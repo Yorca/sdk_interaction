@@ -34,7 +34,7 @@ def get_api_documentation(sdk_name, api_name):
 
 
 
-get_api_documentation("Facebook", "setMixedAudience")
+get_api_documentation("Facebook", "setDataProcessingOptions")
 # with open("api_description.txt", "r") as f:
 #     document = f.read()
 
