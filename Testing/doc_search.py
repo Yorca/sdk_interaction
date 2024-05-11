@@ -14,7 +14,7 @@ def get_api_documentation(sdk_name, api_name):
     doc_name = f'api_description_{sdk_name}_{api_name}.txt'
     if os.path.exists(doc_name):
         os.remove(doc_name)
-    for j in search(query, num_results=5):
+    for j in search(query, num_results=5, pause=2):
         doc_url = j
         response = requests.get(doc_url)
         soup = BeautifulSoup(response.text, 'html.parser')
