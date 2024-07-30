@@ -17,7 +17,10 @@ import org.example.xq.AnalysisAPIs;
 import org.example.xq.Globals;
 
 import soot.Scene;
+import soot.Body;
 import soot.SootMethod;
+import soot.BodyTransformer;
+import soot.Transform;
 import soot.jimple.toolkits.callgraph.ReachableMethods;
 import soot.toolkits.scalar.Pair;
 
@@ -34,7 +37,7 @@ public class Main {
 //		}
 //
 //		String apkPath = args[0];
-		new Main().run("./apks/プラトモ.リゾート_3.1.0_APKPure.apk");
+		new Main().run("./apks/air.jp.globalgear.ptomo2.apk");
 		//new Main().runAnalysis();
 	}
 
@@ -45,10 +48,23 @@ public class Main {
 		long startTime = 0;
 		long endTime = 0;
 		startTime = System.currentTimeMillis();
-		Main.this.runAnalysisReachability();
+		// Set up paths & privacy API string
+                PrivacyAPILoader.loadPrivacyAPIs("res/Priv_impl5.json");
+		AnalysisAPIs.runCustomPack("jtp",
+				new Transform[] { new Transform("jtp.defaultEntryPointCollector", new BodyTransformer() {
+					@Override
+					protected void internalTransform(Body b, String phaseName, Map<String, String> options) {
+						// TODO Auto-generated method stub
+
+					}}) 
+				});
+
+                // Set up custom code in Flowdroid
+                System.out.println("apis" + PrivacyAPISummary.getPrivacyAPIs());
+		//Main.this.runAnalysisReachability();
+		Main.this.runAnalysis();
 		endTime = System.currentTimeMillis();
 		Utils.LOGGER.info(String.format("#FINISH# Analysis of %s costs %d seconds", Globals.APK_PATH, (endTime - startTime) / 1000));
-		runAnalysis();
 	}
 //
 	private void runAnalysisReachability() {
@@ -58,7 +74,7 @@ public class Main {
 		startTime = System.currentTimeMillis();
 
 		// Set up paths & privacy API string
-		PrivacyAPILoader.loadPrivacyAPIs("res/Priv_impl4.json");
+		PrivacyAPILoader.loadPrivacyAPIs("res/Priv_impl5.json");
 		// Set up custom code in Flowdroid
 
 		System.out.println("apis" + PrivacyAPISummary.getPrivacyAPIs());

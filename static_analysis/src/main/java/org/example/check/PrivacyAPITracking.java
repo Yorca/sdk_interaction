@@ -29,6 +29,7 @@ import soot.jimple.infoflow.results.ResultSourceInfo;
 import soot.jimple.infoflow.solver.cfg.IInfoflowCFG;
 import soot.jimple.infoflow.taintWrappers.EasyTaintWrapper;
 import soot.jimple.infoflow.InfoflowConfiguration;
+import soot.jimple.infoflow.InfoflowConfiguration.ImplicitFlowMode;
 import soot.options.Options;
 import soot.jimple.infoflow.data.AccessPath;
 import soot.toolkits.scalar.Pair;
@@ -96,6 +97,7 @@ public class PrivacyAPITracking {
 		config.setMergeDexFiles(true);
 //        Write analysis result to files for further analysis
 		config.setWriteOutputFiles(true);
+		config.setImplicitFlowMode(ImplicitFlowMode.AllImplicitFlows);
 		config.getAnalysisFileConfig().setSourceSinkFile("res/SharedPreferenceAndNetworkAsSinks.txt");
 		config.getCallbackConfig().setEnableCallbacks(true);
 		config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.CHA);
@@ -279,6 +281,7 @@ public class PrivacyAPITracking {
 				List<String> methods = PrivacyAPISummary.getPrivacyAPIs();
 
 				// only setIsAgeRestrictedUser
+				/*
 				if (!mtdName.equals('setIsAgeRestrictedUser')) {
 					return outgoing;
 				}
@@ -293,51 +296,41 @@ public class PrivacyAPITracking {
 				if (!inList) {
 					return outgoing;
 				}
+				*/
 
-				boolean hasPredecessor = false;
+				boolean hasNewTaint = false;
 				for (Abstraction abs: outgoing) {
 					if (abs.equals(incoming)) {
 						continue;
 					}
-//					out_str += "outgoing:\n";
-//					AccessPath ap = abs.getAccessPath();
-//					if (ap == null) {
-//						out_str += "null\n";
-//					} else {
-//						out_str += abs.getCurrentStmt() + "\n";
-//					}
-//					out_str += "path_length:>>  " + abs.getPathLength() + "\n";
-					out_str += "backward Method List:" + "\n";
-					Abstraction pd = abs.getPredecessor();
+					hasNewTaint = true;
+					Abstraction pd = abs;
+
 					int i = 1;
 					while (pd != null) {
-						hasPredecessor = true;
-						out_str += "   "+ i + "    ";
-						out_str += "statement:" + pd.getCurrentStmt() + "\n";
+						out_str += "   ^"+ i + "    ";
+						out_str += "Stmt: " + pd.getCurrentStmt() + "\n";
 						Stmt curstmt = pd.getCurrentStmt();
 						if (curstmt != null) {
-							out_str += "        Method" + manager.getICFG().getMethodOf(curstmt).getSignature() + "\n";
+							out_str += "        Method: " + manager.getICFG().getMethodOf(curstmt).getSignature() + "\n";
 						}
+						out_str += "        isImplicit: " + pd.isImplicit() + "\n";
 						pd = pd.getPredecessor();
 						i += 1;
 					}
 				}
 
-//				if (!hasPredecessor) {
-//					return outgoing;
-//				}
-
-//				out_str += "Signature:\n" + signature + "\n";
-//				out_str = out_str + "type:\n" + type.toString() + "\n";
 				out_str += "\n";
 
-				try {
-					BufferedWriter writer;
-					writer = new BufferedWriter(new FileWriter("res/notifyFlowOut_idfa2.txt", true));
-					writer.write(out_str);
-					writer.close();
-				} catch (IOException e) {
-					throw new RuntimeException(e);
+				if (hasNewTaint) {
+					try {
+						BufferedWriter writer;
+						writer = new BufferedWriter(new FileWriter("res/notifyFlowOut_idfa2.txt", true));
+						writer.write(out_str);
+						writer.close();
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
 				}
 
 //				System.out.println("test notifyFlowOut");
@@ -352,6 +345,7 @@ public class PrivacyAPITracking {
 //						FileWriter("res/notifyFlowOut.txt", true)); writer.write(out_str);
 //					writer.close(); } catch (IOException e) { throw new RuntimeException(e); }
 
+				/*
 				for (Abstraction abs : outgoing) {
 					if (abs.equals(incoming)) {
 						continue;
@@ -539,6 +533,7 @@ public class PrivacyAPITracking {
 						}
 					}
 				}
+				*/
 				return outgoing;
 
 				/*
