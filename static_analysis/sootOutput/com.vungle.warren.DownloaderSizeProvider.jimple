@@ -1,0 +1,91 @@
+public class com.vungle.warren.DownloaderSizeProvider extends java.lang.Object implements com.vungle.warren.SizeProvider
+{
+    private com.vungle.warren.persistence.CacheManager cacheManager;
+    private final float cap;
+    private com.vungle.warren.RuntimeValues runtimeValues;
+
+    public void <init>(com.vungle.warren.persistence.CacheManager, com.vungle.warren.RuntimeValues, float)
+    {
+        com.vungle.warren.RuntimeValues $r2;
+        com.vungle.warren.DownloaderSizeProvider r0;
+        com.vungle.warren.persistence.CacheManager $r1;
+        float $f0;
+
+        r0 := @this: com.vungle.warren.DownloaderSizeProvider;
+
+        $r1 := @parameter0: com.vungle.warren.persistence.CacheManager;
+
+        $r2 := @parameter1: com.vungle.warren.RuntimeValues;
+
+        $f0 := @parameter2: float;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.vungle.warren.DownloaderSizeProvider: com.vungle.warren.persistence.CacheManager cacheManager> = $r1;
+
+        r0.<com.vungle.warren.DownloaderSizeProvider: com.vungle.warren.RuntimeValues runtimeValues> = $r2;
+
+        r0.<com.vungle.warren.DownloaderSizeProvider: float cap> = 0.1F;
+
+        return;
+    }
+
+    public long getTargetSize()
+    {
+        com.vungle.warren.RuntimeValues $r1;
+        com.vungle.warren.persistence.CacheManager $r5;
+        long $l0, $l1, $l2;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        com.vungle.warren.DownloaderSizeProvider r0;
+        com.vungle.warren.VungleSettings $r4;
+        float $f0, $f1;
+        java.lang.Object $r3;
+
+        r0 := @this: com.vungle.warren.DownloaderSizeProvider;
+
+        $r1 = r0.<com.vungle.warren.DownloaderSizeProvider: com.vungle.warren.RuntimeValues runtimeValues>;
+
+        $r2 = $r1.<com.vungle.warren.RuntimeValues: java.util.concurrent.atomic.AtomicReference settings>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r4 = (com.vungle.warren.VungleSettings) $r3;
+
+        if $r4 != null goto label1;
+
+        return 0L;
+
+     label1:
+        $r5 = r0.<com.vungle.warren.DownloaderSizeProvider: com.vungle.warren.persistence.CacheManager cacheManager>;
+
+        $l0 = virtualinvoke $r5.<com.vungle.warren.persistence.CacheManager: long getBytesAvailable()>();
+
+        $l0 = $l0 / 2L;
+
+        $l1 = virtualinvoke $r4.<com.vungle.warren.VungleSettings: long getMaximumStorageForCleverCache()>();
+
+        $l2 = virtualinvoke $r4.<com.vungle.warren.VungleSettings: long getMinimumSpaceForAd()>();
+
+        $l2 = $l2 - $l0;
+
+        $l2 = staticinvoke <java.lang.Math: long max(long,long)>(0L, $l2);
+
+        $l0 = staticinvoke <java.lang.Math: long min(long,long)>($l1, $l0);
+
+        $f0 = (float) $l0;
+
+        $f1 = r0.<com.vungle.warren.DownloaderSizeProvider: float cap>;
+
+        $f1 = $f1 * $f0;
+
+        $f0 = $f0 - $f1;
+
+        $l0 = (long) $f0;
+
+        $l0 = $l0 - $l2;
+
+        $l0 = staticinvoke <java.lang.Math: long max(long,long)>(0L, $l0);
+
+        return $l0;
+    }
+}

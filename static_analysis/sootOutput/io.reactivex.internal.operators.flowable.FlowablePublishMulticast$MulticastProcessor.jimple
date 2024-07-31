@@ -1,0 +1,920 @@
+final class io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor extends io.reactivex.Flowable implements io.reactivex.FlowableSubscriber, io.reactivex.disposables.Disposable
+{
+    static final io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] EMPTY;
+    static final io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] TERMINATED;
+    int consumed;
+    final boolean delayError;
+    volatile boolean done;
+    java.lang.Throwable error;
+    final int limit;
+    final int prefetch;
+    volatile io.reactivex.internal.fuseable.SimpleQueue queue;
+    final java.util.concurrent.atomic.AtomicReference s;
+    int sourceMode;
+    final java.util.concurrent.atomic.AtomicReference subscribers;
+    final java.util.concurrent.atomic.AtomicInteger wip;
+
+    static void <clinit>()
+    {
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] $r0;
+
+        $r0 = newarray (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription)[0];
+
+        <io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] EMPTY> = $r0;
+
+        $r0 = newarray (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription)[0];
+
+        <io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] TERMINATED> = $r0;
+
+        return;
+    }
+
+    void <init>(int, boolean)
+    {
+        java.util.concurrent.atomic.AtomicInteger $r1;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        int $i0, $i1;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $i1 := @parameter0: int;
+
+        $z0 := @parameter1: boolean;
+
+        specialinvoke r0.<io.reactivex.Flowable: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int prefetch> = $i1;
+
+        $i0 = $i1 >> 2;
+
+        $i1 = $i1 - $i0;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int limit> = $i1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean delayError> = $z0;
+
+        $r1 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r1.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicInteger wip> = $r1;
+
+        $r2 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference s> = $r2;
+
+        $r2 = new java.util.concurrent.atomic.AtomicReference;
+
+        $r3 = <io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] EMPTY>;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicReference: void <init>(java.lang.Object)>($r3);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference subscribers> = $r2;
+
+        return;
+    }
+
+    boolean add(io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription)
+    {
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription $r1;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] $r4, $r5;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 := @parameter0: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription;
+
+     label1:
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference subscribers>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r4 = (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[]) $r3;
+
+        $r5 = <io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] TERMINATED>;
+
+        if $r4 != $r5 goto label2;
+
+        return 0;
+
+     label2:
+        $i0 = lengthof $r4;
+
+        $i1 = $i0 + 1;
+
+        $r5 = newarray (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription)[$i1];
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, 0, $r5, 0, $i0);
+
+        $r5[$i0] = $r1;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference subscribers>;
+
+        $z0 = staticinvoke <kotlin.UByte$$ExternalSyntheticBackport0: boolean m(java.util.concurrent.atomic.AtomicReference,java.lang.Object,java.lang.Object)>($r2, $r4, $r5);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+    }
+
+    void completeAll()
+    {
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        long $l3;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription $r4;
+        byte $b0;
+        int $i1, $i2;
+        java.lang.Object $r3;
+        org.reactivestreams.Subscriber $r5;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] $r2;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference subscribers>;
+
+        $r2 = <io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] TERMINATED>;
+
+        $r3 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: java.lang.Object getAndSet(java.lang.Object)>($r2);
+
+        $r2 = (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[]) $r3;
+
+        $i1 = lengthof $r2;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 >= $i1 goto label3;
+
+        $r4 = $r2[$i2];
+
+        $l3 = virtualinvoke $r4.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: long get()>();
+
+        $b0 = $l3 cmp -9223372036854775808L;
+
+        if $b0 == 0 goto label2;
+
+        $r5 = $r4.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r5.<org.reactivestreams.Subscriber: void onComplete()>();
+
+     label2:
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    public void dispose()
+    {
+        java.util.concurrent.atomic.AtomicInteger $r2;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        int $i0;
+        io.reactivex.internal.fuseable.SimpleQueue $r3;
+        java.util.concurrent.atomic.AtomicReference $r1;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference s>;
+
+        staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean cancel(java.util.concurrent.atomic.AtomicReference)>($r1);
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicInteger wip>;
+
+        $i0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicInteger: int getAndIncrement()>();
+
+        if $i0 != 0 goto label1;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        if $r3 == null goto label1;
+
+        interfaceinvoke $r3.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+     label1:
+        return;
+    }
+
+    void drain()
+    {
+        java.lang.Throwable $r7;
+        long $l5, $l7, $l8;
+        java.util.concurrent.atomic.AtomicReference $r3, $r9;
+        byte $b9;
+        java.util.concurrent.atomic.AtomicInteger $r1;
+        int $i0, $i1, $i2, $i3, $i4, $i6, $i10;
+        org.reactivestreams.Subscriber $r8;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] $r5, $r11;
+        boolean $z0, $z1, $z2;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription $r6;
+        org.reactivestreams.Subscription $r10;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        java.lang.Object $r4;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicInteger wip>;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicInteger: int getAndIncrement()>();
+
+        if $i0 == 0 goto label01;
+
+        return;
+
+     label01:
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        $i1 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int consumed>;
+
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int limit>;
+
+        $i2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int sourceMode>;
+
+        if $i2 == 1 goto label02;
+
+        $z0 = 1;
+
+        goto label03;
+
+     label02:
+        $z0 = 0;
+
+     label03:
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference subscribers>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r5 = (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[]) $r4;
+
+        $i2 = 1;
+
+     label04:
+        $i3 = lengthof $r5;
+
+        if $r2 == null goto label30;
+
+        if $i3 == 0 goto label30;
+
+        $i4 = lengthof $r5;
+
+        $l5 = 9223372036854775807L;
+
+        $i6 = 0;
+
+     label05:
+        if $i6 >= $i4 goto label08;
+
+        $r6 = $r5[$i6];
+
+        $l7 = virtualinvoke $r6.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: long get()>();
+
+        $l8 = $r6.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: long emitted>;
+
+        $l7 = $l7 - $l8;
+
+        $b9 = $l7 cmp -9223372036854775808L;
+
+        if $b9 == 0 goto label06;
+
+        $b9 = $l5 cmp $l7;
+
+        $i10 = (int) $b9;
+
+        if $i10 <= 0 goto label07;
+
+        $l5 = $l7;
+
+        goto label07;
+
+     label06:
+        $i3 = $i3 + -1;
+
+     label07:
+        $i6 = $i6 + 1;
+
+        goto label05;
+
+     label08:
+        if $i3 != 0 goto label09;
+
+        $l5 = 0L;
+
+     label09:
+        $b9 = $l5 cmp 0L;
+
+        if $b9 == 0 goto label26;
+
+        $z1 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean isDisposed()>();
+
+        if $z1 == 0 goto label10;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        return;
+
+     label10:
+        $z1 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean done>;
+
+        if $z1 == 0 goto label11;
+
+        $z2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean delayError>;
+
+        if $z2 != 0 goto label11;
+
+        $r7 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.lang.Throwable error>;
+
+        if $r7 == null goto label11;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void errorAll(java.lang.Throwable)>($r7);
+
+        return;
+
+     label11:
+        $r4 = interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: java.lang.Object poll()>();
+
+     label12:
+        if $r4 != null goto label13;
+
+        $z2 = 1;
+
+        goto label14;
+
+     label13:
+        $z2 = 0;
+
+     label14:
+        if $z1 == 0 goto label16;
+
+        if $z2 == 0 goto label17;
+
+        $r7 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.lang.Throwable error>;
+
+        if $r7 == null goto label15;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void errorAll(java.lang.Throwable)>($r7);
+
+        return;
+
+     label15:
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void completeAll()>();
+
+        return;
+
+     label16:
+        if $z2 != 0 goto label26;
+
+     label17:
+        $i3 = lengthof $r5;
+
+        $i4 = 0;
+
+        $z1 = 0;
+
+     label18:
+        if $i4 >= $i3 goto label22;
+
+        $r6 = $r5[$i4];
+
+        $l7 = virtualinvoke $r6.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: long get()>();
+
+        $b9 = $l7 cmp -9223372036854775808L;
+
+        if $b9 == 0 goto label20;
+
+        $b9 = $l7 cmp 9223372036854775807L;
+
+        if $b9 == 0 goto label19;
+
+        $l7 = $r6.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: long emitted>;
+
+        $l7 = $l7 + 1L;
+
+        $r6.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: long emitted> = $l7;
+
+     label19:
+        $r8 = $r6.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r8.<org.reactivestreams.Subscriber: void onNext(java.lang.Object)>($r4);
+
+        goto label21;
+
+     label20:
+        $z1 = 1;
+
+     label21:
+        $i4 = $i4 + 1;
+
+        goto label18;
+
+     label22:
+        $l5 = $l5 - 1L;
+
+        if $z0 == 0 goto label23;
+
+        $i1 = $i1 + 1;
+
+        if $i1 != $i0 goto label23;
+
+        $r9 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference s>;
+
+        $r4 = virtualinvoke $r9.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r10 = (org.reactivestreams.Subscription) $r4;
+
+        $l7 = (long) $i0;
+
+        interfaceinvoke $r10.<org.reactivestreams.Subscription: void request(long)>($l7);
+
+        $i1 = 0;
+
+     label23:
+        $r4 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r11 = (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[]) $r4;
+
+        if $z1 != 0 goto label24;
+
+        if $r11 == $r5 goto label09;
+
+     label24:
+        $r5 = $r11;
+
+        goto label04;
+
+     label25:
+        $r7 := @caughtexception;
+
+        staticinvoke <io.reactivex.exceptions.Exceptions: void throwIfFatal(java.lang.Throwable)>($r7);
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference s>;
+
+        staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean cancel(java.util.concurrent.atomic.AtomicReference)>($r3);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void errorAll(java.lang.Throwable)>($r7);
+
+        return;
+
+     label26:
+        if $b9 != 0 goto label30;
+
+        $z1 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean isDisposed()>();
+
+        if $z1 == 0 goto label27;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        return;
+
+     label27:
+        $z1 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean done>;
+
+        if $z1 == 0 goto label30;
+
+        $z2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean delayError>;
+
+        if $z2 != 0 goto label28;
+
+        $r7 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.lang.Throwable error>;
+
+        if $r7 == null goto label28;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void errorAll(java.lang.Throwable)>($r7);
+
+        return;
+
+     label28:
+        if $z1 == 0 goto label30;
+
+        $z1 = interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: boolean isEmpty()>();
+
+        if $z1 == 0 goto label30;
+
+        $r7 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.lang.Throwable error>;
+
+        if $r7 == null goto label29;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void errorAll(java.lang.Throwable)>($r7);
+
+        return;
+
+     label29:
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void completeAll()>();
+
+        return;
+
+     label30:
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int consumed> = $i1;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicInteger wip>;
+
+        $i2 = neg $i2;
+
+        $i3 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicInteger: int addAndGet(int)>($i2);
+
+        $i2 = $i3;
+
+        if $i3 != 0 goto label31;
+
+        return;
+
+     label31:
+        if $r2 != null goto label32;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+     label32:
+        $r4 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r5 = (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[]) $r4;
+
+        goto label04;
+
+        catch java.lang.Throwable from label11 to label12 with label25;
+    }
+
+    void errorAll(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        long $l3;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription $r5;
+        byte $b0;
+        int $i1, $i2;
+        java.lang.Object $r4;
+        org.reactivestreams.Subscriber $r6;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] $r3;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference subscribers>;
+
+        $r3 = <io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] TERMINATED>;
+
+        $r4 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicReference: java.lang.Object getAndSet(java.lang.Object)>($r3);
+
+        $r3 = (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[]) $r4;
+
+        $i1 = lengthof $r3;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 >= $i1 goto label3;
+
+        $r5 = $r3[$i2];
+
+        $l3 = virtualinvoke $r5.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: long get()>();
+
+        $b0 = $l3 cmp -9223372036854775808L;
+
+        if $b0 == 0 goto label2;
+
+        $r6 = $r5.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r6.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r1);
+
+     label2:
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    public boolean isDisposed()
+    {
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        org.reactivestreams.Subscription $r3;
+        java.lang.Object $r2;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference s>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r3 = (org.reactivestreams.Subscription) $r2;
+
+        $z0 = staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean isCancelled(org.reactivestreams.Subscription)>($r3);
+
+        return $z0;
+    }
+
+    public void onComplete()
+    {
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean done>;
+
+        if $z0 != 0 goto label1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void drain()>();
+
+     label1:
+        return;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r1);
+
+        return;
+
+     label1:
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.lang.Throwable error> = $r1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void drain()>();
+
+        return;
+    }
+
+    public void onNext(java.lang.Object)
+    {
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        java.util.concurrent.atomic.AtomicReference $r3;
+        org.reactivestreams.Subscription $r4;
+        int $i0;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        java.lang.Object $r1;
+        io.reactivex.exceptions.MissingBackpressureException $r5;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int sourceMode>;
+
+        if $i0 != 0 goto label2;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        $z0 = interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: boolean offer(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference s>;
+
+        $r1 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r4 = (org.reactivestreams.Subscription) $r1;
+
+        interfaceinvoke $r4.<org.reactivestreams.Subscription: void cancel()>();
+
+        $r5 = new io.reactivex.exceptions.MissingBackpressureException;
+
+        specialinvoke $r5.<io.reactivex.exceptions.MissingBackpressureException: void <init>()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void onError(java.lang.Throwable)>($r5);
+
+        return;
+
+     label2:
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void drain()>();
+
+        return;
+    }
+
+    public void onSubscribe(org.reactivestreams.Subscription)
+    {
+        io.reactivex.internal.fuseable.QueueSubscription $r3;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        org.reactivestreams.Subscription $r1;
+        int $i0;
+        io.reactivex.internal.fuseable.SimpleQueue $r4;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 := @parameter0: org.reactivestreams.Subscription;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference s>;
+
+        $z0 = staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean setOnce(java.util.concurrent.atomic.AtomicReference,org.reactivestreams.Subscription)>($r2, $r1);
+
+        if $z0 == 0 goto label3;
+
+        $z0 = $r1 instanceof io.reactivex.internal.fuseable.QueueSubscription;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = (io.reactivex.internal.fuseable.QueueSubscription) $r1;
+
+        $i0 = interfaceinvoke $r3.<io.reactivex.internal.fuseable.QueueSubscription: int requestFusion(int)>(3);
+
+        if $i0 != 1 goto label1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int sourceMode> = $i0;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.fuseable.SimpleQueue queue> = $r3;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void drain()>();
+
+        return;
+
+     label1:
+        if $i0 != 2 goto label2;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int sourceMode> = $i0;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.fuseable.SimpleQueue queue> = $r3;
+
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int prefetch>;
+
+        staticinvoke <io.reactivex.internal.util.QueueDrainHelper: void request(org.reactivestreams.Subscription,int)>($r1, $i0);
+
+        return;
+
+     label2:
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int prefetch>;
+
+        $r4 = staticinvoke <io.reactivex.internal.util.QueueDrainHelper: io.reactivex.internal.fuseable.SimpleQueue createQueue(int)>($i0);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.fuseable.SimpleQueue queue> = $r4;
+
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: int prefetch>;
+
+        staticinvoke <io.reactivex.internal.util.QueueDrainHelper: void request(org.reactivestreams.Subscription,int)>($r1, $i0);
+
+     label3:
+        return;
+    }
+
+    void remove(io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription)
+    {
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription $r1, $r5;
+        int $i0, $i1, $i2;
+        java.lang.Object $r3;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] $r4, $r6;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 := @parameter0: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription;
+
+     label1:
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference subscribers>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r4 = (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[]) $r3;
+
+        $i0 = lengthof $r4;
+
+        if $i0 != 0 goto label2;
+
+        return;
+
+     label2:
+        $i1 = 0;
+
+     label3:
+        if $i1 >= $i0 goto label4;
+
+        $r5 = $r4[$i1];
+
+        if $r5 == $r1 goto label5;
+
+        $i1 = $i1 + 1;
+
+        goto label3;
+
+     label4:
+        $i1 = -1;
+
+     label5:
+        if $i1 >= 0 goto label6;
+
+        return;
+
+     label6:
+        if $i0 != 1 goto label7;
+
+        $r6 = <io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription[] EMPTY>;
+
+        goto label8;
+
+     label7:
+        $i2 = $i0 + -1;
+
+        $r6 = newarray (io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription)[$i2];
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, 0, $r6, 0, $i1);
+
+        $i2 = $i1 + 1;
+
+        $i0 = $i0 - $i1;
+
+        $i0 = $i0 - 1;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, $i2, $r6, $i1, $i0);
+
+     label8:
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.util.concurrent.atomic.AtomicReference subscribers>;
+
+        $z0 = staticinvoke <kotlin.UByte$$ExternalSyntheticBackport0: boolean m(java.util.concurrent.atomic.AtomicReference,java.lang.Object,java.lang.Object)>($r2, $r4, $r6);
+
+        if $z0 == 0 goto label1;
+
+        return;
+    }
+
+    protected void subscribeActual(org.reactivestreams.Subscriber)
+    {
+        java.lang.Throwable $r3;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor r0;
+        org.reactivestreams.Subscriber $r1;
+        io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor;
+
+        $r1 := @parameter0: org.reactivestreams.Subscriber;
+
+        $r2 = new io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription;
+
+        specialinvoke $r2.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: void <init>(org.reactivestreams.Subscriber,io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor)>($r1, r0);
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onSubscribe(org.reactivestreams.Subscription)>($r2);
+
+        $z0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: boolean add(io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription)>($r2);
+
+        if $z0 == 0 goto label2;
+
+        $z0 = virtualinvoke $r2.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription: boolean isCancelled()>();
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void remove(io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastSubscription)>($r2);
+
+        return;
+
+     label1:
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: void drain()>();
+
+        return;
+
+     label2:
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowablePublishMulticast$MulticastProcessor: java.lang.Throwable error>;
+
+        if $r3 == null goto label3;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r3);
+
+        return;
+
+     label3:
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onComplete()>();
+
+        return;
+    }
+}

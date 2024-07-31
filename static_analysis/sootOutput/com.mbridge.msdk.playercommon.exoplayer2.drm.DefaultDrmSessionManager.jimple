@@ -1,0 +1,1233 @@
+public class com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession$ProvisioningManager, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager
+{
+    public static final int INITIAL_DRM_REQUEST_RETRY_COUNT;
+    public static final int MODE_DOWNLOAD;
+    public static final int MODE_PLAYBACK;
+    public static final int MODE_QUERY;
+    public static final int MODE_RELEASE;
+    public static final java.lang.String PLAYREADY_CUSTOM_DATA_KEY;
+    private static final java.lang.String TAG;
+    private final com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback callback;
+    private final com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher eventDispatcher;
+    private final int initialDrmRequestRetryCount;
+    private final com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm mediaDrm;
+    volatile com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MediaDrmHandler mediaDrmHandler;
+    private int mode;
+    private final boolean multiSession;
+    private byte[] offlineLicenseKeySetId;
+    private final java.util.HashMap optionalKeyRequestParameters;
+    private android.os.Looper playbackLooper;
+    private final java.util.List provisioningSessions;
+    private final java.util.List sessions;
+    private final java.util.UUID uuid;
+
+    public void <init>(java.util.UUID, com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm, com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.util.HashMap)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r3;
+        java.util.HashMap $r4;
+        java.util.UUID $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: java.util.UUID;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r4 := @parameter3: java.util.HashMap;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void <init>(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm,com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.util.HashMap,boolean,int)>($r1, $r2, $r3, $r4, 0, 3);
+
+        return;
+    }
+
+    public void <init>(java.util.UUID, com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm, com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.util.HashMap, android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r2;
+        android.os.Handler $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r3;
+        java.util.HashMap $r4;
+        java.util.UUID $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener $r6;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: java.util.UUID;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r4 := @parameter3: java.util.HashMap;
+
+        $r5 := @parameter4: android.os.Handler;
+
+        $r6 := @parameter5: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void <init>(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm,com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.util.HashMap)>($r1, $r2, $r3, $r4);
+
+        if $r5 == null goto label1;
+
+        if $r6 == null goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void addListener(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)>($r5, $r6);
+
+     label1:
+        return;
+    }
+
+    public void <init>(java.util.UUID, com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm, com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.util.HashMap, android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r3;
+        java.util.HashMap $r4;
+        java.util.UUID $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r2;
+        android.os.Handler $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener $r6;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: java.util.UUID;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r4 := @parameter3: java.util.HashMap;
+
+        $r5 := @parameter4: android.os.Handler;
+
+        $r6 := @parameter5: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener;
+
+        $z0 := @parameter6: boolean;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void <init>(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm,com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.util.HashMap,boolean)>($r1, $r2, $r3, $r4, $z0);
+
+        if $r5 == null goto label1;
+
+        if $r6 == null goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void addListener(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)>($r5, $r6);
+
+     label1:
+        return;
+    }
+
+    public void <init>(java.util.UUID, com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm, com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.util.HashMap, android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener, boolean, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r3;
+        java.util.HashMap $r4;
+        java.util.UUID $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r2;
+        android.os.Handler $r5;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener $r6;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: java.util.UUID;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r4 := @parameter3: java.util.HashMap;
+
+        $r5 := @parameter4: android.os.Handler;
+
+        $r6 := @parameter5: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener;
+
+        $z0 := @parameter6: boolean;
+
+        $i0 := @parameter7: int;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void <init>(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm,com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.util.HashMap,boolean,int)>($r1, $r2, $r3, $r4, $z0, $i0);
+
+        if $r5 == null goto label1;
+
+        if $r6 == null goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void addListener(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)>($r5, $r6);
+
+     label1:
+        return;
+    }
+
+    public void <init>(java.util.UUID, com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm, com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.util.HashMap, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r3;
+        java.util.HashMap $r4;
+        java.util.UUID $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: java.util.UUID;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r4 := @parameter3: java.util.HashMap;
+
+        $z0 := @parameter4: boolean;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void <init>(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm,com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.util.HashMap,boolean,int)>($r1, $r2, $r3, $r4, $z0, 3);
+
+        return;
+    }
+
+    public void <init>(java.util.UUID, com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm, com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.util.HashMap, boolean, int)
+    {
+        java.util.HashMap $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r4;
+        java.util.UUID $r3, $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MediaDrmEventListener $r8;
+        java.util.ArrayList $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher $r6;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r3 := @parameter0: java.util.UUID;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm;
+
+        $r4 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r2 := @parameter3: java.util.HashMap;
+
+        $z0 := @parameter4: boolean;
+
+        $i0 := @parameter5: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r5 = <com.mbridge.msdk.playercommon.exoplayer2.C: java.util.UUID COMMON_PSSH_UUID>;
+
+        $z1 = virtualinvoke $r5.<java.util.UUID: boolean equals(java.lang.Object)>($r3);
+
+        $z1 = $z1 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z1, "Use C.CLEARKEY_UUID instead");
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.UUID uuid> = $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm mediaDrm> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback callback> = $r4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.HashMap optionalKeyRequestParameters> = $r2;
+
+        $r6 = new com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher;
+
+        specialinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher eventDispatcher> = $r6;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: boolean multiSession> = $z0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int initialDrmRequestRetryCount> = $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int mode> = 0;
+
+        $r7 = new java.util.ArrayList;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List sessions> = $r7;
+
+        $r7 = new java.util.ArrayList;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions> = $r7;
+
+        if $z0 == 0 goto label1;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm: void setPropertyString(java.lang.String,java.lang.String)>("sessionSharing", "enable");
+
+     label1:
+        $r8 = new com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MediaDrmEventListener;
+
+        specialinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MediaDrmEventListener: void <init>(com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$1)>(r0, null);
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm: void setOnEventListener(com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm$OnEventListener)>($r8);
+
+        return;
+    }
+
+    static java.util.List access$200(com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager)
+    {
+        java.util.List r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List sessions>;
+
+        return r1;
+    }
+
+    static int access$300(com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager)
+    {
+        int i0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        i0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int mode>;
+
+        return i0;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData getSchemeData(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData, java.util.UUID, boolean)
+    {
+        byte[] $r5;
+        java.util.UUID $r2, $r4;
+        java.util.ArrayList $r0, $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData $r1;
+        int $i0, $i1, $i2;
+        java.lang.Object $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData $r3;
+        boolean $z0, $z1, $z2;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData;
+
+        $r2 := @parameter1: java.util.UUID;
+
+        $z0 := @parameter2: boolean;
+
+        $r7 = new java.util.ArrayList;
+
+        $r0 = $r7;
+
+        $i0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData: int schemeDataCount>;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $i0 = 0;
+
+     label01:
+        $i1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData: int schemeDataCount>;
+
+        $z1 = 1;
+
+        if $i0 >= $i1 goto label06;
+
+        $r3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData get(int)>($i0);
+
+        $z2 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData: boolean matches(java.util.UUID)>($r2);
+
+        if $z2 != 0 goto label03;
+
+        $r4 = <com.mbridge.msdk.playercommon.exoplayer2.C: java.util.UUID CLEARKEY_UUID>;
+
+        $z2 = virtualinvoke $r4.<java.util.UUID: boolean equals(java.lang.Object)>($r2);
+
+        if $z2 == 0 goto label02;
+
+        $r4 = <com.mbridge.msdk.playercommon.exoplayer2.C: java.util.UUID COMMON_PSSH_UUID>;
+
+        $z2 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData: boolean matches(java.util.UUID)>($r4);
+
+        if $z2 == 0 goto label02;
+
+        goto label03;
+
+     label02:
+        $z1 = 0;
+
+     label03:
+        if $z1 == 0 goto label05;
+
+        $r5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData: byte[] data>;
+
+        if $r5 != null goto label04;
+
+        if $z0 == 0 goto label05;
+
+     label04:
+        interfaceinvoke $r0.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+     label05:
+        $i0 = $i0 + 1;
+
+        goto label01;
+
+     label06:
+        $z0 = interfaceinvoke $r0.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label07;
+
+        return null;
+
+     label07:
+        $r4 = <com.mbridge.msdk.playercommon.exoplayer2.C: java.util.UUID WIDEVINE_UUID>;
+
+        $z0 = virtualinvoke $r4.<java.util.UUID: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label13;
+
+        $i0 = 0;
+
+     label08:
+        $i1 = interfaceinvoke $r0.<java.util.List: int size()>();
+
+        if $i0 >= $i1 goto label13;
+
+        $r6 = interfaceinvoke $r0.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData) $r6;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData: boolean hasData()>();
+
+        if $z0 == 0 goto label09;
+
+        $r5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData: byte[] data>;
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.PsshAtomUtil: int parseVersion(byte[])>($r5);
+
+        goto label10;
+
+     label09:
+        $i1 = -1;
+
+     label10:
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i2 >= 23 goto label11;
+
+        if $i1 != 0 goto label11;
+
+        return $r3;
+
+     label11:
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i2 < 23 goto label12;
+
+        if $i1 != 1 goto label12;
+
+        return $r3;
+
+     label12:
+        $i0 = $i0 + 1;
+
+        goto label08;
+
+     label13:
+        $r6 = interfaceinvoke $r0.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData) $r6;
+
+        return $r3;
+    }
+
+    public static com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newFrameworkInstance(java.util.UUID, com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.util.HashMap) throws com.mbridge.msdk.playercommon.exoplayer2.drm.UnsupportedDrmException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.FrameworkMediaDrm $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r1;
+        java.util.HashMap $r2;
+        java.util.UUID $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager $r3;
+
+        $r0 := @parameter0: java.util.UUID;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r2 := @parameter2: java.util.HashMap;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.drm.FrameworkMediaDrm: com.mbridge.msdk.playercommon.exoplayer2.drm.FrameworkMediaDrm newInstance(java.util.UUID)>($r0);
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void <init>(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm,com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.util.HashMap,boolean,int)>($r0, $r4, $r1, $r2, 0, 3);
+
+        return $r3;
+    }
+
+    public static com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newFrameworkInstance(java.util.UUID, com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.util.HashMap, android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener) throws com.mbridge.msdk.playercommon.exoplayer2.drm.UnsupportedDrmException
+    {
+        android.os.Handler $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r0;
+        java.util.HashMap $r1;
+        java.util.UUID $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener $r3;
+
+        $r5 := @parameter0: java.util.UUID;
+
+        $r0 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r1 := @parameter2: java.util.HashMap;
+
+        $r2 := @parameter3: android.os.Handler;
+
+        $r3 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener;
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newFrameworkInstance(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.util.HashMap)>($r5, $r0, $r1);
+
+        if $r2 == null goto label1;
+
+        if $r3 == null goto label1;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void addListener(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)>($r2, $r3);
+
+     label1:
+        return $r4;
+    }
+
+    public static com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newPlayReadyInstance(com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.lang.String) throws com.mbridge.msdk.playercommon.exoplayer2.drm.UnsupportedDrmException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r0;
+        java.util.HashMap $r2;
+        java.lang.String $r1;
+        java.util.UUID $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager $r4;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $r2 = new java.util.HashMap;
+
+        specialinvoke $r2.<java.util.HashMap: void <init>()>();
+
+        virtualinvoke $r2.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("PRCustomData", $r1);
+
+        goto label2;
+
+     label1:
+        $r2 = null;
+
+     label2:
+        $r3 = <com.mbridge.msdk.playercommon.exoplayer2.C: java.util.UUID PLAYREADY_UUID>;
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newFrameworkInstance(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.util.HashMap)>($r3, $r0, $r2);
+
+        return $r4;
+    }
+
+    public static com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newPlayReadyInstance(com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.lang.String, android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener) throws com.mbridge.msdk.playercommon.exoplayer2.drm.UnsupportedDrmException
+    {
+        android.os.Handler $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r4;
+        java.lang.String $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener $r2;
+
+        $r4 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: android.os.Handler;
+
+        $r2 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener;
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newPlayReadyInstance(com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.lang.String)>($r4, $r0);
+
+        if $r1 == null goto label1;
+
+        if $r2 == null goto label1;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void addListener(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)>($r1, $r2);
+
+     label1:
+        return $r3;
+    }
+
+    public static com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newWidevineInstance(com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.util.HashMap) throws com.mbridge.msdk.playercommon.exoplayer2.drm.UnsupportedDrmException
+    {
+        java.util.HashMap $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r3;
+        java.util.UUID $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager $r2;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r0 := @parameter1: java.util.HashMap;
+
+        $r1 = <com.mbridge.msdk.playercommon.exoplayer2.C: java.util.UUID WIDEVINE_UUID>;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newFrameworkInstance(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.util.HashMap)>($r1, $r3, $r0);
+
+        return $r2;
+    }
+
+    public static com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newWidevineInstance(com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback, java.util.HashMap, android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener) throws com.mbridge.msdk.playercommon.exoplayer2.drm.UnsupportedDrmException
+    {
+        android.os.Handler $r1;
+        java.util.HashMap $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener $r2;
+
+        $r4 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback;
+
+        $r0 := @parameter1: java.util.HashMap;
+
+        $r1 := @parameter2: android.os.Handler;
+
+        $r2 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener;
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager newWidevineInstance(com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,java.util.HashMap)>($r4, $r0);
+
+        if $r1 == null goto label1;
+
+        if $r2 == null goto label1;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void addListener(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)>($r1, $r2);
+
+     label1:
+        return $r3;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession acquireSession(android.os.Looper, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData)
+    {
+        byte[] $r1;
+        java.util.HashMap $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MissingSchemeDataException $r13;
+        android.os.Looper $r5, $r7;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ErrorStateDrmSession $r14;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MediaDrmHandler $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession $r10, $r18;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        boolean $z0;
+        java.util.Iterator $r17;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession$DrmSessionException $r15;
+        java.util.UUID $r11;
+        java.util.List $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r19;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher $r4;
+        java.lang.Object $r16;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData $r12;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r5 := @parameter0: android.os.Looper;
+
+        $r6 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: android.os.Looper playbackLooper>;
+
+        if $r7 == null goto label02;
+
+        if $r7 != $r5 goto label01;
+
+        goto label02;
+
+     label01:
+        $z0 = 0;
+
+        goto label03;
+
+     label02:
+        $z0 = 1;
+
+     label03:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List sessions>;
+
+        $z0 = interfaceinvoke $r8.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label04;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: android.os.Looper playbackLooper> = $r5;
+
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MediaDrmHandler mediaDrmHandler>;
+
+        if $r9 != null goto label04;
+
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MediaDrmHandler;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MediaDrmHandler: void <init>(com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager,android.os.Looper)>(r0, $r5);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MediaDrmHandler mediaDrmHandler> = $r9;
+
+     label04:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: byte[] offlineLicenseKeySetId>;
+
+        $r10 = null;
+
+        if $r1 != null goto label06;
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.UUID uuid>;
+
+        $r12 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData getSchemeData(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,java.util.UUID,boolean)>($r6, $r11, 0);
+
+        if $r12 != null goto label05;
+
+        $r13 = new com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MissingSchemeDataException;
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.UUID uuid>;
+
+        specialinvoke $r13.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$MissingSchemeDataException: void <init>(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager$1)>($r11, null);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher eventDispatcher>;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher: void drmSessionManagerError(java.lang.Exception)>($r13);
+
+        $r14 = new com.mbridge.msdk.playercommon.exoplayer2.drm.ErrorStateDrmSession;
+
+        $r15 = new com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession$DrmSessionException;
+
+        specialinvoke $r15.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession$DrmSessionException: void <init>(java.lang.Throwable)>($r13);
+
+        specialinvoke $r14.<com.mbridge.msdk.playercommon.exoplayer2.drm.ErrorStateDrmSession: void <init>(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession$DrmSessionException)>($r15);
+
+        return $r14;
+
+     label05:
+        goto label07;
+
+     label06:
+        $r12 = null;
+
+     label07:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: boolean multiSession>;
+
+        if $z0 != 0 goto label09;
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List sessions>;
+
+        $z0 = interfaceinvoke $r8.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label08;
+
+        goto label13;
+
+     label08:
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List sessions>;
+
+        $r16 = interfaceinvoke $r8.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r10 = (com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession) $r16;
+
+        goto label13;
+
+     label09:
+        if $r12 == null goto label10;
+
+        $r1 = $r12.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData: byte[] data>;
+
+        goto label11;
+
+     label10:
+        $r1 = null;
+
+     label11:
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List sessions>;
+
+        $r17 = interfaceinvoke $r8.<java.util.List: java.util.Iterator iterator()>();
+
+     label12:
+        $z0 = interfaceinvoke $r17.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label13;
+
+        $r16 = interfaceinvoke $r17.<java.util.Iterator: java.lang.Object next()>();
+
+        $r18 = (com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession) $r16;
+
+        $z0 = virtualinvoke $r18.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession: boolean hasInitData(byte[])>($r1);
+
+        if $z0 == 0 goto label12;
+
+        $r10 = $r18;
+
+     label13:
+        if $r10 != null goto label14;
+
+        $r10 = new com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession;
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.UUID uuid>;
+
+        $r19 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm mediaDrm>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int mode>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: byte[] offlineLicenseKeySetId>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.HashMap optionalKeyRequestParameters>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback callback>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher eventDispatcher>;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int initialDrmRequestRetryCount>;
+
+        specialinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession: void <init>(java.util.UUID,com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession$ProvisioningManager,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData,int,byte[],java.util.HashMap,com.mbridge.msdk.playercommon.exoplayer2.drm.MediaDrmCallback,android.os.Looper,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher,int)>($r11, $r19, r0, $r12, $i0, $r1, $r2, $r3, $r5, $r4, $i1);
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List sessions>;
+
+        interfaceinvoke $r8.<java.util.List: boolean add(java.lang.Object)>($r10);
+
+     label14:
+        virtualinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession: void acquire()>();
+
+        return $r10;
+    }
+
+    public final void addListener(android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher $r3;
+        android.os.Handler $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: android.os.Handler;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher eventDispatcher>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher: void addListener(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)>($r1, $r2);
+
+        return;
+    }
+
+    public boolean canAcquireSession(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData)
+    {
+        byte[] $r2;
+        java.util.UUID $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData $r1;
+        int $i0;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6, $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: byte[] offlineLicenseKeySetId>;
+
+        if $r2 == null goto label1;
+
+        return 1;
+
+     label1:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.UUID uuid>;
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData getSchemeData(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,java.util.UUID,boolean)>($r1, $r3, 1);
+
+        if $r4 != null goto label3;
+
+        $i0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData: int schemeDataCount>;
+
+        if $i0 != 1 goto label2;
+
+        $r4 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData get(int)>(0);
+
+        $r3 = <com.mbridge.msdk.playercommon.exoplayer2.C: java.util.UUID COMMON_PSSH_UUID>;
+
+        $z0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData$SchemeData: boolean matches(java.util.UUID)>($r3);
+
+        if $z0 == 0 goto label7;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("DrmInitData only contains common PSSH SchemeData. Assuming support for: ");
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.UUID uuid>;
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("DefaultDrmSessionMgr", $r6);
+
+        goto label3;
+
+     label2:
+        return 0;
+
+     label3:
+        $r6 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData: java.lang.String schemeType>;
+
+        if $r6 == null goto label8;
+
+        $r7 = "cenc";
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label4;
+
+        return 1;
+
+     label4:
+        $r7 = "cbc1";
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 != 0 goto label6;
+
+        $r7 = "cbcs";
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 != 0 goto label6;
+
+        $r7 = "cens";
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label5;
+
+        goto label6;
+
+     label5:
+        return 1;
+
+     label6:
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i0 < 25 goto label7;
+
+        return 1;
+
+     label7:
+        return 0;
+
+     label8:
+        return 1;
+    }
+
+    public final byte[] getPropertyByteArray(java.lang.String)
+    {
+        byte[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r1;
+        java.lang.String $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm mediaDrm>;
+
+        $r2 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm: byte[] getPropertyByteArray(java.lang.String)>($r3);
+
+        return $r2;
+    }
+
+    public final java.lang.String getPropertyString(java.lang.String)
+    {
+        java.lang.String $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm mediaDrm>;
+
+        $r2 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm: java.lang.String getPropertyString(java.lang.String)>($r2);
+
+        return $r2;
+    }
+
+    public void onProvisionCompleted()
+    {
+        java.util.List $r1;
+        java.util.Iterator $r2;
+        java.lang.Object $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession) $r3;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession: void onProvisionCompleted()>();
+
+        goto label1;
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions>;
+
+        interfaceinvoke $r1.<java.util.List: void clear()>();
+
+        return;
+    }
+
+    public void onProvisionError(java.lang.Exception)
+    {
+        java.util.List $r2;
+        java.util.Iterator $r3;
+        java.lang.Object $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        java.lang.Exception $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: java.lang.Exception;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession) $r4;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession: void onProvisionError(java.lang.Exception)>($r1);
+
+        goto label1;
+
+     label2:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions>;
+
+        interfaceinvoke $r2.<java.util.List: void clear()>();
+
+        return;
+    }
+
+    public void provisionRequired(com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession)
+    {
+        java.util.List $r2;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 != 1 goto label1;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession: void provision()>();
+
+     label1:
+        return;
+    }
+
+    public void releaseSession(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession)
+    {
+        java.util.List $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession $r1;
+        int $i0;
+        java.lang.Object $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession $r2, $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession;
+
+        $z0 = $r1 instanceof com.mbridge.msdk.playercommon.exoplayer2.drm.ErrorStateDrmSession;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession) $r1;
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession: boolean release()>();
+
+        if $z0 == 0 goto label3;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List sessions>;
+
+        interfaceinvoke $r3.<java.util.List: boolean remove(java.lang.Object)>($r2);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions>;
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i0 <= 1 goto label2;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions>;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>(0);
+
+        if $r4 != $r2 goto label2;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions>;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>(1);
+
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession) $r4;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSession: void provision()>();
+
+     label2:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List provisioningSessions>;
+
+        interfaceinvoke $r3.<java.util.List: boolean remove(java.lang.Object)>($r2);
+
+     label3:
+        return;
+    }
+
+    public final void removeListener(com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher eventDispatcher>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener$EventDispatcher: void removeListener(com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)>($r1);
+
+        return;
+    }
+
+    public void setMode(int, byte[])
+    {
+        byte[] $r1;
+        java.util.List $r2;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: byte[];
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.util.List sessions>;
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean isEmpty()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        if $i0 == 1 goto label1;
+
+        if $i0 != 3 goto label2;
+
+     label1:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int mode> = $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: byte[] offlineLicenseKeySetId> = $r1;
+
+        return;
+    }
+
+    public final void setPropertyByteArray(java.lang.String, byte[])
+    {
+        byte[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r3;
+        java.lang.String $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: byte[];
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm mediaDrm>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm: void setPropertyByteArray(java.lang.String,byte[])>($r1, $r2);
+
+        return;
+    }
+
+    public final void setPropertyString(java.lang.String, java.lang.String)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm $r3;
+        java.lang.String $r1, $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm mediaDrm>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaDrm: void setPropertyString(java.lang.String,java.lang.String)>($r1, $r2);
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.lang.String TAG> = "DefaultDrmSessionMgr";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: java.lang.String PLAYREADY_CUSTOM_DATA_KEY> = "PRCustomData";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int MODE_RELEASE> = 3;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int MODE_QUERY> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int MODE_PLAYBACK> = 0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int MODE_DOWNLOAD> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: int INITIAL_DRM_REQUEST_RETRY_COUNT> = 3;
+
+        return;
+    }
+}

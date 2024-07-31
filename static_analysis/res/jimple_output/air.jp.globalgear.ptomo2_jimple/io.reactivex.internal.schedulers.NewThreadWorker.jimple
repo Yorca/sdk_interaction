@@ -1,0 +1,412 @@
+public class io.reactivex.internal.schedulers.NewThreadWorker extends io.reactivex.Scheduler$Worker implements io.reactivex.disposables.Disposable
+{
+    volatile boolean disposed;
+    private final java.util.concurrent.ScheduledExecutorService executor;
+
+    public void <init>(java.util.concurrent.ThreadFactory)
+    {
+        java.util.concurrent.ScheduledExecutorService $r1;
+        io.reactivex.internal.schedulers.NewThreadWorker r0;
+        java.util.concurrent.ThreadFactory $r2;
+
+        r0 := @this: io.reactivex.internal.schedulers.NewThreadWorker;
+
+        $r2 := @parameter0: java.util.concurrent.ThreadFactory;
+
+        specialinvoke r0.<io.reactivex.Scheduler$Worker: void <init>()>();
+
+        $r1 = staticinvoke <io.reactivex.internal.schedulers.SchedulerPoolFactory: java.util.concurrent.ScheduledExecutorService create(java.util.concurrent.ThreadFactory)>($r2);
+
+        r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor> = $r1;
+
+        return;
+    }
+
+    public void dispose()
+    {
+        java.util.concurrent.ScheduledExecutorService $r1;
+        io.reactivex.internal.schedulers.NewThreadWorker r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.schedulers.NewThreadWorker;
+
+        $z0 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: boolean disposed>;
+
+        if $z0 != 0 goto label1;
+
+        r0.<io.reactivex.internal.schedulers.NewThreadWorker: boolean disposed> = 1;
+
+        $r1 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor>;
+
+        interfaceinvoke $r1.<java.util.concurrent.ScheduledExecutorService: java.util.List shutdownNow()>();
+
+     label1:
+        return;
+    }
+
+    public boolean isDisposed()
+    {
+        io.reactivex.internal.schedulers.NewThreadWorker r0;
+        boolean z0;
+
+        r0 := @this: io.reactivex.internal.schedulers.NewThreadWorker;
+
+        z0 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: boolean disposed>;
+
+        return z0;
+    }
+
+    public io.reactivex.disposables.Disposable schedule(java.lang.Runnable)
+    {
+        io.reactivex.disposables.Disposable $r1;
+        io.reactivex.internal.schedulers.NewThreadWorker r0;
+        java.lang.Runnable $r2;
+
+        r0 := @this: io.reactivex.internal.schedulers.NewThreadWorker;
+
+        $r2 := @parameter0: java.lang.Runnable;
+
+        $r1 = virtualinvoke r0.<io.reactivex.internal.schedulers.NewThreadWorker: io.reactivex.disposables.Disposable schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r2, 0L, null);
+
+        return $r1;
+    }
+
+    public io.reactivex.disposables.Disposable schedule(java.lang.Runnable, long, java.util.concurrent.TimeUnit)
+    {
+        java.util.concurrent.TimeUnit $r1;
+        io.reactivex.internal.disposables.EmptyDisposable r4;
+        io.reactivex.internal.schedulers.ScheduledRunnable $r2;
+        long $l0;
+        io.reactivex.internal.schedulers.NewThreadWorker r0;
+        java.lang.Runnable $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.schedulers.NewThreadWorker;
+
+        $r3 := @parameter0: java.lang.Runnable;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: java.util.concurrent.TimeUnit;
+
+        $z0 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: boolean disposed>;
+
+        if $z0 == 0 goto label1;
+
+        r4 = <io.reactivex.internal.disposables.EmptyDisposable: io.reactivex.internal.disposables.EmptyDisposable INSTANCE>;
+
+        return r4;
+
+     label1:
+        $r2 = virtualinvoke r0.<io.reactivex.internal.schedulers.NewThreadWorker: io.reactivex.internal.schedulers.ScheduledRunnable scheduleActual(java.lang.Runnable,long,java.util.concurrent.TimeUnit,io.reactivex.internal.disposables.DisposableContainer)>($r3, $l0, $r1, null);
+
+        return $r2;
+    }
+
+    public io.reactivex.internal.schedulers.ScheduledRunnable scheduleActual(java.lang.Runnable, long, java.util.concurrent.TimeUnit, io.reactivex.internal.disposables.DisposableContainer)
+    {
+        java.lang.Throwable $r9;
+        java.util.concurrent.ScheduledFuture $r8;
+        io.reactivex.internal.schedulers.ScheduledRunnable $r10;
+        long $l0;
+        java.lang.Runnable $r4;
+        java.util.concurrent.TimeUnit $r1;
+        java.util.concurrent.Future $r6;
+        byte $b1;
+        java.util.concurrent.ScheduledExecutorService $r5;
+        int $i2;
+        java.lang.Object $r7;
+        io.reactivex.internal.disposables.DisposableContainer $r2;
+        io.reactivex.internal.schedulers.NewThreadWorker r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.schedulers.NewThreadWorker;
+
+        $r4 := @parameter0: java.lang.Runnable;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: java.util.concurrent.TimeUnit;
+
+        $r2 := @parameter3: io.reactivex.internal.disposables.DisposableContainer;
+
+        $r4 = staticinvoke <io.reactivex.plugins.RxJavaPlugins: java.lang.Runnable onSchedule(java.lang.Runnable)>($r4);
+
+        $r10 = new io.reactivex.internal.schedulers.ScheduledRunnable;
+
+        specialinvoke $r10.<io.reactivex.internal.schedulers.ScheduledRunnable: void <init>(java.lang.Runnable,io.reactivex.internal.disposables.DisposableContainer)>($r4, $r2);
+
+        if $r2 == null goto label01;
+
+        $z0 = interfaceinvoke $r2.<io.reactivex.internal.disposables.DisposableContainer: boolean add(io.reactivex.disposables.Disposable)>($r10);
+
+        if $z0 != 0 goto label01;
+
+        return $r10;
+
+     label01:
+        $b1 = $l0 cmp 0L;
+
+        $i2 = (int) $b1;
+
+        if $i2 > 0 goto label04;
+
+        $r5 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor>;
+
+     label02:
+        $r6 = interfaceinvoke $r5.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.Future submit(java.util.concurrent.Callable)>($r10);
+
+     label03:
+        $r7 = $r6;
+
+        goto label07;
+
+     label04:
+        $r5 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor>;
+
+     label05:
+        $r8 = interfaceinvoke $r5.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.util.concurrent.Callable,long,java.util.concurrent.TimeUnit)>($r10, $l0, $r1);
+
+     label06:
+        $r7 = $r8;
+
+     label07:
+        $r6 = (java.util.concurrent.Future) $r7;
+
+     label08:
+        virtualinvoke $r10.<io.reactivex.internal.schedulers.ScheduledRunnable: void setFuture(java.util.concurrent.Future)>($r6);
+
+     label09:
+        return $r10;
+
+     label10:
+        $r9 := @caughtexception;
+
+        if $r2 == null goto label11;
+
+        interfaceinvoke $r2.<io.reactivex.internal.disposables.DisposableContainer: boolean remove(io.reactivex.disposables.Disposable)>($r10);
+
+     label11:
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r9);
+
+        return $r10;
+
+        catch java.util.concurrent.RejectedExecutionException from label02 to label03 with label10;
+        catch java.util.concurrent.RejectedExecutionException from label05 to label06 with label10;
+        catch java.util.concurrent.RejectedExecutionException from label08 to label09 with label10;
+    }
+
+    public io.reactivex.disposables.Disposable scheduleDirect(java.lang.Runnable, long, java.util.concurrent.TimeUnit)
+    {
+        java.lang.Throwable $r8;
+        java.util.concurrent.ScheduledFuture $r7;
+        long $l0;
+        java.lang.Runnable $r3;
+        java.util.concurrent.TimeUnit $r1;
+        java.util.concurrent.Future $r5;
+        io.reactivex.internal.disposables.EmptyDisposable r9;
+        byte $b1;
+        java.util.concurrent.ScheduledExecutorService $r4;
+        int $i2;
+        java.lang.Object $r6;
+        io.reactivex.internal.schedulers.NewThreadWorker r0;
+        io.reactivex.internal.schedulers.ScheduledDirectTask $r10;
+
+        r0 := @this: io.reactivex.internal.schedulers.NewThreadWorker;
+
+        $r3 := @parameter0: java.lang.Runnable;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: java.util.concurrent.TimeUnit;
+
+        $r10 = new io.reactivex.internal.schedulers.ScheduledDirectTask;
+
+        $r3 = staticinvoke <io.reactivex.plugins.RxJavaPlugins: java.lang.Runnable onSchedule(java.lang.Runnable)>($r3);
+
+        specialinvoke $r10.<io.reactivex.internal.schedulers.ScheduledDirectTask: void <init>(java.lang.Runnable)>($r3);
+
+        $b1 = $l0 cmp 0L;
+
+        $i2 = (int) $b1;
+
+        if $i2 > 0 goto label3;
+
+        $r4 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor>;
+
+     label1:
+        $r5 = interfaceinvoke $r4.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.Future submit(java.util.concurrent.Callable)>($r10);
+
+     label2:
+        $r6 = $r5;
+
+        goto label6;
+
+     label3:
+        $r4 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor>;
+
+     label4:
+        $r7 = interfaceinvoke $r4.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.util.concurrent.Callable,long,java.util.concurrent.TimeUnit)>($r10, $l0, $r1);
+
+     label5:
+        $r6 = $r7;
+
+     label6:
+        $r5 = (java.util.concurrent.Future) $r6;
+
+     label7:
+        virtualinvoke $r10.<io.reactivex.internal.schedulers.ScheduledDirectTask: void setFuture(java.util.concurrent.Future)>($r5);
+
+     label8:
+        return $r10;
+
+     label9:
+        $r8 := @caughtexception;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r8);
+
+        r9 = <io.reactivex.internal.disposables.EmptyDisposable: io.reactivex.internal.disposables.EmptyDisposable INSTANCE>;
+
+        return r9;
+
+        catch java.util.concurrent.RejectedExecutionException from label1 to label2 with label9;
+        catch java.util.concurrent.RejectedExecutionException from label4 to label5 with label9;
+        catch java.util.concurrent.RejectedExecutionException from label7 to label8 with label9;
+    }
+
+    public io.reactivex.disposables.Disposable schedulePeriodicallyDirect(java.lang.Runnable, long, long, java.util.concurrent.TimeUnit)
+    {
+        java.lang.Throwable $r9, $r10;
+        java.util.concurrent.ScheduledFuture $r8;
+        long $l0, $l1;
+        java.lang.Runnable $r4;
+        java.util.concurrent.Future $r6;
+        byte $b2;
+        java.util.concurrent.ScheduledExecutorService $r1;
+        int $i3;
+        io.reactivex.internal.schedulers.ScheduledDirectPeriodicTask $r13;
+        java.util.concurrent.TimeUnit $r2;
+        io.reactivex.internal.schedulers.InstantPeriodicTask $r12;
+        io.reactivex.internal.disposables.EmptyDisposable r11;
+        java.lang.Object $r7;
+        io.reactivex.internal.schedulers.NewThreadWorker r0;
+
+        r0 := @this: io.reactivex.internal.schedulers.NewThreadWorker;
+
+        $r4 := @parameter0: java.lang.Runnable;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $r2 := @parameter3: java.util.concurrent.TimeUnit;
+
+        $r4 = staticinvoke <io.reactivex.plugins.RxJavaPlugins: java.lang.Runnable onSchedule(java.lang.Runnable)>($r4);
+
+        $b2 = $l1 cmp 0L;
+
+        $i3 = (int) $b2;
+
+        if $i3 > 0 goto label10;
+
+        $r12 = new io.reactivex.internal.schedulers.InstantPeriodicTask;
+
+        $r1 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor>;
+
+        specialinvoke $r12.<io.reactivex.internal.schedulers.InstantPeriodicTask: void <init>(java.lang.Runnable,java.util.concurrent.ExecutorService)>($r4, $r1);
+
+        $b2 = $l0 cmp 0L;
+
+        $i3 = (int) $b2;
+
+        if $i3 > 0 goto label03;
+
+        $r1 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor>;
+
+     label01:
+        $r6 = interfaceinvoke $r1.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.Future submit(java.util.concurrent.Callable)>($r12);
+
+     label02:
+        $r7 = $r6;
+
+        goto label06;
+
+     label03:
+        $r1 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor>;
+
+     label04:
+        $r8 = interfaceinvoke $r1.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.util.concurrent.Callable,long,java.util.concurrent.TimeUnit)>($r12, $l0, $r2);
+
+     label05:
+        $r7 = $r8;
+
+     label06:
+        $r6 = (java.util.concurrent.Future) $r7;
+
+     label07:
+        virtualinvoke $r12.<io.reactivex.internal.schedulers.InstantPeriodicTask: void setFirst(java.util.concurrent.Future)>($r6);
+
+     label08:
+        return $r12;
+
+     label09:
+        $r9 := @caughtexception;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r9);
+
+        r11 = <io.reactivex.internal.disposables.EmptyDisposable: io.reactivex.internal.disposables.EmptyDisposable INSTANCE>;
+
+        return r11;
+
+     label10:
+        $r13 = new io.reactivex.internal.schedulers.ScheduledDirectPeriodicTask;
+
+        specialinvoke $r13.<io.reactivex.internal.schedulers.ScheduledDirectPeriodicTask: void <init>(java.lang.Runnable)>($r4);
+
+        $r1 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor>;
+
+     label11:
+        $r8 = interfaceinvoke $r1.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture scheduleAtFixedRate(java.lang.Runnable,long,long,java.util.concurrent.TimeUnit)>($r13, $l0, $l1, $r2);
+
+        virtualinvoke $r13.<io.reactivex.internal.schedulers.ScheduledDirectPeriodicTask: void setFuture(java.util.concurrent.Future)>($r8);
+
+     label12:
+        return $r13;
+
+     label13:
+        $r10 := @caughtexception;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r10);
+
+        r11 = <io.reactivex.internal.disposables.EmptyDisposable: io.reactivex.internal.disposables.EmptyDisposable INSTANCE>;
+
+        return r11;
+
+        catch java.util.concurrent.RejectedExecutionException from label01 to label02 with label09;
+        catch java.util.concurrent.RejectedExecutionException from label04 to label05 with label09;
+        catch java.util.concurrent.RejectedExecutionException from label07 to label08 with label09;
+        catch java.util.concurrent.RejectedExecutionException from label11 to label12 with label13;
+    }
+
+    public void shutdown()
+    {
+        java.util.concurrent.ScheduledExecutorService $r1;
+        io.reactivex.internal.schedulers.NewThreadWorker r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.schedulers.NewThreadWorker;
+
+        $z0 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: boolean disposed>;
+
+        if $z0 != 0 goto label1;
+
+        r0.<io.reactivex.internal.schedulers.NewThreadWorker: boolean disposed> = 1;
+
+        $r1 = r0.<io.reactivex.internal.schedulers.NewThreadWorker: java.util.concurrent.ScheduledExecutorService executor>;
+
+        interfaceinvoke $r1.<java.util.concurrent.ScheduledExecutorService: void shutdown()>();
+
+     label1:
+        return;
+    }
+}

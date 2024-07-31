@@ -1,0 +1,562 @@
+public class com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.LoadControl
+{
+    public static final int DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS;
+    public static final int DEFAULT_BUFFER_FOR_PLAYBACK_MS;
+    public static final int DEFAULT_MAX_BUFFER_MS;
+    public static final int DEFAULT_MIN_BUFFER_MS;
+    public static final boolean DEFAULT_PRIORITIZE_TIME_OVER_SIZE_THRESHOLDS;
+    public static final int DEFAULT_TARGET_BUFFER_BYTES;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator allocator;
+    private final long bufferForPlaybackAfterRebufferUs;
+    private final long bufferForPlaybackUs;
+    private boolean isBuffering;
+    private final long maxBufferUs;
+    private final long minBufferUs;
+    private final boolean prioritizeTimeOverSizeThresholds;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager priorityTaskManager;
+    private final int targetBufferBytesOverwrite;
+    private int targetBufferSize;
+
+    public void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: void <init>(boolean,int)>(1, 65536);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator)>($r1);
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator,int,int,int,int,int,boolean)>($r1, 15000, 50000, 2500, 5000, -1, 1);
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator, int, int, int, int, int, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $i3 := @parameter4: int;
+
+        $i4 := @parameter5: int;
+
+        $z0 := @parameter6: boolean;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator,int,int,int,int,int,boolean,com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager)>($r1, $i0, $i1, $i2, $i3, $i4, $z0, null);
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator, int, int, int, int, int, boolean, com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+        long $l5;
+        int $i0, $i1, $i2, $i3, $i4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $i3 := @parameter4: int;
+
+        $i4 := @parameter5: int;
+
+        $z0 := @parameter6: boolean;
+
+        $r1 := @parameter7: com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void assertGreaterOrEqual(int,int,java.lang.String,java.lang.String)>($i2, 0, "bufferForPlaybackMs", "0");
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void assertGreaterOrEqual(int,int,java.lang.String,java.lang.String)>($i3, 0, "bufferForPlaybackAfterRebufferMs", "0");
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void assertGreaterOrEqual(int,int,java.lang.String,java.lang.String)>($i0, $i2, "minBufferMs", "bufferForPlaybackMs");
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void assertGreaterOrEqual(int,int,java.lang.String,java.lang.String)>($i0, $i3, "minBufferMs", "bufferForPlaybackAfterRebufferMs");
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void assertGreaterOrEqual(int,int,java.lang.String,java.lang.String)>($i1, $i0, "maxBufferMs", "minBufferMs");
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator allocator> = $r2;
+
+        $l5 = (long) $i0;
+
+        $l5 = $l5 * 1000L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: long minBufferUs> = $l5;
+
+        $l5 = (long) $i1;
+
+        $l5 = $l5 * 1000L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: long maxBufferUs> = $l5;
+
+        $l5 = (long) $i2;
+
+        $l5 = $l5 * 1000L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: long bufferForPlaybackUs> = $l5;
+
+        $l5 = (long) $i3;
+
+        $l5 = $l5 * 1000L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: long bufferForPlaybackAfterRebufferUs> = $l5;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int targetBufferBytesOverwrite> = $i4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean prioritizeTimeOverSizeThresholds> = $z0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager priorityTaskManager> = $r1;
+
+        return;
+    }
+
+    private static void assertGreaterOrEqual(int, int, java.lang.String, java.lang.String)
+    {
+        int $i0, $i1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r0, $r1;
+        boolean $z0;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $r0 := @parameter3: java.lang.String;
+
+        if $i0 < $i1 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" cannot be less than ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, $r1);
+
+        return;
+    }
+
+    private void reset(boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        $z1 := @parameter0: boolean;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int targetBufferSize> = 0;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager priorityTaskManager>;
+
+        if $r1 == null goto label1;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean isBuffering>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager: void remove(int)>(0);
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean isBuffering> = 0;
+
+        if $z1 == 0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator allocator>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: void reset()>();
+
+     label2:
+        return;
+    }
+
+    protected int calculateTargetBufferSize(com.mbridge.msdk.playercommon.exoplayer2.Renderer[], com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r3;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Renderer[];
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray;
+
+        $i0 = 0;
+
+        $i1 = 0;
+
+     label1:
+        $i2 = lengthof $r1;
+
+        if $i0 >= $i2 goto label3;
+
+        $r3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection get(int)>($i0);
+
+        if $r3 == null goto label2;
+
+        $r4 = $r1[$i0];
+
+        $i2 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.Renderer: int getTrackType()>();
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getDefaultBufferSize(int)>($i2);
+
+        $i1 = $i1 + $i2;
+
+     label2:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label3:
+        return $i1;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator getAllocator()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r1;
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator allocator>;
+
+        return r1;
+    }
+
+    public long getBackBufferDurationUs()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        return 0L;
+    }
+
+    public void onPrepared()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void reset(boolean)>(0);
+
+        return;
+    }
+
+    public void onReleased()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void reset(boolean)>(1);
+
+        return;
+    }
+
+    public void onStopped()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: void reset(boolean)>(1);
+
+        return;
+    }
+
+    public void onTracksSelected(com.mbridge.msdk.playercommon.exoplayer2.Renderer[], com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray, com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray $r1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer[] $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Renderer[];
+
+        $r3 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r1 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int targetBufferBytesOverwrite>;
+
+        if $i0 != -1 goto label1;
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int calculateTargetBufferSize(com.mbridge.msdk.playercommon.exoplayer2.Renderer[],com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray)>($r2, $r1);
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int targetBufferSize> = $i0;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator allocator>;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: void setTargetBufferSize(int)>($i0);
+
+        return;
+    }
+
+    public boolean retainBackBufferFromKeyframe()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        return 0;
+    }
+
+    public boolean shouldContinueLoading(long, float)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+        long $l0, $l3, $l5;
+        byte $b4;
+        int $i1, $i2;
+        float $f0;
+        boolean $z0, $z1, $z2, $z3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        $l0 := @parameter0: long;
+
+        $f0 := @parameter1: float;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator allocator>;
+
+        $i1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int getTotalBytesAllocated()>();
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int targetBufferSize>;
+
+        $z0 = 1;
+
+        if $i1 < $i2 goto label01;
+
+        $z1 = 1;
+
+        goto label02;
+
+     label01:
+        $z1 = 0;
+
+     label02:
+        $z2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean isBuffering>;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: long minBufferUs>;
+
+        $b4 = $f0 cmpl 1.0F;
+
+        $i1 = (int) $b4;
+
+        if $i1 <= 0 goto label03;
+
+        $l3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long getMediaDurationForPlayoutDuration(long,float)>($l3, $f0);
+
+        $l5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: long maxBufferUs>;
+
+        $l3 = staticinvoke <java.lang.Math: long min(long,long)>($l3, $l5);
+
+     label03:
+        $b4 = $l0 cmp $l3;
+
+        $i1 = (int) $b4;
+
+        if $i1 >= 0 goto label06;
+
+        $z3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean prioritizeTimeOverSizeThresholds>;
+
+        if $z3 != 0 goto label05;
+
+        if $z1 != 0 goto label04;
+
+        goto label05;
+
+     label04:
+        $z0 = 0;
+
+     label05:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean isBuffering> = $z0;
+
+        goto label08;
+
+     label06:
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: long maxBufferUs>;
+
+        $b4 = $l0 cmp $l3;
+
+        $i1 = (int) $b4;
+
+        if $i1 > 0 goto label07;
+
+        if $z1 == 0 goto label08;
+
+     label07:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean isBuffering> = 0;
+
+     label08:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager priorityTaskManager>;
+
+        if $r2 == null goto label10;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean isBuffering>;
+
+        if $z0 == $z2 goto label10;
+
+        if $z0 == 0 goto label09;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager: void add(int)>(0);
+
+        goto label10;
+
+     label09:
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.PriorityTaskManager: void remove(int)>(0);
+
+     label10:
+        $z2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean isBuffering>;
+
+        return $z2;
+    }
+
+    public boolean shouldStartPlayback(long, float, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl r0;
+        long $l2, $l3;
+        byte $b1;
+        int $i0, $i4;
+        float $f0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl;
+
+        $l2 := @parameter0: long;
+
+        $f0 := @parameter1: float;
+
+        $z0 := @parameter2: boolean;
+
+        $l2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long getPlayoutDurationForMediaDuration(long,float)>($l2, $f0);
+
+        if $z0 == 0 goto label1;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: long bufferForPlaybackAfterRebufferUs>;
+
+        goto label2;
+
+     label1:
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: long bufferForPlaybackUs>;
+
+     label2:
+        $b1 = $l3 cmp 0L;
+
+        $i0 = (int) $b1;
+
+        if $i0 <= 0 goto label4;
+
+        $b1 = $l2 cmp $l3;
+
+        $i0 = (int) $b1;
+
+        if $i0 >= 0 goto label4;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean prioritizeTimeOverSizeThresholds>;
+
+        if $z0 != 0 goto label3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator allocator>;
+
+        $i4 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int getTotalBytesAllocated()>();
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int targetBufferSize>;
+
+        if $i4 < $i0 goto label3;
+
+        goto label4;
+
+     label3:
+        return 0;
+
+     label4:
+        return 1;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int DEFAULT_TARGET_BUFFER_BYTES> = -1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: boolean DEFAULT_PRIORITIZE_TIME_OVER_SIZE_THRESHOLDS> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int DEFAULT_MIN_BUFFER_MS> = 15000;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int DEFAULT_MAX_BUFFER_MS> = 50000;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int DEFAULT_BUFFER_FOR_PLAYBACK_MS> = 2500;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.DefaultLoadControl: int DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS> = 5000;
+
+        return;
+    }
+}

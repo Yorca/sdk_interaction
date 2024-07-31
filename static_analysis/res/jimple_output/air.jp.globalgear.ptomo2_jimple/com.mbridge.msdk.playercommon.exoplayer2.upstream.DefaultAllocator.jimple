@@ -1,0 +1,642 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator
+{
+    private static final int AVAILABLE_EXTRA_CAPACITY;
+    private int allocatedCount;
+    private com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations;
+    private int availableCount;
+    private final int individualAllocationSize;
+    private final byte[] initialAllocationBlock;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] singleAllocationReleaseHolder;
+    private int targetBufferSize;
+    private final boolean trimOnReset;
+
+    public void <init>(boolean, int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        $z0 := @parameter0: boolean;
+
+        $i0 := @parameter1: int;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: void <init>(boolean,int,int)>($z0, $i0, 0);
+
+        return;
+    }
+
+    public void <init>(boolean, int, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r1;
+        byte[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] $r3;
+        int $i0, $i1, $i2, $i3;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        $z0 := @parameter0: boolean;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $i2 = 0;
+
+        if $i0 <= 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean)>($z1);
+
+        if $i1 < 0 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean)>($z1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: boolean trimOnReset> = $z0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int individualAllocationSize> = $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int availableCount> = $i1;
+
+        $i3 = $i1 + 100;
+
+        $r3 = newarray (com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation)[$i3];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations> = $r3;
+
+        if $i1 <= 0 goto label6;
+
+        $i3 = $i1 * $i0;
+
+        $r2 = newarray (byte)[$i3];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: byte[] initialAllocationBlock> = $r2;
+
+     label5:
+        if $i2 >= $i1 goto label7;
+
+        $i3 = $i2 * $i0;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations>;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: byte[] initialAllocationBlock>;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: void <init>(byte[],int)>($r2, $i3);
+
+        $r3[$i2] = $r1;
+
+        $i2 = $i2 + 1;
+
+        goto label5;
+
+     label6:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: byte[] initialAllocationBlock> = null;
+
+     label7:
+        $r3 = newarray (com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation)[1];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] singleAllocationReleaseHolder> = $r3;
+
+        return;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation allocate()
+    {
+        java.lang.Throwable $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r2, $r5;
+        byte[] $r3;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        entermonitor r0;
+
+     label1:
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int allocatedCount>;
+
+        $i0 = $i0 + 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int allocatedCount> = $i0;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int availableCount>;
+
+        if $i0 <= 0 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations>;
+
+        $i0 = $i0 + -1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int availableCount> = $i0;
+
+        $r2 = $r1[$i0];
+
+        $r1[$i0] = null;
+
+        goto label3;
+
+     label2:
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation;
+
+        $r2 = $r5;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int individualAllocationSize>;
+
+        $r3 = newarray (byte)[$i0];
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: void <init>(byte[],int)>($r3, 0);
+
+     label3:
+        exitmonitor r0;
+
+        return $r2;
+
+     label4:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+
+    public final int getIndividualAllocationLength()
+    {
+        int i0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int individualAllocationSize>;
+
+        return i0;
+    }
+
+    public final int getTotalBytesAllocated()
+    {
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r0;
+        int $i0, $i1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        entermonitor r0;
+
+     label1:
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int allocatedCount>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int individualAllocationSize>;
+
+     label2:
+        $i0 = $i1 * $i0;
+
+        exitmonitor r0;
+
+        return $i0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void release(com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation)
+    {
+        java.lang.Throwable $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] singleAllocationReleaseHolder>;
+
+        $r1[0] = $r2;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: void release(com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[])>($r1);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void release(com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[])
+    {
+        java.lang.Throwable $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r4;
+        byte[] $r5, $r6;
+        java.lang.Object[] $r3;
+        java.lang.IllegalArgumentException $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] $r1, $r2;
+        int $i0, $i1, $i2, $i3;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r9;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[];
+
+        entermonitor r0;
+
+     label1:
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int availableCount>;
+
+        $i2 = lengthof $r1;
+
+        $i2 = $i2 + $i1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations>;
+
+        $i0 = lengthof $r2;
+
+        if $i2 < $i0 goto label2;
+
+        $i2 = lengthof $r2;
+
+        $i2 = $i2 * 2;
+
+        $i0 = lengthof $r1;
+
+        $i1 = $i1 + $i0;
+
+        $i1 = staticinvoke <java.lang.Math: int max(int,int)>($i2, $i1);
+
+        $r3 = staticinvoke <java.util.Arrays: java.lang.Object[] copyOf(java.lang.Object[],int)>($r2, $i1);
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[]) $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations> = $r2;
+
+     label2:
+        $i1 = lengthof $r1;
+
+        $i2 = 0;
+
+     label3:
+        if $i2 >= $i1 goto label6;
+
+        $r4 = $r1[$i2];
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: byte[] data>;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: byte[] initialAllocationBlock>;
+
+        if $r5 == $r6 goto label5;
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: byte[] data>;
+
+        $i0 = lengthof $r5;
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int individualAllocationSize>;
+
+        if $i0 != $i3 goto label4;
+
+        goto label5;
+
+     label4:
+        $r7 = new java.lang.IllegalArgumentException;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unexpected allocation: ");
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: byte[] data>;
+
+        $i1 = staticinvoke <java.lang.System: int identityHashCode(java.lang.Object)>($r5);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: byte[] initialAllocationBlock>;
+
+        $i1 = staticinvoke <java.lang.System: int identityHashCode(java.lang.Object)>($r5);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: byte[] data>;
+
+        $i1 = lengthof $r5;
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int individualAllocationSize>;
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r7.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r9);
+
+        throw $r7;
+
+     label5:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations>;
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int availableCount>;
+
+        $i0 = $i3 + 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int availableCount> = $i0;
+
+        $r2[$i3] = $r4;
+
+        $i2 = $i2 + 1;
+
+        goto label3;
+
+     label6:
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int allocatedCount>;
+
+        $i2 = lengthof $r1;
+
+        $i1 = $i1 - $i2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int allocatedCount> = $i1;
+
+        virtualinvoke r0.<java.lang.Object: void notifyAll()>();
+
+     label7:
+        exitmonitor r0;
+
+        return;
+
+     label8:
+        $r10 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r10;
+
+        catch java.lang.Throwable from label1 to label7 with label8;
+    }
+
+    public final void reset()
+    {
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: boolean trimOnReset>;
+
+        if $z0 == 0 goto label2;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: void setTargetBufferSize(int)>(0);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void setTargetBufferSize(int)
+    {
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r0;
+        int $i0, $i1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        $i0 := @parameter0: int;
+
+        entermonitor r0;
+
+     label1:
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int targetBufferSize>;
+
+        if $i0 >= $i1 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int targetBufferSize> = $i0;
+
+        if $z0 == 0 goto label4;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: void trim()>();
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+    }
+
+    public final void trim()
+    {
+        java.lang.Throwable $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator r0;
+        byte[] $r1, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r3, $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] $r2;
+        int $i0, $i1, $i2, $i3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator;
+
+        entermonitor r0;
+
+     label01:
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int targetBufferSize>;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int individualAllocationSize>;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int ceilDivide(int,int)>($i0, $i1);
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int allocatedCount>;
+
+        $i0 = $i0 - $i1;
+
+        $i1 = 0;
+
+        $i0 = staticinvoke <java.lang.Math: int max(int,int)>(0, $i0);
+
+        $i2 = $i0;
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int availableCount>;
+
+     label02:
+        if $i0 < $i3 goto label03;
+
+        exitmonitor r0;
+
+        return;
+
+     label03:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: byte[] initialAllocationBlock>;
+
+        if $r1 == null goto label09;
+
+        $i2 = $i3 + -1;
+
+     label04:
+        if $i1 > $i2 goto label07;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations>;
+
+        $r3 = $r2[$i1];
+
+        $r1 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: byte[] data>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: byte[] initialAllocationBlock>;
+
+        if $r1 != $r4 goto label05;
+
+        $i1 = $i1 + 1;
+
+        goto label04;
+
+     label05:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations>;
+
+        $r5 = $r2[$i2];
+
+        $r1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: byte[] data>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: byte[] initialAllocationBlock>;
+
+        if $r1 == $r4 goto label06;
+
+        $i2 = $i2 + -1;
+
+        goto label04;
+
+     label06:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations>;
+
+        $i3 = $i1 + 1;
+
+        $r2[$i1] = $r5;
+
+        $r2[$i2] = $r3;
+
+        $i2 = $i2 + -1;
+
+        $i1 = $i3;
+
+        goto label04;
+
+     label07:
+        $i0 = staticinvoke <java.lang.Math: int max(int,int)>($i0, $i1);
+
+        $i2 = $i0;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int availableCount>;
+
+     label08:
+        if $i0 < $i1 goto label09;
+
+        exitmonitor r0;
+
+        return;
+
+     label09:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] availableAllocations>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int availableCount>;
+
+        staticinvoke <java.util.Arrays: void fill(java.lang.Object[],int,int,java.lang.Object)>($r2, $i2, $i0, null);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int availableCount> = $i2;
+
+     label10:
+        exitmonitor r0;
+
+        return;
+
+     label11:
+        $r6 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r6;
+
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.lang.Throwable from label03 to label08 with label11;
+        catch java.lang.Throwable from label09 to label10 with label11;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultAllocator: int AVAILABLE_EXTRA_CAPACITY> = 100;
+
+        return;
+    }
+}

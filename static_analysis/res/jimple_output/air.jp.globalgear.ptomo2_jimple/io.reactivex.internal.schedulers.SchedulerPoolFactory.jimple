@@ -1,0 +1,214 @@
+public final class io.reactivex.internal.schedulers.SchedulerPoolFactory extends java.lang.Object
+{
+    static final java.util.Map POOLS;
+    public static final boolean PURGE_ENABLED;
+    static final java.lang.String PURGE_ENABLED_KEY;
+    public static final int PURGE_PERIOD_SECONDS;
+    static final java.lang.String PURGE_PERIOD_SECONDS_KEY;
+    static final java.util.concurrent.atomic.AtomicReference PURGE_THREAD;
+
+    static void <clinit>()
+    {
+        java.util.Properties $r1;
+        java.util.concurrent.ConcurrentHashMap $r3;
+        int $i0;
+        io.reactivex.internal.schedulers.SchedulerPoolFactory$PurgeProperties $r0;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        boolean $z0;
+
+        <io.reactivex.internal.schedulers.SchedulerPoolFactory: java.lang.String PURGE_PERIOD_SECONDS_KEY> = "rx2.purge-period-seconds";
+
+        <io.reactivex.internal.schedulers.SchedulerPoolFactory: java.lang.String PURGE_ENABLED_KEY> = "rx2.purge-enabled";
+
+        $r2 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        <io.reactivex.internal.schedulers.SchedulerPoolFactory: java.util.concurrent.atomic.AtomicReference PURGE_THREAD> = $r2;
+
+        $r3 = new java.util.concurrent.ConcurrentHashMap;
+
+        specialinvoke $r3.<java.util.concurrent.ConcurrentHashMap: void <init>()>();
+
+        <io.reactivex.internal.schedulers.SchedulerPoolFactory: java.util.Map POOLS> = $r3;
+
+        $r1 = staticinvoke <java.lang.System: java.util.Properties getProperties()>();
+
+        $r0 = new io.reactivex.internal.schedulers.SchedulerPoolFactory$PurgeProperties;
+
+        specialinvoke $r0.<io.reactivex.internal.schedulers.SchedulerPoolFactory$PurgeProperties: void <init>()>();
+
+        virtualinvoke $r0.<io.reactivex.internal.schedulers.SchedulerPoolFactory$PurgeProperties: void load(java.util.Properties)>($r1);
+
+        $z0 = $r0.<io.reactivex.internal.schedulers.SchedulerPoolFactory$PurgeProperties: boolean purgeEnable>;
+
+        <io.reactivex.internal.schedulers.SchedulerPoolFactory: boolean PURGE_ENABLED> = $z0;
+
+        $i0 = $r0.<io.reactivex.internal.schedulers.SchedulerPoolFactory$PurgeProperties: int purgePeriod>;
+
+        <io.reactivex.internal.schedulers.SchedulerPoolFactory: int PURGE_PERIOD_SECONDS> = $i0;
+
+        staticinvoke <io.reactivex.internal.schedulers.SchedulerPoolFactory: void start()>();
+
+        return;
+    }
+
+    private void <init>()
+    {
+        io.reactivex.internal.schedulers.SchedulerPoolFactory r0;
+        java.lang.IllegalStateException $r1;
+
+        r0 := @this: io.reactivex.internal.schedulers.SchedulerPoolFactory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.lang.IllegalStateException;
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>(java.lang.String)>("No instances!");
+
+        throw $r1;
+    }
+
+    public static java.util.concurrent.ScheduledExecutorService create(java.util.concurrent.ThreadFactory)
+    {
+        java.util.concurrent.ScheduledExecutorService $r0;
+        java.util.concurrent.ThreadFactory $r1;
+        boolean $z0;
+
+        $r1 := @parameter0: java.util.concurrent.ThreadFactory;
+
+        $r0 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ScheduledExecutorService newScheduledThreadPool(int,java.util.concurrent.ThreadFactory)>(1, $r1);
+
+        $z0 = <io.reactivex.internal.schedulers.SchedulerPoolFactory: boolean PURGE_ENABLED>;
+
+        staticinvoke <io.reactivex.internal.schedulers.SchedulerPoolFactory: void tryPutIntoPool(boolean,java.util.concurrent.ScheduledExecutorService)>($z0, $r0);
+
+        return $r0;
+    }
+
+    public static void shutdown()
+    {
+        java.util.Map $r3;
+        java.util.concurrent.ScheduledExecutorService $r2;
+        java.lang.Object $r0;
+        java.util.concurrent.atomic.AtomicReference $r1;
+
+        $r1 = <io.reactivex.internal.schedulers.SchedulerPoolFactory: java.util.concurrent.atomic.AtomicReference PURGE_THREAD>;
+
+        $r0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: java.lang.Object getAndSet(java.lang.Object)>(null);
+
+        $r2 = (java.util.concurrent.ScheduledExecutorService) $r0;
+
+        if $r2 == null goto label1;
+
+        interfaceinvoke $r2.<java.util.concurrent.ScheduledExecutorService: java.util.List shutdownNow()>();
+
+     label1:
+        $r3 = <io.reactivex.internal.schedulers.SchedulerPoolFactory: java.util.Map POOLS>;
+
+        interfaceinvoke $r3.<java.util.Map: void clear()>();
+
+        return;
+    }
+
+    public static void start()
+    {
+        boolean $z0;
+
+        $z0 = <io.reactivex.internal.schedulers.SchedulerPoolFactory: boolean PURGE_ENABLED>;
+
+        staticinvoke <io.reactivex.internal.schedulers.SchedulerPoolFactory: void tryStart(boolean)>($z0);
+
+        return;
+    }
+
+    static void tryPutIntoPool(boolean, java.util.concurrent.ScheduledExecutorService)
+    {
+        java.util.Map $r1;
+        java.util.concurrent.ScheduledExecutorService $r0;
+        java.util.concurrent.ScheduledThreadPoolExecutor $r2;
+        boolean $z0;
+
+        $z0 := @parameter0: boolean;
+
+        $r0 := @parameter1: java.util.concurrent.ScheduledExecutorService;
+
+        if $z0 == 0 goto label1;
+
+        $z0 = $r0 instanceof java.util.concurrent.ScheduledThreadPoolExecutor;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = (java.util.concurrent.ScheduledThreadPoolExecutor) $r0;
+
+        $r1 = <io.reactivex.internal.schedulers.SchedulerPoolFactory: java.util.Map POOLS>;
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r2, $r0);
+
+     label1:
+        return;
+    }
+
+    static void tryStart(boolean)
+    {
+        io.reactivex.internal.schedulers.RxThreadFactory $r0;
+        long $l0, $l1;
+        java.util.concurrent.atomic.AtomicReference $r3;
+        java.util.concurrent.TimeUnit $r2;
+        io.reactivex.internal.schedulers.SchedulerPoolFactory$ScheduledTask $r1;
+        java.util.concurrent.ScheduledExecutorService $r5, $r6;
+        int $i2;
+        java.lang.Object $r4;
+        boolean $z0;
+
+        $z0 := @parameter0: boolean;
+
+        if $z0 == 0 goto label4;
+
+     label1:
+        $r3 = <io.reactivex.internal.schedulers.SchedulerPoolFactory: java.util.concurrent.atomic.AtomicReference PURGE_THREAD>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r5 = (java.util.concurrent.ScheduledExecutorService) $r4;
+
+        if $r5 == null goto label2;
+
+        return;
+
+     label2:
+        $r0 = new io.reactivex.internal.schedulers.RxThreadFactory;
+
+        specialinvoke $r0.<io.reactivex.internal.schedulers.RxThreadFactory: void <init>(java.lang.String)>("RxSchedulerPurge");
+
+        $r6 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ScheduledExecutorService newScheduledThreadPool(int,java.util.concurrent.ThreadFactory)>(1, $r0);
+
+        $z0 = staticinvoke <kotlin.UByte$$ExternalSyntheticBackport0: boolean m(java.util.concurrent.atomic.AtomicReference,java.lang.Object,java.lang.Object)>($r3, $r5, $r6);
+
+        if $z0 == 0 goto label3;
+
+        $r1 = new io.reactivex.internal.schedulers.SchedulerPoolFactory$ScheduledTask;
+
+        specialinvoke $r1.<io.reactivex.internal.schedulers.SchedulerPoolFactory$ScheduledTask: void <init>()>();
+
+        $i2 = <io.reactivex.internal.schedulers.SchedulerPoolFactory: int PURGE_PERIOD_SECONDS>;
+
+        $l0 = (long) $i2;
+
+        $l1 = (long) $i2;
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        interfaceinvoke $r6.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture scheduleAtFixedRate(java.lang.Runnable,long,long,java.util.concurrent.TimeUnit)>($r1, $l0, $l1, $r2);
+
+        return;
+
+     label3:
+        interfaceinvoke $r6.<java.util.concurrent.ScheduledExecutorService: java.util.List shutdownNow()>();
+
+        goto label1;
+
+     label4:
+        return;
+    }
+}

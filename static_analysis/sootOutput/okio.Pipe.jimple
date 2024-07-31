@@ -1,0 +1,242 @@
+public final class okio.Pipe extends java.lang.Object
+{
+    final okio.Buffer buffer;
+    private okio.Sink foldedSink;
+    final long maxBufferSize;
+    private final okio.Sink sink;
+    boolean sinkClosed;
+    private final okio.Source source;
+    boolean sourceClosed;
+
+    public void <init>(long)
+    {
+        okio.Pipe$PipeSink $r4;
+        okio.Buffer $r3;
+        okio.Pipe r0;
+        long $l0;
+        java.lang.IllegalArgumentException $r7;
+        byte $b1;
+        okio.Pipe$PipeSource $r5;
+        int $i2;
+        java.lang.StringBuilder $r1, $r6;
+        java.lang.String $r2;
+
+        r0 := @this: okio.Pipe;
+
+        $l0 := @parameter0: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new okio.Buffer;
+
+        specialinvoke $r3.<okio.Buffer: void <init>()>();
+
+        r0.<okio.Pipe: okio.Buffer buffer> = $r3;
+
+        $r4 = new okio.Pipe$PipeSink;
+
+        specialinvoke $r4.<okio.Pipe$PipeSink: void <init>(okio.Pipe)>(r0);
+
+        r0.<okio.Pipe: okio.Sink sink> = $r4;
+
+        $r5 = new okio.Pipe$PipeSource;
+
+        specialinvoke $r5.<okio.Pipe$PipeSource: void <init>(okio.Pipe)>(r0);
+
+        r0.<okio.Pipe: okio.Source source> = $r5;
+
+        $b1 = $l0 cmp 1L;
+
+        $i2 = (int) $b1;
+
+        if $i2 < 0 goto label1;
+
+        r0.<okio.Pipe: long maxBufferSize> = $l0;
+
+        return;
+
+     label1:
+        $r7 = new java.lang.IllegalArgumentException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        $r1 = $r6;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("maxBufferSize < 1: ");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r7.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r2);
+
+        throw $r7;
+    }
+
+    static okio.Sink access$000(okio.Pipe)
+    {
+        okio.Pipe $r0;
+        okio.Sink r1;
+
+        $r0 := @parameter0: okio.Pipe;
+
+        r1 = $r0.<okio.Pipe: okio.Sink foldedSink>;
+
+        return r1;
+    }
+
+    public void fold(okio.Sink) throws java.io.IOException
+    {
+        java.lang.Throwable $r6, $r7, $r9;
+        java.lang.IllegalStateException $r8;
+        okio.Buffer $r1, $r3, $r5;
+        okio.Pipe r0;
+        long $l0;
+        okio.Sink $r2, $r4;
+        boolean $z0;
+
+        r0 := @this: okio.Pipe;
+
+        $r2 := @parameter0: okio.Sink;
+
+     label01:
+        $r3 = r0.<okio.Pipe: okio.Buffer buffer>;
+
+        entermonitor $r3;
+
+     label02:
+        $r4 = r0.<okio.Pipe: okio.Sink foldedSink>;
+
+        if $r4 != null goto label17;
+
+        $r1 = r0.<okio.Pipe: okio.Buffer buffer>;
+
+        $z0 = virtualinvoke $r1.<okio.Buffer: boolean exhausted()>();
+
+        if $z0 == 0 goto label04;
+
+        r0.<okio.Pipe: boolean sourceClosed> = 1;
+
+        r0.<okio.Pipe: okio.Sink foldedSink> = $r2;
+
+        exitmonitor $r3;
+
+     label03:
+        return;
+
+     label04:
+        $z0 = r0.<okio.Pipe: boolean sinkClosed>;
+
+        $r1 = new okio.Buffer;
+
+        specialinvoke $r1.<okio.Buffer: void <init>()>();
+
+        $r5 = r0.<okio.Pipe: okio.Buffer buffer>;
+
+        $l0 = $r5.<okio.Buffer: long size>;
+
+        virtualinvoke $r1.<okio.Buffer: void write(okio.Buffer,long)>($r5, $l0);
+
+        $r5 = r0.<okio.Pipe: okio.Buffer buffer>;
+
+        virtualinvoke $r5.<java.lang.Object: void notifyAll()>();
+
+        exitmonitor $r3;
+
+     label05:
+        $l0 = $r1.<okio.Buffer: long size>;
+
+        interfaceinvoke $r2.<okio.Sink: void write(okio.Buffer,long)>($r1, $l0);
+
+     label06:
+        if $z0 == 0 goto label09;
+
+     label07:
+        interfaceinvoke $r2.<okio.Sink: void close()>();
+
+     label08:
+        goto label01;
+
+     label09:
+        interfaceinvoke $r2.<okio.Sink: void flush()>();
+
+     label10:
+        goto label01;
+
+     label11:
+        $r6 := @caughtexception;
+
+        $r3 = r0.<okio.Pipe: okio.Buffer buffer>;
+
+        entermonitor $r3;
+
+     label12:
+        r0.<okio.Pipe: boolean sourceClosed> = 1;
+
+        $r1 = r0.<okio.Pipe: okio.Buffer buffer>;
+
+        virtualinvoke $r1.<java.lang.Object: void notifyAll()>();
+
+        exitmonitor $r3;
+
+     label13:
+        throw $r6;
+
+     label14:
+        $r7 := @caughtexception;
+
+     label15:
+        exitmonitor $r3;
+
+     label16:
+        throw $r7;
+
+     label17:
+        $r8 = new java.lang.IllegalStateException;
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>(java.lang.String)>("sink already folded");
+
+        throw $r8;
+
+     label18:
+        $r9 := @caughtexception;
+
+        exitmonitor $r3;
+
+     label19:
+        throw $r9;
+
+        catch java.lang.Throwable from label02 to label03 with label18;
+        catch java.lang.Throwable from label04 to label05 with label18;
+        catch java.lang.Throwable from label05 to label06 with label11;
+        catch java.lang.Throwable from label07 to label08 with label11;
+        catch java.lang.Throwable from label09 to label10 with label11;
+        catch java.lang.Throwable from label12 to label13 with label14;
+        catch java.lang.Throwable from label15 to label16 with label14;
+        catch java.lang.Throwable from label17 to label19 with label18;
+    }
+
+    public final okio.Sink sink()
+    {
+        okio.Pipe r0;
+        okio.Sink r1;
+
+        r0 := @this: okio.Pipe;
+
+        r1 = r0.<okio.Pipe: okio.Sink sink>;
+
+        return r1;
+    }
+
+    public final okio.Source source()
+    {
+        okio.Pipe r0;
+        okio.Source r1;
+
+        r0 := @this: okio.Pipe;
+
+        r1 = r0.<okio.Pipe: okio.Source source>;
+
+        return r1;
+    }
+}

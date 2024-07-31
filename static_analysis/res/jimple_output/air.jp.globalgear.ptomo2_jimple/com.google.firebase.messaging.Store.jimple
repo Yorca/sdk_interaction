@@ -1,0 +1,360 @@
+class com.google.firebase.messaging.Store extends java.lang.Object
+{
+    static final java.lang.String NO_BACKUP_FILE;
+    static final java.lang.String PREFERENCES;
+    private static final java.lang.String SCOPE_ALL;
+    private static final java.lang.String STORE_KEY_TOKEN;
+    final android.content.SharedPreferences store;
+
+    public void <init>(android.content.Context)
+    {
+        android.content.Context $r1;
+        com.google.firebase.messaging.Store r0;
+        android.content.SharedPreferences $r2;
+
+        r0 := @this: com.google.firebase.messaging.Store;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>("com.google.android.gms.appid", 0);
+
+        r0.<com.google.firebase.messaging.Store: android.content.SharedPreferences store> = $r2;
+
+        specialinvoke r0.<com.google.firebase.messaging.Store: void checkForRestore(android.content.Context,java.lang.String)>($r1, "com.google.android.gms.appid-no-backup");
+
+        return;
+    }
+
+    private void checkForRestore(android.content.Context, java.lang.String)
+    {
+        java.lang.Throwable $r5;
+        android.content.Context $r1;
+        java.io.IOException $r9;
+        java.io.File $r3, $r7;
+        com.google.firebase.messaging.Store r0;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.Store;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = staticinvoke <androidx.core.content.ContextCompat: java.io.File getNoBackupFilesDir(android.content.Context)>($r1);
+
+        $r7 = new java.io.File;
+
+        specialinvoke $r7.<java.io.File: void <init>(java.io.File,java.lang.String)>($r3, $r2);
+
+        $z0 = virtualinvoke $r7.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $z0 = virtualinvoke $r7.<java.io.File: boolean createNewFile()>();
+
+     label2:
+        if $z0 == 0 goto label8;
+
+     label3:
+        $z0 = virtualinvoke r0.<com.google.firebase.messaging.Store: boolean isEmpty()>();
+
+     label4:
+        if $z0 != 0 goto label8;
+
+     label5:
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("FirebaseMessaging", "App restored, clearing state");
+
+        virtualinvoke r0.<com.google.firebase.messaging.Store: void deleteAll()>();
+
+     label6:
+        return;
+
+     label7:
+        $r5 := @caughtexception;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z0 == 0 goto label8;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("Error creating file in no backup dir: ");
+
+        $r9 = (java.io.IOException) $r5;
+
+        $r2 = virtualinvoke $r9.<java.io.IOException: java.lang.String getMessage()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("FirebaseMessaging", $r2);
+
+     label8:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label7;
+        catch java.io.IOException from label3 to label4 with label7;
+        catch java.io.IOException from label5 to label6 with label7;
+    }
+
+    private java.lang.String createTokenKey(java.lang.String, java.lang.String)
+    {
+        com.google.firebase.messaging.Store r0;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r1, $r3;
+
+        r0 := @this: com.google.firebase.messaging.Store;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("|T|");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("|*");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+    public void deleteAll()
+    {
+        android.content.SharedPreferences$Editor $r2;
+        java.lang.Throwable $r3;
+        com.google.firebase.messaging.Store r0;
+        android.content.SharedPreferences $r1;
+
+        r0 := @this: com.google.firebase.messaging.Store;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.google.firebase.messaging.Store: android.content.SharedPreferences store>;
+
+        $r2 = interfaceinvoke $r1.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        $r2 = interfaceinvoke $r2.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor clear()>();
+
+        interfaceinvoke $r2.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public void deleteToken(java.lang.String, java.lang.String)
+    {
+        android.content.SharedPreferences$Editor $r4;
+        java.lang.Throwable $r5;
+        com.google.firebase.messaging.Store r0;
+        android.content.SharedPreferences $r3;
+        java.lang.String $r1, $r2;
+
+        r0 := @this: com.google.firebase.messaging.Store;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = specialinvoke r0.<com.google.firebase.messaging.Store: java.lang.String createTokenKey(java.lang.String,java.lang.String)>($r1, $r2);
+
+        $r3 = r0.<com.google.firebase.messaging.Store: android.content.SharedPreferences store>;
+
+        $r4 = interfaceinvoke $r3.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        interfaceinvoke $r4.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor remove(java.lang.String)>($r1);
+
+        interfaceinvoke $r4.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r5 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public com.google.firebase.messaging.Store$Token getToken(java.lang.String, java.lang.String)
+    {
+        com.google.firebase.messaging.Store$Token $r4;
+        java.lang.Throwable $r5;
+        com.google.firebase.messaging.Store r0;
+        android.content.SharedPreferences $r1;
+        java.lang.String $r2, $r3;
+
+        r0 := @this: com.google.firebase.messaging.Store;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: java.lang.String;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.google.firebase.messaging.Store: android.content.SharedPreferences store>;
+
+        $r2 = specialinvoke r0.<com.google.firebase.messaging.Store: java.lang.String createTokenKey(java.lang.String,java.lang.String)>($r2, $r3);
+
+        $r2 = interfaceinvoke $r1.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>($r2, null);
+
+        $r4 = staticinvoke <com.google.firebase.messaging.Store$Token: com.google.firebase.messaging.Store$Token parse(java.lang.String)>($r2);
+
+     label2:
+        exitmonitor r0;
+
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public boolean isEmpty()
+    {
+        java.lang.Throwable $r3;
+        com.google.firebase.messaging.Store r0;
+        android.content.SharedPreferences $r1;
+        java.util.Map $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.Store;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.google.firebase.messaging.Store: android.content.SharedPreferences store>;
+
+        $r2 = interfaceinvoke $r1.<android.content.SharedPreferences: java.util.Map getAll()>();
+
+        $z0 = interfaceinvoke $r2.<java.util.Map: boolean isEmpty()>();
+
+     label2:
+        exitmonitor r0;
+
+        return $z0;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public void saveToken(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+    {
+        android.content.SharedPreferences$Editor $r6;
+        java.lang.Throwable $r7;
+        long $l0;
+        com.google.firebase.messaging.Store r0;
+        android.content.SharedPreferences $r5;
+        java.lang.String $r1, $r2, $r3, $r4;
+
+        r0 := @this: com.google.firebase.messaging.Store;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String;
+
+        entermonitor r0;
+
+     label1:
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r3 = staticinvoke <com.google.firebase.messaging.Store$Token: java.lang.String encode(java.lang.String,java.lang.String,long)>($r3, $r4, $l0);
+
+     label2:
+        if $r3 != null goto label3;
+
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r5 = r0.<com.google.firebase.messaging.Store: android.content.SharedPreferences store>;
+
+        $r6 = interfaceinvoke $r5.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        $r2 = specialinvoke r0.<com.google.firebase.messaging.Store: java.lang.String createTokenKey(java.lang.String,java.lang.String)>($r2, $r1);
+
+        interfaceinvoke $r6.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>($r2, $r3);
+
+        interfaceinvoke $r6.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r7 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r7;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    public static void <clinit>()
+    {
+        <com.google.firebase.messaging.Store: java.lang.String STORE_KEY_TOKEN> = "|T|";
+
+        <com.google.firebase.messaging.Store: java.lang.String SCOPE_ALL> = "*";
+
+        <com.google.firebase.messaging.Store: java.lang.String PREFERENCES> = "com.google.android.gms.appid";
+
+        <com.google.firebase.messaging.Store: java.lang.String NO_BACKUP_FILE> = "com.google.android.gms.appid-no-backup";
+
+        return;
+    }
+}

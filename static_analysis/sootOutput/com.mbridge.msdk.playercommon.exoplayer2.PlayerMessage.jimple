@@ -1,0 +1,554 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage extends java.lang.Object
+{
+    private boolean deleteAfterDelivery;
+    private android.os.Handler handler;
+    private boolean isCanceled;
+    private boolean isDelivered;
+    private boolean isProcessed;
+    private boolean isSent;
+    private java.lang.Object payload;
+    private long positionMs;
+    private final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Sender sender;
+    private final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target target;
+    private final com.mbridge.msdk.playercommon.exoplayer2.Timeline timeline;
+    private int type;
+    private int windowIndex;
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Sender, com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target, com.mbridge.msdk.playercommon.exoplayer2.Timeline, int, android.os.Handler)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Sender $r4;
+        android.os.Handler $r3;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        $r4 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Sender;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target;
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.Timeline;
+
+        $i0 := @parameter3: int;
+
+        $r3 := @parameter4: android.os.Handler;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Sender sender> = $r4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target target> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.Timeline timeline> = $r2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: android.os.Handler handler> = $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: int windowIndex> = $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: long positionMs> = -9223372036854775807L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean deleteAfterDelivery> = 1;
+
+        return;
+    }
+
+    public final boolean blockUntilDelivered() throws java.lang.InterruptedException, java.util.concurrent.TimeoutException
+    {
+        java.lang.Throwable $r5;
+        java.util.concurrent.TimeoutException $r6;
+        long $l1, $l2;
+        byte $b0;
+        android.os.Handler $r1;
+        android.os.Looper $r2;
+        java.lang.Thread $r3, $r4;
+        int $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isSent>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: android.os.Handler handler>;
+
+        $r2 = virtualinvoke $r1.<android.os.Handler: android.os.Looper getLooper()>();
+
+        $r3 = virtualinvoke $r2.<android.os.Looper: java.lang.Thread getThread()>();
+
+        $r4 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        if $r3 == $r4 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $l1 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        $l2 = 500L;
+
+        $l1 = $l1 + 500L;
+
+     label4:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isProcessed>;
+
+        if $z0 != 0 goto label5;
+
+        $b0 = $l2 cmp 0L;
+
+        $i3 = (int) $b0;
+
+        if $i3 <= 0 goto label5;
+
+        virtualinvoke r0.<java.lang.Object: void wait(long)>($l2);
+
+        $l2 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        $l2 = $l1 - $l2;
+
+        goto label4;
+
+     label5:
+        if $z0 == 0 goto label7;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isDelivered>;
+
+     label6:
+        exitmonitor r0;
+
+        return $z0;
+
+     label7:
+        $r6 = new java.util.concurrent.TimeoutException;
+
+        specialinvoke $r6.<java.util.concurrent.TimeoutException: void <init>(java.lang.String)>("Message delivery time out");
+
+        throw $r6;
+
+     label8:
+        $r5 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label6 with label8;
+        catch java.lang.Throwable from label7 to label8 with label8;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage cancel()
+    {
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isSent>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isCanceled> = 1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: void markAsProcessed(boolean)>(0);
+
+     label2:
+        exitmonitor r0;
+
+        return r0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final boolean getDeleteAfterDelivery()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean deleteAfterDelivery>;
+
+        return z0;
+    }
+
+    public final android.os.Handler getHandler()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        android.os.Handler r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: android.os.Handler handler>;
+
+        return r1;
+    }
+
+    public final java.lang.Object getPayload()
+    {
+        java.lang.Object r1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: java.lang.Object payload>;
+
+        return r1;
+    }
+
+    public final long getPositionMs()
+    {
+        long l0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: long positionMs>;
+
+        return l0;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target getTarget()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target r1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target target>;
+
+        return r1;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.Timeline getTimeline()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.Timeline timeline>;
+
+        return r1;
+    }
+
+    public final int getType()
+    {
+        int i0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: int type>;
+
+        return i0;
+    }
+
+    public final int getWindowIndex()
+    {
+        int i0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: int windowIndex>;
+
+        return i0;
+    }
+
+    public final boolean isCanceled()
+    {
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        entermonitor r0;
+
+     label1:
+        z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isCanceled>;
+
+     label2:
+        exitmonitor r0;
+
+        return z0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void markAsProcessed(boolean)
+    {
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        $z1 := @parameter0: boolean;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isDelivered>;
+
+        $z1 = $z1 | $z0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isDelivered> = $z1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isProcessed> = 1;
+
+        virtualinvoke r0.<java.lang.Object: void notifyAll()>();
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()
+    {
+        byte $b1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Sender $r1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isSent>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: long positionMs>;
+
+        $b1 = $l0 cmp -9223372036854775807L;
+
+        if $b1 != 0 goto label1;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean deleteAfterDelivery>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean)>($z0);
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isSent> = 1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Sender sender>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Sender: void sendMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage)>(r0);
+
+        return r0;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setDeleteAfterDelivery(boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        $z0 := @parameter0: boolean;
+
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isSent>;
+
+        $z1 = $z1 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean deleteAfterDelivery> = $z0;
+
+        return r0;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setHandler(android.os.Handler)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        android.os.Handler $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        $r1 := @parameter0: android.os.Handler;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isSent>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: android.os.Handler handler> = $r1;
+
+        return r0;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)
+    {
+        java.lang.Object $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isSent>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: java.lang.Object payload> = $r1;
+
+        return r0;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPosition(int, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.IllegalSeekPositionException $r2;
+        long $l1;
+        byte $b2;
+        int $i0, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        $i0 := @parameter0: int;
+
+        $l1 := @parameter1: long;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isSent>;
+
+        $z1 = 1;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $b2 = $l1 cmp -9223372036854775807L;
+
+        if $b2 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean)>($z1);
+
+        if $i0 < 0 goto label4;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.Timeline timeline>;
+
+        $z1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: boolean isEmpty()>();
+
+        if $z1 != 0 goto label3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.Timeline timeline>;
+
+        $i3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: int getWindowCount()>();
+
+        if $i0 >= $i3 goto label4;
+
+     label3:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: int windowIndex> = $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: long positionMs> = $l1;
+
+        return r0;
+
+     label4:
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.IllegalSeekPositionException;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.Timeline timeline>;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.IllegalSeekPositionException: void <init>(com.mbridge.msdk.playercommon.exoplayer2.Timeline,int,long)>($r1, $i0, $l1);
+
+        throw $r2;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPosition(long)
+    {
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        $l0 := @parameter0: long;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isSent>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: long positionMs> = $l0;
+
+        return r0;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage;
+
+        $i0 := @parameter0: int;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean isSent>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: int type> = $i0;
+
+        return r0;
+    }
+}

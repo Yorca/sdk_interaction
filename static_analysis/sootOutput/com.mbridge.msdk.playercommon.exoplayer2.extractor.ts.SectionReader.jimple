@@ -1,0 +1,325 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader
+{
+    private static final int DEFAULT_SECTION_BUFFER_LENGTH;
+    private static final int MAX_SECTION_LENGTH;
+    private static final int SECTION_HEADER_LENGTH;
+    private int bytesRead;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader reader;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData;
+    private boolean sectionSyntaxIndicator;
+    private int totalSectionLength;
+    private boolean waitingForPayloadStart;
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader reader> = $r1;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void <init>(int)>(32);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData> = $r2;
+
+        return;
+    }
+
+    public final void consume(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, boolean)
+    {
+        byte[] $r3, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1, $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader $r5;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $z0 := @parameter1: boolean;
+
+        if $z0 == 0 goto label01;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i0 = $i1 + $i0;
+
+        goto label02;
+
+     label01:
+        $i0 = -1;
+
+     label02:
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: boolean waitingForPayloadStart>;
+
+        if $z1 == 0 goto label04;
+
+        if $z0 != 0 goto label03;
+
+        return;
+
+     label03:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: boolean waitingForPayloadStart> = 0;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead> = 0;
+
+     label04:
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i0 <= 0 goto label11;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead>;
+
+        $z0 = 1;
+
+        if $i0 >= 3 goto label07;
+
+        if $i0 != 0 goto label05;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i1 = $i1 - 1;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i1);
+
+        if $i0 != 255 goto label05;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: boolean waitingForPayloadStart> = 1;
+
+        return;
+
+     label05:
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead>;
+
+        $i1 = 3 - $i1;
+
+        $i0 = staticinvoke <java.lang.Math: int min(int,int)>($i0, $i1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r3, $i1, $i0);
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead>;
+
+        $i0 = $i1 + $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead> = $i0;
+
+        if $i0 != 3 goto label04;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset(int)>(3);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        $i1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i2 = $i1 & 128;
+
+        if $i2 != 0 goto label06;
+
+        $z0 = 0;
+
+     label06:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: boolean sectionSyntaxIndicator> = $z0;
+
+        $i1 = $i1 & 15;
+
+        $i1 = $i1 << 8;
+
+        $i0 = $i1 | $i0;
+
+        $i0 = $i0 + 3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int totalSectionLength> = $i0;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int capacity()>();
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int totalSectionLength>;
+
+        if $i0 >= $i1 goto label04;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int totalSectionLength>;
+
+        $i1 = lengthof $r3;
+
+        $i1 = $i1 * 2;
+
+        $i0 = staticinvoke <java.lang.Math: int max(int,int)>($i0, $i1);
+
+        $i0 = staticinvoke <java.lang.Math: int min(int,int)>(4098, $i0);
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset(int)>($i0);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        $r4 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r3, 0, $r4, 0, 3);
+
+        goto label04;
+
+     label07:
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int totalSectionLength>;
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead>;
+
+        $i1 = $i1 - $i2;
+
+        $i0 = staticinvoke <java.lang.Math: int min(int,int)>($i0, $i1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r3, $i1, $i0);
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead>;
+
+        $i0 = $i1 + $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead> = $i0;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int totalSectionLength>;
+
+        if $i0 != $i1 goto label04;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: boolean sectionSyntaxIndicator>;
+
+        if $z0 == 0 goto label09;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int totalSectionLength>;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int crc(byte[],int,int,int)>($r3, 0, $i0, -1);
+
+        if $i0 == 0 goto label08;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: boolean waitingForPayloadStart> = 1;
+
+        return;
+
+     label08:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int totalSectionLength>;
+
+        $i0 = $i0 + -4;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset(int)>($i0);
+
+        goto label10;
+
+     label09:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset(int)>($i1);
+
+     label10:
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader reader>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray sectionData>;
+
+        interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader: void consume(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int bytesRead> = 0;
+
+        goto label04;
+
+     label11:
+        return;
+    }
+
+    public final void init(com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster, com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput, com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader;
+
+        $r4 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput;
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader reader>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader: void init(com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster,com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput,com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator)>($r4, $r1, $r2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: boolean waitingForPayloadStart> = 1;
+
+        return;
+    }
+
+    public final void seek()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: boolean waitingForPayloadStart> = 1;
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int SECTION_HEADER_LENGTH> = 3;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int MAX_SECTION_LENGTH> = 4098;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: int DEFAULT_SECTION_BUFFER_LENGTH> = 32;
+
+        return;
+    }
+}

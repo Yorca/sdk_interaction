@@ -1,0 +1,169 @@
+final class io.grpc.Metadata$LazyValue extends java.lang.Object
+{
+    private final io.grpc.Metadata$BinaryStreamMarshaller marshaller;
+    private volatile byte[] serialized;
+    private final java.lang.Object value;
+
+    void <init>(io.grpc.Metadata$BinaryStreamMarshaller, java.lang.Object)
+    {
+        io.grpc.Metadata$LazyValue r0;
+        io.grpc.Metadata$BinaryStreamMarshaller $r1;
+        java.lang.Object $r2;
+
+        r0 := @this: io.grpc.Metadata$LazyValue;
+
+        $r1 := @parameter0: io.grpc.Metadata$BinaryStreamMarshaller;
+
+        $r2 := @parameter1: java.lang.Object;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<io.grpc.Metadata$LazyValue: io.grpc.Metadata$BinaryStreamMarshaller marshaller> = $r1;
+
+        r0.<io.grpc.Metadata$LazyValue: java.lang.Object value> = $r2;
+
+        return;
+    }
+
+    static io.grpc.Metadata$LazyValue create(io.grpc.Metadata$Key, java.lang.Object)
+    {
+        io.grpc.Metadata$LazyValue $r1;
+        io.grpc.Metadata$BinaryStreamMarshaller $r3;
+        java.lang.Object $r0, $r4;
+        io.grpc.Metadata$Key $r2;
+
+        $r2 := @parameter0: io.grpc.Metadata$Key;
+
+        $r0 := @parameter1: java.lang.Object;
+
+        $r1 = new io.grpc.Metadata$LazyValue;
+
+        $r3 = staticinvoke <io.grpc.Metadata$LazyValue: io.grpc.Metadata$BinaryStreamMarshaller getBinaryStreamMarshaller(io.grpc.Metadata$Key)>($r2);
+
+        $r4 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        $r3 = (io.grpc.Metadata$BinaryStreamMarshaller) $r4;
+
+        specialinvoke $r1.<io.grpc.Metadata$LazyValue: void <init>(io.grpc.Metadata$BinaryStreamMarshaller,java.lang.Object)>($r3, $r0);
+
+        return $r1;
+    }
+
+    private static io.grpc.Metadata$BinaryStreamMarshaller getBinaryStreamMarshaller(io.grpc.Metadata$Key)
+    {
+        java.lang.Object $r0;
+        io.grpc.Metadata$BinaryStreamMarshaller $r2;
+        io.grpc.Metadata$Key $r1;
+
+        $r1 := @parameter0: io.grpc.Metadata$Key;
+
+        $r0 = virtualinvoke $r1.<io.grpc.Metadata$Key: java.lang.Object getMarshaller(java.lang.Class)>(class "Lio/grpc/Metadata$BinaryStreamMarshaller;");
+
+        $r2 = (io.grpc.Metadata$BinaryStreamMarshaller) $r0;
+
+        return $r2;
+    }
+
+    byte[] toBytes()
+    {
+        io.grpc.Metadata$LazyValue r0;
+        java.lang.Throwable $r3;
+        byte[] $r1;
+        java.io.InputStream $r2;
+
+        r0 := @this: io.grpc.Metadata$LazyValue;
+
+        $r1 = r0.<io.grpc.Metadata$LazyValue: byte[] serialized>;
+
+        if $r1 != null goto label6;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<io.grpc.Metadata$LazyValue: byte[] serialized>;
+
+        if $r1 != null goto label2;
+
+        $r2 = virtualinvoke r0.<io.grpc.Metadata$LazyValue: java.io.InputStream toStream()>();
+
+        $r1 = staticinvoke <io.grpc.Metadata: byte[] access$1300(java.io.InputStream)>($r2);
+
+        r0.<io.grpc.Metadata$LazyValue: byte[] serialized> = $r1;
+
+     label2:
+        exitmonitor r0;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+     label5:
+        throw $r3;
+
+     label6:
+        $r1 = r0.<io.grpc.Metadata$LazyValue: byte[] serialized>;
+
+        return $r1;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    java.lang.Object toObject(io.grpc.Metadata$Key)
+    {
+        io.grpc.Metadata$LazyValue r0;
+        byte[] $r5;
+        io.grpc.Metadata$BinaryStreamMarshaller $r2;
+        java.lang.Object $r4;
+        io.grpc.Metadata$Key $r1;
+        boolean $z0;
+        java.io.InputStream $r3;
+
+        r0 := @this: io.grpc.Metadata$LazyValue;
+
+        $r1 := @parameter0: io.grpc.Metadata$Key;
+
+        $z0 = virtualinvoke $r1.<io.grpc.Metadata$Key: boolean serializesToStreams()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = staticinvoke <io.grpc.Metadata$LazyValue: io.grpc.Metadata$BinaryStreamMarshaller getBinaryStreamMarshaller(io.grpc.Metadata$Key)>($r1);
+
+        if $r2 == null goto label1;
+
+        $r3 = virtualinvoke r0.<io.grpc.Metadata$LazyValue: java.io.InputStream toStream()>();
+
+        $r4 = interfaceinvoke $r2.<io.grpc.Metadata$BinaryStreamMarshaller: java.lang.Object parseStream(java.io.InputStream)>($r3);
+
+        return $r4;
+
+     label1:
+        $r5 = virtualinvoke r0.<io.grpc.Metadata$LazyValue: byte[] toBytes()>();
+
+        $r4 = virtualinvoke $r1.<io.grpc.Metadata$Key: java.lang.Object parseBytes(byte[])>($r5);
+
+        return $r4;
+    }
+
+    java.io.InputStream toStream()
+    {
+        io.grpc.Metadata$LazyValue r0;
+        io.grpc.Metadata$BinaryStreamMarshaller $r3;
+        java.lang.Object $r1;
+        java.io.InputStream $r2;
+
+        r0 := @this: io.grpc.Metadata$LazyValue;
+
+        $r3 = r0.<io.grpc.Metadata$LazyValue: io.grpc.Metadata$BinaryStreamMarshaller marshaller>;
+
+        $r1 = r0.<io.grpc.Metadata$LazyValue: java.lang.Object value>;
+
+        $r2 = interfaceinvoke $r3.<io.grpc.Metadata$BinaryStreamMarshaller: java.io.InputStream toStream(java.lang.Object)>($r1);
+
+        return $r2;
+    }
+}

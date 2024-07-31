@@ -1,0 +1,401 @@
+class com.adobe.air.net.AndroidNetworkInfo extends java.lang.Object
+{
+    private static final java.lang.String LOG_TAG;
+    private static com.adobe.air.net.AndroidNetworkInfo sAndroidNetworkInfo;
+    private android.content.Context mContext;
+    private java.util.Vector mInterfaces;
+
+    static void <clinit>()
+    {
+        <com.adobe.air.net.AndroidNetworkInfo: java.lang.String LOG_TAG> = "AndroidNetworkInfo";
+
+        return;
+    }
+
+    private void <init>(android.content.Context)
+    {
+        com.adobe.air.net.AndroidNetworkInfo r0;
+        android.content.Context $r1;
+        java.util.Vector $r2;
+
+        r0 := @this: com.adobe.air.net.AndroidNetworkInfo;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.air.net.AndroidNetworkInfo: android.content.Context mContext> = $r1;
+
+        $r2 = new java.util.Vector;
+
+        specialinvoke $r2.<java.util.Vector: void <init>()>();
+
+        r0.<com.adobe.air.net.AndroidNetworkInfo: java.util.Vector mInterfaces> = $r2;
+
+        return;
+    }
+
+    public static com.adobe.air.net.AndroidNetworkInfo GetAndroidNetworkInfo(android.content.Context)
+    {
+        com.adobe.air.net.AndroidNetworkInfo $r1;
+        android.content.Context $r0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = <com.adobe.air.net.AndroidNetworkInfo: com.adobe.air.net.AndroidNetworkInfo sAndroidNetworkInfo>;
+
+        if $r1 != null goto label1;
+
+        $r1 = new com.adobe.air.net.AndroidNetworkInfo;
+
+        specialinvoke $r1.<com.adobe.air.net.AndroidNetworkInfo: void <init>(android.content.Context)>($r0);
+
+        <com.adobe.air.net.AndroidNetworkInfo: com.adobe.air.net.AndroidNetworkInfo sAndroidNetworkInfo> = $r1;
+
+     label1:
+        $r1 = <com.adobe.air.net.AndroidNetworkInfo: com.adobe.air.net.AndroidNetworkInfo sAndroidNetworkInfo>;
+
+        return $r1;
+    }
+
+    private void enumerateNetworkInterfaces()
+    {
+        com.adobe.air.net.AndroidNetworkInfo r0;
+        android.net.ConnectivityManager $r4;
+        android.content.Context $r2;
+        com.adobe.air.net.NetworkInterface $r7;
+        android.net.NetworkInfo $r6;
+        java.lang.Exception $r1;
+        java.util.Vector $r8;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        android.net.NetworkInfo[] $r5;
+
+        r0 := @this: com.adobe.air.net.AndroidNetworkInfo;
+
+     label01:
+        $r2 = r0.<com.adobe.air.net.AndroidNetworkInfo: android.content.Context mContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r4 = (android.net.ConnectivityManager) $r3;
+
+        $r5 = virtualinvoke $r4.<android.net.ConnectivityManager: android.net.NetworkInfo[] getAllNetworkInfo()>();
+
+     label02:
+        $i0 = 0;
+
+     label03:
+        $i1 = lengthof $r5;
+
+     label04:
+        if $i0 >= $i1 goto label14;
+
+     label05:
+        $r6 = $r5[$i0];
+
+        $i1 = virtualinvoke $r6.<android.net.NetworkInfo: int getType()>();
+
+     label06:
+        if $i1 == 1 goto label09;
+
+     label07:
+        $r7 = virtualinvoke r0.<com.adobe.air.net.AndroidNetworkInfo: com.adobe.air.net.NetworkInterface getDefaultData(android.net.NetworkInfo)>($r6);
+
+     label08:
+        goto label10;
+
+     label09:
+        $r7 = virtualinvoke r0.<com.adobe.air.net.AndroidNetworkInfo: com.adobe.air.net.NetworkInterface getWifiData(android.net.NetworkInfo)>($r6);
+
+     label10:
+        $r8 = r0.<com.adobe.air.net.AndroidNetworkInfo: java.util.Vector mInterfaces>;
+
+        virtualinvoke $r8.<java.util.Vector: boolean add(java.lang.Object)>($r7);
+
+     label11:
+        $i0 = $i0 + 1;
+
+        goto label03;
+
+     label12:
+        $r8 = r0.<com.adobe.air.net.AndroidNetworkInfo: java.util.Vector mInterfaces>;
+
+        virtualinvoke $r8.<java.util.Vector: void clear()>();
+
+        return;
+
+     label13:
+        $r1 := @caughtexception;
+
+        goto label12;
+
+     label14:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label13;
+        catch java.lang.Exception from label03 to label04 with label13;
+        catch java.lang.Exception from label05 to label06 with label13;
+        catch java.lang.Exception from label07 to label08 with label13;
+        catch java.lang.Exception from label09 to label10 with label13;
+        catch java.lang.Exception from label10 to label11 with label13;
+    }
+
+    public com.adobe.air.net.NetworkInterface GetNetworkInterface(int)
+    {
+        com.adobe.air.net.AndroidNetworkInfo r0;
+        java.util.Vector $r1;
+        com.adobe.air.net.NetworkInterface $r3;
+        int $i0, $i1;
+        java.lang.Object $r2;
+
+        r0 := @this: com.adobe.air.net.AndroidNetworkInfo;
+
+        $i0 := @parameter0: int;
+
+        if $i0 < 0 goto label2;
+
+        $r1 = r0.<com.adobe.air.net.AndroidNetworkInfo: java.util.Vector mInterfaces>;
+
+        $i1 = virtualinvoke $r1.<java.util.Vector: int size()>();
+
+        if $i0 < $i1 goto label1;
+
+        goto label2;
+
+     label1:
+        $r1 = r0.<com.adobe.air.net.AndroidNetworkInfo: java.util.Vector mInterfaces>;
+
+        $r2 = virtualinvoke $r1.<java.util.Vector: java.lang.Object elementAt(int)>($i0);
+
+        $r3 = (com.adobe.air.net.NetworkInterface) $r2;
+
+        return $r3;
+
+     label2:
+        return null;
+    }
+
+    public int GetNetworkInterfacesCount()
+    {
+        com.adobe.air.net.AndroidNetworkInfo r0;
+        int $i0;
+        java.util.Vector $r1;
+
+        r0 := @this: com.adobe.air.net.AndroidNetworkInfo;
+
+        $r1 = r0.<com.adobe.air.net.AndroidNetworkInfo: java.util.Vector mInterfaces>;
+
+        virtualinvoke $r1.<java.util.Vector: void clear()>();
+
+        specialinvoke r0.<com.adobe.air.net.AndroidNetworkInfo: void enumerateNetworkInterfaces()>();
+
+        $r1 = r0.<com.adobe.air.net.AndroidNetworkInfo: java.util.Vector mInterfaces>;
+
+        $i0 = virtualinvoke $r1.<java.util.Vector: int size()>();
+
+        return $i0;
+    }
+
+    public void InterfacesReadComplete()
+    {
+        com.adobe.air.net.AndroidNetworkInfo r0;
+        java.util.Vector $r1;
+
+        r0 := @this: com.adobe.air.net.AndroidNetworkInfo;
+
+        $r1 = r0.<com.adobe.air.net.AndroidNetworkInfo: java.util.Vector mInterfaces>;
+
+        virtualinvoke $r1.<java.util.Vector: void clear()>();
+
+        return;
+    }
+
+    com.adobe.air.net.InterfaceAddress getAddress(android.net.NetworkInfo)
+    {
+        com.adobe.air.net.AndroidNetworkInfo r0;
+        android.content.Context $r3;
+        android.net.DhcpInfo $r6;
+        android.net.wifi.WifiInfo $r8;
+        android.net.NetworkInfo $r2;
+        android.net.wifi.WifiManager $r5;
+        int $i0, $i1, $i2;
+        java.lang.Object $r4;
+        java.lang.String $r7;
+        com.adobe.air.net.InterfaceAddress $r1, $r9;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.net.AndroidNetworkInfo;
+
+        $r2 := @parameter0: android.net.NetworkInfo;
+
+        $r9 = new com.adobe.air.net.InterfaceAddress;
+
+        $r1 = $r9;
+
+        specialinvoke $r9.<com.adobe.air.net.InterfaceAddress: void <init>()>();
+
+        $z0 = virtualinvoke $r2.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 != 0 goto label1;
+
+        return null;
+
+     label1:
+        $r3 = r0.<com.adobe.air.net.AndroidNetworkInfo: android.content.Context mContext>;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("wifi");
+
+        $r5 = (android.net.wifi.WifiManager) $r4;
+
+        if $r5 != null goto label2;
+
+        return null;
+
+     label2:
+        $r6 = virtualinvoke $r5.<android.net.wifi.WifiManager: android.net.DhcpInfo getDhcpInfo()>();
+
+        if $r6 == null goto label3;
+
+        $i0 = $r6.<android.net.DhcpInfo: int ipAddress>;
+
+        $r7 = staticinvoke <android.text.format.Formatter: java.lang.String formatIpAddress(int)>($i0);
+
+        $r1.<com.adobe.air.net.InterfaceAddress: java.lang.String address> = $r7;
+
+        $i0 = $r6.<android.net.DhcpInfo: int netmask>;
+
+        $i0 = staticinvoke <java.lang.Integer: int bitCount(int)>($i0);
+
+        $r1.<com.adobe.air.net.InterfaceAddress: int prefixLength> = $i0;
+
+        $i0 = $r6.<android.net.DhcpInfo: int ipAddress>;
+
+        $i1 = $r6.<android.net.DhcpInfo: int netmask>;
+
+        $i2 = -1;
+
+        $i1 = $i1 ^ $i2;
+
+        $i0 = $i0 | $i1;
+
+        $r7 = staticinvoke <android.text.format.Formatter: java.lang.String formatIpAddress(int)>($i0);
+
+        $r1.<com.adobe.air.net.InterfaceAddress: java.lang.String broadcast> = $r7;
+
+        $r1.<com.adobe.air.net.InterfaceAddress: java.lang.String ipVersion> = "IPv4";
+
+        return $r1;
+
+     label3:
+        $r8 = virtualinvoke $r5.<android.net.wifi.WifiManager: android.net.wifi.WifiInfo getConnectionInfo()>();
+
+        if $r8 != null goto label4;
+
+        return null;
+
+     label4:
+        $i0 = virtualinvoke $r8.<android.net.wifi.WifiInfo: int getIpAddress()>();
+
+        $r7 = staticinvoke <android.text.format.Formatter: java.lang.String formatIpAddress(int)>($i0);
+
+        $r1.<com.adobe.air.net.InterfaceAddress: java.lang.String address> = $r7;
+
+        $r1.<com.adobe.air.net.InterfaceAddress: java.lang.String ipVersion> = "IPv4";
+
+        return $r1;
+    }
+
+    com.adobe.air.net.NetworkInterface getDefaultData(android.net.NetworkInfo)
+    {
+        com.adobe.air.net.AndroidNetworkInfo r0;
+        com.adobe.air.net.NetworkInterface $r1;
+        android.net.NetworkInfo $r2;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.net.AndroidNetworkInfo;
+
+        $r2 := @parameter0: android.net.NetworkInfo;
+
+        $r1 = new com.adobe.air.net.NetworkInterface;
+
+        specialinvoke $r1.<com.adobe.air.net.NetworkInterface: void <init>()>();
+
+        $z0 = virtualinvoke $r2.<android.net.NetworkInfo: boolean isConnected()>();
+
+        $r1.<com.adobe.air.net.NetworkInterface: boolean active> = $z0;
+
+        $r3 = virtualinvoke $r2.<android.net.NetworkInfo: java.lang.String getTypeName()>();
+
+        $r1.<com.adobe.air.net.NetworkInterface: java.lang.String displayName> = $r3;
+
+        $r3 = virtualinvoke $r2.<android.net.NetworkInfo: java.lang.String getTypeName()>();
+
+        $r1.<com.adobe.air.net.NetworkInterface: java.lang.String name> = $r3;
+
+        return $r1;
+    }
+
+    com.adobe.air.net.NetworkInterface getWifiData(android.net.NetworkInfo)
+    {
+        com.adobe.air.net.AndroidNetworkInfo r0;
+        android.content.Context $r3;
+        com.adobe.air.net.NetworkInterface $r1;
+        android.net.wifi.WifiInfo $r6;
+        android.net.NetworkInfo $r2;
+        android.net.wifi.WifiManager $r5;
+        java.lang.Object $r4;
+        java.lang.String $r7, $r8;
+        boolean $z0;
+        com.adobe.air.net.InterfaceAddress $r9;
+
+        r0 := @this: com.adobe.air.net.AndroidNetworkInfo;
+
+        $r2 := @parameter0: android.net.NetworkInfo;
+
+        $r1 = new com.adobe.air.net.NetworkInterface;
+
+        specialinvoke $r1.<com.adobe.air.net.NetworkInterface: void <init>()>();
+
+        $r3 = r0.<com.adobe.air.net.AndroidNetworkInfo: android.content.Context mContext>;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("wifi");
+
+        $r5 = (android.net.wifi.WifiManager) $r4;
+
+        $r6 = virtualinvoke $r5.<android.net.wifi.WifiManager: android.net.wifi.WifiInfo getConnectionInfo()>();
+
+        $z0 = virtualinvoke $r2.<android.net.NetworkInfo: boolean isConnected()>();
+
+        $r1.<com.adobe.air.net.NetworkInterface: boolean active> = $z0;
+
+        $r7 = virtualinvoke $r2.<android.net.NetworkInfo: java.lang.String getTypeName()>();
+
+        $r1.<com.adobe.air.net.NetworkInterface: java.lang.String displayName> = $r7;
+
+        $r7 = virtualinvoke $r2.<android.net.NetworkInfo: java.lang.String getTypeName()>();
+
+        $r1.<com.adobe.air.net.NetworkInterface: java.lang.String name> = $r7;
+
+        if $r6 == null goto label2;
+
+        $r7 = virtualinvoke $r6.<android.net.wifi.WifiInfo: java.lang.String getMacAddress()>();
+
+        $r8 = $r7;
+
+        if $r7 != null goto label1;
+
+        $r8 = "";
+
+     label1:
+        $r1.<com.adobe.air.net.NetworkInterface: java.lang.String hardwareAddress> = $r8;
+
+     label2:
+        $r9 = virtualinvoke r0.<com.adobe.air.net.AndroidNetworkInfo: com.adobe.air.net.InterfaceAddress getAddress(android.net.NetworkInfo)>($r2);
+
+        virtualinvoke $r1.<com.adobe.air.net.NetworkInterface: void addAddress(com.adobe.air.net.InterfaceAddress)>($r9);
+
+        return $r1;
+    }
+}

@@ -1,0 +1,277 @@
+public class com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout extends com.unity3d.services.ads.operation.show.ShowModuleDecorator
+{
+    private static final java.lang.String errorMsgTimeout;
+
+    public void <init>(com.unity3d.services.ads.operation.show.IShowModule, com.unity3d.services.core.configuration.ConfigurationReader)
+    {
+        com.unity3d.services.core.configuration.ConfigurationReader $r2;
+        com.unity3d.services.ads.operation.show.IShowModule $r1;
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout r0;
+
+        r0 := @this: com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout;
+
+        $r1 := @parameter0: com.unity3d.services.ads.operation.show.IShowModule;
+
+        $r2 := @parameter1: com.unity3d.services.core.configuration.ConfigurationReader;
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecorator: void <init>(com.unity3d.services.ads.operation.show.IShowModule)>($r1);
+
+        return;
+    }
+
+    static void access$000(com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout, com.unity3d.services.ads.operation.show.ShowOperationState, com.unity3d.ads.UnityAds$UnityAdsShowError, java.lang.String)
+    {
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout $r0;
+        com.unity3d.ads.UnityAds$UnityAdsShowError $r2;
+        java.lang.String $r3;
+        com.unity3d.services.ads.operation.show.ShowOperationState $r1;
+
+        $r0 := @parameter0: com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout;
+
+        $r1 := @parameter1: com.unity3d.services.ads.operation.show.ShowOperationState;
+
+        $r2 := @parameter2: com.unity3d.ads.UnityAds$UnityAdsShowError;
+
+        $r3 := @parameter3: java.lang.String;
+
+        specialinvoke $r0.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: void onOperationTimeout(com.unity3d.services.ads.operation.show.ShowOperationState,com.unity3d.ads.UnityAds$UnityAdsShowError,java.lang.String)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    private void onOperationTimeout(com.unity3d.services.ads.operation.show.ShowOperationState, com.unity3d.ads.UnityAds$UnityAdsShowError, java.lang.String)
+    {
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r4;
+        long $l0;
+        com.unity3d.services.core.request.metrics.AdOperationError $r5;
+        java.lang.Long $r6;
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout r0;
+        com.unity3d.services.core.request.metrics.Metric $r7;
+        com.unity3d.ads.UnityAds$UnityAdsShowError $r2;
+        java.lang.String $r3, $r8;
+        com.unity3d.services.ads.operation.show.ShowOperationState $r1;
+
+        r0 := @this: com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout;
+
+        $r1 := @parameter0: com.unity3d.services.ads.operation.show.ShowOperationState;
+
+        $r2 := @parameter1: com.unity3d.ads.UnityAds$UnityAdsShowError;
+
+        $r3 := @parameter2: java.lang.String;
+
+        if $r1 == null goto label1;
+
+        $r4 = virtualinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: com.unity3d.services.core.request.metrics.SDKMetricsSender getMetricSender()>();
+
+        $r5 = <com.unity3d.services.core.request.metrics.AdOperationError: com.unity3d.services.core.request.metrics.AdOperationError timeout>;
+
+        $l0 = virtualinvoke $r1.<com.unity3d.services.ads.operation.show.ShowOperationState: long duration()>();
+
+        $r6 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $r7 = staticinvoke <com.unity3d.services.core.request.metrics.AdOperationMetric: com.unity3d.services.core.request.metrics.Metric newAdShowFailure(com.unity3d.services.core.request.metrics.AdOperationError,java.lang.Long)>($r5, $r6);
+
+        interfaceinvoke $r4.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetricWithInitState(com.unity3d.services.core.request.metrics.Metric)>($r7);
+
+        $r8 = $r1.<com.unity3d.services.ads.operation.show.ShowOperationState: java.lang.String id>;
+
+        virtualinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: void remove(java.lang.String)>($r8);
+
+        virtualinvoke $r1.<com.unity3d.services.ads.operation.show.ShowOperationState: void onUnityAdsShowFailure(com.unity3d.ads.UnityAds$UnityAdsShowError,java.lang.String)>($r2, $r3);
+
+     label1:
+        return;
+    }
+
+    private void releaseOperationTimeoutLock(java.lang.String)
+    {
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout r0;
+        com.unity3d.services.core.timer.BaseTimer $r4;
+        java.lang.String $r1;
+        com.unity3d.services.ads.operation.show.IShowOperation $r2;
+        com.unity3d.services.ads.operation.show.ShowOperationState $r3;
+
+        r0 := @this: com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: com.unity3d.services.ads.operation.show.IShowOperation get(java.lang.String)>($r1);
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        $r3 = interfaceinvoke $r2.<com.unity3d.services.ads.operation.show.IShowOperation: com.unity3d.services.ads.operation.show.ShowOperationState getShowOperationState()>();
+
+        if $r3 != null goto label2;
+
+        return;
+
+     label2:
+        $r4 = $r3.<com.unity3d.services.ads.operation.show.ShowOperationState: com.unity3d.services.core.timer.BaseTimer timeoutTimer>;
+
+        if $r4 != null goto label3;
+
+        return;
+
+     label3:
+        virtualinvoke $r4.<com.unity3d.services.core.timer.BaseTimer: void kill()>();
+
+        return;
+    }
+
+    private void startShowTimeout(com.unity3d.services.ads.operation.show.ShowOperationState)
+    {
+        com.unity3d.services.core.configuration.Configuration $r4;
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout$1 $r1;
+        java.lang.Integer $r5;
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout r0;
+        com.unity3d.services.core.timer.BaseTimer $r3;
+        int $i0;
+        java.util.concurrent.ScheduledExecutorService $r6;
+        com.unity3d.services.ads.operation.show.ShowOperationState $r2;
+
+        r0 := @this: com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout;
+
+        $r2 := @parameter0: com.unity3d.services.ads.operation.show.ShowOperationState;
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        $r3 = new com.unity3d.services.core.timer.BaseTimer;
+
+        $r4 = $r2.<com.unity3d.services.ads.operation.show.ShowOperationState: com.unity3d.services.core.configuration.Configuration configuration>;
+
+        $i0 = virtualinvoke $r4.<com.unity3d.services.core.configuration.Configuration: int getShowTimeout()>();
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r1 = new com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout$1;
+
+        specialinvoke $r1.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout$1: void <init>(com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout,com.unity3d.services.ads.operation.show.ShowOperationState)>(r0, $r2);
+
+        specialinvoke $r3.<com.unity3d.services.core.timer.BaseTimer: void <init>(java.lang.Integer,com.unity3d.services.core.timer.ITimerListener)>($r5, $r1);
+
+        $r2.<com.unity3d.services.ads.operation.show.ShowOperationState: com.unity3d.services.core.timer.BaseTimer timeoutTimer> = $r3;
+
+        $r3 = $r2.<com.unity3d.services.ads.operation.show.ShowOperationState: com.unity3d.services.core.timer.BaseTimer timeoutTimer>;
+
+        $r6 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ScheduledExecutorService newSingleThreadScheduledExecutor()>();
+
+        virtualinvoke $r3.<com.unity3d.services.core.timer.BaseTimer: void start(java.util.concurrent.ScheduledExecutorService)>($r6);
+
+        return;
+    }
+
+    public void executeAdOperation(com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker, com.unity3d.services.ads.operation.show.ShowOperationState)
+    {
+        com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker $r1;
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r3;
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout r0;
+        com.unity3d.services.core.request.metrics.Metric $r4;
+        com.unity3d.services.ads.operation.show.ShowOperationState $r2;
+
+        r0 := @this: com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout;
+
+        $r1 := @parameter0: com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker;
+
+        $r2 := @parameter1: com.unity3d.services.ads.operation.show.ShowOperationState;
+
+        $r3 = virtualinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: com.unity3d.services.core.request.metrics.SDKMetricsSender getMetricSender()>();
+
+        $r4 = staticinvoke <com.unity3d.services.core.request.metrics.AdOperationMetric: com.unity3d.services.core.request.metrics.Metric newAdShowStart()>();
+
+        interfaceinvoke $r3.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetricWithInitState(com.unity3d.services.core.request.metrics.Metric)>($r4);
+
+        virtualinvoke $r2.<com.unity3d.services.ads.operation.show.ShowOperationState: void start()>();
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: void startShowTimeout(com.unity3d.services.ads.operation.show.ShowOperationState)>($r2);
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecorator: void executeAdOperation(com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker,com.unity3d.services.ads.operation.show.ShowOperationState)>($r1, $r2);
+
+        return;
+    }
+
+    public volatile void executeAdOperation(com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker, java.lang.Object)
+    {
+        com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker $r1;
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout r0;
+        java.lang.Object $r2;
+        com.unity3d.services.ads.operation.show.ShowOperationState $r3;
+
+        r0 := @this: com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout;
+
+        $r1 := @parameter0: com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker;
+
+        $r2 := @parameter1: java.lang.Object;
+
+        $r3 = (com.unity3d.services.ads.operation.show.ShowOperationState) $r2;
+
+        virtualinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: void executeAdOperation(com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker,com.unity3d.services.ads.operation.show.ShowOperationState)>($r1, $r3);
+
+        return;
+    }
+
+    public void onUnityAdsShowConsent(java.lang.String)
+    {
+        java.lang.String $r1;
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout r0;
+
+        r0 := @this: com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout;
+
+        $r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: void releaseOperationTimeoutLock(java.lang.String)>($r1);
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecorator: void onUnityAdsShowConsent(java.lang.String)>($r1);
+
+        return;
+    }
+
+    public void onUnityAdsShowFailure(java.lang.String, com.unity3d.ads.UnityAds$UnityAdsShowError, java.lang.String)
+    {
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout r0;
+        java.lang.String $r1, $r3;
+        com.unity3d.ads.UnityAds$UnityAdsShowError $r2;
+
+        r0 := @this: com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.unity3d.ads.UnityAds$UnityAdsShowError;
+
+        $r3 := @parameter2: java.lang.String;
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: void releaseOperationTimeoutLock(java.lang.String)>($r1);
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecorator: void onUnityAdsShowFailure(java.lang.String,com.unity3d.ads.UnityAds$UnityAdsShowError,java.lang.String)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    public void onUnityAdsShowStart(java.lang.String)
+    {
+        java.lang.String $r1;
+        com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout r0;
+
+        r0 := @this: com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout;
+
+        $r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: void releaseOperationTimeoutLock(java.lang.String)>($r1);
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.show.ShowModuleDecorator: void onUnityAdsShowStart(java.lang.String)>($r1);
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.unity3d.services.ads.operation.show.ShowModuleDecoratorTimeout: java.lang.String errorMsgTimeout> = "[UnityAds] Timeout while trying to show ";
+
+        return;
+    }
+}

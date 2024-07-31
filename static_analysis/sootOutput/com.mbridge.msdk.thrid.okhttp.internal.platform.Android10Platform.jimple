@@ -1,0 +1,165 @@
+class com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform extends com.mbridge.msdk.thrid.okhttp.internal.platform.AndroidPlatform
+{
+
+    void <init>(java.lang.Class)
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform r0;
+        java.lang.Class $r1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform;
+
+        $r1 := @parameter0: java.lang.Class;
+
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.platform.AndroidPlatform: void <init>(java.lang.Class,com.mbridge.msdk.thrid.okhttp.internal.platform.OptionalMethod,com.mbridge.msdk.thrid.okhttp.internal.platform.OptionalMethod,com.mbridge.msdk.thrid.okhttp.internal.platform.OptionalMethod,com.mbridge.msdk.thrid.okhttp.internal.platform.OptionalMethod)>($r1, null, null, null, null);
+
+        return;
+    }
+
+    public static com.mbridge.msdk.thrid.okhttp.internal.platform.Platform buildIfSupported()
+    {
+        int $i0;
+        com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform $r2;
+        java.lang.ClassNotFoundException $r0;
+        java.lang.Class $r1;
+        boolean $z0;
+
+        $z0 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.platform.Platform: boolean isAndroid()>();
+
+        if $z0 != 0 goto label1;
+
+        return null;
+
+     label1:
+        $i0 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform: int getSdkInt()>();
+
+     label2:
+        if $i0 < 29 goto label7;
+
+     label3:
+        $r1 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("com.android.org.conscrypt.SSLParametersImpl");
+
+     label4:
+        $r2 = new com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform;
+
+     label5:
+        specialinvoke $r2.<com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform: void <init>(java.lang.Class)>($r1);
+
+     label6:
+        return $r2;
+
+     label7:
+        return null;
+
+     label8:
+        $r0 := @caughtexception;
+
+        return null;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label8;
+        catch java.lang.ClassNotFoundException from label3 to label4 with label8;
+        catch java.lang.ClassNotFoundException from label5 to label6 with label8;
+    }
+
+    private void enableSessionTickets(javax.net.ssl.SSLSocket)
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform r0;
+        javax.net.ssl.SSLSocket $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $z0 = staticinvoke <android.net.ssl.SSLSockets: boolean isSupportedSocket(javax.net.ssl.SSLSocket)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <android.net.ssl.SSLSockets: void setUseSessionTickets(javax.net.ssl.SSLSocket,boolean)>($r1, 1);
+
+     label1:
+        return;
+    }
+
+    public void configureTlsExtensions(javax.net.ssl.SSLSocket, java.lang.String, java.util.List) throws java.io.IOException
+    {
+        java.lang.Throwable $r7;
+        java.lang.Object[] $r6;
+        javax.net.ssl.SSLParameters $r4;
+        javax.net.ssl.SSLSocket $r1;
+        java.lang.String[] $r5;
+        java.io.IOException $r8;
+        java.util.List $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform r0;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.util.List;
+
+     label1:
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform: void enableSessionTickets(javax.net.ssl.SSLSocket)>($r1);
+
+        $r4 = virtualinvoke $r1.<javax.net.ssl.SSLSocket: javax.net.ssl.SSLParameters getSSLParameters()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.platform.Platform: java.util.List alpnProtocolNames(java.util.List)>($r3);
+
+     label2:
+        $r5 = newarray (java.lang.String)[0];
+
+     label3:
+        $r6 = interfaceinvoke $r3.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r5);
+
+     label4:
+        $r5 = (java.lang.String[]) $r6;
+
+     label5:
+        virtualinvoke $r4.<javax.net.ssl.SSLParameters: void setApplicationProtocols(java.lang.String[])>($r5);
+
+        virtualinvoke $r1.<javax.net.ssl.SSLSocket: void setSSLParameters(javax.net.ssl.SSLParameters)>($r4);
+
+     label6:
+        return;
+
+     label7:
+        $r7 := @caughtexception;
+
+        $r8 = new java.io.IOException;
+
+        specialinvoke $r8.<java.io.IOException: void <init>(java.lang.String,java.lang.Throwable)>("Android internal error", $r7);
+
+        throw $r8;
+
+        catch java.lang.IllegalArgumentException from label1 to label2 with label7;
+        catch java.lang.IllegalArgumentException from label3 to label4 with label7;
+        catch java.lang.IllegalArgumentException from label5 to label6 with label7;
+    }
+
+    public java.lang.String getSelectedProtocol(javax.net.ssl.SSLSocket)
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform r0;
+        javax.net.ssl.SSLSocket $r1;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.Android10Platform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r2 = virtualinvoke $r1.<javax.net.ssl.SSLSocket: java.lang.String getApplicationProtocol()>();
+
+        if $r2 == null goto label1;
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        return $r2;
+
+     label1:
+        return null;
+    }
+}

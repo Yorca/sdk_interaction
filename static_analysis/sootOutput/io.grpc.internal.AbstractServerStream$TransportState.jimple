@@ -1,0 +1,417 @@
+public abstract class io.grpc.internal.AbstractServerStream$TransportState extends io.grpc.internal.AbstractStream$TransportState
+{
+    private io.grpc.Status closedStatus;
+    private boolean deframerClosed;
+    private java.lang.Runnable deframerClosedTask;
+    private boolean endOfStream;
+    private boolean immediateCloseRequested;
+    private io.grpc.internal.ServerStreamListener listener;
+    private boolean listenerClosed;
+    private final io.grpc.internal.StatsTraceContext statsTraceCtx;
+
+    protected void <init>(int, io.grpc.internal.StatsTraceContext, io.grpc.internal.TransportTracer)
+    {
+        io.grpc.internal.TransportTracer $r2;
+        int $i0;
+        java.lang.Object $r3;
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        io.grpc.internal.StatsTraceContext $r1;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: io.grpc.internal.StatsTraceContext;
+
+        $r2 := @parameter2: io.grpc.internal.TransportTracer;
+
+        $r3 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "transportTracer");
+
+        $r2 = (io.grpc.internal.TransportTracer) $r3;
+
+        specialinvoke r0.<io.grpc.internal.AbstractStream$TransportState: void <init>(int,io.grpc.internal.StatsTraceContext,io.grpc.internal.TransportTracer)>($i0, $r1, $r2);
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean endOfStream> = 0;
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean deframerClosed> = 0;
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean immediateCloseRequested> = 0;
+
+        $r3 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "statsTraceCtx");
+
+        $r1 = (io.grpc.internal.StatsTraceContext) $r3;
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.StatsTraceContext statsTraceCtx> = $r1;
+
+        return;
+    }
+
+    static void access$000(io.grpc.internal.AbstractServerStream$TransportState, io.grpc.Status)
+    {
+        io.grpc.Status $r1;
+        io.grpc.internal.AbstractServerStream$TransportState $r0;
+
+        $r0 := @parameter0: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $r1 := @parameter1: io.grpc.Status;
+
+        specialinvoke $r0.<io.grpc.internal.AbstractServerStream$TransportState: void setClosedStatus(io.grpc.Status)>($r1);
+
+        return;
+    }
+
+    static void access$100(io.grpc.internal.AbstractServerStream$TransportState, io.grpc.Status)
+    {
+        io.grpc.Status $r1;
+        io.grpc.internal.AbstractServerStream$TransportState $r0;
+
+        $r0 := @parameter0: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $r1 := @parameter1: io.grpc.Status;
+
+        specialinvoke $r0.<io.grpc.internal.AbstractServerStream$TransportState: void closeListener(io.grpc.Status)>($r1);
+
+        return;
+    }
+
+    private void closeListener(io.grpc.Status)
+    {
+        io.grpc.internal.ServerStreamListener $r5;
+        io.grpc.internal.TransportTracer $r4;
+        io.grpc.Status $r1, $r2;
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        io.grpc.internal.StatsTraceContext $r3;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $r1 := @parameter0: io.grpc.Status;
+
+        $z0 = virtualinvoke $r1.<io.grpc.Status: boolean isOk()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.Status closedStatus>;
+
+        if $r2 != null goto label1;
+
+        $z0 = 0;
+
+        goto label2;
+
+     label1:
+        $z0 = 1;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean)>($z0);
+
+        $z0 = r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean listenerClosed>;
+
+        if $z0 != 0 goto label5;
+
+        $z0 = virtualinvoke $r1.<io.grpc.Status: boolean isOk()>();
+
+        if $z0 != 0 goto label3;
+
+        $r3 = r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        virtualinvoke $r3.<io.grpc.internal.StatsTraceContext: void streamClosed(io.grpc.Status)>($r1);
+
+        $r4 = virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.TransportTracer getTransportTracer()>();
+
+        virtualinvoke $r4.<io.grpc.internal.TransportTracer: void reportStreamClosed(boolean)>(0);
+
+        goto label4;
+
+     label3:
+        $r3 = r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $r2 = r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.Status closedStatus>;
+
+        virtualinvoke $r3.<io.grpc.internal.StatsTraceContext: void streamClosed(io.grpc.Status)>($r2);
+
+        $r4 = virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.TransportTracer getTransportTracer()>();
+
+        $r2 = r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.Status closedStatus>;
+
+        $z0 = virtualinvoke $r2.<io.grpc.Status: boolean isOk()>();
+
+        virtualinvoke $r4.<io.grpc.internal.TransportTracer: void reportStreamClosed(boolean)>($z0);
+
+     label4:
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean listenerClosed> = 1;
+
+        virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: void onStreamDeallocated()>();
+
+        $r5 = virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.ServerStreamListener listener()>();
+
+        interfaceinvoke $r5.<io.grpc.internal.ServerStreamListener: void closed(io.grpc.Status)>($r1);
+
+     label5:
+        return;
+    }
+
+    private void setClosedStatus(io.grpc.Status)
+    {
+        io.grpc.Status $r1, $r2;
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $r1 := @parameter0: io.grpc.Status;
+
+        $r2 = r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.Status closedStatus>;
+
+        if $r2 != null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "closedStatus can only be set once");
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.Status closedStatus> = $r1;
+
+        return;
+    }
+
+    public void complete()
+    {
+        io.grpc.Status $r1;
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        io.grpc.internal.AbstractServerStream$TransportState$2 $r2;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $z0 = r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean deframerClosed>;
+
+        if $z0 == 0 goto label1;
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: java.lang.Runnable deframerClosedTask> = null;
+
+        $r1 = <io.grpc.Status: io.grpc.Status OK>;
+
+        specialinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: void closeListener(io.grpc.Status)>($r1);
+
+        return;
+
+     label1:
+        $r2 = new io.grpc.internal.AbstractServerStream$TransportState$2;
+
+        specialinvoke $r2.<io.grpc.internal.AbstractServerStream$TransportState$2: void <init>(io.grpc.internal.AbstractServerStream$TransportState)>(r0);
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: java.lang.Runnable deframerClosedTask> = $r2;
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean immediateCloseRequested> = 1;
+
+        virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: void closeDeframer(boolean)>(1);
+
+        return;
+    }
+
+    public void deframerClosed(boolean)
+    {
+        io.grpc.StatusRuntimeException $r2;
+        io.grpc.internal.ServerStreamListener $r3;
+        io.grpc.Status $r1;
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        java.lang.Runnable $r4;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $z0 := @parameter0: boolean;
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean deframerClosed> = 1;
+
+        $z1 = r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean endOfStream>;
+
+        if $z1 == 0 goto label2;
+
+        $z1 = r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean immediateCloseRequested>;
+
+        if $z1 != 0 goto label2;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = <io.grpc.Status: io.grpc.Status INTERNAL>;
+
+        $r1 = virtualinvoke $r1.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Encountered end-of-stream mid-frame");
+
+        $r2 = virtualinvoke $r1.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException()>();
+
+        virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: void deframeFailed(java.lang.Throwable)>($r2);
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: java.lang.Runnable deframerClosedTask> = null;
+
+        return;
+
+     label1:
+        $r3 = r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.ServerStreamListener listener>;
+
+        interfaceinvoke $r3.<io.grpc.internal.ServerStreamListener: void halfClosed()>();
+
+     label2:
+        $r4 = r0.<io.grpc.internal.AbstractServerStream$TransportState: java.lang.Runnable deframerClosedTask>;
+
+        if $r4 == null goto label3;
+
+        interfaceinvoke $r4.<java.lang.Runnable: void run()>();
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: java.lang.Runnable deframerClosedTask> = null;
+
+     label3:
+        return;
+    }
+
+    public void inboundDataReceived(io.grpc.internal.ReadableBuffer, boolean)
+    {
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        io.grpc.internal.ReadableBuffer $r1;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $r1 := @parameter0: io.grpc.internal.ReadableBuffer;
+
+        $z0 := @parameter1: boolean;
+
+        $z1 = r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean endOfStream>;
+
+        $z1 = $z1 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z1, "Past end of stream");
+
+        virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: void deframe(io.grpc.internal.ReadableBuffer)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean endOfStream> = 1;
+
+        virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: void closeDeframer(boolean)>(0);
+
+     label1:
+        return;
+    }
+
+    protected io.grpc.internal.ServerStreamListener listener()
+    {
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        io.grpc.internal.ServerStreamListener r1;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        r1 = r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.ServerStreamListener listener>;
+
+        return r1;
+    }
+
+    protected volatile io.grpc.internal.StreamListener listener()
+    {
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        io.grpc.internal.ServerStreamListener $r1;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $r1 = virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.ServerStreamListener listener()>();
+
+        return $r1;
+    }
+
+    public final void onStreamAllocated()
+    {
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        io.grpc.internal.TransportTracer $r1;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        specialinvoke r0.<io.grpc.internal.AbstractStream$TransportState: void onStreamAllocated()>();
+
+        $r1 = virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.TransportTracer getTransportTracer()>();
+
+        virtualinvoke $r1.<io.grpc.internal.TransportTracer: void reportRemoteStreamStarted()>();
+
+        return;
+    }
+
+    public final void setListener(io.grpc.internal.ServerStreamListener)
+    {
+        io.grpc.internal.ServerStreamListener $r2, $r3;
+        java.lang.Object $r1;
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $r2 := @parameter0: io.grpc.internal.ServerStreamListener;
+
+        $r3 = r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.ServerStreamListener listener>;
+
+        if $r3 != null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "setListener should be called only once");
+
+        $r1 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "listener");
+
+        $r2 = (io.grpc.internal.ServerStreamListener) $r1;
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: io.grpc.internal.ServerStreamListener listener> = $r2;
+
+        return;
+    }
+
+    public final void transportReportStatus(io.grpc.Status)
+    {
+        io.grpc.internal.AbstractServerStream$TransportState$1 $r2;
+        io.grpc.Status $r1;
+        io.grpc.internal.AbstractServerStream$TransportState r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractServerStream$TransportState;
+
+        $r1 := @parameter0: io.grpc.Status;
+
+        $z0 = virtualinvoke $r1.<io.grpc.Status: boolean isOk()>();
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "status must not be OK");
+
+        $z0 = r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean deframerClosed>;
+
+        if $z0 == 0 goto label1;
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: java.lang.Runnable deframerClosedTask> = null;
+
+        specialinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: void closeListener(io.grpc.Status)>($r1);
+
+        return;
+
+     label1:
+        $r2 = new io.grpc.internal.AbstractServerStream$TransportState$1;
+
+        specialinvoke $r2.<io.grpc.internal.AbstractServerStream$TransportState$1: void <init>(io.grpc.internal.AbstractServerStream$TransportState,io.grpc.Status)>(r0, $r1);
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: java.lang.Runnable deframerClosedTask> = $r2;
+
+        r0.<io.grpc.internal.AbstractServerStream$TransportState: boolean immediateCloseRequested> = 1;
+
+        virtualinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: void closeDeframer(boolean)>(1);
+
+        return;
+    }
+}

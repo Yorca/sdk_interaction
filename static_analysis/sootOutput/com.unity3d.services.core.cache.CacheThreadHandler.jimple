@@ -1,0 +1,1193 @@
+class com.unity3d.services.core.cache.CacheThreadHandler extends android.os.Handler
+{
+    private boolean _active;
+    private boolean _canceled;
+    private com.unity3d.services.core.request.WebRequest _currentRequest;
+
+    void <init>()
+    {
+        com.unity3d.services.core.cache.CacheThreadHandler r0;
+
+        r0 := @this: com.unity3d.services.core.cache.CacheThreadHandler;
+
+        specialinvoke r0.<android.os.Handler: void <init>()>();
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest> = null;
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _canceled> = 0;
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 0;
+
+        return;
+    }
+
+    private void downloadFile(java.lang.String, java.lang.String, int, int, int, java.util.HashMap, boolean, com.unity3d.services.core.cache.CacheEventSender)
+    {
+        java.lang.IllegalStateException $r36;
+        java.util.Map $r14;
+        boolean $z0, $z1;
+        com.unity3d.services.core.cache.CacheEventSender $r4;
+        java.lang.Exception $r15, $r17, $r25, $r26, $r27, $r28, $r29, $r30, $r31;
+        java.io.FileNotFoundException $r39;
+        com.unity3d.services.core.cache.CacheThreadHandler r0;
+        java.lang.StringBuilder $r6, $r33;
+        com.unity3d.services.core.cache.CacheEvent $r7;
+        java.lang.Throwable $r16, $r19, $r20, $r21, $r22, $r23, $r24;
+        java.lang.Object[] $r8;
+        java.util.HashMap $r3;
+        long $l3, $l4, $l5;
+        com.unity3d.services.core.request.NetworkIOException $r18;
+        com.unity3d.services.core.cache.CacheError $r9;
+        int $i0, $i1, $i2;
+        java.lang.String $r1, $r2;
+        java.net.MalformedURLException $r38;
+        java.io.FileOutputStream $r10, $r11, $r34;
+        java.io.IOException $r37;
+        java.io.File $r5, $r32;
+        com.unity3d.services.core.request.WebRequest $r12;
+        com.unity3d.services.core.cache.CacheThreadHandler$1 $r13, $r35;
+
+        r0 := @this: com.unity3d.services.core.cache.CacheThreadHandler;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        $i2 := @parameter4: int;
+
+        $r3 := @parameter5: java.util.HashMap;
+
+        $z0 := @parameter6: boolean;
+
+        $r4 := @parameter7: com.unity3d.services.core.cache.CacheEventSender;
+
+        $z1 = r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _canceled>;
+
+        if $z1 != 0 goto label88;
+
+        if $r1 == null goto label88;
+
+        if $r2 != null goto label01;
+
+        return;
+
+     label01:
+        $r32 = new java.io.File;
+
+        $r5 = $r32;
+
+        specialinvoke $r32.<java.io.File: void <init>(java.lang.String)>($r2);
+
+        if $z0 == 0 goto label02;
+
+        $r33 = new java.lang.StringBuilder;
+
+        $r6 = $r33;
+
+        specialinvoke $r33.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unity Ads cache: resuming download ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" to ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" at ");
+
+        $l3 = virtualinvoke $r5.<java.io.File: long length()>();
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l3);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" bytes");
+
+        $r2 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>($r2);
+
+        goto label03;
+
+     label02:
+        $r33 = new java.lang.StringBuilder;
+
+        $r6 = $r33;
+
+        specialinvoke $r33.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unity Ads cache: start downloading ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" to ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>($r2);
+
+     label03:
+        $z1 = staticinvoke <com.unity3d.services.core.device.Device: boolean isActiveNetworkConnected()>();
+
+        if $z1 != 0 goto label04;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>("Unity Ads cache: download cancelled, no internet connection available");
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[2];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError NO_INTERNET>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+        return;
+
+     label04:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 1;
+
+        $l3 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        $r10 = null;
+
+     label05:
+        $r34 = new java.io.FileOutputStream;
+
+     label06:
+        $r11 = $r34;
+
+     label07:
+        specialinvoke $r34.<java.io.FileOutputStream: void <init>(java.io.File,boolean)>($r5, $z0);
+
+     label08:
+        $r12 = specialinvoke r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest getWebRequest(java.lang.String,int,int,java.util.HashMap)>($r1, $i0, $i1, $r3);
+
+     label09:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest> = $r12;
+
+     label10:
+        $r35 = new com.unity3d.services.core.cache.CacheThreadHandler$1;
+
+     label11:
+        $r13 = $r35;
+
+     label12:
+        specialinvoke $r35.<com.unity3d.services.core.cache.CacheThreadHandler$1: void <init>(com.unity3d.services.core.cache.CacheThreadHandler,com.unity3d.services.core.cache.CacheEventSender,java.io.File,int)>(r0, $r4, $r5, $i2);
+
+        virtualinvoke $r12.<com.unity3d.services.core.request.WebRequest: void setProgressListener(com.unity3d.services.core.request.IWebRequestProgressListener)>($r13);
+
+     label13:
+        $r12 = r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest>;
+
+     label14:
+        $l4 = virtualinvoke $r12.<com.unity3d.services.core.request.WebRequest: long makeStreamRequest(java.io.OutputStream)>($r11);
+
+     label15:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 0;
+
+        $r12 = r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest>;
+
+     label16:
+        $l5 = virtualinvoke $r12.<com.unity3d.services.core.request.WebRequest: long getContentLength()>();
+
+     label17:
+        $r12 = r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest>;
+
+     label18:
+        $z0 = virtualinvoke $r12.<com.unity3d.services.core.request.WebRequest: boolean isCanceled()>();
+
+     label19:
+        $r12 = r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest>;
+
+     label20:
+        $i0 = virtualinvoke $r12.<com.unity3d.services.core.request.WebRequest: int getResponseCode()>();
+
+     label21:
+        $r12 = r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest>;
+
+     label22:
+        $r14 = virtualinvoke $r12.<com.unity3d.services.core.request.WebRequest: java.util.Map getResponseHeaders()>();
+
+     label23:
+        $r10 = $r11;
+
+     label24:
+        specialinvoke r0.<com.unity3d.services.core.cache.CacheThreadHandler: void postProcessDownload(long,java.lang.String,java.io.File,long,long,boolean,int,java.util.Map,com.unity3d.services.core.cache.CacheEventSender)>($l3, $r1, $r5, $l4, $l5, $z0, $i0, $r14, $r4);
+
+     label25:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest> = null;
+
+     label26:
+        virtualinvoke $r11.<java.io.FileOutputStream: void close()>();
+
+     label27:
+        return;
+
+     label28:
+        $r15 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing stream", $r15);
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_IO_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r1 = virtualinvoke $r15.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8[2] = $r1;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+        return;
+
+     label29:
+        $r16 := @caughtexception;
+
+        goto label37;
+
+     label30:
+        $r17 := @caughtexception;
+
+        goto label47;
+
+     label31:
+        $r18 := @caughtexception;
+
+        goto label53;
+
+     label32:
+        $r19 := @caughtexception;
+
+        goto label59;
+
+     label33:
+        $r20 := @caughtexception;
+
+        goto label65;
+
+     label34:
+        $r21 := @caughtexception;
+
+        goto label71;
+
+     label35:
+        $r22 := @caughtexception;
+
+        goto label77;
+
+     label36:
+        $r16 := @caughtexception;
+
+        $r10 = $r11;
+
+     label37:
+        $r23 = $r16;
+
+        goto label83;
+
+     label38:
+        $r17 := @caughtexception;
+
+        $r10 = $r11;
+
+        goto label47;
+
+     label39:
+        $r18 := @caughtexception;
+
+        $r10 = $r11;
+
+        goto label53;
+
+     label40:
+        $r19 := @caughtexception;
+
+        $r10 = $r11;
+
+        goto label59;
+
+     label41:
+        $r20 := @caughtexception;
+
+        $r10 = $r11;
+
+        goto label65;
+
+     label42:
+        $r21 := @caughtexception;
+
+        $r10 = $r11;
+
+        goto label71;
+
+     label43:
+        $r22 := @caughtexception;
+
+        $r10 = $r11;
+
+        goto label77;
+
+     label44:
+        $r24 := @caughtexception;
+
+     label45:
+        $r23 = $r24;
+
+        goto label83;
+
+     label46:
+        $r17 := @caughtexception;
+
+     label47:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Unknown error", $r17);
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 0;
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError UNKNOWN_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r2 = virtualinvoke $r17.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8[2] = $r2;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+     label48:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest> = null;
+
+        if $r10 == null goto label88;
+
+     label49:
+        virtualinvoke $r10.<java.io.FileOutputStream: void close()>();
+
+     label50:
+        return;
+
+     label51:
+        $r25 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing stream", $r25);
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_IO_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r1 = virtualinvoke $r25.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8[2] = $r1;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+        return;
+
+     label52:
+        $r18 := @caughtexception;
+
+     label53:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Network error", $r18);
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 0;
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError NETWORK_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r2 = virtualinvoke $r18.<com.unity3d.services.core.request.NetworkIOException: java.lang.String getMessage()>();
+
+        $r8[2] = $r2;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+     label54:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest> = null;
+
+        if $r10 == null goto label88;
+
+     label55:
+        virtualinvoke $r10.<java.io.FileOutputStream: void close()>();
+
+     label56:
+        return;
+
+     label57:
+        $r26 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing stream", $r26);
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_IO_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r1 = virtualinvoke $r26.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8[2] = $r1;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+        return;
+
+     label58:
+        $r19 := @caughtexception;
+
+     label59:
+        $r15 = (java.lang.Exception) $r19;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Illegal state", $r15);
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 0;
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError ILLEGAL_STATE>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r36 = (java.lang.IllegalStateException) $r19;
+
+        $r2 = virtualinvoke $r36.<java.lang.IllegalStateException: java.lang.String getMessage()>();
+
+        $r8[2] = $r2;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+     label60:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest> = null;
+
+        if $r10 == null goto label88;
+
+     label61:
+        virtualinvoke $r10.<java.io.FileOutputStream: void close()>();
+
+     label62:
+        return;
+
+     label63:
+        $r27 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing stream", $r27);
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_IO_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r1 = virtualinvoke $r27.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8[2] = $r1;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+        return;
+
+     label64:
+        $r20 := @caughtexception;
+
+     label65:
+        $r15 = (java.lang.Exception) $r20;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Couldn\'t request stream", $r15);
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 0;
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_IO_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r37 = (java.io.IOException) $r20;
+
+        $r2 = virtualinvoke $r37.<java.io.IOException: java.lang.String getMessage()>();
+
+        $r8[2] = $r2;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+     label66:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest> = null;
+
+        if $r10 == null goto label88;
+
+     label67:
+        virtualinvoke $r10.<java.io.FileOutputStream: void close()>();
+
+     label68:
+        return;
+
+     label69:
+        $r28 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing stream", $r28);
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_IO_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r1 = virtualinvoke $r28.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8[2] = $r1;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+        return;
+
+     label70:
+        $r21 := @caughtexception;
+
+     label71:
+        $r15 = (java.lang.Exception) $r21;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Malformed URL", $r15);
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 0;
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError MALFORMED_URL>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r38 = (java.net.MalformedURLException) $r21;
+
+        $r2 = virtualinvoke $r38.<java.net.MalformedURLException: java.lang.String getMessage()>();
+
+        $r8[2] = $r2;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+     label72:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest> = null;
+
+        if $r10 == null goto label88;
+
+     label73:
+        virtualinvoke $r10.<java.io.FileOutputStream: void close()>();
+
+     label74:
+        return;
+
+     label75:
+        $r29 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing stream", $r29);
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_IO_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r1 = virtualinvoke $r29.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8[2] = $r1;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+        return;
+
+     label76:
+        $r22 := @caughtexception;
+
+     label77:
+        $r15 = (java.lang.Exception) $r22;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Couldn\'t create target file", $r15);
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 0;
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_IO_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r39 = (java.io.FileNotFoundException) $r22;
+
+        $r2 = virtualinvoke $r39.<java.io.FileNotFoundException: java.lang.String getMessage()>();
+
+        $r8[2] = $r2;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+     label78:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest> = null;
+
+        if $r10 == null goto label88;
+
+     label79:
+        virtualinvoke $r10.<java.io.FileOutputStream: void close()>();
+
+     label80:
+        return;
+
+     label81:
+        $r30 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing stream", $r30);
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_IO_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r1 = virtualinvoke $r30.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8[2] = $r1;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+        return;
+
+     label82:
+        $r24 := @caughtexception;
+
+        goto label45;
+
+     label83:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest> = null;
+
+        if $r10 == null goto label87;
+
+     label84:
+        virtualinvoke $r10.<java.io.FileOutputStream: void close()>();
+
+     label85:
+        goto label87;
+
+     label86:
+        $r31 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing stream", $r31);
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_IO_ERROR>;
+
+        $r8[0] = $r9;
+
+        $r8[1] = $r1;
+
+        $r1 = virtualinvoke $r31.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8[2] = $r1;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+     label87:
+        throw $r23;
+
+     label88:
+        return;
+
+        catch java.io.FileNotFoundException from label07 to label08 with label76;
+        catch java.net.MalformedURLException from label07 to label08 with label70;
+        catch java.io.IOException from label07 to label08 with label64;
+        catch java.lang.IllegalStateException from label07 to label08 with label58;
+        catch com.unity3d.services.core.request.NetworkIOException from label07 to label08 with label52;
+        catch java.lang.Exception from label07 to label08 with label46;
+        catch java.lang.Throwable from label05 to label06 with label44;
+        catch java.lang.Throwable from label07 to label08 with label44;
+        catch java.io.FileNotFoundException from label08 to label09 with label43;
+        catch java.io.FileNotFoundException from label12 to label13 with label43;
+        catch java.io.FileNotFoundException from label14 to label15 with label43;
+        catch java.io.FileNotFoundException from label16 to label17 with label43;
+        catch java.io.FileNotFoundException from label18 to label19 with label43;
+        catch java.io.FileNotFoundException from label20 to label21 with label43;
+        catch java.io.FileNotFoundException from label22 to label23 with label43;
+        catch java.net.MalformedURLException from label08 to label09 with label42;
+        catch java.net.MalformedURLException from label12 to label13 with label42;
+        catch java.net.MalformedURLException from label14 to label15 with label42;
+        catch java.net.MalformedURLException from label16 to label17 with label42;
+        catch java.net.MalformedURLException from label18 to label19 with label42;
+        catch java.net.MalformedURLException from label20 to label21 with label42;
+        catch java.net.MalformedURLException from label22 to label23 with label42;
+        catch java.io.IOException from label08 to label09 with label41;
+        catch java.io.IOException from label12 to label13 with label41;
+        catch java.io.IOException from label14 to label15 with label41;
+        catch java.io.IOException from label16 to label17 with label41;
+        catch java.io.IOException from label18 to label19 with label41;
+        catch java.io.IOException from label20 to label21 with label41;
+        catch java.io.IOException from label22 to label23 with label41;
+        catch java.lang.IllegalStateException from label08 to label09 with label40;
+        catch java.lang.IllegalStateException from label12 to label13 with label40;
+        catch java.lang.IllegalStateException from label14 to label15 with label40;
+        catch java.lang.IllegalStateException from label16 to label17 with label40;
+        catch java.lang.IllegalStateException from label18 to label19 with label40;
+        catch java.lang.IllegalStateException from label20 to label21 with label40;
+        catch java.lang.IllegalStateException from label22 to label23 with label40;
+        catch com.unity3d.services.core.request.NetworkIOException from label08 to label09 with label39;
+        catch com.unity3d.services.core.request.NetworkIOException from label12 to label13 with label39;
+        catch com.unity3d.services.core.request.NetworkIOException from label14 to label15 with label39;
+        catch com.unity3d.services.core.request.NetworkIOException from label16 to label17 with label39;
+        catch com.unity3d.services.core.request.NetworkIOException from label18 to label19 with label39;
+        catch com.unity3d.services.core.request.NetworkIOException from label20 to label21 with label39;
+        catch com.unity3d.services.core.request.NetworkIOException from label22 to label23 with label39;
+        catch java.lang.Exception from label08 to label10 with label38;
+        catch java.lang.Exception from label12 to label23 with label38;
+        catch java.lang.Throwable from label08 to label11 with label36;
+        catch java.lang.Throwable from label12 to label23 with label36;
+        catch java.io.FileNotFoundException from label24 to label25 with label35;
+        catch java.net.MalformedURLException from label24 to label25 with label34;
+        catch java.io.IOException from label24 to label25 with label33;
+        catch java.lang.IllegalStateException from label24 to label25 with label32;
+        catch com.unity3d.services.core.request.NetworkIOException from label24 to label25 with label31;
+        catch java.lang.Exception from label24 to label25 with label30;
+        catch java.lang.Throwable from label24 to label25 with label29;
+        catch java.lang.Exception from label26 to label27 with label28;
+        catch java.lang.Throwable from label47 to label48 with label82;
+        catch java.lang.Exception from label49 to label50 with label51;
+        catch java.lang.Throwable from label53 to label54 with label82;
+        catch java.lang.Exception from label55 to label56 with label57;
+        catch java.lang.Throwable from label59 to label60 with label82;
+        catch java.lang.Exception from label61 to label62 with label63;
+        catch java.lang.Throwable from label65 to label66 with label82;
+        catch java.lang.Exception from label67 to label68 with label69;
+        catch java.lang.Throwable from label71 to label72 with label82;
+        catch java.lang.Exception from label73 to label74 with label75;
+        catch java.lang.Throwable from label77 to label78 with label82;
+        catch java.lang.Exception from label79 to label80 with label81;
+        catch java.lang.Exception from label84 to label85 with label86;
+    }
+
+    private com.unity3d.services.core.request.WebRequest getWebRequest(java.lang.String, int, int, java.util.HashMap) throws java.net.MalformedURLException
+    {
+        com.unity3d.services.core.request.WebRequest $r4;
+        com.unity3d.services.core.cache.CacheThreadHandler r0;
+        int $i0, $i1;
+        java.util.HashMap $r2, $r3;
+        java.lang.String $r1;
+
+        r0 := @this: com.unity3d.services.core.cache.CacheThreadHandler;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r3 := @parameter3: java.util.HashMap;
+
+        $r2 = new java.util.HashMap;
+
+        specialinvoke $r2.<java.util.HashMap: void <init>()>();
+
+        if $r3 == null goto label1;
+
+        virtualinvoke $r2.<java.util.HashMap: void putAll(java.util.Map)>($r3);
+
+     label1:
+        $r4 = new com.unity3d.services.core.request.WebRequest;
+
+        specialinvoke $r4.<com.unity3d.services.core.request.WebRequest: void <init>(java.lang.String,java.lang.String,java.util.Map,int,int)>($r1, "GET", $r2, $i0, $i1);
+
+        return $r4;
+    }
+
+    private void postProcessDownload(long, java.lang.String, java.io.File, long, long, boolean, int, java.util.Map, com.unity3d.services.core.cache.CacheEventSender)
+    {
+        com.unity3d.services.core.cache.CacheEvent $r7;
+        java.lang.Object[] $r8;
+        long $l0, $l1, $l2, $l4;
+        java.lang.Integer $r10;
+        java.lang.Long $r9;
+        java.util.Map $r3;
+        int $i3;
+        java.lang.String $r1, $r6;
+        boolean $z0, $z1;
+        com.unity3d.services.core.cache.CacheEventSender $r4;
+        java.io.File $r2;
+        com.unity3d.services.core.cache.CacheThreadHandler r0;
+        java.lang.StringBuilder $r5;
+        org.json.JSONArray $r11;
+
+        r0 := @this: com.unity3d.services.core.cache.CacheThreadHandler;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.io.File;
+
+        $l1 := @parameter3: long;
+
+        $l2 := @parameter4: long;
+
+        $z0 := @parameter5: boolean;
+
+        $i3 := @parameter6: int;
+
+        $r3 := @parameter7: java.util.Map;
+
+        $r4 := @parameter8: com.unity3d.services.core.cache.CacheEventSender;
+
+        $l4 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        $l0 = $l4 - $l0;
+
+        $z1 = virtualinvoke $r2.<java.io.File: boolean setReadable(boolean,boolean)>(1, 0);
+
+        if $z1 != 0 goto label1;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>("Unity Ads cache: could not set file readable!");
+
+     label1:
+        if $z0 != 0 goto label2;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unity Ads cache: File ");
+
+        $r6 = virtualinvoke $r2.<java.io.File: java.lang.String getName()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" of ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" bytes downloaded in ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("ms");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>($r6);
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_END>;
+
+        $r8 = newarray (java.lang.Object)[6];
+
+        $r8[0] = $r1;
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        $r8[1] = $r9;
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l2);
+
+        $r8[2] = $r9;
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $r8[3] = $r9;
+
+        $r10 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i3);
+
+        $r8[4] = $r10;
+
+        $r11 = staticinvoke <com.unity3d.services.core.api.Request: org.json.JSONArray getResponseHeadersMap(java.util.Map)>($r3);
+
+        $r8[5] = $r11;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+        return;
+
+     label2:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unity Ads cache: downloading of ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" stopped");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>($r6);
+
+        $r7 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_STOPPED>;
+
+        $r8 = newarray (java.lang.Object)[6];
+
+        $r8[0] = $r1;
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        $r8[1] = $r9;
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l2);
+
+        $r8[2] = $r9;
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $r8[3] = $r9;
+
+        $r10 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i3);
+
+        $r8[4] = $r10;
+
+        $r11 = staticinvoke <com.unity3d.services.core.api.Request: org.json.JSONArray getResponseHeadersMap(java.util.Map)>($r3);
+
+        $r8[5] = $r11;
+
+        virtualinvoke $r4.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r7, $r8);
+
+        return;
+    }
+
+    public void handleMessage(android.os.Message)
+    {
+        com.unity3d.services.core.cache.CacheEvent $r15;
+        android.os.Bundle $r2;
+        java.lang.Object[] $r16;
+        java.util.HashMap $r7;
+        java.lang.String[] $r12;
+        com.unity3d.services.core.cache.CacheError $r17;
+        int $i0, $i1, $i2, $i3;
+        java.lang.Boolean $r18;
+        java.lang.String $r3, $r4, $r11;
+        boolean $z0, $z1;
+        com.unity3d.services.core.cache.CacheEventSender $r6;
+        java.util.Iterator $r9;
+        java.util.Set $r8;
+        java.io.File $r14;
+        java.io.Serializable $r5;
+        java.util.List $r13;
+        android.os.Message $r1;
+        com.unity3d.services.core.cache.CacheThreadHandler r0;
+        java.lang.Object $r10;
+
+        r0 := @this: com.unity3d.services.core.cache.CacheThreadHandler;
+
+        $r1 := @parameter0: android.os.Message;
+
+        $r2 = virtualinvoke $r1.<android.os.Message: android.os.Bundle getData()>();
+
+        $r3 = virtualinvoke $r2.<android.os.Bundle: java.lang.String getString(java.lang.String)>("source");
+
+        virtualinvoke $r2.<android.os.Bundle: void remove(java.lang.String)>("source");
+
+        $r4 = virtualinvoke $r2.<android.os.Bundle: java.lang.String getString(java.lang.String)>("target");
+
+        virtualinvoke $r2.<android.os.Bundle: void remove(java.lang.String)>("target");
+
+        $i0 = virtualinvoke $r2.<android.os.Bundle: int getInt(java.lang.String)>("connectTimeout");
+
+        virtualinvoke $r2.<android.os.Bundle: void remove(java.lang.String)>("connectTimeout");
+
+        $i1 = virtualinvoke $r2.<android.os.Bundle: int getInt(java.lang.String)>("readTimeout");
+
+        virtualinvoke $r2.<android.os.Bundle: void remove(java.lang.String)>("readTimeout");
+
+        $i2 = virtualinvoke $r2.<android.os.Bundle: int getInt(java.lang.String)>("progressInterval");
+
+        virtualinvoke $r2.<android.os.Bundle: void remove(java.lang.String)>("progressInterval");
+
+        $z0 = virtualinvoke $r2.<android.os.Bundle: boolean getBoolean(java.lang.String,boolean)>("append", 0);
+
+        virtualinvoke $r2.<android.os.Bundle: void remove(java.lang.String)>("append");
+
+        $r5 = virtualinvoke $r2.<android.os.Bundle: java.io.Serializable getSerializable(java.lang.String)>("cacheEventSender");
+
+        $r6 = (com.unity3d.services.core.cache.CacheEventSender) $r5;
+
+        virtualinvoke $r2.<android.os.Bundle: void remove(java.lang.String)>("cacheEventSender");
+
+        $i3 = virtualinvoke $r2.<android.os.Bundle: int size()>();
+
+        if $i3 <= 0 goto label2;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>("There are headers left in data, reading them");
+
+        $r7 = new java.util.HashMap;
+
+        specialinvoke $r7.<java.util.HashMap: void <init>()>();
+
+        $r8 = virtualinvoke $r2.<android.os.Bundle: java.util.Set keySet()>();
+
+        $r9 = interfaceinvoke $r8.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke $r9.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r10 = interfaceinvoke $r9.<java.util.Iterator: java.lang.Object next()>();
+
+        $r11 = (java.lang.String) $r10;
+
+        $r12 = virtualinvoke $r2.<android.os.Bundle: java.lang.String[] getStringArray(java.lang.String)>($r11);
+
+        $r13 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r12);
+
+        virtualinvoke $r7.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r11, $r13);
+
+        goto label1;
+
+     label2:
+        $r7 = null;
+
+     label3:
+        $r14 = new java.io.File;
+
+        specialinvoke $r14.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        if $z0 == 0 goto label4;
+
+        $z1 = virtualinvoke $r14.<java.io.File: boolean exists()>();
+
+        if $z1 == 0 goto label5;
+
+     label4:
+        if $z0 != 0 goto label6;
+
+        $z1 = virtualinvoke $r14.<java.io.File: boolean exists()>();
+
+        if $z1 == 0 goto label6;
+
+     label5:
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 0;
+
+        $r15 = <com.unity3d.services.core.cache.CacheEvent: com.unity3d.services.core.cache.CacheEvent DOWNLOAD_ERROR>;
+
+        $r16 = newarray (java.lang.Object)[5];
+
+        $r17 = <com.unity3d.services.core.cache.CacheError: com.unity3d.services.core.cache.CacheError FILE_STATE_WRONG>;
+
+        $r16[0] = $r17;
+
+        $r16[1] = $r3;
+
+        $r16[2] = $r4;
+
+        $r18 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r16[3] = $r18;
+
+        $z0 = virtualinvoke $r14.<java.io.File: boolean exists()>();
+
+        $r18 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r16[4] = $r18;
+
+        virtualinvoke $r6.<com.unity3d.services.core.cache.CacheEventSender: boolean sendEvent(com.unity3d.services.core.cache.CacheEvent,java.lang.Object[])>($r15, $r16);
+
+        return;
+
+     label6:
+        $i3 = $r1.<android.os.Message: int what>;
+
+        if $i3 == 1 goto label7;
+
+        return;
+
+     label7:
+        specialinvoke r0.<com.unity3d.services.core.cache.CacheThreadHandler: void downloadFile(java.lang.String,java.lang.String,int,int,int,java.util.HashMap,boolean,com.unity3d.services.core.cache.CacheEventSender)>($r3, $r4, $i0, $i1, $i2, $r7, $z0, $r6);
+
+        return;
+    }
+
+    public boolean isActive()
+    {
+        com.unity3d.services.core.cache.CacheThreadHandler r0;
+        boolean z0;
+
+        r0 := @this: com.unity3d.services.core.cache.CacheThreadHandler;
+
+        z0 = r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active>;
+
+        return z0;
+    }
+
+    public void setCancelStatus(boolean)
+    {
+        com.unity3d.services.core.request.WebRequest $r1;
+        com.unity3d.services.core.cache.CacheThreadHandler r0;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.core.cache.CacheThreadHandler;
+
+        $z0 := @parameter0: boolean;
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _canceled> = 1;
+
+        $r1 = r0.<com.unity3d.services.core.cache.CacheThreadHandler: com.unity3d.services.core.request.WebRequest _currentRequest>;
+
+        if $r1 == null goto label1;
+
+        r0.<com.unity3d.services.core.cache.CacheThreadHandler: boolean _active> = 0;
+
+        virtualinvoke $r1.<com.unity3d.services.core.request.WebRequest: void cancel()>();
+
+     label1:
+        return;
+    }
+}

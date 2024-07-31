@@ -1,0 +1,338 @@
+final class com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor extends java.util.concurrent.atomic.AtomicReference implements java.util.concurrent.Executor, java.lang.Runnable
+{
+    java.util.concurrent.Executor delegate;
+    com.google.common.util.concurrent.ExecutionSequencer sequencer;
+    java.lang.Thread submitting;
+    java.lang.Runnable task;
+
+    private void <init>(java.util.concurrent.Executor, com.google.common.util.concurrent.ExecutionSequencer)
+    {
+        com.google.common.util.concurrent.ExecutionSequencer$RunningState $r3;
+        java.util.concurrent.Executor $r1;
+        com.google.common.util.concurrent.ExecutionSequencer $r2;
+        com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor r0;
+
+        r0 := @this: com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor;
+
+        $r1 := @parameter0: java.util.concurrent.Executor;
+
+        $r2 := @parameter1: com.google.common.util.concurrent.ExecutionSequencer;
+
+        $r3 = <com.google.common.util.concurrent.ExecutionSequencer$RunningState: com.google.common.util.concurrent.ExecutionSequencer$RunningState NOT_RUN>;
+
+        specialinvoke r0.<java.util.concurrent.atomic.AtomicReference: void <init>(java.lang.Object)>($r3);
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.util.concurrent.Executor delegate> = $r1;
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: com.google.common.util.concurrent.ExecutionSequencer sequencer> = $r2;
+
+        return;
+    }
+
+    void <init>(java.util.concurrent.Executor, com.google.common.util.concurrent.ExecutionSequencer, com.google.common.util.concurrent.ExecutionSequencer$1)
+    {
+        com.google.common.util.concurrent.ExecutionSequencer$1 $r3;
+        java.util.concurrent.Executor $r1;
+        com.google.common.util.concurrent.ExecutionSequencer $r2;
+        com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor r0;
+
+        r0 := @this: com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor;
+
+        $r1 := @parameter0: java.util.concurrent.Executor;
+
+        $r2 := @parameter1: com.google.common.util.concurrent.ExecutionSequencer;
+
+        $r3 := @parameter2: com.google.common.util.concurrent.ExecutionSequencer$1;
+
+        specialinvoke r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: void <init>(java.util.concurrent.Executor,com.google.common.util.concurrent.ExecutionSequencer)>($r1, $r2);
+
+        return;
+    }
+
+    static boolean access$200(com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor)
+    {
+        com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor;
+
+        $z0 = specialinvoke $r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: boolean trySetStarted()>();
+
+        return $z0;
+    }
+
+    static boolean access$300(com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor)
+    {
+        com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor;
+
+        $z0 = specialinvoke $r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: boolean trySetCancelled()>();
+
+        return $z0;
+    }
+
+    private boolean trySetCancelled()
+    {
+        com.google.common.util.concurrent.ExecutionSequencer$RunningState $r1, $r2;
+        com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor r0;
+        boolean $z0;
+
+        r0 := @this: com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor;
+
+        $r2 = <com.google.common.util.concurrent.ExecutionSequencer$RunningState: com.google.common.util.concurrent.ExecutionSequencer$RunningState NOT_RUN>;
+
+        $r1 = <com.google.common.util.concurrent.ExecutionSequencer$RunningState: com.google.common.util.concurrent.ExecutionSequencer$RunningState CANCELLED>;
+
+        $z0 = virtualinvoke r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r2, $r1);
+
+        return $z0;
+    }
+
+    private boolean trySetStarted()
+    {
+        com.google.common.util.concurrent.ExecutionSequencer$RunningState $r1, $r2;
+        com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor r0;
+        boolean $z0;
+
+        r0 := @this: com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor;
+
+        $r2 = <com.google.common.util.concurrent.ExecutionSequencer$RunningState: com.google.common.util.concurrent.ExecutionSequencer$RunningState NOT_RUN>;
+
+        $r1 = <com.google.common.util.concurrent.ExecutionSequencer$RunningState: com.google.common.util.concurrent.ExecutionSequencer$RunningState STARTED>;
+
+        $z0 = virtualinvoke r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r2, $r1);
+
+        return $z0;
+    }
+
+    public void execute(java.lang.Runnable)
+    {
+        com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue $r6;
+        java.lang.Throwable $r10;
+        com.google.common.util.concurrent.ExecutionSequencer$RunningState $r4;
+        java.util.concurrent.Executor $r9;
+        java.lang.Runnable $r2, $r8;
+        java.lang.Thread $r1, $r7;
+        java.lang.Object $r3;
+        com.google.common.util.concurrent.ExecutionSequencer $r5;
+        com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor r0;
+        boolean $z0;
+
+        r0 := @this: com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor;
+
+        $r2 := @parameter0: java.lang.Runnable;
+
+        $r3 = virtualinvoke r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Object get()>();
+
+        $r4 = <com.google.common.util.concurrent.ExecutionSequencer$RunningState: com.google.common.util.concurrent.ExecutionSequencer$RunningState CANCELLED>;
+
+        if $r3 != $r4 goto label01;
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.util.concurrent.Executor delegate> = null;
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: com.google.common.util.concurrent.ExecutionSequencer sequencer> = null;
+
+        return;
+
+     label01:
+        $r1 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Thread submitting> = $r1;
+
+     label02:
+        $r5 = r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: com.google.common.util.concurrent.ExecutionSequencer sequencer>;
+
+        $r3 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r5);
+
+        $r5 = (com.google.common.util.concurrent.ExecutionSequencer) $r3;
+
+        $r6 = staticinvoke <com.google.common.util.concurrent.ExecutionSequencer: com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue access$400(com.google.common.util.concurrent.ExecutionSequencer)>($r5);
+
+        $r7 = $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.lang.Thread thread>;
+
+        $r1 = r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Thread submitting>;
+
+     label03:
+        if $r7 != $r1 goto label09;
+
+     label04:
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: com.google.common.util.concurrent.ExecutionSequencer sequencer> = null;
+
+        $r8 = $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.lang.Runnable nextTask>;
+
+     label05:
+        if $r8 != null goto label06;
+
+        $z0 = 1;
+
+        goto label07;
+
+     label06:
+        $z0 = 0;
+
+     label07:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean)>($z0);
+
+        $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.lang.Runnable nextTask> = $r2;
+
+        $r9 = r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.util.concurrent.Executor delegate>;
+
+        $r3 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r9);
+
+        $r9 = (java.util.concurrent.Executor) $r3;
+
+        $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.util.concurrent.Executor nextExecutor> = $r9;
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.util.concurrent.Executor delegate> = null;
+
+     label08:
+        goto label10;
+
+     label09:
+        $r9 = r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.util.concurrent.Executor delegate>;
+
+        $r3 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r9);
+
+        $r9 = (java.util.concurrent.Executor) $r3;
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.util.concurrent.Executor delegate> = null;
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Runnable task> = $r2;
+
+        interfaceinvoke $r9.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>(r0);
+
+     label10:
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Thread submitting> = null;
+
+        return;
+
+     label11:
+        $r10 := @caughtexception;
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Thread submitting> = null;
+
+        throw $r10;
+
+        catch java.lang.Throwable from label02 to label03 with label11;
+        catch java.lang.Throwable from label04 to label05 with label11;
+        catch java.lang.Throwable from label07 to label08 with label11;
+        catch java.lang.Throwable from label09 to label10 with label11;
+    }
+
+    public void run()
+    {
+        com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue $r6;
+        java.lang.Throwable $r8;
+        java.util.concurrent.Executor $r1;
+        java.lang.Runnable $r4;
+        java.lang.Thread $r2, $r3;
+        java.lang.Object $r5;
+        com.google.common.util.concurrent.ExecutionSequencer $r7;
+        com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor;
+
+        $r2 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        $r3 = r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Thread submitting>;
+
+        if $r2 == $r3 goto label01;
+
+        $r4 = r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Runnable task>;
+
+        $r5 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r4);
+
+        $r4 = (java.lang.Runnable) $r5;
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Runnable task> = null;
+
+        interfaceinvoke $r4.<java.lang.Runnable: void run()>();
+
+        return;
+
+     label01:
+        $r6 = new com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue;
+
+        specialinvoke $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: void <init>(com.google.common.util.concurrent.ExecutionSequencer$1)>(null);
+
+        $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.lang.Thread thread> = $r2;
+
+        $r7 = r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: com.google.common.util.concurrent.ExecutionSequencer sequencer>;
+
+        $r5 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r7);
+
+        $r7 = (com.google.common.util.concurrent.ExecutionSequencer) $r5;
+
+        staticinvoke <com.google.common.util.concurrent.ExecutionSequencer: com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue access$402(com.google.common.util.concurrent.ExecutionSequencer,com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue)>($r7, $r6);
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: com.google.common.util.concurrent.ExecutionSequencer sequencer> = null;
+
+     label02:
+        $r4 = r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Runnable task>;
+
+        $r5 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r4);
+
+        $r4 = (java.lang.Runnable) $r5;
+
+        r0.<com.google.common.util.concurrent.ExecutionSequencer$TaskNonReentrantExecutor: java.lang.Runnable task> = null;
+
+        interfaceinvoke $r4.<java.lang.Runnable: void run()>();
+
+     label03:
+        $r4 = $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.lang.Runnable nextTask>;
+
+     label04:
+        $z0 = 1;
+
+        if $r4 == null goto label05;
+
+        $z1 = 1;
+
+        goto label06;
+
+     label05:
+        $z1 = 0;
+
+     label06:
+        $r1 = $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.util.concurrent.Executor nextExecutor>;
+
+     label07:
+        if $r1 != null goto label08;
+
+        $z0 = 0;
+
+     label08:
+        $z0 = $z0 & $z1;
+
+        if $z0 == 0 goto label11;
+
+     label09:
+        $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.lang.Runnable nextTask> = null;
+
+        $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.util.concurrent.Executor nextExecutor> = null;
+
+        interfaceinvoke $r1.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r4);
+
+     label10:
+        goto label03;
+
+     label11:
+        $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.lang.Thread thread> = null;
+
+        return;
+
+     label12:
+        $r8 := @caughtexception;
+
+        $r6.<com.google.common.util.concurrent.ExecutionSequencer$ThreadConfinedTaskQueue: java.lang.Thread thread> = null;
+
+        throw $r8;
+
+        catch java.lang.Throwable from label02 to label04 with label12;
+        catch java.lang.Throwable from label06 to label07 with label12;
+        catch java.lang.Throwable from label09 to label10 with label12;
+    }
+}

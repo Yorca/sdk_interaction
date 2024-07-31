@@ -1,0 +1,997 @@
+final class io.grpc.internal.RetriableStream$Sublistener extends java.lang.Object implements io.grpc.internal.ClientStreamListener
+{
+    static final boolean $assertionsDisabled;
+    final io.grpc.internal.RetriableStream$Substream substream;
+    final io.grpc.internal.RetriableStream this$0;
+
+    static void <clinit>()
+    {
+        return;
+    }
+
+    void <init>(io.grpc.internal.RetriableStream, io.grpc.internal.RetriableStream$Substream)
+    {
+        io.grpc.internal.RetriableStream$Sublistener r0;
+        io.grpc.internal.RetriableStream $r1;
+        io.grpc.internal.RetriableStream$Substream $r2;
+
+        r0 := @this: io.grpc.internal.RetriableStream$Sublistener;
+
+        $r1 := @parameter0: io.grpc.internal.RetriableStream;
+
+        $r2 := @parameter1: io.grpc.internal.RetriableStream$Substream;
+
+        r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0> = $r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream> = $r2;
+
+        return;
+    }
+
+    private java.lang.Integer getPushbackMills(io.grpc.Metadata)
+    {
+        java.lang.Throwable $r2;
+        io.grpc.Metadata $r3;
+        java.lang.Object $r4;
+        io.grpc.internal.RetriableStream$Sublistener r0;
+        java.lang.String $r5;
+        io.grpc.Metadata$Key $r1;
+        java.lang.Integer $r6;
+
+        r0 := @this: io.grpc.internal.RetriableStream$Sublistener;
+
+        $r3 := @parameter0: io.grpc.Metadata;
+
+        $r1 = <io.grpc.internal.RetriableStream: io.grpc.Metadata$Key GRPC_RETRY_PUSHBACK_MS>;
+
+        $r4 = virtualinvoke $r3.<io.grpc.Metadata: java.lang.Object get(io.grpc.Metadata$Key)>($r1);
+
+        $r5 = (java.lang.String) $r4;
+
+        if $r5 == null goto label4;
+
+     label1:
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(java.lang.String)>($r5);
+
+     label2:
+        return $r6;
+
+     label3:
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(-1);
+
+        return $r6;
+
+     label4:
+        return null;
+
+     label5:
+        $r2 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.NumberFormatException from label1 to label2 with label5;
+    }
+
+    private io.grpc.internal.RetriableStream$HedgingPlan makeHedgingDecision(io.grpc.Status, io.grpc.Metadata)
+    {
+        io.grpc.internal.HedgingPolicy $r6;
+        java.util.Set $r7;
+        io.grpc.internal.RetriableStream$Sublistener r0;
+        io.grpc.internal.RetriableStream $r5;
+        java.lang.Integer $r4;
+        io.grpc.internal.RetriableStream$HedgingPlan $r1;
+        io.grpc.Status$Code $r8;
+        int $i0;
+        io.grpc.Metadata $r3;
+        io.grpc.Status $r2;
+        io.grpc.internal.RetriableStream$Throttle $r9;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: io.grpc.internal.RetriableStream$Sublistener;
+
+        $r2 := @parameter0: io.grpc.Status;
+
+        $r3 := @parameter1: io.grpc.Metadata;
+
+        $r4 = specialinvoke r0.<io.grpc.internal.RetriableStream$Sublistener: java.lang.Integer getPushbackMills(io.grpc.Metadata)>($r3);
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r6 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.HedgingPolicy access$900(io.grpc.internal.RetriableStream)>($r5);
+
+        $r7 = $r6.<io.grpc.internal.HedgingPolicy: java.util.Set nonFatalStatusCodes>;
+
+        $r8 = virtualinvoke $r2.<io.grpc.Status: io.grpc.Status$Code getCode()>();
+
+        $z0 = interfaceinvoke $r7.<java.util.Set: boolean contains(java.lang.Object)>($r8);
+
+        $z1 = 1;
+
+        $z0 = $z0 ^ 1;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r9 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$Throttle access$700(io.grpc.internal.RetriableStream)>($r5);
+
+        if $r9 == null goto label2;
+
+        if $z0 == 0 goto label1;
+
+        if $r4 == null goto label2;
+
+        $i0 = virtualinvoke $r4.<java.lang.Integer: int intValue()>();
+
+        if $i0 >= 0 goto label2;
+
+     label1:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r9 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$Throttle access$700(io.grpc.internal.RetriableStream)>($r5);
+
+        $z2 = virtualinvoke $r9.<io.grpc.internal.RetriableStream$Throttle: boolean onQualifiedFailureThenCheckIsAboveThreshold()>();
+
+        $z2 = $z2 ^ 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        $r1 = new io.grpc.internal.RetriableStream$HedgingPlan;
+
+        if $z0 != 0 goto label4;
+
+        if $z2 == 0 goto label5;
+
+     label4:
+        $z1 = 0;
+
+     label5:
+        specialinvoke $r1.<io.grpc.internal.RetriableStream$HedgingPlan: void <init>(boolean,java.lang.Integer)>($z1, $r4);
+
+        return $r1;
+    }
+
+    private io.grpc.internal.RetriableStream$RetryPlan makeRetryDecision(io.grpc.Status, io.grpc.Metadata)
+    {
+        long $l0, $l3, $l4;
+        java.util.Random $r11;
+        io.grpc.internal.RetriableStream$Sublistener r0;
+        java.lang.Integer $r8;
+        int $i1, $i2;
+        io.grpc.Status $r1;
+        boolean $z0, $z1, $z2;
+        double $d0, $d1;
+        io.grpc.internal.RetriableStream$Substream $r10;
+        java.util.Set $r6;
+        io.grpc.internal.RetriableStream $r3, $r12;
+        java.util.concurrent.TimeUnit $r13;
+        io.grpc.internal.RetriableStream$RetryPlan $r5;
+        io.grpc.Status$Code $r7;
+        io.grpc.Metadata $r2;
+        io.grpc.internal.RetryPolicy $r4;
+        io.grpc.internal.RetriableStream$Throttle $r9;
+
+        r0 := @this: io.grpc.internal.RetriableStream$Sublistener;
+
+        $r1 := @parameter0: io.grpc.Status;
+
+        $r2 := @parameter1: io.grpc.Metadata;
+
+        $r3 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r4 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetryPolicy access$2300(io.grpc.internal.RetriableStream)>($r3);
+
+        $l0 = 0L;
+
+        $z0 = 0;
+
+        if $r4 != null goto label1;
+
+        $r5 = new io.grpc.internal.RetriableStream$RetryPlan;
+
+        specialinvoke $r5.<io.grpc.internal.RetriableStream$RetryPlan: void <init>(boolean,long)>(0, 0L);
+
+        return $r5;
+
+     label1:
+        $r3 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r4 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetryPolicy access$2300(io.grpc.internal.RetriableStream)>($r3);
+
+        $r6 = $r4.<io.grpc.internal.RetryPolicy: java.util.Set retryableStatusCodes>;
+
+        $r7 = virtualinvoke $r1.<io.grpc.Status: io.grpc.Status$Code getCode()>();
+
+        $z1 = interfaceinvoke $r6.<java.util.Set: boolean contains(java.lang.Object)>($r7);
+
+        $r8 = specialinvoke r0.<io.grpc.internal.RetriableStream$Sublistener: java.lang.Integer getPushbackMills(io.grpc.Metadata)>($r2);
+
+        $r3 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r9 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$Throttle access$700(io.grpc.internal.RetriableStream)>($r3);
+
+        if $r9 == null goto label3;
+
+        if $z1 != 0 goto label2;
+
+        if $r8 == null goto label3;
+
+        $i1 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        if $i1 >= 0 goto label3;
+
+     label2:
+        $r3 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r9 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$Throttle access$700(io.grpc.internal.RetriableStream)>($r3);
+
+        $z2 = virtualinvoke $r9.<io.grpc.internal.RetriableStream$Throttle: boolean onQualifiedFailureThenCheckIsAboveThreshold()>();
+
+        $z2 = $z2 ^ 1;
+
+        goto label4;
+
+     label3:
+        $z2 = 0;
+
+     label4:
+        $r3 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r4 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetryPolicy access$2300(io.grpc.internal.RetriableStream)>($r3);
+
+        $i1 = $r4.<io.grpc.internal.RetryPolicy: int maxAttempts>;
+
+        $r10 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        $i2 = $r10.<io.grpc.internal.RetriableStream$Substream: int previousAttemptCount>;
+
+        $i2 = $i2 + 1;
+
+        if $i1 <= $i2 goto label7;
+
+        if $z2 != 0 goto label7;
+
+        if $r8 != null goto label5;
+
+        if $z1 == 0 goto label7;
+
+        $r3 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $l0 = staticinvoke <io.grpc.internal.RetriableStream: long access$2700(io.grpc.internal.RetriableStream)>($r3);
+
+        $d0 = (double) $l0;
+
+        $r11 = staticinvoke <io.grpc.internal.RetriableStream: java.util.Random access$2800()>();
+
+        $d1 = virtualinvoke $r11.<java.util.Random: double nextDouble()>();
+
+        $d0 = $d0 * $d1;
+
+        $l0 = (long) $d0;
+
+        $r3 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $l3 = staticinvoke <io.grpc.internal.RetriableStream: long access$2700(io.grpc.internal.RetriableStream)>($r3);
+
+        $d0 = (double) $l3;
+
+        $r12 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r4 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetryPolicy access$2300(io.grpc.internal.RetriableStream)>($r12);
+
+        $d1 = $r4.<io.grpc.internal.RetryPolicy: double backoffMultiplier>;
+
+        $d0 = $d0 * $d1;
+
+        $l3 = (long) $d0;
+
+        $r12 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r4 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetryPolicy access$2300(io.grpc.internal.RetriableStream)>($r12);
+
+        $l4 = $r4.<io.grpc.internal.RetryPolicy: long maxBackoffNanos>;
+
+        $l3 = staticinvoke <java.lang.Math: long min(long,long)>($l3, $l4);
+
+        staticinvoke <io.grpc.internal.RetriableStream: long access$2702(io.grpc.internal.RetriableStream,long)>($r3, $l3);
+
+        goto label6;
+
+     label5:
+        $i1 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        if $i1 < 0 goto label7;
+
+        $r13 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $i1 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        $l0 = (long) $i1;
+
+        $l0 = virtualinvoke $r13.<java.util.concurrent.TimeUnit: long toNanos(long)>($l0);
+
+        $r3 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r4 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetryPolicy access$2300(io.grpc.internal.RetriableStream)>($r3);
+
+        $l3 = $r4.<io.grpc.internal.RetryPolicy: long initialBackoffNanos>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: long access$2702(io.grpc.internal.RetriableStream,long)>($r3, $l3);
+
+     label6:
+        $z0 = 1;
+
+     label7:
+        $r5 = new io.grpc.internal.RetriableStream$RetryPlan;
+
+        specialinvoke $r5.<io.grpc.internal.RetriableStream$RetryPlan: void <init>(boolean,long)>($z0, $l0);
+
+        return $r5;
+    }
+
+    public void closed(io.grpc.Status, io.grpc.internal.ClientStreamListener$RpcProgress, io.grpc.Metadata)
+    {
+        io.grpc.internal.InsightBuilder $r8;
+        java.util.concurrent.ScheduledFuture $r26;
+        io.grpc.internal.RetriableStream$State $r7;
+        java.lang.Integer $r17;
+        java.util.concurrent.atomic.AtomicInteger $r10;
+        io.grpc.Status $r2, $r13;
+        boolean $z0, $z1;
+        io.grpc.internal.RetriableStream$Substream $r1, $r11;
+        java.util.Collection $r18;
+        io.grpc.internal.RetriableStream$RetryPlan $r20;
+        io.grpc.Metadata $r4;
+        io.grpc.internal.RetriableStream$FutureCanceller $r21;
+        java.lang.Throwable $r19, $r27, $r28, $r32;
+        java.util.concurrent.atomic.AtomicBoolean $r15;
+        long $l1;
+        io.grpc.internal.RetriableStream$Sublistener$2 $r31;
+        io.grpc.internal.RetriableStream$Sublistener r0;
+        io.grpc.internal.RetriableStream$HedgingPlan $r16;
+        int $i0;
+        java.util.concurrent.ScheduledExecutorService $r23;
+        io.grpc.internal.RetriableStream$Sublistener$1RetryBackoffRunnable $r24;
+        java.util.concurrent.Executor $r30;
+        io.grpc.internal.RetriableStream $r5;
+        io.grpc.internal.ClientStreamListener$RpcProgress $r3, $r12;
+        io.grpc.StatusRuntimeException $r14;
+        java.util.concurrent.TimeUnit $r25;
+        io.grpc.Status$Code $r9;
+        java.lang.Object $r6, $r22;
+        io.grpc.internal.RetryPolicy $r29;
+
+        r0 := @this: io.grpc.internal.RetriableStream$Sublistener;
+
+        $r2 := @parameter0: io.grpc.Status;
+
+        $r3 := @parameter1: io.grpc.internal.ClientStreamListener$RpcProgress;
+
+        $r4 := @parameter2: io.grpc.Metadata;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r6 = staticinvoke <io.grpc.internal.RetriableStream: java.lang.Object access$500(io.grpc.internal.RetriableStream)>($r5);
+
+        entermonitor $r6;
+
+     label01:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $r1 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        $r7 = virtualinvoke $r7.<io.grpc.internal.RetriableStream$State: io.grpc.internal.RetriableStream$State substreamClosed(io.grpc.internal.RetriableStream$Substream)>($r1);
+
+        staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$302(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$State)>($r5, $r7);
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r8 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.InsightBuilder access$1600(io.grpc.internal.RetriableStream)>($r5);
+
+        $r9 = virtualinvoke $r2.<io.grpc.Status: io.grpc.Status$Code getCode()>();
+
+        virtualinvoke $r8.<io.grpc.internal.InsightBuilder: io.grpc.internal.InsightBuilder append(java.lang.Object)>($r9);
+
+        exitmonitor $r6;
+
+     label02:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r10 = staticinvoke <io.grpc.internal.RetriableStream: java.util.concurrent.atomic.AtomicInteger access$1700(io.grpc.internal.RetriableStream)>($r5);
+
+        $i0 = virtualinvoke $r10.<java.util.concurrent.atomic.AtomicInteger: int decrementAndGet()>();
+
+        if $i0 != -2147483648 goto label03;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r2 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.Status access$1800(io.grpc.internal.RetriableStream)>($r5);
+
+        $r3 = <io.grpc.internal.ClientStreamListener$RpcProgress: io.grpc.internal.ClientStreamListener$RpcProgress PROCESSED>;
+
+        $r4 = new io.grpc.Metadata;
+
+        specialinvoke $r4.<io.grpc.Metadata: void <init>()>();
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$1900(io.grpc.internal.RetriableStream,io.grpc.Status,io.grpc.internal.ClientStreamListener$RpcProgress,io.grpc.Metadata)>($r5, $r2, $r3, $r4);
+
+        return;
+
+     label03:
+        $r1 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        $z0 = $r1.<io.grpc.internal.RetriableStream$Substream: boolean bufferLimitExceeded>;
+
+        if $z0 == 0 goto label04;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r1 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$1400(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$Substream)>($r5, $r1);
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $r1 = $r7.<io.grpc.internal.RetriableStream$State: io.grpc.internal.RetriableStream$Substream winningSubstream>;
+
+        $r11 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        if $r1 != $r11 goto label38;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$1900(io.grpc.internal.RetriableStream,io.grpc.Status,io.grpc.internal.ClientStreamListener$RpcProgress,io.grpc.Metadata)>($r5, $r2, $r3, $r4);
+
+        return;
+
+     label04:
+        $r12 = <io.grpc.internal.ClientStreamListener$RpcProgress: io.grpc.internal.ClientStreamListener$RpcProgress MISCARRIED>;
+
+        if $r3 != $r12 goto label05;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r10 = staticinvoke <io.grpc.internal.RetriableStream: java.util.concurrent.atomic.AtomicInteger access$2000(io.grpc.internal.RetriableStream)>($r5);
+
+        $i0 = virtualinvoke $r10.<java.util.concurrent.atomic.AtomicInteger: int incrementAndGet()>();
+
+        if $i0 <= 1000 goto label05;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r1 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$1400(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$Substream)>($r5, $r1);
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $r1 = $r7.<io.grpc.internal.RetriableStream$State: io.grpc.internal.RetriableStream$Substream winningSubstream>;
+
+        $r11 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        if $r1 != $r11 goto label38;
+
+        $r13 = <io.grpc.Status: io.grpc.Status INTERNAL>;
+
+        $r13 = virtualinvoke $r13.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Too many transparent retries. Might be a bug in gRPC");
+
+        $r14 = virtualinvoke $r2.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException()>();
+
+        $r2 = virtualinvoke $r13.<io.grpc.Status: io.grpc.Status withCause(java.lang.Throwable)>($r14);
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$1900(io.grpc.internal.RetriableStream,io.grpc.Status,io.grpc.internal.ClientStreamListener$RpcProgress,io.grpc.Metadata)>($r5, $r2, $r3, $r4);
+
+        return;
+
+     label05:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $r1 = $r7.<io.grpc.internal.RetriableStream$State: io.grpc.internal.RetriableStream$Substream winningSubstream>;
+
+        if $r1 != null goto label34;
+
+        $r12 = <io.grpc.internal.ClientStreamListener$RpcProgress: io.grpc.internal.ClientStreamListener$RpcProgress MISCARRIED>;
+
+        $z0 = 0;
+
+        if $r3 == $r12 goto label23;
+
+        $r12 = <io.grpc.internal.ClientStreamListener$RpcProgress: io.grpc.internal.ClientStreamListener$RpcProgress REFUSED>;
+
+        if $r3 != $r12 goto label06;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r15 = staticinvoke <io.grpc.internal.RetriableStream: java.util.concurrent.atomic.AtomicBoolean access$2100(io.grpc.internal.RetriableStream)>($r5);
+
+        $z1 = virtualinvoke $r15.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(0, 1);
+
+        if $z1 != 0 goto label23;
+
+     label06:
+        $r12 = <io.grpc.internal.ClientStreamListener$RpcProgress: io.grpc.internal.ClientStreamListener$RpcProgress DROPPED>;
+
+        if $r3 != $r12 goto label07;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $z0 = staticinvoke <io.grpc.internal.RetriableStream: boolean access$2200(io.grpc.internal.RetriableStream)>($r5);
+
+        if $z0 == 0 goto label34;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$2400(io.grpc.internal.RetriableStream)>($r5);
+
+        goto label34;
+
+     label07:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r15 = staticinvoke <io.grpc.internal.RetriableStream: java.util.concurrent.atomic.AtomicBoolean access$2100(io.grpc.internal.RetriableStream)>($r5);
+
+        virtualinvoke $r15.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(1);
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $z0 = staticinvoke <io.grpc.internal.RetriableStream: boolean access$2200(io.grpc.internal.RetriableStream)>($r5);
+
+        if $z0 == 0 goto label16;
+
+        $r16 = specialinvoke r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$HedgingPlan makeHedgingDecision(io.grpc.Status,io.grpc.Metadata)>($r2, $r4);
+
+        $z0 = $r16.<io.grpc.internal.RetriableStream$HedgingPlan: boolean isHedgeable>;
+
+        if $z0 == 0 goto label08;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r17 = $r16.<io.grpc.internal.RetriableStream$HedgingPlan: java.lang.Integer hedgingPushbackMillis>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$2500(io.grpc.internal.RetriableStream,java.lang.Integer)>($r5, $r17);
+
+     label08:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r6 = staticinvoke <io.grpc.internal.RetriableStream: java.lang.Object access$500(io.grpc.internal.RetriableStream)>($r5);
+
+        entermonitor $r6;
+
+     label09:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $r1 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        $r7 = virtualinvoke $r7.<io.grpc.internal.RetriableStream$State: io.grpc.internal.RetriableStream$State removeActiveHedge(io.grpc.internal.RetriableStream$Substream)>($r1);
+
+        staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$302(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$State)>($r5, $r7);
+
+        $z0 = $r16.<io.grpc.internal.RetriableStream$HedgingPlan: boolean isHedgeable>;
+
+        if $z0 == 0 goto label12;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $z0 = staticinvoke <io.grpc.internal.RetriableStream: boolean access$600(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$State)>($r5, $r7);
+
+        if $z0 != 0 goto label10;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $r18 = $r7.<io.grpc.internal.RetriableStream$State: java.util.Collection activeHedges>;
+
+        $z0 = interfaceinvoke $r18.<java.util.Collection: boolean isEmpty()>();
+
+        if $z0 != 0 goto label12;
+
+     label10:
+        exitmonitor $r6;
+
+     label11:
+        return;
+
+     label12:
+        exitmonitor $r6;
+
+     label13:
+        goto label34;
+
+     label14:
+        $r19 := @caughtexception;
+
+        exitmonitor $r6;
+
+     label15:
+        throw $r19;
+
+     label16:
+        $r20 = specialinvoke r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$RetryPlan makeRetryDecision(io.grpc.Status,io.grpc.Metadata)>($r2, $r4);
+
+        $z0 = $r20.<io.grpc.internal.RetriableStream$RetryPlan: boolean shouldRetry>;
+
+        if $z0 == 0 goto label34;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r1 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        $i0 = $r1.<io.grpc.internal.RetriableStream$Substream: int previousAttemptCount>;
+
+        $i0 = $i0 + 1;
+
+        $r1 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$Substream access$400(io.grpc.internal.RetriableStream,int,boolean)>($r5, $i0, 0);
+
+        if $r1 != null goto label17;
+
+        return;
+
+     label17:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r6 = staticinvoke <io.grpc.internal.RetriableStream: java.lang.Object access$500(io.grpc.internal.RetriableStream)>($r5);
+
+        entermonitor $r6;
+
+     label18:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r21 = new io.grpc.internal.RetriableStream$FutureCanceller;
+
+        $r22 = staticinvoke <io.grpc.internal.RetriableStream: java.lang.Object access$500(io.grpc.internal.RetriableStream)>($r5);
+
+        specialinvoke $r21.<io.grpc.internal.RetriableStream$FutureCanceller: void <init>(java.lang.Object)>($r22);
+
+        staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$FutureCanceller access$2602(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$FutureCanceller)>($r5, $r21);
+
+        exitmonitor $r6;
+
+     label19:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r23 = staticinvoke <io.grpc.internal.RetriableStream: java.util.concurrent.ScheduledExecutorService access$1000(io.grpc.internal.RetriableStream)>($r5);
+
+        $r24 = new io.grpc.internal.RetriableStream$Sublistener$1RetryBackoffRunnable;
+
+        specialinvoke $r24.<io.grpc.internal.RetriableStream$Sublistener$1RetryBackoffRunnable: void <init>(io.grpc.internal.RetriableStream$Sublistener,io.grpc.internal.RetriableStream$Substream)>(r0, $r1);
+
+        $l1 = $r20.<io.grpc.internal.RetriableStream$RetryPlan: long backoffNanos>;
+
+        $r25 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r26 = interfaceinvoke $r23.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r24, $l1, $r25);
+
+        virtualinvoke $r21.<io.grpc.internal.RetriableStream$FutureCanceller: void setFuture(java.util.concurrent.Future)>($r26);
+
+        return;
+
+     label20:
+        $r27 := @caughtexception;
+
+     label21:
+        exitmonitor $r6;
+
+     label22:
+        throw $r27;
+
+     label23:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r1 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        $i0 = $r1.<io.grpc.internal.RetriableStream$Substream: int previousAttemptCount>;
+
+        $r1 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$Substream access$400(io.grpc.internal.RetriableStream,int,boolean)>($r5, $i0, 1);
+
+        if $r1 != null goto label24;
+
+        return;
+
+     label24:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $z1 = staticinvoke <io.grpc.internal.RetriableStream: boolean access$2200(io.grpc.internal.RetriableStream)>($r5);
+
+        if $z1 == 0 goto label31;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r6 = staticinvoke <io.grpc.internal.RetriableStream: java.lang.Object access$500(io.grpc.internal.RetriableStream)>($r5);
+
+        entermonitor $r6;
+
+     label25:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $r11 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        $r7 = virtualinvoke $r7.<io.grpc.internal.RetriableStream$State: io.grpc.internal.RetriableStream$State replaceActiveHedge(io.grpc.internal.RetriableStream$Substream,io.grpc.internal.RetriableStream$Substream)>($r11, $r1);
+
+        staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$302(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$State)>($r5, $r7);
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $z1 = staticinvoke <io.grpc.internal.RetriableStream: boolean access$600(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$State)>($r5, $r7);
+
+        if $z1 != 0 goto label26;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $r18 = $r7.<io.grpc.internal.RetriableStream$State: java.util.Collection activeHedges>;
+
+        $i0 = interfaceinvoke $r18.<java.util.Collection: int size()>();
+
+        if $i0 != 1 goto label26;
+
+        $z0 = 1;
+
+     label26:
+        exitmonitor $r6;
+
+     label27:
+        if $z0 == 0 goto label33;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$1400(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$Substream)>($r5, $r1);
+
+        goto label33;
+
+     label28:
+        $r28 := @caughtexception;
+
+     label29:
+        exitmonitor $r6;
+
+     label30:
+        throw $r28;
+
+     label31:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r29 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetryPolicy access$2300(io.grpc.internal.RetriableStream)>($r5);
+
+        if $r29 == null goto label32;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r29 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetryPolicy access$2300(io.grpc.internal.RetriableStream)>($r5);
+
+        $i0 = $r29.<io.grpc.internal.RetryPolicy: int maxAttempts>;
+
+        if $i0 != 1 goto label33;
+
+     label32:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$1400(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$Substream)>($r5, $r1);
+
+     label33:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r30 = staticinvoke <io.grpc.internal.RetriableStream: java.util.concurrent.Executor access$1200(io.grpc.internal.RetriableStream)>($r5);
+
+        $r31 = new io.grpc.internal.RetriableStream$Sublistener$2;
+
+        specialinvoke $r31.<io.grpc.internal.RetriableStream$Sublistener$2: void <init>(io.grpc.internal.RetriableStream$Sublistener,io.grpc.internal.RetriableStream$Substream)>(r0, $r1);
+
+        interfaceinvoke $r30.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r31);
+
+        return;
+
+     label34:
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r1 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$1400(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$Substream)>($r5, $r1);
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r5);
+
+        $r1 = $r7.<io.grpc.internal.RetriableStream$State: io.grpc.internal.RetriableStream$Substream winningSubstream>;
+
+        $r11 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        if $r1 != $r11 goto label38;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$1900(io.grpc.internal.RetriableStream,io.grpc.Status,io.grpc.internal.ClientStreamListener$RpcProgress,io.grpc.Metadata)>($r5, $r2, $r3, $r4);
+
+        return;
+
+     label35:
+        $r32 := @caughtexception;
+
+     label36:
+        exitmonitor $r6;
+
+     label37:
+        throw $r32;
+
+     label38:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label35;
+        catch java.lang.Throwable from label09 to label11 with label14;
+        catch java.lang.Throwable from label12 to label13 with label14;
+        catch java.lang.Throwable from label14 to label15 with label14;
+        catch java.lang.Throwable from label18 to label19 with label20;
+        catch java.lang.Throwable from label21 to label22 with label20;
+        catch java.lang.Throwable from label25 to label27 with label28;
+        catch java.lang.Throwable from label29 to label30 with label28;
+        catch java.lang.Throwable from label36 to label37 with label35;
+    }
+
+    public void headersRead(io.grpc.Metadata)
+    {
+        io.grpc.internal.RetriableStream$Substream $r3, $r5;
+        java.util.concurrent.Executor $r7;
+        io.grpc.internal.RetriableStream$State $r4;
+        io.grpc.internal.RetriableStream$Sublistener r0;
+        io.grpc.internal.RetriableStream $r2;
+        io.grpc.internal.RetriableStream$Sublistener$1 $r8;
+        io.grpc.Metadata $r1;
+        io.grpc.internal.RetriableStream$Throttle $r6;
+
+        r0 := @this: io.grpc.internal.RetriableStream$Sublistener;
+
+        $r1 := @parameter0: io.grpc.Metadata;
+
+        $r2 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r3 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        staticinvoke <io.grpc.internal.RetriableStream: void access$1400(io.grpc.internal.RetriableStream,io.grpc.internal.RetriableStream$Substream)>($r2, $r3);
+
+        $r2 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r4 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r2);
+
+        $r3 = $r4.<io.grpc.internal.RetriableStream$State: io.grpc.internal.RetriableStream$Substream winningSubstream>;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        if $r3 != $r5 goto label2;
+
+        $r2 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r6 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$Throttle access$700(io.grpc.internal.RetriableStream)>($r2);
+
+        if $r6 == null goto label1;
+
+        $r2 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r6 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$Throttle access$700(io.grpc.internal.RetriableStream)>($r2);
+
+        virtualinvoke $r6.<io.grpc.internal.RetriableStream$Throttle: void onSuccess()>();
+
+     label1:
+        $r2 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: java.util.concurrent.Executor access$1500(io.grpc.internal.RetriableStream)>($r2);
+
+        $r8 = new io.grpc.internal.RetriableStream$Sublistener$1;
+
+        specialinvoke $r8.<io.grpc.internal.RetriableStream$Sublistener$1: void <init>(io.grpc.internal.RetriableStream$Sublistener,io.grpc.Metadata)>(r0, $r1);
+
+        interfaceinvoke $r7.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r8);
+
+     label2:
+        return;
+    }
+
+    public void messagesAvailable(io.grpc.internal.StreamListener$MessageProducer)
+    {
+        io.grpc.internal.RetriableStream$Substream $r4, $r5;
+        java.util.concurrent.Executor $r6;
+        io.grpc.internal.RetriableStream$Sublistener$3 $r7;
+        io.grpc.internal.RetriableStream$State $r3;
+        io.grpc.internal.RetriableStream$Sublistener r0;
+        io.grpc.internal.RetriableStream $r2;
+        io.grpc.internal.StreamListener$MessageProducer $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.RetriableStream$Sublistener;
+
+        $r1 := @parameter0: io.grpc.internal.StreamListener$MessageProducer;
+
+        $r2 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r3 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.internal.RetriableStream$State access$300(io.grpc.internal.RetriableStream)>($r2);
+
+        $r4 = $r3.<io.grpc.internal.RetriableStream$State: io.grpc.internal.RetriableStream$Substream winningSubstream>;
+
+        if $r4 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Headers should be received prior to messages.");
+
+        $r4 = $r3.<io.grpc.internal.RetriableStream$State: io.grpc.internal.RetriableStream$Substream winningSubstream>;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream$Substream substream>;
+
+        if $r4 == $r5 goto label3;
+
+        return;
+
+     label3:
+        $r2 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r6 = staticinvoke <io.grpc.internal.RetriableStream: java.util.concurrent.Executor access$1500(io.grpc.internal.RetriableStream)>($r2);
+
+        $r7 = new io.grpc.internal.RetriableStream$Sublistener$3;
+
+        specialinvoke $r7.<io.grpc.internal.RetriableStream$Sublistener$3: void <init>(io.grpc.internal.RetriableStream$Sublistener,io.grpc.internal.StreamListener$MessageProducer)>(r0, $r1);
+
+        interfaceinvoke $r6.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r7);
+
+        return;
+    }
+
+    public void onReady()
+    {
+        io.grpc.internal.RetriableStream$Sublistener$4 $r1;
+        java.util.concurrent.Executor $r3;
+        io.grpc.internal.RetriableStream$Sublistener r0;
+        io.grpc.internal.RetriableStream $r2;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.RetriableStream$Sublistener;
+
+        $r2 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $z0 = virtualinvoke $r2.<io.grpc.internal.RetriableStream: boolean isReady()>();
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = r0.<io.grpc.internal.RetriableStream$Sublistener: io.grpc.internal.RetriableStream this$0>;
+
+        $r3 = staticinvoke <io.grpc.internal.RetriableStream: java.util.concurrent.Executor access$1500(io.grpc.internal.RetriableStream)>($r2);
+
+        $r1 = new io.grpc.internal.RetriableStream$Sublistener$4;
+
+        specialinvoke $r1.<io.grpc.internal.RetriableStream$Sublistener$4: void <init>(io.grpc.internal.RetriableStream$Sublistener)>(r0);
+
+        interfaceinvoke $r3.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r1);
+
+        return;
+    }
+}

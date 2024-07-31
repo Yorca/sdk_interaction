@@ -1,0 +1,504 @@
+public class com.mbridge.msdk.thrid.okio.AsyncTimeout extends com.mbridge.msdk.thrid.okio.Timeout
+{
+    private static final long IDLE_TIMEOUT_MILLIS;
+    private static final long IDLE_TIMEOUT_NANOS;
+    private static final int TIMEOUT_WRITE_SIZE;
+    static com.mbridge.msdk.thrid.okio.AsyncTimeout head;
+    private boolean inQueue;
+    private com.mbridge.msdk.thrid.okio.AsyncTimeout next;
+    private long timeoutAt;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.TimeUnit $r0;
+        long $l0;
+
+        <com.mbridge.msdk.thrid.okio.AsyncTimeout: int TIMEOUT_WRITE_SIZE> = 65536;
+
+        $r0 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $l0 = virtualinvoke $r0.<java.util.concurrent.TimeUnit: long toMillis(long)>(60L);
+
+        <com.mbridge.msdk.thrid.okio.AsyncTimeout: long IDLE_TIMEOUT_MILLIS> = $l0;
+
+        $r0 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $l0 = virtualinvoke $r0.<java.util.concurrent.TimeUnit: long toNanos(long)>($l0);
+
+        <com.mbridge.msdk.thrid.okio.AsyncTimeout: long IDLE_TIMEOUT_NANOS> = $l0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.mbridge.msdk.thrid.okio.AsyncTimeout r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        specialinvoke r0.<com.mbridge.msdk.thrid.okio.Timeout: void <init>()>();
+
+        return;
+    }
+
+    static com.mbridge.msdk.thrid.okio.AsyncTimeout awaitTimeout() throws java.lang.InterruptedException
+    {
+        long $l0, $l1, $l3;
+        com.mbridge.msdk.thrid.okio.AsyncTimeout $r0, $r2, $r3;
+        byte $b2;
+        int $i4;
+        java.lang.Class $r1;
+
+        $r0 = <com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout head>;
+
+        $r0 = $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next>;
+
+        $r1 = class "Lcom/mbridge/msdk/thrid/okio/AsyncTimeout;";
+
+        if $r0 != null goto label1;
+
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l1 = <com.mbridge.msdk.thrid.okio.AsyncTimeout: long IDLE_TIMEOUT_MILLIS>;
+
+        virtualinvoke $r1.<java.lang.Object: void wait(long)>($l1);
+
+        $r0 = <com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout head>;
+
+        $r0 = $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next>;
+
+        if $r0 != null goto label3;
+
+        $l1 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l0 = $l1 - $l0;
+
+        $l1 = <com.mbridge.msdk.thrid.okio.AsyncTimeout: long IDLE_TIMEOUT_NANOS>;
+
+        $b2 = $l0 cmp $l1;
+
+        $i4 = (int) $b2;
+
+        if $i4 < 0 goto label3;
+
+        $r0 = <com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout head>;
+
+        return $r0;
+
+     label1:
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l1 = specialinvoke $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: long remainingNanos(long)>($l0);
+
+        $b2 = $l1 cmp 0L;
+
+        $i4 = (int) $b2;
+
+        if $i4 <= 0 goto label2;
+
+        $l0 = $l1 / 1000000L;
+
+        $l3 = 1000000L * $l0;
+
+        $l1 = $l1 - $l3;
+
+        $i4 = (int) $l1;
+
+        virtualinvoke $r1.<java.lang.Object: void wait(long,int)>($l0, $i4);
+
+        return null;
+
+     label2:
+        $r2 = <com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout head>;
+
+        $r3 = $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next>;
+
+        $r2.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next> = $r3;
+
+        $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next> = null;
+
+        return $r0;
+
+     label3:
+        return null;
+    }
+
+    private static boolean cancelScheduledTimeout(com.mbridge.msdk.thrid.okio.AsyncTimeout)
+    {
+        java.lang.Throwable $r3;
+        com.mbridge.msdk.thrid.okio.AsyncTimeout $r0, $r1, $r2;
+
+        $r0 := @parameter0: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        entermonitor class "Lcom/mbridge/msdk/thrid/okio/AsyncTimeout;";
+
+     label1:
+        $r1 = <com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout head>;
+
+     label2:
+        if $r1 == null goto label5;
+
+        $r2 = $r1.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next>;
+
+        if $r2 != $r0 goto label4;
+
+        $r2 = $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next>;
+
+        $r1.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next> = $r2;
+
+        $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next> = null;
+
+     label3:
+        exitmonitor class "Lcom/mbridge/msdk/thrid/okio/AsyncTimeout;";
+
+        return 0;
+
+     label4:
+        $r1 = $r2;
+
+        goto label2;
+
+     label5:
+        exitmonitor class "Lcom/mbridge/msdk/thrid/okio/AsyncTimeout;";
+
+        return 1;
+
+     label6:
+        $r3 := @caughtexception;
+
+        exitmonitor class "Lcom/mbridge/msdk/thrid/okio/AsyncTimeout;";
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label3 with label6;
+    }
+
+    private long remainingNanos(long)
+    {
+        com.mbridge.msdk.thrid.okio.AsyncTimeout r0;
+        long $l0, $l1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        $l0 := @parameter0: long;
+
+        $l1 = r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: long timeoutAt>;
+
+        $l0 = $l1 - $l0;
+
+        return $l0;
+    }
+
+    private static void scheduleTimeout(com.mbridge.msdk.thrid.okio.AsyncTimeout, long, boolean)
+    {
+        java.lang.Throwable $r4;
+        com.mbridge.msdk.thrid.okio.AsyncTimeout$Watchdog $r5;
+        long $l0, $l1, $l3;
+        java.lang.AssertionError $r6;
+        com.mbridge.msdk.thrid.okio.AsyncTimeout $r0, $r1, $r2;
+        byte $b2;
+        int $i4;
+        java.lang.Class $r3;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        $l0 := @parameter1: long;
+
+        $z0 := @parameter2: boolean;
+
+        entermonitor class "Lcom/mbridge/msdk/thrid/okio/AsyncTimeout;";
+
+     label01:
+        $r1 = <com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout head>;
+
+        if $r1 != null goto label02;
+
+        $r2 = new com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        specialinvoke $r2.<com.mbridge.msdk.thrid.okio.AsyncTimeout: void <init>()>();
+
+        <com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout head> = $r2;
+
+        $r5 = new com.mbridge.msdk.thrid.okio.AsyncTimeout$Watchdog;
+
+        specialinvoke $r5.<com.mbridge.msdk.thrid.okio.AsyncTimeout$Watchdog: void <init>()>();
+
+        virtualinvoke $r5.<com.mbridge.msdk.thrid.okio.AsyncTimeout$Watchdog: void start()>();
+
+     label02:
+        $l1 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $b2 = $l0 cmp 0L;
+
+        if $b2 == 0 goto label03;
+
+        if $z0 == 0 goto label03;
+
+        $l3 = virtualinvoke $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: long deadlineNanoTime()>();
+
+        $l3 = $l3 - $l1;
+
+        $l0 = staticinvoke <java.lang.Math: long min(long,long)>($l0, $l3);
+
+        $l0 = $l0 + $l1;
+
+        $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: long timeoutAt> = $l0;
+
+        goto label05;
+
+     label03:
+        if $b2 == 0 goto label04;
+
+        $l0 = $l0 + $l1;
+
+        $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: long timeoutAt> = $l0;
+
+        goto label05;
+
+     label04:
+        if $z0 == 0 goto label10;
+
+        $l0 = virtualinvoke $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: long deadlineNanoTime()>();
+
+        $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: long timeoutAt> = $l0;
+
+     label05:
+        $l0 = specialinvoke $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: long remainingNanos(long)>($l1);
+
+        $r1 = <com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout head>;
+
+     label06:
+        $r2 = $r1.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next>;
+
+        if $r2 == null goto label08;
+
+        $l3 = specialinvoke $r2.<com.mbridge.msdk.thrid.okio.AsyncTimeout: long remainingNanos(long)>($l1);
+
+        $b2 = $l0 cmp $l3;
+
+        $i4 = (int) $b2;
+
+        if $i4 >= 0 goto label07;
+
+        goto label08;
+
+     label07:
+        $r1 = $r1.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next>;
+
+        goto label06;
+
+     label08:
+        $r2 = $r1.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next>;
+
+        $r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next> = $r2;
+
+        $r1.<com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout next> = $r0;
+
+        $r0 = <com.mbridge.msdk.thrid.okio.AsyncTimeout: com.mbridge.msdk.thrid.okio.AsyncTimeout head>;
+
+        if $r1 != $r0 goto label09;
+
+        $r3 = class "Lcom/mbridge/msdk/thrid/okio/AsyncTimeout;";
+
+        virtualinvoke $r3.<java.lang.Object: void notify()>();
+
+     label09:
+        exitmonitor class "Lcom/mbridge/msdk/thrid/okio/AsyncTimeout;";
+
+        return;
+
+     label10:
+        $r6 = new java.lang.AssertionError;
+
+        specialinvoke $r6.<java.lang.AssertionError: void <init>()>();
+
+        throw $r6;
+
+     label11:
+        $r4 := @caughtexception;
+
+        exitmonitor class "Lcom/mbridge/msdk/thrid/okio/AsyncTimeout;";
+
+        throw $r4;
+
+        catch java.lang.Throwable from label01 to label09 with label11;
+        catch java.lang.Throwable from label10 to label11 with label11;
+    }
+
+    public final void enter()
+    {
+        java.lang.IllegalStateException $r1;
+        com.mbridge.msdk.thrid.okio.AsyncTimeout r0;
+        byte $b0;
+        long $l1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        $z0 = r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: boolean inQueue>;
+
+        if $z0 != 0 goto label2;
+
+        $l1 = virtualinvoke r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: long timeoutNanos()>();
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: boolean hasDeadline()>();
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 != 0 goto label1;
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: boolean inQueue> = 1;
+
+        staticinvoke <com.mbridge.msdk.thrid.okio.AsyncTimeout: void scheduleTimeout(com.mbridge.msdk.thrid.okio.AsyncTimeout,long,boolean)>(r0, $l1, $z0);
+
+        return;
+
+     label2:
+        $r1 = new java.lang.IllegalStateException;
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Unbalanced enter/exit");
+
+        throw $r1;
+    }
+
+    final java.io.IOException exit(java.io.IOException) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okio.AsyncTimeout r0;
+        java.io.IOException $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        $r1 := @parameter0: java.io.IOException;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: boolean exit()>();
+
+        if $z0 != 0 goto label1;
+
+        return $r1;
+
+     label1:
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: java.io.IOException newTimeoutException(java.io.IOException)>($r1);
+
+        return $r1;
+    }
+
+    final void exit(boolean) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okio.AsyncTimeout r0;
+        java.io.IOException $r1;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        $z0 := @parameter0: boolean;
+
+        $z1 = virtualinvoke r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: boolean exit()>();
+
+        if $z1 == 0 goto label2;
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: java.io.IOException newTimeoutException(java.io.IOException)>(null);
+
+        throw $r1;
+
+     label2:
+        return;
+    }
+
+    public final boolean exit()
+    {
+        com.mbridge.msdk.thrid.okio.AsyncTimeout r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        $z0 = r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: boolean inQueue>;
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        r0.<com.mbridge.msdk.thrid.okio.AsyncTimeout: boolean inQueue> = 0;
+
+        $z0 = staticinvoke <com.mbridge.msdk.thrid.okio.AsyncTimeout: boolean cancelScheduledTimeout(com.mbridge.msdk.thrid.okio.AsyncTimeout)>(r0);
+
+        return $z0;
+    }
+
+    protected java.io.IOException newTimeoutException(java.io.IOException)
+    {
+        com.mbridge.msdk.thrid.okio.AsyncTimeout r0;
+        java.io.IOException $r1;
+        java.io.InterruptedIOException $r2;
+
+        r0 := @this: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        $r1 := @parameter0: java.io.IOException;
+
+        $r2 = new java.io.InterruptedIOException;
+
+        specialinvoke $r2.<java.io.InterruptedIOException: void <init>(java.lang.String)>("timeout");
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r2.<java.io.InterruptedIOException: java.lang.Throwable initCause(java.lang.Throwable)>($r1);
+
+     label1:
+        return $r2;
+    }
+
+    public final com.mbridge.msdk.thrid.okio.Sink sink(com.mbridge.msdk.thrid.okio.Sink)
+    {
+        com.mbridge.msdk.thrid.okio.Sink $r1;
+        com.mbridge.msdk.thrid.okio.AsyncTimeout r0;
+        com.mbridge.msdk.thrid.okio.AsyncTimeout$1 $r2;
+
+        r0 := @this: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okio.Sink;
+
+        $r2 = new com.mbridge.msdk.thrid.okio.AsyncTimeout$1;
+
+        specialinvoke $r2.<com.mbridge.msdk.thrid.okio.AsyncTimeout$1: void <init>(com.mbridge.msdk.thrid.okio.AsyncTimeout,com.mbridge.msdk.thrid.okio.Sink)>(r0, $r1);
+
+        return $r2;
+    }
+
+    public final com.mbridge.msdk.thrid.okio.Source source(com.mbridge.msdk.thrid.okio.Source)
+    {
+        com.mbridge.msdk.thrid.okio.Source $r1;
+        com.mbridge.msdk.thrid.okio.AsyncTimeout r0;
+        com.mbridge.msdk.thrid.okio.AsyncTimeout$2 $r2;
+
+        r0 := @this: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okio.Source;
+
+        $r2 = new com.mbridge.msdk.thrid.okio.AsyncTimeout$2;
+
+        specialinvoke $r2.<com.mbridge.msdk.thrid.okio.AsyncTimeout$2: void <init>(com.mbridge.msdk.thrid.okio.AsyncTimeout,com.mbridge.msdk.thrid.okio.Source)>(r0, $r1);
+
+        return $r2;
+    }
+
+    protected void timedOut()
+    {
+        com.mbridge.msdk.thrid.okio.AsyncTimeout r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okio.AsyncTimeout;
+
+        return;
+    }
+}

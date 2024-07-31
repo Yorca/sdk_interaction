@@ -1,0 +1,105 @@
+class io.grpc.internal.RetriableStream$1CommitTask extends java.lang.Object implements java.lang.Runnable
+{
+    final io.grpc.internal.RetriableStream this$0;
+    final java.util.concurrent.Future val$hedgingFuture;
+    final java.util.concurrent.Future val$retryFuture;
+    final java.util.Collection val$savedDrainedSubstreams;
+    final io.grpc.internal.RetriableStream$Substream val$winningSubstream;
+
+    void <init>(io.grpc.internal.RetriableStream, java.util.Collection, io.grpc.internal.RetriableStream$Substream, java.util.concurrent.Future, java.util.concurrent.Future)
+    {
+        java.util.concurrent.Future $r4, $r5;
+        io.grpc.internal.RetriableStream$Substream $r3;
+        io.grpc.internal.RetriableStream$1CommitTask r0;
+        java.util.Collection $r2;
+        io.grpc.internal.RetriableStream $r1;
+
+        r0 := @this: io.grpc.internal.RetriableStream$1CommitTask;
+
+        $r1 := @parameter0: io.grpc.internal.RetriableStream;
+
+        $r2 := @parameter1: java.util.Collection;
+
+        $r3 := @parameter2: io.grpc.internal.RetriableStream$Substream;
+
+        $r4 := @parameter3: java.util.concurrent.Future;
+
+        $r5 := @parameter4: java.util.concurrent.Future;
+
+        r0.<io.grpc.internal.RetriableStream$1CommitTask: io.grpc.internal.RetriableStream this$0> = $r1;
+
+        r0.<io.grpc.internal.RetriableStream$1CommitTask: java.util.Collection val$savedDrainedSubstreams> = $r2;
+
+        r0.<io.grpc.internal.RetriableStream$1CommitTask: io.grpc.internal.RetriableStream$Substream val$winningSubstream> = $r3;
+
+        r0.<io.grpc.internal.RetriableStream$1CommitTask: java.util.concurrent.Future val$retryFuture> = $r4;
+
+        r0.<io.grpc.internal.RetriableStream$1CommitTask: java.util.concurrent.Future val$hedgingFuture> = $r5;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        io.grpc.internal.RetriableStream$Substream $r4, $r5;
+        java.util.Iterator $r2;
+        io.grpc.internal.ClientStream $r6;
+        io.grpc.internal.RetriableStream$1CommitTask r0;
+        java.util.Collection $r1;
+        io.grpc.internal.RetriableStream $r9;
+        java.util.concurrent.Future $r8;
+        java.lang.Object $r3;
+        io.grpc.Status $r7;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.RetriableStream$1CommitTask;
+
+        $r1 = r0.<io.grpc.internal.RetriableStream$1CommitTask: java.util.Collection val$savedDrainedSubstreams>;
+
+        $r2 = interfaceinvoke $r1.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (io.grpc.internal.RetriableStream$Substream) $r3;
+
+        $r5 = r0.<io.grpc.internal.RetriableStream$1CommitTask: io.grpc.internal.RetriableStream$Substream val$winningSubstream>;
+
+        if $r4 == $r5 goto label1;
+
+        $r6 = $r4.<io.grpc.internal.RetriableStream$Substream: io.grpc.internal.ClientStream stream>;
+
+        $r7 = staticinvoke <io.grpc.internal.RetriableStream: io.grpc.Status access$000()>();
+
+        interfaceinvoke $r6.<io.grpc.internal.ClientStream: void cancel(io.grpc.Status)>($r7);
+
+        goto label1;
+
+     label2:
+        $r8 = r0.<io.grpc.internal.RetriableStream$1CommitTask: java.util.concurrent.Future val$retryFuture>;
+
+        if $r8 == null goto label3;
+
+        interfaceinvoke $r8.<java.util.concurrent.Future: boolean cancel(boolean)>(0);
+
+     label3:
+        $r8 = r0.<io.grpc.internal.RetriableStream$1CommitTask: java.util.concurrent.Future val$hedgingFuture>;
+
+        if $r8 == null goto label4;
+
+        interfaceinvoke $r8.<java.util.concurrent.Future: boolean cancel(boolean)>(0);
+
+     label4:
+        $r9 = r0.<io.grpc.internal.RetriableStream$1CommitTask: io.grpc.internal.RetriableStream this$0>;
+
+        virtualinvoke $r9.<io.grpc.internal.RetriableStream: void postCommit()>();
+
+        return;
+    }
+}

@@ -1,0 +1,210 @@
+class com.vungle.warren.Banners$1 extends java.lang.Object implements java.util.concurrent.Callable
+{
+    final com.vungle.warren.AdConfig$AdSize val$adSize;
+    final android.content.Context val$context;
+    final java.lang.String val$placementId;
+    final com.vungle.warren.model.admarkup.AdMarkup val$serializedAdMarkup;
+
+    void <init>(android.content.Context, com.vungle.warren.model.admarkup.AdMarkup, java.lang.String, com.vungle.warren.AdConfig$AdSize)
+    {
+        android.content.Context $r1;
+        com.vungle.warren.Banners$1 r0;
+        com.vungle.warren.model.admarkup.AdMarkup $r2;
+        java.lang.String $r3;
+        com.vungle.warren.AdConfig$AdSize $r4;
+
+        r0 := @this: com.vungle.warren.Banners$1;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: com.vungle.warren.model.admarkup.AdMarkup;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: com.vungle.warren.AdConfig$AdSize;
+
+        r0.<com.vungle.warren.Banners$1: android.content.Context val$context> = $r1;
+
+        r0.<com.vungle.warren.Banners$1: com.vungle.warren.model.admarkup.AdMarkup val$serializedAdMarkup> = $r2;
+
+        r0.<com.vungle.warren.Banners$1: java.lang.String val$placementId> = $r3;
+
+        r0.<com.vungle.warren.Banners$1: com.vungle.warren.AdConfig$AdSize val$adSize> = $r4;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public java.lang.Boolean call()
+    {
+        android.content.Context $r3;
+        com.vungle.warren.Banners$1 r0;
+        com.vungle.warren.model.Placement $r10;
+        com.vungle.warren.model.Advertisement $r11;
+        com.vungle.warren.persistence.Repository $r6;
+        com.vungle.warren.model.admarkup.AdMarkup $r7;
+        int $i0;
+        java.lang.Boolean $r1;
+        com.vungle.warren.AdConfig $r13;
+        java.lang.String $r2, $r8;
+        boolean $z0, $z1, $z2;
+        com.vungle.warren.AdConfig$AdSize $r12, $r14, $r15, $r16;
+        com.vungle.warren.ServiceLocator $r4;
+        java.lang.Object $r5;
+        com.vungle.warren.persistence.FutureResult $r9;
+
+        r0 := @this: com.vungle.warren.Banners$1;
+
+        $z0 = staticinvoke <com.vungle.warren.Vungle: boolean isInitialized()>();
+
+        $z1 = 0;
+
+        $r1 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(0);
+
+        if $z0 != 0 goto label01;
+
+        $r2 = staticinvoke <com.vungle.warren.Banners: java.lang.String access$000()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, "Vungle is not initialized");
+
+        return $r1;
+
+     label01:
+        $r3 = r0.<com.vungle.warren.Banners$1: android.content.Context val$context>;
+
+        $r4 = staticinvoke <com.vungle.warren.ServiceLocator: com.vungle.warren.ServiceLocator getInstance(android.content.Context)>($r3);
+
+        $r5 = virtualinvoke $r4.<com.vungle.warren.ServiceLocator: java.lang.Object getService(java.lang.Class)>(class "Lcom/vungle/warren/persistence/Repository;");
+
+        $r6 = (com.vungle.warren.persistence.Repository) $r5;
+
+        $r7 = r0.<com.vungle.warren.Banners$1: com.vungle.warren.model.admarkup.AdMarkup val$serializedAdMarkup>;
+
+        if $r7 == null goto label02;
+
+        $r2 = virtualinvoke $r7.<com.vungle.warren.model.admarkup.AdMarkup: java.lang.String getEventId()>();
+
+        goto label03;
+
+     label02:
+        $r2 = null;
+
+     label03:
+        $r8 = r0.<com.vungle.warren.Banners$1: java.lang.String val$placementId>;
+
+        $r9 = virtualinvoke $r6.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>($r8, class "Lcom/vungle/warren/model/Placement;");
+
+        $r5 = virtualinvoke $r9.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r10 = (com.vungle.warren.model.Placement) $r5;
+
+        if $r10 != null goto label04;
+
+        return $r1;
+
+     label04:
+        $z0 = virtualinvoke $r10.<com.vungle.warren.model.Placement: boolean isMultipleHBPEnabled()>();
+
+        if $z0 == 0 goto label05;
+
+        if $r2 != null goto label05;
+
+        return $r1;
+
+     label05:
+        $r8 = r0.<com.vungle.warren.Banners$1: java.lang.String val$placementId>;
+
+        $r9 = virtualinvoke $r6.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult findValidAdvertisementForPlacement(java.lang.String,java.lang.String)>($r8, $r2);
+
+        $r5 = virtualinvoke $r9.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r11 = (com.vungle.warren.model.Advertisement) $r5;
+
+        if $r11 != null goto label06;
+
+        return $r1;
+
+     label06:
+        $r12 = virtualinvoke $r10.<com.vungle.warren.model.Placement: com.vungle.warren.AdConfig$AdSize getAdSize()>();
+
+        $r13 = virtualinvoke $r11.<com.vungle.warren.model.Advertisement: com.vungle.warren.AdConfig getAdConfig()>();
+
+        $r14 = virtualinvoke $r13.<com.vungle.warren.AdConfig: com.vungle.warren.AdConfig$AdSize getAdSize()>();
+
+        $r15 = r0.<com.vungle.warren.Banners$1: com.vungle.warren.AdConfig$AdSize val$adSize>;
+
+        $r16 = <com.vungle.warren.AdConfig$AdSize: com.vungle.warren.AdConfig$AdSize VUNGLE_MREC>;
+
+        $z0 = 1;
+
+        if $r15 != $r16 goto label07;
+
+        $z2 = staticinvoke <com.vungle.warren.AdConfig$AdSize: boolean isDefaultAdSize(com.vungle.warren.AdConfig$AdSize)>($r12);
+
+        if $z2 == 0 goto label07;
+
+        $z2 = staticinvoke <com.vungle.warren.AdConfig$AdSize: boolean isDefaultAdSize(com.vungle.warren.AdConfig$AdSize)>($r14);
+
+        if $z2 == 0 goto label07;
+
+        $i0 = virtualinvoke $r10.<com.vungle.warren.model.Placement: int getPlacementAdType()>();
+
+        if $i0 != 3 goto label07;
+
+        $z1 = 1;
+
+     label07:
+        $z2 = virtualinvoke $r10.<com.vungle.warren.model.Placement: boolean isMultipleHBPEnabled()>();
+
+        if $z2 == 0 goto label08;
+
+        $z2 = staticinvoke <com.vungle.warren.AdConfig$AdSize: boolean isNonMrecBannerAdSize(com.vungle.warren.AdConfig$AdSize)>($r12);
+
+        if $z2 == 0 goto label08;
+
+        $z2 = staticinvoke <com.vungle.warren.AdConfig$AdSize: boolean isNonMrecBannerAdSize(com.vungle.warren.AdConfig$AdSize)>($r14);
+
+        if $z2 == 0 goto label08;
+
+        $r15 = r0.<com.vungle.warren.Banners$1: com.vungle.warren.AdConfig$AdSize val$adSize>;
+
+        $z2 = staticinvoke <com.vungle.warren.AdConfig$AdSize: boolean isNonMrecBannerAdSize(com.vungle.warren.AdConfig$AdSize)>($r15);
+
+        if $z2 != 0 goto label09;
+
+     label08:
+        $z0 = $z1;
+
+     label09:
+        if $z0 != 0 goto label10;
+
+        $r15 = r0.<com.vungle.warren.Banners$1: com.vungle.warren.AdConfig$AdSize val$adSize>;
+
+        if $r15 != $r12 goto label11;
+
+        if $r15 == $r14 goto label10;
+
+        return $r1;
+
+     label10:
+        $z1 = staticinvoke <com.vungle.warren.Vungle: boolean canPlayAd(com.vungle.warren.model.Advertisement)>($r11);
+
+        $r1 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z1);
+
+     label11:
+        return $r1;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        java.lang.Boolean $r1;
+        com.vungle.warren.Banners$1 r0;
+
+        r0 := @this: com.vungle.warren.Banners$1;
+
+        $r1 = virtualinvoke r0.<com.vungle.warren.Banners$1: java.lang.Boolean call()>();
+
+        return $r1;
+    }
+}

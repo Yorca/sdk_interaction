@@ -1,0 +1,206 @@
+public class com.distriqt.extension.pushnotifications.azure.AzureRegistrationService extends android.app.IntentService
+{
+    public static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        <com.distriqt.extension.pushnotifications.azure.AzureRegistrationService: java.lang.String TAG> = "AzureRegistrationService";
+
+        return;
+    }
+
+    public void <init>()
+    {
+        java.lang.String $r1;
+        com.distriqt.extension.pushnotifications.azure.AzureRegistrationService r0;
+
+        r0 := @this: com.distriqt.extension.pushnotifications.azure.AzureRegistrationService;
+
+        $r1 = <com.distriqt.extension.pushnotifications.azure.AzureRegistrationService: java.lang.String TAG>;
+
+        specialinvoke r0.<android.app.IntentService: void <init>(java.lang.String)>($r1);
+
+        return;
+    }
+
+    protected void onHandleIntent(android.content.Intent)
+    {
+        java.lang.Object[] $r1;
+        android.content.Intent $r2;
+        java.lang.String[] $r12;
+        com.google.android.gms.tasks.Task $r8;
+        com.distriqt.core.utils.IExtensionContext $r14;
+        int $i0;
+        com.microsoft.windowsazure.messaging.NotificationHub $r11;
+        java.lang.String $r3, $r5, $r6, $r10;
+        com.distriqt.extension.pushnotifications.notifications.state.PersistentState $r4;
+        boolean $z0;
+        com.google.firebase.messaging.FirebaseMessaging $r7;
+        com.microsoft.windowsazure.messaging.Registration $r13;
+        java.lang.Exception $r15;
+        com.distriqt.extension.pushnotifications.azure.AzureRegistrationService r0;
+        java.lang.Object $r9;
+
+        r0 := @this: com.distriqt.extension.pushnotifications.azure.AzureRegistrationService;
+
+        $r2 := @parameter0: android.content.Intent;
+
+        $r3 = <com.distriqt.extension.pushnotifications.azure.AzureRegistrationService: java.lang.String TAG>;
+
+        $r1 = newarray (java.lang.Object)[0];
+
+        staticinvoke <com.distriqt.extension.pushnotifications.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "onHandleIntent()", $r1);
+
+     label01:
+        $r4 = staticinvoke <com.distriqt.extension.pushnotifications.notifications.state.PersistentState: com.distriqt.extension.pushnotifications.notifications.state.PersistentState getState(android.content.Context)>(r0);
+
+        $r5 = virtualinvoke $r4.<com.distriqt.extension.pushnotifications.notifications.state.PersistentState: java.lang.String getString(java.lang.String)>("__dtpn_ps_service_id");
+
+        $r6 = virtualinvoke $r4.<com.distriqt.extension.pushnotifications.notifications.state.PersistentState: java.lang.String getString(java.lang.String)>("__dtpn_ps_service_key");
+
+     label02:
+        $r1 = newarray (java.lang.Object)[1];
+
+     label03:
+        $r1[0] = $r5;
+
+        staticinvoke <com.distriqt.extension.pushnotifications.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "handleTokenRefresh(): serviceId: %s", $r1);
+
+     label04:
+        $r1 = newarray (java.lang.Object)[1];
+
+     label05:
+        $r1[0] = $r6;
+
+        staticinvoke <com.distriqt.extension.pushnotifications.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "handleTokenRefresh(): serviceKey: %s", $r1);
+
+        $i0 = virtualinvoke $r5.<java.lang.String: int length()>();
+
+     label06:
+        if $i0 == 0 goto label26;
+
+     label07:
+        $i0 = virtualinvoke $r6.<java.lang.String: int length()>();
+
+     label08:
+        if $i0 != 0 goto label09;
+
+        goto label26;
+
+     label09:
+        $r7 = staticinvoke <com.google.firebase.messaging.FirebaseMessaging: com.google.firebase.messaging.FirebaseMessaging getInstance()>();
+
+        $r8 = virtualinvoke $r7.<com.google.firebase.messaging.FirebaseMessaging: com.google.android.gms.tasks.Task getToken()>();
+
+        $r9 = virtualinvoke $r8.<com.google.android.gms.tasks.Task: java.lang.Object getResult()>();
+
+        $r10 = (java.lang.String) $r9;
+
+     label10:
+        $r1 = newarray (java.lang.Object)[1];
+
+     label11:
+        $r1[0] = $r10;
+
+        staticinvoke <com.distriqt.extension.pushnotifications.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "handleTokenRefresh(): token: %s", $r1);
+
+     label12:
+        $r11 = new com.microsoft.windowsazure.messaging.NotificationHub;
+
+     label13:
+        specialinvoke $r11.<com.microsoft.windowsazure.messaging.NotificationHub: void <init>(java.lang.String,java.lang.String,android.content.Context)>($r5, $r6, r0);
+
+     label14:
+        $r12 = newarray (java.lang.String)[0];
+
+     label15:
+        $r13 = virtualinvoke $r11.<com.microsoft.windowsazure.messaging.NotificationHub: com.microsoft.windowsazure.messaging.Registration register(java.lang.String,java.lang.String[])>($r10, $r12);
+
+        $r5 = virtualinvoke $r13.<com.microsoft.windowsazure.messaging.Registration: java.lang.String getRegistrationId()>();
+
+     label16:
+        $r1 = newarray (java.lang.Object)[1];
+
+     label17:
+        $r1[0] = $r5;
+
+        staticinvoke <com.distriqt.extension.pushnotifications.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "handleTokenRefresh(): NotificationHub.register(): %s", $r1);
+
+        virtualinvoke $r4.<com.distriqt.extension.pushnotifications.notifications.state.PersistentState: void putString(java.lang.String,java.lang.String)>("__dtpn_ps_token", $r10);
+
+        virtualinvoke $r4.<com.distriqt.extension.pushnotifications.notifications.state.PersistentState: void putString(java.lang.String,java.lang.String)>("__dtpn_ps_service_token", $r5);
+
+     label18:
+        $r14 = <com.distriqt.extension.pushnotifications.azure.AzureController: com.distriqt.core.utils.IExtensionContext extensionContext>;
+
+        if $r14 == null goto label30;
+
+        $z0 = <com.distriqt.extension.pushnotifications.azure.AzureController: boolean registered>;
+
+        if $z0 == 0 goto label30;
+
+        $r1 = newarray (java.lang.Object)[0];
+
+     label19:
+        staticinvoke <com.distriqt.extension.pushnotifications.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "handleTokenRefresh(): dispatch", $r1);
+
+     label20:
+        $z0 = <com.distriqt.extension.pushnotifications.azure.AzureController: boolean hasDispatchedRegisterSuccess>;
+
+        if $z0 != 0 goto label23;
+
+        <com.distriqt.extension.pushnotifications.azure.AzureController: boolean hasDispatchedRegisterSuccess> = 1;
+
+        $r14 = <com.distriqt.extension.pushnotifications.azure.AzureController: com.distriqt.core.utils.IExtensionContext extensionContext>;
+
+     label21:
+        $r3 = staticinvoke <com.distriqt.extension.pushnotifications.events.RegistrationEvent: java.lang.String formatTokenForEvent(java.lang.String,java.lang.String)>($r10, $r5);
+
+        interfaceinvoke $r14.<com.distriqt.core.utils.IExtensionContext: void dispatchEvent(java.lang.String,java.lang.String)>("registration:register:success", $r3);
+
+     label22:
+        return;
+
+     label23:
+        $r14 = <com.distriqt.extension.pushnotifications.azure.AzureController: com.distriqt.core.utils.IExtensionContext extensionContext>;
+
+     label24:
+        $r3 = staticinvoke <com.distriqt.extension.pushnotifications.events.RegistrationEvent: java.lang.String formatTokenForEvent(java.lang.String,java.lang.String)>($r10, $r5);
+
+        interfaceinvoke $r14.<com.distriqt.core.utils.IExtensionContext: void dispatchEvent(java.lang.String,java.lang.String)>("registration:changed", $r3);
+
+     label25:
+        return;
+
+     label26:
+        $r1 = newarray (java.lang.Object)[0];
+
+     label27:
+        staticinvoke <com.distriqt.extension.pushnotifications.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "Service not yet set", $r1);
+
+     label28:
+        return;
+
+     label29:
+        $r15 := @caughtexception;
+
+        virtualinvoke $r15.<java.lang.Exception: void printStackTrace()>();
+
+     label30:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label29;
+        catch java.lang.Exception from label03 to label04 with label29;
+        catch java.lang.Exception from label05 to label06 with label29;
+        catch java.lang.Exception from label07 to label08 with label29;
+        catch java.lang.Exception from label09 to label10 with label29;
+        catch java.lang.Exception from label11 to label12 with label29;
+        catch java.lang.Exception from label13 to label14 with label29;
+        catch java.lang.Exception from label15 to label16 with label29;
+        catch java.lang.Exception from label17 to label18 with label29;
+        catch java.lang.Exception from label19 to label20 with label29;
+        catch java.lang.Exception from label21 to label22 with label29;
+        catch java.lang.Exception from label24 to label25 with label29;
+        catch java.lang.Exception from label27 to label28 with label29;
+    }
+}

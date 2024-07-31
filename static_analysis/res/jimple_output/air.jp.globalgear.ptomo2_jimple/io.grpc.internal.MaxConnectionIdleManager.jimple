@@ -1,0 +1,290 @@
+public final class io.grpc.internal.MaxConnectionIdleManager extends java.lang.Object
+{
+    private static final io.grpc.internal.MaxConnectionIdleManager$Ticker systemTicker;
+    private boolean isActive;
+    private final long maxConnectionIdleInNanos;
+    private long nextIdleMonitorTime;
+    private java.util.concurrent.ScheduledExecutorService scheduler;
+    private boolean shutdownDelayed;
+    private java.util.concurrent.ScheduledFuture shutdownFuture;
+    private java.lang.Runnable shutdownTask;
+    private final io.grpc.internal.MaxConnectionIdleManager$Ticker ticker;
+
+    static void <clinit>()
+    {
+        io.grpc.internal.MaxConnectionIdleManager$1 $r0;
+
+        $r0 = new io.grpc.internal.MaxConnectionIdleManager$1;
+
+        specialinvoke $r0.<io.grpc.internal.MaxConnectionIdleManager$1: void <init>()>();
+
+        <io.grpc.internal.MaxConnectionIdleManager: io.grpc.internal.MaxConnectionIdleManager$Ticker systemTicker> = $r0;
+
+        return;
+    }
+
+    public void <init>(long)
+    {
+        long $l0;
+        io.grpc.internal.MaxConnectionIdleManager$Ticker $r1;
+        io.grpc.internal.MaxConnectionIdleManager r0;
+
+        r0 := @this: io.grpc.internal.MaxConnectionIdleManager;
+
+        $l0 := @parameter0: long;
+
+        $r1 = <io.grpc.internal.MaxConnectionIdleManager: io.grpc.internal.MaxConnectionIdleManager$Ticker systemTicker>;
+
+        specialinvoke r0.<io.grpc.internal.MaxConnectionIdleManager: void <init>(long,io.grpc.internal.MaxConnectionIdleManager$Ticker)>($l0, $r1);
+
+        return;
+    }
+
+    public void <init>(long, io.grpc.internal.MaxConnectionIdleManager$Ticker)
+    {
+        long $l0;
+        io.grpc.internal.MaxConnectionIdleManager$Ticker $r1;
+        io.grpc.internal.MaxConnectionIdleManager r0;
+
+        r0 := @this: io.grpc.internal.MaxConnectionIdleManager;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: io.grpc.internal.MaxConnectionIdleManager$Ticker;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: long maxConnectionIdleInNanos> = $l0;
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: io.grpc.internal.MaxConnectionIdleManager$Ticker ticker> = $r1;
+
+        return;
+    }
+
+    static boolean access$000(io.grpc.internal.MaxConnectionIdleManager)
+    {
+        io.grpc.internal.MaxConnectionIdleManager $r0;
+        boolean z0;
+
+        $r0 := @parameter0: io.grpc.internal.MaxConnectionIdleManager;
+
+        z0 = $r0.<io.grpc.internal.MaxConnectionIdleManager: boolean shutdownDelayed>;
+
+        return z0;
+    }
+
+    static boolean access$002(io.grpc.internal.MaxConnectionIdleManager, boolean)
+    {
+        io.grpc.internal.MaxConnectionIdleManager $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: io.grpc.internal.MaxConnectionIdleManager;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<io.grpc.internal.MaxConnectionIdleManager: boolean shutdownDelayed> = $z0;
+
+        return $z0;
+    }
+
+    static boolean access$100(io.grpc.internal.MaxConnectionIdleManager)
+    {
+        io.grpc.internal.MaxConnectionIdleManager $r0;
+        boolean z0;
+
+        $r0 := @parameter0: io.grpc.internal.MaxConnectionIdleManager;
+
+        z0 = $r0.<io.grpc.internal.MaxConnectionIdleManager: boolean isActive>;
+
+        return z0;
+    }
+
+    static java.util.concurrent.ScheduledFuture access$202(io.grpc.internal.MaxConnectionIdleManager, java.util.concurrent.ScheduledFuture)
+    {
+        java.util.concurrent.ScheduledFuture $r1;
+        io.grpc.internal.MaxConnectionIdleManager $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MaxConnectionIdleManager;
+
+        $r1 := @parameter1: java.util.concurrent.ScheduledFuture;
+
+        $r0.<io.grpc.internal.MaxConnectionIdleManager: java.util.concurrent.ScheduledFuture shutdownFuture> = $r1;
+
+        return $r1;
+    }
+
+    static java.lang.Runnable access$300(io.grpc.internal.MaxConnectionIdleManager)
+    {
+        java.lang.Runnable r1;
+        io.grpc.internal.MaxConnectionIdleManager $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MaxConnectionIdleManager;
+
+        r1 = $r0.<io.grpc.internal.MaxConnectionIdleManager: java.lang.Runnable shutdownTask>;
+
+        return r1;
+    }
+
+    static long access$400(io.grpc.internal.MaxConnectionIdleManager)
+    {
+        long l0;
+        io.grpc.internal.MaxConnectionIdleManager $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MaxConnectionIdleManager;
+
+        l0 = $r0.<io.grpc.internal.MaxConnectionIdleManager: long nextIdleMonitorTime>;
+
+        return l0;
+    }
+
+    static io.grpc.internal.MaxConnectionIdleManager$Ticker access$500(io.grpc.internal.MaxConnectionIdleManager)
+    {
+        io.grpc.internal.MaxConnectionIdleManager$Ticker r1;
+        io.grpc.internal.MaxConnectionIdleManager $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MaxConnectionIdleManager;
+
+        r1 = $r0.<io.grpc.internal.MaxConnectionIdleManager: io.grpc.internal.MaxConnectionIdleManager$Ticker ticker>;
+
+        return r1;
+    }
+
+    public void onTransportActive()
+    {
+        io.grpc.internal.MaxConnectionIdleManager r0;
+
+        r0 := @this: io.grpc.internal.MaxConnectionIdleManager;
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: boolean isActive> = 1;
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: boolean shutdownDelayed> = 1;
+
+        return;
+    }
+
+    public void onTransportIdle()
+    {
+        java.util.concurrent.ScheduledFuture $r2;
+        long $l0, $l1;
+        java.lang.Runnable $r4;
+        io.grpc.internal.MaxConnectionIdleManager r0;
+        java.util.concurrent.TimeUnit $r1;
+        java.util.concurrent.ScheduledExecutorService $r3;
+        io.grpc.internal.MaxConnectionIdleManager$Ticker $r5;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.MaxConnectionIdleManager;
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: boolean isActive> = 0;
+
+        $r2 = r0.<io.grpc.internal.MaxConnectionIdleManager: java.util.concurrent.ScheduledFuture shutdownFuture>;
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        $z0 = interfaceinvoke $r2.<java.util.concurrent.ScheduledFuture: boolean isDone()>();
+
+        if $z0 == 0 goto label2;
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: boolean shutdownDelayed> = 0;
+
+        $r3 = r0.<io.grpc.internal.MaxConnectionIdleManager: java.util.concurrent.ScheduledExecutorService scheduler>;
+
+        $r4 = r0.<io.grpc.internal.MaxConnectionIdleManager: java.lang.Runnable shutdownTask>;
+
+        $l0 = r0.<io.grpc.internal.MaxConnectionIdleManager: long maxConnectionIdleInNanos>;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r2 = interfaceinvoke $r3.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r4, $l0, $r1);
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: java.util.concurrent.ScheduledFuture shutdownFuture> = $r2;
+
+        return;
+
+     label2:
+        $r5 = r0.<io.grpc.internal.MaxConnectionIdleManager: io.grpc.internal.MaxConnectionIdleManager$Ticker ticker>;
+
+        $l0 = interfaceinvoke $r5.<io.grpc.internal.MaxConnectionIdleManager$Ticker: long nanoTime()>();
+
+        $l1 = r0.<io.grpc.internal.MaxConnectionIdleManager: long maxConnectionIdleInNanos>;
+
+        $l0 = $l0 + $l1;
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: long nextIdleMonitorTime> = $l0;
+
+        return;
+    }
+
+    public void onTransportTermination()
+    {
+        java.util.concurrent.ScheduledFuture $r1;
+        io.grpc.internal.MaxConnectionIdleManager r0;
+
+        r0 := @this: io.grpc.internal.MaxConnectionIdleManager;
+
+        $r1 = r0.<io.grpc.internal.MaxConnectionIdleManager: java.util.concurrent.ScheduledFuture shutdownFuture>;
+
+        if $r1 == null goto label1;
+
+        interfaceinvoke $r1.<java.util.concurrent.ScheduledFuture: boolean cancel(boolean)>(0);
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: java.util.concurrent.ScheduledFuture shutdownFuture> = null;
+
+     label1:
+        return;
+    }
+
+    public void start(java.lang.Runnable, java.util.concurrent.ScheduledExecutorService)
+    {
+        java.util.concurrent.ScheduledFuture $r7;
+        io.grpc.internal.MaxConnectionIdleManager$2 $r5;
+        long $l0, $l1;
+        java.lang.Runnable $r2;
+        io.grpc.internal.MaxConnectionIdleManager r0;
+        java.util.concurrent.TimeUnit $r6;
+        java.util.concurrent.ScheduledExecutorService $r1;
+        io.grpc.internal.MaxConnectionIdleManager$Ticker $r3;
+        io.grpc.internal.LogExceptionRunnable $r4;
+
+        r0 := @this: io.grpc.internal.MaxConnectionIdleManager;
+
+        $r2 := @parameter0: java.lang.Runnable;
+
+        $r1 := @parameter1: java.util.concurrent.ScheduledExecutorService;
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: java.util.concurrent.ScheduledExecutorService scheduler> = $r1;
+
+        $r3 = r0.<io.grpc.internal.MaxConnectionIdleManager: io.grpc.internal.MaxConnectionIdleManager$Ticker ticker>;
+
+        $l1 = interfaceinvoke $r3.<io.grpc.internal.MaxConnectionIdleManager$Ticker: long nanoTime()>();
+
+        $l0 = r0.<io.grpc.internal.MaxConnectionIdleManager: long maxConnectionIdleInNanos>;
+
+        $l0 = $l1 + $l0;
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: long nextIdleMonitorTime> = $l0;
+
+        $r4 = new io.grpc.internal.LogExceptionRunnable;
+
+        $r5 = new io.grpc.internal.MaxConnectionIdleManager$2;
+
+        specialinvoke $r5.<io.grpc.internal.MaxConnectionIdleManager$2: void <init>(io.grpc.internal.MaxConnectionIdleManager,java.util.concurrent.ScheduledExecutorService,java.lang.Runnable)>(r0, $r1, $r2);
+
+        specialinvoke $r4.<io.grpc.internal.LogExceptionRunnable: void <init>(java.lang.Runnable)>($r5);
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: java.lang.Runnable shutdownTask> = $r4;
+
+        $l0 = r0.<io.grpc.internal.MaxConnectionIdleManager: long maxConnectionIdleInNanos>;
+
+        $r6 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r7 = interfaceinvoke $r1.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r4, $l0, $r6);
+
+        r0.<io.grpc.internal.MaxConnectionIdleManager: java.util.concurrent.ScheduledFuture shutdownFuture> = $r7;
+
+        return;
+    }
+}

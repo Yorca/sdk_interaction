@@ -1,0 +1,2375 @@
+public class com.bumptech.glide.gifdecoder.StandardGifDecoder extends java.lang.Object implements com.bumptech.glide.gifdecoder.GifDecoder
+{
+    private static final int BYTES_PER_INTEGER;
+    private static final int COLOR_TRANSPARENT_BLACK;
+    private static final int INITIAL_FRAME_POINTER;
+    private static final int MASK_INT_LOWEST_BYTE;
+    private static final int MAX_STACK_SIZE;
+    private static final int NULL_CODE;
+    private static final java.lang.String TAG;
+    private int[] act;
+    private android.graphics.Bitmap$Config bitmapConfig;
+    private final com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider;
+    private byte[] block;
+    private int downsampledHeight;
+    private int downsampledWidth;
+    private int framePointer;
+    private com.bumptech.glide.gifdecoder.GifHeader header;
+    private java.lang.Boolean isFirstFrameTransparent;
+    private byte[] mainPixels;
+    private int[] mainScratch;
+    private com.bumptech.glide.gifdecoder.GifHeaderParser parser;
+    private final int[] pct;
+    private byte[] pixelStack;
+    private short[] prefix;
+    private android.graphics.Bitmap previousImage;
+    private java.nio.ByteBuffer rawData;
+    private int sampleSize;
+    private boolean savePrevious;
+    private int status;
+    private byte[] suffix;
+
+    static void <clinit>()
+    {
+        <com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.String TAG> = "StandardGifDecoder";
+
+        <com.bumptech.glide.gifdecoder.StandardGifDecoder: int NULL_CODE> = -1;
+
+        <com.bumptech.glide.gifdecoder.StandardGifDecoder: int MAX_STACK_SIZE> = 4096;
+
+        <com.bumptech.glide.gifdecoder.StandardGifDecoder: int MASK_INT_LOWEST_BYTE> = 255;
+
+        <com.bumptech.glide.gifdecoder.StandardGifDecoder: int INITIAL_FRAME_POINTER> = -1;
+
+        <com.bumptech.glide.gifdecoder.StandardGifDecoder: int COLOR_TRANSPARENT_BLACK> = 0;
+
+        <com.bumptech.glide.gifdecoder.StandardGifDecoder: int BYTES_PER_INTEGER> = 4;
+
+        return;
+    }
+
+    public void <init>(com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider)
+    {
+        int[] $r2;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider $r1;
+        android.graphics.Bitmap$Config $r3;
+        com.bumptech.glide.gifdecoder.GifHeader $r4;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 := @parameter0: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = newarray (int)[256];
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] pct> = $r2;
+
+        $r3 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config ARGB_8888>;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap$Config bitmapConfig> = $r3;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider> = $r1;
+
+        $r4 = new com.bumptech.glide.gifdecoder.GifHeader;
+
+        specialinvoke $r4.<com.bumptech.glide.gifdecoder.GifHeader: void <init>()>();
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header> = $r4;
+
+        return;
+    }
+
+    public void <init>(com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider, com.bumptech.glide.gifdecoder.GifHeader, java.nio.ByteBuffer)
+    {
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider $r1;
+        com.bumptech.glide.gifdecoder.GifHeader $r2;
+        java.nio.ByteBuffer $r3;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 := @parameter0: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider;
+
+        $r2 := @parameter1: com.bumptech.glide.gifdecoder.GifHeader;
+
+        $r3 := @parameter2: java.nio.ByteBuffer;
+
+        specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: void <init>(com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider,com.bumptech.glide.gifdecoder.GifHeader,java.nio.ByteBuffer,int)>($r1, $r2, $r3, 1);
+
+        return;
+    }
+
+    public void <init>(com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider, com.bumptech.glide.gifdecoder.GifHeader, java.nio.ByteBuffer, int)
+    {
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider $r1;
+        int $i0;
+        com.bumptech.glide.gifdecoder.GifHeader $r2;
+        java.nio.ByteBuffer $r3;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 := @parameter0: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider;
+
+        $r2 := @parameter1: com.bumptech.glide.gifdecoder.GifHeader;
+
+        $r3 := @parameter2: java.nio.ByteBuffer;
+
+        $i0 := @parameter3: int;
+
+        specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: void <init>(com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider)>($r1);
+
+        virtualinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: void setData(com.bumptech.glide.gifdecoder.GifHeader,java.nio.ByteBuffer,int)>($r2, $r3, $i0);
+
+        return;
+    }
+
+    private int averageColorsNear(int, int, int)
+    {
+        byte[] $r1;
+        short $s11;
+        byte $b10;
+        int[] $r2;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i12;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $i2 := @parameter2: int;
+
+        $i3 = $i0;
+
+        $i4 = 0;
+
+        $i5 = 0;
+
+        $i6 = 0;
+
+        $i7 = 0;
+
+        $i8 = 0;
+
+     label1:
+        $i9 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        $i9 = $i9 + $i0;
+
+        if $i3 >= $i9 goto label3;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] mainPixels>;
+
+        $i9 = lengthof $r1;
+
+        if $i3 >= $i9 goto label3;
+
+        if $i3 >= $i1 goto label3;
+
+        $b10 = $r1[$i3];
+
+        $s11 = (short) $b10;
+
+        $s11 = $s11 & 255;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] act>;
+
+        $i9 = (int) $s11;
+
+        $i9 = $r2[$i9];
+
+        if $i9 == 0 goto label2;
+
+        $i12 = $i9 >> 24;
+
+        $i12 = $i12 & 255;
+
+        $i4 = $i4 + $i12;
+
+        $i12 = $i9 >> 16;
+
+        $i12 = $i12 & 255;
+
+        $i5 = $i5 + $i12;
+
+        $i12 = $i9 >> 8;
+
+        $i12 = $i12 & 255;
+
+        $i6 = $i6 + $i12;
+
+        $i9 = $i9 & 255;
+
+        $i7 = $i7 + $i9;
+
+        $i8 = $i8 + 1;
+
+     label2:
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label3:
+        $i0 = $i0 + $i2;
+
+        $i2 = $i0;
+
+     label4:
+        $i3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        $i3 = $i3 + $i0;
+
+        if $i2 >= $i3 goto label6;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] mainPixels>;
+
+        $i3 = lengthof $r1;
+
+        if $i2 >= $i3 goto label6;
+
+        if $i2 >= $i1 goto label6;
+
+        $b10 = $r1[$i2];
+
+        $s11 = (short) $b10;
+
+        $s11 = $s11 & 255;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] act>;
+
+        $i3 = (int) $s11;
+
+        $i3 = $r2[$i3];
+
+        if $i3 == 0 goto label5;
+
+        $i9 = $i3 >> 24;
+
+        $i9 = $i9 & 255;
+
+        $i4 = $i4 + $i9;
+
+        $i9 = $i3 >> 16;
+
+        $i9 = $i9 & 255;
+
+        $i5 = $i5 + $i9;
+
+        $i9 = $i3 >> 8;
+
+        $i9 = $i9 & 255;
+
+        $i6 = $i6 + $i9;
+
+        $i3 = $i3 & 255;
+
+        $i7 = $i7 + $i3;
+
+        $i8 = $i8 + 1;
+
+     label5:
+        $i2 = $i2 + 1;
+
+        goto label4;
+
+     label6:
+        if $i8 != 0 goto label7;
+
+        return 0;
+
+     label7:
+        $i0 = $i4 / $i8;
+
+        $i0 = $i0 << 24;
+
+        $i1 = $i5 / $i8;
+
+        $i1 = $i1 << 16;
+
+        $i0 = $i0 | $i1;
+
+        $i1 = $i6 / $i8;
+
+        $i1 = $i1 << 8;
+
+        $i0 = $i0 | $i1;
+
+        $i1 = $i7 / $i8;
+
+        $i0 = $i0 | $i1;
+
+        return $i0;
+    }
+
+    private void copyCopyIntoScratchRobust(com.bumptech.glide.gifdecoder.GifFrame)
+    {
+        com.bumptech.glide.gifdecoder.GifFrame $r1;
+        byte[] $r3;
+        short $s16;
+        byte $b7, $b15;
+        int[] $r2, $r4;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i17;
+        java.lang.Boolean $r5, $r6;
+        boolean $z0, $z1;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 := @parameter0: com.bumptech.glide.gifdecoder.GifFrame;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] mainScratch>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int ih>;
+
+        $i3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        $i4 = $i0 / $i3;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int iy>;
+
+        $i3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        $i5 = $i0 / $i3;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int iw>;
+
+        $i3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        $i6 = $i0 / $i3;
+
+        $i3 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int ix>;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        $i3 = $i3 / $i0;
+
+        $i1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        $r5 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+        if $i1 != 0 goto label01;
+
+        $z0 = 1;
+
+        goto label02;
+
+     label01:
+        $z0 = 0;
+
+     label02:
+        $i1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledWidth>;
+
+        $i2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledHeight>;
+
+        $r3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] mainPixels>;
+
+        $r4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] act>;
+
+        $r6 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.Boolean isFirstFrameTransparent>;
+
+        $b7 = 8;
+
+        $i8 = 0;
+
+        $i9 = 0;
+
+        $i10 = 1;
+
+     label03:
+        if $i8 >= $i4 goto label20;
+
+        $z1 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: boolean interlace>;
+
+        if $z1 == 0 goto label07;
+
+        if $i9 < $i4 goto label06;
+
+        $i10 = $i10 + 1;
+
+        if $i10 == 2 goto label05;
+
+        if $i10 == 3 goto label04;
+
+        if $i10 != 4 goto label06;
+
+        $i9 = 1;
+
+        $b7 = 2;
+
+        goto label06;
+
+     label04:
+        $i9 = 2;
+
+        $b7 = 4;
+
+        goto label06;
+
+     label05:
+        $i9 = 4;
+
+     label06:
+        $i11 = $i9 + $b7;
+
+        goto label08;
+
+     label07:
+        $i11 = $i9;
+
+        $i9 = $i8;
+
+     label08:
+        $i9 = $i9 + $i5;
+
+        if $i0 != 1 goto label09;
+
+        $z1 = 1;
+
+        goto label10;
+
+     label09:
+        $z1 = 0;
+
+     label10:
+        if $i9 >= $i2 goto label19;
+
+        $i12 = $i9 * $i1;
+
+        $i13 = $i12 + $i3;
+
+        $i9 = $i13 + $i6;
+
+        $i12 = $i12 + $i1;
+
+        if $i12 >= $i9 goto label11;
+
+        $i9 = $i12;
+
+     label11:
+        $i12 = $i8 * $i0;
+
+        $i14 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int iw>;
+
+        $i12 = $i12 * $i14;
+
+        if $z1 == 0 goto label15;
+
+     label12:
+        if $i13 >= $i9 goto label19;
+
+        $b15 = $r3[$i12];
+
+        $s16 = (short) $b15;
+
+        $s16 = $s16 & 255;
+
+        $i14 = (int) $s16;
+
+        $i14 = $r4[$i14];
+
+        if $i14 == 0 goto label13;
+
+        $r2[$i13] = $i14;
+
+        goto label14;
+
+     label13:
+        if $z0 == 0 goto label14;
+
+        if $r6 != null goto label14;
+
+        $r6 = $r5;
+
+     label14:
+        $i12 = $i12 + $i0;
+
+        $i13 = $i13 + 1;
+
+        goto label12;
+
+     label15:
+        $i14 = $i9 - $i13;
+
+        $i14 = $i14 * $i0;
+
+        $i14 = $i14 + $i12;
+
+     label16:
+        if $i13 >= $i9 goto label19;
+
+        $i17 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int iw>;
+
+        $i17 = specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int averageColorsNear(int,int,int)>($i12, $i14, $i17);
+
+        if $i17 == 0 goto label17;
+
+        $r2[$i13] = $i17;
+
+        goto label18;
+
+     label17:
+        if $z0 == 0 goto label18;
+
+        if $r6 != null goto label18;
+
+        $r6 = $r5;
+
+     label18:
+        $i12 = $i12 + $i0;
+
+        $i13 = $i13 + 1;
+
+        goto label16;
+
+     label19:
+        $i8 = $i8 + 1;
+
+        $i9 = $i11;
+
+        goto label03;
+
+     label20:
+        $r5 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.Boolean isFirstFrameTransparent>;
+
+        if $r5 != null goto label23;
+
+        if $r6 != null goto label21;
+
+        $z0 = 0;
+
+        goto label22;
+
+     label21:
+        $z0 = virtualinvoke $r6.<java.lang.Boolean: boolean booleanValue()>();
+
+     label22:
+        $r5 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.Boolean isFirstFrameTransparent> = $r5;
+
+     label23:
+        return;
+    }
+
+    private void copyIntoScratchFast(com.bumptech.glide.gifdecoder.GifFrame)
+    {
+        com.bumptech.glide.gifdecoder.GifFrame $r1, $r5;
+        byte[] $r3;
+        short $s11;
+        byte $b6, $b10;
+        int[] $r2, $r4;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i7, $i8, $i9, $i12, $i13;
+        java.lang.Boolean $r6;
+        boolean $z0, $z1;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 := @parameter0: com.bumptech.glide.gifdecoder.GifFrame;
+
+        $r5 = $r1;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] mainScratch>;
+
+        $i4 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int ih>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int iy>;
+
+        $i1 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int iw>;
+
+        $i2 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int ix>;
+
+        $i3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        if $i3 != 0 goto label01;
+
+        $z0 = 1;
+
+        goto label02;
+
+     label01:
+        $z0 = 0;
+
+     label02:
+        $i3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledWidth>;
+
+        $r3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] mainPixels>;
+
+        $r4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] act>;
+
+        $i5 = 0;
+
+        $b6 = -1;
+
+     label03:
+        if $i5 >= $i4 goto label09;
+
+        $i7 = $i5 + $i0;
+
+        $i8 = $i7 * $i3;
+
+        $i9 = $i8 + $i2;
+
+        $i7 = $i9 + $i1;
+
+        $i8 = $i8 + $i3;
+
+        if $i8 >= $i7 goto label04;
+
+        $i7 = $i8;
+
+     label04:
+        $i8 = $r5.<com.bumptech.glide.gifdecoder.GifFrame: int iw>;
+
+        $i8 = $i8 * $i5;
+
+     label05:
+        if $i9 >= $i7 goto label08;
+
+        $b10 = $r3[$i8];
+
+        $s11 = (short) $b10;
+
+        $s11 = $s11 & 255;
+
+        $i12 = (int) $s11;
+
+        $i13 = (int) $b6;
+
+        if $i12 == $i13 goto label07;
+
+        $i12 = (int) $s11;
+
+        $i12 = $r4[$i12];
+
+        if $i12 == 0 goto label06;
+
+        $r2[$i9] = $i12;
+
+        goto label07;
+
+     label06:
+        $b6 = $b10;
+
+     label07:
+        $i8 = $i8 + 1;
+
+        $i9 = $i9 + 1;
+
+        goto label05;
+
+     label08:
+        $i5 = $i5 + 1;
+
+        $r5 = $r1;
+
+        goto label03;
+
+     label09:
+        $r6 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.Boolean isFirstFrameTransparent>;
+
+        if $r6 == null goto label10;
+
+        $z1 = virtualinvoke $r6.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z1 != 0 goto label11;
+
+     label10:
+        $r6 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.Boolean isFirstFrameTransparent>;
+
+        if $r6 != null goto label12;
+
+        if $z0 == 0 goto label12;
+
+        $i0 = (int) $b6;
+
+        if $i0 == -1 goto label12;
+
+     label11:
+        $z0 = 1;
+
+        goto label13;
+
+     label12:
+        $z0 = 0;
+
+     label13:
+        $r6 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.Boolean isFirstFrameTransparent> = $r6;
+
+        return;
+    }
+
+    private void decodeBitmapData(com.bumptech.glide.gifdecoder.GifFrame)
+    {
+        byte[] $r5, $r8, $r9, $r10;
+        com.bumptech.glide.gifdecoder.GifHeader $r4;
+        java.nio.ByteBuffer $r3;
+        byte $b8, $b23;
+        com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider $r6;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0, $r2;
+        short[] $r7;
+        com.bumptech.glide.gifdecoder.GifFrame $r1;
+        short $s19;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i20, $i21, $i22;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 := @parameter0: com.bumptech.glide.gifdecoder.GifFrame;
+
+        $r2 = r0;
+
+        if $r1 == null goto label01;
+
+        $r3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.nio.ByteBuffer rawData>;
+
+        $i2 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int bufferFrameStart>;
+
+        virtualinvoke $r3.<java.nio.ByteBuffer: java.nio.Buffer position(int)>($i2);
+
+     label01:
+        if $r1 != null goto label02;
+
+        $r4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i2 = $r4.<com.bumptech.glide.gifdecoder.GifHeader: int width>;
+
+        $r4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i0 = $r4.<com.bumptech.glide.gifdecoder.GifHeader: int height>;
+
+        $i2 = $i2 * $i0;
+
+        goto label03;
+
+     label02:
+        $i2 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int iw>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifFrame: int ih>;
+
+        $i2 = $i0 * $i2;
+
+     label03:
+        $r5 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] mainPixels>;
+
+        if $r5 == null goto label04;
+
+        $i0 = lengthof $r5;
+
+        if $i0 >= $i2 goto label05;
+
+     label04:
+        $r6 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider>;
+
+        $r5 = interfaceinvoke $r6.<com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider: byte[] obtainByteArray(int)>($i2);
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] mainPixels> = $r5;
+
+     label05:
+        $r5 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] mainPixels>;
+
+        $r7 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: short[] prefix>;
+
+        if $r7 != null goto label06;
+
+        $r7 = newarray (short)[4096];
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: short[] prefix> = $r7;
+
+     label06:
+        $r7 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: short[] prefix>;
+
+        $r8 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] suffix>;
+
+        if $r8 != null goto label07;
+
+        $r8 = newarray (byte)[4096];
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] suffix> = $r8;
+
+     label07:
+        $r8 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] suffix>;
+
+        $r9 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] pixelStack>;
+
+        if $r9 != null goto label08;
+
+        $r9 = newarray (byte)[4097];
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] pixelStack> = $r9;
+
+     label08:
+        $r10 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] pixelStack>;
+
+        $i3 = specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int readByte()>();
+
+        $i0 = 1 << $i3;
+
+        $i1 = $i0 + 1;
+
+        $i4 = $i0 + 2;
+
+        $i5 = $i3 + 1;
+
+        $i3 = 1 << $i5;
+
+        $i3 = $i3 - 1;
+
+        $i6 = 0;
+
+        $i7 = 0;
+
+     label09:
+        if $i7 >= $i0 goto label10;
+
+        $r7[$i7] = 0;
+
+        $b8 = (byte) $i7;
+
+        $r8[$i7] = $b8;
+
+        $i7 = $i7 + 1;
+
+        goto label09;
+
+     label10:
+        $r9 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] block>;
+
+        $i9 = $i5;
+
+        $i10 = $i4;
+
+        $i7 = $i3;
+
+        $i11 = 0;
+
+        $i12 = 0;
+
+        $i13 = 0;
+
+        $i14 = 0;
+
+        $i15 = 0;
+
+        $i16 = -1;
+
+        $i17 = 0;
+
+        $i18 = 0;
+
+     label11:
+        if $i6 >= $i2 goto label25;
+
+        if $i11 != 0 goto label13;
+
+        $i12 = specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int readBlock()>();
+
+        $i11 = $i12;
+
+        if $i12 > 0 goto label12;
+
+        $r2.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status> = 3;
+
+        goto label25;
+
+     label12:
+        $i12 = 0;
+
+     label13:
+        $b8 = $r9[$i12];
+
+        $s19 = (short) $b8;
+
+        $s19 = $s19 & 255;
+
+        $i20 = (int) $s19;
+
+        $i20 = $i20 << $i13;
+
+        $i14 = $i14 + $i20;
+
+        $i12 = $i12 + 1;
+
+        $i11 = $i11 + -1;
+
+        $i13 = $i13 + 8;
+
+     label14:
+        if $i13 < $i9 goto label24;
+
+        $i20 = $i4;
+
+        $i21 = $i14 & $i7;
+
+        $i14 = $i14 >> $i9;
+
+        $i13 = $i13 - $i9;
+
+        if $i21 != $i0 goto label15;
+
+        $i7 = $i3;
+
+        $i9 = $i5;
+
+        $i10 = $i4;
+
+        $i16 = -1;
+
+        goto label14;
+
+     label15:
+        if $i21 != $i1 goto label16;
+
+        $r2 = r0;
+
+        goto label11;
+
+     label16:
+        $i22 = $i13;
+
+        if $i16 != -1 goto label17;
+
+        $b8 = $r8[$i21];
+
+        $r5[$i15] = $b8;
+
+        $i15 = $i15 + 1;
+
+        $i6 = $i6 + 1;
+
+        $i16 = $i21;
+
+        $i17 = $i21;
+
+        goto label14;
+
+     label17:
+        if $i21 < $i10 goto label18;
+
+        $b8 = (byte) $i17;
+
+        $r10[$i18] = $b8;
+
+        $i18 = $i18 + 1;
+
+        $i4 = $i16;
+
+        goto label19;
+
+     label18:
+        $i4 = $i21;
+
+     label19:
+        if $i4 < $i0 goto label20;
+
+        $b8 = $r8[$i4];
+
+        $r10[$i18] = $b8;
+
+        $i18 = $i18 + 1;
+
+        $i4 = $r7[$i4];
+
+        goto label19;
+
+     label20:
+        $b8 = $r8[$i4];
+
+        $i4 = (int) $b8;
+
+        $i17 = $i4 & 255;
+
+        $b8 = (byte) $i17;
+
+        $r5[$i15] = $b8;
+
+     label21:
+        $i15 = $i15 + 1;
+
+        $i6 = $i6 + 1;
+
+        if $i18 <= 0 goto label22;
+
+        $i18 = $i18 + -1;
+
+        $b23 = $r10[$i18];
+
+        $r5[$i15] = $b23;
+
+        goto label21;
+
+     label22:
+        if $i10 >= 4096 goto label23;
+
+        $s19 = (short) $i16;
+
+        $r7[$i10] = $s19;
+
+        $r8[$i10] = $b8;
+
+        $i10 = $i10 + 1;
+
+        $i4 = $i10 & $i7;
+
+        if $i4 != 0 goto label23;
+
+        if $i10 >= 4096 goto label23;
+
+        $i9 = $i9 + 1;
+
+        $i7 = $i7 + $i10;
+
+     label23:
+        $i16 = $i21;
+
+        $i4 = $i20;
+
+        $i13 = $i22;
+
+        goto label14;
+
+     label24:
+        $r2 = r0;
+
+        goto label11;
+
+     label25:
+        staticinvoke <java.util.Arrays: void fill(byte[],int,int,byte)>($r5, $i15, $i2, 0);
+
+        return;
+    }
+
+    private com.bumptech.glide.gifdecoder.GifHeaderParser getHeaderParser()
+    {
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        com.bumptech.glide.gifdecoder.GifHeaderParser $r1;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeaderParser parser>;
+
+        if $r1 != null goto label1;
+
+        $r1 = new com.bumptech.glide.gifdecoder.GifHeaderParser;
+
+        specialinvoke $r1.<com.bumptech.glide.gifdecoder.GifHeaderParser: void <init>()>();
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeaderParser parser> = $r1;
+
+     label1:
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeaderParser parser>;
+
+        return $r1;
+    }
+
+    private android.graphics.Bitmap getNextBitmap()
+    {
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        android.graphics.Bitmap$Config $r2;
+        android.graphics.Bitmap $r4;
+        int $i0, $i1;
+        com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider $r3;
+        java.lang.Boolean $r1;
+        boolean $z0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.Boolean isFirstFrameTransparent>;
+
+        if $r1 == null goto label1;
+
+        $z0 = virtualinvoke $r1.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap$Config bitmapConfig>;
+
+        goto label2;
+
+     label1:
+        $r2 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config ARGB_8888>;
+
+     label2:
+        $r3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider>;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledWidth>;
+
+        $i1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledHeight>;
+
+        $r4 = interfaceinvoke $r3.<com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider: android.graphics.Bitmap obtain(int,int,android.graphics.Bitmap$Config)>($i0, $i1, $r2);
+
+        virtualinvoke $r4.<android.graphics.Bitmap: void setHasAlpha(boolean)>(1);
+
+        return $r4;
+    }
+
+    private int readBlock()
+    {
+        byte[] $r2;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        int $i0, $i1;
+        java.nio.ByteBuffer $r1;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $i0 = specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int readByte()>();
+
+        if $i0 > 0 goto label1;
+
+        return $i0;
+
+     label1:
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.nio.ByteBuffer rawData>;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] block>;
+
+        $i1 = virtualinvoke $r1.<java.nio.ByteBuffer: int remaining()>();
+
+        $i1 = staticinvoke <java.lang.Math: int min(int,int)>($i0, $i1);
+
+        virtualinvoke $r1.<java.nio.ByteBuffer: java.nio.ByteBuffer get(byte[],int,int)>($r2, 0, $i1);
+
+        return $i0;
+    }
+
+    private int readByte()
+    {
+        short $s1;
+        byte $b0;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        int $i2;
+        java.nio.ByteBuffer $r1;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.nio.ByteBuffer rawData>;
+
+        $b0 = virtualinvoke $r1.<java.nio.ByteBuffer: byte get()>();
+
+        $s1 = (short) $b0;
+
+        $s1 = $s1 & 255;
+
+        $i2 = (int) $s1;
+
+        return $i2;
+    }
+
+    private android.graphics.Bitmap setPixels(com.bumptech.glide.gifdecoder.GifFrame, com.bumptech.glide.gifdecoder.GifFrame)
+    {
+        com.bumptech.glide.gifdecoder.GifFrame $r2, $r3;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        com.bumptech.glide.gifdecoder.GifHeader $r6;
+        int[] $r1, $r7;
+        android.graphics.Bitmap $r4;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider $r5;
+        boolean $z0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r2 := @parameter0: com.bumptech.glide.gifdecoder.GifFrame;
+
+        $r3 := @parameter1: com.bumptech.glide.gifdecoder.GifFrame;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] mainScratch>;
+
+        $i0 = 0;
+
+        if $r3 != null goto label02;
+
+        $r4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap previousImage>;
+
+        if $r4 == null goto label01;
+
+        $r5 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider>;
+
+        interfaceinvoke $r5.<com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider: void release(android.graphics.Bitmap)>($r4);
+
+     label01:
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap previousImage> = null;
+
+        staticinvoke <java.util.Arrays: void fill(int[],int)>($r1, 0);
+
+     label02:
+        if $r3 == null goto label10;
+
+        $i1 = $r3.<com.bumptech.glide.gifdecoder.GifFrame: int dispose>;
+
+        if $i1 != 3 goto label03;
+
+        $r4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap previousImage>;
+
+        if $r4 != null goto label03;
+
+        staticinvoke <java.util.Arrays: void fill(int[],int)>($r1, 0);
+
+     label03:
+        if $r3 == null goto label10;
+
+        $i1 = $r3.<com.bumptech.glide.gifdecoder.GifFrame: int dispose>;
+
+        if $i1 <= 0 goto label10;
+
+        $i1 = $r3.<com.bumptech.glide.gifdecoder.GifFrame: int dispose>;
+
+        if $i1 != 2 goto label09;
+
+        $z0 = $r2.<com.bumptech.glide.gifdecoder.GifFrame: boolean transparency>;
+
+        if $z0 != 0 goto label05;
+
+        $r6 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i1 = $r6.<com.bumptech.glide.gifdecoder.GifHeader: int bgColor>;
+
+        $r7 = $r2.<com.bumptech.glide.gifdecoder.GifFrame: int[] lct>;
+
+        if $r7 == null goto label04;
+
+        $r6 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i2 = $r6.<com.bumptech.glide.gifdecoder.GifHeader: int bgIndex>;
+
+        $i3 = $r2.<com.bumptech.glide.gifdecoder.GifFrame: int transIndex>;
+
+        if $i2 == $i3 goto label05;
+
+     label04:
+        $i0 = $i1;
+
+     label05:
+        $i1 = $r3.<com.bumptech.glide.gifdecoder.GifFrame: int ih>;
+
+        $i2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        $i2 = $i1 / $i2;
+
+        $i1 = $r3.<com.bumptech.glide.gifdecoder.GifFrame: int iy>;
+
+        $i3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        $i3 = $i1 / $i3;
+
+        $i1 = $r3.<com.bumptech.glide.gifdecoder.GifFrame: int iw>;
+
+        $i4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        $i1 = $i1 / $i4;
+
+        $i4 = $r3.<com.bumptech.glide.gifdecoder.GifFrame: int ix>;
+
+        $i5 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        $i5 = $i4 / $i5;
+
+        $i4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledWidth>;
+
+        $i3 = $i3 * $i4;
+
+        $i3 = $i3 + $i5;
+
+        $i2 = $i2 * $i4;
+
+        $i2 = $i2 + $i3;
+
+     label06:
+        if $i3 >= $i2 goto label10;
+
+        $i4 = $i3 + $i1;
+
+        $i5 = $i3;
+
+     label07:
+        if $i5 >= $i4 goto label08;
+
+        $r1[$i5] = $i0;
+
+        $i5 = $i5 + 1;
+
+        goto label07;
+
+     label08:
+        $i4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledWidth>;
+
+        $i3 = $i3 + $i4;
+
+        goto label06;
+
+     label09:
+        $i0 = $r3.<com.bumptech.glide.gifdecoder.GifFrame: int dispose>;
+
+        if $i0 != 3 goto label10;
+
+        $r4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap previousImage>;
+
+        if $r4 == null goto label10;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledWidth>;
+
+        $i1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledHeight>;
+
+        virtualinvoke $r4.<android.graphics.Bitmap: void getPixels(int[],int,int,int,int,int,int)>($r1, 0, $i0, 0, 0, $i0, $i1);
+
+     label10:
+        specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: void decodeBitmapData(com.bumptech.glide.gifdecoder.GifFrame)>($r2);
+
+        $z0 = $r2.<com.bumptech.glide.gifdecoder.GifFrame: boolean interlace>;
+
+        if $z0 != 0 goto label11;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize>;
+
+        if $i0 != 1 goto label11;
+
+        specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: void copyIntoScratchFast(com.bumptech.glide.gifdecoder.GifFrame)>($r2);
+
+        goto label12;
+
+     label11:
+        specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: void copyCopyIntoScratchRobust(com.bumptech.glide.gifdecoder.GifFrame)>($r2);
+
+     label12:
+        $z0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: boolean savePrevious>;
+
+        if $z0 == 0 goto label15;
+
+        $i0 = $r2.<com.bumptech.glide.gifdecoder.GifFrame: int dispose>;
+
+        if $i0 == 0 goto label13;
+
+        $i0 = $r2.<com.bumptech.glide.gifdecoder.GifFrame: int dispose>;
+
+        if $i0 != 1 goto label15;
+
+     label13:
+        $r4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap previousImage>;
+
+        if $r4 != null goto label14;
+
+        $r4 = specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap getNextBitmap()>();
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap previousImage> = $r4;
+
+     label14:
+        $r4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap previousImage>;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledWidth>;
+
+        $i1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledHeight>;
+
+        virtualinvoke $r4.<android.graphics.Bitmap: void setPixels(int[],int,int,int,int,int,int)>($r1, 0, $i0, 0, 0, $i0, $i1);
+
+     label15:
+        $r4 = specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap getNextBitmap()>();
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledWidth>;
+
+        $i1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledHeight>;
+
+        virtualinvoke $r4.<android.graphics.Bitmap: void setPixels(int[],int,int,int,int,int,int)>($r1, 0, $i0, 0, 0, $i0, $i1);
+
+        return $r4;
+    }
+
+    public void advance()
+    {
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        int $i0, $i1;
+        com.bumptech.glide.gifdecoder.GifHeader $r1;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        $i0 = $i0 + 1;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i1 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int frameCount>;
+
+        $i0 = $i0 % $i1;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer> = $i0;
+
+        return;
+    }
+
+    public void clear()
+    {
+        byte[] $r1;
+        int[] $r3;
+        android.graphics.Bitmap $r4;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider $r2;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header> = null;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] mainPixels>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider>;
+
+        interfaceinvoke $r2.<com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider: void release(byte[])>($r1);
+
+     label1:
+        $r3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] mainScratch>;
+
+        if $r3 == null goto label2;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider>;
+
+        interfaceinvoke $r2.<com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider: void release(int[])>($r3);
+
+     label2:
+        $r4 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap previousImage>;
+
+        if $r4 == null goto label3;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider>;
+
+        interfaceinvoke $r2.<com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider: void release(android.graphics.Bitmap)>($r4);
+
+     label3:
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap previousImage> = null;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.nio.ByteBuffer rawData> = null;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.Boolean isFirstFrameTransparent> = null;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] block>;
+
+        if $r1 == null goto label4;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider>;
+
+        interfaceinvoke $r2.<com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider: void release(byte[])>($r1);
+
+     label4:
+        return;
+    }
+
+    public int getByteSize()
+    {
+        byte[] $r2;
+        int[] $r3;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        int $i0, $i1;
+        java.nio.ByteBuffer $r1;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.nio.ByteBuffer rawData>;
+
+        $i0 = virtualinvoke $r1.<java.nio.ByteBuffer: int limit()>();
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] mainPixels>;
+
+        $i1 = lengthof $r2;
+
+        $i0 = $i0 + $i1;
+
+        $r3 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] mainScratch>;
+
+        $i1 = lengthof $r3;
+
+        $i1 = $i1 * 4;
+
+        $i0 = $i0 + $i1;
+
+        return $i0;
+    }
+
+    public int getCurrentFrameIndex()
+    {
+        int i0;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        return i0;
+    }
+
+    public java.nio.ByteBuffer getData()
+    {
+        java.nio.ByteBuffer r1;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.nio.ByteBuffer rawData>;
+
+        return r1;
+    }
+
+    public int getDelay(int)
+    {
+        com.bumptech.glide.gifdecoder.GifFrame $r4;
+        java.util.List $r3;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        int $i0, $i1;
+        java.lang.Object $r1;
+        com.bumptech.glide.gifdecoder.GifHeader $r2;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $i0 := @parameter0: int;
+
+        if $i0 < 0 goto label1;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i1 = $r2.<com.bumptech.glide.gifdecoder.GifHeader: int frameCount>;
+
+        if $i0 >= $i1 goto label1;
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $r3 = $r2.<com.bumptech.glide.gifdecoder.GifHeader: java.util.List frames>;
+
+        $r1 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r4 = (com.bumptech.glide.gifdecoder.GifFrame) $r1;
+
+        $i0 = $r4.<com.bumptech.glide.gifdecoder.GifFrame: int delay>;
+
+        return $i0;
+
+     label1:
+        return -1;
+    }
+
+    public int getFrameCount()
+    {
+        int i0;
+        com.bumptech.glide.gifdecoder.GifHeader $r1;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int frameCount>;
+
+        return i0;
+    }
+
+    public int getHeight()
+    {
+        int i0;
+        com.bumptech.glide.gifdecoder.GifHeader $r1;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int height>;
+
+        return i0;
+    }
+
+    public int getLoopCount()
+    {
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        int $i0, $i1;
+        com.bumptech.glide.gifdecoder.GifHeader $r1;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int loopCount>;
+
+        $i1 = -1;
+
+        if $i0 != $i1 goto label1;
+
+        return 1;
+
+     label1:
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int loopCount>;
+
+        return $i0;
+    }
+
+    public int getNetscapeLoopCount()
+    {
+        int i0;
+        com.bumptech.glide.gifdecoder.GifHeader $r1;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int loopCount>;
+
+        return i0;
+    }
+
+    public int getNextDelay()
+    {
+        int $i0;
+        com.bumptech.glide.gifdecoder.GifHeader $r1;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int frameCount>;
+
+        if $i0 <= 0 goto label1;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        if $i0 < 0 goto label1;
+
+        $i0 = virtualinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int getDelay(int)>($i0);
+
+        return $i0;
+
+     label1:
+        return 0;
+    }
+
+    public android.graphics.Bitmap getNextFrame()
+    {
+        java.lang.Throwable $r15;
+        byte[] $r5;
+        com.bumptech.glide.gifdecoder.GifFrame $r9, $r10;
+        com.bumptech.glide.gifdecoder.GifHeader $r1;
+        int[] $r11, $r12;
+        int $i0;
+        com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider $r6;
+        java.lang.Boolean $r13;
+        java.lang.String $r2, $r4;
+        boolean $z0;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        java.util.List $r7;
+        android.graphics.Bitmap $r14;
+        java.lang.StringBuilder $r3;
+        java.lang.Object $r8;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        entermonitor r0;
+
+     label01:
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int frameCount>;
+
+        if $i0 <= 0 goto label02;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        if $i0 >= 0 goto label04;
+
+     label02:
+        $r2 = <com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.String TAG>;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>($r2, 3);
+
+        if $z0 == 0 goto label03;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unable to decode frame, frameCount=");
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int frameCount>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", framePointer=");
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r2, $r4);
+
+     label03:
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status> = 1;
+
+     label04:
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status>;
+
+        if $i0 == 1 goto label15;
+
+        if $i0 == 2 goto label15;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status> = 0;
+
+        $r5 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] block>;
+
+        if $r5 != null goto label05;
+
+        $r6 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider>;
+
+        $r5 = interfaceinvoke $r6.<com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider: byte[] obtainByteArray(int)>(255);
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] block> = $r5;
+
+     label05:
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $r7 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: java.util.List frames>;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        $r8 = interfaceinvoke $r7.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r9 = (com.bumptech.glide.gifdecoder.GifFrame) $r8;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        $i0 = $i0 - 1;
+
+        if $i0 < 0 goto label06;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $r7 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: java.util.List frames>;
+
+        $r8 = interfaceinvoke $r7.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r10 = (com.bumptech.glide.gifdecoder.GifFrame) $r8;
+
+        goto label07;
+
+     label06:
+        $r10 = null;
+
+     label07:
+        $r11 = $r9.<com.bumptech.glide.gifdecoder.GifFrame: int[] lct>;
+
+        if $r11 == null goto label08;
+
+        $r11 = $r9.<com.bumptech.glide.gifdecoder.GifFrame: int[] lct>;
+
+        goto label09;
+
+     label08:
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $r11 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int[] gct>;
+
+     label09:
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] act> = $r11;
+
+        if $r11 != null goto label12;
+
+        $r2 = <com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.String TAG>;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>($r2, 3);
+
+        if $z0 == 0 goto label10;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("No valid color table found for frame #");
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r2, $r4);
+
+     label10:
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status> = 1;
+
+     label11:
+        exitmonitor r0;
+
+        return null;
+
+     label12:
+        $z0 = $r9.<com.bumptech.glide.gifdecoder.GifFrame: boolean transparency>;
+
+        if $z0 == 0 goto label13;
+
+        $r11 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] act>;
+
+        $r12 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] pct>;
+
+        $i0 = lengthof $r11;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r11, 0, $r12, 0, $i0);
+
+        $r11 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] pct>;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] act> = $r11;
+
+        $i0 = $r9.<com.bumptech.glide.gifdecoder.GifFrame: int transIndex>;
+
+        $r11[$i0] = 0;
+
+        $i0 = $r9.<com.bumptech.glide.gifdecoder.GifFrame: int dispose>;
+
+        if $i0 != 2 goto label13;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer>;
+
+        if $i0 != 0 goto label13;
+
+        $r13 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.Boolean isFirstFrameTransparent> = $r13;
+
+     label13:
+        $r14 = specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap setPixels(com.bumptech.glide.gifdecoder.GifFrame,com.bumptech.glide.gifdecoder.GifFrame)>($r9, $r10);
+
+     label14:
+        exitmonitor r0;
+
+        return $r14;
+
+     label15:
+        $r2 = <com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.String TAG>;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>($r2, 3);
+
+        if $z0 == 0 goto label16;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unable to decode frame, status=");
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r2, $r4);
+
+     label16:
+        exitmonitor r0;
+
+        return null;
+
+     label17:
+        $r15 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r15;
+
+        catch java.lang.Throwable from label01 to label11 with label17;
+        catch java.lang.Throwable from label12 to label14 with label17;
+        catch java.lang.Throwable from label15 to label16 with label17;
+    }
+
+    public int getStatus()
+    {
+        int i0;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status>;
+
+        return i0;
+    }
+
+    public int getTotalIterationCount()
+    {
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        int $i0, $i1;
+        com.bumptech.glide.gifdecoder.GifHeader $r1;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int loopCount>;
+
+        $i1 = -1;
+
+        if $i0 != $i1 goto label1;
+
+        return 1;
+
+     label1:
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int loopCount>;
+
+        if $i0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int loopCount>;
+
+        $i0 = $i0 + 1;
+
+        return $i0;
+    }
+
+    public int getWidth()
+    {
+        int i0;
+        com.bumptech.glide.gifdecoder.GifHeader $r1;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header>;
+
+        i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int width>;
+
+        return i0;
+    }
+
+    public int read(java.io.InputStream, int)
+    {
+        java.lang.Throwable $r4, $r6;
+        byte[] $r3;
+        java.io.ByteArrayOutputStream $r2, $r7;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        int $i0, $i1;
+        java.lang.String $r5;
+        java.io.InputStream $r1;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        $i0 := @parameter1: int;
+
+        if $r1 == null goto label12;
+
+        if $i0 <= 0 goto label01;
+
+        $i0 = $i0 + 4096;
+
+        goto label02;
+
+     label01:
+        $i0 = 16384;
+
+     label02:
+        $r7 = new java.io.ByteArrayOutputStream;
+
+        $r2 = $r7;
+
+     label03:
+        specialinvoke $r7.<java.io.ByteArrayOutputStream: void <init>(int)>($i0);
+
+     label04:
+        $r3 = newarray (byte)[16384];
+
+     label05:
+        $i0 = virtualinvoke $r1.<java.io.InputStream: int read(byte[],int,int)>($r3, 0, 16384);
+
+     label06:
+        $i1 = -1;
+
+        if $i0 == $i1 goto label09;
+
+     label07:
+        virtualinvoke $r2.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r3, 0, $i0);
+
+     label08:
+        goto label05;
+
+     label09:
+        virtualinvoke $r2.<java.io.ByteArrayOutputStream: void flush()>();
+
+        $r3 = virtualinvoke $r2.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        virtualinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int read(byte[])>($r3);
+
+     label10:
+        goto label13;
+
+     label11:
+        $r4 := @caughtexception;
+
+        $r5 = <com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>($r5, "Error reading data from stream", $r4);
+
+        goto label13;
+
+     label12:
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status> = 2;
+
+     label13:
+        if $r1 == null goto label17;
+
+     label14:
+        virtualinvoke $r1.<java.io.InputStream: void close()>();
+
+     label15:
+        goto label17;
+
+     label16:
+        $r6 := @caughtexception;
+
+        $r5 = <com.bumptech.glide.gifdecoder.StandardGifDecoder: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>($r5, "Error closing stream", $r6);
+
+     label17:
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status>;
+
+        return $i0;
+
+        catch java.io.IOException from label03 to label04 with label11;
+        catch java.io.IOException from label05 to label06 with label11;
+        catch java.io.IOException from label07 to label08 with label11;
+        catch java.io.IOException from label09 to label10 with label11;
+        catch java.io.IOException from label14 to label15 with label16;
+    }
+
+    public int read(byte[])
+    {
+        java.lang.Throwable $r4;
+        byte[] $r1;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        int i0;
+        com.bumptech.glide.gifdecoder.GifHeader $r3;
+        com.bumptech.glide.gifdecoder.GifHeaderParser $r2;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 := @parameter0: byte[];
+
+        entermonitor r0;
+
+     label1:
+        $r2 = specialinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeaderParser getHeaderParser()>();
+
+        $r2 = virtualinvoke $r2.<com.bumptech.glide.gifdecoder.GifHeaderParser: com.bumptech.glide.gifdecoder.GifHeaderParser setData(byte[])>($r1);
+
+        $r3 = virtualinvoke $r2.<com.bumptech.glide.gifdecoder.GifHeaderParser: com.bumptech.glide.gifdecoder.GifHeader parseHeader()>();
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header> = $r3;
+
+        if $r1 == null goto label2;
+
+        virtualinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: void setData(com.bumptech.glide.gifdecoder.GifHeader,byte[])>($r3, $r1);
+
+     label2:
+        i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status>;
+
+     label3:
+        exitmonitor r0;
+
+        return i0;
+
+     label4:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+
+    public void resetFrameIndex()
+    {
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer> = -1;
+
+        return;
+    }
+
+    public void setData(com.bumptech.glide.gifdecoder.GifHeader, java.nio.ByteBuffer)
+    {
+        java.lang.Throwable $r3;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        com.bumptech.glide.gifdecoder.GifHeader $r2;
+        java.nio.ByteBuffer $r1;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r2 := @parameter0: com.bumptech.glide.gifdecoder.GifHeader;
+
+        $r1 := @parameter1: java.nio.ByteBuffer;
+
+        entermonitor r0;
+
+     label1:
+        virtualinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: void setData(com.bumptech.glide.gifdecoder.GifHeader,java.nio.ByteBuffer,int)>($r2, $r1, 1);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public void setData(com.bumptech.glide.gifdecoder.GifHeader, java.nio.ByteBuffer, int)
+    {
+        java.lang.Throwable $r11;
+        com.bumptech.glide.gifdecoder.GifFrame $r7;
+        byte[] $r9;
+        com.bumptech.glide.gifdecoder.GifHeader $r1;
+        java.nio.ByteBuffer $r2;
+        int[] $r10;
+        int $i0, $i1;
+        com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider $r8;
+        java.lang.String $r13;
+        boolean $z0;
+        java.util.Iterator $r5;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        java.lang.IllegalArgumentException $r15;
+        java.nio.ByteOrder $r3;
+        java.util.List $r4;
+        java.lang.Object $r6;
+        java.lang.StringBuilder $r12, $r14;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r1 := @parameter0: com.bumptech.glide.gifdecoder.GifHeader;
+
+        $r2 := @parameter1: java.nio.ByteBuffer;
+
+        $i0 := @parameter2: int;
+
+        entermonitor r0;
+
+        if $i0 <= 0 goto label6;
+
+     label1:
+        $i0 = staticinvoke <java.lang.Integer: int highestOneBit(int)>($i0);
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int status> = 0;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifHeader header> = $r1;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int framePointer> = -1;
+
+        $r2 = virtualinvoke $r2.<java.nio.ByteBuffer: java.nio.ByteBuffer asReadOnlyBuffer()>();
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.nio.ByteBuffer rawData> = $r2;
+
+        virtualinvoke $r2.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        $r2 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: java.nio.ByteBuffer rawData>;
+
+        $r3 = <java.nio.ByteOrder: java.nio.ByteOrder LITTLE_ENDIAN>;
+
+        virtualinvoke $r2.<java.nio.ByteBuffer: java.nio.ByteBuffer order(java.nio.ByteOrder)>($r3);
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: boolean savePrevious> = 0;
+
+        $r4 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: java.util.List frames>;
+
+        $r5 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (com.bumptech.glide.gifdecoder.GifFrame) $r6;
+
+        $i1 = $r7.<com.bumptech.glide.gifdecoder.GifFrame: int dispose>;
+
+        if $i1 != 3 goto label2;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: boolean savePrevious> = 1;
+
+     label3:
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int sampleSize> = $i0;
+
+        $i1 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int width>;
+
+        $i1 = $i1 / $i0;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledWidth> = $i1;
+
+        $i1 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int height>;
+
+        $i0 = $i1 / $i0;
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledHeight> = $i0;
+
+        $r8 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider>;
+
+        $i0 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int width>;
+
+        $i1 = $r1.<com.bumptech.glide.gifdecoder.GifHeader: int height>;
+
+        $i0 = $i0 * $i1;
+
+        $r9 = interfaceinvoke $r8.<com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider: byte[] obtainByteArray(int)>($i0);
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: byte[] mainPixels> = $r9;
+
+        $r8 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider bitmapProvider>;
+
+        $i0 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledWidth>;
+
+        $i1 = r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int downsampledHeight>;
+
+        $i0 = $i0 * $i1;
+
+        $r10 = interfaceinvoke $r8.<com.bumptech.glide.gifdecoder.GifDecoder$BitmapProvider: int[] obtainIntArray(int)>($i0);
+
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: int[] mainScratch> = $r10;
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r11 := @caughtexception;
+
+        goto label7;
+
+     label6:
+        $r15 = new java.lang.IllegalArgumentException;
+
+        $r14 = new java.lang.StringBuilder;
+
+        $r12 = $r14;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>(java.lang.String)>("Sample size must be >=0, not: ");
+
+        virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r15.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r13);
+
+        throw $r15;
+
+     label7:
+        exitmonitor r0;
+
+        throw $r11;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label6 to label7 with label5;
+    }
+
+    public void setData(com.bumptech.glide.gifdecoder.GifHeader, byte[])
+    {
+        java.lang.Throwable $r4;
+        byte[] $r3;
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        com.bumptech.glide.gifdecoder.GifHeader $r2;
+        java.nio.ByteBuffer $r1;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r2 := @parameter0: com.bumptech.glide.gifdecoder.GifHeader;
+
+        $r3 := @parameter1: byte[];
+
+        entermonitor r0;
+
+     label1:
+        $r1 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>($r3);
+
+        virtualinvoke r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: void setData(com.bumptech.glide.gifdecoder.GifHeader,java.nio.ByteBuffer)>($r2, $r1);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public void setDefaultBitmapConfig(android.graphics.Bitmap$Config)
+    {
+        com.bumptech.glide.gifdecoder.StandardGifDecoder r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+        java.lang.IllegalArgumentException $r5;
+        android.graphics.Bitmap$Config $r3, $r4;
+
+        r0 := @this: com.bumptech.glide.gifdecoder.StandardGifDecoder;
+
+        $r3 := @parameter0: android.graphics.Bitmap$Config;
+
+        $r4 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config ARGB_8888>;
+
+        if $r3 == $r4 goto label1;
+
+        $r4 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config RGB_565>;
+
+        if $r3 == $r4 goto label1;
+
+        $r5 = new java.lang.IllegalArgumentException;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unsupported format: ");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", must be one of ");
+
+        $r3 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config ARGB_8888>;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" or ");
+
+        $r3 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config RGB_565>;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r2);
+
+        throw $r5;
+
+     label1:
+        r0.<com.bumptech.glide.gifdecoder.StandardGifDecoder: android.graphics.Bitmap$Config bitmapConfig> = $r3;
+
+        return;
+    }
+}

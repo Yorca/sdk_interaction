@@ -1,0 +1,402 @@
+public class com.adobe.air.SSLSecurityDialog extends java.lang.Object
+{
+    public static final java.lang.String TAG;
+    private static final java.lang.String USER_ACTION_TRUST_ALWAYS;
+    private static final java.lang.String USER_ACTION_TRUST_NONE;
+    private static final java.lang.String USER_ACTION_TRUST_SESSION;
+    private java.util.concurrent.locks.Condition m_condition;
+    private java.util.concurrent.locks.Lock m_lock;
+    private java.lang.String m_useraction;
+
+    static void <clinit>()
+    {
+        java.lang.Class $r1;
+        java.lang.String $r0;
+
+        <com.adobe.air.SSLSecurityDialog: java.lang.String USER_ACTION_TRUST_SESSION> = "session";
+
+        <com.adobe.air.SSLSecurityDialog: java.lang.String USER_ACTION_TRUST_NONE> = "none";
+
+        <com.adobe.air.SSLSecurityDialog: java.lang.String USER_ACTION_TRUST_ALWAYS> = "always";
+
+        $r1 = class "Lcom/adobe/air/SSLSecurityDialog;";
+
+        $r0 = virtualinvoke $r1.<java.lang.Class: java.lang.String toString()>();
+
+        <com.adobe.air.SSLSecurityDialog: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.adobe.air.SSLSecurityDialog r0;
+        java.util.concurrent.locks.Condition $r1;
+        java.util.concurrent.locks.ReentrantLock $r2;
+
+        r0 := @this: com.adobe.air.SSLSecurityDialog;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.air.SSLSecurityDialog: java.lang.String m_useraction> = null;
+
+        $r2 = new java.util.concurrent.locks.ReentrantLock;
+
+        specialinvoke $r2.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        r0.<com.adobe.air.SSLSecurityDialog: java.util.concurrent.locks.Lock m_lock> = $r2;
+
+        $r1 = interfaceinvoke $r2.<java.util.concurrent.locks.Lock: java.util.concurrent.locks.Condition newCondition()>();
+
+        r0.<com.adobe.air.SSLSecurityDialog: java.util.concurrent.locks.Condition m_condition> = $r1;
+
+        return;
+    }
+
+    private void SetUserAction(java.lang.String)
+    {
+        com.adobe.air.SSLSecurityDialog r0;
+        java.util.concurrent.locks.Lock $r1;
+        java.util.concurrent.locks.Condition $r3;
+        java.lang.String $r2;
+
+        r0 := @this: com.adobe.air.SSLSecurityDialog;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 = r0.<com.adobe.air.SSLSecurityDialog: java.util.concurrent.locks.Lock m_lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+        r0.<com.adobe.air.SSLSecurityDialog: java.lang.String m_useraction> = $r2;
+
+        $r3 = r0.<com.adobe.air.SSLSecurityDialog: java.util.concurrent.locks.Condition m_condition>;
+
+        interfaceinvoke $r3.<java.util.concurrent.locks.Condition: void signal()>();
+
+        $r1 = r0.<com.adobe.air.SSLSecurityDialog: java.util.concurrent.locks.Lock m_lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return;
+    }
+
+    static void access$000(com.adobe.air.SSLSecurityDialog, java.lang.String)
+    {
+        com.adobe.air.SSLSecurityDialog $r0;
+        java.lang.String $r1;
+
+        $r0 := @parameter0: com.adobe.air.SSLSecurityDialog;
+
+        $r1 := @parameter1: java.lang.String;
+
+        specialinvoke $r0.<com.adobe.air.SSLSecurityDialog: void SetUserAction(java.lang.String)>($r1);
+
+        return;
+    }
+
+    public void ShowSSLDialog(java.lang.String, byte[], android.net.http.SslCertificate, boolean)
+    {
+        java.lang.Throwable $r1, $r30;
+        byte[] $r3;
+        java.lang.Object[] $r19;
+        com.adobe.air.AndroidAlertDialog $r8;
+        android.view.View $r12, $r14;
+        android.widget.Button $r22;
+        java.lang.String $r2, $r20;
+        com.adobe.air.AndroidActivityWrapper $r5;
+        boolean $z0;
+        android.widget.TextView$BufferType $r21;
+        java.lang.CharSequence $r17;
+        android.view.LayoutInflater $r10;
+        com.adobe.air.SSLSecurityDialog$4 $r26;
+        com.adobe.air.SSLSecurityDialog$5 $r27;
+        com.adobe.air.SSLSecurityDialog$1 $r23;
+        com.adobe.air.Certificate $r18;
+        com.adobe.air.SSLSecurityDialog$3 $r25;
+        com.adobe.air.SSLSecurityDialog r0;
+        java.util.concurrent.locks.Lock $r28;
+        java.util.concurrent.locks.Condition $r29;
+        android.widget.TextView $r15;
+        android.app.AlertDialog$Builder $r9;
+        java.lang.StringBuilder $r16;
+        android.net.http.SslCertificate $r4;
+        android.app.Activity $r6, $r7;
+        android.content.res.Resources $r11, $r13;
+
+        r0 := @this: com.adobe.air.SSLSecurityDialog;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: byte[];
+
+        $r4 := @parameter2: android.net.http.SslCertificate;
+
+        $z0 := @parameter3: boolean;
+
+        $r5 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r6 = virtualinvoke $r5.<com.adobe.air.AndroidActivityWrapper: android.app.Activity getActivity()>();
+
+        $r7 = $r6;
+
+        if $r6 != null goto label01;
+
+        $r7 = virtualinvoke $r5.<com.adobe.air.AndroidActivityWrapper: android.app.Activity WaitForNewActivity()>();
+
+     label01:
+        $r8 = new com.adobe.air.AndroidAlertDialog;
+
+        specialinvoke $r8.<com.adobe.air.AndroidAlertDialog: void <init>(android.content.Context)>($r7);
+
+        $r9 = virtualinvoke $r8.<com.adobe.air.AndroidAlertDialog: android.app.AlertDialog$Builder GetAlertDialogBuilder()>();
+
+        $r10 = virtualinvoke $r7.<android.app.Activity: android.view.LayoutInflater getLayoutInflater()>();
+
+        $r11 = virtualinvoke $r7.<android.app.Activity: android.content.res.Resources getResources()>();
+
+        $r12 = staticinvoke <com.adobe.air.utils.Utils: android.view.View GetLayoutView(java.lang.String,android.content.res.Resources,android.view.LayoutInflater)>("ssl_certificate_warning", $r11, $r10);
+
+        if $r12 == null goto label12;
+
+        $r13 = virtualinvoke $r12.<android.view.View: android.content.res.Resources getResources()>();
+
+        $r14 = staticinvoke <com.adobe.air.utils.Utils: android.view.View GetWidgetInViewByNameFromPackage(java.lang.String,android.content.res.Resources,android.view.View)>("ServerName", $r13, $r12);
+
+        $r15 = (android.widget.TextView) $r14;
+
+        $r16 = new java.lang.StringBuilder;
+
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>()>();
+
+        $r17 = virtualinvoke $r15.<android.widget.TextView: java.lang.CharSequence getText()>();
+
+        virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r17);
+
+        virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r15.<android.widget.TextView: void setText(java.lang.CharSequence)>($r2);
+
+        goto label02;
+
+     label02:
+        $r18 = new com.adobe.air.Certificate;
+
+        specialinvoke $r18.<com.adobe.air.Certificate: void <init>(android.net.http.SslCertificate)>($r4);
+
+        $r2 = staticinvoke <com.adobe.air.utils.Utils: java.lang.String GetResourceString(java.lang.String,android.content.res.Resources)>("IDA_CERTIFICATE_DETAILS", $r11);
+
+        $r19 = newarray (java.lang.Object)[8];
+
+        $r20 = virtualinvoke $r18.<com.adobe.air.Certificate: java.lang.String getIssuedToCommonName()>();
+
+        $r19[0] = $r20;
+
+        $r20 = virtualinvoke $r18.<com.adobe.air.Certificate: java.lang.String getIssuedToOrganization()>();
+
+        $r19[1] = $r20;
+
+        $r20 = virtualinvoke $r18.<com.adobe.air.Certificate: java.lang.String getIssuedToOrganizationalUnit()>();
+
+        $r19[2] = $r20;
+
+        $r20 = virtualinvoke $r18.<com.adobe.air.Certificate: java.lang.String getIssuedByCommonName()>();
+
+        $r19[3] = $r20;
+
+        $r20 = virtualinvoke $r18.<com.adobe.air.Certificate: java.lang.String getIssuedByOrganization()>();
+
+        $r19[4] = $r20;
+
+        $r20 = virtualinvoke $r18.<com.adobe.air.Certificate: java.lang.String getIssuedByOrganizationalUnit()>();
+
+        $r19[5] = $r20;
+
+        $r20 = virtualinvoke $r18.<com.adobe.air.Certificate: java.lang.String getIssuedOn()>();
+
+        $r19[6] = $r20;
+
+        $r20 = virtualinvoke $r18.<com.adobe.air.Certificate: java.lang.String getExpiresOn()>();
+
+        $r19[7] = $r20;
+
+        $r2 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r2, $r19);
+
+        $r14 = staticinvoke <com.adobe.air.utils.Utils: android.view.View GetWidgetInViewByNameFromPackage(java.lang.String,android.content.res.Resources,android.view.View)>("CertificateDetails", $r13, $r12);
+
+        $r15 = (android.widget.TextView) $r14;
+
+        $r21 = <android.widget.TextView$BufferType: android.widget.TextView$BufferType SPANNABLE>;
+
+        virtualinvoke $r15.<android.widget.TextView: void setText(java.lang.CharSequence,android.widget.TextView$BufferType)>($r2, $r21);
+
+        $r14 = staticinvoke <com.adobe.air.utils.Utils: android.view.View GetWidgetInViewByNameFromPackage(java.lang.String,android.content.res.Resources,android.view.View)>("NeutralButton", $r13, $r12);
+
+        $r22 = (android.widget.Button) $r14;
+
+        $r23 = new com.adobe.air.SSLSecurityDialog$1;
+
+        specialinvoke $r23.<com.adobe.air.SSLSecurityDialog$1: void <init>(com.adobe.air.SSLSecurityDialog,com.adobe.air.AndroidAlertDialog)>(r0, $r8);
+
+        virtualinvoke $r22.<android.widget.Button: void setOnClickListener(android.view.View$OnClickListener)>($r23);
+
+        $r14 = staticinvoke <com.adobe.air.utils.Utils: android.view.View GetWidgetInViewByNameFromPackage(java.lang.String,android.content.res.Resources,android.view.View)>("PositiveButton", $r13, $r12);
+
+        $r22 = (android.widget.Button) $r14;
+
+        goto label03;
+
+     label03:
+        virtualinvoke $r22.<android.widget.Button: void setVisibility(int)>(8);
+
+        $r14 = staticinvoke <com.adobe.air.utils.Utils: android.view.View GetWidgetInViewByNameFromPackage(java.lang.String,android.content.res.Resources,android.view.View)>("NegativeButton", $r13, $r12);
+
+        $r22 = (android.widget.Button) $r14;
+
+        $r25 = new com.adobe.air.SSLSecurityDialog$3;
+
+        specialinvoke $r25.<com.adobe.air.SSLSecurityDialog$3: void <init>(com.adobe.air.SSLSecurityDialog,com.adobe.air.AndroidAlertDialog)>(r0, $r8);
+
+        virtualinvoke $r22.<android.widget.Button: void setOnClickListener(android.view.View$OnClickListener)>($r25);
+
+        virtualinvoke $r9.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setView(android.view.View)>($r12);
+
+        $r26 = new com.adobe.air.SSLSecurityDialog$4;
+
+        specialinvoke $r26.<com.adobe.air.SSLSecurityDialog$4: void <init>(com.adobe.air.SSLSecurityDialog)>(r0);
+
+        virtualinvoke $r9.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setOnKeyListener(android.content.DialogInterface$OnKeyListener)>($r26);
+
+        $r27 = new com.adobe.air.SSLSecurityDialog$5;
+
+        specialinvoke $r27.<com.adobe.air.SSLSecurityDialog$5: void <init>(com.adobe.air.SSLSecurityDialog,com.adobe.air.AndroidAlertDialog)>(r0, $r8);
+
+        virtualinvoke $r7.<android.app.Activity: void runOnUiThread(java.lang.Runnable)>($r27);
+
+        $r28 = r0.<com.adobe.air.SSLSecurityDialog: java.util.concurrent.locks.Lock m_lock>;
+
+        interfaceinvoke $r28.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label04:
+        $r2 = r0.<com.adobe.air.SSLSecurityDialog: java.lang.String m_useraction>;
+
+     label05:
+        if $r2 != null goto label10;
+
+     label06:
+        $r29 = r0.<com.adobe.air.SSLSecurityDialog: java.util.concurrent.locks.Condition m_condition>;
+
+     label07:
+        interfaceinvoke $r29.<java.util.concurrent.locks.Condition: void await()>();
+
+     label08:
+        goto label10;
+
+     label09:
+        $r30 := @caughtexception;
+
+        $r28 = r0.<com.adobe.air.SSLSecurityDialog: java.util.concurrent.locks.Lock m_lock>;
+
+        interfaceinvoke $r28.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r30;
+
+     label10:
+        $r28 = r0.<com.adobe.air.SSLSecurityDialog: java.util.concurrent.locks.Lock m_lock>;
+
+        interfaceinvoke $r28.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return;
+
+     label11:
+        $r1 := @caughtexception;
+
+        goto label10;
+
+     label12:
+        return;
+
+        catch java.lang.InterruptedException from label07 to label08 with label11;
+        catch java.lang.Throwable from label04 to label05 with label09;
+        catch java.lang.Throwable from label06 to label08 with label09;
+    }
+
+    public int check(long, java.lang.String)
+    {
+        com.adobe.air.SSLSecurityDialog r0;
+        com.adobe.air.CertificateEventData $r2;
+        int $i0;
+        long $l1;
+        java.lang.String $r1;
+
+        r0 := @this: com.adobe.air.SSLSecurityDialog;
+
+        $l1 := @parameter0: long;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = new com.adobe.air.CertificateEventData;
+
+        specialinvoke $r2.<com.adobe.air.CertificateEventData: void <init>(long,java.lang.String)>($l1, $r1);
+
+        staticinvoke <com.adobe.air.Entrypoints: boolean registerCertificateCallback(int,com.adobe.air.CertificateEventData,android.os.Handler)>(0, $r2, null);
+
+        $i0 = virtualinvoke $r2.<com.adobe.air.CertificateEventData: int waitForResult()>();
+
+        return $i0;
+    }
+
+    public java.lang.String getUserAction()
+    {
+        com.adobe.air.SSLSecurityDialog r0;
+        java.lang.String r1;
+
+        r0 := @this: com.adobe.air.SSLSecurityDialog;
+
+        r1 = r0.<com.adobe.air.SSLSecurityDialog: java.lang.String m_useraction>;
+
+        return r1;
+    }
+
+    public java.lang.String show(java.lang.String, android.net.http.SslCertificate)
+    {
+        com.adobe.air.SSLSecurityDialog r0;
+        java.lang.String $r2;
+        android.net.http.SslCertificate $r1;
+
+        r0 := @this: com.adobe.air.SSLSecurityDialog;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: android.net.http.SslCertificate;
+
+        virtualinvoke r0.<com.adobe.air.SSLSecurityDialog: void ShowSSLDialog(java.lang.String,byte[],android.net.http.SslCertificate,boolean)>($r2, null, $r1, 0);
+
+        $r2 = r0.<com.adobe.air.SSLSecurityDialog: java.lang.String m_useraction>;
+
+        return $r2;
+    }
+
+    public java.lang.String show(java.lang.String, byte[])
+    {
+        com.adobe.air.SSLSecurityDialog r0;
+        byte[] $r1;
+        java.lang.String $r2;
+
+        r0 := @this: com.adobe.air.SSLSecurityDialog;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: byte[];
+
+        virtualinvoke r0.<com.adobe.air.SSLSecurityDialog: void ShowSSLDialog(java.lang.String,byte[],android.net.http.SslCertificate,boolean)>($r2, $r1, null, 0);
+
+        $r2 = r0.<com.adobe.air.SSLSecurityDialog: java.lang.String m_useraction>;
+
+        return $r2;
+    }
+}

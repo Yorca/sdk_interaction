@@ -1,0 +1,2246 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataDecoder
+{
+    private static final int FRAME_FLAG_V3_HAS_GROUP_IDENTIFIER;
+    private static final int FRAME_FLAG_V3_IS_COMPRESSED;
+    private static final int FRAME_FLAG_V3_IS_ENCRYPTED;
+    private static final int FRAME_FLAG_V4_HAS_DATA_LENGTH;
+    private static final int FRAME_FLAG_V4_HAS_GROUP_IDENTIFIER;
+    private static final int FRAME_FLAG_V4_IS_COMPRESSED;
+    private static final int FRAME_FLAG_V4_IS_ENCRYPTED;
+    private static final int FRAME_FLAG_V4_IS_UNSYNCHRONIZED;
+    public static final int ID3_HEADER_LENGTH;
+    public static final int ID3_TAG;
+    private static final int ID3_TEXT_ENCODING_ISO_8859_1;
+    private static final int ID3_TEXT_ENCODING_UTF_16;
+    private static final int ID3_TEXT_ENCODING_UTF_16BE;
+    private static final int ID3_TEXT_ENCODING_UTF_8;
+    public static final com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate NO_FRAMES_PREDICATE;
+    private static final java.lang.String TAG;
+    private final com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate framePredicate;
+
+    static void <clinit>()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$1 $r0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String TAG> = "Id3Decoder";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int ID3_TEXT_ENCODING_UTF_8> = 3;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int ID3_TEXT_ENCODING_UTF_16BE> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int ID3_TEXT_ENCODING_UTF_16> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int ID3_TEXT_ENCODING_ISO_8859_1> = 0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int ID3_HEADER_LENGTH> = 10;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int FRAME_FLAG_V4_IS_UNSYNCHRONIZED> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int FRAME_FLAG_V4_IS_ENCRYPTED> = 4;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int FRAME_FLAG_V4_IS_COMPRESSED> = 8;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int FRAME_FLAG_V4_HAS_GROUP_IDENTIFIER> = 64;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int FRAME_FLAG_V4_HAS_DATA_LENGTH> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int FRAME_FLAG_V3_IS_ENCRYPTED> = 64;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int FRAME_FLAG_V3_IS_COMPRESSED> = 128;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int FRAME_FLAG_V3_HAS_GROUP_IDENTIFIER> = 32;
+
+        $r0 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$1;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$1: void <init>()>();
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate NO_FRAMES_PREDICATE> = $r0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("ID3");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int ID3_TAG> = $i0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: void <init>(com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate)>(null);
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate framePredicate> = $r1;
+
+        return;
+    }
+
+    private static byte[] copyOfRangeIfValid(byte[], int, int)
+    {
+        int $i0, $i1;
+        byte[] $r0;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        if $i1 > $i0 goto label1;
+
+        $r0 = newarray (byte)[0];
+
+        return $r0;
+
+     label1:
+        $r0 = staticinvoke <java.util.Arrays: byte[] copyOfRange(byte[],int,int)>($r0, $i0, $i1);
+
+        return $r0;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ApicFrame decodeApicFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        short $s5;
+        byte $b4;
+        int $i0, $i1, $i2, $i3, $i6;
+        java.lang.String $r2, $r4, $r5, $r6;
+        boolean $z0;
+        java.lang.StringBuilder $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ApicFrame $r8;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String getCharsetName(int)>($i2);
+
+        $i0 = $i0 + -1;
+
+        $r0 = newarray (byte)[$i0];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r0, 0, $i0);
+
+        if $i1 != 2 goto label2;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("image/");
+
+        $r5 = new java.lang.String;
+
+        specialinvoke $r5.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r0, 0, 3, "ISO-8859-1");
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: java.lang.String toLowerInvariant(java.lang.String)>($r5);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r5 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = $r5;
+
+        $r6 = "image/jpg";
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = "image/jpeg";
+
+     label1:
+        $i1 = 2;
+
+        goto label3;
+
+     label2:
+        $i3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfZeroByte(byte[],int)>($r0, 0);
+
+        $i1 = $i3;
+
+        $r5 = new java.lang.String;
+
+        specialinvoke $r5.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r0, 0, $i3, "ISO-8859-1");
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: java.lang.String toLowerInvariant(java.lang.String)>($r5);
+
+        $i3 = virtualinvoke $r4.<java.lang.String: int indexOf(int)>(47);
+
+        if $i3 != -1 goto label3;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("image/");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label3;
+
+     label3:
+        $i3 = $i1 + 1;
+
+        $b4 = $r0[$i3];
+
+        $s5 = (short) $b4;
+
+        $s5 = $s5 & 255;
+
+        $i3 = $i1 + 2;
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfEos(byte[],int,int)>($r0, $i3, $i2);
+
+        $r6 = new java.lang.String;
+
+        $i6 = $i1 - $i3;
+
+        specialinvoke $r6.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r0, $i3, $i6, $r2);
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int delimiterLength(int)>($i2);
+
+        $i1 = $i1 + $i2;
+
+        $r0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: byte[] copyOfRangeIfValid(byte[],int,int)>($r0, $i1, $i0);
+
+        $r8 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ApicFrame;
+
+        $i0 = (int) $s5;
+
+        specialinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ApicFrame: void <init>(java.lang.String,java.lang.String,int,byte[])>($r4, $r6, $i0, $r0);
+
+        return $r8;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.BinaryFrame decodeBinaryFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, java.lang.String)
+    {
+        byte[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.BinaryFrame $r3;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+        java.lang.String $r0;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $r0 := @parameter2: java.lang.String;
+
+        $r1 = newarray (byte)[$i0];
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r1, 0, $i0);
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.BinaryFrame;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.BinaryFrame: void <init>(java.lang.String,byte[])>($r0, $r1);
+
+        return $r3;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterFrame decodeChapterFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int, boolean, int, com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        long $l6, $l8;
+        java.util.ArrayList $r4;
+        byte $b7;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        java.lang.String $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterFrame $r7;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame[] $r6;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $z0 := @parameter3: boolean;
+
+        $i2 := @parameter4: int;
+
+        $r1 := @parameter5: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate;
+
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $r3 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfZeroByte(byte[],int)>($r3, $i3);
+
+        $r2 = new java.lang.String;
+
+        $r3 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i5 = $i4 - $i3;
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r3, $i3, $i5, "ISO-8859-1");
+
+        $i4 = $i4 + 1;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i4);
+
+        $i4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i5 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $l6 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: long readUnsignedInt()>();
+
+        $b7 = $l6 cmp 4294967295L;
+
+        if $b7 != 0 goto label1;
+
+        $l6 = -1L;
+
+        goto label1;
+
+     label1:
+        $l8 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: long readUnsignedInt()>();
+
+        $b7 = $l8 cmp 4294967295L;
+
+        if $b7 != 0 goto label2;
+
+        $l8 = -1L;
+
+        goto label2;
+
+     label2:
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        $i0 = $i3 + $i0;
+
+     label3:
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        if $i3 >= $i0 goto label4;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame decodeFrame(int,com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,boolean,int,com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate)>($i1, $r0, $z0, $i2, $r1);
+
+        if $r5 == null goto label3;
+
+        virtualinvoke $r4.<java.util.ArrayList: boolean add(java.lang.Object)>($r5);
+
+        goto label3;
+
+     label4:
+        $i0 = virtualinvoke $r4.<java.util.ArrayList: int size()>();
+
+        $r6 = newarray (com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame)[$i0];
+
+        virtualinvoke $r4.<java.util.ArrayList: java.lang.Object[] toArray(java.lang.Object[])>($r6);
+
+        $r7 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterFrame;
+
+        specialinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterFrame: void <init>(java.lang.String,int,int,long,long,com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame[])>($r2, $i4, $i5, $l6, $l8, $r6);
+
+        return $r7;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterTocFrame decodeChapterTOCFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int, boolean, int, com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame $r7;
+        java.lang.String[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r4;
+        java.util.ArrayList $r6;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8;
+        java.lang.String $r0, $r2;
+        boolean $z0, $z1, $z2;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame[] $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterTocFrame $r9;
+
+        $r4 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i1 := @parameter1: int;
+
+        $i2 := @parameter2: int;
+
+        $z0 := @parameter3: boolean;
+
+        $i3 := @parameter4: int;
+
+        $r5 := @parameter5: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate;
+
+        $i4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $r3 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfZeroByte(byte[],int)>($r3, $i4);
+
+        $r0 = new java.lang.String;
+
+        $r3 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i6 = $i5 - $i4;
+
+        specialinvoke $r0.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r3, $i4, $i6, "ISO-8859-1");
+
+        $i5 = $i5 + 1;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i5);
+
+        $i6 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i0 = $i6 & 2;
+
+        $i5 = 0;
+
+        if $i0 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        $i6 = $i6 & 1;
+
+        if $i6 == 0 goto label3;
+
+        $z2 = 1;
+
+        goto label4;
+
+     label3:
+        $z2 = 0;
+
+     label4:
+        $i6 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r1 = newarray (java.lang.String)[$i6];
+
+     label5:
+        if $i5 >= $i6 goto label6;
+
+        $i7 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $r3 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i8 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfZeroByte(byte[],int)>($r3, $i7);
+
+        $r2 = new java.lang.String;
+
+        $r3 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i0 = $i8 - $i7;
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r3, $i7, $i0, "ISO-8859-1");
+
+        $r1[$i5] = $r2;
+
+        $i0 = $i8 + 1;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i0);
+
+        $i5 = $i5 + 1;
+
+        goto label5;
+
+     label6:
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        $i1 = $i4 + $i1;
+
+     label7:
+        $i4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        if $i4 >= $i1 goto label8;
+
+        $r7 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame decodeFrame(int,com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,boolean,int,com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate)>($i2, $r4, $z0, $i3, $r5);
+
+        if $r7 == null goto label7;
+
+        virtualinvoke $r6.<java.util.ArrayList: boolean add(java.lang.Object)>($r7);
+
+        goto label7;
+
+     label8:
+        $i1 = virtualinvoke $r6.<java.util.ArrayList: int size()>();
+
+        $r8 = newarray (com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame)[$i1];
+
+        virtualinvoke $r6.<java.util.ArrayList: java.lang.Object[] toArray(java.lang.Object[])>($r8);
+
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterTocFrame;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterTocFrame: void <init>(java.lang.String,boolean,boolean,java.lang.String[],com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame[])>($r0, $z1, $z2, $r1, $r8);
+
+        return $r9;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.CommentFrame decodeCommentFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+        int $i0, $i1, $i2;
+        java.lang.String $r1, $r3, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.CommentFrame $r5;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        if $i0 >= 4 goto label1;
+
+        return null;
+
+     label1:
+        $i1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String getCharsetName(int)>($i1);
+
+        $r0 = newarray (byte)[3];
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r0, 0, 3);
+
+        $r1 = new java.lang.String;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[],int,int)>($r0, 0, 3);
+
+        $i0 = $i0 - 4;
+
+        $r0 = newarray (byte)[$i0];
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r0, 0, $i0);
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfEos(byte[],int,int)>($r0, 0, $i1);
+
+        $r4 = new java.lang.String;
+
+        specialinvoke $r4.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r0, 0, $i0, $r3);
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int delimiterLength(int)>($i1);
+
+        $i0 = $i0 + $i2;
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfEos(byte[],int,int)>($r0, $i0, $i1);
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String decodeStringIfValid(byte[],int,int,java.lang.String)>($r0, $i0, $i1, $r3);
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.CommentFrame;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.CommentFrame: void <init>(java.lang.String,java.lang.String,java.lang.String)>($r1, $r4, $r3);
+
+        return $r5;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame decodeFrame(int, com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, boolean, int, com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.GeobFrame $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterFrame $r12;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterTocFrame $r13;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.PrivFrame $r8;
+        java.lang.StringBuilder $r16;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.CommentFrame $r11;
+        java.lang.Throwable $r2, $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.BinaryFrame $r14;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame $r3;
+        java.lang.String $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ApicFrame $r10;
+
+        $i0 := @parameter0: int;
+
+        $r0 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $z0 := @parameter2: boolean;
+
+        $i1 := @parameter3: int;
+
+        $r1 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate;
+
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        if $i0 < 3 goto label01;
+
+        $i5 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        goto label02;
+
+     label01:
+        $i5 = 0;
+
+     label02:
+        if $i0 != 4 goto label04;
+
+        $i6 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $i7 = $i6;
+
+        if $z0 != 0 goto label03;
+
+        $i7 = $i6 & 255;
+
+        $i8 = $i6 >> 8;
+
+        $i8 = $i8 & 255;
+
+        $i8 = $i8 << 7;
+
+        $i7 = $i7 | $i8;
+
+        $i8 = $i6 >> 16;
+
+        $i8 = $i8 & 255;
+
+        $i8 = $i8 << 14;
+
+        $i7 = $i7 | $i8;
+
+        $i6 = $i6 >> 24;
+
+        $i6 = $i6 & 255;
+
+        $i6 = $i6 << 21;
+
+        $i7 = $i6 | $i7;
+
+     label03:
+        $i6 = $i7;
+
+        goto label06;
+
+     label04:
+        if $i0 != 3 goto label05;
+
+        $i7 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        goto label03;
+
+     label05:
+        $i7 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedInt24()>();
+
+        goto label03;
+
+     label06:
+        if $i0 < 3 goto label07;
+
+        $i8 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedShort()>();
+
+        goto label08;
+
+     label07:
+        $i8 = 0;
+
+     label08:
+        if $i2 != 0 goto label09;
+
+        if $i3 != 0 goto label09;
+
+        if $i4 != 0 goto label09;
+
+        if $i5 != 0 goto label09;
+
+        if $i6 != 0 goto label09;
+
+        if $i8 != 0 goto label09;
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i0);
+
+        return null;
+
+     label09:
+        $i7 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i9 = $i7 + $i6;
+
+        $i7 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        if $i9 <= $i7 goto label10;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("Id3Decoder", "Frame size exceeds remaining tag data");
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i0);
+
+        return null;
+
+     label10:
+        if $r1 == null goto label11;
+
+        $i7 = $i9;
+
+        $i10 = $i8;
+
+        $z1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate: boolean evaluate(int,int,int,int,int)>($i0, $i2, $i3, $i4, $i5);
+
+        if $z1 != 0 goto label12;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i9);
+
+        return null;
+
+     label11:
+        $i7 = $i9;
+
+        $i10 = $i8;
+
+     label12:
+        if $i0 != 3 goto label19;
+
+        $i8 = $i10;
+
+        $i9 = $i10 & 128;
+
+        if $i9 == 0 goto label13;
+
+        $z2 = 1;
+
+        goto label14;
+
+     label13:
+        $z2 = 0;
+
+     label14:
+        $i9 = $i8 & 64;
+
+        if $i9 == 0 goto label15;
+
+        $z1 = 1;
+
+        goto label16;
+
+     label15:
+        $z1 = 0;
+
+     label16:
+        $i8 = $i8 & 32;
+
+        if $i8 == 0 goto label17;
+
+        $z3 = 1;
+
+        goto label18;
+
+     label17:
+        $z3 = 0;
+
+     label18:
+        $z4 = $z2;
+
+        $z5 = 0;
+
+        goto label29;
+
+     label19:
+        $i8 = $i10;
+
+        if $i0 != 4 goto label30;
+
+        $i9 = $i10 & 64;
+
+        if $i9 == 0 goto label20;
+
+        $z3 = 1;
+
+        goto label21;
+
+     label20:
+        $z3 = 0;
+
+     label21:
+        $i9 = $i8 & 8;
+
+        if $i9 == 0 goto label22;
+
+        $z2 = 1;
+
+        goto label23;
+
+     label22:
+        $z2 = 0;
+
+     label23:
+        $i9 = $i8 & 4;
+
+        if $i9 == 0 goto label24;
+
+        $z1 = 1;
+
+        goto label25;
+
+     label24:
+        $z1 = 0;
+
+     label25:
+        $i9 = $i8 & 2;
+
+        if $i9 == 0 goto label26;
+
+        $z5 = 1;
+
+        goto label27;
+
+     label26:
+        $z5 = 0;
+
+     label27:
+        $i8 = $i8 & 1;
+
+        if $i8 == 0 goto label28;
+
+        $z4 = 1;
+
+        goto label29;
+
+     label28:
+        $z4 = 0;
+
+     label29:
+        goto label31;
+
+     label30:
+        $z4 = 0;
+
+        $z3 = 0;
+
+        $z1 = 0;
+
+        $z5 = 0;
+
+        $z2 = 0;
+
+     label31:
+        if $z2 != 0 goto label76;
+
+        if $z1 == 0 goto label32;
+
+        goto label76;
+
+     label32:
+        if $z3 == 0 goto label33;
+
+        $i6 = $i6 + -1;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(1);
+
+     label33:
+        if $z4 == 0 goto label34;
+
+        $i6 = $i6 + -4;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(4);
+
+     label34:
+        $i8 = $i6;
+
+        if $z5 == 0 goto label35;
+
+        $i8 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int removeUnsynchronization(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r0, $i6);
+
+     label35:
+        $i6 = $i8;
+
+        if $i2 != 84 goto label38;
+
+        if $i3 != 88 goto label38;
+
+        if $i4 != 88 goto label38;
+
+        if $i0 == 2 goto label36;
+
+        if $i5 != 88 goto label38;
+
+     label36:
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame decodeTxxxFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r0, $i6);
+
+     label37:
+        $r4 = $r3;
+
+        goto label69;
+
+     label38:
+        if $i2 != 84 goto label42;
+
+     label39:
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String getFrameId(int,int,int,int,int)>($i0, $i2, $i3, $i4, $i5);
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame decodeTextInformationFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,java.lang.String)>($r0, $i6, $r5);
+
+     label40:
+        $r4 = $r3;
+
+        goto label69;
+
+     label41:
+        $r6 := @caughtexception;
+
+        goto label75;
+
+     label42:
+        if $i2 != 87 goto label45;
+
+        if $i3 != 88 goto label45;
+
+        if $i4 != 88 goto label45;
+
+        if $i0 == 2 goto label43;
+
+        if $i5 != 88 goto label45;
+
+     label43:
+        $r7 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame decodeWxxxFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r0, $i6);
+
+     label44:
+        $r4 = $r7;
+
+        goto label69;
+
+     label45:
+        if $i2 != 87 goto label48;
+
+     label46:
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String getFrameId(int,int,int,int,int)>($i0, $i2, $i3, $i4, $i5);
+
+        $r7 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame decodeUrlLinkFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,java.lang.String)>($r0, $i6, $r5);
+
+     label47:
+        $r4 = $r7;
+
+        goto label69;
+
+     label48:
+        if $i2 != 80 goto label51;
+
+        if $i3 != 82 goto label51;
+
+        if $i4 != 73 goto label51;
+
+        if $i5 != 86 goto label51;
+
+     label49:
+        $r8 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.PrivFrame decodePrivFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r0, $i6);
+
+     label50:
+        $r4 = $r8;
+
+        goto label69;
+
+     label51:
+        if $i2 != 71 goto label54;
+
+        if $i3 != 69 goto label54;
+
+        if $i4 != 79 goto label54;
+
+        if $i5 == 66 goto label52;
+
+        if $i0 != 2 goto label54;
+
+     label52:
+        $r9 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.GeobFrame decodeGeobFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r0, $i6);
+
+     label53:
+        $r4 = $r9;
+
+        goto label69;
+
+     label54:
+        if $i0 != 2 goto label55;
+
+        if $i2 != 80 goto label58;
+
+        if $i3 != 73 goto label58;
+
+        if $i4 != 67 goto label58;
+
+        goto label56;
+
+     label55:
+        if $i2 != 65 goto label58;
+
+        if $i3 != 80 goto label58;
+
+        if $i4 != 73 goto label58;
+
+        if $i5 != 67 goto label58;
+
+     label56:
+        $r10 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ApicFrame decodeApicFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int)>($r0, $i6, $i0);
+
+     label57:
+        $r4 = $r10;
+
+        goto label69;
+
+     label58:
+        if $i2 != 67 goto label61;
+
+        if $i3 != 79 goto label61;
+
+        if $i4 != 77 goto label61;
+
+        if $i5 == 77 goto label59;
+
+        if $i0 != 2 goto label61;
+
+     label59:
+        $r11 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.CommentFrame decodeCommentFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r0, $i6);
+
+     label60:
+        $r4 = $r11;
+
+        goto label69;
+
+     label61:
+        if $i2 != 67 goto label64;
+
+        if $i3 != 72 goto label64;
+
+        if $i4 != 65 goto label64;
+
+        if $i5 != 80 goto label64;
+
+     label62:
+        $r12 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterFrame decodeChapterFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int,boolean,int,com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate)>($r0, $i6, $i0, $z0, $i1, $r1);
+
+     label63:
+        $r4 = $r12;
+
+        goto label69;
+
+     label64:
+        if $i2 != 67 goto label67;
+
+        if $i3 != 84 goto label67;
+
+        if $i4 != 79 goto label67;
+
+        if $i5 != 67 goto label67;
+
+     label65:
+        $r13 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.ChapterTocFrame decodeChapterTOCFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int,boolean,int,com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate)>($r0, $i6, $i0, $z0, $i1, $r1);
+
+     label66:
+        $r4 = $r13;
+
+        goto label69;
+
+     label67:
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String getFrameId(int,int,int,int,int)>($i0, $i2, $i3, $i4, $i5);
+
+        $r14 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.BinaryFrame decodeBinaryFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,java.lang.String)>($r0, $i6, $r5);
+
+     label68:
+        $r4 = $r14;
+
+     label69:
+        if $r4 != null goto label72;
+
+     label70:
+        $r16 = new java.lang.StringBuilder;
+
+     label71:
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failed to decode frame: id=");
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String getFrameId(int,int,int,int,int)>($i0, $i2, $i3, $i4, $i5);
+
+        virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", frameSize=");
+
+        virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i6);
+
+        $r5 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("Id3Decoder", $r5);
+
+     label72:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i7);
+
+        return $r4;
+
+     label73:
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("Id3Decoder", "Unsupported character encoding");
+
+     label74:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i7);
+
+        return null;
+
+     label75:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i7);
+
+        throw $r6;
+
+     label76:
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("Id3Decoder", "Skipping unsupported compressed or encrypted frame");
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i7);
+
+        return null;
+
+     label77:
+        $r2 := @caughtexception;
+
+        goto label73;
+
+        catch java.io.UnsupportedEncodingException from label36 to label37 with label77;
+        catch java.io.UnsupportedEncodingException from label39 to label40 with label77;
+        catch java.io.UnsupportedEncodingException from label43 to label44 with label77;
+        catch java.io.UnsupportedEncodingException from label46 to label47 with label77;
+        catch java.io.UnsupportedEncodingException from label49 to label50 with label77;
+        catch java.io.UnsupportedEncodingException from label52 to label53 with label77;
+        catch java.io.UnsupportedEncodingException from label56 to label57 with label77;
+        catch java.io.UnsupportedEncodingException from label59 to label60 with label77;
+        catch java.io.UnsupportedEncodingException from label62 to label63 with label77;
+        catch java.io.UnsupportedEncodingException from label65 to label66 with label77;
+        catch java.io.UnsupportedEncodingException from label67 to label68 with label77;
+        catch java.io.UnsupportedEncodingException from label71 to label72 with label77;
+        catch java.lang.Throwable from label36 to label37 with label41;
+        catch java.lang.Throwable from label39 to label40 with label41;
+        catch java.lang.Throwable from label43 to label44 with label41;
+        catch java.lang.Throwable from label46 to label47 with label41;
+        catch java.lang.Throwable from label49 to label50 with label41;
+        catch java.lang.Throwable from label52 to label53 with label41;
+        catch java.lang.Throwable from label56 to label57 with label41;
+        catch java.lang.Throwable from label59 to label60 with label41;
+        catch java.lang.Throwable from label62 to label63 with label41;
+        catch java.lang.Throwable from label65 to label66 with label41;
+        catch java.lang.Throwable from label67 to label68 with label41;
+        catch java.lang.Throwable from label70 to label71 with label41;
+        catch java.lang.Throwable from label71 to label72 with label41;
+        catch java.lang.Throwable from label73 to label74 with label41;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.GeobFrame decodeGeobFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.GeobFrame $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+        int $i0, $i1, $i2, $i3;
+        java.lang.String $r1, $r3, $r4;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String getCharsetName(int)>($i1);
+
+        $i0 = $i0 + -1;
+
+        $r0 = newarray (byte)[$i0];
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r0, 0, $i0);
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfZeroByte(byte[],int)>($r0, 0);
+
+        $r4 = new java.lang.String;
+
+        $r1 = $r4;
+
+        specialinvoke $r4.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r0, 0, $i2, "ISO-8859-1");
+
+        $i3 = $i2 + 1;
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfEos(byte[],int,int)>($r0, $i3, $i1);
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String decodeStringIfValid(byte[],int,int,java.lang.String)>($r0, $i3, $i2, $r3);
+
+        $i3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int delimiterLength(int)>($i1);
+
+        $i3 = $i2 + $i3;
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfEos(byte[],int,int)>($r0, $i3, $i1);
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String decodeStringIfValid(byte[],int,int,java.lang.String)>($r0, $i3, $i2, $r3);
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int delimiterLength(int)>($i1);
+
+        $i1 = $i2 + $i1;
+
+        $r0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: byte[] copyOfRangeIfValid(byte[],int,int)>($r0, $i1, $i0);
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.GeobFrame;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.GeobFrame: void <init>(java.lang.String,java.lang.String,java.lang.String,byte[])>($r1, $r4, $r3, $r0);
+
+        return $r5;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header decodeHeader(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header $r4;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r2;
+        boolean $z0, $z1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i0 >= 10 goto label01;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("Id3Decoder", "Data too short to be an ID3 tag");
+
+        return null;
+
+     label01:
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedInt24()>();
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int ID3_TAG>;
+
+        if $i0 == $i1 goto label02;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unexpected first three bytes of ID3 tag header: ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("Id3Decoder", $r2);
+
+        return null;
+
+     label02:
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $z0 = 1;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(1);
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readSynchSafeInt()>();
+
+        $i3 = $i2;
+
+        if $i0 != 2 goto label05;
+
+        $i2 = $i1 & 64;
+
+        if $i2 == 0 goto label03;
+
+        $z1 = 1;
+
+        goto label04;
+
+     label03:
+        $z1 = 0;
+
+     label04:
+        if $z1 == 0 goto label14;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("Id3Decoder", "Skipped ID3 tag with majorVersion=2 and undefined compression scheme");
+
+        return null;
+
+     label05:
+        if $i0 != 3 goto label08;
+
+        $i4 = $i1 & 64;
+
+        if $i4 == 0 goto label06;
+
+        $z1 = 1;
+
+        goto label07;
+
+     label06:
+        $z1 = 0;
+
+     label07:
+        if $z1 == 0 goto label14;
+
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($i3);
+
+        $i3 = $i3 + 4;
+
+        $i3 = $i2 - $i3;
+
+        goto label14;
+
+     label08:
+        if $i0 != 4 goto label17;
+
+        $i4 = $i1 & 64;
+
+        if $i4 == 0 goto label09;
+
+        $z1 = 1;
+
+        goto label10;
+
+     label09:
+        $z1 = 0;
+
+     label10:
+        if $z1 == 0 goto label11;
+
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readSynchSafeInt()>();
+
+        $i4 = $i3 + -4;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($i4);
+
+        $i3 = $i2 - $i3;
+
+     label11:
+        $i2 = $i1 & 16;
+
+        if $i2 == 0 goto label12;
+
+        $z1 = 1;
+
+        goto label13;
+
+     label12:
+        $z1 = 0;
+
+     label13:
+        if $z1 == 0 goto label14;
+
+        $i3 = $i3 + -10;
+
+     label14:
+        if $i0 >= 4 goto label15;
+
+        $i1 = $i1 & 128;
+
+        if $i1 == 0 goto label15;
+
+        goto label16;
+
+     label15:
+        $z0 = 0;
+
+     label16:
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header: void <init>(int,boolean,int)>($i0, $z0, $i3);
+
+        return $r4;
+
+     label17:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Skipped ID3 tag with unsupported majorVersion=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("Id3Decoder", $r2);
+
+        return null;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.PrivFrame decodePrivFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.PrivFrame $r3;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+        java.lang.String $r1;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $r0 = newarray (byte)[$i0];
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r0, 0, $i0);
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfZeroByte(byte[],int)>($r0, 0);
+
+        $r1 = new java.lang.String;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r0, 0, $i1, "ISO-8859-1");
+
+        $i1 = $i1 + 1;
+
+        $r0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: byte[] copyOfRangeIfValid(byte[],int,int)>($r0, $i1, $i0);
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.PrivFrame;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.PrivFrame: void <init>(java.lang.String,byte[])>($r1, $r0);
+
+        return $r3;
+    }
+
+    private static java.lang.String decodeStringIfValid(byte[], int, int, java.lang.String) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r1;
+        int $i0, $i1, $i2;
+        java.lang.String $r0, $r2;
+
+        $r1 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r0 := @parameter3: java.lang.String;
+
+        if $i1 <= $i0 goto label2;
+
+        $i2 = lengthof $r1;
+
+        if $i1 <= $i2 goto label1;
+
+        goto label2;
+
+     label1:
+        $r2 = new java.lang.String;
+
+        $i1 = $i1 - $i0;
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r1, $i0, $i1, $r0);
+
+        return $r2;
+
+     label2:
+        return "";
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame decodeTextInformationFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, java.lang.String) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame $r5;
+        java.lang.String $r0, $r2, $r4;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $r0 := @parameter2: java.lang.String;
+
+        if $i0 >= 1 goto label1;
+
+        return null;
+
+     label1:
+        $i1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String getCharsetName(int)>($i1);
+
+        $i0 = $i0 - 1;
+
+        $r3 = newarray (byte)[$i0];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r3, 0, $i0);
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfEos(byte[],int,int)>($r3, 0, $i1);
+
+        $r4 = new java.lang.String;
+
+        specialinvoke $r4.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r3, 0, $i0, $r2);
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame: void <init>(java.lang.String,java.lang.String,java.lang.String)>($r0, null, $r4);
+
+        return $r5;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame decodeTxxxFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame $r4;
+        java.lang.String $r1, $r3;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        if $i0 >= 1 goto label1;
+
+        return null;
+
+     label1:
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String getCharsetName(int)>($i1);
+
+        $i0 = $i0 - 1;
+
+        $r2 = newarray (byte)[$i0];
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r2, 0, $i0);
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfEos(byte[],int,int)>($r2, 0, $i1);
+
+        $r3 = new java.lang.String;
+
+        specialinvoke $r3.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r2, 0, $i0, $r1);
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int delimiterLength(int)>($i1);
+
+        $i0 = $i0 + $i2;
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfEos(byte[],int,int)>($r2, $i0, $i1);
+
+        $r1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String decodeStringIfValid(byte[],int,int,java.lang.String)>($r2, $i0, $i1, $r1);
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.TextInformationFrame: void <init>(java.lang.String,java.lang.String,java.lang.String)>("TXXX", $r3, $r1);
+
+        return $r4;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame decodeUrlLinkFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, java.lang.String) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame $r4;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        java.lang.String $r0, $r3;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $r0 := @parameter2: java.lang.String;
+
+        $r2 = newarray (byte)[$i0];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r2, 0, $i0);
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfZeroByte(byte[],int)>($r2, 0);
+
+        $r3 = new java.lang.String;
+
+        specialinvoke $r3.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r2, 0, $i0, "ISO-8859-1");
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame: void <init>(java.lang.String,java.lang.String,java.lang.String)>($r0, null, $r3);
+
+        return $r4;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame decodeWxxxFrame(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame $r4;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        java.lang.String $r1, $r3;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        if $i0 >= 1 goto label1;
+
+        return null;
+
+     label1:
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String getCharsetName(int)>($i1);
+
+        $i0 = $i0 - 1;
+
+        $r2 = newarray (byte)[$i0];
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r2, 0, $i0);
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfEos(byte[],int,int)>($r2, 0, $i1);
+
+        $r3 = new java.lang.String;
+
+        specialinvoke $r3.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r2, 0, $i0, $r1);
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int delimiterLength(int)>($i1);
+
+        $i0 = $i0 + $i1;
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfZeroByte(byte[],int)>($r2, $i0);
+
+        $r1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: java.lang.String decodeStringIfValid(byte[],int,int,java.lang.String)>($r2, $i0, $i1, "ISO-8859-1");
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.UrlLinkFrame: void <init>(java.lang.String,java.lang.String,java.lang.String)>("WXXX", $r3, $r1);
+
+        return $r4;
+    }
+
+    private static int delimiterLength(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        if $i0 == 0 goto label2;
+
+        if $i0 != 3 goto label1;
+
+        goto label2;
+
+     label1:
+        return 2;
+
+     label2:
+        return 1;
+    }
+
+    private static java.lang.String getCharsetName(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        if $i0 == 1 goto label3;
+
+        if $i0 == 2 goto label2;
+
+        if $i0 == 3 goto label1;
+
+        return "ISO-8859-1";
+
+     label1:
+        return "UTF-8";
+
+     label2:
+        return "UTF-16BE";
+
+     label3:
+        return "UTF-16";
+    }
+
+    private static java.lang.String getFrameId(int, int, int, int, int)
+    {
+        java.lang.Object[] $r1;
+        java.lang.Integer $r2;
+        java.util.Locale $r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.String $r3;
+
+        $i2 := @parameter0: int;
+
+        $i3 := @parameter1: int;
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        $i4 := @parameter4: int;
+
+        if $i2 != 2 goto label1;
+
+        $r0 = <java.util.Locale: java.util.Locale US>;
+
+        $r1 = newarray (java.lang.Object)[3];
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i3);
+
+        $r1[0] = $r2;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r1[1] = $r2;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r1[2] = $r2;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r0, "%c%c%c", $r1);
+
+        return $r3;
+
+     label1:
+        $r0 = <java.util.Locale: java.util.Locale US>;
+
+        $r1 = newarray (java.lang.Object)[4];
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i3);
+
+        $r1[0] = $r2;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r1[1] = $r2;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r1[2] = $r2;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i4);
+
+        $r1[3] = $r2;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r0, "%c%c%c%c", $r1);
+
+        return $r3;
+    }
+
+    private static int indexOfEos(byte[], int, int)
+    {
+        byte[] $r0;
+        byte $b3;
+        int $i0, $i1, $i2;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfZeroByte(byte[],int)>($r0, $i0);
+
+        $i0 = $i2;
+
+        if $i1 == 0 goto label4;
+
+        if $i1 != 3 goto label1;
+
+        return $i2;
+
+     label1:
+        $i1 = lengthof $r0;
+
+        $i1 = $i1 + -1;
+
+        if $i0 >= $i1 goto label3;
+
+        $i1 = $i0 % 2;
+
+        if $i1 != 0 goto label2;
+
+        $i1 = $i0 + 1;
+
+        $b3 = $r0[$i1];
+
+        if $b3 != 0 goto label2;
+
+        return $i0;
+
+     label2:
+        $i0 = $i0 + 1;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int indexOfZeroByte(byte[],int)>($r0, $i0);
+
+        goto label1;
+
+     label3:
+        $i0 = lengthof $r0;
+
+        return $i0;
+
+     label4:
+        return $i2;
+    }
+
+    private static int indexOfZeroByte(byte[], int)
+    {
+        byte[] $r0;
+        byte $b2;
+        int $i0, $i1;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+     label1:
+        $i1 = lengthof $r0;
+
+        if $i0 >= $i1 goto label3;
+
+        $b2 = $r0[$i0];
+
+        if $b2 != 0 goto label2;
+
+        return $i0;
+
+     label2:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label3:
+        $i0 = lengthof $r0;
+
+        return $i0;
+    }
+
+    private static int removeUnsynchronization(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int)
+    {
+        byte[] $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        short $s4;
+        byte $b3;
+        int $i0, $i1, $i2, $i5;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i1 := @parameter1: int;
+
+        $r0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+     label1:
+        $i0 = $i2 + 1;
+
+        if $i0 >= $i1 goto label3;
+
+        $b3 = $r0[$i2];
+
+        $s4 = (short) $b3;
+
+        $s4 = $s4 & 255;
+
+        $i5 = (int) $s4;
+
+        if $i5 != 255 goto label2;
+
+        $b3 = $r0[$i0];
+
+        if $b3 != 0 goto label2;
+
+        $i5 = $i2 + 2;
+
+        $i2 = $i1 - $i2;
+
+        $i2 = $i2 + -2;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r0, $i5, $r0, $i0, $i2);
+
+        $i1 = $i1 + -1;
+
+     label2:
+        $i2 = $i0;
+
+        goto label1;
+
+     label3:
+        return $i1;
+    }
+
+    private static boolean validateFrames(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int, boolean)
+    {
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        long $l5, $l7, $l8;
+        byte $b6;
+        int $i0, $i1, $i2, $i3, $i4;
+        boolean $z0, $z1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $z0 := @parameter3: boolean;
+
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+     label01:
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+     label02:
+        $z1 = 1;
+
+        if $i3 < $i1 goto label30;
+
+        if $i0 < 3 goto label08;
+
+     label03:
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+     label04:
+        $i4 = $i3;
+
+     label05:
+        $l5 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: long readUnsignedInt()>();
+
+     label06:
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedShort()>();
+
+     label07:
+        goto label12;
+
+     label08:
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedInt24()>();
+
+     label09:
+        $i4 = $i3;
+
+     label10:
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedInt24()>();
+
+     label11:
+        $l5 = (long) $i3;
+
+        $i3 = 0;
+
+     label12:
+        if $i4 != 0 goto label13;
+
+        $b6 = $l5 cmp 0L;
+
+        if $b6 != 0 goto label13;
+
+        if $i3 != 0 goto label13;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        return 1;
+
+     label13:
+        if $i0 != 4 goto label15;
+
+        if $z0 != 0 goto label15;
+
+        $l7 = 8421504L & $l5;
+
+        $b6 = $l7 cmp 0L;
+
+        if $b6 == 0 goto label14;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        return 0;
+
+     label14:
+        $l7 = $l5 & 255L;
+
+        $l8 = $l5 >> 8;
+
+        $l8 = $l8 & 255L;
+
+        $l8 = $l8 << 7;
+
+        $l7 = $l7 | $l8;
+
+        $l8 = $l5 >> 16;
+
+        $l8 = $l8 & 255L;
+
+        $l8 = $l8 << 14;
+
+        $l7 = $l7 | $l8;
+
+        $l5 = $l5 >> 24;
+
+        $l5 = $l5 & 255L;
+
+        $l5 = $l5 << 21;
+
+        $l5 = $l5 | $l7;
+
+     label15:
+        if $i0 != 4 goto label19;
+
+        $i4 = $i3 & 64;
+
+        if $i4 == 0 goto label16;
+
+        $i4 = 1;
+
+        goto label17;
+
+     label16:
+        $i4 = 0;
+
+     label17:
+        $i3 = $i3 & 1;
+
+        if $i3 == 0 goto label18;
+
+        goto label23;
+
+     label18:
+        $z1 = 0;
+
+        goto label23;
+
+     label19:
+        if $i0 != 3 goto label22;
+
+        $i4 = $i3 & 32;
+
+        if $i4 == 0 goto label20;
+
+        $i4 = 1;
+
+        goto label21;
+
+     label20:
+        $i4 = 0;
+
+     label21:
+        $i3 = $i3 & 128;
+
+        if $i3 == 0 goto label18;
+
+        goto label23;
+
+     label22:
+        $i4 = 0;
+
+        goto label18;
+
+     label23:
+        if $z1 == 0 goto label24;
+
+        $i4 = $i4 + 4;
+
+     label24:
+        $l7 = (long) $i4;
+
+        $b6 = $l5 cmp $l7;
+
+        $i3 = (int) $b6;
+
+        if $i3 >= 0 goto label25;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        return 0;
+
+     label25:
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+     label26:
+        $l7 = (long) $i3;
+
+        $b6 = $l7 cmp $l5;
+
+        $i3 = (int) $b6;
+
+        if $i3 >= 0 goto label27;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        return 0;
+
+     label27:
+        $i3 = (int) $l5;
+
+     label28:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($i3);
+
+     label29:
+        goto label01;
+
+     label30:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        return 1;
+
+     label31:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        throw $r1;
+
+        catch java.lang.Throwable from label01 to label02 with label31;
+        catch java.lang.Throwable from label03 to label04 with label31;
+        catch java.lang.Throwable from label05 to label06 with label31;
+        catch java.lang.Throwable from label06 to label07 with label31;
+        catch java.lang.Throwable from label08 to label09 with label31;
+        catch java.lang.Throwable from label10 to label11 with label31;
+        catch java.lang.Throwable from label25 to label26 with label31;
+        catch java.lang.Throwable from label28 to label29 with label31;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata decode(com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataInputBuffer)
+    {
+        byte[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataInputBuffer $r1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder r0;
+        java.nio.ByteBuffer $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataInputBuffer;
+
+        $r2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataInputBuffer: java.nio.ByteBuffer data>;
+
+        $r3 = virtualinvoke $r2.<java.nio.ByteBuffer: byte[] array()>();
+
+        $i0 = virtualinvoke $r2.<java.nio.ByteBuffer: int limit()>();
+
+        $r4 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata decode(byte[],int)>($r3, $i0);
+
+        return $r4;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata decode(byte[], int)
+    {
+        byte[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder r0;
+        java.util.ArrayList $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header $r4;
+        byte $b2;
+        int $i0, $i1;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder;
+
+        $r1 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void <init>(byte[],int)>($r1, $i0);
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header decodeHeader(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r3);
+
+        if $r4 != null goto label1;
+
+        return null;
+
+     label1:
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header: int access$000(com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header)>($r4);
+
+        if $i1 != 2 goto label2;
+
+        $b2 = 6;
+
+        goto label3;
+
+     label2:
+        $b2 = 10;
+
+     label3:
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header: int access$100(com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header)>($r4);
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header: boolean access$200(com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header)>($r4);
+
+        if $z0 == 0 goto label4;
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header: int access$100(com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header)>($r4);
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: int removeUnsynchronization(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r3, $i1);
+
+     label4:
+        $i0 = $i0 + $i1;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setLimit(int)>($i0);
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header: int access$000(com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header)>($r4);
+
+        $z0 = 0;
+
+        $z1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: boolean validateFrames(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int,boolean)>($r3, $i0, $b2, 0);
+
+        if $z1 != 0 goto label6;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header: int access$000(com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header)>($r4);
+
+        if $i0 != 4 goto label5;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: boolean validateFrames(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int,boolean)>($r3, 4, $b2, 1);
+
+        if $z0 == 0 goto label5;
+
+        $z0 = 1;
+
+        goto label6;
+
+     label5:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failed to validate ID3 tag with majorVersion=");
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header: int access$000(com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header)>($r4);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("Id3Decoder", $r6);
+
+        return null;
+
+     label6:
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i0 < $b2 goto label7;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header: int access$000(com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$Id3Header)>($r4);
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate framePredicate>;
+
+        $r8 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Frame decodeFrame(int,com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,boolean,int,com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate)>($i0, $r3, $z0, $b2, $r7);
+
+        if $r8 == null goto label6;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r8);
+
+        goto label6;
+
+     label7:
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata: void <init>(java.util.List)>($r2);
+
+        return $r9;
+    }
+}

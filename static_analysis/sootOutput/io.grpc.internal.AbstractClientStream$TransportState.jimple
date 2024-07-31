@@ -1,0 +1,669 @@
+public abstract class io.grpc.internal.AbstractClientStream$TransportState extends io.grpc.internal.AbstractStream$TransportState
+{
+    private io.grpc.DecompressorRegistry decompressorRegistry;
+    private boolean deframerClosed;
+    private java.lang.Runnable deframerClosedTask;
+    private boolean fullStreamDecompression;
+    private io.grpc.internal.ClientStreamListener listener;
+    private boolean listenerClosed;
+    private volatile boolean outboundClosed;
+    private final io.grpc.internal.StatsTraceContext statsTraceCtx;
+    private boolean statusReported;
+    private boolean statusReportedIsOk;
+
+    protected void <init>(int, io.grpc.internal.StatsTraceContext, io.grpc.internal.TransportTracer)
+    {
+        io.grpc.internal.TransportTracer $r2;
+        io.grpc.DecompressorRegistry $r3;
+        int $i0;
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        java.lang.Object $r4;
+        io.grpc.internal.StatsTraceContext $r1;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: io.grpc.internal.StatsTraceContext;
+
+        $r2 := @parameter2: io.grpc.internal.TransportTracer;
+
+        specialinvoke r0.<io.grpc.internal.AbstractStream$TransportState: void <init>(int,io.grpc.internal.StatsTraceContext,io.grpc.internal.TransportTracer)>($i0, $r1, $r2);
+
+        $r3 = staticinvoke <io.grpc.DecompressorRegistry: io.grpc.DecompressorRegistry getDefaultInstance()>();
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.DecompressorRegistry decompressorRegistry> = $r3;
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean deframerClosed> = 0;
+
+        $r4 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "statsTraceCtx");
+
+        $r1 = (io.grpc.internal.StatsTraceContext) $r4;
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.StatsTraceContext statsTraceCtx> = $r1;
+
+        return;
+    }
+
+    static void access$000(io.grpc.internal.AbstractClientStream$TransportState, boolean)
+    {
+        io.grpc.internal.AbstractClientStream$TransportState $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $z0 := @parameter1: boolean;
+
+        specialinvoke $r0.<io.grpc.internal.AbstractClientStream$TransportState: void setFullStreamDecompression(boolean)>($z0);
+
+        return;
+    }
+
+    static void access$100(io.grpc.internal.AbstractClientStream$TransportState, io.grpc.DecompressorRegistry)
+    {
+        io.grpc.internal.AbstractClientStream$TransportState $r0;
+        io.grpc.DecompressorRegistry $r1;
+
+        $r0 := @parameter0: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r1 := @parameter1: io.grpc.DecompressorRegistry;
+
+        specialinvoke $r0.<io.grpc.internal.AbstractClientStream$TransportState: void setDecompressorRegistry(io.grpc.DecompressorRegistry)>($r1);
+
+        return;
+    }
+
+    static void access$200(io.grpc.internal.AbstractClientStream$TransportState)
+    {
+        io.grpc.internal.AbstractClientStream$TransportState $r0;
+
+        $r0 := @parameter0: io.grpc.internal.AbstractClientStream$TransportState;
+
+        specialinvoke $r0.<io.grpc.internal.AbstractClientStream$TransportState: void setOutboundClosed()>();
+
+        return;
+    }
+
+    static void access$400(io.grpc.internal.AbstractClientStream$TransportState, io.grpc.Status, io.grpc.internal.ClientStreamListener$RpcProgress, io.grpc.Metadata)
+    {
+        io.grpc.internal.ClientStreamListener$RpcProgress $r2;
+        io.grpc.internal.AbstractClientStream$TransportState $r0;
+        io.grpc.Metadata $r3;
+        io.grpc.Status $r1;
+
+        $r0 := @parameter0: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r1 := @parameter1: io.grpc.Status;
+
+        $r2 := @parameter2: io.grpc.internal.ClientStreamListener$RpcProgress;
+
+        $r3 := @parameter3: io.grpc.Metadata;
+
+        specialinvoke $r0.<io.grpc.internal.AbstractClientStream$TransportState: void closeListener(io.grpc.Status,io.grpc.internal.ClientStreamListener$RpcProgress,io.grpc.Metadata)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    private void closeListener(io.grpc.Status, io.grpc.internal.ClientStreamListener$RpcProgress, io.grpc.Metadata)
+    {
+        io.grpc.internal.TransportTracer $r6;
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        io.grpc.internal.ClientStreamListener$RpcProgress $r3;
+        io.grpc.internal.ClientStreamListener $r5;
+        io.grpc.Metadata $r1;
+        io.grpc.Status $r2;
+        io.grpc.internal.StatsTraceContext $r4;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r2 := @parameter0: io.grpc.Status;
+
+        $r3 := @parameter1: io.grpc.internal.ClientStreamListener$RpcProgress;
+
+        $r1 := @parameter2: io.grpc.Metadata;
+
+        $z0 = r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean listenerClosed>;
+
+        if $z0 != 0 goto label1;
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean listenerClosed> = 1;
+
+        $r4 = r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        virtualinvoke $r4.<io.grpc.internal.StatsTraceContext: void streamClosed(io.grpc.Status)>($r2);
+
+        $r5 = virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.ClientStreamListener listener()>();
+
+        interfaceinvoke $r5.<io.grpc.internal.ClientStreamListener: void closed(io.grpc.Status,io.grpc.internal.ClientStreamListener$RpcProgress,io.grpc.Metadata)>($r2, $r3, $r1);
+
+        $r6 = virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.TransportTracer getTransportTracer()>();
+
+        if $r6 == null goto label1;
+
+        $r6 = virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.TransportTracer getTransportTracer()>();
+
+        $z0 = virtualinvoke $r2.<io.grpc.Status: boolean isOk()>();
+
+        virtualinvoke $r6.<io.grpc.internal.TransportTracer: void reportStreamClosed(boolean)>($z0);
+
+     label1:
+        return;
+    }
+
+    private void setDecompressorRegistry(io.grpc.DecompressorRegistry)
+    {
+        io.grpc.DecompressorRegistry $r2;
+        io.grpc.internal.ClientStreamListener $r3;
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r2 := @parameter0: io.grpc.DecompressorRegistry;
+
+        $r3 = r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.ClientStreamListener listener>;
+
+        if $r3 != null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Already called start");
+
+        $r1 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "decompressorRegistry");
+
+        $r2 = (io.grpc.DecompressorRegistry) $r1;
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.DecompressorRegistry decompressorRegistry> = $r2;
+
+        return;
+    }
+
+    private void setFullStreamDecompression(boolean)
+    {
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $z0 := @parameter0: boolean;
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean fullStreamDecompression> = $z0;
+
+        return;
+    }
+
+    private final void setOutboundClosed()
+    {
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean outboundClosed> = 1;
+
+        return;
+    }
+
+    public void deframerClosed(boolean)
+    {
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        io.grpc.Metadata $r2;
+        io.grpc.Status $r1;
+        java.lang.Runnable $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $z0 := @parameter0: boolean;
+
+        $z1 = r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean statusReported>;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z1, "status should have been reported on deframer closed");
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean deframerClosed> = 1;
+
+        $z1 = r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean statusReportedIsOk>;
+
+        if $z1 == 0 goto label1;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = <io.grpc.Status: io.grpc.Status INTERNAL>;
+
+        $r1 = virtualinvoke $r1.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Encountered end-of-stream mid-frame");
+
+        $r2 = new io.grpc.Metadata;
+
+        specialinvoke $r2.<io.grpc.Metadata: void <init>()>();
+
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void transportReportStatus(io.grpc.Status,boolean,io.grpc.Metadata)>($r1, 1, $r2);
+
+     label1:
+        $r3 = r0.<io.grpc.internal.AbstractClientStream$TransportState: java.lang.Runnable deframerClosedTask>;
+
+        if $r3 == null goto label2;
+
+        interfaceinvoke $r3.<java.lang.Runnable: void run()>();
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: java.lang.Runnable deframerClosedTask> = null;
+
+     label2:
+        return;
+    }
+
+    protected void inboundDataReceived(io.grpc.internal.ReadableBuffer)
+    {
+        java.lang.Throwable $r4;
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        java.util.logging.Logger $r3;
+        io.grpc.internal.ReadableBuffer $r1;
+        java.util.logging.Level $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r1 := @parameter0: io.grpc.internal.ReadableBuffer;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "frame");
+
+        $z0 = 1;
+
+     label01:
+        $z1 = r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean statusReported>;
+
+     label02:
+        if $z1 == 0 goto label05;
+
+     label03:
+        $r3 = staticinvoke <io.grpc.internal.AbstractClientStream: java.util.logging.Logger access$300()>();
+
+        $r2 = <java.util.logging.Level: java.util.logging.Level INFO>;
+
+        virtualinvoke $r3.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r2, "Received data on closed stream");
+
+     label04:
+        interfaceinvoke $r1.<io.grpc.internal.ReadableBuffer: void close()>();
+
+        return;
+
+     label05:
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void deframe(io.grpc.internal.ReadableBuffer)>($r1);
+
+     label06:
+        return;
+
+     label07:
+        $r4 := @caughtexception;
+
+        $z0 = 0;
+
+        goto label09;
+
+     label08:
+        $r4 := @caughtexception;
+
+     label09:
+        if $z0 == 0 goto label10;
+
+        interfaceinvoke $r1.<io.grpc.internal.ReadableBuffer: void close()>();
+
+     label10:
+        throw $r4;
+
+        catch java.lang.Throwable from label01 to label02 with label08;
+        catch java.lang.Throwable from label03 to label04 with label08;
+        catch java.lang.Throwable from label05 to label06 with label07;
+    }
+
+    protected void inboundHeadersReceived(io.grpc.Metadata)
+    {
+        java.lang.Object[] $r8;
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        io.grpc.Metadata$Key $r3;
+        io.grpc.internal.GzipInflatingBuffer $r6;
+        io.grpc.StatusRuntimeException $r9;
+        io.grpc.DecompressorRegistry $r10;
+        io.grpc.Decompressor $r11;
+        io.grpc.internal.ClientStreamListener $r13;
+        io.grpc.Metadata $r1;
+        java.lang.Object $r4;
+        java.lang.String $r5;
+        io.grpc.Status $r7;
+        io.grpc.Codec $r12;
+        io.grpc.internal.StatsTraceContext $r2;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r1 := @parameter0: io.grpc.Metadata;
+
+        $z0 = r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean statusReported>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Received headers on closed stream");
+
+        $r2 = r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        virtualinvoke $r2.<io.grpc.internal.StatsTraceContext: void clientInboundHeaders()>();
+
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key CONTENT_ENCODING_KEY>;
+
+        $r4 = virtualinvoke $r1.<io.grpc.Metadata: java.lang.Object get(io.grpc.Metadata$Key)>($r3);
+
+        $r5 = (java.lang.String) $r4;
+
+        $z0 = r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean fullStreamDecompression>;
+
+        if $z0 == 0 goto label2;
+
+        if $r5 == null goto label2;
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>("gzip");
+
+        if $z0 == 0 goto label1;
+
+        $r6 = new io.grpc.internal.GzipInflatingBuffer;
+
+        specialinvoke $r6.<io.grpc.internal.GzipInflatingBuffer: void <init>()>();
+
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void setFullStreamDecompressor(io.grpc.internal.GzipInflatingBuffer)>($r6);
+
+        $z0 = 1;
+
+        goto label3;
+
+     label1:
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>("identity");
+
+        if $z0 != 0 goto label2;
+
+        $r7 = <io.grpc.Status: io.grpc.Status INTERNAL>;
+
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r8[0] = $r5;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Can\'t find full stream decompressor for %s", $r8);
+
+        $r7 = virtualinvoke $r7.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>($r5);
+
+        $r9 = virtualinvoke $r7.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException()>();
+
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void deframeFailed(java.lang.Throwable)>($r9);
+
+        return;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key MESSAGE_ENCODING_KEY>;
+
+        $r4 = virtualinvoke $r1.<io.grpc.Metadata: java.lang.Object get(io.grpc.Metadata$Key)>($r3);
+
+        $r5 = (java.lang.String) $r4;
+
+        if $r5 == null goto label6;
+
+        $r10 = r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.DecompressorRegistry decompressorRegistry>;
+
+        $r11 = virtualinvoke $r10.<io.grpc.DecompressorRegistry: io.grpc.Decompressor lookupDecompressor(java.lang.String)>($r5);
+
+        if $r11 != null goto label4;
+
+        $r7 = <io.grpc.Status: io.grpc.Status INTERNAL>;
+
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r8[0] = $r5;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Can\'t find decompressor for %s", $r8);
+
+        $r7 = virtualinvoke $r7.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>($r5);
+
+        $r9 = virtualinvoke $r7.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException()>();
+
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void deframeFailed(java.lang.Throwable)>($r9);
+
+        return;
+
+     label4:
+        $r12 = <io.grpc.Codec$Identity: io.grpc.Codec NONE>;
+
+        if $r11 == $r12 goto label6;
+
+        if $z0 == 0 goto label5;
+
+        $r7 = <io.grpc.Status: io.grpc.Status INTERNAL>;
+
+        $r7 = virtualinvoke $r7.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Full stream and gRPC message encoding cannot both be set");
+
+        $r9 = virtualinvoke $r7.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException()>();
+
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void deframeFailed(java.lang.Throwable)>($r9);
+
+        return;
+
+     label5:
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void setDecompressor(io.grpc.Decompressor)>($r11);
+
+     label6:
+        $r13 = virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.ClientStreamListener listener()>();
+
+        interfaceinvoke $r13.<io.grpc.internal.ClientStreamListener: void headersRead(io.grpc.Metadata)>($r1);
+
+        return;
+    }
+
+    protected void inboundTrailersReceived(io.grpc.Metadata, io.grpc.Status)
+    {
+        java.lang.Object[] $r5;
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        java.util.logging.Logger $r2;
+        java.util.logging.Level $r1;
+        io.grpc.Metadata $r3;
+        io.grpc.Status $r4;
+        io.grpc.internal.StatsTraceContext $r6;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r3 := @parameter0: io.grpc.Metadata;
+
+        $r4 := @parameter1: io.grpc.Status;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r4, "status");
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r3, "trailers");
+
+        $z0 = r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean statusReported>;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = staticinvoke <io.grpc.internal.AbstractClientStream: java.util.logging.Logger access$300()>();
+
+        $r1 = <java.util.logging.Level: java.util.logging.Level INFO>;
+
+        $r5 = newarray (java.lang.Object)[2];
+
+        $r5[0] = $r4;
+
+        $r5[1] = $r3;
+
+        virtualinvoke $r2.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String,java.lang.Object[])>($r1, "Received trailers on closed stream:\n {1}\n {2}", $r5);
+
+        return;
+
+     label1:
+        $r6 = r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        virtualinvoke $r6.<io.grpc.internal.StatsTraceContext: void clientInboundTrailers(io.grpc.Metadata)>($r3);
+
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void transportReportStatus(io.grpc.Status,boolean,io.grpc.Metadata)>($r4, 0, $r3);
+
+        return;
+    }
+
+    protected final boolean isOutboundClosed()
+    {
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        boolean z0;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        z0 = r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean outboundClosed>;
+
+        return z0;
+    }
+
+    protected final io.grpc.internal.ClientStreamListener listener()
+    {
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        io.grpc.internal.ClientStreamListener r1;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        r1 = r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.ClientStreamListener listener>;
+
+        return r1;
+    }
+
+    protected volatile io.grpc.internal.StreamListener listener()
+    {
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        io.grpc.internal.ClientStreamListener $r1;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r1 = virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.ClientStreamListener listener()>();
+
+        return $r1;
+    }
+
+    public final void setListener(io.grpc.internal.ClientStreamListener)
+    {
+        io.grpc.internal.ClientStreamListener $r2, $r3;
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r2 := @parameter0: io.grpc.internal.ClientStreamListener;
+
+        $r3 = r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.ClientStreamListener listener>;
+
+        if $r3 != null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Already called setListener");
+
+        $r1 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "listener");
+
+        $r2 = (io.grpc.internal.ClientStreamListener) $r1;
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: io.grpc.internal.ClientStreamListener listener> = $r2;
+
+        return;
+    }
+
+    public final void transportReportStatus(io.grpc.Status, io.grpc.internal.ClientStreamListener$RpcProgress, boolean, io.grpc.Metadata)
+    {
+        io.grpc.internal.ClientStreamListener$RpcProgress $r2;
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        io.grpc.Metadata $r3;
+        io.grpc.internal.AbstractClientStream$TransportState$1 $r4;
+        io.grpc.Status $r1;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r1 := @parameter0: io.grpc.Status;
+
+        $r2 := @parameter1: io.grpc.internal.ClientStreamListener$RpcProgress;
+
+        $z1 := @parameter2: boolean;
+
+        $r3 := @parameter3: io.grpc.Metadata;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "status");
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r3, "trailers");
+
+        $z0 = r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean statusReported>;
+
+        if $z0 == 0 goto label1;
+
+        if $z1 != 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean statusReported> = 1;
+
+        $z0 = virtualinvoke $r1.<io.grpc.Status: boolean isOk()>();
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean statusReportedIsOk> = $z0;
+
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void onStreamDeallocated()>();
+
+        $z0 = r0.<io.grpc.internal.AbstractClientStream$TransportState: boolean deframerClosed>;
+
+        if $z0 == 0 goto label2;
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: java.lang.Runnable deframerClosedTask> = null;
+
+        specialinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void closeListener(io.grpc.Status,io.grpc.internal.ClientStreamListener$RpcProgress,io.grpc.Metadata)>($r1, $r2, $r3);
+
+        return;
+
+     label2:
+        $r4 = new io.grpc.internal.AbstractClientStream$TransportState$1;
+
+        specialinvoke $r4.<io.grpc.internal.AbstractClientStream$TransportState$1: void <init>(io.grpc.internal.AbstractClientStream$TransportState,io.grpc.Status,io.grpc.internal.ClientStreamListener$RpcProgress,io.grpc.Metadata)>(r0, $r1, $r2, $r3);
+
+        r0.<io.grpc.internal.AbstractClientStream$TransportState: java.lang.Runnable deframerClosedTask> = $r4;
+
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void closeDeframer(boolean)>($z1);
+
+        return;
+    }
+
+    public final void transportReportStatus(io.grpc.Status, boolean, io.grpc.Metadata)
+    {
+        io.grpc.internal.ClientStreamListener$RpcProgress $r3;
+        io.grpc.internal.AbstractClientStream$TransportState r0;
+        io.grpc.Metadata $r2;
+        io.grpc.Status $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.AbstractClientStream$TransportState;
+
+        $r1 := @parameter0: io.grpc.Status;
+
+        $z0 := @parameter1: boolean;
+
+        $r2 := @parameter2: io.grpc.Metadata;
+
+        $r3 = <io.grpc.internal.ClientStreamListener$RpcProgress: io.grpc.internal.ClientStreamListener$RpcProgress PROCESSED>;
+
+        virtualinvoke r0.<io.grpc.internal.AbstractClientStream$TransportState: void transportReportStatus(io.grpc.Status,io.grpc.internal.ClientStreamListener$RpcProgress,boolean,io.grpc.Metadata)>($r1, $r3, $z0, $r2);
+
+        return;
+    }
+}

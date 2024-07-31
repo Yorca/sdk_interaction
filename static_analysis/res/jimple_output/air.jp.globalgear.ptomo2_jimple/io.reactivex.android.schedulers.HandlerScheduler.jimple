@@ -1,0 +1,90 @@
+final class io.reactivex.android.schedulers.HandlerScheduler extends io.reactivex.Scheduler
+{
+    private final android.os.Handler handler;
+
+    void <init>(android.os.Handler)
+    {
+        io.reactivex.android.schedulers.HandlerScheduler r0;
+        android.os.Handler $r1;
+
+        r0 := @this: io.reactivex.android.schedulers.HandlerScheduler;
+
+        $r1 := @parameter0: android.os.Handler;
+
+        specialinvoke r0.<io.reactivex.Scheduler: void <init>()>();
+
+        r0.<io.reactivex.android.schedulers.HandlerScheduler: android.os.Handler handler> = $r1;
+
+        return;
+    }
+
+    public io.reactivex.Scheduler$Worker createWorker()
+    {
+        io.reactivex.android.schedulers.HandlerScheduler$HandlerWorker $r1;
+        io.reactivex.android.schedulers.HandlerScheduler r0;
+        android.os.Handler $r2;
+
+        r0 := @this: io.reactivex.android.schedulers.HandlerScheduler;
+
+        $r1 = new io.reactivex.android.schedulers.HandlerScheduler$HandlerWorker;
+
+        $r2 = r0.<io.reactivex.android.schedulers.HandlerScheduler: android.os.Handler handler>;
+
+        specialinvoke $r1.<io.reactivex.android.schedulers.HandlerScheduler$HandlerWorker: void <init>(android.os.Handler)>($r2);
+
+        return $r1;
+    }
+
+    public io.reactivex.disposables.Disposable scheduleDirect(java.lang.Runnable, long, java.util.concurrent.TimeUnit)
+    {
+        java.util.concurrent.TimeUnit $r1;
+        io.reactivex.android.schedulers.HandlerScheduler$ScheduledRunnable $r2;
+        io.reactivex.android.schedulers.HandlerScheduler r0;
+        android.os.Handler $r3;
+        long $l0;
+        java.lang.Runnable $r4;
+        java.lang.NullPointerException $r5;
+
+        r0 := @this: io.reactivex.android.schedulers.HandlerScheduler;
+
+        $r4 := @parameter0: java.lang.Runnable;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: java.util.concurrent.TimeUnit;
+
+        if $r4 == null goto label2;
+
+        if $r1 == null goto label1;
+
+        $r4 = staticinvoke <io.reactivex.plugins.RxJavaPlugins: java.lang.Runnable onSchedule(java.lang.Runnable)>($r4);
+
+        $r2 = new io.reactivex.android.schedulers.HandlerScheduler$ScheduledRunnable;
+
+        $r3 = r0.<io.reactivex.android.schedulers.HandlerScheduler: android.os.Handler handler>;
+
+        specialinvoke $r2.<io.reactivex.android.schedulers.HandlerScheduler$ScheduledRunnable: void <init>(android.os.Handler,java.lang.Runnable)>($r3, $r4);
+
+        $r3 = r0.<io.reactivex.android.schedulers.HandlerScheduler: android.os.Handler handler>;
+
+        $l0 = virtualinvoke $r1.<java.util.concurrent.TimeUnit: long toMillis(long)>($l0);
+
+        virtualinvoke $r3.<android.os.Handler: boolean postDelayed(java.lang.Runnable,long)>($r2, $l0);
+
+        return $r2;
+
+     label1:
+        $r5 = new java.lang.NullPointerException;
+
+        specialinvoke $r5.<java.lang.NullPointerException: void <init>(java.lang.String)>("unit == null");
+
+        throw $r5;
+
+     label2:
+        $r5 = new java.lang.NullPointerException;
+
+        specialinvoke $r5.<java.lang.NullPointerException: void <init>(java.lang.String)>("run == null");
+
+        throw $r5;
+    }
+}

@@ -1,0 +1,557 @@
+abstract class com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader extends java.lang.Object
+{
+    private static final int STATE_END_OF_INPUT;
+    private static final int STATE_READ_HEADERS;
+    private static final int STATE_READ_PAYLOAD;
+    private static final int STATE_SKIP_HEADERS;
+    private long currentGranule;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput extractorOutput;
+    private boolean formatSet;
+    private long lengthOfReadPacket;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket oggPacket;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker oggSeeker;
+    private long payloadStartPosition;
+    private int sampleRate;
+    private boolean seekMapSet;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData setupData;
+    private int state;
+    private long targetGranule;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput trackOutput;
+
+    public void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket oggPacket> = $r1;
+
+        return;
+    }
+
+    private int readHeaders(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput) throws java.io.IOException, java.lang.InterruptedException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPageHeader $r8;
+        long $l1, $l2, $l4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader r0;
+        byte $b3;
+        int $i0, $i5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r6;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$UnseekableOggSeeker $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.DefaultOggSeeker $r10;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $z0 = 1;
+
+     label1:
+        if $z0 == 0 goto label3;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket oggPacket>;
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket: boolean populate(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int state> = 3;
+
+        return -1;
+
+     label2:
+        $l1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getPosition()>();
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long payloadStartPosition>;
+
+        $l1 = $l1 - $l2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long lengthOfReadPacket> = $l1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket oggPacket>;
+
+        $r3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray getPayload()>();
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long payloadStartPosition>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData setupData>;
+
+        $z1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: boolean readHeaders(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,long,com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData)>($r3, $l1, $r4);
+
+        $z0 = $z1;
+
+        if $z1 == 0 goto label1;
+
+        $l1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getPosition()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long payloadStartPosition> = $l1;
+
+        goto label1;
+
+     label3:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData setupData>;
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.Format: int sampleRate>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int sampleRate> = $i0;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: boolean formatSet>;
+
+        if $z0 != 0 goto label4;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput trackOutput>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData setupData>;
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void format(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r5);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: boolean formatSet> = 1;
+
+     label4:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData setupData>;
+
+        $r7 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker oggSeeker>;
+
+        if $r7 == null goto label5;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData setupData>;
+
+        $r7 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker oggSeeker>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker oggSeeker> = $r7;
+
+        goto label7;
+
+     label5:
+        $l1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getLength()>();
+
+        $b3 = $l1 cmp -1L;
+
+        if $b3 != 0 goto label6;
+
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$UnseekableOggSeeker;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$UnseekableOggSeeker: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$1)>(null);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker oggSeeker> = $r9;
+
+        goto label7;
+
+     label6:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket oggPacket>;
+
+        $r8 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPageHeader getPageHeader()>();
+
+        $r10 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.DefaultOggSeeker;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long payloadStartPosition>;
+
+        $l4 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getLength()>();
+
+        $i0 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPageHeader: int headerSize>;
+
+        $i5 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPageHeader: int bodySize>;
+
+        $i0 = $i0 + $i5;
+
+        $l1 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPageHeader: long granulePosition>;
+
+        specialinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.DefaultOggSeeker: void <init>(long,long,com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader,int,long)>($l2, $l4, r0, $i0, $l1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker oggSeeker> = $r10;
+
+     label7:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData setupData> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int state> = 2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket oggPacket>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket: void trimPayload()>();
+
+        return 0;
+    }
+
+    private int readPayload(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput, com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder) throws java.io.IOException, java.lang.InterruptedException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        long $l1, $l2, $l3, $l4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader r0;
+        byte $b0;
+        int $i5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r8;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker oggSeeker>;
+
+        $l2 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker: long read(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput)>($r1);
+
+        $b0 = $l2 cmp 0L;
+
+        $i5 = (int) $b0;
+
+        if $i5 < 0 goto label1;
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder: long position> = $l2;
+
+        return 1;
+
+     label1:
+        $b0 = $l2 cmp -1L;
+
+        $i5 = (int) $b0;
+
+        if $i5 >= 0 goto label2;
+
+        $l2 = $l2 + 2L;
+
+        $l2 = neg $l2;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: void onSeekEnd(long)>($l2);
+
+     label2:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: boolean seekMapSet>;
+
+        if $z0 != 0 goto label3;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker oggSeeker>;
+
+        $r5 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap createSeekMap()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput extractorOutput>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput: void seekMap(com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap)>($r5);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: boolean seekMapSet> = 1;
+
+     label3:
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long lengthOfReadPacket>;
+
+        $b0 = $l2 cmp 0L;
+
+        $i5 = (int) $b0;
+
+        if $i5 > 0 goto label4;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket oggPacket>;
+
+        $z0 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket: boolean populate(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput)>($r1);
+
+        if $z0 != 0 goto label4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int state> = 3;
+
+        return -1;
+
+     label4:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long lengthOfReadPacket> = 0L;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket oggPacket>;
+
+        $r7 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray getPayload()>();
+
+        $l2 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long preparePayload(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r7);
+
+        $b0 = $l2 cmp 0L;
+
+        $i5 = (int) $b0;
+
+        if $i5 < 0 goto label5;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long currentGranule>;
+
+        $l4 = $l3 + $l2;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long targetGranule>;
+
+        $b0 = $l4 cmp $l1;
+
+        $i5 = (int) $b0;
+
+        if $i5 < 0 goto label5;
+
+        $l1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long convertGranuleToTime(long)>($l3);
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput trackOutput>;
+
+        $i5 = virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        interfaceinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void sampleData(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r7, $i5);
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput trackOutput>;
+
+        $i5 = virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        interfaceinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void sampleMetadata(long,int,int,int,com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData)>($l1, 1, $i5, 0, null);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long targetGranule> = -1L;
+
+     label5:
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long currentGranule>;
+
+        $l2 = $l1 + $l2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long currentGranule> = $l2;
+
+        return 0;
+    }
+
+    protected long convertGranuleToTime(long)
+    {
+        int $i1;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader;
+
+        $l0 := @parameter0: long;
+
+        $l0 = $l0 * 1000000L;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int sampleRate>;
+
+        $l2 = (long) $i1;
+
+        $l0 = $l0 / $l2;
+
+        return $l0;
+    }
+
+    protected long convertTimeToGranule(long)
+    {
+        int $i1;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader;
+
+        $l0 := @parameter0: long;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int sampleRate>;
+
+        $l2 = (long) $i1;
+
+        $l0 = $l2 * $l0;
+
+        $l0 = $l0 / 1000000L;
+
+        return $l0;
+    }
+
+    void init(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput, com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput extractorOutput> = $r2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput trackOutput> = $r1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: void reset(boolean)>(1);
+
+        return;
+    }
+
+    protected void onSeekEnd(long)
+    {
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader;
+
+        $l0 := @parameter0: long;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long currentGranule> = $l0;
+
+        return;
+    }
+
+    protected abstract long preparePayload(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray);
+
+    final int read(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput, com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder) throws java.io.IOException, java.lang.InterruptedException
+    {
+        java.lang.IllegalStateException $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        int $i0;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int state>;
+
+        if $i0 == 0 goto label3;
+
+        if $i0 == 1 goto label2;
+
+        if $i0 != 2 goto label1;
+
+        $i0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int readPayload(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput,com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder)>($r1, $r2);
+
+        return $i0;
+
+     label1:
+        $r3 = new java.lang.IllegalStateException;
+
+        specialinvoke $r3.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r3;
+
+     label2:
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long payloadStartPosition>;
+
+        $i0 = (int) $l1;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void skipFully(int)>($i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int state> = 2;
+
+        return 0;
+
+     label3:
+        $i0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int readHeaders(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput)>($r1);
+
+        return $i0;
+    }
+
+    protected abstract boolean readHeaders(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, long, com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData) throws java.io.IOException, java.lang.InterruptedException;
+
+    protected void reset(boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader;
+
+        $z0 := @parameter0: boolean;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData setupData> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long payloadStartPosition> = 0L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int state> = 0;
+
+        goto label2;
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int state> = 1;
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long targetGranule> = -1L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long currentGranule> = 0L;
+
+        return;
+    }
+
+    final void seek(long, long)
+    {
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader r0;
+        byte $b1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket $r1;
+        int $i3;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader;
+
+        $l2 := @parameter0: long;
+
+        $l0 := @parameter1: long;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket oggPacket>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggPacket: void reset()>();
+
+        $b1 = $l2 cmp 0L;
+
+        if $b1 != 0 goto label1;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: boolean seekMapSet>;
+
+        $z0 = $z0 ^ 1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: void reset(boolean)>($z0);
+
+        return;
+
+     label1:
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int state>;
+
+        if $i3 == 0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker oggSeeker>;
+
+        $l2 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.OggSeeker: long startSeek(long)>($l0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: long targetGranule> = $l2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int state> = 2;
+
+     label2:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int STATE_SKIP_HEADERS> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int STATE_READ_PAYLOAD> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int STATE_READ_HEADERS> = 0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: int STATE_END_OF_INPUT> = 3;
+
+        return;
+    }
+}

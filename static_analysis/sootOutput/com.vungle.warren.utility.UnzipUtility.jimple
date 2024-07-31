@@ -1,0 +1,387 @@
+public class com.vungle.warren.utility.UnzipUtility extends java.lang.Object
+{
+    private static final int BUFFER_SIZE;
+    private static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        <com.vungle.warren.utility.UnzipUtility: java.lang.String TAG> = "com.vungle.warren.utility.UnzipUtility";
+
+        <com.vungle.warren.utility.UnzipUtility: int BUFFER_SIZE> = 4096;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.vungle.warren.utility.UnzipUtility r0;
+
+        r0 := @this: com.vungle.warren.utility.UnzipUtility;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void extractFile(java.io.InputStream, java.lang.String) throws java.io.IOException
+    {
+        java.lang.Throwable $r7;
+        byte[] $r6;
+        java.io.FileOutputStream $r5, $r9;
+        java.io.File $r2, $r8;
+        java.io.BufferedOutputStream $r3, $r4, $r10;
+        int $i0;
+        java.lang.String $r1;
+        java.io.InputStream $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r8 = new java.io.File;
+
+        $r2 = $r8;
+
+        specialinvoke $r8.<java.io.File: void <init>(java.lang.String)>($r1);
+
+        staticinvoke <com.vungle.warren.utility.FileUtility: void delete(java.io.File)>($r2);
+
+        $r2 = virtualinvoke $r2.<java.io.File: java.io.File getParentFile()>();
+
+        if $r2 == null goto label01;
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label01;
+
+        virtualinvoke $r2.<java.io.File: boolean mkdirs()>();
+
+     label01:
+        $r3 = null;
+
+     label02:
+        $r10 = new java.io.BufferedOutputStream;
+
+     label03:
+        $r4 = $r10;
+
+     label04:
+        $r9 = new java.io.FileOutputStream;
+
+     label05:
+        $r5 = $r9;
+
+     label06:
+        specialinvoke $r9.<java.io.FileOutputStream: void <init>(java.lang.String)>($r1);
+
+     label07:
+        specialinvoke $r10.<java.io.BufferedOutputStream: void <init>(java.io.OutputStream)>($r5);
+
+     label08:
+        $r6 = newarray (byte)[4096];
+
+     label09:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r6);
+
+     label10:
+        if $i0 == -1 goto label13;
+
+     label11:
+        virtualinvoke $r4.<java.io.BufferedOutputStream: void write(byte[],int,int)>($r6, 0, $i0);
+
+     label12:
+        goto label09;
+
+     label13:
+        staticinvoke <com.vungle.warren.utility.FileUtility: void closeQuietly(java.io.Closeable)>($r0);
+
+        staticinvoke <com.vungle.warren.utility.FileUtility: void closeQuietly(java.io.Closeable)>($r4);
+
+        staticinvoke <com.vungle.warren.utility.FileUtility: void closeQuietly(java.io.Closeable)>($r5);
+
+        return;
+
+     label14:
+        $r7 := @caughtexception;
+
+        $r3 = $r4;
+
+        goto label17;
+
+     label15:
+        $r7 := @caughtexception;
+
+        goto label17;
+
+     label16:
+        $r7 := @caughtexception;
+
+        $r5 = null;
+
+     label17:
+        staticinvoke <com.vungle.warren.utility.FileUtility: void closeQuietly(java.io.Closeable)>($r0);
+
+        staticinvoke <com.vungle.warren.utility.FileUtility: void closeQuietly(java.io.Closeable)>($r3);
+
+        staticinvoke <com.vungle.warren.utility.FileUtility: void closeQuietly(java.io.Closeable)>($r5);
+
+        throw $r7;
+
+        catch java.lang.Throwable from label02 to label03 with label16;
+        catch java.lang.Throwable from label04 to label05 with label16;
+        catch java.lang.Throwable from label06 to label07 with label16;
+        catch java.lang.Throwable from label07 to label08 with label15;
+        catch java.lang.Throwable from label09 to label10 with label14;
+        catch java.lang.Throwable from label11 to label12 with label14;
+    }
+
+    public static java.util.List unzip(java.lang.String, java.lang.String) throws java.io.IOException
+    {
+        java.util.List $r1;
+        java.lang.String $r0, $r2;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r1 = staticinvoke <com.vungle.warren.utility.UnzipUtility: java.util.List unzip(java.lang.String,java.lang.String,com.vungle.warren.utility.UnzipUtility$Filter)>($r2, $r0, null);
+
+        return $r1;
+    }
+
+    public static java.util.List unzip(java.lang.String, java.lang.String, com.vungle.warren.utility.UnzipUtility$Filter) throws java.io.IOException
+    {
+        java.lang.Throwable $r2, $r3, $r15;
+        java.util.Enumeration $r10;
+        java.util.ArrayList $r8;
+        java.util.zip.ZipFile $r1, $r9;
+        java.lang.String $r4, $r5;
+        java.util.zip.ZipEntry $r12;
+        boolean $z0;
+        com.vungle.warren.utility.UnzipUtility$Filter $r0;
+        java.io.IOException $r16;
+        java.io.File $r6, $r7;
+        java.lang.Object $r11;
+        java.lang.StringBuilder $r13;
+        java.io.InputStream $r14;
+
+        $r4 := @parameter0: java.lang.String;
+
+        $r5 := @parameter1: java.lang.String;
+
+        $r0 := @parameter2: com.vungle.warren.utility.UnzipUtility$Filter;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r4);
+
+        if $z0 != 0 goto label26;
+
+        $r6 = new java.io.File;
+
+        specialinvoke $r6.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        $z0 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label25;
+
+        $r7 = new java.io.File;
+
+        specialinvoke $r7.<java.io.File: void <init>(java.lang.String)>($r5);
+
+        $z0 = virtualinvoke $r7.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label01;
+
+        virtualinvoke $r7.<java.io.File: boolean mkdir()>();
+
+     label01:
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        $r9 = null;
+
+     label02:
+        $r1 = new java.util.zip.ZipFile;
+
+        specialinvoke $r1.<java.util.zip.ZipFile: void <init>(java.io.File)>($r6);
+
+     label03:
+        $r10 = virtualinvoke $r1.<java.util.zip.ZipFile: java.util.Enumeration entries()>();
+
+     label04:
+        $z0 = interfaceinvoke $r10.<java.util.Enumeration: boolean hasMoreElements()>();
+
+     label05:
+        if $z0 == 0 goto label18;
+
+     label06:
+        $r11 = interfaceinvoke $r10.<java.util.Enumeration: java.lang.Object nextElement()>();
+
+        $r12 = (java.util.zip.ZipEntry) $r11;
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r4 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r12.<java.util.zip.ZipEntry: java.lang.String getName()>();
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label07:
+        if $r0 == null goto label10;
+
+     label08:
+        $z0 = interfaceinvoke $r0.<com.vungle.warren.utility.UnzipUtility$Filter: boolean matches(java.lang.String)>($r4);
+
+     label09:
+        if $z0 == 0 goto label04;
+
+     label10:
+        staticinvoke <com.vungle.warren.utility.UnzipUtility: java.lang.String validateFilename(java.lang.String,java.lang.String)>($r4, $r5);
+
+        $z0 = virtualinvoke $r12.<java.util.zip.ZipEntry: boolean isDirectory()>();
+
+     label11:
+        if $z0 == 0 goto label16;
+
+     label12:
+        $r6 = new java.io.File;
+
+        specialinvoke $r6.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        $z0 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+     label13:
+        if $z0 != 0 goto label04;
+
+     label14:
+        virtualinvoke $r6.<java.io.File: boolean mkdir()>();
+
+     label15:
+        goto label04;
+
+     label16:
+        $r14 = virtualinvoke $r1.<java.util.zip.ZipFile: java.io.InputStream getInputStream(java.util.zip.ZipEntry)>($r12);
+
+        staticinvoke <com.vungle.warren.utility.UnzipUtility: void extractFile(java.io.InputStream,java.lang.String)>($r14, $r4);
+
+        $r6 = new java.io.File;
+
+        specialinvoke $r6.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        interfaceinvoke $r8.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+     label17:
+        goto label04;
+
+     label18:
+        virtualinvoke $r1.<java.util.zip.ZipFile: void close()>();
+
+     label19:
+        return $r8;
+
+     label20:
+        $r15 := @caughtexception;
+
+        $r9 = $r1;
+
+        goto label22;
+
+     label21:
+        $r15 := @caughtexception;
+
+     label22:
+        if $r9 == null goto label24;
+
+     label23:
+        virtualinvoke $r9.<java.util.zip.ZipFile: void close()>();
+
+     label24:
+        throw $r15;
+
+     label25:
+        $r16 = new java.io.IOException;
+
+        specialinvoke $r16.<java.io.IOException: void <init>(java.lang.String)>("File does not exist");
+
+        throw $r16;
+
+     label26:
+        $r16 = new java.io.IOException;
+
+        specialinvoke $r16.<java.io.IOException: void <init>(java.lang.String)>("Path is empty");
+
+        throw $r16;
+
+     label27:
+        $r2 := @caughtexception;
+
+        return $r8;
+
+     label28:
+        $r3 := @caughtexception;
+
+        goto label24;
+
+        catch java.lang.Throwable from label02 to label03 with label21;
+        catch java.lang.Throwable from label03 to label05 with label20;
+        catch java.lang.Throwable from label06 to label07 with label20;
+        catch java.lang.Throwable from label08 to label09 with label20;
+        catch java.lang.Throwable from label10 to label11 with label20;
+        catch java.lang.Throwable from label12 to label13 with label20;
+        catch java.lang.Throwable from label14 to label15 with label20;
+        catch java.lang.Throwable from label16 to label17 with label20;
+        catch java.io.IOException from label18 to label19 with label27;
+        catch java.io.IOException from label23 to label24 with label28;
+    }
+
+    private static java.lang.String validateFilename(java.lang.String, java.lang.String) throws java.io.IOException
+    {
+        com.vungle.warren.utility.UnzipUtility$ZipSecurityException $r3;
+        java.lang.String $r0, $r1;
+        java.io.File $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = new java.io.File;
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r2.<java.io.File: java.lang.String getCanonicalPath()>();
+
+        $r2 = new java.io.File;
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r2.<java.io.File: java.lang.String getCanonicalPath()>();
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean startsWith(java.lang.String)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        return $r0;
+
+     label1:
+        $r0 = <com.vungle.warren.utility.UnzipUtility: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r0, "File is outside extraction target directory.");
+
+        $r3 = new com.vungle.warren.utility.UnzipUtility$ZipSecurityException;
+
+        specialinvoke $r3.<com.vungle.warren.utility.UnzipUtility$ZipSecurityException: void <init>(java.lang.String)>("File is outside extraction target directory.");
+
+        throw $r3;
+    }
+}

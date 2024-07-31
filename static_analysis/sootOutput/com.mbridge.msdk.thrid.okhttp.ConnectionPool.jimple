@@ -1,0 +1,685 @@
+public final class com.mbridge.msdk.thrid.okhttp.ConnectionPool extends java.lang.Object
+{
+    static final boolean $assertionsDisabled;
+    private static final java.util.concurrent.Executor executor;
+    private final java.lang.Runnable cleanupRunnable;
+    boolean cleanupRunning;
+    private final java.util.Deque connections;
+    private final long keepAliveDurationNs;
+    private final int maxIdleConnections;
+    final com.mbridge.msdk.thrid.okhttp.internal.connection.RouteDatabase routeDatabase;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.TimeUnit $r0;
+        java.util.concurrent.SynchronousQueue $r1;
+        java.util.concurrent.ThreadPoolExecutor $r2;
+        java.util.concurrent.ThreadFactory $r3;
+
+        $r2 = new java.util.concurrent.ThreadPoolExecutor;
+
+        $r0 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $r1 = new java.util.concurrent.SynchronousQueue;
+
+        specialinvoke $r1.<java.util.concurrent.SynchronousQueue: void <init>()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.Util: java.util.concurrent.ThreadFactory threadFactory(java.lang.String,boolean)>("OkHttp ConnectionPool", 1);
+
+        specialinvoke $r2.<java.util.concurrent.ThreadPoolExecutor: void <init>(int,int,long,java.util.concurrent.TimeUnit,java.util.concurrent.BlockingQueue,java.util.concurrent.ThreadFactory)>(0, 2147483647, 60L, $r0, $r1, $r3);
+
+        <com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.concurrent.Executor executor> = $r2;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        java.util.concurrent.TimeUnit $r1;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MINUTES>;
+
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: void <init>(int,long,java.util.concurrent.TimeUnit)>(5, 5L, $r1);
+
+        return;
+    }
+
+    public void <init>(int, long, java.util.concurrent.TimeUnit)
+    {
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool$1 $r4;
+        long $l1, $l2;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.RouteDatabase $r6;
+        java.lang.IllegalArgumentException $r8;
+        java.util.concurrent.TimeUnit $r1;
+        int $i0;
+        java.lang.StringBuilder $r2, $r7;
+        java.lang.String $r3;
+        java.util.ArrayDeque $r5;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        $i0 := @parameter0: int;
+
+        $l1 := @parameter1: long;
+
+        $r1 := @parameter2: java.util.concurrent.TimeUnit;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new com.mbridge.msdk.thrid.okhttp.ConnectionPool$1;
+
+        specialinvoke $r4.<com.mbridge.msdk.thrid.okhttp.ConnectionPool$1: void <init>(com.mbridge.msdk.thrid.okhttp.ConnectionPool)>(r0);
+
+        r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.lang.Runnable cleanupRunnable> = $r4;
+
+        $r5 = new java.util.ArrayDeque;
+
+        specialinvoke $r5.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.Deque connections> = $r5;
+
+        $r6 = new com.mbridge.msdk.thrid.okhttp.internal.connection.RouteDatabase;
+
+        specialinvoke $r6.<com.mbridge.msdk.thrid.okhttp.internal.connection.RouteDatabase: void <init>()>();
+
+        r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: com.mbridge.msdk.thrid.okhttp.internal.connection.RouteDatabase routeDatabase> = $r6;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: int maxIdleConnections> = $i0;
+
+        $l2 = virtualinvoke $r1.<java.util.concurrent.TimeUnit: long toNanos(long)>(5L);
+
+        r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: long keepAliveDurationNs> = $l2;
+
+        $i0 = (int) 1;
+
+        if $i0 <= 0 goto label1;
+
+        return;
+
+     label1:
+        $r8 = new java.lang.IllegalArgumentException;
+
+        $r7 = new java.lang.StringBuilder;
+
+        $r2 = $r7;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("keepAliveDuration <= 0: ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(5L);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r3);
+
+        throw $r8;
+    }
+
+    private int pruneAndGetAllocationCount(com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection, long)
+    {
+        long $l0, $l3;
+        com.mbridge.msdk.thrid.okhttp.HttpUrl $r9;
+        int $i1, $i2;
+        java.lang.String $r10;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+        com.mbridge.msdk.thrid.okhttp.internal.platform.Platform $r11;
+        boolean $z0;
+        com.mbridge.msdk.thrid.okhttp.Route $r7;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation$StreamAllocationReference $r5;
+        java.lang.ref.Reference $r4;
+        com.mbridge.msdk.thrid.okhttp.Address $r8;
+        java.util.List $r1;
+        java.lang.Object $r3;
+        java.lang.StringBuilder $r6;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection $r2;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        $r2 := @parameter0: com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection;
+
+        $l0 := @parameter1: long;
+
+        $r1 = $r2.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: java.util.List allocations>;
+
+        $i1 = 0;
+
+     label1:
+        $i2 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        if $i1 >= $i2 goto label3;
+
+        $r3 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $r4 = (java.lang.ref.Reference) $r3;
+
+        $r3 = virtualinvoke $r4.<java.lang.ref.Reference: java.lang.Object get()>();
+
+        if $r3 == null goto label2;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r5 = (com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation$StreamAllocationReference) $r4;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("A connection to ");
+
+        $r7 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: com.mbridge.msdk.thrid.okhttp.Route route()>();
+
+        $r8 = virtualinvoke $r7.<com.mbridge.msdk.thrid.okhttp.Route: com.mbridge.msdk.thrid.okhttp.Address address()>();
+
+        $r9 = virtualinvoke $r8.<com.mbridge.msdk.thrid.okhttp.Address: com.mbridge.msdk.thrid.okhttp.HttpUrl url()>();
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r9);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" was leaked. Did you forget to close a response body?");
+
+        $r10 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r11 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.platform.Platform: com.mbridge.msdk.thrid.okhttp.internal.platform.Platform get()>();
+
+        $r3 = $r5.<com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation$StreamAllocationReference: java.lang.Object callStackTrace>;
+
+        virtualinvoke $r11.<com.mbridge.msdk.thrid.okhttp.internal.platform.Platform: void logCloseableLeak(java.lang.String,java.lang.Object)>($r10, $r3);
+
+        interfaceinvoke $r1.<java.util.List: java.lang.Object remove(int)>($i1);
+
+        $r2.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: boolean noNewStreams> = 1;
+
+        $z0 = interfaceinvoke $r1.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $l3 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: long keepAliveDurationNs>;
+
+        $l0 = $l0 - $l3;
+
+        $r2.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: long idleAtNanos> = $l0;
+
+        return 0;
+
+     label3:
+        $i1 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        return $i1;
+    }
+
+    long cleanup(long)
+    {
+        java.lang.Throwable $r7;
+        java.net.Socket $r6;
+        long $l1, $l2, $l6;
+        java.util.Deque $r1;
+        byte $b0;
+        int $i3, $i4, $i5;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+        boolean $z0;
+        java.util.Iterator $r2;
+        java.lang.Object $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection $r3, $r5;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        $l1 := @parameter0: long;
+
+        entermonitor r0;
+
+     label01:
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.Deque connections>;
+
+        $r2 = interfaceinvoke $r1.<java.util.Deque: java.util.Iterator iterator()>();
+
+        $r3 = null;
+
+        $l2 = -9223372036854775808L;
+
+        $i3 = 0;
+
+        $i4 = 0;
+
+     label02:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label04;
+
+        $r4 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection) $r4;
+
+        $i5 = specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: int pruneAndGetAllocationCount(com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection,long)>($r5, $l1);
+
+        if $i5 <= 0 goto label03;
+
+        $i4 = $i4 + 1;
+
+        goto label02;
+
+     label03:
+        $i3 = $i3 + 1;
+
+        $l6 = $r5.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: long idleAtNanos>;
+
+        $l6 = $l1 - $l6;
+
+        $b0 = $l6 cmp $l2;
+
+        $i5 = (int) $b0;
+
+        if $i5 <= 0 goto label02;
+
+        $r3 = $r5;
+
+        $l2 = $l6;
+
+        goto label02;
+
+     label04:
+        $l1 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: long keepAliveDurationNs>;
+
+        $b0 = $l2 cmp $l1;
+
+        $i5 = (int) $b0;
+
+        if $i5 >= 0 goto label10;
+
+        $i5 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: int maxIdleConnections>;
+
+        if $i3 > $i5 goto label10;
+
+        if $i3 <= 0 goto label06;
+
+        $l1 = $l1 - $l2;
+
+        exitmonitor r0;
+
+     label05:
+        return $l1;
+
+     label06:
+        if $i4 <= 0 goto label08;
+
+        exitmonitor r0;
+
+     label07:
+        return $l1;
+
+     label08:
+        r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: boolean cleanupRunning> = 0;
+
+        exitmonitor r0;
+
+     label09:
+        return -1L;
+
+     label10:
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.Deque connections>;
+
+        interfaceinvoke $r1.<java.util.Deque: boolean remove(java.lang.Object)>($r3);
+
+        exitmonitor r0;
+
+     label11:
+        $r6 = virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: java.net.Socket socket()>();
+
+        staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.Util: void closeQuietly(java.net.Socket)>($r6);
+
+        return 0L;
+
+     label12:
+        $r7 := @caughtexception;
+
+     label13:
+        exitmonitor r0;
+
+     label14:
+        throw $r7;
+
+        catch java.lang.Throwable from label01 to label05 with label12;
+        catch java.lang.Throwable from label06 to label07 with label12;
+        catch java.lang.Throwable from label08 to label09 with label12;
+        catch java.lang.Throwable from label10 to label11 with label12;
+        catch java.lang.Throwable from label13 to label14 with label12;
+    }
+
+    boolean connectionBecameIdle(com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection)
+    {
+        int $i0;
+        java.util.Deque $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection $r1;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection;
+
+        $z0 = $r1.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: boolean noNewStreams>;
+
+        if $z0 != 0 goto label1;
+
+        $i0 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: int maxIdleConnections>;
+
+        if $i0 == 0 goto label1;
+
+        virtualinvoke r0.<java.lang.Object: void notifyAll()>();
+
+        return 0;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.Deque connections>;
+
+        interfaceinvoke $r2.<java.util.Deque: boolean remove(java.lang.Object)>($r1);
+
+        return 1;
+    }
+
+    public int connectionCount()
+    {
+        java.lang.Throwable $r2;
+        int $i0;
+        java.util.Deque $r1;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.Deque connections>;
+
+        $i0 = interfaceinvoke $r1.<java.util.Deque: int size()>();
+
+     label2:
+        exitmonitor r0;
+
+        return $i0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    java.net.Socket deduplicate(com.mbridge.msdk.thrid.okhttp.Address, com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation)
+    {
+        java.net.Socket $r8;
+        java.util.Iterator $r4;
+        java.util.Deque $r3;
+        com.mbridge.msdk.thrid.okhttp.Address $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation $r1;
+        java.lang.Object $r5;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection $r6, $r7;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        $r2 := @parameter0: com.mbridge.msdk.thrid.okhttp.Address;
+
+        $r1 := @parameter1: com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation;
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.Deque connections>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Deque: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection) $r5;
+
+        $z0 = virtualinvoke $r6.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: boolean isEligible(com.mbridge.msdk.thrid.okhttp.Address,com.mbridge.msdk.thrid.okhttp.Route)>($r2, null);
+
+        if $z0 == 0 goto label1;
+
+        $z0 = virtualinvoke $r6.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: boolean isMultiplexed()>();
+
+        if $z0 == 0 goto label1;
+
+        $r7 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation: com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection connection()>();
+
+        if $r6 == $r7 goto label1;
+
+        $r8 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation: java.net.Socket releaseAndAcquire(com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection)>($r6);
+
+        return $r8;
+
+     label2:
+        return null;
+    }
+
+    public void evictAll()
+    {
+        java.lang.Throwable $r8;
+        java.net.Socket $r7;
+        java.util.Iterator $r3;
+        java.util.Deque $r2;
+        java.util.ArrayList $r1;
+        java.util.List $r6;
+        java.lang.Object $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection $r5;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        entermonitor r0;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.Deque connections>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Deque: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection) $r4;
+
+        $r6 = $r5.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: java.util.List allocations>;
+
+        $z0 = interfaceinvoke $r6.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: boolean noNewStreams> = 1;
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        interfaceinvoke $r3.<java.util.Iterator: void remove()>();
+
+        goto label2;
+
+     label3:
+        exitmonitor r0;
+
+     label4:
+        $r3 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label5:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection) $r4;
+
+        $r7 = virtualinvoke $r5.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: java.net.Socket socket()>();
+
+        staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.Util: void closeQuietly(java.net.Socket)>($r7);
+
+        goto label5;
+
+     label6:
+        return;
+
+     label7:
+        $r8 := @caughtexception;
+
+     label8:
+        exitmonitor r0;
+
+     label9:
+        throw $r8;
+
+        catch java.lang.Throwable from label1 to label4 with label7;
+        catch java.lang.Throwable from label8 to label9 with label7;
+    }
+
+    com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection get(com.mbridge.msdk.thrid.okhttp.Address, com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation, com.mbridge.msdk.thrid.okhttp.Route)
+    {
+        java.util.Iterator $r5;
+        com.mbridge.msdk.thrid.okhttp.Route $r2;
+        java.util.Deque $r4;
+        com.mbridge.msdk.thrid.okhttp.Address $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation $r1;
+        java.lang.Object $r6;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection $r7;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        $r3 := @parameter0: com.mbridge.msdk.thrid.okhttp.Address;
+
+        $r1 := @parameter1: com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation;
+
+        $r2 := @parameter2: com.mbridge.msdk.thrid.okhttp.Route;
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.Deque connections>;
+
+        $r5 = interfaceinvoke $r4.<java.util.Deque: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection) $r6;
+
+        $z0 = virtualinvoke $r7.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: boolean isEligible(com.mbridge.msdk.thrid.okhttp.Address,com.mbridge.msdk.thrid.okhttp.Route)>($r3, $r2);
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation: void acquire(com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection,boolean)>($r7, 1);
+
+        return $r7;
+
+     label2:
+        return null;
+    }
+
+    public int idleConnectionCount()
+    {
+        java.lang.Throwable $r6;
+        java.util.Iterator $r2;
+        java.util.Deque $r1;
+        java.util.List $r5;
+        int $i0;
+        java.lang.Object $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection $r4;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.Deque connections>;
+
+        $r2 = interfaceinvoke $r1.<java.util.Deque: java.util.Iterator iterator()>();
+
+        $i0 = 0;
+
+     label2:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection) $r3;
+
+        $r5 = $r4.<com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection: java.util.List allocations>;
+
+        $z0 = interfaceinvoke $r5.<java.util.List: boolean isEmpty()>();
+
+     label3:
+        if $z0 == 0 goto label2;
+
+        $i0 = $i0 + 1;
+
+        goto label2;
+
+     label4:
+        exitmonitor r0;
+
+        return $i0;
+
+     label5:
+        $r6 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label3 with label5;
+    }
+
+    void put(com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection)
+    {
+        java.util.concurrent.Executor $r3;
+        java.util.Deque $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection $r1;
+        java.lang.Runnable $r2;
+        com.mbridge.msdk.thrid.okhttp.ConnectionPool r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.ConnectionPool;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.internal.connection.RealConnection;
+
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: boolean cleanupRunning>;
+
+        if $z0 != 0 goto label1;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: boolean cleanupRunning> = 1;
+
+        $r3 = <com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.concurrent.Executor executor>;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.lang.Runnable cleanupRunnable>;
+
+        interfaceinvoke $r3.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r2);
+
+     label1:
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.ConnectionPool: java.util.Deque connections>;
+
+        interfaceinvoke $r4.<java.util.Deque: boolean add(java.lang.Object)>($r1);
+
+        return;
+    }
+}

@@ -1,0 +1,455 @@
+public final class io.reactivex.subscribers.SerializedSubscriber extends java.lang.Object implements io.reactivex.FlowableSubscriber, org.reactivestreams.Subscription
+{
+    static final int QUEUE_LINK_SIZE;
+    final org.reactivestreams.Subscriber actual;
+    final boolean delayError;
+    volatile boolean done;
+    boolean emitting;
+    io.reactivex.internal.util.AppendOnlyLinkedArrayList queue;
+    org.reactivestreams.Subscription subscription;
+
+    public void <init>(org.reactivestreams.Subscriber)
+    {
+        io.reactivex.subscribers.SerializedSubscriber r0;
+        org.reactivestreams.Subscriber $r1;
+
+        r0 := @this: io.reactivex.subscribers.SerializedSubscriber;
+
+        $r1 := @parameter0: org.reactivestreams.Subscriber;
+
+        specialinvoke r0.<io.reactivex.subscribers.SerializedSubscriber: void <init>(org.reactivestreams.Subscriber,boolean)>($r1, 0);
+
+        return;
+    }
+
+    public void <init>(org.reactivestreams.Subscriber, boolean)
+    {
+        io.reactivex.subscribers.SerializedSubscriber r0;
+        org.reactivestreams.Subscriber $r1;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.subscribers.SerializedSubscriber;
+
+        $r1 := @parameter0: org.reactivestreams.Subscriber;
+
+        $z0 := @parameter1: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscriber actual> = $r1;
+
+        r0.<io.reactivex.subscribers.SerializedSubscriber: boolean delayError> = 0;
+
+        return;
+    }
+
+    public void cancel()
+    {
+        io.reactivex.subscribers.SerializedSubscriber r0;
+        org.reactivestreams.Subscription $r1;
+
+        r0 := @this: io.reactivex.subscribers.SerializedSubscriber;
+
+        $r1 = r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscription subscription>;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void cancel()>();
+
+        return;
+    }
+
+    void emitLoop()
+    {
+        java.lang.Throwable $r3;
+        io.reactivex.subscribers.SerializedSubscriber r0;
+        io.reactivex.internal.util.AppendOnlyLinkedArrayList $r1;
+        org.reactivestreams.Subscriber $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.subscribers.SerializedSubscriber;
+
+     label1:
+        entermonitor r0;
+
+     label2:
+        $r1 = r0.<io.reactivex.subscribers.SerializedSubscriber: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue>;
+
+        if $r1 != null goto label4;
+
+        r0.<io.reactivex.subscribers.SerializedSubscriber: boolean emitting> = 0;
+
+        exitmonitor r0;
+
+     label3:
+        return;
+
+     label4:
+        r0.<io.reactivex.subscribers.SerializedSubscriber: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue> = null;
+
+        exitmonitor r0;
+
+     label5:
+        $r2 = r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscriber actual>;
+
+        $z0 = virtualinvoke $r1.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: boolean accept(org.reactivestreams.Subscriber)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label6:
+        $r3 := @caughtexception;
+
+     label7:
+        exitmonitor r0;
+
+     label8:
+        throw $r3;
+
+        catch java.lang.Throwable from label2 to label3 with label6;
+        catch java.lang.Throwable from label4 to label5 with label6;
+        catch java.lang.Throwable from label7 to label8 with label6;
+    }
+
+    public void onComplete()
+    {
+        java.lang.Throwable $r4;
+        io.reactivex.subscribers.SerializedSubscriber r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.util.AppendOnlyLinkedArrayList $r2;
+        org.reactivestreams.Subscriber $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.subscribers.SerializedSubscriber;
+
+        $z0 = r0.<io.reactivex.subscribers.SerializedSubscriber: boolean done>;
+
+        if $z0 == 0 goto label01;
+
+        return;
+
+     label01:
+        entermonitor r0;
+
+     label02:
+        $z0 = r0.<io.reactivex.subscribers.SerializedSubscriber: boolean done>;
+
+        if $z0 == 0 goto label04;
+
+        exitmonitor r0;
+
+     label03:
+        return;
+
+     label04:
+        $z0 = r0.<io.reactivex.subscribers.SerializedSubscriber: boolean emitting>;
+
+        if $z0 == 0 goto label07;
+
+        $r2 = r0.<io.reactivex.subscribers.SerializedSubscriber: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue>;
+
+        if $r2 != null goto label05;
+
+        $r2 = new io.reactivex.internal.util.AppendOnlyLinkedArrayList;
+
+        specialinvoke $r2.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void <init>(int)>(4);
+
+        r0.<io.reactivex.subscribers.SerializedSubscriber: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue> = $r2;
+
+     label05:
+        $r1 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object complete()>();
+
+        virtualinvoke $r2.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void add(java.lang.Object)>($r1);
+
+        exitmonitor r0;
+
+     label06:
+        return;
+
+     label07:
+        r0.<io.reactivex.subscribers.SerializedSubscriber: boolean done> = 1;
+
+        r0.<io.reactivex.subscribers.SerializedSubscriber: boolean emitting> = 1;
+
+        exitmonitor r0;
+
+     label08:
+        $r3 = r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r3.<org.reactivestreams.Subscriber: void onComplete()>();
+
+        return;
+
+     label09:
+        $r4 := @caughtexception;
+
+     label10:
+        exitmonitor r0;
+
+     label11:
+        throw $r4;
+
+        catch java.lang.Throwable from label02 to label03 with label09;
+        catch java.lang.Throwable from label04 to label06 with label09;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label10 to label11 with label09;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r2, $r5;
+        io.reactivex.subscribers.SerializedSubscriber r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.util.AppendOnlyLinkedArrayList $r3;
+        org.reactivestreams.Subscriber $r4;
+        boolean $z0, $z1;
+
+        r0 := @this: io.reactivex.subscribers.SerializedSubscriber;
+
+        $r2 := @parameter0: java.lang.Throwable;
+
+        $z0 = r0.<io.reactivex.subscribers.SerializedSubscriber: boolean done>;
+
+        if $z0 == 0 goto label01;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r2);
+
+        return;
+
+     label01:
+        entermonitor r0;
+
+     label02:
+        $z0 = r0.<io.reactivex.subscribers.SerializedSubscriber: boolean done>;
+
+        $z1 = 1;
+
+        if $z0 != 0 goto label08;
+
+        $z0 = r0.<io.reactivex.subscribers.SerializedSubscriber: boolean emitting>;
+
+        if $z0 == 0 goto label07;
+
+        r0.<io.reactivex.subscribers.SerializedSubscriber: boolean done> = 1;
+
+        $r3 = r0.<io.reactivex.subscribers.SerializedSubscriber: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue>;
+
+        if $r3 != null goto label03;
+
+        $r3 = new io.reactivex.internal.util.AppendOnlyLinkedArrayList;
+
+        specialinvoke $r3.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void <init>(int)>(4);
+
+        r0.<io.reactivex.subscribers.SerializedSubscriber: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue> = $r3;
+
+     label03:
+        $r1 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object error(java.lang.Throwable)>($r2);
+
+        $z0 = r0.<io.reactivex.subscribers.SerializedSubscriber: boolean delayError>;
+
+        if $z0 == 0 goto label04;
+
+        virtualinvoke $r3.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void add(java.lang.Object)>($r1);
+
+        goto label05;
+
+     label04:
+        virtualinvoke $r3.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void setFirst(java.lang.Object)>($r1);
+
+     label05:
+        exitmonitor r0;
+
+     label06:
+        return;
+
+     label07:
+        r0.<io.reactivex.subscribers.SerializedSubscriber: boolean done> = 1;
+
+        r0.<io.reactivex.subscribers.SerializedSubscriber: boolean emitting> = 1;
+
+        $z1 = 0;
+
+     label08:
+        exitmonitor r0;
+
+     label09:
+        if $z1 == 0 goto label10;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r2);
+
+        return;
+
+     label10:
+        $r4 = r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r4.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r2);
+
+        return;
+
+     label11:
+        $r5 := @caughtexception;
+
+     label12:
+        exitmonitor r0;
+
+     label13:
+        throw $r5;
+
+        catch java.lang.Throwable from label02 to label06 with label11;
+        catch java.lang.Throwable from label07 to label09 with label11;
+        catch java.lang.Throwable from label12 to label13 with label11;
+    }
+
+    public void onNext(java.lang.Object)
+    {
+        java.lang.Throwable $r6;
+        java.lang.NullPointerException $r3;
+        org.reactivestreams.Subscription $r2;
+        io.reactivex.subscribers.SerializedSubscriber r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.util.AppendOnlyLinkedArrayList $r4;
+        org.reactivestreams.Subscriber $r5;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.subscribers.SerializedSubscriber;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $z0 = r0.<io.reactivex.subscribers.SerializedSubscriber: boolean done>;
+
+        if $z0 == 0 goto label01;
+
+        return;
+
+     label01:
+        if $r1 != null goto label02;
+
+        $r2 = r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscription subscription>;
+
+        interfaceinvoke $r2.<org.reactivestreams.Subscription: void cancel()>();
+
+        $r3 = new java.lang.NullPointerException;
+
+        specialinvoke $r3.<java.lang.NullPointerException: void <init>(java.lang.String)>("onNext called with null. Null values are generally not allowed in 2.x operators and sources.");
+
+        virtualinvoke r0.<io.reactivex.subscribers.SerializedSubscriber: void onError(java.lang.Throwable)>($r3);
+
+        return;
+
+     label02:
+        entermonitor r0;
+
+     label03:
+        $z0 = r0.<io.reactivex.subscribers.SerializedSubscriber: boolean done>;
+
+        if $z0 == 0 goto label05;
+
+        exitmonitor r0;
+
+     label04:
+        return;
+
+     label05:
+        $z0 = r0.<io.reactivex.subscribers.SerializedSubscriber: boolean emitting>;
+
+        if $z0 == 0 goto label08;
+
+        $r4 = r0.<io.reactivex.subscribers.SerializedSubscriber: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue>;
+
+        if $r4 != null goto label06;
+
+        $r4 = new io.reactivex.internal.util.AppendOnlyLinkedArrayList;
+
+        specialinvoke $r4.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void <init>(int)>(4);
+
+        r0.<io.reactivex.subscribers.SerializedSubscriber: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue> = $r4;
+
+     label06:
+        $r1 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object next(java.lang.Object)>($r1);
+
+        virtualinvoke $r4.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void add(java.lang.Object)>($r1);
+
+        exitmonitor r0;
+
+     label07:
+        return;
+
+     label08:
+        r0.<io.reactivex.subscribers.SerializedSubscriber: boolean emitting> = 1;
+
+        exitmonitor r0;
+
+     label09:
+        $r5 = r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r5.<org.reactivestreams.Subscriber: void onNext(java.lang.Object)>($r1);
+
+        virtualinvoke r0.<io.reactivex.subscribers.SerializedSubscriber: void emitLoop()>();
+
+        return;
+
+     label10:
+        $r6 := @caughtexception;
+
+     label11:
+        exitmonitor r0;
+
+     label12:
+        throw $r6;
+
+        catch java.lang.Throwable from label03 to label04 with label10;
+        catch java.lang.Throwable from label05 to label07 with label10;
+        catch java.lang.Throwable from label08 to label09 with label10;
+        catch java.lang.Throwable from label11 to label12 with label10;
+    }
+
+    public void onSubscribe(org.reactivestreams.Subscription)
+    {
+        org.reactivestreams.Subscription $r1, $r2;
+        io.reactivex.subscribers.SerializedSubscriber r0;
+        org.reactivestreams.Subscriber $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.subscribers.SerializedSubscriber;
+
+        $r1 := @parameter0: org.reactivestreams.Subscription;
+
+        $r2 = r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscription subscription>;
+
+        $z0 = staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean validate(org.reactivestreams.Subscription,org.reactivestreams.Subscription)>($r2, $r1);
+
+        if $z0 == 0 goto label1;
+
+        r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscription subscription> = $r1;
+
+        $r3 = r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r3.<org.reactivestreams.Subscriber: void onSubscribe(org.reactivestreams.Subscription)>(r0);
+
+     label1:
+        return;
+    }
+
+    public void request(long)
+    {
+        io.reactivex.subscribers.SerializedSubscriber r0;
+        long $l0;
+        org.reactivestreams.Subscription $r1;
+
+        r0 := @this: io.reactivex.subscribers.SerializedSubscriber;
+
+        $l0 := @parameter0: long;
+
+        $r1 = r0.<io.reactivex.subscribers.SerializedSubscriber: org.reactivestreams.Subscription subscription>;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void request(long)>($l0);
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <io.reactivex.subscribers.SerializedSubscriber: int QUEUE_LINK_SIZE> = 4;
+
+        return;
+    }
+}

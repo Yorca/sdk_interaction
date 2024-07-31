@@ -1,0 +1,863 @@
+final class io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber extends io.reactivex.internal.subscriptions.BasicIntQueueSubscription implements io.reactivex.FlowableSubscriber
+{
+    private static final long serialVersionUID;
+    final org.reactivestreams.Subscriber actual;
+    volatile boolean cancelled;
+    int consumed;
+    java.util.Iterator current;
+    volatile boolean done;
+    final java.util.concurrent.atomic.AtomicReference error;
+    int fusionMode;
+    final int limit;
+    final io.reactivex.functions.Function mapper;
+    final int prefetch;
+    io.reactivex.internal.fuseable.SimpleQueue queue;
+    final java.util.concurrent.atomic.AtomicLong requested;
+    org.reactivestreams.Subscription s;
+
+    void <init>(org.reactivestreams.Subscriber, io.reactivex.functions.Function, int)
+    {
+        java.util.concurrent.atomic.AtomicLong $r4;
+        io.reactivex.functions.Function $r1;
+        int $i0, $i1;
+        org.reactivestreams.Subscriber $r2;
+        java.util.concurrent.atomic.AtomicReference $r3;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $r2 := @parameter0: org.reactivestreams.Subscriber;
+
+        $r1 := @parameter1: io.reactivex.functions.Function;
+
+        $i0 := @parameter2: int;
+
+        specialinvoke r0.<io.reactivex.internal.subscriptions.BasicIntQueueSubscription: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscriber actual> = $r2;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.functions.Function mapper> = $r1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int prefetch> = $i0;
+
+        $i1 = $i0 >> 2;
+
+        $i0 = $i0 - $i1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int limit> = $i0;
+
+        $r3 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r3.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error> = $r3;
+
+        $r4 = new java.util.concurrent.atomic.AtomicLong;
+
+        specialinvoke $r4.<java.util.concurrent.atomic.AtomicLong: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicLong requested> = $r4;
+
+        return;
+    }
+
+    public void cancel()
+    {
+        org.reactivestreams.Subscription $r1;
+        int $i0;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean cancelled>;
+
+        if $z0 != 0 goto label1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean cancelled> = 1;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscription s>;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void cancel()>();
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int getAndIncrement()>();
+
+        if $i0 != 0 goto label1;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+     label1:
+        return;
+    }
+
+    boolean checkTerminated(boolean, boolean, org.reactivestreams.Subscriber, io.reactivex.internal.fuseable.SimpleQueue)
+    {
+        java.lang.Throwable $r5;
+        java.util.concurrent.atomic.AtomicReference $r3;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        java.lang.Object $r4;
+        org.reactivestreams.Subscriber $r1;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $z2 := @parameter0: boolean;
+
+        $z0 := @parameter1: boolean;
+
+        $r1 := @parameter2: org.reactivestreams.Subscriber;
+
+        $r2 := @parameter3: io.reactivex.internal.fuseable.SimpleQueue;
+
+        $z1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean cancelled>;
+
+        if $z1 == 0 goto label1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current> = null;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        return 1;
+
+     label1:
+        if $z2 == 0 goto label3;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r5 = (java.lang.Throwable) $r4;
+
+        if $r5 == null goto label2;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        $r5 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.Throwable terminate(java.util.concurrent.atomic.AtomicReference)>($r3);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current> = null;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r5);
+
+        return 1;
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onComplete()>();
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    public void clear()
+    {
+        io.reactivex.internal.fuseable.SimpleQueue $r1;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current> = null;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        interfaceinvoke $r1.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        return;
+    }
+
+    void consumedOne(boolean)
+    {
+        org.reactivestreams.Subscription $r1;
+        int $i1, $i2;
+        long $l0;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $z0 := @parameter0: boolean;
+
+        if $z0 == 0 goto label2;
+
+        $i1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int consumed>;
+
+        $i1 = $i1 + 1;
+
+        $i2 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int limit>;
+
+        if $i1 != $i2 goto label1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int consumed> = 0;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscription s>;
+
+        $l0 = (long) $i1;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void request(long)>($l0);
+
+        return;
+
+     label1:
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int consumed> = $i1;
+
+     label2:
+        return;
+    }
+
+    void drain()
+    {
+        java.lang.Throwable $r8, $r11, $r13, $r14;
+        long $l1, $l2;
+        java.util.concurrent.atomic.AtomicReference $r10;
+        java.lang.Iterable $r6;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        byte $b3;
+        int $i0, $i4;
+        org.reactivestreams.Subscriber $r1;
+        boolean $z0, $z1, $z2;
+        java.util.Iterator $r3, $r7;
+        java.util.concurrent.atomic.AtomicLong $r12;
+        io.reactivex.functions.Function $r5;
+        org.reactivestreams.Subscription $r9;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        java.lang.Object $r4;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int getAndIncrement()>();
+
+        if $i0 == 0 goto label01;
+
+        return;
+
+     label01:
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscriber actual>;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int fusionMode>;
+
+        if $i0 == 1 goto label02;
+
+        $z0 = 1;
+
+        goto label03;
+
+     label02:
+        $z0 = 0;
+
+     label03:
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current>;
+
+        $i0 = 1;
+
+     label04:
+        if $r3 != null goto label17;
+
+        $z1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean done>;
+
+     label05:
+        $r4 = interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: java.lang.Object poll()>();
+
+     label06:
+        if $r4 != null goto label07;
+
+        $z2 = 1;
+
+        goto label08;
+
+     label07:
+        $z2 = 0;
+
+     label08:
+        $z1 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean checkTerminated(boolean,boolean,org.reactivestreams.Subscriber,io.reactivex.internal.fuseable.SimpleQueue)>($z1, $z2, $r1, $r2);
+
+        if $z1 == 0 goto label09;
+
+        return;
+
+     label09:
+        if $r4 == null goto label17;
+
+     label10:
+        $r5 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.functions.Function mapper>;
+
+        $r4 = interfaceinvoke $r5.<io.reactivex.functions.Function: java.lang.Object apply(java.lang.Object)>($r4);
+
+        $r6 = (java.lang.Iterable) $r4;
+
+        $r7 = interfaceinvoke $r6.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label11:
+        $r3 = $r7;
+
+     label12:
+        $z1 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+     label13:
+        if $z1 != 0 goto label14;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: void consumedOne(boolean)>($z0);
+
+        $r3 = null;
+
+        goto label04;
+
+     label14:
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current> = $r7;
+
+        goto label17;
+
+     label15:
+        $r8 := @caughtexception;
+
+        staticinvoke <io.reactivex.exceptions.Exceptions: void throwIfFatal(java.lang.Throwable)>($r8);
+
+        $r9 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscription s>;
+
+        interfaceinvoke $r9.<org.reactivestreams.Subscription: void cancel()>();
+
+        $r10 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        staticinvoke <io.reactivex.internal.util.ExceptionHelper: boolean addThrowable(java.util.concurrent.atomic.AtomicReference,java.lang.Throwable)>($r10, $r8);
+
+        $r10 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        $r8 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.Throwable terminate(java.util.concurrent.atomic.AtomicReference)>($r10);
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label16:
+        $r11 := @caughtexception;
+
+        staticinvoke <io.reactivex.exceptions.Exceptions: void throwIfFatal(java.lang.Throwable)>($r11);
+
+        $r9 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscription s>;
+
+        interfaceinvoke $r9.<org.reactivestreams.Subscription: void cancel()>();
+
+        $r10 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        staticinvoke <io.reactivex.internal.util.ExceptionHelper: boolean addThrowable(java.util.concurrent.atomic.AtomicReference,java.lang.Throwable)>($r10, $r11);
+
+        $r10 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        $r8 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.Throwable terminate(java.util.concurrent.atomic.AtomicReference)>($r10);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current> = null;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label17:
+        if $r3 == null goto label32;
+
+        $r12 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicLong requested>;
+
+        $l1 = virtualinvoke $r12.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $l2 = 0L;
+
+     label18:
+        $b3 = $l2 cmp $l1;
+
+        if $b3 == 0 goto label27;
+
+        $z1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean done>;
+
+        $z1 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean checkTerminated(boolean,boolean,org.reactivestreams.Subscriber,io.reactivex.internal.fuseable.SimpleQueue)>($z1, 0, $r1, $r2);
+
+        if $z1 == 0 goto label19;
+
+        return;
+
+     label19:
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: java.lang.Object requireNonNull(java.lang.Object,java.lang.String)>($r4, "The iterator returned a null value");
+
+     label20:
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onNext(java.lang.Object)>($r4);
+
+        $z1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean done>;
+
+        $z1 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean checkTerminated(boolean,boolean,org.reactivestreams.Subscriber,io.reactivex.internal.fuseable.SimpleQueue)>($z1, 0, $r1, $r2);
+
+        if $z1 == 0 goto label21;
+
+        return;
+
+     label21:
+        $l2 = $l2 + 1L;
+
+     label22:
+        $z1 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+     label23:
+        if $z1 != 0 goto label24;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: void consumedOne(boolean)>($z0);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current> = null;
+
+        $r3 = null;
+
+        goto label27;
+
+     label24:
+        goto label18;
+
+     label25:
+        $r13 := @caughtexception;
+
+        staticinvoke <io.reactivex.exceptions.Exceptions: void throwIfFatal(java.lang.Throwable)>($r13);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current> = null;
+
+        $r9 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscription s>;
+
+        interfaceinvoke $r9.<org.reactivestreams.Subscription: void cancel()>();
+
+        $r10 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        staticinvoke <io.reactivex.internal.util.ExceptionHelper: boolean addThrowable(java.util.concurrent.atomic.AtomicReference,java.lang.Throwable)>($r10, $r13);
+
+        $r10 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        $r8 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.Throwable terminate(java.util.concurrent.atomic.AtomicReference)>($r10);
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label26:
+        $r14 := @caughtexception;
+
+        staticinvoke <io.reactivex.exceptions.Exceptions: void throwIfFatal(java.lang.Throwable)>($r14);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current> = null;
+
+        $r9 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscription s>;
+
+        interfaceinvoke $r9.<org.reactivestreams.Subscription: void cancel()>();
+
+        $r10 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        staticinvoke <io.reactivex.internal.util.ExceptionHelper: boolean addThrowable(java.util.concurrent.atomic.AtomicReference,java.lang.Throwable)>($r10, $r14);
+
+        $r10 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        $r8 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.Throwable terminate(java.util.concurrent.atomic.AtomicReference)>($r10);
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label27:
+        $b3 = $l2 cmp $l1;
+
+        if $b3 != 0 goto label30;
+
+        $z1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean done>;
+
+        $z2 = interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: boolean isEmpty()>();
+
+        if $z2 == 0 goto label28;
+
+        if $r3 != null goto label28;
+
+        $z2 = 1;
+
+        goto label29;
+
+     label28:
+        $z2 = 0;
+
+     label29:
+        $z1 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean checkTerminated(boolean,boolean,org.reactivestreams.Subscriber,io.reactivex.internal.fuseable.SimpleQueue)>($z1, $z2, $r1, $r2);
+
+        if $z1 == 0 goto label30;
+
+        return;
+
+     label30:
+        $b3 = $l2 cmp 0L;
+
+        if $b3 == 0 goto label31;
+
+        $b3 = $l1 cmp 9223372036854775807L;
+
+        if $b3 == 0 goto label31;
+
+        $r12 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicLong requested>;
+
+        $l1 = neg $l2;
+
+        virtualinvoke $r12.<java.util.concurrent.atomic.AtomicLong: long addAndGet(long)>($l1);
+
+     label31:
+        if $r3 != null goto label32;
+
+        goto label33;
+
+     label32:
+        $i0 = neg $i0;
+
+        $i4 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int addAndGet(int)>($i0);
+
+        $i0 = $i4;
+
+        if $i4 != 0 goto label33;
+
+        return;
+
+     label33:
+        goto label04;
+
+        catch java.lang.Throwable from label05 to label06 with label16;
+        catch java.lang.Throwable from label10 to label11 with label15;
+        catch java.lang.Throwable from label12 to label13 with label15;
+        catch java.lang.Throwable from label19 to label20 with label26;
+        catch java.lang.Throwable from label22 to label23 with label25;
+    }
+
+    public boolean isEmpty()
+    {
+        java.util.Iterator $r1;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current>;
+
+        if $r1 != null goto label1;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        $z0 = interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public void onComplete()
+    {
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: void drain()>();
+
+        return;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean done>;
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicReference error>;
+
+        $z0 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: boolean addThrowable(java.util.concurrent.atomic.AtomicReference,java.lang.Throwable)>($r2, $r1);
+
+        if $z0 == 0 goto label1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: void drain()>();
+
+        return;
+
+     label1:
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r1);
+
+        return;
+    }
+
+    public void onNext(java.lang.Object)
+    {
+        int $i0;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        java.lang.Object $r1;
+        io.reactivex.exceptions.MissingBackpressureException $r3;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int fusionMode>;
+
+        if $i0 != 0 goto label2;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        $z0 = interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: boolean offer(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        $r3 = new io.reactivex.exceptions.MissingBackpressureException;
+
+        specialinvoke $r3.<io.reactivex.exceptions.MissingBackpressureException: void <init>(java.lang.String)>("Queue is full?!");
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: void onError(java.lang.Throwable)>($r3);
+
+        return;
+
+     label2:
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: void drain()>();
+
+        return;
+    }
+
+    public void onSubscribe(org.reactivestreams.Subscription)
+    {
+        long $l1;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        io.reactivex.internal.queue.SpscArrayQueue $r5;
+        io.reactivex.internal.fuseable.QueueSubscription $r3;
+        org.reactivestreams.Subscription $r1, $r2;
+        int $i0;
+        org.reactivestreams.Subscriber $r4;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $r1 := @parameter0: org.reactivestreams.Subscription;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscription s>;
+
+        $z0 = staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean validate(org.reactivestreams.Subscription,org.reactivestreams.Subscription)>($r2, $r1);
+
+        if $z0 == 0 goto label3;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscription s> = $r1;
+
+        $z0 = $r1 instanceof io.reactivex.internal.fuseable.QueueSubscription;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = (io.reactivex.internal.fuseable.QueueSubscription) $r1;
+
+        $i0 = interfaceinvoke $r3.<io.reactivex.internal.fuseable.QueueSubscription: int requestFusion(int)>(3);
+
+        if $i0 != 1 goto label1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int fusionMode> = $i0;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue> = $r3;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: boolean done> = 1;
+
+        $r4 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r4.<org.reactivestreams.Subscriber: void onSubscribe(org.reactivestreams.Subscription)>(r0);
+
+        return;
+
+     label1:
+        if $i0 != 2 goto label2;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int fusionMode> = $i0;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue> = $r3;
+
+        $r4 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r4.<org.reactivestreams.Subscriber: void onSubscribe(org.reactivestreams.Subscription)>(r0);
+
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int prefetch>;
+
+        $l1 = (long) $i0;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void request(long)>($l1);
+
+        return;
+
+     label2:
+        $r5 = new io.reactivex.internal.queue.SpscArrayQueue;
+
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int prefetch>;
+
+        specialinvoke $r5.<io.reactivex.internal.queue.SpscArrayQueue: void <init>(int)>($i0);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue> = $r5;
+
+        $r4 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r4.<org.reactivestreams.Subscriber: void onSubscribe(org.reactivestreams.Subscription)>(r0);
+
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int prefetch>;
+
+        $l1 = (long) $i0;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void request(long)>($l1);
+
+     label3:
+        return;
+    }
+
+    public java.lang.Object poll() throws java.lang.Exception
+    {
+        java.util.Iterator $r1, $r6;
+        java.lang.Iterable $r5;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        io.reactivex.functions.Function $r4;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        java.lang.Object $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current>;
+
+     label1:
+        if $r1 != null goto label4;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        $r3 = interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: java.lang.Object poll()>();
+
+        if $r3 != null goto label2;
+
+        return null;
+
+     label2:
+        $r4 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: io.reactivex.functions.Function mapper>;
+
+        $r3 = interfaceinvoke $r4.<io.reactivex.functions.Function: java.lang.Object apply(java.lang.Object)>($r3);
+
+        $r5 = (java.lang.Iterable) $r3;
+
+        $r6 = interfaceinvoke $r5.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $r1 = $r6;
+
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label3;
+
+        $r1 = null;
+
+        goto label1;
+
+     label3:
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current> = $r6;
+
+     label4:
+        $r3 = interfaceinvoke $r1.<java.util.Iterator: java.lang.Object next()>();
+
+        $r3 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: java.lang.Object requireNonNull(java.lang.Object,java.lang.String)>($r3, "The iterator returned a null value");
+
+        $z0 = interfaceinvoke $r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label5;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.Iterator current> = null;
+
+     label5:
+        return $r3;
+    }
+
+    public void request(long)
+    {
+        java.util.concurrent.atomic.AtomicLong $r1;
+        long $l0;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $l0 := @parameter0: long;
+
+        $z0 = staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean validate(long)>($l0);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: java.util.concurrent.atomic.AtomicLong requested>;
+
+        staticinvoke <io.reactivex.internal.util.BackpressureHelper: long add(java.util.concurrent.atomic.AtomicLong,long)>($r1, $l0);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: void drain()>();
+
+     label1:
+        return;
+    }
+
+    public int requestFusion(int)
+    {
+        int $i0;
+        io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber r0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber;
+
+        $i0 := @parameter0: int;
+
+        $i0 = $i0 & 1;
+
+        if $i0 == 0 goto label1;
+
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: int fusionMode>;
+
+        if $i0 != 1 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public static void <clinit>()
+    {
+        <io.reactivex.internal.operators.flowable.FlowableFlattenIterable$FlattenIterableSubscriber: long serialVersionUID> = -3096000382929934955L;
+
+        return;
+    }
+}

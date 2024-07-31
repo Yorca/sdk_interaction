@@ -1,0 +1,115 @@
+final class io.grpc.Context$LazyStorage extends java.lang.Object
+{
+    static final io.grpc.Context$Storage storage;
+
+    static void <clinit>()
+    {
+        java.lang.Throwable $r4;
+        io.grpc.Context$Storage $r2;
+        java.lang.Object $r3;
+        java.util.logging.Logger $r5;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        java.util.logging.Level $r0;
+
+        $r1 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r1.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        $r2 = staticinvoke <io.grpc.Context$LazyStorage: io.grpc.Context$Storage createStorage(java.util.concurrent.atomic.AtomicReference)>($r1);
+
+        <io.grpc.Context$LazyStorage: io.grpc.Context$Storage storage> = $r2;
+
+        $r3 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r4 = (java.lang.Throwable) $r3;
+
+        if $r4 == null goto label1;
+
+        $r5 = <io.grpc.Context: java.util.logging.Logger log>;
+
+        $r0 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        virtualinvoke $r5.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String,java.lang.Throwable)>($r0, "Storage override doesn\'t exist. Using default", $r4);
+
+     label1:
+        return;
+    }
+
+    private void <init>()
+    {
+        io.grpc.Context$LazyStorage r0;
+
+        r0 := @this: io.grpc.Context$LazyStorage;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static io.grpc.Context$Storage createStorage(java.util.concurrent.atomic.AtomicReference)
+    {
+        java.lang.Object[] $r4;
+        java.lang.Class[] $r0;
+        java.lang.RuntimeException $r8;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        java.lang.reflect.Constructor $r3;
+        java.lang.Exception $r7;
+        io.grpc.ThreadLocalContextStorage $r10;
+        io.grpc.Context$Storage $r6;
+        java.lang.Class $r2;
+        java.lang.Object $r5;
+        java.lang.ClassNotFoundException $r9;
+
+        $r1 := @parameter0: java.util.concurrent.atomic.AtomicReference;
+
+     label1:
+        $r2 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("io.grpc.override.ContextStorageOverride");
+
+        $r2 = virtualinvoke $r2.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>(class "Lio/grpc/Context$Storage;");
+
+     label2:
+        $r0 = newarray (java.lang.Class)[0];
+
+     label3:
+        $r3 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Constructor getConstructor(java.lang.Class[])>($r0);
+
+     label4:
+        $r4 = newarray (java.lang.Object)[0];
+
+     label5:
+        $r5 = virtualinvoke $r3.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r4);
+
+     label6:
+        $r6 = (io.grpc.Context$Storage) $r5;
+
+     label7:
+        return $r6;
+
+     label8:
+        $r7 := @caughtexception;
+
+        $r8 = new java.lang.RuntimeException;
+
+        specialinvoke $r8.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>("Storage override failed to initialize", $r7);
+
+        throw $r8;
+
+     label9:
+        $r9 := @caughtexception;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>($r9);
+
+        $r10 = new io.grpc.ThreadLocalContextStorage;
+
+        specialinvoke $r10.<io.grpc.ThreadLocalContextStorage: void <init>()>();
+
+        return $r10;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label9;
+        catch java.lang.ClassNotFoundException from label3 to label4 with label9;
+        catch java.lang.ClassNotFoundException from label5 to label6 with label9;
+        catch java.lang.Exception from label1 to label2 with label8;
+        catch java.lang.Exception from label3 to label4 with label8;
+        catch java.lang.Exception from label5 to label7 with label8;
+    }
+}

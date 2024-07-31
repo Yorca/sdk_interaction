@@ -1,0 +1,778 @@
+final class io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable extends java.util.concurrent.atomic.AtomicInteger implements io.reactivex.disposables.Disposable, io.reactivex.internal.operators.observable.ObservableGroupJoin$JoinSupport
+{
+    static final java.lang.Integer LEFT_CLOSE;
+    static final java.lang.Integer LEFT_VALUE;
+    static final java.lang.Integer RIGHT_CLOSE;
+    static final java.lang.Integer RIGHT_VALUE;
+    private static final long serialVersionUID;
+    final java.util.concurrent.atomic.AtomicInteger active;
+    final io.reactivex.Observer actual;
+    volatile boolean cancelled;
+    final io.reactivex.disposables.CompositeDisposable disposables;
+    final java.util.concurrent.atomic.AtomicReference error;
+    final io.reactivex.functions.Function leftEnd;
+    int leftIndex;
+    final java.util.Map lefts;
+    final io.reactivex.internal.queue.SpscLinkedArrayQueue queue;
+    final io.reactivex.functions.BiFunction resultSelector;
+    final io.reactivex.functions.Function rightEnd;
+    int rightIndex;
+    final java.util.Map rights;
+
+    static void <clinit>()
+    {
+        java.lang.Integer $r0;
+
+        <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: long serialVersionUID> = -6071216598687999801L;
+
+        $r0 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(1);
+
+        <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer LEFT_VALUE> = $r0;
+
+        $r0 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(2);
+
+        <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer RIGHT_VALUE> = $r0;
+
+        $r0 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(3);
+
+        <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer LEFT_CLOSE> = $r0;
+
+        $r0 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(4);
+
+        <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer RIGHT_CLOSE> = $r0;
+
+        return;
+    }
+
+    void <init>(io.reactivex.Observer, io.reactivex.functions.Function, io.reactivex.functions.Function, io.reactivex.functions.BiFunction)
+    {
+        io.reactivex.functions.BiFunction $r2;
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r6;
+        java.util.concurrent.atomic.AtomicReference $r8;
+        java.util.LinkedHashMap $r7;
+        io.reactivex.disposables.CompositeDisposable $r5;
+        java.util.concurrent.atomic.AtomicInteger $r9;
+        io.reactivex.functions.Function $r1, $r4;
+        int $i0;
+        io.reactivex.Observer $r3;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $r3 := @parameter0: io.reactivex.Observer;
+
+        $r4 := @parameter1: io.reactivex.functions.Function;
+
+        $r1 := @parameter2: io.reactivex.functions.Function;
+
+        $r2 := @parameter3: io.reactivex.functions.BiFunction;
+
+        specialinvoke r0.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.Observer actual> = $r3;
+
+        $r5 = new io.reactivex.disposables.CompositeDisposable;
+
+        specialinvoke $r5.<io.reactivex.disposables.CompositeDisposable: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.disposables.CompositeDisposable disposables> = $r5;
+
+        $r6 = new io.reactivex.internal.queue.SpscLinkedArrayQueue;
+
+        $i0 = staticinvoke <io.reactivex.Observable: int bufferSize()>();
+
+        specialinvoke $r6.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void <init>(int)>($i0);
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.internal.queue.SpscLinkedArrayQueue queue> = $r6;
+
+        $r7 = new java.util.LinkedHashMap;
+
+        specialinvoke $r7.<java.util.LinkedHashMap: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map lefts> = $r7;
+
+        $r7 = new java.util.LinkedHashMap;
+
+        specialinvoke $r7.<java.util.LinkedHashMap: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map rights> = $r7;
+
+        $r8 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r8.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicReference error> = $r8;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.functions.Function leftEnd> = $r4;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.functions.Function rightEnd> = $r1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.functions.BiFunction resultSelector> = $r2;
+
+        $r9 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r9.<java.util.concurrent.atomic.AtomicInteger: void <init>(int)>(2);
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicInteger active> = $r9;
+
+        return;
+    }
+
+    void cancelAll()
+    {
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        io.reactivex.disposables.CompositeDisposable $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.disposables.CompositeDisposable disposables>;
+
+        virtualinvoke $r1.<io.reactivex.disposables.CompositeDisposable: void dispose()>();
+
+        return;
+    }
+
+    public void dispose()
+    {
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r1;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: boolean cancelled>;
+
+        if $z0 != 0 goto label1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: boolean cancelled> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void cancelAll()>();
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: int getAndIncrement()>();
+
+        if $i0 != 0 goto label1;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.internal.queue.SpscLinkedArrayQueue queue>;
+
+        virtualinvoke $r1.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void clear()>();
+
+     label1:
+        return;
+    }
+
+    void drain()
+    {
+        java.lang.Throwable $r5, $r18, $r19, $r20;
+        io.reactivex.functions.BiFunction $r17;
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver $r14;
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r2;
+        java.util.concurrent.atomic.AtomicReference $r3;
+        java.lang.Integer $r7, $r10;
+        java.util.concurrent.atomic.AtomicInteger $r6;
+        java.util.Map $r8;
+        int $i0, $i1, $i2;
+        io.reactivex.ObservableSource $r13;
+        boolean $z0, $z1;
+        java.util.Iterator $r16;
+        java.util.Collection $r15;
+        io.reactivex.disposables.CompositeDisposable $r9;
+        io.reactivex.functions.Function $r11;
+        io.reactivex.Observer $r1;
+        java.lang.Object $r4, $r12;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: int getAndIncrement()>();
+
+        if $i0 == 0 goto label01;
+
+        return;
+
+     label01:
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.internal.queue.SpscLinkedArrayQueue queue>;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.Observer actual>;
+
+        $i0 = 1;
+
+     label02:
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: boolean cancelled>;
+
+        if $z0 == 0 goto label03;
+
+        virtualinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void clear()>();
+
+        return;
+
+     label03:
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicReference error>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r5 = (java.lang.Throwable) $r4;
+
+        if $r5 == null goto label04;
+
+        virtualinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void cancelAll()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void errorAll(io.reactivex.Observer)>($r1);
+
+        return;
+
+     label04:
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicInteger active>;
+
+        $i1 = virtualinvoke $r6.<java.util.concurrent.atomic.AtomicInteger: int get()>();
+
+        if $i1 != 0 goto label05;
+
+        $z0 = 1;
+
+        goto label06;
+
+     label05:
+        $z0 = 0;
+
+     label06:
+        $r4 = virtualinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: java.lang.Object poll()>();
+
+        $r7 = (java.lang.Integer) $r4;
+
+        if $r7 != null goto label07;
+
+        $z1 = 1;
+
+        goto label08;
+
+     label07:
+        $z1 = 0;
+
+     label08:
+        if $z0 == 0 goto label09;
+
+        if $z1 == 0 goto label10;
+
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map lefts>;
+
+        interfaceinvoke $r8.<java.util.Map: void clear()>();
+
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map rights>;
+
+        interfaceinvoke $r8.<java.util.Map: void clear()>();
+
+        $r9 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.disposables.CompositeDisposable disposables>;
+
+        virtualinvoke $r9.<io.reactivex.disposables.CompositeDisposable: void dispose()>();
+
+        interfaceinvoke $r1.<io.reactivex.Observer: void onComplete()>();
+
+        return;
+
+     label09:
+        if $z1 == 0 goto label10;
+
+        $i0 = neg $i0;
+
+        $i1 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: int addAndGet(int)>($i0);
+
+        $i0 = $i1;
+
+        if $i1 != 0 goto label02;
+
+        return;
+
+     label10:
+        $r4 = virtualinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: java.lang.Object poll()>();
+
+        $r10 = <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer LEFT_VALUE>;
+
+        if $r7 != $r10 goto label19;
+
+        $i1 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: int leftIndex>;
+
+        $i2 = $i1 + 1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: int leftIndex> = $i2;
+
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map lefts>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        interfaceinvoke $r8.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r7, $r4);
+
+     label11:
+        $r11 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.functions.Function leftEnd>;
+
+        $r12 = interfaceinvoke $r11.<io.reactivex.functions.Function: java.lang.Object apply(java.lang.Object)>($r4);
+
+        $r12 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: java.lang.Object requireNonNull(java.lang.Object,java.lang.String)>($r12, "The leftEnd returned a null ObservableSource");
+
+        $r13 = (io.reactivex.ObservableSource) $r12;
+
+     label12:
+        $r14 = new io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver;
+
+        specialinvoke $r14.<io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver: void <init>(io.reactivex.internal.operators.observable.ObservableGroupJoin$JoinSupport,boolean,int)>(r0, 1, $i1);
+
+        $r9 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.disposables.CompositeDisposable disposables>;
+
+        virtualinvoke $r9.<io.reactivex.disposables.CompositeDisposable: boolean add(io.reactivex.disposables.Disposable)>($r14);
+
+        interfaceinvoke $r13.<io.reactivex.ObservableSource: void subscribe(io.reactivex.Observer)>($r14);
+
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicReference error>;
+
+        $r12 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r5 = (java.lang.Throwable) $r12;
+
+        if $r5 == null goto label13;
+
+        virtualinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void cancelAll()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void errorAll(io.reactivex.Observer)>($r1);
+
+        return;
+
+     label13:
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map rights>;
+
+        $r15 = interfaceinvoke $r8.<java.util.Map: java.util.Collection values()>();
+
+        $r16 = interfaceinvoke $r15.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label14:
+        $z0 = interfaceinvoke $r16.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label02;
+
+        $r12 = interfaceinvoke $r16.<java.util.Iterator: java.lang.Object next()>();
+
+     label15:
+        $r17 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.functions.BiFunction resultSelector>;
+
+        $r12 = interfaceinvoke $r17.<io.reactivex.functions.BiFunction: java.lang.Object apply(java.lang.Object,java.lang.Object)>($r4, $r12);
+
+        $r12 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: java.lang.Object requireNonNull(java.lang.Object,java.lang.String)>($r12, "The resultSelector returned a null value");
+
+     label16:
+        interfaceinvoke $r1.<io.reactivex.Observer: void onNext(java.lang.Object)>($r12);
+
+        goto label14;
+
+     label17:
+        $r5 := @caughtexception;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void fail(java.lang.Throwable,io.reactivex.Observer,io.reactivex.internal.queue.SpscLinkedArrayQueue)>($r5, $r1, $r2);
+
+        return;
+
+     label18:
+        $r18 := @caughtexception;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void fail(java.lang.Throwable,io.reactivex.Observer,io.reactivex.internal.queue.SpscLinkedArrayQueue)>($r18, $r1, $r2);
+
+        return;
+
+     label19:
+        $r10 = <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer RIGHT_VALUE>;
+
+        if $r7 != $r10 goto label28;
+
+        $i1 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: int rightIndex>;
+
+        $i2 = $i1 + 1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: int rightIndex> = $i2;
+
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map rights>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        interfaceinvoke $r8.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r7, $r4);
+
+     label20:
+        $r11 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.functions.Function rightEnd>;
+
+        $r12 = interfaceinvoke $r11.<io.reactivex.functions.Function: java.lang.Object apply(java.lang.Object)>($r4);
+
+        $r12 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: java.lang.Object requireNonNull(java.lang.Object,java.lang.String)>($r12, "The rightEnd returned a null ObservableSource");
+
+        $r13 = (io.reactivex.ObservableSource) $r12;
+
+     label21:
+        $r14 = new io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver;
+
+        specialinvoke $r14.<io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver: void <init>(io.reactivex.internal.operators.observable.ObservableGroupJoin$JoinSupport,boolean,int)>(r0, 0, $i1);
+
+        $r9 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.disposables.CompositeDisposable disposables>;
+
+        virtualinvoke $r9.<io.reactivex.disposables.CompositeDisposable: boolean add(io.reactivex.disposables.Disposable)>($r14);
+
+        interfaceinvoke $r13.<io.reactivex.ObservableSource: void subscribe(io.reactivex.Observer)>($r14);
+
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicReference error>;
+
+        $r12 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r5 = (java.lang.Throwable) $r12;
+
+        if $r5 == null goto label22;
+
+        virtualinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void cancelAll()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void errorAll(io.reactivex.Observer)>($r1);
+
+        return;
+
+     label22:
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map lefts>;
+
+        $r15 = interfaceinvoke $r8.<java.util.Map: java.util.Collection values()>();
+
+        $r16 = interfaceinvoke $r15.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label23:
+        $z0 = interfaceinvoke $r16.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label02;
+
+        $r12 = interfaceinvoke $r16.<java.util.Iterator: java.lang.Object next()>();
+
+     label24:
+        $r17 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.functions.BiFunction resultSelector>;
+
+        $r12 = interfaceinvoke $r17.<io.reactivex.functions.BiFunction: java.lang.Object apply(java.lang.Object,java.lang.Object)>($r12, $r4);
+
+        $r12 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: java.lang.Object requireNonNull(java.lang.Object,java.lang.String)>($r12, "The resultSelector returned a null value");
+
+     label25:
+        interfaceinvoke $r1.<io.reactivex.Observer: void onNext(java.lang.Object)>($r12);
+
+        goto label23;
+
+     label26:
+        $r19 := @caughtexception;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void fail(java.lang.Throwable,io.reactivex.Observer,io.reactivex.internal.queue.SpscLinkedArrayQueue)>($r19, $r1, $r2);
+
+        return;
+
+     label27:
+        $r20 := @caughtexception;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void fail(java.lang.Throwable,io.reactivex.Observer,io.reactivex.internal.queue.SpscLinkedArrayQueue)>($r20, $r1, $r2);
+
+        return;
+
+     label28:
+        $r10 = <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer LEFT_CLOSE>;
+
+        if $r7 != $r10 goto label29;
+
+        $r14 = (io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver) $r4;
+
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map lefts>;
+
+        $i1 = $r14.<io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver: int index>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        interfaceinvoke $r8.<java.util.Map: java.lang.Object remove(java.lang.Object)>($r7);
+
+        $r9 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.disposables.CompositeDisposable disposables>;
+
+        virtualinvoke $r9.<io.reactivex.disposables.CompositeDisposable: boolean remove(io.reactivex.disposables.Disposable)>($r14);
+
+        goto label02;
+
+     label29:
+        $r14 = (io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver) $r4;
+
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map rights>;
+
+        $i1 = $r14.<io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver: int index>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        interfaceinvoke $r8.<java.util.Map: java.lang.Object remove(java.lang.Object)>($r7);
+
+        $r9 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.disposables.CompositeDisposable disposables>;
+
+        virtualinvoke $r9.<io.reactivex.disposables.CompositeDisposable: boolean remove(io.reactivex.disposables.Disposable)>($r14);
+
+        goto label02;
+
+        catch java.lang.Throwable from label11 to label12 with label18;
+        catch java.lang.Throwable from label15 to label16 with label17;
+        catch java.lang.Throwable from label20 to label21 with label27;
+        catch java.lang.Throwable from label24 to label25 with label26;
+    }
+
+    void errorAll(io.reactivex.Observer)
+    {
+        java.lang.Throwable $r2;
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        java.util.Map $r4;
+        io.reactivex.Observer $r1;
+        java.util.concurrent.atomic.AtomicReference $r3;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $r1 := @parameter0: io.reactivex.Observer;
+
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicReference error>;
+
+        $r2 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.Throwable terminate(java.util.concurrent.atomic.AtomicReference)>($r3);
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map lefts>;
+
+        interfaceinvoke $r4.<java.util.Map: void clear()>();
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.Map rights>;
+
+        interfaceinvoke $r4.<java.util.Map: void clear()>();
+
+        interfaceinvoke $r1.<io.reactivex.Observer: void onError(java.lang.Throwable)>($r2);
+
+        return;
+    }
+
+    void fail(java.lang.Throwable, io.reactivex.Observer, io.reactivex.internal.queue.SpscLinkedArrayQueue)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r3;
+        io.reactivex.Observer $r2;
+        java.util.concurrent.atomic.AtomicReference $r4;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 := @parameter1: io.reactivex.Observer;
+
+        $r3 := @parameter2: io.reactivex.internal.queue.SpscLinkedArrayQueue;
+
+        staticinvoke <io.reactivex.exceptions.Exceptions: void throwIfFatal(java.lang.Throwable)>($r1);
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicReference error>;
+
+        staticinvoke <io.reactivex.internal.util.ExceptionHelper: boolean addThrowable(java.util.concurrent.atomic.AtomicReference,java.lang.Throwable)>($r4, $r1);
+
+        virtualinvoke $r3.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void cancelAll()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void errorAll(io.reactivex.Observer)>($r2);
+
+        return;
+    }
+
+    public void innerClose(boolean, io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver)
+    {
+        java.lang.Throwable $r4;
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver $r1;
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r2;
+        java.lang.Integer $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 := @parameter1: io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightEndObserver;
+
+        entermonitor r0;
+
+     label1:
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.internal.queue.SpscLinkedArrayQueue queue>;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer LEFT_CLOSE>;
+
+        goto label3;
+
+     label2:
+        $r3 = <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer RIGHT_CLOSE>;
+
+     label3:
+        virtualinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: boolean offer(java.lang.Object,java.lang.Object)>($r3, $r1);
+
+        exitmonitor r0;
+
+     label4:
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void drain()>();
+
+        return;
+
+     label5:
+        $r4 := @caughtexception;
+
+     label6:
+        exitmonitor r0;
+
+     label7:
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label6 to label7 with label5;
+    }
+
+    public void innerCloseError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicReference error>;
+
+        $z0 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: boolean addThrowable(java.util.concurrent.atomic.AtomicReference,java.lang.Throwable)>($r2, $r1);
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void drain()>();
+
+        return;
+
+     label1:
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r1);
+
+        return;
+    }
+
+    public void innerComplete(io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightObserver)
+    {
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        io.reactivex.disposables.CompositeDisposable $r1;
+        java.util.concurrent.atomic.AtomicInteger $r3;
+        io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightObserver $r2;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $r2 := @parameter0: io.reactivex.internal.operators.observable.ObservableGroupJoin$LeftRightObserver;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.disposables.CompositeDisposable disposables>;
+
+        virtualinvoke $r1.<io.reactivex.disposables.CompositeDisposable: boolean delete(io.reactivex.disposables.Disposable)>($r2);
+
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicInteger active>;
+
+        virtualinvoke $r3.<java.util.concurrent.atomic.AtomicInteger: int decrementAndGet()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void drain()>();
+
+        return;
+    }
+
+    public void innerError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        java.util.concurrent.atomic.AtomicInteger $r3;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicReference error>;
+
+        $z0 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: boolean addThrowable(java.util.concurrent.atomic.AtomicReference,java.lang.Throwable)>($r2, $r1);
+
+        if $z0 == 0 goto label1;
+
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.util.concurrent.atomic.AtomicInteger active>;
+
+        virtualinvoke $r3.<java.util.concurrent.atomic.AtomicInteger: int decrementAndGet()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void drain()>();
+
+        return;
+
+     label1:
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r1);
+
+        return;
+    }
+
+    public void innerValue(boolean, java.lang.Object)
+    {
+        java.lang.Throwable $r4;
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r2;
+        java.lang.Object $r1;
+        java.lang.Integer $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        entermonitor r0;
+
+     label1:
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: io.reactivex.internal.queue.SpscLinkedArrayQueue queue>;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer LEFT_VALUE>;
+
+        goto label3;
+
+     label2:
+        $r3 = <io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: java.lang.Integer RIGHT_VALUE>;
+
+     label3:
+        virtualinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: boolean offer(java.lang.Object,java.lang.Object)>($r3, $r1);
+
+        exitmonitor r0;
+
+     label4:
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: void drain()>();
+
+        return;
+
+     label5:
+        $r4 := @caughtexception;
+
+     label6:
+        exitmonitor r0;
+
+     label7:
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label6 to label7 with label5;
+    }
+
+    public boolean isDisposed()
+    {
+        io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable r0;
+        boolean z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable;
+
+        z0 = r0.<io.reactivex.internal.operators.observable.ObservableJoin$JoinDisposable: boolean cancelled>;
+
+        return z0;
+    }
+}

@@ -1,0 +1,590 @@
+public final class com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec extends java.lang.Object implements com.mbridge.msdk.thrid.okhttp.internal.http.HttpCodec
+{
+    private static final java.lang.String CONNECTION;
+    private static final java.lang.String ENCODING;
+    private static final java.lang.String HOST;
+    private static final java.util.List HTTP_2_SKIPPED_REQUEST_HEADERS;
+    private static final java.util.List HTTP_2_SKIPPED_RESPONSE_HEADERS;
+    private static final java.lang.String KEEP_ALIVE;
+    private static final java.lang.String PROXY_CONNECTION;
+    private static final java.lang.String TE;
+    private static final java.lang.String TRANSFER_ENCODING;
+    private static final java.lang.String UPGRADE;
+    private final com.mbridge.msdk.thrid.okhttp.Interceptor$Chain chain;
+    private final com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection connection;
+    private final com.mbridge.msdk.thrid.okhttp.Protocol protocol;
+    private com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream stream;
+    final com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation streamAllocation;
+
+    static void <clinit>()
+    {
+        java.lang.String[] $r0;
+        java.util.List $r1;
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.lang.String UPGRADE> = "upgrade";
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.lang.String TRANSFER_ENCODING> = "transfer-encoding";
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.lang.String TE> = "te";
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.lang.String PROXY_CONNECTION> = "proxy-connection";
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.lang.String KEEP_ALIVE> = "keep-alive";
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.lang.String HOST> = "host";
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.lang.String ENCODING> = "encoding";
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.lang.String CONNECTION> = "connection";
+
+        $r0 = newarray (java.lang.String)[12];
+
+        $r0[0] = "connection";
+
+        $r0[1] = "host";
+
+        $r0[2] = "keep-alive";
+
+        $r0[3] = "proxy-connection";
+
+        $r0[4] = "te";
+
+        $r0[5] = "transfer-encoding";
+
+        $r0[6] = "encoding";
+
+        $r0[7] = "upgrade";
+
+        $r0[8] = ":method";
+
+        $r0[9] = ":path";
+
+        $r0[10] = ":scheme";
+
+        $r0[11] = ":authority";
+
+        $r1 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.Util: java.util.List immutableList(java.lang.Object[])>($r0);
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.util.List HTTP_2_SKIPPED_REQUEST_HEADERS> = $r1;
+
+        $r0 = newarray (java.lang.String)[8];
+
+        $r0[0] = "connection";
+
+        $r0[1] = "host";
+
+        $r0[2] = "keep-alive";
+
+        $r0[3] = "proxy-connection";
+
+        $r0[4] = "te";
+
+        $r0[5] = "transfer-encoding";
+
+        $r0[6] = "encoding";
+
+        $r0[7] = "upgrade";
+
+        $r1 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.Util: java.util.List immutableList(java.lang.Object[])>($r0);
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.util.List HTTP_2_SKIPPED_RESPONSE_HEADERS> = $r1;
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.thrid.okhttp.OkHttpClient, com.mbridge.msdk.thrid.okhttp.Interceptor$Chain, com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation, com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection)
+    {
+        com.mbridge.msdk.thrid.okhttp.Interceptor$Chain $r4;
+        com.mbridge.msdk.thrid.okhttp.Protocol $r6;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection $r2;
+        java.util.List $r5;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec r0;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation $r1;
+        com.mbridge.msdk.thrid.okhttp.OkHttpClient $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec;
+
+        $r3 := @parameter0: com.mbridge.msdk.thrid.okhttp.OkHttpClient;
+
+        $r4 := @parameter1: com.mbridge.msdk.thrid.okhttp.Interceptor$Chain;
+
+        $r1 := @parameter2: com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation;
+
+        $r2 := @parameter3: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.Interceptor$Chain chain> = $r4;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation streamAllocation> = $r1;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection connection> = $r2;
+
+        $r5 = virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.OkHttpClient: java.util.List protocols()>();
+
+        $r6 = <com.mbridge.msdk.thrid.okhttp.Protocol: com.mbridge.msdk.thrid.okhttp.Protocol H2_PRIOR_KNOWLEDGE>;
+
+        $z0 = interfaceinvoke $r5.<java.util.List: boolean contains(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label1;
+
+        $r6 = <com.mbridge.msdk.thrid.okhttp.Protocol: com.mbridge.msdk.thrid.okhttp.Protocol H2_PRIOR_KNOWLEDGE>;
+
+        goto label2;
+
+     label1:
+        $r6 = <com.mbridge.msdk.thrid.okhttp.Protocol: com.mbridge.msdk.thrid.okhttp.Protocol HTTP_2>;
+
+     label2:
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.Protocol protocol> = $r6;
+
+        return;
+    }
+
+    public static java.util.List http2HeadersList(com.mbridge.msdk.thrid.okhttp.Request)
+    {
+        com.mbridge.msdk.thrid.okhttp.HttpUrl $r6;
+        java.util.ArrayList $r0;
+        java.util.List $r8;
+        com.mbridge.msdk.thrid.okhttp.Request $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Header $r3;
+        java.util.Locale $r7;
+        com.mbridge.msdk.thrid.okhttp.Headers $r2;
+        int $i0, $i1;
+        java.lang.String $r5;
+        com.mbridge.msdk.thrid.okio.ByteString $r4;
+        boolean $z0;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.Request;
+
+        $r2 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.Headers headers()>();
+
+        $r0 = new java.util.ArrayList;
+
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Headers: int size()>();
+
+        $i0 = $i0 + 4;
+
+        specialinvoke $r0.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $r3 = new com.mbridge.msdk.thrid.okhttp.internal.http2.Header;
+
+        $r4 = <com.mbridge.msdk.thrid.okhttp.internal.http2.Header: com.mbridge.msdk.thrid.okio.ByteString TARGET_METHOD>;
+
+        $r5 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Request: java.lang.String method()>();
+
+        specialinvoke $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.Header: void <init>(com.mbridge.msdk.thrid.okio.ByteString,java.lang.String)>($r4, $r5);
+
+        interfaceinvoke $r0.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+        $r3 = new com.mbridge.msdk.thrid.okhttp.internal.http2.Header;
+
+        $r4 = <com.mbridge.msdk.thrid.okhttp.internal.http2.Header: com.mbridge.msdk.thrid.okio.ByteString TARGET_PATH>;
+
+        $r6 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.HttpUrl url()>();
+
+        $r5 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http.RequestLine: java.lang.String requestPath(com.mbridge.msdk.thrid.okhttp.HttpUrl)>($r6);
+
+        specialinvoke $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.Header: void <init>(com.mbridge.msdk.thrid.okio.ByteString,java.lang.String)>($r4, $r5);
+
+        interfaceinvoke $r0.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+        $r5 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Request: java.lang.String header(java.lang.String)>("Host");
+
+        if $r5 == null goto label1;
+
+        $r3 = new com.mbridge.msdk.thrid.okhttp.internal.http2.Header;
+
+        $r4 = <com.mbridge.msdk.thrid.okhttp.internal.http2.Header: com.mbridge.msdk.thrid.okio.ByteString TARGET_AUTHORITY>;
+
+        specialinvoke $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.Header: void <init>(com.mbridge.msdk.thrid.okio.ByteString,java.lang.String)>($r4, $r5);
+
+        interfaceinvoke $r0.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+     label1:
+        $r3 = new com.mbridge.msdk.thrid.okhttp.internal.http2.Header;
+
+        $r4 = <com.mbridge.msdk.thrid.okhttp.internal.http2.Header: com.mbridge.msdk.thrid.okio.ByteString TARGET_SCHEME>;
+
+        $r6 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.HttpUrl url()>();
+
+        $r5 = virtualinvoke $r6.<com.mbridge.msdk.thrid.okhttp.HttpUrl: java.lang.String scheme()>();
+
+        specialinvoke $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.Header: void <init>(com.mbridge.msdk.thrid.okio.ByteString,java.lang.String)>($r4, $r5);
+
+        interfaceinvoke $r0.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Headers: int size()>();
+
+        $i1 = 0;
+
+     label2:
+        if $i1 >= $i0 goto label4;
+
+        $r5 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Headers: java.lang.String name(int)>($i1);
+
+        $r7 = <java.util.Locale: java.util.Locale US>;
+
+        $r5 = virtualinvoke $r5.<java.lang.String: java.lang.String toLowerCase(java.util.Locale)>($r7);
+
+        $r4 = staticinvoke <com.mbridge.msdk.thrid.okio.ByteString: com.mbridge.msdk.thrid.okio.ByteString encodeUtf8(java.lang.String)>($r5);
+
+        $r8 = <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.util.List HTTP_2_SKIPPED_REQUEST_HEADERS>;
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okio.ByteString: java.lang.String utf8()>();
+
+        $z0 = interfaceinvoke $r8.<java.util.List: boolean contains(java.lang.Object)>($r5);
+
+        if $z0 != 0 goto label3;
+
+        $r3 = new com.mbridge.msdk.thrid.okhttp.internal.http2.Header;
+
+        $r5 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Headers: java.lang.String value(int)>($i1);
+
+        specialinvoke $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.Header: void <init>(com.mbridge.msdk.thrid.okio.ByteString,java.lang.String)>($r4, $r5);
+
+        interfaceinvoke $r0.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+     label3:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label4:
+        return $r0;
+    }
+
+    public static com.mbridge.msdk.thrid.okhttp.Response$Builder readHttp2HeadersList(com.mbridge.msdk.thrid.okhttp.Headers, com.mbridge.msdk.thrid.okhttp.Protocol) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.Internal $r8;
+        com.mbridge.msdk.thrid.okhttp.Protocol $r2;
+        java.util.List $r7;
+        com.mbridge.msdk.thrid.okhttp.Response$Builder $r9;
+        java.net.ProtocolException $r10;
+        com.mbridge.msdk.thrid.okhttp.Headers $r1;
+        int $i0, $i1;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r4, $r5;
+        com.mbridge.msdk.thrid.okhttp.Headers$Builder $r0;
+        com.mbridge.msdk.thrid.okhttp.internal.http.StatusLine $r3;
+        boolean $z0;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.Headers;
+
+        $r2 := @parameter1: com.mbridge.msdk.thrid.okhttp.Protocol;
+
+        $r0 = new com.mbridge.msdk.thrid.okhttp.Headers$Builder;
+
+        specialinvoke $r0.<com.mbridge.msdk.thrid.okhttp.Headers$Builder: void <init>()>();
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Headers: int size()>();
+
+        $r3 = null;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label4;
+
+        $r4 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Headers: java.lang.String name(int)>($i1);
+
+        $r5 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Headers: java.lang.String value(int)>($i1);
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>(":status");
+
+        if $z0 == 0 goto label2;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("HTTP/1.1 ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r4 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http.StatusLine: com.mbridge.msdk.thrid.okhttp.internal.http.StatusLine parse(java.lang.String)>($r4);
+
+        goto label3;
+
+     label2:
+        $r7 = <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.util.List HTTP_2_SKIPPED_RESPONSE_HEADERS>;
+
+        $z0 = interfaceinvoke $r7.<java.util.List: boolean contains(java.lang.Object)>($r4);
+
+        if $z0 != 0 goto label3;
+
+        $r8 = <com.mbridge.msdk.thrid.okhttp.internal.Internal: com.mbridge.msdk.thrid.okhttp.internal.Internal instance>;
+
+        virtualinvoke $r8.<com.mbridge.msdk.thrid.okhttp.internal.Internal: void addLenient(com.mbridge.msdk.thrid.okhttp.Headers$Builder,java.lang.String,java.lang.String)>($r0, $r4, $r5);
+
+     label3:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label4:
+        if $r3 == null goto label5;
+
+        $r9 = new com.mbridge.msdk.thrid.okhttp.Response$Builder;
+
+        specialinvoke $r9.<com.mbridge.msdk.thrid.okhttp.Response$Builder: void <init>()>();
+
+        $r9 = virtualinvoke $r9.<com.mbridge.msdk.thrid.okhttp.Response$Builder: com.mbridge.msdk.thrid.okhttp.Response$Builder protocol(com.mbridge.msdk.thrid.okhttp.Protocol)>($r2);
+
+        $i0 = $r3.<com.mbridge.msdk.thrid.okhttp.internal.http.StatusLine: int code>;
+
+        $r9 = virtualinvoke $r9.<com.mbridge.msdk.thrid.okhttp.Response$Builder: com.mbridge.msdk.thrid.okhttp.Response$Builder code(int)>($i0);
+
+        $r4 = $r3.<com.mbridge.msdk.thrid.okhttp.internal.http.StatusLine: java.lang.String message>;
+
+        $r9 = virtualinvoke $r9.<com.mbridge.msdk.thrid.okhttp.Response$Builder: com.mbridge.msdk.thrid.okhttp.Response$Builder message(java.lang.String)>($r4);
+
+        $r1 = virtualinvoke $r0.<com.mbridge.msdk.thrid.okhttp.Headers$Builder: com.mbridge.msdk.thrid.okhttp.Headers build()>();
+
+        $r9 = virtualinvoke $r9.<com.mbridge.msdk.thrid.okhttp.Response$Builder: com.mbridge.msdk.thrid.okhttp.Response$Builder headers(com.mbridge.msdk.thrid.okhttp.Headers)>($r1);
+
+        return $r9;
+
+     label5:
+        $r10 = new java.net.ProtocolException;
+
+        specialinvoke $r10.<java.net.ProtocolException: void <init>(java.lang.String)>("Expected \':status\' header not present");
+
+        throw $r10;
+    }
+
+    public void cancel()
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec r0;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode $r2;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream stream>;
+
+        if $r1 == null goto label1;
+
+        $r2 = <com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode: com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode CANCEL>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream: void closeLater(com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode)>($r2);
+
+     label1:
+        return;
+    }
+
+    public com.mbridge.msdk.thrid.okio.Sink createRequestBody(com.mbridge.msdk.thrid.okhttp.Request, long)
+    {
+        com.mbridge.msdk.thrid.okio.Sink $r1;
+        com.mbridge.msdk.thrid.okhttp.Request $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec r0;
+        long $l0;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream $r3;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec;
+
+        $r2 := @parameter0: com.mbridge.msdk.thrid.okhttp.Request;
+
+        $l0 := @parameter1: long;
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream stream>;
+
+        $r1 = virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream: com.mbridge.msdk.thrid.okio.Sink getSink()>();
+
+        return $r1;
+    }
+
+    public void finishRequest() throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okio.Sink $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream stream>;
+
+        $r1 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream: com.mbridge.msdk.thrid.okio.Sink getSink()>();
+
+        interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.Sink: void close()>();
+
+        return;
+    }
+
+    public void flushRequest() throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection connection>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection: void flush()>();
+
+        return;
+    }
+
+    public com.mbridge.msdk.thrid.okhttp.ResponseBody openResponseBody(com.mbridge.msdk.thrid.okhttp.Response) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.Call $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec$StreamFinishingSource $r6;
+        long $l0;
+        com.mbridge.msdk.thrid.okhttp.EventListener $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.http.RealResponseBody $r9;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec r0;
+        com.mbridge.msdk.thrid.okio.Source $r8;
+        com.mbridge.msdk.thrid.okio.BufferedSource $r10;
+        com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation $r2;
+        java.lang.String $r5;
+        com.mbridge.msdk.thrid.okhttp.Response $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream $r7;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.Response;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation streamAllocation>;
+
+        $r3 = $r2.<com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation: com.mbridge.msdk.thrid.okhttp.EventListener eventListener>;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation streamAllocation>;
+
+        $r4 = $r2.<com.mbridge.msdk.thrid.okhttp.internal.connection.StreamAllocation: com.mbridge.msdk.thrid.okhttp.Call call>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.EventListener: void responseBodyStart(com.mbridge.msdk.thrid.okhttp.Call)>($r4);
+
+        $r5 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Response: java.lang.String header(java.lang.String)>("Content-Type");
+
+        $l0 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http.HttpHeaders: long contentLength(com.mbridge.msdk.thrid.okhttp.Response)>($r1);
+
+        $r6 = new com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec$StreamFinishingSource;
+
+        $r7 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream stream>;
+
+        $r8 = virtualinvoke $r7.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream: com.mbridge.msdk.thrid.okio.Source getSource()>();
+
+        specialinvoke $r6.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec$StreamFinishingSource: void <init>(com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec,com.mbridge.msdk.thrid.okio.Source)>(r0, $r8);
+
+        $r9 = new com.mbridge.msdk.thrid.okhttp.internal.http.RealResponseBody;
+
+        $r10 = staticinvoke <com.mbridge.msdk.thrid.okio.Okio: com.mbridge.msdk.thrid.okio.BufferedSource buffer(com.mbridge.msdk.thrid.okio.Source)>($r6);
+
+        specialinvoke $r9.<com.mbridge.msdk.thrid.okhttp.internal.http.RealResponseBody: void <init>(java.lang.String,long,com.mbridge.msdk.thrid.okio.BufferedSource)>($r5, $l0, $r10);
+
+        return $r9;
+    }
+
+    public com.mbridge.msdk.thrid.okhttp.Response$Builder readResponseHeaders(boolean) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.Internal $r5;
+        com.mbridge.msdk.thrid.okhttp.Protocol $r3;
+        com.mbridge.msdk.thrid.okhttp.Response$Builder $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec r0;
+        com.mbridge.msdk.thrid.okhttp.Headers $r2;
+        int $i0;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream stream>;
+
+        $r2 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream: com.mbridge.msdk.thrid.okhttp.Headers takeHeaders()>();
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.Protocol protocol>;
+
+        $r4 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.Response$Builder readHttp2HeadersList(com.mbridge.msdk.thrid.okhttp.Headers,com.mbridge.msdk.thrid.okhttp.Protocol)>($r2, $r3);
+
+        if $z0 == 0 goto label1;
+
+        $r5 = <com.mbridge.msdk.thrid.okhttp.internal.Internal: com.mbridge.msdk.thrid.okhttp.internal.Internal instance>;
+
+        $i0 = virtualinvoke $r5.<com.mbridge.msdk.thrid.okhttp.internal.Internal: int code(com.mbridge.msdk.thrid.okhttp.Response$Builder)>($r4);
+
+        if $i0 != 100 goto label1;
+
+        return null;
+
+     label1:
+        return $r4;
+    }
+
+    public void writeRequestHeaders(com.mbridge.msdk.thrid.okhttp.Request) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.RequestBody $r4;
+        com.mbridge.msdk.thrid.okio.Timeout $r6;
+        com.mbridge.msdk.thrid.okhttp.Interceptor$Chain $r7;
+        long $l1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection $r1;
+        java.util.concurrent.TimeUnit $r8;
+        java.util.List $r5;
+        com.mbridge.msdk.thrid.okhttp.Request $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec r0;
+        int $i0;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec;
+
+        $r2 := @parameter0: com.mbridge.msdk.thrid.okhttp.Request;
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream stream>;
+
+        if $r3 == null goto label1;
+
+        return;
+
+     label1:
+        $r4 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.RequestBody body()>();
+
+        if $r4 == null goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        $r5 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: java.util.List http2HeadersList(com.mbridge.msdk.thrid.okhttp.Request)>($r2);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection connection>;
+
+        $r3 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Connection: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream newStream(java.util.List,boolean)>($r5, $z0);
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream stream> = $r3;
+
+        $r6 = virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream: com.mbridge.msdk.thrid.okio.Timeout readTimeout()>();
+
+        $r7 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.Interceptor$Chain chain>;
+
+        $i0 = interfaceinvoke $r7.<com.mbridge.msdk.thrid.okhttp.Interceptor$Chain: int readTimeoutMillis()>();
+
+        $l1 = (long) $i0;
+
+        $r8 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.thrid.okio.Timeout: com.mbridge.msdk.thrid.okio.Timeout timeout(long,java.util.concurrent.TimeUnit)>($l1, $r8);
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream stream>;
+
+        $r6 = virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Stream: com.mbridge.msdk.thrid.okio.Timeout writeTimeout()>();
+
+        $r7 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Codec: com.mbridge.msdk.thrid.okhttp.Interceptor$Chain chain>;
+
+        $i0 = interfaceinvoke $r7.<com.mbridge.msdk.thrid.okhttp.Interceptor$Chain: int writeTimeoutMillis()>();
+
+        $l1 = (long) $i0;
+
+        $r8 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.thrid.okio.Timeout: com.mbridge.msdk.thrid.okio.Timeout timeout(long,java.util.concurrent.TimeUnit)>($l1, $r8);
+
+        return;
+    }
+}

@@ -1,0 +1,408 @@
+public class com.adobe.flashplayer.HDMIUtils extends java.lang.Object
+{
+    private static final java.lang.String EXTDISP_PUBLIC_STATE;
+    private static final java.lang.String EXTDISP_STATUS_CONNECTION;
+    private static final java.lang.String EXTDISP_STATUS_DISPLAY;
+    private static final java.lang.String EXTDISP_STATUS_RESOLUTION;
+    private static final java.lang.String EXTRA_HDCP;
+    private static final java.lang.String EXTRA_HDMI;
+    private static final java.lang.String TAG;
+    private static final int TYPE_HDMI;
+    private static java.lang.Object lock;
+    private static com.adobe.flashplayer.HDMIUtils mSingleton;
+    private com.adobe.flashplayer.HDMIUtils$HdmiServiceConnection mConnection;
+    private android.content.Context mContext;
+    private android.os.Binder mDeathWatcher;
+    private com.adobe.flashplayer.HDMIUtils$HdmiBroadcastReceiver mExtConnectionReceiver;
+    private boolean mHdcpOnOff;
+    private boolean mHdmiConnection;
+    private boolean mHdmiOnOff;
+    private boolean mHdmiStatusKnown;
+
+    static void <clinit>()
+    {
+        java.lang.Object $r0;
+
+        <com.adobe.flashplayer.HDMIUtils: int TYPE_HDMI> = 1;
+
+        <com.adobe.flashplayer.HDMIUtils: java.lang.String TAG> = "HDMIUtils";
+
+        <com.adobe.flashplayer.HDMIUtils: java.lang.String EXTRA_HDMI> = "hdmi";
+
+        <com.adobe.flashplayer.HDMIUtils: java.lang.String EXTRA_HDCP> = "hdcp";
+
+        <com.adobe.flashplayer.HDMIUtils: java.lang.String EXTDISP_STATUS_RESOLUTION> = "com.motorola.intent.action.EXTDISP_STATUS_RESOLUTION";
+
+        <com.adobe.flashplayer.HDMIUtils: java.lang.String EXTDISP_STATUS_DISPLAY> = "com.motorola.intent.action.EXTDISP_STATUS_DISPLAY";
+
+        <com.adobe.flashplayer.HDMIUtils: java.lang.String EXTDISP_STATUS_CONNECTION> = "com.motorola.intent.action.EXTDISP_STATUS_CONNECTION";
+
+        <com.adobe.flashplayer.HDMIUtils: java.lang.String EXTDISP_PUBLIC_STATE> = "com.motorola.intent.action.externaldisplaystate";
+
+        $r0 = new java.lang.Object;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        <com.adobe.flashplayer.HDMIUtils: java.lang.Object lock> = $r0;
+
+        return;
+    }
+
+    private void <init>(android.content.Context)
+    {
+        com.adobe.flashplayer.HDMIUtils$HdmiServiceConnection $r3;
+        android.os.Binder $r4;
+        android.content.Context $r2;
+        com.adobe.flashplayer.HDMIUtils r0;
+        com.adobe.flashplayer.HDMIUtils$HdmiBroadcastReceiver $r1;
+        android.content.IntentFilter $r5;
+
+        r0 := @this: com.adobe.flashplayer.HDMIUtils;
+
+        $r2 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils$HdmiBroadcastReceiver mExtConnectionReceiver> = null;
+
+        r0.<com.adobe.flashplayer.HDMIUtils: android.os.Binder mDeathWatcher> = null;
+
+        r0.<com.adobe.flashplayer.HDMIUtils: android.content.Context mContext> = $r2;
+
+        r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiStatusKnown> = 0;
+
+        r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdcpOnOff> = 0;
+
+        r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiOnOff> = 0;
+
+        r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiConnection> = 0;
+
+        $r3 = new com.adobe.flashplayer.HDMIUtils$HdmiServiceConnection;
+
+        specialinvoke $r3.<com.adobe.flashplayer.HDMIUtils$HdmiServiceConnection: void <init>(com.adobe.flashplayer.HDMIUtils)>(r0);
+
+        r0.<com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils$HdmiServiceConnection mConnection> = $r3;
+
+        $r4 = new android.os.Binder;
+
+        specialinvoke $r4.<android.os.Binder: void <init>()>();
+
+        r0.<com.adobe.flashplayer.HDMIUtils: android.os.Binder mDeathWatcher> = $r4;
+
+        $r1 = new com.adobe.flashplayer.HDMIUtils$HdmiBroadcastReceiver;
+
+        specialinvoke $r1.<com.adobe.flashplayer.HDMIUtils$HdmiBroadcastReceiver: void <init>(com.adobe.flashplayer.HDMIUtils)>(r0);
+
+        r0.<com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils$HdmiBroadcastReceiver mExtConnectionReceiver> = $r1;
+
+        $r5 = new android.content.IntentFilter;
+
+        specialinvoke $r5.<android.content.IntentFilter: void <init>()>();
+
+        virtualinvoke $r5.<android.content.IntentFilter: void addAction(java.lang.String)>("com.motorola.intent.action.externaldisplaystate");
+
+        virtualinvoke $r5.<android.content.IntentFilter: void addAction(java.lang.String)>("com.motorola.intent.action.EXTDISP_STATUS_CONNECTION");
+
+        virtualinvoke $r5.<android.content.IntentFilter: void addAction(java.lang.String)>("com.motorola.intent.action.EXTDISP_STATUS_DISPLAY");
+
+        virtualinvoke $r5.<android.content.IntentFilter: void addAction(java.lang.String)>("com.motorola.intent.action.EXTDISP_STATUS_RESOLUTION");
+
+        $r2 = r0.<com.adobe.flashplayer.HDMIUtils: android.content.Context mContext>;
+
+        $r1 = r0.<com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils$HdmiBroadcastReceiver mExtConnectionReceiver>;
+
+        virtualinvoke $r2.<android.content.Context: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>($r1, $r5);
+
+        return;
+    }
+
+    static boolean access$000(com.adobe.flashplayer.HDMIUtils)
+    {
+        com.adobe.flashplayer.HDMIUtils $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.adobe.flashplayer.HDMIUtils;
+
+        z0 = $r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiConnection>;
+
+        return z0;
+    }
+
+    static boolean access$002(com.adobe.flashplayer.HDMIUtils, boolean)
+    {
+        com.adobe.flashplayer.HDMIUtils $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.adobe.flashplayer.HDMIUtils;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiConnection> = $z0;
+
+        return $z0;
+    }
+
+    static boolean access$102(com.adobe.flashplayer.HDMIUtils, boolean)
+    {
+        com.adobe.flashplayer.HDMIUtils $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.adobe.flashplayer.HDMIUtils;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiStatusKnown> = $z0;
+
+        return $z0;
+    }
+
+    static boolean access$200(com.adobe.flashplayer.HDMIUtils)
+    {
+        com.adobe.flashplayer.HDMIUtils $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.adobe.flashplayer.HDMIUtils;
+
+        z0 = $r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiOnOff>;
+
+        return z0;
+    }
+
+    static boolean access$202(com.adobe.flashplayer.HDMIUtils, boolean)
+    {
+        com.adobe.flashplayer.HDMIUtils $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.adobe.flashplayer.HDMIUtils;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiOnOff> = $z0;
+
+        return $z0;
+    }
+
+    static boolean access$302(com.adobe.flashplayer.HDMIUtils, boolean)
+    {
+        com.adobe.flashplayer.HDMIUtils $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.adobe.flashplayer.HDMIUtils;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdcpOnOff> = $z0;
+
+        return $z0;
+    }
+
+    public static void closeHelper()
+    {
+        com.adobe.flashplayer.HDMIUtils$HdmiServiceConnection $r4;
+        java.lang.Throwable $r5;
+        android.content.Context $r3;
+        com.adobe.flashplayer.HDMIUtils $r0;
+        com.adobe.flashplayer.HDMIUtils$HdmiBroadcastReceiver $r2;
+        java.lang.Object $r1;
+
+        $r0 = <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton>;
+
+        if $r0 != null goto label1;
+
+        return;
+
+     label1:
+        $r1 = <com.adobe.flashplayer.HDMIUtils: java.lang.Object lock>;
+
+        entermonitor $r1;
+
+     label2:
+        $r0 = <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton>;
+
+        $r2 = $r0.<com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils$HdmiBroadcastReceiver mExtConnectionReceiver>;
+
+        if $r2 == null goto label3;
+
+        $r3 = $r0.<com.adobe.flashplayer.HDMIUtils: android.content.Context mContext>;
+
+        virtualinvoke $r3.<android.content.Context: void unregisterReceiver(android.content.BroadcastReceiver)>($r2);
+
+        $r0 = <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton>;
+
+        $r0.<com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils$HdmiBroadcastReceiver mExtConnectionReceiver> = null;
+
+     label3:
+        $r0 = <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton>;
+
+        $r4 = $r0.<com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils$HdmiServiceConnection mConnection>;
+
+        if $r4 == null goto label4;
+
+        $r3 = $r0.<com.adobe.flashplayer.HDMIUtils: android.content.Context mContext>;
+
+        virtualinvoke $r3.<android.content.Context: void unbindService(android.content.ServiceConnection)>($r4);
+
+        $r0 = <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton>;
+
+        $r0.<com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils$HdmiServiceConnection mConnection> = null;
+
+     label4:
+        $r0 = <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton>;
+
+        $r0.<com.adobe.flashplayer.HDMIUtils: android.os.Binder mDeathWatcher> = null;
+
+        exitmonitor $r1;
+
+     label5:
+        $r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiStatusKnown> = 0;
+
+        <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton> = null;
+
+        return;
+
+     label6:
+        $r5 := @caughtexception;
+
+     label7:
+        exitmonitor $r1;
+
+     label8:
+        throw $r5;
+
+        catch java.lang.Throwable from label2 to label5 with label6;
+        catch java.lang.Throwable from label7 to label8 with label6;
+    }
+
+    public static int getHDMIState(android.content.Context)
+    {
+        com.adobe.flashplayer.HDMIUtils$HDMIState $r1;
+        android.content.Context $r0;
+        com.adobe.flashplayer.HDMIUtils $r2;
+        int $i0;
+        boolean $z0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        staticinvoke <com.adobe.flashplayer.HDMIUtils: void initHelper(android.content.Context)>($r0);
+
+        $r1 = <com.adobe.flashplayer.HDMIUtils$HDMIState: com.adobe.flashplayer.HDMIUtils$HDMIState UNKNOWN>;
+
+        $i0 = $r1.<com.adobe.flashplayer.HDMIUtils$HDMIState: int value>;
+
+        $r2 = <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton>;
+
+        $z0 = virtualinvoke $r2.<com.adobe.flashplayer.HDMIUtils: boolean isHdmiStatusKnown()>();
+
+        if $z0 != 0 goto label1;
+
+        $r1 = <com.adobe.flashplayer.HDMIUtils$HDMIState: com.adobe.flashplayer.HDMIUtils$HDMIState UNKNOWN>;
+
+        $i0 = $r1.<com.adobe.flashplayer.HDMIUtils$HDMIState: int value>;
+
+        return $i0;
+
+     label1:
+        $r2 = <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton>;
+
+        $z0 = virtualinvoke $r2.<com.adobe.flashplayer.HDMIUtils: boolean isHDCPOn()>();
+
+        if $z0 == 0 goto label2;
+
+        $r1 = <com.adobe.flashplayer.HDMIUtils$HDMIState: com.adobe.flashplayer.HDMIUtils$HDMIState HDCPON>;
+
+        $i0 = $r1.<com.adobe.flashplayer.HDMIUtils$HDMIState: int value>;
+
+        return $i0;
+
+     label2:
+        $r2 = <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton>;
+
+        $z0 = virtualinvoke $r2.<com.adobe.flashplayer.HDMIUtils: boolean isHDMIOn()>();
+
+        if $z0 == 0 goto label3;
+
+        $r1 = <com.adobe.flashplayer.HDMIUtils$HDMIState: com.adobe.flashplayer.HDMIUtils$HDMIState ON>;
+
+        $i0 = $r1.<com.adobe.flashplayer.HDMIUtils$HDMIState: int value>;
+
+        return $i0;
+
+     label3:
+        $r1 = <com.adobe.flashplayer.HDMIUtils$HDMIState: com.adobe.flashplayer.HDMIUtils$HDMIState OFF>;
+
+        $i0 = $r1.<com.adobe.flashplayer.HDMIUtils$HDMIState: int value>;
+
+        return $i0;
+    }
+
+    public static void initHelper(android.content.Context)
+    {
+        android.content.Context $r0;
+        com.adobe.flashplayer.HDMIUtils $r1;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton>;
+
+        if $r1 == null goto label1;
+
+        return;
+
+     label1:
+        $r1 = new com.adobe.flashplayer.HDMIUtils;
+
+        specialinvoke $r1.<com.adobe.flashplayer.HDMIUtils: void <init>(android.content.Context)>($r0);
+
+        <com.adobe.flashplayer.HDMIUtils: com.adobe.flashplayer.HDMIUtils mSingleton> = $r1;
+
+        return;
+    }
+
+    public boolean isConnected()
+    {
+        com.adobe.flashplayer.HDMIUtils r0;
+        boolean z0;
+
+        r0 := @this: com.adobe.flashplayer.HDMIUtils;
+
+        z0 = r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiConnection>;
+
+        return z0;
+    }
+
+    public boolean isHDCPOn()
+    {
+        com.adobe.flashplayer.HDMIUtils r0;
+        boolean z0;
+
+        r0 := @this: com.adobe.flashplayer.HDMIUtils;
+
+        z0 = r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdcpOnOff>;
+
+        return z0;
+    }
+
+    public boolean isHDMIOn()
+    {
+        com.adobe.flashplayer.HDMIUtils r0;
+        boolean z0;
+
+        r0 := @this: com.adobe.flashplayer.HDMIUtils;
+
+        z0 = r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiOnOff>;
+
+        return z0;
+    }
+
+    public boolean isHdmiStatusKnown()
+    {
+        com.adobe.flashplayer.HDMIUtils r0;
+        boolean z0;
+
+        r0 := @this: com.adobe.flashplayer.HDMIUtils;
+
+        z0 = r0.<com.adobe.flashplayer.HDMIUtils: boolean mHdmiStatusKnown>;
+
+        return z0;
+    }
+}

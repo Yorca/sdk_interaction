@@ -1,0 +1,255 @@
+public final class io.grpc.util.OutlierDetectionLoadBalancerProvider extends io.grpc.LoadBalancerProvider
+{
+
+    public void <init>()
+    {
+        io.grpc.util.OutlierDetectionLoadBalancerProvider r0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancerProvider;
+
+        specialinvoke r0.<io.grpc.LoadBalancerProvider: void <init>()>();
+
+        return;
+    }
+
+    public java.lang.String getPolicyName()
+    {
+        io.grpc.util.OutlierDetectionLoadBalancerProvider r0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancerProvider;
+
+        return "outlier_detection_experimental";
+    }
+
+    public int getPriority()
+    {
+        io.grpc.util.OutlierDetectionLoadBalancerProvider r0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancerProvider;
+
+        return 5;
+    }
+
+    public boolean isAvailable()
+    {
+        io.grpc.util.OutlierDetectionLoadBalancerProvider r0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancerProvider;
+
+        return 1;
+    }
+
+    public io.grpc.LoadBalancer newLoadBalancer(io.grpc.LoadBalancer$Helper)
+    {
+        io.grpc.LoadBalancer$Helper $r1;
+        io.grpc.internal.TimeProvider $r3;
+        io.grpc.util.OutlierDetectionLoadBalancerProvider r0;
+        io.grpc.util.OutlierDetectionLoadBalancer $r2;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancerProvider;
+
+        $r1 := @parameter0: io.grpc.LoadBalancer$Helper;
+
+        $r2 = new io.grpc.util.OutlierDetectionLoadBalancer;
+
+        $r3 = <io.grpc.internal.TimeProvider: io.grpc.internal.TimeProvider SYSTEM_TIME_PROVIDER>;
+
+        specialinvoke $r2.<io.grpc.util.OutlierDetectionLoadBalancer: void <init>(io.grpc.LoadBalancer$Helper,io.grpc.internal.TimeProvider)>($r1, $r3);
+
+        return $r2;
+    }
+
+    public io.grpc.NameResolver$ConfigOrError parseLoadBalancingPolicyConfig(java.util.Map)
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder $r13;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection $r14;
+        io.grpc.LoadBalancerRegistry $r16;
+        java.lang.Integer $r6, $r9, $r10, $r11;
+        io.grpc.NameResolver$ConfigOrError $r17;
+        io.grpc.internal.ServiceConfigUtil$PolicySelection $r20;
+        java.lang.Long $r3, $r4, $r5;
+        java.util.Map $r2, $r7;
+        io.grpc.Status $r18;
+        java.lang.String $r23;
+        boolean $z0;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder $r8;
+        io.grpc.util.OutlierDetectionLoadBalancerProvider r0;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig $r21;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder $r1;
+        java.util.List $r15;
+        java.lang.Object $r19;
+        java.lang.StringBuilder $r22;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection $r12;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancerProvider;
+
+        $r2 := @parameter0: java.util.Map;
+
+        $r3 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Long getStringAsDuration(java.util.Map,java.lang.String)>($r2, "interval");
+
+        $r4 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Long getStringAsDuration(java.util.Map,java.lang.String)>($r2, "baseEjectionTime");
+
+        $r5 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Long getStringAsDuration(java.util.Map,java.lang.String)>($r2, "maxEjectionTime");
+
+        $r6 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Integer getNumberAsInteger(java.util.Map,java.lang.String)>($r2, "maxEjectionPercentage");
+
+        $r1 = new io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder;
+
+        specialinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder: void <init>()>();
+
+        if $r3 == null goto label01;
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder setIntervalNanos(java.lang.Long)>($r3);
+
+     label01:
+        if $r4 == null goto label02;
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder setBaseEjectionTimeNanos(java.lang.Long)>($r4);
+
+     label02:
+        if $r5 == null goto label03;
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder setMaxEjectionTimeNanos(java.lang.Long)>($r5);
+
+     label03:
+        if $r6 == null goto label04;
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder setMaxEjectionPercent(java.lang.Integer)>($r6);
+
+     label04:
+        $r7 = staticinvoke <io.grpc.internal.JsonUtil: java.util.Map getObject(java.util.Map,java.lang.String)>($r2, "successRateEjection");
+
+        if $r7 == null goto label09;
+
+        $r8 = new io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder;
+
+        specialinvoke $r8.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder: void <init>()>();
+
+        $r6 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Integer getNumberAsInteger(java.util.Map,java.lang.String)>($r7, "stdevFactor");
+
+        $r9 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Integer getNumberAsInteger(java.util.Map,java.lang.String)>($r7, "enforcementPercentage");
+
+        $r10 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Integer getNumberAsInteger(java.util.Map,java.lang.String)>($r7, "minimumHosts");
+
+        $r11 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Integer getNumberAsInteger(java.util.Map,java.lang.String)>($r7, "requestVolume");
+
+        if $r6 == null goto label05;
+
+        virtualinvoke $r8.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder setStdevFactor(java.lang.Integer)>($r6);
+
+     label05:
+        if $r9 == null goto label06;
+
+        virtualinvoke $r8.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder setEnforcementPercentage(java.lang.Integer)>($r9);
+
+     label06:
+        if $r10 == null goto label07;
+
+        virtualinvoke $r8.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder setMinimumHosts(java.lang.Integer)>($r10);
+
+     label07:
+        if $r11 == null goto label08;
+
+        virtualinvoke $r8.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder setRequestVolume(java.lang.Integer)>($r11);
+
+     label08:
+        $r12 = virtualinvoke $r8.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection build()>();
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder setSuccessRateEjection(io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection)>($r12);
+
+     label09:
+        $r7 = staticinvoke <io.grpc.internal.JsonUtil: java.util.Map getObject(java.util.Map,java.lang.String)>($r2, "failurePercentageEjection");
+
+        if $r7 == null goto label14;
+
+        $r13 = new io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder;
+
+        specialinvoke $r13.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder: void <init>()>();
+
+        $r6 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Integer getNumberAsInteger(java.util.Map,java.lang.String)>($r7, "threshold");
+
+        $r9 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Integer getNumberAsInteger(java.util.Map,java.lang.String)>($r7, "enforcementPercentage");
+
+        $r10 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Integer getNumberAsInteger(java.util.Map,java.lang.String)>($r7, "minimumHosts");
+
+        $r11 = staticinvoke <io.grpc.internal.JsonUtil: java.lang.Integer getNumberAsInteger(java.util.Map,java.lang.String)>($r7, "requestVolume");
+
+        if $r6 == null goto label10;
+
+        virtualinvoke $r13.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder setThreshold(java.lang.Integer)>($r6);
+
+     label10:
+        if $r9 == null goto label11;
+
+        virtualinvoke $r13.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder setEnforcementPercentage(java.lang.Integer)>($r9);
+
+     label11:
+        if $r10 == null goto label12;
+
+        virtualinvoke $r13.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder setMinimumHosts(java.lang.Integer)>($r10);
+
+     label12:
+        if $r11 == null goto label13;
+
+        virtualinvoke $r13.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder setRequestVolume(java.lang.Integer)>($r11);
+
+     label13:
+        $r14 = virtualinvoke $r13.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection build()>();
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder setFailurePercentageEjection(io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection)>($r14);
+
+     label14:
+        $r15 = staticinvoke <io.grpc.internal.JsonUtil: java.util.List getListOfObjects(java.util.Map,java.lang.String)>($r2, "childPolicy");
+
+        $r15 = staticinvoke <io.grpc.internal.ServiceConfigUtil: java.util.List unwrapLoadBalancingConfigList(java.util.List)>($r15);
+
+        if $r15 == null goto label17;
+
+        $z0 = interfaceinvoke $r15.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label15;
+
+        goto label17;
+
+     label15:
+        $r16 = staticinvoke <io.grpc.LoadBalancerRegistry: io.grpc.LoadBalancerRegistry getDefaultRegistry()>();
+
+        $r17 = staticinvoke <io.grpc.internal.ServiceConfigUtil: io.grpc.NameResolver$ConfigOrError selectLbPolicyFromList(java.util.List,io.grpc.LoadBalancerRegistry)>($r15, $r16);
+
+        $r18 = virtualinvoke $r17.<io.grpc.NameResolver$ConfigOrError: io.grpc.Status getError()>();
+
+        if $r18 == null goto label16;
+
+        return $r17;
+
+     label16:
+        $r19 = virtualinvoke $r17.<io.grpc.NameResolver$ConfigOrError: java.lang.Object getConfig()>();
+
+        $r20 = (io.grpc.internal.ServiceConfigUtil$PolicySelection) $r19;
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder setChildPolicy(io.grpc.internal.ServiceConfigUtil$PolicySelection)>($r20);
+
+        $r21 = virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$Builder: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig build()>();
+
+        $r17 = staticinvoke <io.grpc.NameResolver$ConfigOrError: io.grpc.NameResolver$ConfigOrError fromConfig(java.lang.Object)>($r21);
+
+        return $r17;
+
+     label17:
+        $r18 = <io.grpc.Status: io.grpc.Status INTERNAL>;
+
+        $r22 = new java.lang.StringBuilder;
+
+        specialinvoke $r22.<java.lang.StringBuilder: void <init>(java.lang.String)>("No child policy in outlier_detection_experimental LB policy: ");
+
+        virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r18 = virtualinvoke $r18.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>($r23);
+
+        $r17 = staticinvoke <io.grpc.NameResolver$ConfigOrError: io.grpc.NameResolver$ConfigOrError fromError(io.grpc.Status)>($r18);
+
+        return $r17;
+    }
+}

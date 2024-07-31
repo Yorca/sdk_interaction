@@ -1,0 +1,398 @@
+class com.android.installreferrer.api.InstallReferrerClientImpl extends com.android.installreferrer.api.InstallReferrerClient
+{
+    private static final int PLAY_STORE_MIN_APP_VER;
+    private static final java.lang.String SERVICE_ACTION_NAME;
+    private static final java.lang.String SERVICE_NAME;
+    private static final java.lang.String SERVICE_PACKAGE_NAME;
+    private static final java.lang.String TAG;
+    private int clientState;
+    private final android.content.Context mApplicationContext;
+    private com.google.android.finsky.externalreferrer.IGetInstallReferrerService service;
+    private android.content.ServiceConnection serviceConnection;
+
+    public void <init>(android.content.Context)
+    {
+        android.content.Context $r1;
+        com.android.installreferrer.api.InstallReferrerClientImpl r0;
+
+        r0 := @this: com.android.installreferrer.api.InstallReferrerClientImpl;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<com.android.installreferrer.api.InstallReferrerClient: void <init>()>();
+
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: int clientState> = 0;
+
+        $r1 = virtualinvoke $r1.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.Context mApplicationContext> = $r1;
+
+        return;
+    }
+
+    static com.google.android.finsky.externalreferrer.IGetInstallReferrerService access$102(com.android.installreferrer.api.InstallReferrerClientImpl, com.google.android.finsky.externalreferrer.IGetInstallReferrerService)
+    {
+        com.android.installreferrer.api.InstallReferrerClientImpl $r0;
+        com.google.android.finsky.externalreferrer.IGetInstallReferrerService $r1;
+
+        $r0 := @parameter0: com.android.installreferrer.api.InstallReferrerClientImpl;
+
+        $r1 := @parameter1: com.google.android.finsky.externalreferrer.IGetInstallReferrerService;
+
+        $r0.<com.android.installreferrer.api.InstallReferrerClientImpl: com.google.android.finsky.externalreferrer.IGetInstallReferrerService service> = $r1;
+
+        return $r1;
+    }
+
+    static int access$202(com.android.installreferrer.api.InstallReferrerClientImpl, int)
+    {
+        int $i0;
+        com.android.installreferrer.api.InstallReferrerClientImpl $r0;
+
+        $r0 := @parameter0: com.android.installreferrer.api.InstallReferrerClientImpl;
+
+        $i0 := @parameter1: int;
+
+        $r0.<com.android.installreferrer.api.InstallReferrerClientImpl: int clientState> = $i0;
+
+        return $i0;
+    }
+
+    private boolean isPlayStoreCompatible()
+    {
+        java.lang.Throwable $r1;
+        android.content.Context $r2;
+        android.content.pm.PackageManager $r3;
+        com.android.installreferrer.api.InstallReferrerClientImpl r0;
+        int $i0;
+        android.content.pm.PackageInfo $r4;
+
+        r0 := @this: com.android.installreferrer.api.InstallReferrerClientImpl;
+
+        $r2 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.Context mApplicationContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+     label1:
+        $r4 = virtualinvoke $r3.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>("com.android.vending", 128);
+
+     label2:
+        $i0 = $r4.<android.content.pm.PackageInfo: int versionCode>;
+
+        if $i0 < 80837300 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+
+     label4:
+        $r1 := @caughtexception;
+
+        return 0;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label4;
+    }
+
+    public void endConnection()
+    {
+        android.content.ServiceConnection $r1;
+        android.content.Context $r2;
+        com.android.installreferrer.api.InstallReferrerClientImpl r0;
+
+        r0 := @this: com.android.installreferrer.api.InstallReferrerClientImpl;
+
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: int clientState> = 3;
+
+        $r1 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.ServiceConnection serviceConnection>;
+
+        if $r1 == null goto label1;
+
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logVerbose(java.lang.String,java.lang.String)>("InstallReferrerClient", "Unbinding from service.");
+
+        $r2 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.Context mApplicationContext>;
+
+        $r1 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.ServiceConnection serviceConnection>;
+
+        virtualinvoke $r2.<android.content.Context: void unbindService(android.content.ServiceConnection)>($r1);
+
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.ServiceConnection serviceConnection> = null;
+
+     label1:
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: com.google.android.finsky.externalreferrer.IGetInstallReferrerService service> = null;
+
+        return;
+    }
+
+    public com.android.installreferrer.api.ReferrerDetails getInstallReferrer() throws android.os.RemoteException
+    {
+        java.lang.Throwable $r6;
+        android.content.Context $r2;
+        java.lang.IllegalStateException $r7;
+        android.os.Bundle $r1;
+        com.android.installreferrer.api.ReferrerDetails $r4;
+        com.android.installreferrer.api.InstallReferrerClientImpl r0;
+        com.google.android.finsky.externalreferrer.IGetInstallReferrerService $r5;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.android.installreferrer.api.InstallReferrerClientImpl;
+
+        $z0 = virtualinvoke r0.<com.android.installreferrer.api.InstallReferrerClientImpl: boolean isReady()>();
+
+        if $z0 == 0 goto label4;
+
+        $r1 = new android.os.Bundle;
+
+        specialinvoke $r1.<android.os.Bundle: void <init>()>();
+
+        $r2 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.Context mApplicationContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke $r1.<android.os.Bundle: void putString(java.lang.String,java.lang.String)>("package_name", $r3);
+
+        $r4 = new com.android.installreferrer.api.ReferrerDetails;
+
+        $r5 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: com.google.android.finsky.externalreferrer.IGetInstallReferrerService service>;
+
+     label1:
+        $r1 = interfaceinvoke $r5.<com.google.android.finsky.externalreferrer.IGetInstallReferrerService: android.os.Bundle c(android.os.Bundle)>($r1);
+
+        specialinvoke $r4.<com.android.installreferrer.api.ReferrerDetails: void <init>(android.os.Bundle)>($r1);
+
+     label2:
+        return $r4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logWarn(java.lang.String,java.lang.String)>("InstallReferrerClient", "RemoteException getting install referrer information");
+
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: int clientState> = 0;
+
+        throw $r6;
+
+     label4:
+        $r7 = new java.lang.IllegalStateException;
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Service not connected. Please start a connection before using the service.");
+
+        throw $r7;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    public boolean isReady()
+    {
+        com.android.installreferrer.api.InstallReferrerClientImpl r0;
+        com.google.android.finsky.externalreferrer.IGetInstallReferrerService $r1;
+        int $i0;
+        android.content.ServiceConnection $r2;
+
+        r0 := @this: com.android.installreferrer.api.InstallReferrerClientImpl;
+
+        $i0 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: int clientState>;
+
+        if $i0 != 2 goto label1;
+
+        $r1 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: com.google.android.finsky.externalreferrer.IGetInstallReferrerService service>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.ServiceConnection serviceConnection>;
+
+        if $r2 == null goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public void startConnection(com.android.installreferrer.api.InstallReferrerStateListener)
+    {
+        java.lang.Throwable $r1;
+        android.content.Context $r6;
+        android.content.pm.PackageManager $r7;
+        android.content.Intent $r3, $r14;
+        com.android.installreferrer.api.InstallReferrerClientImpl$InstallReferrerServiceConnection $r15;
+        com.android.installreferrer.api.InstallReferrerClientImpl r0;
+        int $i0;
+        java.lang.String $r5, $r12, $r13;
+        boolean $z0;
+        com.android.installreferrer.api.InstallReferrerStateListener $r2;
+        android.content.ComponentName $r4;
+        android.content.pm.ResolveInfo $r10;
+        java.util.List $r8;
+        java.lang.Object $r9;
+        android.content.pm.ServiceInfo $r11;
+
+        r0 := @this: com.android.installreferrer.api.InstallReferrerClientImpl;
+
+        $r2 := @parameter0: com.android.installreferrer.api.InstallReferrerStateListener;
+
+        $z0 = virtualinvoke r0.<com.android.installreferrer.api.InstallReferrerClientImpl: boolean isReady()>();
+
+        if $z0 == 0 goto label01;
+
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logVerbose(java.lang.String,java.lang.String)>("InstallReferrerClient", "Service connection is valid. No need to re-initialize.");
+
+        interfaceinvoke $r2.<com.android.installreferrer.api.InstallReferrerStateListener: void onInstallReferrerSetupFinished(int)>(0);
+
+        return;
+
+     label01:
+        $i0 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: int clientState>;
+
+        if $i0 != 1 goto label02;
+
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logWarn(java.lang.String,java.lang.String)>("InstallReferrerClient", "Client is already in the process of connecting to the service.");
+
+        interfaceinvoke $r2.<com.android.installreferrer.api.InstallReferrerStateListener: void onInstallReferrerSetupFinished(int)>(3);
+
+        return;
+
+     label02:
+        if $i0 != 3 goto label03;
+
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logWarn(java.lang.String,java.lang.String)>("InstallReferrerClient", "Client was already closed and can\'t be reused. Please create another instance.");
+
+        interfaceinvoke $r2.<com.android.installreferrer.api.InstallReferrerStateListener: void onInstallReferrerSetupFinished(int)>(3);
+
+        return;
+
+     label03:
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logVerbose(java.lang.String,java.lang.String)>("InstallReferrerClient", "Starting install referrer service setup.");
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(java.lang.String)>("com.google.android.finsky.BIND_GET_INSTALL_REFERRER_SERVICE");
+
+        $r4 = new android.content.ComponentName;
+
+        $r5 = "com.android.vending";
+
+        specialinvoke $r4.<android.content.ComponentName: void <init>(java.lang.String,java.lang.String)>("com.android.vending", "com.google.android.finsky.externalreferrer.GetInstallReferrerService");
+
+        virtualinvoke $r3.<android.content.Intent: android.content.Intent setComponent(android.content.ComponentName)>($r4);
+
+        $r6 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.Context mApplicationContext>;
+
+        $r7 = virtualinvoke $r6.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r8 = virtualinvoke $r7.<android.content.pm.PackageManager: java.util.List queryIntentServices(android.content.Intent,int)>($r3, 0);
+
+        if $r8 == null goto label09;
+
+        $z0 = interfaceinvoke $r8.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label09;
+
+        $r9 = interfaceinvoke $r8.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r10 = (android.content.pm.ResolveInfo) $r9;
+
+        $r11 = $r10.<android.content.pm.ResolveInfo: android.content.pm.ServiceInfo serviceInfo>;
+
+        if $r11 == null goto label09;
+
+        $r11 = $r10.<android.content.pm.ResolveInfo: android.content.pm.ServiceInfo serviceInfo>;
+
+        $r12 = $r11.<android.content.pm.ServiceInfo: java.lang.String packageName>;
+
+        $r11 = $r10.<android.content.pm.ResolveInfo: android.content.pm.ServiceInfo serviceInfo>;
+
+        $r13 = $r11.<android.content.pm.ServiceInfo: java.lang.String name>;
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r12);
+
+        if $z0 == 0 goto label08;
+
+        if $r13 == null goto label08;
+
+        $z0 = specialinvoke r0.<com.android.installreferrer.api.InstallReferrerClientImpl: boolean isPlayStoreCompatible()>();
+
+        if $z0 == 0 goto label08;
+
+        $r14 = new android.content.Intent;
+
+        specialinvoke $r14.<android.content.Intent: void <init>(android.content.Intent)>($r3);
+
+        $r15 = new com.android.installreferrer.api.InstallReferrerClientImpl$InstallReferrerServiceConnection;
+
+        specialinvoke $r15.<com.android.installreferrer.api.InstallReferrerClientImpl$InstallReferrerServiceConnection: void <init>(com.android.installreferrer.api.InstallReferrerClientImpl,com.android.installreferrer.api.InstallReferrerStateListener,com.android.installreferrer.api.InstallReferrerClientImpl$1)>(r0, $r2, null);
+
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.ServiceConnection serviceConnection> = $r15;
+
+        $r6 = r0.<com.android.installreferrer.api.InstallReferrerClientImpl: android.content.Context mApplicationContext>;
+
+     label04:
+        $z0 = virtualinvoke $r6.<android.content.Context: boolean bindService(android.content.Intent,android.content.ServiceConnection,int)>($r14, $r15, 1);
+
+     label05:
+        if $z0 == 0 goto label06;
+
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logVerbose(java.lang.String,java.lang.String)>("InstallReferrerClient", "Service was bonded successfully.");
+
+        return;
+
+     label06:
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logWarn(java.lang.String,java.lang.String)>("InstallReferrerClient", "Connection to service is blocked.");
+
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: int clientState> = 0;
+
+        interfaceinvoke $r2.<com.android.installreferrer.api.InstallReferrerStateListener: void onInstallReferrerSetupFinished(int)>(1);
+
+        return;
+
+     label07:
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logWarn(java.lang.String,java.lang.String)>("InstallReferrerClient", "No permission to connect to service.");
+
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: int clientState> = 0;
+
+        interfaceinvoke $r2.<com.android.installreferrer.api.InstallReferrerStateListener: void onInstallReferrerSetupFinished(int)>(4);
+
+        return;
+
+     label08:
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logWarn(java.lang.String,java.lang.String)>("InstallReferrerClient", "Play Store missing or incompatible. Version 8.3.73 or later required.");
+
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: int clientState> = 0;
+
+        interfaceinvoke $r2.<com.android.installreferrer.api.InstallReferrerStateListener: void onInstallReferrerSetupFinished(int)>(2);
+
+        return;
+
+     label09:
+        r0.<com.android.installreferrer.api.InstallReferrerClientImpl: int clientState> = 0;
+
+        staticinvoke <com.android.installreferrer.commons.InstallReferrerCommons: void logVerbose(java.lang.String,java.lang.String)>("InstallReferrerClient", "Install Referrer service unavailable on device.");
+
+        interfaceinvoke $r2.<com.android.installreferrer.api.InstallReferrerStateListener: void onInstallReferrerSetupFinished(int)>(2);
+
+        return;
+
+     label10:
+        $r1 := @caughtexception;
+
+        goto label07;
+
+        catch java.lang.SecurityException from label04 to label05 with label10;
+    }
+
+    public static void <clinit>()
+    {
+        <com.android.installreferrer.api.InstallReferrerClientImpl: java.lang.String TAG> = "InstallReferrerClient";
+
+        <com.android.installreferrer.api.InstallReferrerClientImpl: java.lang.String SERVICE_PACKAGE_NAME> = "com.android.vending";
+
+        <com.android.installreferrer.api.InstallReferrerClientImpl: java.lang.String SERVICE_NAME> = "com.google.android.finsky.externalreferrer.GetInstallReferrerService";
+
+        <com.android.installreferrer.api.InstallReferrerClientImpl: java.lang.String SERVICE_ACTION_NAME> = "com.google.android.finsky.BIND_GET_INSTALL_REFERRER_SERVICE";
+
+        <com.android.installreferrer.api.InstallReferrerClientImpl: int PLAY_STORE_MIN_APP_VER> = 80837300;
+
+        return;
+    }
+}

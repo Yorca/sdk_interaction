@@ -1,0 +1,85 @@
+final class okio.AsyncTimeout$Watchdog extends java.lang.Thread
+{
+
+    void <init>()
+    {
+        okio.AsyncTimeout$Watchdog r0;
+
+        r0 := @this: okio.AsyncTimeout$Watchdog;
+
+        specialinvoke r0.<java.lang.Thread: void <init>(java.lang.String)>("Okio Watchdog");
+
+        virtualinvoke r0.<okio.AsyncTimeout$Watchdog: void setDaemon(boolean)>(1);
+
+        return;
+    }
+
+    public void run()
+    {
+        java.lang.Throwable $r3, $r4, $r5;
+        okio.AsyncTimeout$Watchdog r0;
+        okio.AsyncTimeout $r1, $r2;
+
+        r0 := @this: okio.AsyncTimeout$Watchdog;
+
+     label01:
+        entermonitor class "Lokio/AsyncTimeout;";
+
+     label02:
+        $r2 = staticinvoke <okio.AsyncTimeout: okio.AsyncTimeout awaitTimeout()>();
+
+        if $r2 != null goto label04;
+
+        exitmonitor class "Lokio/AsyncTimeout;";
+
+     label03:
+        goto label01;
+
+     label04:
+        $r1 = <okio.AsyncTimeout: okio.AsyncTimeout head>;
+
+        if $r2 != $r1 goto label06;
+
+        <okio.AsyncTimeout: okio.AsyncTimeout head> = null;
+
+        exitmonitor class "Lokio/AsyncTimeout;";
+
+     label05:
+        return;
+
+     label06:
+        exitmonitor class "Lokio/AsyncTimeout;";
+
+     label07:
+        virtualinvoke $r2.<okio.AsyncTimeout: void timedOut()>();
+
+     label08:
+        goto label01;
+
+     label09:
+        $r5 := @caughtexception;
+
+     label10:
+        exitmonitor class "Lokio/AsyncTimeout;";
+
+     label11:
+        throw $r5;
+
+     label12:
+        $r3 := @caughtexception;
+
+        goto label01;
+
+     label13:
+        $r4 := @caughtexception;
+
+        goto label01;
+
+        catch java.lang.Throwable from label02 to label03 with label09;
+        catch java.lang.Throwable from label04 to label05 with label09;
+        catch java.lang.Throwable from label06 to label07 with label09;
+        catch java.lang.InterruptedException from label07 to label08 with label12;
+        catch java.lang.Throwable from label10 to label11 with label09;
+        catch java.lang.InterruptedException from label11 to label12 with label13;
+    }
+}

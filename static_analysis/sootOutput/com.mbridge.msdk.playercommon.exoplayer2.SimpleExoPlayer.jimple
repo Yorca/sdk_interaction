@@ -1,0 +1,2478 @@
+public class com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer, com.mbridge.msdk.playercommon.exoplayer2.Player$TextComponent, com.mbridge.msdk.playercommon.exoplayer2.Player$VideoComponent
+{
+    private static final java.lang.String TAG;
+    private final com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector;
+    private com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes audioAttributes;
+    private final java.util.concurrent.CopyOnWriteArraySet audioDebugListeners;
+    private com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters audioDecoderCounters;
+    private com.mbridge.msdk.playercommon.exoplayer2.Format audioFormat;
+    private int audioSessionId;
+    private float audioVolume;
+    private final com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener componentListener;
+    private java.util.List currentCues;
+    private final android.os.Handler eventHandler;
+    private com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource mediaSource;
+    private final java.util.concurrent.CopyOnWriteArraySet metadataOutputs;
+    private boolean ownsSurface;
+    private final com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player;
+    protected final com.mbridge.msdk.playercommon.exoplayer2.Renderer[] renderers;
+    private android.view.Surface surface;
+    private android.view.SurfaceHolder surfaceHolder;
+    private final java.util.concurrent.CopyOnWriteArraySet textOutputs;
+    private android.view.TextureView textureView;
+    private final java.util.concurrent.CopyOnWriteArraySet videoDebugListeners;
+    private com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters videoDecoderCounters;
+    private com.mbridge.msdk.playercommon.exoplayer2.Format videoFormat;
+    private final java.util.concurrent.CopyOnWriteArraySet videoListeners;
+    private int videoScalingMode;
+
+    protected void <init>(com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory, com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector, com.mbridge.msdk.playercommon.exoplayer2.LoadControl, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.LoadControl $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.LoadControl;
+
+        $r4 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager;
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory: void <init>()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void <init>(com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory,com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector,com.mbridge.msdk.playercommon.exoplayer2.LoadControl,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager,com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory)>($r1, $r2, $r3, null, $r5);
+
+        return;
+    }
+
+    protected void <init>(com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory, com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector, com.mbridge.msdk.playercommon.exoplayer2.LoadControl, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager, com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.LoadControl $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.Clock $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.LoadControl;
+
+        $r4 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager;
+
+        $r5 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory;
+
+        $r6 = <com.mbridge.msdk.playercommon.exoplayer2.util.Clock: com.mbridge.msdk.playercommon.exoplayer2.util.Clock DEFAULT>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void <init>(com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory,com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector,com.mbridge.msdk.playercommon.exoplayer2.LoadControl,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager,com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory,com.mbridge.msdk.playercommon.exoplayer2.util.Clock)>($r1, $r2, $r3, null, $r5, $r6);
+
+        return;
+    }
+
+    protected void <init>(com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory, com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector, com.mbridge.msdk.playercommon.exoplayer2.LoadControl, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager, com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory, com.mbridge.msdk.playercommon.exoplayer2.util.Clock)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r16;
+        android.os.Handler $r10;
+        android.os.Looper $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager $r17;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer[] $r12;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.LoadControl $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r15;
+        java.util.concurrent.CopyOnWriteArraySet $r8, $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes $r13;
+        java.util.List $r14;
+        com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.Clock $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.LoadControl;
+
+        $r4 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager;
+
+        $r5 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory;
+
+        $r6 := @parameter5: com.mbridge.msdk.playercommon.exoplayer2.util.Clock;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r7 = new com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener;
+
+        specialinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener: void <init>(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer,com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$1)>(r0, null);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener componentListener> = $r7;
+
+        $r8 = new java.util.concurrent.CopyOnWriteArraySet;
+
+        specialinvoke $r8.<java.util.concurrent.CopyOnWriteArraySet: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet videoListeners> = $r8;
+
+        $r8 = new java.util.concurrent.CopyOnWriteArraySet;
+
+        specialinvoke $r8.<java.util.concurrent.CopyOnWriteArraySet: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet textOutputs> = $r8;
+
+        $r8 = new java.util.concurrent.CopyOnWriteArraySet;
+
+        specialinvoke $r8.<java.util.concurrent.CopyOnWriteArraySet: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet metadataOutputs> = $r8;
+
+        $r8 = new java.util.concurrent.CopyOnWriteArraySet;
+
+        specialinvoke $r8.<java.util.concurrent.CopyOnWriteArraySet: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet videoDebugListeners> = $r8;
+
+        $r9 = new java.util.concurrent.CopyOnWriteArraySet;
+
+        specialinvoke $r9.<java.util.concurrent.CopyOnWriteArraySet: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet audioDebugListeners> = $r9;
+
+        $r11 = staticinvoke <android.os.Looper: android.os.Looper myLooper()>();
+
+        if $r11 == null goto label1;
+
+        $r11 = staticinvoke <android.os.Looper: android.os.Looper myLooper()>();
+
+        goto label2;
+
+     label1:
+        $r11 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+     label2:
+        $r10 = new android.os.Handler;
+
+        specialinvoke $r10.<android.os.Handler: void <init>(android.os.Looper)>($r11);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.os.Handler eventHandler> = $r10;
+
+        $r12 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.RenderersFactory: com.mbridge.msdk.playercommon.exoplayer2.Renderer[] createRenderers(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener,com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput,com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager)>($r10, $r7, $r7, $r7, $r7, null);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.Renderer[] renderers> = $r12;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: float audioVolume> = 1.0F;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: int audioSessionId> = 0;
+
+        $r13 = <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes DEFAULT>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes audioAttributes> = $r13;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: int videoScalingMode> = 1;
+
+        $r14 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.List currentCues> = $r14;
+
+        $r15 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer createExoPlayerImpl(com.mbridge.msdk.playercommon.exoplayer2.Renderer[],com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector,com.mbridge.msdk.playercommon.exoplayer2.LoadControl,com.mbridge.msdk.playercommon.exoplayer2.util.Clock)>($r12, $r2, $r3, $r6);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player> = $r15;
+
+        $r16 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector$Factory: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector createAnalyticsCollector(com.mbridge.msdk.playercommon.exoplayer2.Player,com.mbridge.msdk.playercommon.exoplayer2.util.Clock)>($r15, $r6);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector> = $r16;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void addListener(com.mbridge.msdk.playercommon.exoplayer2.Player$EventListener)>($r16);
+
+        virtualinvoke $r8.<java.util.concurrent.CopyOnWriteArraySet: boolean add(java.lang.Object)>($r16);
+
+        virtualinvoke $r9.<java.util.concurrent.CopyOnWriteArraySet: boolean add(java.lang.Object)>($r16);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void addMetadataOutput(com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput)>($r16);
+
+        $z0 = null instanceof com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager;
+
+        if $z0 == 0 goto label3;
+
+        $r17 = null;
+
+        virtualinvoke $r17.<com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionManager: void addListener(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.drm.DefaultDrmSessionEventListener)>($r10, $r16);
+
+     label3:
+        return;
+    }
+
+    static java.util.List access$1002(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer, java.util.List)
+    {
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter1: java.util.List;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.List currentCues> = $r1;
+
+        return $r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters access$102(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer, com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters videoDecoderCounters> = $r1;
+
+        return $r1;
+    }
+
+    static java.util.concurrent.CopyOnWriteArraySet access$1100(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+        java.util.concurrent.CopyOnWriteArraySet r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet textOutputs>;
+
+        return r1;
+    }
+
+    static java.util.concurrent.CopyOnWriteArraySet access$1200(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+        java.util.concurrent.CopyOnWriteArraySet r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet metadataOutputs>;
+
+        return r1;
+    }
+
+    static void access$1300(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer, android.view.Surface, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+        android.view.Surface $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter1: android.view.Surface;
+
+        $z0 := @parameter2: boolean;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setVideoSurfaceInternal(android.view.Surface,boolean)>($r1, $z0);
+
+        return;
+    }
+
+    static java.util.concurrent.CopyOnWriteArraySet access$200(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+        java.util.concurrent.CopyOnWriteArraySet r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet videoDebugListeners>;
+
+        return r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.Format access$302(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer, com.mbridge.msdk.playercommon.exoplayer2.Format)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.Format videoFormat> = $r1;
+
+        return $r1;
+    }
+
+    static java.util.concurrent.CopyOnWriteArraySet access$400(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+        java.util.concurrent.CopyOnWriteArraySet r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet videoListeners>;
+
+        return r1;
+    }
+
+    static android.view.Surface access$500(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+        android.view.Surface r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.Surface surface>;
+
+        return r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters access$602(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer, com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters audioDecoderCounters> = $r1;
+
+        return $r1;
+    }
+
+    static java.util.concurrent.CopyOnWriteArraySet access$700(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+        java.util.concurrent.CopyOnWriteArraySet r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet audioDebugListeners>;
+
+        return r1;
+    }
+
+    static int access$802(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer, int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $i0 := @parameter1: int;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: int audioSessionId> = $i0;
+
+        return $i0;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.Format access$902(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer, com.mbridge.msdk.playercommon.exoplayer2.Format)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.Format audioFormat> = $r1;
+
+        return $r1;
+    }
+
+    private void removeSurfaceCallbacks()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        android.view.TextureView $r2;
+        android.view.TextureView$SurfaceTextureListener $r1;
+        android.view.SurfaceHolder $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.TextureView textureView>;
+
+        if $r2 == null goto label3;
+
+        $r1 = virtualinvoke $r2.<android.view.TextureView: android.view.TextureView$SurfaceTextureListener getSurfaceTextureListener()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener componentListener>;
+
+        if $r1 == $r3 goto label1;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("SimpleExoPlayer", "SurfaceTextureListener already unset or replaced.");
+
+        goto label2;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.TextureView textureView>;
+
+        virtualinvoke $r2.<android.view.TextureView: void setSurfaceTextureListener(android.view.TextureView$SurfaceTextureListener)>(null);
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.TextureView textureView> = null;
+
+     label3:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.SurfaceHolder surfaceHolder>;
+
+        if $r4 == null goto label4;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener componentListener>;
+
+        interfaceinvoke $r4.<android.view.SurfaceHolder: void removeCallback(android.view.SurfaceHolder$Callback)>($r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.SurfaceHolder surfaceHolder> = null;
+
+     label4:
+        return;
+    }
+
+    private void setVideoSurfaceInternal(android.view.Surface, boolean)
+    {
+        java.lang.Throwable $r2, $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer $r6;
+        java.util.ArrayList $r4;
+        java.lang.Thread $r12;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r8;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer[] $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r7;
+        java.util.Iterator $r10;
+        android.view.Surface $r1, $r9;
+        java.lang.Object $r11;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: android.view.Surface;
+
+        $z0 := @parameter1: boolean;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.Renderer[] renderers>;
+
+        $i0 = lengthof $r5;
+
+        $i1 = 0;
+
+     label01:
+        if $i1 >= $i0 goto label03;
+
+        $r6 = $r5[$i1];
+
+        $i2 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.Renderer: int getTrackType()>();
+
+        if $i2 != 2 goto label02;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r8 = interfaceinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>($r6);
+
+        $r8 = virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(1);
+
+        $r8 = virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)>($r1);
+
+        $r8 = virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r8);
+
+     label02:
+        $i1 = $i1 + 1;
+
+        goto label01;
+
+     label03:
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.Surface surface>;
+
+        if $r9 == null goto label14;
+
+        if $r9 == $r1 goto label14;
+
+     label04:
+        $r10 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label05:
+        $z1 = interfaceinvoke $r10.<java.util.Iterator: boolean hasNext()>();
+
+     label06:
+        if $z1 == 0 goto label13;
+
+     label07:
+        $r11 = interfaceinvoke $r10.<java.util.Iterator: java.lang.Object next()>();
+
+     label08:
+        $r8 = (com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage) $r11;
+
+     label09:
+        virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: boolean blockUntilDelivered()>();
+
+     label10:
+        goto label05;
+
+     label11:
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void stop(boolean)>(0);
+
+        goto label13;
+
+     label12:
+        $r12 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r12.<java.lang.Thread: void interrupt()>();
+
+     label13:
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: boolean ownsSurface>;
+
+        if $z1 == 0 goto label14;
+
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.Surface surface>;
+
+        virtualinvoke $r9.<android.view.Surface: void release()>();
+
+     label14:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.Surface surface> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: boolean ownsSurface> = 0;
+
+        return;
+
+     label15:
+        $r2 := @caughtexception;
+
+        goto label12;
+
+     label16:
+        $r3 := @caughtexception;
+
+        goto label11;
+
+        catch java.lang.InterruptedException from label04 to label06 with label15;
+        catch java.lang.InterruptedException from label07 to label08 with label15;
+        catch java.lang.InterruptedException from label09 to label10 with label15;
+        catch java.util.concurrent.TimeoutException from label04 to label06 with label16;
+        catch java.util.concurrent.TimeoutException from label07 to label08 with label16;
+        catch java.util.concurrent.TimeoutException from label09 to label10 with label16;
+    }
+
+    public void addAnalyticsListener(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector: void addListener(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener)>($r1);
+
+        return;
+    }
+
+    public void addAudioDebugListener(com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet audioDebugListeners>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean add(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void addListener(com.mbridge.msdk.playercommon.exoplayer2.Player$EventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.Player$EventListener $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Player$EventListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void addListener(com.mbridge.msdk.playercommon.exoplayer2.Player$EventListener)>($r1);
+
+        return;
+    }
+
+    public void addMetadataOutput(com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet metadataOutputs>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean add(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void addTextOutput(com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput)
+    {
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.List currentCues>;
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.List currentCues>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput: void onCues(java.util.List)>($r2);
+
+     label1:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet textOutputs>;
+
+        virtualinvoke $r3.<java.util.concurrent.CopyOnWriteArraySet: boolean add(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void addVideoDebugListener(com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet videoDebugListeners>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean add(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void addVideoListener(com.mbridge.msdk.playercommon.exoplayer2.video.VideoListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.video.VideoListener $r1;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.video.VideoListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet videoListeners>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean add(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public transient void blockingSendMessages(com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer$ExoPlayerMessage[])
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer$ExoPlayerMessage[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer$ExoPlayerMessage[];
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void blockingSendMessages(com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer$ExoPlayerMessage[])>($r1);
+
+        return;
+    }
+
+    public void clearMetadataOutput(com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void removeMetadataOutput(com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput)>($r1);
+
+        return;
+    }
+
+    public void clearTextOutput(com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void removeTextOutput(com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput)>($r1);
+
+        return;
+    }
+
+    public void clearVideoListener(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$VideoListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$VideoListener $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$VideoListener;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void removeVideoListener(com.mbridge.msdk.playercommon.exoplayer2.video.VideoListener)>($r1);
+
+        return;
+    }
+
+    public void clearVideoSurface()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setVideoSurface(android.view.Surface)>(null);
+
+        return;
+    }
+
+    public void clearVideoSurface(android.view.Surface)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        android.view.Surface $r1, $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 := @parameter0: android.view.Surface;
+
+        if $r2 == null goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.Surface surface>;
+
+        if $r2 != $r1 goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setVideoSurface(android.view.Surface)>(null);
+
+     label1:
+        return;
+    }
+
+    public void clearVideoSurfaceHolder(android.view.SurfaceHolder)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        android.view.SurfaceHolder $r1, $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 := @parameter0: android.view.SurfaceHolder;
+
+        if $r2 == null goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.SurfaceHolder surfaceHolder>;
+
+        if $r2 != $r1 goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setVideoSurfaceHolder(android.view.SurfaceHolder)>(null);
+
+     label1:
+        return;
+    }
+
+    public void clearVideoSurfaceView(android.view.SurfaceView)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        android.view.SurfaceView $r2;
+        android.view.SurfaceHolder $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 := @parameter0: android.view.SurfaceView;
+
+        if $r2 != null goto label1;
+
+        $r1 = null;
+
+        goto label2;
+
+     label1:
+        $r1 = virtualinvoke $r2.<android.view.SurfaceView: android.view.SurfaceHolder getHolder()>();
+
+     label2:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void clearVideoSurfaceHolder(android.view.SurfaceHolder)>($r1);
+
+        return;
+    }
+
+    public void clearVideoTextureView(android.view.TextureView)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        android.view.TextureView $r1, $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 := @parameter0: android.view.TextureView;
+
+        if $r2 == null goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.TextureView textureView>;
+
+        if $r2 != $r1 goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setVideoTextureView(android.view.TextureView)>(null);
+
+     label1:
+        return;
+    }
+
+    protected com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer createExoPlayerImpl(com.mbridge.msdk.playercommon.exoplayer2.Renderer[], com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector, com.mbridge.msdk.playercommon.exoplayer2.LoadControl, com.mbridge.msdk.playercommon.exoplayer2.util.Clock)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.LoadControl $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayerImpl $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.util.Clock $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Renderer[];
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.LoadControl;
+
+        $r4 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.util.Clock;
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.ExoPlayerImpl;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayerImpl: void <init>(com.mbridge.msdk.playercommon.exoplayer2.Renderer[],com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelector,com.mbridge.msdk.playercommon.exoplayer2.LoadControl,com.mbridge.msdk.playercommon.exoplayer2.util.Clock)>($r1, $r2, $r3, $r4);
+
+        return $r5;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r2 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>($r3);
+
+        return $r2;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector getAnalyticsCollector()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        return r1;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes getAudioAttributes()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes audioAttributes>;
+
+        return r1;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters getAudioDecoderCounters()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters audioDecoderCounters>;
+
+        return r1;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.Format getAudioFormat()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Format r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.Format audioFormat>;
+
+        return r1;
+    }
+
+    public int getAudioSessionId()
+    {
+        int i0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: int audioSessionId>;
+
+        return i0;
+    }
+
+    public int getAudioStreamType()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes audioAttributes>;
+
+        $i0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes: int usage>;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getStreamTypeForAudioUsage(int)>($i0);
+
+        return $i0;
+    }
+
+    public int getBufferedPercentage()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getBufferedPercentage()>();
+
+        return $i0;
+    }
+
+    public long getBufferedPosition()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $l0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: long getBufferedPosition()>();
+
+        return $l0;
+    }
+
+    public long getContentPosition()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $l0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: long getContentPosition()>();
+
+        return $l0;
+    }
+
+    public int getCurrentAdGroupIndex()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getCurrentAdGroupIndex()>();
+
+        return $i0;
+    }
+
+    public int getCurrentAdIndexInAdGroup()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getCurrentAdIndexInAdGroup()>();
+
+        return $i0;
+    }
+
+    public java.lang.Object getCurrentManifest()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        java.lang.Object $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: java.lang.Object getCurrentManifest()>();
+
+        return $r1;
+    }
+
+    public int getCurrentPeriodIndex()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getCurrentPeriodIndex()>();
+
+        return $i0;
+    }
+
+    public long getCurrentPosition()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $l0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: long getCurrentPosition()>();
+
+        return $l0;
+    }
+
+    public java.lang.Object getCurrentTag()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        java.lang.Object $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: java.lang.Object getCurrentTag()>();
+
+        return $r1;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.Timeline getCurrentTimeline()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.Timeline getCurrentTimeline()>();
+
+        return $r1;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getCurrentTrackGroups()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getCurrentTrackGroups()>();
+
+        return $r1;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray getCurrentTrackSelections()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray getCurrentTrackSelections()>();
+
+        return $r1;
+    }
+
+    public int getCurrentWindowIndex()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getCurrentWindowIndex()>();
+
+        return $i0;
+    }
+
+    public long getDuration()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $l0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: long getDuration()>();
+
+        return $l0;
+    }
+
+    public int getNextWindowIndex()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getNextWindowIndex()>();
+
+        return $i0;
+    }
+
+    public boolean getPlayWhenReady()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $z0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: boolean getPlayWhenReady()>();
+
+        return $z0;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException getPlaybackError()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException getPlaybackError()>();
+
+        return $r1;
+    }
+
+    public android.os.Looper getPlaybackLooper()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        android.os.Looper $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: android.os.Looper getPlaybackLooper()>();
+
+        return $r1;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters getPlaybackParameters()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters getPlaybackParameters()>();
+
+        return $r1;
+    }
+
+    public int getPlaybackState()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getPlaybackState()>();
+
+        return $i0;
+    }
+
+    public int getPreviousWindowIndex()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getPreviousWindowIndex()>();
+
+        return $i0;
+    }
+
+    public int getRendererCount()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getRendererCount()>();
+
+        return $i0;
+    }
+
+    public int getRendererType(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getRendererType(int)>($i0);
+
+        return $i0;
+    }
+
+    public int getRepeatMode()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: int getRepeatMode()>();
+
+        return $i0;
+    }
+
+    public boolean getShuffleModeEnabled()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $z0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: boolean getShuffleModeEnabled()>();
+
+        return $z0;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.Player$TextComponent getTextComponent()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        return r0;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.Player$VideoComponent getVideoComponent()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        return r0;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters getVideoDecoderCounters()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters videoDecoderCounters>;
+
+        return r1;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.Format getVideoFormat()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Format r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.Format videoFormat>;
+
+        return r1;
+    }
+
+    public int getVideoScalingMode()
+    {
+        int i0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: int videoScalingMode>;
+
+        return i0;
+    }
+
+    public float getVolume()
+    {
+        float f0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        f0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: float audioVolume>;
+
+        return f0;
+    }
+
+    public boolean isCurrentWindowDynamic()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $z0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: boolean isCurrentWindowDynamic()>();
+
+        return $z0;
+    }
+
+    public boolean isCurrentWindowSeekable()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $z0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: boolean isCurrentWindowSeekable()>();
+
+        return $z0;
+    }
+
+    public boolean isLoading()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $z0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: boolean isLoading()>();
+
+        return $z0;
+    }
+
+    public final boolean isPlaying()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: int getPlaybackState()>();
+
+        if $i0 != 3 goto label1;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: boolean getPlayWhenReady()>();
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public boolean isPlayingAd()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $z0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: boolean isPlayingAd()>();
+
+        return $z0;
+    }
+
+    public void prepare(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void prepare(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource,boolean,boolean)>($r1, 1, 1);
+
+        return;
+    }
+
+    public void prepare(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource, boolean, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r1, $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r3;
+        android.os.Handler $r4;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource;
+
+        $z0 := @parameter1: boolean;
+
+        $z1 := @parameter2: boolean;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource mediaSource>;
+
+        if $r2 == $r1 goto label2;
+
+        if $r2 == null goto label1;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource: void removeEventListener(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener)>($r3);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector: void resetForNewMediaSource()>();
+
+     label1:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.os.Handler eventHandler>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource: void addEventListener(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener)>($r4, $r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource mediaSource> = $r1;
+
+     label2:
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void prepare(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource,boolean,boolean)>($r1, $z0, $z1);
+
+        return;
+    }
+
+    public void release()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r4;
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r5;
+        android.view.Surface $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void release()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void removeSurfaceCallbacks()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.Surface surface>;
+
+        if $r3 == null goto label2;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: boolean ownsSurface>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke $r3.<android.view.Surface: void release()>();
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.Surface surface> = null;
+
+     label2:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource mediaSource>;
+
+        if $r4 == null goto label3;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource: void removeEventListener(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener)>($r5);
+
+     label3:
+        $r1 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.List currentCues> = $r1;
+
+        return;
+    }
+
+    public void removeAnalyticsListener(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector: void removeListener(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener)>($r1);
+
+        return;
+    }
+
+    public void removeAudioDebugListener(com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet audioDebugListeners>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean remove(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void removeListener(com.mbridge.msdk.playercommon.exoplayer2.Player$EventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.Player$EventListener $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Player$EventListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void removeListener(com.mbridge.msdk.playercommon.exoplayer2.Player$EventListener)>($r1);
+
+        return;
+    }
+
+    public void removeMetadataOutput(com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet metadataOutputs>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean remove(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void removeTextOutput(com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet textOutputs>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean remove(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void removeVideoDebugListener(com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet videoDebugListeners>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean remove(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void removeVideoListener(com.mbridge.msdk.playercommon.exoplayer2.video.VideoListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.video.VideoListener $r1;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.video.VideoListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet videoListeners>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean remove(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void seekTo(int, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r1;
+        int $i0;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $i0 := @parameter0: int;
+
+        $l1 := @parameter1: long;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector: void notifySeekStarted()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void seekTo(int,long)>($i0, $l1);
+
+        return;
+    }
+
+    public void seekTo(long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $l0 := @parameter0: long;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector: void notifySeekStarted()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void seekTo(long)>($l0);
+
+        return;
+    }
+
+    public void seekToDefaultPosition()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector: void notifySeekStarted()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void seekToDefaultPosition()>();
+
+        return;
+    }
+
+    public void seekToDefaultPosition(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector: void notifySeekStarted()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void seekToDefaultPosition(int)>($i0);
+
+        return;
+    }
+
+    public transient void sendMessages(com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer$ExoPlayerMessage[])
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer$ExoPlayerMessage[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer$ExoPlayerMessage[];
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void sendMessages(com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer$ExoPlayerMessage[])>($r1);
+
+        return;
+    }
+
+    public void setAudioAttributes(com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes $r1;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer[] $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes audioAttributes> = $r1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.Renderer[] renderers>;
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $r3 = $r2[$i1];
+
+        $i2 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.Renderer: int getTrackType()>();
+
+        if $i2 != 1 goto label2;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r5 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>($r3);
+
+        $r5 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(3);
+
+        $r5 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)>($r1);
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    public void setAudioDebugListener(com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener $r1;
+        java.util.Set $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet audioDebugListeners>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        $r3 = staticinvoke <java.util.Collections: java.util.Set singleton(java.lang.Object)>($r4);
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean retainAll(java.util.Collection)>($r3);
+
+        if $r1 == null goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void addAudioDebugListener(com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void setAudioStreamType(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes $r2;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes$Builder $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $i0 := @parameter0: int;
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getAudioUsageForStreamType(int)>($i0);
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getAudioContentTypeForStreamType(int)>($i0);
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes$Builder;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes$Builder: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes$Builder: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes$Builder setUsage(int)>($i1);
+
+        $r1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes$Builder: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes$Builder setContentType(int)>($i0);
+
+        $r2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes$Builder: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes build()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setAudioAttributes(com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes)>($r2);
+
+        return;
+    }
+
+    public void setMetadataOutput(com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput $r1;
+        java.util.Set $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet metadataOutputs>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        $r3 = staticinvoke <java.util.Collections: java.util.Set singleton(java.lang.Object)>($r4);
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean retainAll(java.util.Collection)>($r3);
+
+        if $r1 == null goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void addMetadataOutput(com.mbridge.msdk.playercommon.exoplayer2.metadata.MetadataOutput)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void setPlayWhenReady(boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void setPlayWhenReady(boolean)>($z0);
+
+        return;
+    }
+
+    public void setPlaybackParameters(com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void setPlaybackParameters(com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters)>($r1);
+
+        return;
+    }
+
+    public void setPlaybackParams(android.media.PlaybackParams)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters $r2;
+        float $f0, $f1;
+        android.media.PlaybackParams $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: android.media.PlaybackParams;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r1.<android.media.PlaybackParams: android.media.PlaybackParams allowDefaults()>();
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters;
+
+        $f0 = virtualinvoke $r1.<android.media.PlaybackParams: float getSpeed()>();
+
+        $f1 = virtualinvoke $r1.<android.media.PlaybackParams: float getPitch()>();
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters: void <init>(float,float)>($f0, $f1);
+
+        goto label2;
+
+     label1:
+        $r2 = null;
+
+     label2:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setPlaybackParameters(com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters)>($r2);
+
+        return;
+    }
+
+    public void setRepeatMode(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void setRepeatMode(int)>($i0);
+
+        return;
+    }
+
+    public void setSeekParameters(com.mbridge.msdk.playercommon.exoplayer2.SeekParameters)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.SeekParameters $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SeekParameters;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void setSeekParameters(com.mbridge.msdk.playercommon.exoplayer2.SeekParameters)>($r1);
+
+        return;
+    }
+
+    public void setShuffleModeEnabled(boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void setShuffleModeEnabled(boolean)>($z0);
+
+        return;
+    }
+
+    public void setTextOutput(com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet textOutputs>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: void clear()>();
+
+        if $r1 == null goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void addTextOutput(com.mbridge.msdk.playercommon.exoplayer2.text.TextOutput)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void setVideoDebugListener(com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener $r1;
+        java.util.Set $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet videoDebugListeners>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        $r3 = staticinvoke <java.util.Collections: java.util.Set singleton(java.lang.Object)>($r4);
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean retainAll(java.util.Collection)>($r3);
+
+        if $r1 == null goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void addVideoDebugListener(com.mbridge.msdk.playercommon.exoplayer2.video.VideoRendererEventListener)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void setVideoListener(com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$VideoListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$VideoListener $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$VideoListener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.concurrent.CopyOnWriteArraySet videoListeners>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: void clear()>();
+
+        if $r1 == null goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void addVideoListener(com.mbridge.msdk.playercommon.exoplayer2.video.VideoListener)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void setVideoScalingMode(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer $r2;
+        java.lang.Integer $r5;
+        int $i0, $i1, $i2, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $i0 := @parameter0: int;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: int videoScalingMode> = $i0;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.Renderer[] renderers>;
+
+        $i1 = lengthof $r1;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 >= $i1 goto label3;
+
+        $r2 = $r1[$i2];
+
+        $i3 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Renderer: int getTrackType()>();
+
+        if $i3 != 2 goto label2;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r4 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>($r2);
+
+        $r4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(4);
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)>($r5);
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+     label2:
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    public void setVideoSurface(android.view.Surface)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        android.view.Surface $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: android.view.Surface;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void removeSurfaceCallbacks()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setVideoSurfaceInternal(android.view.Surface,boolean)>($r1, 0);
+
+        return;
+    }
+
+    public void setVideoSurfaceHolder(android.view.SurfaceHolder)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener $r2;
+        android.view.Surface $r3, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        android.view.SurfaceHolder $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: android.view.SurfaceHolder;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void removeSurfaceCallbacks()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.SurfaceHolder surfaceHolder> = $r1;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener componentListener>;
+
+        interfaceinvoke $r1.<android.view.SurfaceHolder: void addCallback(android.view.SurfaceHolder$Callback)>($r2);
+
+        $r3 = interfaceinvoke $r1.<android.view.SurfaceHolder: android.view.Surface getSurface()>();
+
+        $r4 = $r3;
+
+        if $r3 == null goto label1;
+
+        $z0 = virtualinvoke $r3.<android.view.Surface: boolean isValid()>();
+
+        if $z0 != 0 goto label2;
+
+     label1:
+        $r4 = null;
+
+     label2:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setVideoSurfaceInternal(android.view.Surface,boolean)>($r4, 0);
+
+        return;
+    }
+
+    public void setVideoSurfaceView(android.view.SurfaceView)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        android.view.SurfaceView $r2;
+        android.view.SurfaceHolder $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r2 := @parameter0: android.view.SurfaceView;
+
+        if $r2 != null goto label1;
+
+        $r1 = null;
+
+        goto label2;
+
+     label1:
+        $r1 = virtualinvoke $r2.<android.view.SurfaceView: android.view.SurfaceHolder getHolder()>();
+
+     label2:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setVideoSurfaceHolder(android.view.SurfaceHolder)>($r1);
+
+        return;
+    }
+
+    public void setVideoTextureView(android.view.TextureView)
+    {
+        android.graphics.SurfaceTexture $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener $r4;
+        android.view.Surface $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        android.view.TextureView $r1;
+        android.view.TextureView$SurfaceTextureListener $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $r1 := @parameter0: android.view.TextureView;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void removeSurfaceCallbacks()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: android.view.TextureView textureView> = $r1;
+
+        $r2 = null;
+
+        if $r1 != null goto label1;
+
+        goto label6;
+
+     label1:
+        $r3 = virtualinvoke $r1.<android.view.TextureView: android.view.TextureView$SurfaceTextureListener getSurfaceTextureListener()>();
+
+        if $r3 == null goto label2;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("SimpleExoPlayer", "Replacing existing SurfaceTextureListener.");
+
+     label2:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer$ComponentListener componentListener>;
+
+        virtualinvoke $r1.<android.view.TextureView: void setSurfaceTextureListener(android.view.TextureView$SurfaceTextureListener)>($r4);
+
+        $z0 = virtualinvoke $r1.<android.view.TextureView: boolean isAvailable()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = virtualinvoke $r1.<android.view.TextureView: android.graphics.SurfaceTexture getSurfaceTexture()>();
+
+        goto label4;
+
+     label3:
+        $r5 = null;
+
+     label4:
+        if $r5 != null goto label5;
+
+        goto label6;
+
+     label5:
+        $r2 = new android.view.Surface;
+
+        specialinvoke $r2.<android.view.Surface: void <init>(android.graphics.SurfaceTexture)>($r5);
+
+     label6:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void setVideoSurfaceInternal(android.view.Surface,boolean)>($r2, 1);
+
+        return;
+    }
+
+    public void setVolume(float)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r3;
+        java.lang.Float $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer $r2;
+        int $i0, $i1, $i2;
+        float $f0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.Renderer[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $f0 := @parameter0: float;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: float audioVolume> = $f0;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.Renderer[] renderers>;
+
+        $i0 = lengthof $r1;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $r2 = $r1[$i1];
+
+        $i2 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Renderer: int getTrackType()>();
+
+        if $i2 != 1 goto label2;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r4 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>($r2);
+
+        $r4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(2);
+
+        $r5 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>($f0);
+
+        $r4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)>($r5);
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    public void stop()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: void stop(boolean)>(0);
+
+        return;
+    }
+
+    public void stop(boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r3;
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer;
+
+        $z0 := @parameter0: boolean;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: void stop(boolean)>($z0);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource mediaSource>;
+
+        if $r3 == null goto label1;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource: void removeEventListener(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener)>($r4);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource mediaSource> = null;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector analyticsCollector>;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsCollector: void resetForNewMediaSource()>();
+
+     label1:
+        $r1 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.util.List currentCues> = $r1;
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.SimpleExoPlayer: java.lang.String TAG> = "SimpleExoPlayer";
+
+        return;
+    }
+}

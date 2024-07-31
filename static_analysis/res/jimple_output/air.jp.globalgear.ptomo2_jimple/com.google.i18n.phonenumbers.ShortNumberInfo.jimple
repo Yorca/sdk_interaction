@@ -1,0 +1,1030 @@
+public class com.google.i18n.phonenumbers.ShortNumberInfo extends java.lang.Object
+{
+    private static final com.google.i18n.phonenumbers.ShortNumberInfo INSTANCE;
+    private static final java.util.Set REGIONS_WHERE_EMERGENCY_NUMBERS_MUST_BE_EXACT;
+    private static final java.util.logging.Logger logger;
+    private final java.util.Map countryCallingCodeToRegionCodeMap;
+    private final com.google.i18n.phonenumbers.internal.MatcherApi matcherApi;
+
+    static void <clinit>()
+    {
+        java.util.HashSet $r5;
+        com.google.i18n.phonenumbers.ShortNumberInfo $r3;
+        com.google.i18n.phonenumbers.internal.MatcherApi $r4;
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+
+        $r0 = class "Lcom/google/i18n/phonenumbers/ShortNumberInfo;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <com.google.i18n.phonenumbers.ShortNumberInfo: java.util.logging.Logger logger> = $r2;
+
+        $r3 = new com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r4 = staticinvoke <com.google.i18n.phonenumbers.internal.RegexBasedMatcher: com.google.i18n.phonenumbers.internal.MatcherApi create()>();
+
+        specialinvoke $r3.<com.google.i18n.phonenumbers.ShortNumberInfo: void <init>(com.google.i18n.phonenumbers.internal.MatcherApi)>($r4);
+
+        <com.google.i18n.phonenumbers.ShortNumberInfo: com.google.i18n.phonenumbers.ShortNumberInfo INSTANCE> = $r3;
+
+        $r5 = new java.util.HashSet;
+
+        specialinvoke $r5.<java.util.HashSet: void <init>()>();
+
+        <com.google.i18n.phonenumbers.ShortNumberInfo: java.util.Set REGIONS_WHERE_EMERGENCY_NUMBERS_MUST_BE_EXACT> = $r5;
+
+        interfaceinvoke $r5.<java.util.Set: boolean add(java.lang.Object)>("BR");
+
+        interfaceinvoke $r5.<java.util.Set: boolean add(java.lang.Object)>("CL");
+
+        interfaceinvoke $r5.<java.util.Set: boolean add(java.lang.Object)>("NI");
+
+        return;
+    }
+
+    void <init>(com.google.i18n.phonenumbers.internal.MatcherApi)
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.internal.MatcherApi $r2;
+        java.util.Map $r1;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r2 := @parameter0: com.google.i18n.phonenumbers.internal.MatcherApi;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.google.i18n.phonenumbers.ShortNumberInfo: com.google.i18n.phonenumbers.internal.MatcherApi matcherApi> = $r2;
+
+        $r1 = staticinvoke <com.google.i18n.phonenumbers.CountryCodeToRegionCodeMap: java.util.Map getCountryCodeToRegionCodeMap()>();
+
+        r0.<com.google.i18n.phonenumbers.ShortNumberInfo: java.util.Map countryCallingCodeToRegionCodeMap> = $r1;
+
+        return;
+    }
+
+    public static com.google.i18n.phonenumbers.ShortNumberInfo getInstance()
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+
+        r0 = <com.google.i18n.phonenumbers.ShortNumberInfo: com.google.i18n.phonenumbers.ShortNumberInfo INSTANCE>;
+
+        return r0;
+    }
+
+    private static java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)
+    {
+        int $i0;
+        char[] $r2;
+        java.lang.StringBuilder $r0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r1;
+        long $l1;
+        java.lang.String $r3;
+        boolean $z0;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $z0 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: boolean isItalianLeadingZero()>();
+
+        if $z0 == 0 goto label1;
+
+        $i0 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getNumberOfLeadingZeros()>();
+
+        $r2 = newarray (char)[$i0];
+
+        staticinvoke <java.util.Arrays: void fill(char[],char)>($r2, 48);
+
+        $r3 = new java.lang.String;
+
+        specialinvoke $r3.<java.lang.String: void <init>(char[])>($r2);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+     label1:
+        $l1 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: long getNationalNumber()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r3 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+    private java.lang.String getRegionCodeForShortNumberFromRegionList(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.util.List)
+    {
+        java.util.Iterator $r5;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r7;
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r8;
+        java.util.List $r2;
+        int $i0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r1;
+        java.lang.Object $r3;
+        java.lang.String $r4, $r6;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r2 := @parameter1: java.util.List;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 != 0 goto label1;
+
+        return null;
+
+     label1:
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 != 1 goto label2;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r4 = (java.lang.String) $r3;
+
+        return $r4;
+
+     label2:
+        $r4 = staticinvoke <com.google.i18n.phonenumbers.ShortNumberInfo: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r1);
+
+        $r5 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r3 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (java.lang.String) $r3;
+
+        $r7 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r6);
+
+        if $r7 == null goto label3;
+
+        $r8 = virtualinvoke $r7.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getShortCode()>();
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesPossibleNumberAndNationalNumber(java.lang.String,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc)>($r4, $r8);
+
+        if $z0 == 0 goto label3;
+
+        return $r6;
+
+     label4:
+        return null;
+    }
+
+    private java.util.List getRegionCodesForCountryCode(int)
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        java.util.List $r4;
+        java.util.Map $r1;
+        int $i0;
+        java.lang.Object $r3;
+        java.lang.Integer $r2;
+        java.util.ArrayList $r5;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.google.i18n.phonenumbers.ShortNumberInfo: java.util.Map countryCallingCodeToRegionCodeMap>;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r3 = interfaceinvoke $r1.<java.util.Map: java.lang.Object get(java.lang.Object)>($r2);
+
+        $r3 = (java.util.List) $r3;
+
+        if $r3 != null goto label1;
+
+        $r5 = new java.util.ArrayList;
+
+        $r3 = $r5;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>(int)>(0);
+
+     label1:
+        $r4 = (java.util.List) $r3;
+
+        $r4 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r4);
+
+        return $r4;
+    }
+
+    private boolean matchesEmergencyNumberHelper(java.lang.CharSequence, java.lang.String, boolean)
+    {
+        java.lang.CharSequence $r1;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r5;
+        java.util.Set $r7;
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r9;
+        java.util.regex.Matcher $r4;
+        com.google.i18n.phonenumbers.internal.MatcherApi $r8;
+        java.lang.String $r2, $r6;
+        java.util.regex.Pattern $r3;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: java.lang.CharSequence;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $z0 := @parameter2: boolean;
+
+        $r1 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.CharSequence extractPossibleNumber(java.lang.CharSequence)>($r1);
+
+        $r3 = <com.google.i18n.phonenumbers.PhoneNumberUtil: java.util.regex.Pattern PLUS_CHARS_PATTERN>;
+
+        $r4 = virtualinvoke $r3.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r1);
+
+        $z1 = virtualinvoke $r4.<java.util.regex.Matcher: boolean lookingAt()>();
+
+        $z2 = 0;
+
+        if $z1 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r5 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r2);
+
+        if $r5 == null goto label4;
+
+        $z1 = virtualinvoke $r5.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: boolean hasEmergency()>();
+
+        if $z1 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        $r6 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String normalizeDigitsOnly(java.lang.CharSequence)>($r1);
+
+        if $z0 == 0 goto label3;
+
+        $r7 = <com.google.i18n.phonenumbers.ShortNumberInfo: java.util.Set REGIONS_WHERE_EMERGENCY_NUMBERS_MUST_BE_EXACT>;
+
+        $z0 = interfaceinvoke $r7.<java.util.Set: boolean contains(java.lang.Object)>($r2);
+
+        if $z0 != 0 goto label3;
+
+        $z2 = 1;
+
+     label3:
+        $r8 = r0.<com.google.i18n.phonenumbers.ShortNumberInfo: com.google.i18n.phonenumbers.internal.MatcherApi matcherApi>;
+
+        $r9 = virtualinvoke $r5.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getEmergency()>();
+
+        $z0 = interfaceinvoke $r8.<com.google.i18n.phonenumbers.internal.MatcherApi: boolean matchNationalNumber(java.lang.CharSequence,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc,boolean)>($r6, $r9, $z2);
+
+        return $z0;
+
+     label4:
+        return 0;
+    }
+
+    private boolean matchesPossibleNumberAndNationalNumber(java.lang.String, com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc)
+    {
+        java.lang.Integer $r4;
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r1;
+        java.util.List $r3;
+        com.google.i18n.phonenumbers.internal.MatcherApi $r5;
+        int $i0;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc;
+
+        $i0 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc: int getPossibleLengthCount()>();
+
+        if $i0 <= 0 goto label1;
+
+        $r3 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc: java.util.List getPossibleLengthList()>();
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $z0 = interfaceinvoke $r3.<java.util.List: boolean contains(java.lang.Object)>($r4);
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r5 = r0.<com.google.i18n.phonenumbers.ShortNumberInfo: com.google.i18n.phonenumbers.internal.MatcherApi matcherApi>;
+
+        $z0 = interfaceinvoke $r5.<com.google.i18n.phonenumbers.internal.MatcherApi: boolean matchNationalNumber(java.lang.CharSequence,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc,boolean)>($r2, $r1, 0);
+
+        return $z0;
+    }
+
+    private boolean regionDialingFromMatchesNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.String)
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        java.util.List $r3;
+        int $i0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r2;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r2 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $i0 = virtualinvoke $r2.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r3 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: java.util.List getRegionCodesForCountryCode(int)>($i0);
+
+        $z0 = interfaceinvoke $r3.<java.util.List: boolean contains(java.lang.Object)>($r1);
+
+        return $z0;
+    }
+
+    public boolean connectsToEmergencyNumber(java.lang.String, java.lang.String)
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        java.lang.String $r1, $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesEmergencyNumberHelper(java.lang.CharSequence,java.lang.String,boolean)>($r2, $r1, 1);
+
+        return $z0;
+    }
+
+    java.lang.String getExampleShortNumber(java.lang.String)
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r3;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r2;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r1);
+
+        if $r2 != null goto label1;
+
+        return "";
+
+     label1:
+        $r3 = virtualinvoke $r2.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getShortCode()>();
+
+        $z0 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc: boolean hasExampleNumber()>();
+
+        if $z0 == 0 goto label2;
+
+        $r1 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc: java.lang.String getExampleNumber()>();
+
+        return $r1;
+
+     label2:
+        return "";
+    }
+
+    java.lang.String getExampleShortNumberForCost(java.lang.String, com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost)
+    {
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r3;
+        com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost $r2;
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r5;
+        int[] $r4;
+        int $i0;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost;
+
+        $r3 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r1);
+
+        if $r3 != null goto label1;
+
+        return "";
+
+     label1:
+        $r4 = <com.google.i18n.phonenumbers.ShortNumberInfo$1: int[] $SwitchMap$com$google$i18n$phonenumbers$ShortNumberInfo$ShortNumberCost>;
+
+        $i0 = virtualinvoke $r2.<com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: int ordinal()>();
+
+        $i0 = $r4[$i0];
+
+        if $i0 == 1 goto label4;
+
+        if $i0 == 3 goto label3;
+
+        if $i0 == 4 goto label2;
+
+        $r5 = null;
+
+        goto label5;
+
+     label2:
+        $r5 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getTollFree()>();
+
+        goto label5;
+
+     label3:
+        $r5 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getStandardRate()>();
+
+        goto label5;
+
+     label4:
+        $r5 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getPremiumRate()>();
+
+     label5:
+        if $r5 == null goto label6;
+
+        $z0 = virtualinvoke $r5.<com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc: boolean hasExampleNumber()>();
+
+        if $z0 == 0 goto label6;
+
+        $r1 = virtualinvoke $r5.<com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc: java.lang.String getExampleNumber()>();
+
+        return $r1;
+
+     label6:
+        return "";
+    }
+
+    public com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost getExpectedCost(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)
+    {
+        java.util.Iterator $r7;
+        java.util.logging.Logger $r10;
+        com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost $r6, $r8;
+        java.util.logging.Level $r11;
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        java.util.List $r3;
+        int[] $r9;
+        int $i0;
+        java.lang.StringBuilder $r1;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r2;
+        java.lang.Object $r4;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r2 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $i0 = virtualinvoke $r2.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r3 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: java.util.List getRegionCodesForCountryCode(int)>($i0);
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i0 != 0 goto label1;
+
+        $r6 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost UNKNOWN_COST>;
+
+        return $r6;
+
+     label1:
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i0 != 1 goto label2;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r5 = (java.lang.String) $r4;
+
+        $r6 = virtualinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost getExpectedCostForRegion(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.String)>($r2, $r5);
+
+        return $r6;
+
+     label2:
+        $r6 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost TOLL_FREE>;
+
+        $r7 = interfaceinvoke $r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label7;
+
+        $r4 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.lang.String) $r4;
+
+        $r8 = virtualinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost getExpectedCostForRegion(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.String)>($r2, $r5);
+
+        $r9 = <com.google.i18n.phonenumbers.ShortNumberInfo$1: int[] $SwitchMap$com$google$i18n$phonenumbers$ShortNumberInfo$ShortNumberCost>;
+
+        $i0 = virtualinvoke $r8.<com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: int ordinal()>();
+
+        $i0 = $r9[$i0];
+
+        if $i0 == 1 goto label6;
+
+        if $i0 == 2 goto label5;
+
+        if $i0 == 3 goto label4;
+
+        if $i0 == 4 goto label3;
+
+        $r10 = <com.google.i18n.phonenumbers.ShortNumberInfo: java.util.logging.Logger logger>;
+
+        $r11 = <java.util.logging.Level: java.util.logging.Level SEVERE>;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unrecognised cost for region: ");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r8);
+
+        $r5 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r10.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r11, $r5);
+
+        goto label3;
+
+     label4:
+        $r8 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost UNKNOWN_COST>;
+
+        if $r6 == $r8 goto label3;
+
+        $r6 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost STANDARD_RATE>;
+
+        goto label3;
+
+     label5:
+        $r6 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost UNKNOWN_COST>;
+
+        goto label3;
+
+     label6:
+        $r6 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost PREMIUM_RATE>;
+
+     label7:
+        return $r6;
+    }
+
+    public com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost getExpectedCostForRegion(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.String)
+    {
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r3;
+        java.lang.Integer $r7;
+        com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost r8;
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r5;
+        java.util.List $r6;
+        int $i0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r2;
+        java.lang.String $r1, $r4;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r2 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean regionDialingFromMatchesNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.String)>($r2, $r1);
+
+        if $z0 != 0 goto label1;
+
+        r8 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost UNKNOWN_COST>;
+
+        return r8;
+
+     label1:
+        $r3 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r1);
+
+        if $r3 != null goto label2;
+
+        r8 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost UNKNOWN_COST>;
+
+        return r8;
+
+     label2:
+        $r4 = staticinvoke <com.google.i18n.phonenumbers.ShortNumberInfo: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r2);
+
+        $r5 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getGeneralDesc()>();
+
+        $r6 = virtualinvoke $r5.<com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc: java.util.List getPossibleLengthList()>();
+
+        $i0 = virtualinvoke $r4.<java.lang.String: int length()>();
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $z0 = interfaceinvoke $r6.<java.util.List: boolean contains(java.lang.Object)>($r7);
+
+        if $z0 != 0 goto label3;
+
+        r8 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost UNKNOWN_COST>;
+
+        return r8;
+
+     label3:
+        $r5 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getPremiumRate()>();
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesPossibleNumberAndNationalNumber(java.lang.String,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc)>($r4, $r5);
+
+        if $z0 == 0 goto label4;
+
+        r8 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost PREMIUM_RATE>;
+
+        return r8;
+
+     label4:
+        $r5 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getStandardRate()>();
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesPossibleNumberAndNationalNumber(java.lang.String,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc)>($r4, $r5);
+
+        if $z0 == 0 goto label5;
+
+        r8 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost STANDARD_RATE>;
+
+        return r8;
+
+     label5:
+        $r5 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getTollFree()>();
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesPossibleNumberAndNationalNumber(java.lang.String,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc)>($r4, $r5);
+
+        if $z0 == 0 goto label6;
+
+        r8 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost TOLL_FREE>;
+
+        return r8;
+
+     label6:
+        $z0 = virtualinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean isEmergencyNumber(java.lang.CharSequence,java.lang.String)>($r4, $r1);
+
+        if $z0 == 0 goto label7;
+
+        r8 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost TOLL_FREE>;
+
+        return r8;
+
+     label7:
+        r8 = <com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost: com.google.i18n.phonenumbers.ShortNumberInfo$ShortNumberCost UNKNOWN_COST>;
+
+        return r8;
+    }
+
+    java.util.Set getSupportedRegions()
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        java.util.Set $r1;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: java.util.Set getSupportedShortNumberRegions()>();
+
+        return $r1;
+    }
+
+    public boolean isCarrierSpecific(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)
+    {
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r5;
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r6;
+        java.util.List $r2;
+        int $i0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r1;
+        java.lang.String $r3, $r4;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $i0 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r2 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: java.util.List getRegionCodesForCountryCode(int)>($i0);
+
+        $r3 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: java.lang.String getRegionCodeForShortNumberFromRegionList(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.util.List)>($r1, $r2);
+
+        $r4 = staticinvoke <com.google.i18n.phonenumbers.ShortNumberInfo: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r1);
+
+        $r5 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r3);
+
+        if $r5 == null goto label1;
+
+        $r6 = virtualinvoke $r5.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getCarrierSpecific()>();
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesPossibleNumberAndNationalNumber(java.lang.String,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc)>($r4, $r6);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public boolean isCarrierSpecificForRegion(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.String)
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r5;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r4;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r1;
+        java.lang.String $r2, $r3;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean regionDialingFromMatchesNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.String)>($r1, $r2);
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r3 = staticinvoke <com.google.i18n.phonenumbers.ShortNumberInfo: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r1);
+
+        $r4 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r2);
+
+        if $r4 == null goto label2;
+
+        $r5 = virtualinvoke $r4.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getCarrierSpecific()>();
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesPossibleNumberAndNationalNumber(java.lang.String,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc)>($r3, $r5);
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    public boolean isEmergencyNumber(java.lang.CharSequence, java.lang.String)
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        java.lang.CharSequence $r2;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r2 := @parameter0: java.lang.CharSequence;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesEmergencyNumberHelper(java.lang.CharSequence,java.lang.String,boolean)>($r2, $r1, 0);
+
+        return $z0;
+    }
+
+    public boolean isPossibleShortNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)
+    {
+        java.util.Iterator $r4;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r6;
+        java.lang.Integer $r8;
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r7;
+        java.util.List $r2;
+        int $i0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r1;
+        java.lang.Object $r5;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $i0 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r2 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: java.util.List getRegionCodesForCountryCode(int)>($i0);
+
+        $r3 = staticinvoke <com.google.i18n.phonenumbers.ShortNumberInfo: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r1);
+
+        $i0 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        $r4 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r3 = (java.lang.String) $r5;
+
+        $r6 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r3);
+
+        if $r6 != null goto label2;
+
+        goto label1;
+
+     label2:
+        $r7 = virtualinvoke $r6.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getGeneralDesc()>();
+
+        $r2 = virtualinvoke $r7.<com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc: java.util.List getPossibleLengthList()>();
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean contains(java.lang.Object)>($r8);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    public boolean isPossibleShortNumberForRegion(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.String)
+    {
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r3;
+        java.lang.Integer $r6;
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r4;
+        java.util.List $r5;
+        int $i0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r1;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean regionDialingFromMatchesNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.String)>($r1, $r2);
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r3 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r2);
+
+        if $r3 != null goto label2;
+
+        return 0;
+
+     label2:
+        $r2 = staticinvoke <com.google.i18n.phonenumbers.ShortNumberInfo: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r1);
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        $r4 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getGeneralDesc()>();
+
+        $r5 = virtualinvoke $r4.<com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc: java.util.List getPossibleLengthList()>();
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $z0 = interfaceinvoke $r5.<java.util.List: boolean contains(java.lang.Object)>($r6);
+
+        return $z0;
+    }
+
+    public boolean isSmsServiceForRegion(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.String)
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r4;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r3;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r1;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean regionDialingFromMatchesNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.String)>($r1, $r2);
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r3 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r2);
+
+        if $r3 == null goto label2;
+
+        $r2 = staticinvoke <com.google.i18n.phonenumbers.ShortNumberInfo: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r1);
+
+        $r4 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getSmsServices()>();
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesPossibleNumberAndNationalNumber(java.lang.String,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc)>($r2, $r4);
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    public boolean isValidShortNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        java.util.List $r2;
+        int $i0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r1;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $i0 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r2 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: java.util.List getRegionCodesForCountryCode(int)>($i0);
+
+        $r3 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: java.lang.String getRegionCodeForShortNumberFromRegionList(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.util.List)>($r1, $r2);
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 <= 1 goto label1;
+
+        if $r3 == null goto label1;
+
+        return 1;
+
+     label1:
+        $z0 = virtualinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean isValidShortNumberForRegion(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.String)>($r1, $r3);
+
+        return $z0;
+    }
+
+    public boolean isValidShortNumberForRegion(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.String)
+    {
+        com.google.i18n.phonenumbers.ShortNumberInfo r0;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc $r4;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r3;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r1;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.ShortNumberInfo;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean regionDialingFromMatchesNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.String)>($r1, $r2);
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r3 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getShortNumberMetadataForRegion(java.lang.String)>($r2);
+
+        if $r3 != null goto label2;
+
+        return 0;
+
+     label2:
+        $r2 = staticinvoke <com.google.i18n.phonenumbers.ShortNumberInfo: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r1);
+
+        $r4 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getGeneralDesc()>();
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesPossibleNumberAndNationalNumber(java.lang.String,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc)>($r2, $r4);
+
+        if $z0 != 0 goto label3;
+
+        return 0;
+
+     label3:
+        $r4 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc getShortCode()>();
+
+        $z0 = specialinvoke r0.<com.google.i18n.phonenumbers.ShortNumberInfo: boolean matchesPossibleNumberAndNationalNumber(java.lang.String,com.google.i18n.phonenumbers.Phonemetadata$PhoneNumberDesc)>($r2, $r4);
+
+        return $z0;
+    }
+}

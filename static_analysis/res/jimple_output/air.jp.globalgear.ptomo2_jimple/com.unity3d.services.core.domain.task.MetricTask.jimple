@@ -1,0 +1,535 @@
+public abstract class com.unity3d.services.core.domain.task.MetricTask extends java.lang.Object implements com.unity3d.services.core.domain.task.BaseTask
+{
+    private long duration;
+    private java.lang.String taskStatus;
+
+    public void <init>()
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.unity3d.services.core.domain.task.MetricTask: java.lang.String taskStatus> = "unknown";
+
+        return;
+    }
+
+    private final void captureMetric(java.lang.Object)
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        kotlin.Result $r3;
+        java.lang.Object $r1;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $z0 = $r1 instanceof kotlin.Result;
+
+        $r2 = "success";
+
+        if $z0 == 0 goto label2;
+
+        $r3 = (kotlin.Result) $r1;
+
+        $r1 = virtualinvoke $r3.<kotlin.Result: java.lang.Object unbox-impl()>();
+
+        $z0 = staticinvoke <kotlin.Result: boolean isSuccess-impl(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        $r2 = "failure";
+
+     label2:
+        r0.<com.unity3d.services.core.domain.task.MetricTask: java.lang.String taskStatus> = $r2;
+
+        specialinvoke r0.<com.unity3d.services.core.domain.task.MetricTask: void sendMetric()>();
+
+        return;
+    }
+
+    private final com.unity3d.services.core.request.metrics.Metric getMetric()
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        java.lang.Long $r3;
+        java.util.Map $r4;
+        com.unity3d.services.core.request.metrics.Metric $r1;
+        long $l0;
+        java.lang.String $r2;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r1 = new com.unity3d.services.core.request.metrics.Metric;
+
+        $r2 = virtualinvoke r0.<com.unity3d.services.core.domain.task.MetricTask: java.lang.String getMetricName()>();
+
+        $l0 = r0.<com.unity3d.services.core.domain.task.MetricTask: long duration>;
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $r4 = specialinvoke r0.<com.unity3d.services.core.domain.task.MetricTask: java.util.Map getMetricTagsForState()>();
+
+        specialinvoke $r1.<com.unity3d.services.core.request.metrics.Metric: void <init>(java.lang.String,java.lang.Object,java.util.Map)>($r2, $r3, $r4);
+
+        return $r1;
+    }
+
+    private final java.util.Map getMetricTagsForState()
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        com.unity3d.services.core.configuration.IInitializeEventsMetricSender $r1;
+        java.util.Map $r2;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r1 = staticinvoke <com.unity3d.services.core.configuration.InitializeEventsMetricSender: com.unity3d.services.core.configuration.IInitializeEventsMetricSender getInstance()>();
+
+        $r2 = interfaceinvoke $r1.<com.unity3d.services.core.configuration.IInitializeEventsMetricSender: java.util.Map getRetryTags()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r2, "getInstance().retryTags");
+
+        return $r2;
+    }
+
+    private final com.unity3d.services.core.request.metrics.SDKMetricsSender getSDKMetrics()
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        kotlin.reflect.KClass $r4;
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r6;
+        com.unity3d.services.core.di.IServicesRegistry $r3;
+        com.unity3d.services.core.di.IServiceProvider $r2;
+        com.unity3d.services.core.di.IServiceComponent $r1;
+        java.lang.Object $r5;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r1 = (com.unity3d.services.core.di.IServiceComponent) r0;
+
+        $r2 = interfaceinvoke $r1.<com.unity3d.services.core.di.IServiceComponent: com.unity3d.services.core.di.IServiceProvider getServiceProvider()>();
+
+        $r3 = interfaceinvoke $r2.<com.unity3d.services.core.di.IServiceProvider: com.unity3d.services.core.di.IServicesRegistry getRegistry()>();
+
+        $r4 = staticinvoke <kotlin.jvm.internal.Reflection: kotlin.reflect.KClass getOrCreateKotlinClass(java.lang.Class)>(class "Lcom/unity3d/services/core/request/metrics/SDKMetricsSender;");
+
+        $r5 = interfaceinvoke $r3.<com.unity3d.services.core.di.IServicesRegistry: java.lang.Object getService(java.lang.String,kotlin.reflect.KClass)>("", $r4);
+
+        $r6 = (com.unity3d.services.core.request.metrics.SDKMetricsSender) $r5;
+
+        return $r6;
+    }
+
+    private final int getStatePrefixLength()
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        return 15;
+    }
+
+    static java.lang.Object invoke$suspendImpl(com.unity3d.services.core.domain.task.MetricTask, com.unity3d.services.core.domain.task.BaseParams, kotlin.coroutines.Continuation)
+    {
+        java.lang.IllegalStateException $r10;
+        kotlin.coroutines.Continuation $r2;
+        long $l1, $l2;
+        com.unity3d.services.core.domain.task.BaseParams $r1;
+        int $i0;
+        com.unity3d.services.core.domain.task.MetricTask$invoke$1 $r3;
+        boolean $z0;
+        kotlin.jvm.internal.Ref$ObjectRef $r7, $r8;
+        com.unity3d.services.core.domain.task.MetricTask $r0, $r9;
+        java.util.concurrent.TimeUnit $r6;
+        kotlin.Unit $r11;
+        java.lang.Object $r4, $r5;
+
+        $r0 := @parameter0: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r1 := @parameter1: com.unity3d.services.core.domain.task.BaseParams;
+
+        $r2 := @parameter2: kotlin.coroutines.Continuation;
+
+        $z0 = $r2 instanceof com.unity3d.services.core.domain.task.MetricTask$invoke$1;
+
+        if $z0 == 0 goto label1;
+
+        $r3 = (com.unity3d.services.core.domain.task.MetricTask$invoke$1) $r2;
+
+        $i0 = $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: int label>;
+
+        $i0 = $i0 & -2147483648;
+
+        if $i0 == 0 goto label1;
+
+        $i0 = $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: int label>;
+
+        $i0 = $i0 - -2147483648;
+
+        $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: int label> = $i0;
+
+        goto label2;
+
+     label1:
+        $r3 = new com.unity3d.services.core.domain.task.MetricTask$invoke$1;
+
+        specialinvoke $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: void <init>(com.unity3d.services.core.domain.task.MetricTask,kotlin.coroutines.Continuation)>($r0, $r2);
+
+     label2:
+        $r4 = $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object result>;
+
+        $r5 = staticinvoke <kotlin.coroutines.intrinsics.IntrinsicsKt: java.lang.Object getCOROUTINE_SUSPENDED()>();
+
+        $i0 = $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: int label>;
+
+        if $i0 == 0 goto label4;
+
+        if $i0 != 1 goto label3;
+
+        $l1 = $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: long J$0>;
+
+        $r5 = $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object L$4>;
+
+        $r6 = (java.util.concurrent.TimeUnit) $r5;
+
+        $r5 = $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object L$3>;
+
+        $r0 = (com.unity3d.services.core.domain.task.MetricTask) $r5;
+
+        $r5 = $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object L$2>;
+
+        $r7 = (kotlin.jvm.internal.Ref$ObjectRef) $r5;
+
+        $r5 = $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object L$1>;
+
+        $r8 = (kotlin.jvm.internal.Ref$ObjectRef) $r5;
+
+        $r5 = $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object L$0>;
+
+        $r9 = (com.unity3d.services.core.domain.task.MetricTask) $r5;
+
+        staticinvoke <kotlin.ResultKt: void throwOnFailure(java.lang.Object)>($r4);
+
+        goto label6;
+
+     label3:
+        $r10 = new java.lang.IllegalStateException;
+
+        specialinvoke $r10.<java.lang.IllegalStateException: void <init>(java.lang.String)>("call to \'resume\' before \'invoke\' with coroutine");
+
+        throw $r10;
+
+     label4:
+        staticinvoke <kotlin.ResultKt: void throwOnFailure(java.lang.Object)>($r4);
+
+        $r8 = new kotlin.jvm.internal.Ref$ObjectRef;
+
+        specialinvoke $r8.<kotlin.jvm.internal.Ref$ObjectRef: void <init>()>();
+
+        $r6 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l2 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l1 = $l2;
+
+        $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object L$0> = $r0;
+
+        $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object L$1> = $r8;
+
+        $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object L$2> = $r8;
+
+        $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object L$3> = $r0;
+
+        $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: java.lang.Object L$4> = $r6;
+
+        $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: long J$0> = $l2;
+
+        $r3.<com.unity3d.services.core.domain.task.MetricTask$invoke$1: int label> = 1;
+
+        $r4 = staticinvoke <com.unity3d.services.core.domain.task.BaseTask$DefaultImpls: java.lang.Object invoke(com.unity3d.services.core.domain.task.BaseTask,com.unity3d.services.core.domain.task.BaseParams,kotlin.coroutines.Continuation)>($r0, $r1, $r3);
+
+        if $r4 != $r5 goto label5;
+
+        return $r5;
+
+     label5:
+        $r9 = $r0;
+
+        $r7 = $r8;
+
+     label6:
+        $r7.<kotlin.jvm.internal.Ref$ObjectRef: java.lang.Object element> = $r4;
+
+        $r11 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        $l2 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l1 = $l2 - $l1;
+
+        $l1 = virtualinvoke $r6.<java.util.concurrent.TimeUnit: long toMillis(long)>($l1);
+
+        $r0.<com.unity3d.services.core.domain.task.MetricTask: long duration> = $l1;
+
+        $r4 = $r8.<kotlin.jvm.internal.Ref$ObjectRef: java.lang.Object element>;
+
+        specialinvoke $r9.<com.unity3d.services.core.domain.task.MetricTask: void captureMetric(java.lang.Object)>($r4);
+
+        $r4 = $r8.<kotlin.jvm.internal.Ref$ObjectRef: java.lang.Object element>;
+
+        return $r4;
+    }
+
+    private final void sendMetric()
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        java.lang.CharSequence $r2;
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r3;
+        int $i0;
+        com.unity3d.services.core.request.metrics.Metric $r4;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r1 = virtualinvoke r0.<com.unity3d.services.core.domain.task.MetricTask: java.lang.String getMetricName()>();
+
+        $r2 = (java.lang.CharSequence) $r1;
+
+        if $r2 == null goto label2;
+
+        $i0 = interfaceinvoke $r2.<java.lang.CharSequence: int length()>();
+
+        if $i0 != 0 goto label1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+        goto label3;
+
+     label2:
+        $z0 = 1;
+
+     label3:
+        if $z0 == 0 goto label4;
+
+        return;
+
+     label4:
+        $r3 = specialinvoke r0.<com.unity3d.services.core.domain.task.MetricTask: com.unity3d.services.core.request.metrics.SDKMetricsSender getSDKMetrics()>();
+
+        $r4 = specialinvoke r0.<com.unity3d.services.core.domain.task.MetricTask: com.unity3d.services.core.request.metrics.Metric getMetric()>();
+
+        interfaceinvoke $r3.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetric(com.unity3d.services.core.request.metrics.Metric)>($r4);
+
+        return;
+    }
+
+    public final long getDuration()
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        long l0;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        l0 = r0.<com.unity3d.services.core.domain.task.MetricTask: long duration>;
+
+        return l0;
+    }
+
+    public java.lang.String getMetricName()
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        return null;
+    }
+
+    public final java.lang.String getMetricNameForInitializeTask(java.lang.String)
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r1;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r1 := @parameter0: java.lang.String;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "name");
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("native_");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("_task_");
+
+        $r1 = r0.<com.unity3d.services.core.domain.task.MetricTask: java.lang.String taskStatus>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("_time");
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public final java.lang.String getMetricNameForTask(java.lang.Object)
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        java.lang.CharSequence $r4;
+        java.util.Locale $r5;
+        int $i0;
+        java.lang.Object $r1;
+        java.lang.Class $r2;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "task");
+
+        $r2 = virtualinvoke $r1.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r3, "className");
+
+        $r4 = (java.lang.CharSequence) $r3;
+
+        $i0 = interfaceinvoke $r4.<java.lang.CharSequence: int length()>();
+
+        if $i0 != 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        return null;
+
+     label3:
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r3, "className");
+
+        $i0 = specialinvoke r0.<com.unity3d.services.core.domain.task.MetricTask: int getStatePrefixLength()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r3, "this as java.lang.String).substring(startIndex)");
+
+        $r5 = <java.util.Locale: java.util.Locale ROOT>;
+
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String toLowerCase(java.util.Locale)>($r5);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r3, "this as java.lang.String).toLowerCase(Locale.ROOT)");
+
+        $r6 = new java.lang.StringBuilder;
+
+        $i0 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        $i0 = 7 + $i0;
+
+        $i0 = $i0 + 6;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(int)>($i0);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("native_");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("_state");
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+    public com.unity3d.services.core.di.IServiceProvider getServiceProvider()
+    {
+        com.unity3d.services.core.di.IServiceProvider $r1;
+        com.unity3d.services.core.domain.task.MetricTask r0;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r1 = staticinvoke <com.unity3d.services.core.domain.task.BaseTask$DefaultImpls: com.unity3d.services.core.di.IServiceProvider getServiceProvider(com.unity3d.services.core.domain.task.BaseTask)>(r0);
+
+        return $r1;
+    }
+
+    public final java.lang.String getTaskStatus()
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        java.lang.String r1;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        r1 = r0.<com.unity3d.services.core.domain.task.MetricTask: java.lang.String taskStatus>;
+
+        return r1;
+    }
+
+    public java.lang.Object invoke(com.unity3d.services.core.domain.task.BaseParams, kotlin.coroutines.Continuation)
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        kotlin.coroutines.Continuation $r1;
+        java.lang.Object $r2;
+        com.unity3d.services.core.domain.task.BaseParams $r3;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r3 := @parameter0: com.unity3d.services.core.domain.task.BaseParams;
+
+        $r1 := @parameter1: kotlin.coroutines.Continuation;
+
+        $r2 = staticinvoke <com.unity3d.services.core.domain.task.MetricTask: java.lang.Object invoke$suspendImpl(com.unity3d.services.core.domain.task.MetricTask,com.unity3d.services.core.domain.task.BaseParams,kotlin.coroutines.Continuation)>(r0, $r3, $r1);
+
+        return $r2;
+    }
+
+    public final void setDuration(long)
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        long $l0;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $l0 := @parameter0: long;
+
+        r0.<com.unity3d.services.core.domain.task.MetricTask: long duration> = $l0;
+
+        return;
+    }
+
+    public final void setTaskStatus(java.lang.String)
+    {
+        com.unity3d.services.core.domain.task.MetricTask r0;
+        java.lang.String $r1;
+
+        r0 := @this: com.unity3d.services.core.domain.task.MetricTask;
+
+        $r1 := @parameter0: java.lang.String;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "<set-?>");
+
+        r0.<com.unity3d.services.core.domain.task.MetricTask: java.lang.String taskStatus> = $r1;
+
+        return;
+    }
+}

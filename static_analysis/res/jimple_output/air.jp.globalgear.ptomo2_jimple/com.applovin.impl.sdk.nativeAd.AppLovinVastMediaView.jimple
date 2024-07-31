@@ -1,0 +1,2190 @@
+public class com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView extends com.applovin.impl.sdk.nativeAd.AppLovinMediaView implements com.applovin.communicator.AppLovinCommunicatorSubscriber
+{
+    private static final java.lang.String COUNTDOWN_IDENTIFIER_PROGRESS_TRACKING;
+    private static final long FADE_ANIMATION_DURATION_MILLIS;
+    private static final java.lang.String TAG;
+    private final java.util.concurrent.atomic.AtomicBoolean automaticPauseHandled;
+    private final java.util.concurrent.atomic.AtomicBoolean automaticResumeHandled;
+    private final android.os.Handler countdownHandler;
+    private final com.applovin.impl.adview.k countdownManager;
+    private android.widget.ImageView industryIconImageView;
+    private final java.util.concurrent.atomic.AtomicBoolean initialOnAttachedToWindowHandled;
+    private boolean isVideoMuted;
+    private boolean isVideoPausedByUser;
+    private final boolean isVideoStream;
+    private long lastVideoPositionFromPauseMillis;
+    private final com.applovin.impl.sdk.utils.a lifecycleCallbacksAdapter;
+    private final java.util.concurrent.atomic.AtomicBoolean mediaErrorHandled;
+    private final com.applovin.exoplayer2.aw mediaPlayer;
+    private android.widget.ImageView muteButtonImageView;
+    private android.widget.ImageView playPauseButtonImageView;
+    private android.widget.FrameLayout replayIconContainer;
+    private int savedVideoPercentViewed;
+    private long startTimeMillis;
+    private final com.applovin.impl.c.a vastAd;
+    private long videoDurationMillis;
+    private final java.util.concurrent.atomic.AtomicBoolean videoEndListenerNotified;
+    private final java.util.Set videoProgressTrackers;
+    private final com.applovin.exoplayer2.ui.g videoView;
+    private boolean videoWasCompleted;
+    private android.widget.LinearLayout videoWidgetLinearLayout;
+    private android.app.Activity viewActivity;
+
+    public void <init>(com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl, com.applovin.impl.sdk.o, android.content.Context)
+    {
+        java.lang.Float $r18;
+        android.widget.LinearLayout $r17, $r35;
+        com.applovin.impl.adview.AppLovinTouchToClickListener $r43;
+        android.net.Uri $r11;
+        android.widget.ImageView $r12, $r36;
+        android.widget.FrameLayout $r20, $r38;
+        java.lang.Integer $r15;
+        android.os.Looper $r5;
+        android.os.Handler $r28;
+        com.applovin.impl.sdk.o $r2, $r6;
+        com.applovin.communicator.AppLovinCommunicator $r9;
+        boolean $z0;
+        com.applovin.impl.c.a$c $r25;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        java.util.Set $r27;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$a $r34;
+        float $f0;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$b $r42;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$c $r40;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$d $r37;
+        android.content.Context $r3, $r21;
+        com.applovin.impl.c.a $r8;
+        java.util.concurrent.atomic.AtomicBoolean $r30;
+        java.lang.String[] $r26;
+        com.applovin.impl.adview.k $r29;
+        com.applovin.impl.c.g $r10;
+        com.applovin.exoplayer2.aw $r22;
+        java.util.HashSet $r31;
+        int $i0, $i1, $i2, $i3;
+        java.lang.Boolean $r16;
+        com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl $r1;
+        android.widget.FrameLayout$LayoutParams $r33;
+        com.applovin.exoplayer2.aw$a $r39;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$1 $r32;
+        com.applovin.impl.sdk.c.b $r13;
+        com.applovin.exoplayer2.ui.g $r41;
+        java.lang.Object $r14;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl;
+
+        $r2 := @parameter1: com.applovin.impl.sdk.o;
+
+        $r3 := @parameter2: android.content.Context;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinMediaView: void <init>(com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl,com.applovin.impl.sdk.o,android.content.Context)>($r1, $r2, $r3);
+
+        $r28 = new android.os.Handler;
+
+        $r5 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        specialinvoke $r28.<android.os.Handler: void <init>(android.os.Looper)>($r5);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.os.Handler countdownHandler> = $r28;
+
+        $r29 = new com.applovin.impl.adview.k;
+
+        $r6 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.o sdk>;
+
+        specialinvoke $r29.<com.applovin.impl.adview.k: void <init>(android.os.Handler,com.applovin.impl.sdk.o)>($r28, $r6);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.adview.k countdownManager> = $r29;
+
+        $r30 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r30.<java.util.concurrent.atomic.AtomicBoolean: void <init>()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean videoEndListenerNotified> = $r30;
+
+        $r30 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r30.<java.util.concurrent.atomic.AtomicBoolean: void <init>()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean mediaErrorHandled> = $r30;
+
+        $r30 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r30.<java.util.concurrent.atomic.AtomicBoolean: void <init>()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean initialOnAttachedToWindowHandled> = $r30;
+
+        $r30 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r30.<java.util.concurrent.atomic.AtomicBoolean: void <init>()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean automaticPauseHandled> = $r30;
+
+        $r30 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r30.<java.util.concurrent.atomic.AtomicBoolean: void <init>()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean automaticResumeHandled> = $r30;
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoMuted> = 1;
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long lastVideoPositionFromPauseMillis> = -1L;
+
+        $r31 = new java.util.HashSet;
+
+        specialinvoke $r31.<java.util.HashSet: void <init>()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.Set videoProgressTrackers> = $r31;
+
+        $r32 = new com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$1;
+
+        specialinvoke $r32.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$1: void <init>(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)>(r0);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.utils.a lifecycleCallbacksAdapter> = $r32;
+
+        $r8 = virtualinvoke $r1.<com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl: com.applovin.impl.c.a getVastAd()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd> = $r8;
+
+        $z0 = virtualinvoke $r8.<com.applovin.impl.c.a: boolean f()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoStream> = $z0;
+
+        if $z0 == 0 goto label1;
+
+        $r9 = staticinvoke <com.applovin.communicator.AppLovinCommunicator: com.applovin.communicator.AppLovinCommunicator getInstance(android.content.Context)>($r3);
+
+        virtualinvoke $r9.<com.applovin.communicator.AppLovinCommunicator: void subscribe(com.applovin.communicator.AppLovinCommunicatorSubscriber,java.lang.String)>(r0, "video_caching_failed");
+
+     label1:
+        $z0 = virtualinvoke $r8.<com.applovin.impl.c.a: boolean aV()>();
+
+        if $z0 == 0 goto label2;
+
+        $r10 = virtualinvoke $r8.<com.applovin.impl.c.a: com.applovin.impl.c.g aU()>();
+
+        $r11 = virtualinvoke $r10.<com.applovin.impl.c.g: android.net.Uri a()>();
+
+        $r12 = staticinvoke <com.applovin.impl.c.g: android.widget.ImageView a(android.net.Uri,android.content.Context,com.applovin.impl.sdk.o)>($r11, $r3, $r2);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView industryIconImageView> = $r12;
+
+        $r13 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b fa>;
+
+        $r14 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.Object a(com.applovin.impl.sdk.c.b)>($r13);
+
+        $r15 = (java.lang.Integer) $r14;
+
+        $i0 = virtualinvoke $r15.<java.lang.Integer: int intValue()>();
+
+        $i0 = staticinvoke <com.applovin.sdk.AppLovinSdkUtils: int dpToPx(android.content.Context,int)>($r3, $i0);
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView industryIconImageView>;
+
+        $r33 = new android.widget.FrameLayout$LayoutParams;
+
+        $r13 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b fc>;
+
+        $r14 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.Object a(com.applovin.impl.sdk.c.b)>($r13);
+
+        $r15 = (java.lang.Integer) $r14;
+
+        $i1 = virtualinvoke $r15.<java.lang.Integer: int intValue()>();
+
+        specialinvoke $r33.<android.widget.FrameLayout$LayoutParams: void <init>(int,int,int)>($i0, $i0, $i1);
+
+        virtualinvoke $r12.<android.widget.ImageView: void setLayoutParams(android.view.ViewGroup$LayoutParams)>($r33);
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView industryIconImageView>;
+
+        $r34 = new com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$a;
+
+        specialinvoke $r34.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$a: void <init>(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView,com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$1)>(r0, null);
+
+        virtualinvoke $r12.<android.widget.ImageView: void setOnClickListener(android.view.View$OnClickListener)>($r34);
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView industryIconImageView>;
+
+        virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void addView(android.view.View)>($r12);
+
+     label2:
+        $r13 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b fh>;
+
+        $r14 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.Object a(com.applovin.impl.sdk.c.b)>($r13);
+
+        $r16 = (java.lang.Boolean) $r14;
+
+        $z0 = virtualinvoke $r16.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label5;
+
+        $r35 = new android.widget.LinearLayout;
+
+        specialinvoke $r35.<android.widget.LinearLayout: void <init>(android.content.Context)>($r3);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.LinearLayout videoWidgetLinearLayout> = $r35;
+
+        virtualinvoke $r35.<android.widget.LinearLayout: void setOrientation(int)>(0);
+
+        $r17 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.LinearLayout videoWidgetLinearLayout>;
+
+        $i0 = <com.applovin.sdk.R$drawable: int applovin_rounded_black_background>;
+
+        virtualinvoke $r17.<android.widget.LinearLayout: void setBackgroundResource(int)>($i0);
+
+        $r17 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.LinearLayout videoWidgetLinearLayout>;
+
+        $r13 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b fg>;
+
+        $r14 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.Object a(com.applovin.impl.sdk.c.b)>($r13);
+
+        $r18 = (java.lang.Float) $r14;
+
+        $f0 = virtualinvoke $r18.<java.lang.Float: float floatValue()>();
+
+        virtualinvoke $r17.<android.widget.LinearLayout: void setAlpha(float)>($f0);
+
+        $r36 = new android.widget.ImageView;
+
+        specialinvoke $r36.<android.widget.ImageView: void <init>(android.content.Context)>($r3);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView playPauseButtonImageView> = $r36;
+
+        virtualinvoke $r36.<android.widget.ImageView: void setClickable(boolean)>(1);
+
+        $r37 = new com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$d;
+
+        specialinvoke $r37.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$d: void <init>(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView,com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$1)>(r0, null);
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView playPauseButtonImageView>;
+
+        virtualinvoke $r12.<android.widget.ImageView: void setOnClickListener(android.view.View$OnClickListener)>($r37);
+
+        $r13 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b fe>;
+
+        $r14 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.Object a(com.applovin.impl.sdk.c.b)>($r13);
+
+        $r15 = (java.lang.Integer) $r14;
+
+        $i0 = virtualinvoke $r15.<java.lang.Integer: int intValue()>();
+
+        $i0 = staticinvoke <com.applovin.sdk.AppLovinSdkUtils: int dpToPx(android.content.Context,int)>($r3, $i0);
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView playPauseButtonImageView>;
+
+        $r33 = new android.widget.FrameLayout$LayoutParams;
+
+        specialinvoke $r33.<android.widget.FrameLayout$LayoutParams: void <init>(int,int)>($i0, $i0);
+
+        virtualinvoke $r12.<android.widget.ImageView: void setLayoutParams(android.view.ViewGroup$LayoutParams)>($r33);
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void populatePlayPauseImage(boolean)>(0);
+
+        $r17 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.LinearLayout videoWidgetLinearLayout>;
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView playPauseButtonImageView>;
+
+        virtualinvoke $r17.<android.widget.LinearLayout: void addView(android.view.View)>($r12);
+
+        $r36 = new android.widget.ImageView;
+
+        specialinvoke $r36.<android.widget.ImageView: void <init>(android.content.Context)>($r3);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView muteButtonImageView> = $r36;
+
+        $z0 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoMuted>;
+
+        $z0 = specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean populateMuteImage(boolean)>($z0);
+
+        if $z0 == 0 goto label3;
+
+        $r13 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b fd>;
+
+        $r14 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.Object a(com.applovin.impl.sdk.c.b)>($r13);
+
+        $r15 = (java.lang.Integer) $r14;
+
+        $i1 = virtualinvoke $r15.<java.lang.Integer: int intValue()>();
+
+        $i2 = staticinvoke <com.applovin.sdk.AppLovinSdkUtils: int dpToPx(android.content.Context,int)>($r3, $i1);
+
+        $i1 = $i2;
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView muteButtonImageView>;
+
+        virtualinvoke $r12.<android.widget.ImageView: void setClickable(boolean)>(1);
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView muteButtonImageView>;
+
+        virtualinvoke $r12.<android.widget.ImageView: void setOnClickListener(android.view.View$OnClickListener)>($r37);
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView muteButtonImageView>;
+
+        $r33 = new android.widget.FrameLayout$LayoutParams;
+
+        specialinvoke $r33.<android.widget.FrameLayout$LayoutParams: void <init>(int,int)>($i2, $i2);
+
+        virtualinvoke $r12.<android.widget.ImageView: void setLayoutParams(android.view.ViewGroup$LayoutParams)>($r33);
+
+        $r17 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.LinearLayout videoWidgetLinearLayout>;
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView muteButtonImageView>;
+
+        virtualinvoke $r17.<android.widget.LinearLayout: void addView(android.view.View)>($r12);
+
+        goto label4;
+
+     label3:
+        $i1 = 0;
+
+     label4:
+        $r13 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b ff>;
+
+        $r14 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.Object a(com.applovin.impl.sdk.c.b)>($r13);
+
+        $r15 = (java.lang.Integer) $r14;
+
+        $i2 = virtualinvoke $r15.<java.lang.Integer: int intValue()>();
+
+        $i2 = staticinvoke <com.applovin.sdk.AppLovinSdkUtils: int dpToPx(android.content.Context,int)>($r3, $i2);
+
+        $r17 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.LinearLayout videoWidgetLinearLayout>;
+
+        virtualinvoke $r17.<android.widget.LinearLayout: void setPadding(int,int,int,int)>($i2, $i2, $i2, $i2);
+
+        $i3 = $i0 + $i1;
+
+        $i2 = $i2 * 2;
+
+        $i3 = $i3 + $i2;
+
+        $i0 = staticinvoke <java.lang.Math: int max(int,int)>($i0, $i1);
+
+        $i0 = $i0 + $i2;
+
+        $r17 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.LinearLayout videoWidgetLinearLayout>;
+
+        $r33 = new android.widget.FrameLayout$LayoutParams;
+
+        specialinvoke $r33.<android.widget.FrameLayout$LayoutParams: void <init>(int,int,int)>($i3, $i0, 8388691);
+
+        virtualinvoke $r17.<android.widget.LinearLayout: void setLayoutParams(android.view.ViewGroup$LayoutParams)>($r33);
+
+        $r17 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.LinearLayout videoWidgetLinearLayout>;
+
+        virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void addView(android.view.View)>($r17);
+
+     label5:
+        $r13 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b fi>;
+
+        $r14 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.Object a(com.applovin.impl.sdk.c.b)>($r13);
+
+        $r16 = (java.lang.Boolean) $r14;
+
+        $z0 = virtualinvoke $r16.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label6;
+
+        $r38 = new android.widget.FrameLayout;
+
+        $r21 = virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.content.Context getContext()>();
+
+        specialinvoke $r38.<android.widget.FrameLayout: void <init>(android.content.Context)>($r21);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.FrameLayout replayIconContainer> = $r38;
+
+        virtualinvoke $r38.<android.widget.FrameLayout: void setBackgroundColor(int)>(-16777216);
+
+        $r20 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.FrameLayout replayIconContainer>;
+
+        $r33 = new android.widget.FrameLayout$LayoutParams;
+
+        specialinvoke $r33.<android.widget.FrameLayout$LayoutParams: void <init>(int,int)>(-1, -1);
+
+        virtualinvoke $r20.<android.widget.FrameLayout: void setLayoutParams(android.view.ViewGroup$LayoutParams)>($r33);
+
+        $r20 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.FrameLayout replayIconContainer>;
+
+        virtualinvoke $r20.<android.widget.FrameLayout: void setVisibility(int)>(4);
+
+        $r37 = new com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$d;
+
+        specialinvoke $r37.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$d: void <init>(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView,com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$1)>(r0, null);
+
+        $r20 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.FrameLayout replayIconContainer>;
+
+        virtualinvoke $r20.<android.widget.FrameLayout: void setOnClickListener(android.view.View$OnClickListener)>($r37);
+
+        $r36 = new android.widget.ImageView;
+
+        $r21 = virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.content.Context getContext()>();
+
+        specialinvoke $r36.<android.widget.ImageView: void <init>(android.content.Context)>($r21);
+
+        $r13 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b fj>;
+
+        $r14 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.Object a(com.applovin.impl.sdk.c.b)>($r13);
+
+        $r15 = (java.lang.Integer) $r14;
+
+        $i0 = virtualinvoke $r15.<java.lang.Integer: int intValue()>();
+
+        $i0 = staticinvoke <com.applovin.sdk.AppLovinSdkUtils: int dpToPx(android.content.Context,int)>($r3, $i0);
+
+        $r33 = new android.widget.FrameLayout$LayoutParams;
+
+        specialinvoke $r33.<android.widget.FrameLayout$LayoutParams: void <init>(int,int,int)>($i0, $i0, 17);
+
+        virtualinvoke $r36.<android.widget.ImageView: void setLayoutParams(android.view.ViewGroup$LayoutParams)>($r33);
+
+        $i0 = <com.applovin.sdk.R$drawable: int applovin_ic_replay_icon>;
+
+        virtualinvoke $r36.<android.widget.ImageView: void setImageResource(int)>($i0);
+
+        virtualinvoke $r36.<android.widget.ImageView: void setAdjustViewBounds(boolean)>(1);
+
+        $r20 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.FrameLayout replayIconContainer>;
+
+        $i0 = virtualinvoke $r20.<android.widget.FrameLayout: int getHeight()>();
+
+        virtualinvoke $r36.<android.widget.ImageView: void setMaxHeight(int)>($i0);
+
+        $r20 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.FrameLayout replayIconContainer>;
+
+        $i0 = virtualinvoke $r20.<android.widget.FrameLayout: int getWidth()>();
+
+        virtualinvoke $r36.<android.widget.ImageView: void setMaxWidth(int)>($i0);
+
+        $r20 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.FrameLayout replayIconContainer>;
+
+        virtualinvoke $r20.<android.widget.FrameLayout: void addView(android.view.View)>($r36);
+
+        $r20 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.FrameLayout replayIconContainer>;
+
+        virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void addView(android.view.View)>($r20);
+
+     label6:
+        $r39 = new com.applovin.exoplayer2.aw$a;
+
+        $r3 = virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.content.Context getContext()>();
+
+        specialinvoke $r39.<com.applovin.exoplayer2.aw$a: void <init>(android.content.Context)>($r3);
+
+        $r22 = virtualinvoke $r39.<com.applovin.exoplayer2.aw$a: com.applovin.exoplayer2.aw a()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer> = $r22;
+
+        $r40 = new com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$c;
+
+        specialinvoke $r40.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$c: void <init>(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView,com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$1)>(r0, null);
+
+        virtualinvoke $r22.<com.applovin.exoplayer2.aw: void a(com.applovin.exoplayer2.an$b)>($r40);
+
+        virtualinvoke $r22.<com.applovin.exoplayer2.aw: void c(int)>(0);
+
+        $r41 = new com.applovin.exoplayer2.ui.g;
+
+        $r3 = virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.content.Context getContext()>();
+
+        specialinvoke $r41.<com.applovin.exoplayer2.ui.g: void <init>(android.content.Context)>($r3);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.ui.g videoView> = $r41;
+
+        virtualinvoke $r41.<com.applovin.exoplayer2.ui.g: void b()>();
+
+        virtualinvoke $r41.<com.applovin.exoplayer2.ui.g: void setControllerVisibilityListener(com.applovin.exoplayer2.ui.f$d)>($r40);
+
+        virtualinvoke $r41.<com.applovin.exoplayer2.ui.g: void setPlayer(com.applovin.exoplayer2.an)>($r22);
+
+        $r43 = new com.applovin.impl.adview.AppLovinTouchToClickListener;
+
+        $r13 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b aY>;
+
+        $r3 = virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.content.Context getContext()>();
+
+        $r42 = new com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$b;
+
+        specialinvoke $r42.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$b: void <init>(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView,com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl)>(r0, $r1);
+
+        specialinvoke $r43.<com.applovin.impl.adview.AppLovinTouchToClickListener: void <init>(com.applovin.impl.sdk.o,com.applovin.impl.sdk.c.b,android.content.Context,com.applovin.impl.adview.AppLovinTouchToClickListener$OnClickListener)>($r2, $r13, $r3, $r42);
+
+        virtualinvoke $r41.<com.applovin.exoplayer2.ui.g: void setOnTouchListener(android.view.View$OnTouchListener)>($r43);
+
+        virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void addView(android.view.View)>($r41);
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView industryIconImageView>;
+
+        virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void bringChildToFront(android.view.View)>($r12);
+
+        $r17 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.LinearLayout videoWidgetLinearLayout>;
+
+        virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void bringChildToFront(android.view.View)>($r17);
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void prepareMediaPlayer()>();
+
+        virtualinvoke $r1.<com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl: void setVideoView(android.view.View)>($r41);
+
+        $r25 = <com.applovin.impl.c.a$c: com.applovin.impl.c.a$c d>;
+
+        $r26 = <com.applovin.impl.c.l: java.lang.String[] a>;
+
+        $r27 = virtualinvoke $r8.<com.applovin.impl.c.a: java.util.Set a(com.applovin.impl.c.a$c,java.lang.String[])>($r25, $r26);
+
+        interfaceinvoke $r31.<java.util.Set: boolean addAll(java.util.Collection)>($r27);
+
+        return;
+    }
+
+    static android.app.Activity access$000(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        android.app.Activity r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.app.Activity viewActivity>;
+
+        return r1;
+    }
+
+    static boolean access$100(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        z0 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoPausedByUser>;
+
+        return z0;
+    }
+
+    static java.util.Set access$1000(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        java.util.Set r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.Set videoProgressTrackers>;
+
+        return r1;
+    }
+
+    static boolean access$102(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView, boolean)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoPausedByUser> = $z0;
+
+        return $z0;
+    }
+
+    static void access$1100(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView, java.util.Set)
+    {
+        java.util.Set $r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 := @parameter1: java.util.Set;
+
+        specialinvoke $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(java.util.Set)>($r1);
+
+        return;
+    }
+
+    static com.applovin.impl.c.a access$1200(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.impl.c.a r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        return r1;
+    }
+
+    static boolean access$1300(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        z0 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean videoWasCompleted>;
+
+        return z0;
+    }
+
+    static boolean access$1302(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView, boolean)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean videoWasCompleted> = $z0;
+
+        return $z0;
+    }
+
+    static boolean access$1400(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        z0 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoMuted>;
+
+        return z0;
+    }
+
+    static boolean access$1402(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView, boolean)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoMuted> = $z0;
+
+        return $z0;
+    }
+
+    static com.applovin.impl.adview.k access$1500(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.impl.adview.k r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.adview.k countdownManager>;
+
+        return r1;
+    }
+
+    static void access$1600(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        specialinvoke $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void finishVideo()>();
+
+        return;
+    }
+
+    static android.widget.FrameLayout access$1700(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        android.widget.FrameLayout r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.FrameLayout replayIconContainer>;
+
+        return r1;
+    }
+
+    static void access$1800(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        specialinvoke $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void showMediaImageView()>();
+
+        return;
+    }
+
+    static void access$1900(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView, java.lang.String)
+    {
+        java.lang.String $r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 := @parameter1: java.lang.String;
+
+        specialinvoke $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void handleMediaError(java.lang.String)>($r1);
+
+        return;
+    }
+
+    static void access$200(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        specialinvoke $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeHandleResume()>();
+
+        return;
+    }
+
+    static com.applovin.exoplayer2.ui.g access$2000(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.exoplayer2.ui.g r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.ui.g videoView>;
+
+        return r1;
+    }
+
+    static void access$2100(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView, com.applovin.impl.c.a$c)
+    {
+        com.applovin.impl.c.a$c $r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 := @parameter1: com.applovin.impl.c.a$c;
+
+        specialinvoke $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c)>($r1);
+
+        return;
+    }
+
+    static android.widget.ImageView access$2200(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        android.widget.ImageView r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView playPauseButtonImageView>;
+
+        return r1;
+    }
+
+    static android.widget.ImageView access$2300(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        android.widget.ImageView r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView muteButtonImageView>;
+
+        return r1;
+    }
+
+    static boolean access$2400(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView, boolean)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $z0 := @parameter1: boolean;
+
+        $z0 = specialinvoke $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean populateMuteImage(boolean)>($z0);
+
+        return $z0;
+    }
+
+    static java.util.concurrent.atomic.AtomicBoolean access$2500(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        java.util.concurrent.atomic.AtomicBoolean r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean automaticResumeHandled>;
+
+        return r1;
+    }
+
+    static com.applovin.impl.sdk.utils.a access$2600(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+        com.applovin.impl.sdk.utils.a r1;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.utils.a lifecycleCallbacksAdapter>;
+
+        return r1;
+    }
+
+    static void access$300(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        specialinvoke $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeHandlePause()>();
+
+        return;
+    }
+
+    static com.applovin.exoplayer2.aw access$700(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        com.applovin.exoplayer2.aw r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        r1 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        return r1;
+    }
+
+    static long access$800(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        long l0;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        l0 = $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long videoDurationMillis>;
+
+        return l0;
+    }
+
+    static long access$802(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView, long)
+    {
+        long $l0;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $l0 := @parameter1: long;
+
+        $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long videoDurationMillis> = $l0;
+
+        return $l0;
+    }
+
+    static int access$900(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)
+    {
+        int $i0;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $i0 = specialinvoke $r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: int getVideoPercentViewed()>();
+
+        return $i0;
+    }
+
+    private void checkCachedAdResources(boolean)
+    {
+        android.content.Context $r3;
+        com.applovin.impl.c.a $r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        com.applovin.impl.sdk.x $r5;
+        java.util.List $r4;
+        com.applovin.impl.sdk.o $r2;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r7;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.o sdk>;
+
+        $r3 = virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.content.Context getContext()>();
+
+        $r4 = staticinvoke <com.applovin.impl.sdk.utils.Utils: java.util.List checkCachedResourcesExist(boolean,com.applovin.impl.sdk.ad.e,com.applovin.impl.sdk.o,android.content.Context)>($z0, $r1, $r2, $r3);
+
+        $z0 = interfaceinvoke $r4.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.x logger>;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Video failed due to missing resources: ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<com.applovin.impl.sdk.x: void e(java.lang.String,java.lang.String)>("AppLovinVastMediaView", $r7);
+
+     label2:
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void finishVideo()>();
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void showMediaImageView()>();
+
+        return;
+    }
+
+    private void finishVideo()
+    {
+        com.applovin.impl.c.a $r1;
+        com.applovin.impl.c.a$c $r2;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        com.applovin.impl.sdk.a $r4;
+        java.util.concurrent.atomic.AtomicBoolean $r7;
+        long $l0, $l1;
+        com.applovin.impl.sdk.AppLovinAdServiceImpl $r8;
+        com.applovin.impl.sdk.a.g $r6;
+        java.util.concurrent.TimeUnit $r9;
+        int $i2;
+        com.applovin.impl.sdk.o $r3;
+        com.applovin.impl.sdk.utils.a $r5;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r2 = <com.applovin.impl.c.a$c: com.applovin.impl.c.a$c d>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c,java.lang.String)>($r2, "close");
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeHandlePause()>();
+
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.o sdk>;
+
+        $r4 = virtualinvoke $r3.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.a x()>();
+
+        $r5 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.utils.a lifecycleCallbacksAdapter>;
+
+        virtualinvoke $r4.<com.applovin.impl.sdk.a: void b(com.applovin.impl.sdk.utils.a)>($r5);
+
+        $z0 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean videoWasCompleted>;
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireRemainingCompletionTrackers()>();
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r6 = virtualinvoke $r1.<com.applovin.impl.c.a: com.applovin.impl.sdk.a.g g()>();
+
+        virtualinvoke $r6.<com.applovin.impl.sdk.a.g: void i()>();
+
+     label1:
+        $r7 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean videoEndListenerNotified>;
+
+        $z0 = virtualinvoke $r7.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(0, 1);
+
+        if $z0 == 0 goto label2;
+
+        $l0 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        $l1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long startTimeMillis>;
+
+        $l0 = $l0 - $l1;
+
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.o sdk>;
+
+        $r8 = virtualinvoke $r3.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.AppLovinAdServiceImpl F()>();
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r9 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $l0 = virtualinvoke $r9.<java.util.concurrent.TimeUnit: long toSeconds(long)>($l0);
+
+        $i2 = specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: int getVideoPercentViewed()>();
+
+        $z0 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoStream>;
+
+        virtualinvoke $r8.<com.applovin.impl.sdk.AppLovinAdServiceImpl: void trackVideoEnd(com.applovin.impl.sdk.ad.e,long,int,boolean)>($r1, $l0, $i2, $z0);
+
+     label2:
+        return;
+    }
+
+    private int getVideoPercentViewed()
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        long $l1;
+        com.applovin.exoplayer2.aw $r1;
+        byte $b0;
+        int $i2;
+        float $f0, $f1;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        $l1 = virtualinvoke $r1.<com.applovin.exoplayer2.aw: long I()>();
+
+        $z0 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean videoWasCompleted>;
+
+        if $z0 == 0 goto label1;
+
+        return 100;
+
+     label1:
+        $b0 = $l1 cmp 0L;
+
+        $i2 = (int) $b0;
+
+        if $i2 <= 0 goto label2;
+
+        $f0 = (float) $l1;
+
+        $l1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long videoDurationMillis>;
+
+        $f1 = (float) $l1;
+
+        $f0 = $f0 / $f1;
+
+        $f0 = $f0 * 100.0F;
+
+        $i2 = (int) $f0;
+
+        return $i2;
+
+     label2:
+        $i2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: int savedVideoPercentViewed>;
+
+        return $i2;
+    }
+
+    private void handleMediaError(java.lang.String)
+    {
+        com.applovin.impl.c.f $r4;
+        com.applovin.impl.c.a $r5;
+        com.applovin.impl.c.a$c $r3;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        java.util.concurrent.atomic.AtomicBoolean $r7;
+        com.applovin.impl.sdk.x $r2;
+        com.applovin.impl.sdk.a.g $r6;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.x logger>;
+
+        virtualinvoke $r2.<com.applovin.impl.sdk.x: void e(java.lang.String,java.lang.String)>("AppLovinVastMediaView", $r1);
+
+     label1:
+        $r3 = <com.applovin.impl.c.a$c: com.applovin.impl.c.a$c h>;
+
+        $r4 = <com.applovin.impl.c.f: com.applovin.impl.c.f m>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c,com.applovin.impl.c.f)>($r3, $r4);
+
+        $r5 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r6 = virtualinvoke $r5.<com.applovin.impl.c.a: com.applovin.impl.sdk.a.g g()>();
+
+        virtualinvoke $r6.<com.applovin.impl.sdk.a.g: void a(java.lang.String)>($r1);
+
+        $r7 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean mediaErrorHandled>;
+
+        $z0 = virtualinvoke $r7.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(0, 1);
+
+        if $z0 == 0 goto label2;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void finishVideo()>();
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void showMediaImageView()>();
+
+     label2:
+        return;
+    }
+
+    private void maybeFireRemainingCompletionTrackers()
+    {
+        com.applovin.impl.c.a $r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        java.util.Set $r2;
+        com.applovin.impl.sdk.x $r3;
+        int $i0, $i1;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $i0 = specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: int getVideoPercentViewed()>();
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $i1 = virtualinvoke $r1.<com.applovin.impl.c.a: int T()>();
+
+        if $i0 < $i1 goto label2;
+
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.Set videoProgressTrackers>;
+
+        $z0 = interfaceinvoke $r2.<java.util.Set: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label1;
+
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.x logger>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Firing ");
+
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.Set videoProgressTrackers>;
+
+        $i0 = interfaceinvoke $r2.<java.util.Set: int size()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" un-fired video progress trackers when video was completed.");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r3.<com.applovin.impl.sdk.x: void d(java.lang.String,java.lang.String)>("AppLovinVastMediaView", $r5);
+
+     label1:
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.Set videoProgressTrackers>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(java.util.Set)>($r2);
+
+     label2:
+        return;
+    }
+
+    private void maybeFireTrackers(com.applovin.impl.c.a$c)
+    {
+        com.applovin.impl.c.f $r2;
+        com.applovin.impl.c.a$c $r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 := @parameter0: com.applovin.impl.c.a$c;
+
+        $r2 = <com.applovin.impl.c.f: com.applovin.impl.c.f a>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c,com.applovin.impl.c.f)>($r1, $r2);
+
+        return;
+    }
+
+    private void maybeFireTrackers(com.applovin.impl.c.a$c, com.applovin.impl.c.f)
+    {
+        com.applovin.impl.c.f $r2;
+        com.applovin.impl.c.a$c $r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 := @parameter0: com.applovin.impl.c.a$c;
+
+        $r2 := @parameter1: com.applovin.impl.c.f;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c,java.lang.String,com.applovin.impl.c.f)>($r1, "", $r2);
+
+        return;
+    }
+
+    private void maybeFireTrackers(com.applovin.impl.c.a$c, java.lang.String)
+    {
+        com.applovin.impl.c.f $r3;
+        com.applovin.impl.c.a$c $r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        java.lang.String $r2;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 := @parameter0: com.applovin.impl.c.a$c;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = <com.applovin.impl.c.f: com.applovin.impl.c.f a>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c,java.lang.String,com.applovin.impl.c.f)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    private void maybeFireTrackers(com.applovin.impl.c.a$c, java.lang.String, com.applovin.impl.c.f)
+    {
+        com.applovin.impl.c.f $r2;
+        com.applovin.impl.c.a $r3;
+        com.applovin.impl.c.a$c $r5;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        java.util.Set $r4;
+        java.lang.String $r1;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r5 := @parameter0: com.applovin.impl.c.a$c;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: com.applovin.impl.c.f;
+
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r4 = virtualinvoke $r3.<com.applovin.impl.c.a: java.util.Set a(com.applovin.impl.c.a$c,java.lang.String)>($r5, $r1);
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(java.util.Set,com.applovin.impl.c.f)>($r4, $r2);
+
+        return;
+    }
+
+    private void maybeFireTrackers(java.util.Set)
+    {
+        java.util.Set $r1;
+        com.applovin.impl.c.f $r2;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 := @parameter0: java.util.Set;
+
+        $r2 = <com.applovin.impl.c.f: com.applovin.impl.c.f a>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(java.util.Set,com.applovin.impl.c.f)>($r1, $r2);
+
+        return;
+    }
+
+    private void maybeFireTrackers(java.util.Set, com.applovin.impl.c.f)
+    {
+        com.applovin.impl.c.f $r2;
+        com.applovin.impl.c.a $r7;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        android.net.Uri $r3;
+        java.util.Set $r1;
+        long $l0;
+        com.applovin.impl.sdk.x $r9;
+        java.util.concurrent.TimeUnit $r5;
+        com.applovin.exoplayer2.aw $r6;
+        com.applovin.impl.c.o $r8;
+        int $i1;
+        com.applovin.impl.sdk.o $r4;
+        java.lang.StringBuilder $r10;
+        java.lang.String $r11;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 := @parameter0: java.util.Set;
+
+        $r2 := @parameter1: com.applovin.impl.c.f;
+
+        if $r1 == null goto label5;
+
+        $z0 = interfaceinvoke $r1.<java.util.Set: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r5 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $r6 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        $l0 = virtualinvoke $r6.<com.applovin.exoplayer2.aw: long I()>();
+
+        $l0 = virtualinvoke $r5.<java.util.concurrent.TimeUnit: long toSeconds(long)>($l0);
+
+        $r7 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r8 = virtualinvoke $r7.<com.applovin.impl.c.a: com.applovin.impl.c.o aS()>();
+
+        if $r8 == null goto label2;
+
+        $r3 = virtualinvoke $r8.<com.applovin.impl.c.o: android.net.Uri a()>();
+
+        goto label3;
+
+     label2:
+        $r3 = null;
+
+     label3:
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label4;
+
+        $r9 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.x logger>;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("Firing ");
+
+        $i1 = interfaceinvoke $r1.<java.util.Set: int size()>();
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" tracker(s): ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r9.<com.applovin.impl.sdk.x: void b(java.lang.String,java.lang.String)>("AppLovinVastMediaView", $r11);
+
+     label4:
+        $r4 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.o sdk>;
+
+        staticinvoke <com.applovin.impl.c.m: void a(java.util.Set,long,android.net.Uri,com.applovin.impl.c.f,com.applovin.impl.sdk.o)>($r1, $l0, $r3, $r2, $r4);
+
+     label5:
+        return;
+    }
+
+    private void maybeHandleOnAttachedToWindow()
+    {
+        com.applovin.impl.c.a $r4;
+        com.applovin.impl.sdk.a $r11;
+        android.widget.ImageView $r3;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+        long $l0;
+        com.applovin.impl.adview.k $r14;
+        com.applovin.impl.sdk.a.g $r6;
+        com.applovin.exoplayer2.aw $r13;
+        com.applovin.impl.sdk.o $r7;
+        android.view.View $r9;
+        com.applovin.impl.sdk.utils.a $r12;
+        boolean $z0;
+        com.applovin.impl.c.a$c $r5;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$2 $r1;
+        com.applovin.impl.sdk.AppLovinAdServiceImpl $r8;
+        java.util.concurrent.TimeUnit $r15;
+        android.app.Activity $r10;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean initialOnAttachedToWindowHandled>;
+
+        $z0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(0, 1);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView industryIconImageView>;
+
+        if $r3 == null goto label2;
+
+        $r4 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $z0 = virtualinvoke $r4.<com.applovin.impl.c.a: boolean aV()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = <com.applovin.impl.c.a$c: com.applovin.impl.c.a$c f>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c)>($r5);
+
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView industryIconImageView>;
+
+        virtualinvoke $r3.<android.widget.ImageView: void setVisibility(int)>(0);
+
+     label2:
+        $l0 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long startTimeMillis> = $l0;
+
+        $r5 = <com.applovin.impl.c.a$c: com.applovin.impl.c.a$c a>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c)>($r5);
+
+        $r5 = <com.applovin.impl.c.a$c: com.applovin.impl.c.a$c d>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c,java.lang.String)>($r5, "creativeView");
+
+        $r4 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r6 = virtualinvoke $r4.<com.applovin.impl.c.a: com.applovin.impl.sdk.a.g g()>();
+
+        virtualinvoke $r6.<com.applovin.impl.sdk.a.g: void d()>();
+
+        $r4 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        virtualinvoke $r4.<com.applovin.impl.c.a: void setHasShown(boolean)>(1);
+
+        $r7 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.o sdk>;
+
+        $r8 = virtualinvoke $r7.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.AppLovinAdServiceImpl F()>();
+
+        $r4 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        virtualinvoke $r8.<com.applovin.impl.sdk.AppLovinAdServiceImpl: void trackImpression(com.applovin.impl.sdk.ad.e)>($r4);
+
+        $r9 = staticinvoke <com.applovin.impl.sdk.utils.Utils: android.view.View getRootView(android.view.View)>(r0);
+
+        $r10 = staticinvoke <com.applovin.impl.sdk.utils.b: android.app.Activity a(android.view.View)>($r9);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.app.Activity viewActivity> = $r10;
+
+        $r7 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.o sdk>;
+
+        $r11 = virtualinvoke $r7.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.a x()>();
+
+        $r12 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.utils.a lifecycleCallbacksAdapter>;
+
+        virtualinvoke $r11.<com.applovin.impl.sdk.a: void a(com.applovin.impl.sdk.utils.a)>($r12);
+
+        $r13 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        virtualinvoke $r13.<com.applovin.exoplayer2.aw: void a(boolean)>(1);
+
+        $r14 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.adview.k countdownManager>;
+
+        $r15 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $l0 = virtualinvoke $r15.<java.util.concurrent.TimeUnit: long toMillis(long)>(1L);
+
+        $r1 = new com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$2;
+
+        specialinvoke $r1.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView$2: void <init>(com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView)>(r0);
+
+        virtualinvoke $r14.<com.applovin.impl.adview.k: void a(java.lang.String,long,com.applovin.impl.adview.k$a)>("PROGRESS_TRACKING", $l0, $r1);
+
+        return;
+    }
+
+    private void maybeHandlePause()
+    {
+        com.applovin.impl.sdk.a.g $r4;
+        com.applovin.impl.c.a $r3;
+        com.applovin.impl.c.a$c $r2;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean automaticPauseHandled>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(0, 1);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = <com.applovin.impl.c.a$c: com.applovin.impl.c.a$c d>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c,java.lang.String)>($r2, "pause");
+
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r4 = virtualinvoke $r3.<com.applovin.impl.c.a: com.applovin.impl.sdk.a.g g()>();
+
+        virtualinvoke $r4.<com.applovin.impl.sdk.a.g: void j()>();
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void pauseVideo()>();
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void populatePlayPauseImage(boolean)>(1);
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean automaticResumeHandled>;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(0);
+
+        return;
+    }
+
+    private void maybeHandleResume()
+    {
+        com.applovin.impl.c.a $r3;
+        com.applovin.impl.c.a$c $r2;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        long $l1;
+        com.applovin.impl.adview.k $r9;
+        com.applovin.impl.sdk.x $r5;
+        com.applovin.impl.sdk.a.g $r4;
+        com.applovin.exoplayer2.aw $r8;
+        byte $b0;
+        int $i2;
+        java.lang.StringBuilder $r10;
+        java.lang.String $r7;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean automaticResumeHandled>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(0, 1);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = <com.applovin.impl.c.a$c: com.applovin.impl.c.a$c d>;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeFireTrackers(com.applovin.impl.c.a$c,java.lang.String)>($r2, "resume");
+
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r4 = virtualinvoke $r3.<com.applovin.impl.c.a: com.applovin.impl.sdk.a.g g()>();
+
+        virtualinvoke $r4.<com.applovin.impl.sdk.a.g: void k()>();
+
+        $l1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long lastVideoPositionFromPauseMillis>;
+
+        $b0 = $l1 cmp 0L;
+
+        $i2 = (int) $b0;
+
+        if $i2 < 0 goto label3;
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.x logger>;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("Resuming video at position ");
+
+        $l1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long lastVideoPositionFromPauseMillis>;
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r7 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<com.applovin.impl.sdk.x: void b(java.lang.String,java.lang.String)>("AppLovinVastMediaView", $r7);
+
+     label2:
+        $r8 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        virtualinvoke $r8.<com.applovin.exoplayer2.aw: void a(boolean)>(1);
+
+        $r9 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.adview.k countdownManager>;
+
+        virtualinvoke $r9.<com.applovin.impl.adview.k: void a()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long lastVideoPositionFromPauseMillis> = -1L;
+
+        goto label4;
+
+     label3:
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label4;
+
+        $r5 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.x logger>;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("Invalid last video position, isVideoPlaying=");
+
+        $r8 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        $z0 = virtualinvoke $r8.<com.applovin.exoplayer2.aw: boolean a()>();
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r7 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<com.applovin.impl.sdk.x: void b(java.lang.String,java.lang.String)>("AppLovinVastMediaView", $r7);
+
+     label4:
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void populatePlayPauseImage(boolean)>(0);
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.util.concurrent.atomic.AtomicBoolean automaticPauseHandled>;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(0);
+
+        return;
+    }
+
+    private void pauseVideo()
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        long $l1;
+        com.applovin.impl.adview.k $r3;
+        com.applovin.impl.sdk.x $r1;
+        com.applovin.exoplayer2.aw $r2;
+        int $i0;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.x logger>;
+
+        virtualinvoke $r1.<com.applovin.impl.sdk.x: void b(java.lang.String,java.lang.String)>("AppLovinVastMediaView", "Pausing video");
+
+     label1:
+        $i0 = specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: int getVideoPercentViewed()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: int savedVideoPercentViewed> = $i0;
+
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        $l1 = virtualinvoke $r2.<com.applovin.exoplayer2.aw: long I()>();
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long lastVideoPositionFromPauseMillis> = $l1;
+
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        virtualinvoke $r2.<com.applovin.exoplayer2.aw: void a(boolean)>(0);
+
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.adview.k countdownManager>;
+
+        virtualinvoke $r3.<com.applovin.impl.adview.k: void c()>();
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label2;
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.x logger>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Paused video at position ");
+
+        $l1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long lastVideoPositionFromPauseMillis>;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ms");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<com.applovin.impl.sdk.x: void b(java.lang.String,java.lang.String)>("AppLovinVastMediaView", $r5);
+
+     label2:
+        return;
+    }
+
+    private boolean populateMuteImage(boolean)
+    {
+        android.content.Context $r5;
+        com.applovin.impl.c.a $r2;
+        android.os.StrictMode$ThreadPolicy $r4;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        android.widget.ImageView $r1;
+        android.net.Uri $r3;
+        android.graphics.drawable.AnimatedVectorDrawable $r7;
+        android.graphics.drawable.Drawable $r6;
+        int $i0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView muteButtonImageView>;
+
+        if $r1 != null goto label1;
+
+        return 0;
+
+     label1:
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = virtualinvoke $r2.<com.applovin.impl.c.a: android.net.Uri aH()>();
+
+        goto label3;
+
+     label2:
+        $r3 = virtualinvoke $r2.<com.applovin.impl.c.a: android.net.Uri aI()>();
+
+     label3:
+        if $r3 == null goto label4;
+
+        $r4 = staticinvoke <android.os.StrictMode: android.os.StrictMode$ThreadPolicy allowThreadDiskReads()>();
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView muteButtonImageView>;
+
+        virtualinvoke $r1.<android.widget.ImageView: void setImageURI(android.net.Uri)>($r3);
+
+        staticinvoke <android.os.StrictMode: void setThreadPolicy(android.os.StrictMode$ThreadPolicy)>($r4);
+
+        return 1;
+
+     label4:
+        $z1 = staticinvoke <com.applovin.impl.sdk.utils.h: boolean d()>();
+
+        if $z1 != 0 goto label5;
+
+        return 0;
+
+     label5:
+        $r5 = virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.content.Context getContext()>();
+
+        if $z0 == 0 goto label6;
+
+        $i0 = <com.applovin.sdk.R$drawable: int applovin_ic_unmute_to_mute>;
+
+        goto label7;
+
+     label6:
+        $i0 = <com.applovin.sdk.R$drawable: int applovin_ic_mute_to_unmute>;
+
+     label7:
+        $r6 = virtualinvoke $r5.<android.content.Context: android.graphics.drawable.Drawable getDrawable(int)>($i0);
+
+        $r7 = (android.graphics.drawable.AnimatedVectorDrawable) $r6;
+
+        if $r7 != null goto label8;
+
+        return 0;
+
+     label8:
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView muteButtonImageView>;
+
+        virtualinvoke $r1.<android.widget.ImageView: void setImageDrawable(android.graphics.drawable.Drawable)>($r7);
+
+        virtualinvoke $r7.<android.graphics.drawable.AnimatedVectorDrawable: void start()>();
+
+        return 1;
+    }
+
+    private void populatePlayPauseImage(boolean)
+    {
+        com.applovin.impl.c.a $r2;
+        android.os.StrictMode$ThreadPolicy $r4;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        android.widget.ImageView $r1;
+        android.net.Uri $r3;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView playPauseButtonImageView>;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = virtualinvoke $r2.<com.applovin.impl.c.a: android.net.Uri aF()>();
+
+        goto label3;
+
+     label2:
+        $r3 = virtualinvoke $r2.<com.applovin.impl.c.a: android.net.Uri aG()>();
+
+     label3:
+        if $r3 == null goto label4;
+
+        $r4 = staticinvoke <android.os.StrictMode: android.os.StrictMode$ThreadPolicy allowThreadDiskReads()>();
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView playPauseButtonImageView>;
+
+        virtualinvoke $r1.<android.widget.ImageView: void setImageURI(android.net.Uri)>($r3);
+
+        staticinvoke <android.os.StrictMode: void setThreadPolicy(android.os.StrictMode$ThreadPolicy)>($r4);
+
+        return;
+
+     label4:
+        if $z0 == 0 goto label5;
+
+        $i0 = <com.applovin.sdk.R$drawable: int applovin_ic_play_icon>;
+
+        goto label6;
+
+     label5:
+        $i0 = <com.applovin.sdk.R$drawable: int applovin_ic_pause_icon>;
+
+     label6:
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView playPauseButtonImageView>;
+
+        virtualinvoke $r1.<android.widget.ImageView: void setImageResource(int)>($i0);
+
+        return;
+    }
+
+    private void prepareMediaPlayer()
+    {
+        com.applovin.exoplayer2.k.p $r1;
+        android.content.Context $r2, $r3;
+        com.applovin.impl.c.a $r6;
+        com.applovin.exoplayer2.ab $r8;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        android.net.Uri $r7;
+        com.applovin.exoplayer2.h.u$a $r5;
+        com.applovin.exoplayer2.aw $r10;
+        float $f0;
+        java.lang.String $r4;
+        com.applovin.exoplayer2.h.u $r9;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $z0 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoStream>;
+
+        $z0 = $z0 ^ 1;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void checkCachedAdResources(boolean)>($z0);
+
+        $r1 = new com.applovin.exoplayer2.k.p;
+
+        $r2 = virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.content.Context getContext()>();
+
+        $r3 = virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.content.Context getContext()>();
+
+        $r4 = staticinvoke <com.applovin.exoplayer2.l.ai: java.lang.String a(android.content.Context,java.lang.String)>($r3, "com.applovin.sdk");
+
+        specialinvoke $r1.<com.applovin.exoplayer2.k.p: void <init>(android.content.Context,java.lang.String)>($r2, $r4);
+
+        $r5 = new com.applovin.exoplayer2.h.u$a;
+
+        specialinvoke $r5.<com.applovin.exoplayer2.h.u$a: void <init>(com.applovin.exoplayer2.k.i$a)>($r1);
+
+        $r6 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r7 = virtualinvoke $r6.<com.applovin.impl.c.a: android.net.Uri h()>();
+
+        $r8 = staticinvoke <com.applovin.exoplayer2.ab: com.applovin.exoplayer2.ab a(android.net.Uri)>($r7);
+
+        $r9 = virtualinvoke $r5.<com.applovin.exoplayer2.h.u$a: com.applovin.exoplayer2.h.u a(com.applovin.exoplayer2.ab)>($r8);
+
+        $z0 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoMuted>;
+
+        $z0 = $z0 ^ 1;
+
+        $r10 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        $f0 = (float) $z0;
+
+        virtualinvoke $r10.<com.applovin.exoplayer2.aw: void a(float)>($f0);
+
+        $r10 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        virtualinvoke $r10.<com.applovin.exoplayer2.aw: void a(com.applovin.exoplayer2.h.p)>($r9);
+
+        $r10 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        virtualinvoke $r10.<com.applovin.exoplayer2.aw: void w()>();
+
+        $r10 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        virtualinvoke $r10.<com.applovin.exoplayer2.aw: void a(boolean)>(0);
+
+        return;
+    }
+
+    private void showMediaImageView()
+    {
+        android.widget.LinearLayout $r4;
+        com.applovin.exoplayer2.ui.g $r3;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        android.widget.ImageView $r2;
+        android.graphics.drawable.Drawable $r1;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView imageView>;
+
+        $r1 = virtualinvoke $r2.<android.widget.ImageView: android.graphics.drawable.Drawable getDrawable()>();
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView imageView>;
+
+        virtualinvoke $r2.<android.widget.ImageView: void setVisibility(int)>(0);
+
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.ui.g videoView>;
+
+        virtualinvoke $r3.<com.applovin.exoplayer2.ui.g: void setVisibility(int)>(8);
+
+        $r4 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.LinearLayout videoWidgetLinearLayout>;
+
+        if $r4 == null goto label2;
+
+        virtualinvoke $r4.<android.widget.LinearLayout: void setVisibility(int)>(8);
+
+     label2:
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView industryIconImageView>;
+
+        if $r2 == null goto label3;
+
+        virtualinvoke $r2.<android.widget.ImageView: void setVisibility(int)>(8);
+
+     label3:
+        return;
+    }
+
+    public void destroy()
+    {
+        android.content.Context $r9;
+        com.applovin.impl.c.a $r5;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        android.widget.ImageView $r1;
+        android.widget.FrameLayout $r2;
+        com.applovin.impl.adview.k $r7;
+        com.applovin.exoplayer2.aw $r4;
+        com.applovin.impl.sdk.a.g $r6;
+        com.applovin.exoplayer2.ui.g $r3;
+        android.os.Handler $r8;
+        com.applovin.communicator.AppLovinCommunicator $r10;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void finishVideo()>();
+
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView industryIconImageView>;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r1.<android.widget.ImageView: void setOnClickListener(android.view.View$OnClickListener)>(null);
+
+     label1:
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView playPauseButtonImageView>;
+
+        if $r1 == null goto label2;
+
+        virtualinvoke $r1.<android.widget.ImageView: void setOnClickListener(android.view.View$OnClickListener)>(null);
+
+     label2:
+        $r1 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.ImageView muteButtonImageView>;
+
+        if $r1 == null goto label3;
+
+        virtualinvoke $r1.<android.widget.ImageView: void setOnClickListener(android.view.View$OnClickListener)>(null);
+
+     label3:
+        $r2 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.widget.FrameLayout replayIconContainer>;
+
+        if $r2 == null goto label4;
+
+        virtualinvoke $r2.<android.widget.FrameLayout: void setOnClickListener(android.view.View$OnClickListener)>(null);
+
+     label4:
+        $r3 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.ui.g videoView>;
+
+        virtualinvoke $r3.<com.applovin.exoplayer2.ui.g: void setOnClickListener(android.view.View$OnClickListener)>(null);
+
+        r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.app.Activity viewActivity> = null;
+
+        $r4 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        virtualinvoke $r4.<com.applovin.exoplayer2.aw: void E()>();
+
+        $r5 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $r6 = virtualinvoke $r5.<com.applovin.impl.c.a: com.applovin.impl.sdk.a.g g()>();
+
+        virtualinvoke $r6.<com.applovin.impl.sdk.a.g: void e()>();
+
+        $r7 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.adview.k countdownManager>;
+
+        virtualinvoke $r7.<com.applovin.impl.adview.k: void b()>();
+
+        $r8 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.os.Handler countdownHandler>;
+
+        virtualinvoke $r8.<android.os.Handler: void removeCallbacksAndMessages(java.lang.Object)>(null);
+
+        $z0 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoStream>;
+
+        if $z0 == 0 goto label5;
+
+        $r9 = virtualinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: android.content.Context getContext()>();
+
+        $r10 = staticinvoke <com.applovin.communicator.AppLovinCommunicator: com.applovin.communicator.AppLovinCommunicator getInstance(android.content.Context)>($r9);
+
+        virtualinvoke $r10.<com.applovin.communicator.AppLovinCommunicator: void unsubscribe(com.applovin.communicator.AppLovinCommunicatorSubscriber,java.lang.String)>(r0, "video_caching_failed");
+
+     label5:
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinMediaView: void destroy()>();
+
+        return;
+    }
+
+    public java.lang.String getCommunicatorId()
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        return "AppLovinVastMediaView";
+    }
+
+    protected void onAttachedToWindow()
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        boolean $z0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinMediaView: void onAttachedToWindow()>();
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeHandleOnAttachedToWindow()>();
+
+        $z0 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoPausedByUser>;
+
+        if $z0 != 0 goto label1;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeHandleResume()>();
+
+     label1:
+        return;
+    }
+
+    protected void onDetachedFromWindow()
+    {
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void maybeHandlePause()>();
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinMediaView: void onDetachedFromWindow()>();
+
+        return;
+    }
+
+    public void onMessageReceived(com.applovin.communicator.AppLovinCommunicatorMessage)
+    {
+        android.os.Bundle $r5;
+        com.applovin.impl.c.a $r9;
+        long $l1, $l2;
+        com.applovin.exoplayer2.aw $r10;
+        byte $b0;
+        int $i3;
+        com.applovin.impl.sdk.o $r6;
+        java.lang.Boolean $r8;
+        java.lang.String $r3, $r4;
+        boolean $z0;
+        com.applovin.communicator.AppLovinCommunicatorMessage $r2;
+        com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView r0;
+        com.applovin.impl.sdk.c.b $r1;
+        java.lang.Object $r7;
+        java.lang.StringBuilder $r11;
+
+        r0 := @this: com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView;
+
+        $r2 := @parameter0: com.applovin.communicator.AppLovinCommunicatorMessage;
+
+        $r3 = "video_caching_failed";
+
+        $r4 = virtualinvoke $r2.<com.applovin.communicator.AppLovinCommunicatorMessage: java.lang.String getTopic()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r5 = virtualinvoke $r2.<com.applovin.communicator.AppLovinCommunicatorMessage: android.os.Bundle getMessageData()>();
+
+        $l1 = virtualinvoke $r5.<android.os.Bundle: long getLong(java.lang.String)>("ad_id");
+
+        $r6 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.sdk.o sdk>;
+
+        $r1 = <com.applovin.impl.sdk.c.b: com.applovin.impl.sdk.c.b gb>;
+
+        $r7 = virtualinvoke $r6.<com.applovin.impl.sdk.o: java.lang.Object a(com.applovin.impl.sdk.c.b)>($r1);
+
+        $r8 = (java.lang.Boolean) $r7;
+
+        $z0 = virtualinvoke $r8.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label3;
+
+        $r9 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.impl.c.a vastAd>;
+
+        $l2 = virtualinvoke $r9.<com.applovin.impl.c.a: long getAdIdNumber()>();
+
+        $b0 = $l1 cmp $l2;
+
+        if $b0 != 0 goto label3;
+
+        $z0 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean isVideoStream>;
+
+        if $z0 == 0 goto label3;
+
+        $i3 = virtualinvoke $r5.<android.os.Bundle: int getInt(java.lang.String)>("load_response_code");
+
+        $r3 = virtualinvoke $r5.<android.os.Bundle: java.lang.String getString(java.lang.String)>("load_exception_message");
+
+        if $r3 != null goto label2;
+
+        if $i3 < 200 goto label2;
+
+        if $i3 < 300 goto label3;
+
+     label2:
+        $z0 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: boolean videoWasCompleted>;
+
+        if $z0 != 0 goto label3;
+
+        $r10 = r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: com.applovin.exoplayer2.aw mediaPlayer>;
+
+        $z0 = virtualinvoke $r10.<com.applovin.exoplayer2.aw: boolean a()>();
+
+        if $z0 != 0 goto label3;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("Video cache error during stream. ResponseCode=");
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i3);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", exception=");
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: void handleMediaError(java.lang.String)>($r3);
+
+     label3:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.lang.String TAG> = "AppLovinVastMediaView";
+
+        <com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: long FADE_ANIMATION_DURATION_MILLIS> = 250L;
+
+        <com.applovin.impl.sdk.nativeAd.AppLovinVastMediaView: java.lang.String COUNTDOWN_IDENTIFIER_PROGRESS_TRACKING> = "PROGRESS_TRACKING";
+
+        return;
+    }
+}

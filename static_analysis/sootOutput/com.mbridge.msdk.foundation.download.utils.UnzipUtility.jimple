@@ -1,0 +1,732 @@
+public class com.mbridge.msdk.foundation.download.utils.UnzipUtility extends java.lang.Object
+{
+    private static final int BUFFER_SIZE;
+    private static final java.lang.String TAG;
+
+    public void <init>()
+    {
+        com.mbridge.msdk.foundation.download.utils.UnzipUtility r0;
+
+        r0 := @this: com.mbridge.msdk.foundation.download.utils.UnzipUtility;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private void extractFile(java.util.zip.ZipInputStream, java.lang.String) throws java.io.IOException
+    {
+        java.lang.Throwable $r9, $r10;
+        byte[] $r8;
+        java.util.zip.ZipInputStream $r2;
+        java.io.BufferedOutputStream $r1, $r6, $r13;
+        int $i0, $i1;
+        java.lang.String $r3;
+        boolean $z0;
+        java.io.FileOutputStream $r7, $r12;
+        java.io.IOException $r11, $r14;
+        java.io.File $r4, $r5;
+        com.mbridge.msdk.foundation.download.utils.UnzipUtility r0;
+
+        r0 := @this: com.mbridge.msdk.foundation.download.utils.UnzipUtility;
+
+        $r2 := @parameter0: java.util.zip.ZipInputStream;
+
+        $r3 := @parameter1: java.lang.String;
+
+        $r5 = new java.io.File;
+
+        $r4 = $r5;
+
+        specialinvoke $r5.<java.io.File: void <init>(java.lang.String)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.io.File: java.io.File getParentFile()>();
+
+        $z0 = virtualinvoke $r5.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label01;
+
+        $r5 = virtualinvoke $r4.<java.io.File: java.io.File getParentFile()>();
+
+        virtualinvoke $r5.<java.io.File: boolean mkdirs()>();
+
+     label01:
+        $r6 = null;
+
+     label02:
+        $r13 = new java.io.BufferedOutputStream;
+
+     label03:
+        $r1 = $r13;
+
+     label04:
+        $r12 = new java.io.FileOutputStream;
+
+     label05:
+        $r7 = $r12;
+
+     label06:
+        specialinvoke $r12.<java.io.FileOutputStream: void <init>(java.io.File)>($r4);
+
+        specialinvoke $r13.<java.io.BufferedOutputStream: void <init>(java.io.OutputStream)>($r7);
+
+     label07:
+        $r8 = newarray (byte)[4096];
+
+     label08:
+        $i0 = virtualinvoke $r2.<java.util.zip.ZipInputStream: int read(byte[])>($r8);
+
+     label09:
+        $i1 = -1;
+
+        if $i0 == $i1 goto label12;
+
+     label10:
+        virtualinvoke $r1.<java.io.BufferedOutputStream: void write(byte[],int,int)>($r8, 0, $i0);
+
+     label11:
+        goto label08;
+
+     label12:
+        virtualinvoke $r1.<java.io.BufferedOutputStream: void close()>();
+
+        return;
+
+     label13:
+        $r9 := @caughtexception;
+
+        $r6 = $r1;
+
+        goto label20;
+
+     label14:
+        $r10 := @caughtexception;
+
+        $r6 = $r1;
+
+        goto label17;
+
+     label15:
+        $r9 := @caughtexception;
+
+        goto label20;
+
+     label16:
+        $r10 := @caughtexception;
+
+     label17:
+        $r14 = new java.io.IOException;
+
+     label18:
+        $r11 = $r14;
+
+     label19:
+        specialinvoke $r14.<java.io.IOException: void <init>(java.lang.Throwable)>($r10);
+
+        throw $r11;
+
+     label20:
+        if $r6 == null goto label21;
+
+        virtualinvoke $r6.<java.io.BufferedOutputStream: void close()>();
+
+     label21:
+        throw $r9;
+
+        catch java.io.IOException from label06 to label07 with label16;
+        catch java.lang.Throwable from label02 to label03 with label15;
+        catch java.lang.Throwable from label04 to label05 with label15;
+        catch java.lang.Throwable from label06 to label07 with label15;
+        catch java.io.IOException from label08 to label09 with label14;
+        catch java.io.IOException from label10 to label11 with label14;
+        catch java.lang.Throwable from label08 to label09 with label13;
+        catch java.lang.Throwable from label10 to label11 with label13;
+        catch java.lang.Throwable from label17 to label18 with label15;
+        catch java.lang.Throwable from label19 to label20 with label15;
+    }
+
+    public int unzip(java.lang.String, java.lang.String) throws java.io.IOException
+    {
+        byte[] $r17;
+        java.util.Enumeration $r8;
+        java.util.zip.ZipFile $r7, $r31;
+        java.util.zip.ZipEntry $r11;
+        boolean $z0;
+        com.mbridge.msdk.foundation.download.utils.UnzipUtility r0;
+        java.lang.StringBuilder $r4, $r30;
+        java.lang.Throwable $r1, $r12, $r13, $r18, $r19, $r20, $r21, $r22, $r23, $r24, $r25, $r26, $r27, $r28, $r29;
+        int $i0;
+        java.lang.String $r2, $r3;
+        java.io.FileOutputStream $r9, $r15, $r32;
+        java.io.IOException $r33;
+        java.io.File $r5, $r14;
+        java.lang.Object $r10;
+        java.io.InputStream $r6, $r16;
+
+        r0 := @this: com.mbridge.msdk.foundation.download.utils.UnzipUtility;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: java.lang.String;
+
+        if $r2 == null goto label110;
+
+        if $r3 != null goto label001;
+
+        return -1;
+
+     label001:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean endsWith(java.lang.String)>("/");
+
+        if $z0 != 0 goto label002;
+
+        $r30 = new java.lang.StringBuilder;
+
+        $r4 = $r30;
+
+        specialinvoke $r30.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/");
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label002:
+        $r14 = new java.io.File;
+
+        $r5 = $r14;
+
+        specialinvoke $r14.<java.io.File: void <init>(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r5.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label003;
+
+        return 1;
+
+     label003:
+        $r6 = null;
+
+     label004:
+        $r31 = new java.util.zip.ZipFile;
+
+     label005:
+        $r7 = $r31;
+
+     label006:
+        specialinvoke $r31.<java.util.zip.ZipFile: void <init>(java.io.File)>($r5);
+
+        $r8 = virtualinvoke $r7.<java.util.zip.ZipFile: java.util.Enumeration entries()>();
+
+     label007:
+        $r9 = null;
+
+     label008:
+        $z0 = interfaceinvoke $r8.<java.util.Enumeration: boolean hasMoreElements()>();
+
+     label009:
+        if $z0 == 0 goto label077;
+
+     label010:
+        $r10 = interfaceinvoke $r8.<java.util.Enumeration: java.lang.Object nextElement()>();
+
+     label011:
+        $r11 = (java.util.zip.ZipEntry) $r10;
+
+     label012:
+        if $r11 != null goto label020;
+
+        if $r6 == null goto label016;
+
+     label013:
+        virtualinvoke $r6.<java.io.InputStream: void close()>();
+
+     label014:
+        goto label016;
+
+     label015:
+        $r12 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r12;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+     label016:
+        if $r9 == null goto label111;
+
+     label017:
+        virtualinvoke $r9.<java.io.FileOutputStream: void close()>();
+
+     label018:
+        return 2;
+
+     label019:
+        $r13 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r13;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+        return 2;
+
+     label020:
+        $r2 = virtualinvoke $r11.<java.util.zip.ZipEntry: java.lang.String getName()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+     label021:
+        if $z0 != 0 goto label069;
+
+     label022:
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean startsWith(java.lang.String)>("..");
+
+     label023:
+        if $z0 != 0 goto label069;
+
+     label024:
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean startsWith(java.lang.String)>("../");
+
+     label025:
+        if $z0 != 0 goto label069;
+
+     label026:
+        $r14 = new java.io.File;
+
+     label027:
+        $r5 = $r14;
+
+     label028:
+        $r30 = new java.lang.StringBuilder;
+
+     label029:
+        $r4 = $r30;
+
+     label030:
+        specialinvoke $r30.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r14.<java.io.File: void <init>(java.lang.String)>($r2);
+
+     label031:
+        $r2 = virtualinvoke $r5.<java.io.File: java.lang.String getCanonicalPath()>();
+
+     label032:
+        goto label034;
+
+     label033:
+        $r2 = "";
+
+     label034:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+     label035:
+        if $z0 != 0 goto label061;
+
+     label036:
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean startsWith(java.lang.String)>($r3);
+
+     label037:
+        if $z0 == 0 goto label061;
+
+     label038:
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean startsWith(java.lang.String)>("..");
+
+     label039:
+        if $z0 != 0 goto label061;
+
+     label040:
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean startsWith(java.lang.String)>("../");
+
+     label041:
+        if $z0 != 0 goto label061;
+
+     label042:
+        $z0 = virtualinvoke $r11.<java.util.zip.ZipEntry: boolean isDirectory()>();
+
+     label043:
+        if $z0 == 0 goto label046;
+
+     label044:
+        virtualinvoke $r5.<java.io.File: boolean mkdirs()>();
+
+     label045:
+        goto label008;
+
+     label046:
+        $r14 = virtualinvoke $r5.<java.io.File: java.io.File getParentFile()>();
+
+        $z0 = virtualinvoke $r14.<java.io.File: boolean exists()>();
+
+     label047:
+        if $z0 != 0 goto label049;
+
+     label048:
+        $r14 = virtualinvoke $r5.<java.io.File: java.io.File getParentFile()>();
+
+        virtualinvoke $r14.<java.io.File: boolean mkdirs()>();
+
+     label049:
+        $r32 = new java.io.FileOutputStream;
+
+     label050:
+        $r15 = $r32;
+
+     label051:
+        specialinvoke $r32.<java.io.FileOutputStream: void <init>(java.io.File)>($r5);
+
+     label052:
+        $r16 = virtualinvoke $r7.<java.util.zip.ZipFile: java.io.InputStream getInputStream(java.util.zip.ZipEntry)>($r11);
+
+     label053:
+        $r6 = $r16;
+
+        $r17 = newarray (byte)[1024];
+
+     label054:
+        $i0 = virtualinvoke $r16.<java.io.InputStream: int read(byte[],int,int)>($r17, 0, 1024);
+
+     label055:
+        if $i0 == -1 goto label058;
+
+     label056:
+        virtualinvoke $r15.<java.io.FileOutputStream: void write(byte[],int,int)>($r17, 0, $i0);
+
+        virtualinvoke $r15.<java.io.FileOutputStream: void flush()>();
+
+     label057:
+        goto label054;
+
+     label058:
+        $r9 = $r15;
+
+        goto label008;
+
+     label059:
+        $r18 := @caughtexception;
+
+        $r9 = $r15;
+
+        goto label100;
+
+     label060:
+        $r19 := @caughtexception;
+
+        $r9 = $r15;
+
+        goto label089;
+
+     label061:
+        if $r6 == null goto label065;
+
+     label062:
+        virtualinvoke $r6.<java.io.InputStream: void close()>();
+
+     label063:
+        goto label065;
+
+     label064:
+        $r20 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r20;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+     label065:
+        if $r9 == null goto label111;
+
+     label066:
+        virtualinvoke $r9.<java.io.FileOutputStream: void close()>();
+
+     label067:
+        return 2;
+
+     label068:
+        $r21 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r21;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+        return 2;
+
+     label069:
+        if $r6 == null goto label073;
+
+     label070:
+        virtualinvoke $r6.<java.io.InputStream: void close()>();
+
+     label071:
+        goto label073;
+
+     label072:
+        $r22 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r22;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+     label073:
+        if $r9 == null goto label111;
+
+     label074:
+        virtualinvoke $r9.<java.io.FileOutputStream: void close()>();
+
+     label075:
+        return 2;
+
+     label076:
+        $r23 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r23;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+        return 2;
+
+     label077:
+        virtualinvoke $r7.<java.util.zip.ZipFile: void close()>();
+
+     label078:
+        if $r6 == null goto label082;
+
+     label079:
+        virtualinvoke $r6.<java.io.InputStream: void close()>();
+
+     label080:
+        goto label082;
+
+     label081:
+        $r24 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r24;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+     label082:
+        if $r9 == null goto label112;
+
+     label083:
+        virtualinvoke $r9.<java.io.FileOutputStream: void close()>();
+
+     label084:
+        return 0;
+
+     label085:
+        $r25 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r25;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+        return 0;
+
+     label086:
+        $r19 := @caughtexception;
+
+        goto label089;
+
+     label087:
+        $r18 := @caughtexception;
+
+        $r9 = null;
+
+        goto label100;
+
+     label088:
+        $r19 := @caughtexception;
+
+        $r9 = null;
+
+     label089:
+        $r33 = (java.io.IOException) $r19;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+     label090:
+        if $r6 == null goto label094;
+
+     label091:
+        virtualinvoke $r6.<java.io.InputStream: void close()>();
+
+     label092:
+        goto label094;
+
+     label093:
+        $r26 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r26;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+     label094:
+        if $r9 == null goto label098;
+
+     label095:
+        virtualinvoke $r9.<java.io.FileOutputStream: void close()>();
+
+     label096:
+        goto label098;
+
+     label097:
+        $r27 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r27;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+     label098:
+        return 3;
+
+     label099:
+        $r18 := @caughtexception;
+
+     label100:
+        if $r6 == null goto label104;
+
+     label101:
+        virtualinvoke $r6.<java.io.InputStream: void close()>();
+
+     label102:
+        goto label104;
+
+     label103:
+        $r28 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r28;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+     label104:
+        if $r9 == null goto label108;
+
+     label105:
+        virtualinvoke $r9.<java.io.FileOutputStream: void close()>();
+
+     label106:
+        goto label108;
+
+     label107:
+        $r29 := @caughtexception;
+
+        $r33 = (java.io.IOException) $r29;
+
+        $r2 = virtualinvoke $r33.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <com.mbridge.msdk.foundation.tools.x: void d(java.lang.String,java.lang.String)>("UnzipUtility", $r2);
+
+     label108:
+        throw $r18;
+
+     label109:
+        $r1 := @caughtexception;
+
+        goto label033;
+
+     label110:
+        return -1;
+
+     label111:
+        return 2;
+
+     label112:
+        return 0;
+
+        catch java.io.IOException from label006 to label007 with label088;
+        catch java.lang.Throwable from label004 to label005 with label087;
+        catch java.lang.Throwable from label006 to label007 with label087;
+        catch java.io.IOException from label008 to label009 with label086;
+        catch java.io.IOException from label010 to label011 with label086;
+        catch java.lang.Throwable from label008 to label009 with label099;
+        catch java.lang.Throwable from label010 to label012 with label099;
+        catch java.io.IOException from label013 to label014 with label015;
+        catch java.io.IOException from label017 to label018 with label019;
+        catch java.io.IOException from label020 to label021 with label086;
+        catch java.io.IOException from label022 to label023 with label086;
+        catch java.io.IOException from label024 to label025 with label086;
+        catch java.io.IOException from label030 to label031 with label086;
+        catch java.lang.Throwable from label020 to label021 with label099;
+        catch java.lang.Throwable from label022 to label023 with label099;
+        catch java.lang.Throwable from label024 to label025 with label099;
+        catch java.lang.Throwable from label026 to label027 with label099;
+        catch java.lang.Throwable from label028 to label029 with label099;
+        catch java.lang.Throwable from label030 to label031 with label099;
+        catch java.io.IOException from label031 to label032 with label109;
+        catch java.lang.Throwable from label031 to label032 with label099;
+        catch java.io.IOException from label034 to label035 with label086;
+        catch java.io.IOException from label036 to label037 with label086;
+        catch java.io.IOException from label038 to label039 with label086;
+        catch java.io.IOException from label040 to label041 with label086;
+        catch java.io.IOException from label042 to label043 with label086;
+        catch java.io.IOException from label044 to label045 with label086;
+        catch java.io.IOException from label046 to label047 with label086;
+        catch java.io.IOException from label048 to label049 with label086;
+        catch java.io.IOException from label051 to label052 with label086;
+        catch java.lang.Throwable from label034 to label035 with label099;
+        catch java.lang.Throwable from label036 to label037 with label099;
+        catch java.lang.Throwable from label038 to label039 with label099;
+        catch java.lang.Throwable from label040 to label041 with label099;
+        catch java.lang.Throwable from label042 to label043 with label099;
+        catch java.lang.Throwable from label044 to label045 with label099;
+        catch java.lang.Throwable from label046 to label047 with label099;
+        catch java.lang.Throwable from label048 to label050 with label099;
+        catch java.lang.Throwable from label051 to label052 with label099;
+        catch java.io.IOException from label052 to label053 with label060;
+        catch java.io.IOException from label054 to label055 with label060;
+        catch java.io.IOException from label056 to label057 with label060;
+        catch java.lang.Throwable from label052 to label053 with label059;
+        catch java.lang.Throwable from label054 to label055 with label059;
+        catch java.lang.Throwable from label056 to label057 with label059;
+        catch java.io.IOException from label062 to label063 with label064;
+        catch java.io.IOException from label066 to label067 with label068;
+        catch java.io.IOException from label070 to label071 with label072;
+        catch java.io.IOException from label074 to label075 with label076;
+        catch java.io.IOException from label077 to label078 with label086;
+        catch java.lang.Throwable from label077 to label078 with label099;
+        catch java.io.IOException from label079 to label080 with label081;
+        catch java.io.IOException from label083 to label084 with label085;
+        catch java.lang.Throwable from label089 to label090 with label099;
+        catch java.io.IOException from label091 to label092 with label093;
+        catch java.io.IOException from label095 to label096 with label097;
+        catch java.io.IOException from label101 to label102 with label103;
+        catch java.io.IOException from label105 to label106 with label107;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.foundation.download.utils.UnzipUtility: java.lang.String TAG> = "UnzipUtility";
+
+        <com.mbridge.msdk.foundation.download.utils.UnzipUtility: int BUFFER_SIZE> = 4096;
+
+        return;
+    }
+}

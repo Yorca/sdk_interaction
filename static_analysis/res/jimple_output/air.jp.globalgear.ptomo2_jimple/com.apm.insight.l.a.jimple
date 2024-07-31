@@ -1,0 +1,958 @@
+public final class com.apm.insight.l.a extends java.lang.Object
+{
+    private static java.lang.String a;
+    private static java.lang.Class b;
+    private static java.lang.reflect.Field c;
+    private static java.lang.reflect.Field d;
+    private static boolean e;
+
+    static void <clinit>()
+    {
+        <com.apm.insight.l.a: boolean e> = 0;
+
+        return;
+    }
+
+    private static long a(int)
+    {
+        int $i0;
+        long $l1;
+
+        $i0 := @parameter0: int;
+
+        if $i0 >= 0 goto label1;
+
+        return 0L;
+
+     label1:
+        $l1 = (long) $i0;
+
+        $l1 = $l1 * 1024L;
+
+        return $l1;
+    }
+
+    public static android.app.ActivityManager$ProcessErrorStateInfo a(android.content.Context, int)
+    {
+        android.content.Context $r0;
+        android.app.ActivityManager $r2;
+        java.util.Iterator $r4;
+        android.app.ActivityManager$ProcessErrorStateInfo $r5;
+        java.util.List $r3;
+        int $i0, $i1, $i2, $i3;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $i0 := @parameter1: int;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("activity");
+
+        $r2 = (android.app.ActivityManager) $r1;
+
+        if $r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $i1 = staticinvoke <android.os.Process: int myPid()>();
+
+        $i2 = 0;
+
+     label2:
+        if $i2 >= $i0 goto label7;
+
+        $r3 = virtualinvoke $r2.<android.app.ActivityManager: java.util.List getProcessesInErrorState()>();
+
+        if $r3 == null goto label5;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r1 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (android.app.ActivityManager$ProcessErrorStateInfo) $r1;
+
+        $i3 = $r5.<android.app.ActivityManager$ProcessErrorStateInfo: int pid>;
+
+        if $i3 != $i1 goto label3;
+
+        $i3 = $r5.<android.app.ActivityManager$ProcessErrorStateInfo: int condition>;
+
+        if $i3 == 2 goto label4;
+
+        goto label3;
+
+     label4:
+        return $r5;
+
+     label5:
+        $i2 = $i2 + 1;
+
+        if $i0 == $i2 goto label7;
+
+        $z0 = staticinvoke <com.apm.insight.b.f: boolean a()>();
+
+        if $z0 == 0 goto label6;
+
+        return null;
+
+     label6:
+        staticinvoke <android.os.SystemClock: void sleep(long)>(200L);
+
+        goto label2;
+
+     label7:
+        return null;
+    }
+
+    private static java.lang.String a()
+    {
+        java.lang.Throwable $r2, $r3;
+        char $c1;
+        java.io.FileInputStream $r0;
+        java.io.InputStreamReader $r5;
+        int $i0;
+        java.lang.StringBuilder $r1;
+        java.io.BufferedReader $r4;
+        java.lang.String $r6;
+
+     label01:
+        $r4 = new java.io.BufferedReader;
+
+        $r5 = new java.io.InputStreamReader;
+
+        $r0 = new java.io.FileInputStream;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("/proc/");
+
+        $i0 = staticinvoke <android.os.Process: int myPid()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/cmdline");
+
+        $r6 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r0.<java.io.FileInputStream: void <init>(java.lang.String)>($r6);
+
+        specialinvoke $r5.<java.io.InputStreamReader: void <init>(java.io.InputStream,java.lang.String)>($r0, "iso-8859-1");
+
+        specialinvoke $r4.<java.io.BufferedReader: void <init>(java.io.Reader)>($r5);
+
+     label02:
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+     label03:
+        $i0 = virtualinvoke $r4.<java.io.BufferedReader: int read()>();
+
+     label04:
+        if $i0 <= 0 goto label07;
+
+        $c1 = (char) $i0;
+
+     label05:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c1);
+
+     label06:
+        goto label03;
+
+     label07:
+        $r6 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label08:
+        staticinvoke <com.apm.insight.l.k: void a(java.io.Closeable)>($r4);
+
+        return $r6;
+
+     label09:
+        $r4 = null;
+
+     label10:
+        staticinvoke <com.apm.insight.l.k: void a(java.io.Closeable)>($r4);
+
+        return null;
+
+     label11:
+        $r2 := @caughtexception;
+
+        goto label09;
+
+     label12:
+        $r3 := @caughtexception;
+
+        goto label10;
+
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.lang.Throwable from label02 to label04 with label12;
+        catch java.lang.Throwable from label05 to label06 with label12;
+        catch java.lang.Throwable from label07 to label08 with label12;
+    }
+
+    public static void a(android.content.Context, org.json.JSONObject)
+    {
+        java.lang.Throwable $r2;
+        android.content.Context $r3;
+        android.app.ActivityManager $r4;
+        org.json.JSONObject $r0;
+        java.lang.Object $r1;
+
+        $r3 := @parameter0: android.content.Context;
+
+        $r0 := @parameter1: org.json.JSONObject;
+
+     label1:
+        staticinvoke <com.apm.insight.l.a: void a(org.json.JSONObject)>($r0);
+
+        $r1 = virtualinvoke $r3.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("activity");
+
+        $r4 = (android.app.ActivityManager) $r1;
+
+     label2:
+        if $r4 == null goto label4;
+
+     label3:
+        staticinvoke <com.apm.insight.l.a: void b(org.json.JSONObject,android.app.ActivityManager)>($r0, $r4);
+
+     label4:
+        staticinvoke <com.apm.insight.l.a: void a(org.json.JSONObject,android.app.ActivityManager)>($r0, $r4);
+
+     label5:
+        return;
+
+     label6:
+        $r2 := @caughtexception;
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label6;
+        catch java.lang.Throwable from label3 to label5 with label6;
+    }
+
+    public static void a(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.apm.insight.l.a: java.lang.String a> = $r0;
+
+        return;
+    }
+
+    private static void a(org.json.JSONObject)
+    {
+        java.lang.Throwable $r3;
+        android.os.Debug$MemoryInfo $r1;
+        long $l1;
+        org.json.JSONObject $r0, $r2;
+        int $i0;
+        java.lang.String $r4;
+        boolean $z0;
+
+        $r0 := @parameter0: org.json.JSONObject;
+
+        $r1 = new android.os.Debug$MemoryInfo;
+
+        specialinvoke $r1.<android.os.Debug$MemoryInfo: void <init>()>();
+
+        staticinvoke <android.os.Debug: void getMemoryInfo(android.os.Debug$MemoryInfo)>($r1);
+
+        $r2 = new org.json.JSONObject;
+
+        specialinvoke $r2.<org.json.JSONObject: void <init>()>();
+
+        $i0 = $r1.<android.os.Debug$MemoryInfo: int dalvikPrivateDirty>;
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("dalvikPrivateDirty", $l1);
+
+        $i0 = $r1.<android.os.Debug$MemoryInfo: int dalvikPss>;
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("dalvikPss", $l1);
+
+        $i0 = $r1.<android.os.Debug$MemoryInfo: int dalvikSharedDirty>;
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("dalvikSharedDirty", $l1);
+
+        $i0 = $r1.<android.os.Debug$MemoryInfo: int nativePrivateDirty>;
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("nativePrivateDirty", $l1);
+
+        $i0 = $r1.<android.os.Debug$MemoryInfo: int nativePss>;
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("nativePss", $l1);
+
+        $i0 = $r1.<android.os.Debug$MemoryInfo: int nativeSharedDirty>;
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("nativeSharedDirty", $l1);
+
+        $i0 = $r1.<android.os.Debug$MemoryInfo: int otherPrivateDirty>;
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("otherPrivateDirty", $l1);
+
+        $i0 = $r1.<android.os.Debug$MemoryInfo: int otherPss>;
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("otherPss", $l1);
+
+        $i0 = $r1.<android.os.Debug$MemoryInfo: int otherSharedDirty>;
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,int)>("otherSharedDirty", $i0);
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 23 goto label4;
+
+     label1:
+        $r4 = virtualinvoke $r1.<android.os.Debug$MemoryInfo: java.lang.String getMemoryStat(java.lang.String)>("summary.graphics");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r4);
+
+     label2:
+        if $z0 != 0 goto label4;
+
+     label3:
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r4);
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("summary.graphics", $l1);
+
+     label4:
+        $i0 = staticinvoke <com.apm.insight.l.c: int a(android.os.Debug$MemoryInfo)>($r1);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,int)>("totalPrivateClean", $i0);
+
+        $i0 = virtualinvoke $r1.<android.os.Debug$MemoryInfo: int getTotalPrivateDirty()>();
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,int)>("totalPrivateDirty", $i0);
+
+        $i0 = virtualinvoke $r1.<android.os.Debug$MemoryInfo: int getTotalPss()>();
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("totalPss", $l1);
+
+        $i0 = staticinvoke <com.apm.insight.l.c: int b(android.os.Debug$MemoryInfo)>($r1);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,int)>("totalSharedClean", $i0);
+
+        $i0 = virtualinvoke $r1.<android.os.Debug$MemoryInfo: int getTotalSharedDirty()>();
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("totalSharedDirty", $l1);
+
+        $i0 = staticinvoke <com.apm.insight.l.c: int c(android.os.Debug$MemoryInfo)>($r1);
+
+        $l1 = staticinvoke <com.apm.insight.l.a: long a(int)>($i0);
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("totalSwappablePss", $l1);
+
+        virtualinvoke $r0.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("memory_info", $r2);
+
+        return;
+
+     label5:
+        $r3 := @caughtexception;
+
+        goto label4;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    private static void a(org.json.JSONObject, android.app.ActivityManager)
+    {
+        android.app.ActivityManager $r2;
+        java.lang.Runtime $r4;
+        long $l0, $l2, $l3;
+        org.json.JSONObject $r0, $r5;
+        byte $b1;
+        int $i4;
+        float $f0, $f1;
+        java.lang.String $r3;
+        boolean $z0, $z1;
+
+        $r0 := @parameter0: org.json.JSONObject;
+
+        $r2 := @parameter1: android.app.ActivityManager;
+
+        $r5 = new org.json.JSONObject;
+
+        specialinvoke $r5.<org.json.JSONObject: void <init>()>();
+
+        $l0 = staticinvoke <android.os.Debug: long getNativeHeapAllocatedSize()>();
+
+        $z0 = 1;
+
+        $b1 = $l0 cmp 209715200L;
+
+        $i4 = (int) $b1;
+
+        if $i4 <= 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>($z1);
+
+        staticinvoke <com.apm.insight.entity.a: void a(org.json.JSONObject,java.lang.String,java.lang.String,java.lang.String)>($r0, "filters", "native_heap_leak", $r3);
+
+        $l0 = staticinvoke <android.os.Debug: long getNativeHeapSize()>();
+
+        virtualinvoke $r5.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("native_heap_size", $l0);
+
+        $l0 = staticinvoke <android.os.Debug: long getNativeHeapAllocatedSize()>();
+
+        virtualinvoke $r5.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("native_heap_alloc_size", $l0);
+
+        $l0 = staticinvoke <android.os.Debug: long getNativeHeapFreeSize()>();
+
+        virtualinvoke $r5.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("native_heap_free_size", $l0);
+
+        $r4 = staticinvoke <java.lang.Runtime: java.lang.Runtime getRuntime()>();
+
+        $l0 = virtualinvoke $r4.<java.lang.Runtime: long maxMemory()>();
+
+        $l2 = virtualinvoke $r4.<java.lang.Runtime: long freeMemory()>();
+
+        $l3 = virtualinvoke $r4.<java.lang.Runtime: long totalMemory()>();
+
+        virtualinvoke $r5.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("max_memory", $l0);
+
+        virtualinvoke $r5.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("free_memory", $l2);
+
+        virtualinvoke $r5.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("total_memory", $l3);
+
+        $l2 = $l3 - $l2;
+
+        $f0 = (float) $l2;
+
+        $f1 = (float) $l0;
+
+        $f1 = $f1 * 0.95F;
+
+        $b1 = $f0 cmpl $f1;
+
+        $i4 = (int) $b1;
+
+        if $i4 <= 0 goto label3;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>($z0);
+
+        staticinvoke <com.apm.insight.entity.a: void a(org.json.JSONObject,java.lang.String,java.lang.String,java.lang.String)>($r0, "filters", "java_heap_leak", $r3);
+
+        if $r2 == null goto label5;
+
+        $i4 = virtualinvoke $r2.<android.app.ActivityManager: int getMemoryClass()>();
+
+        virtualinvoke $r5.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,int)>("memory_class", $i4);
+
+        $i4 = virtualinvoke $r2.<android.app.ActivityManager: int getLargeMemoryClass()>();
+
+        virtualinvoke $r5.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,int)>("large_memory_class", $i4);
+
+     label5:
+        virtualinvoke $r0.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("app_memory_info", $r5);
+
+        return;
+    }
+
+    public static boolean a(android.content.Context)
+    {
+        android.content.Context $r0;
+        com.apm.insight.runtime.a.b $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        if $r0 != null goto label1;
+
+        $r1 = staticinvoke <com.apm.insight.runtime.a.b: com.apm.insight.runtime.a.b d()>();
+
+        $z0 = virtualinvoke $r1.<com.apm.insight.runtime.a.b: boolean f()>();
+
+        return $z0;
+
+     label1:
+        $r1 = staticinvoke <com.apm.insight.runtime.a.b: com.apm.insight.runtime.a.b d()>();
+
+        $z0 = virtualinvoke $r1.<com.apm.insight.runtime.a.b: boolean f()>();
+
+        if $z0 != 0 goto label3;
+
+        $z0 = staticinvoke <com.apm.insight.l.a: boolean f(android.content.Context)>($r0);
+
+        if $z0 == 0 goto label2;
+
+        goto label3;
+
+     label2:
+        return 0;
+
+     label3:
+        return 1;
+    }
+
+    private static void b(org.json.JSONObject, android.app.ActivityManager)
+    {
+        android.app.ActivityManager $r2;
+        org.json.JSONObject $r0, $r1;
+        long $l0;
+        android.app.ActivityManager$MemoryInfo $r3;
+        boolean $z0;
+
+        $r0 := @parameter0: org.json.JSONObject;
+
+        $r2 := @parameter1: android.app.ActivityManager;
+
+        $r1 = new org.json.JSONObject;
+
+        specialinvoke $r1.<org.json.JSONObject: void <init>()>();
+
+        $r3 = new android.app.ActivityManager$MemoryInfo;
+
+        specialinvoke $r3.<android.app.ActivityManager$MemoryInfo: void <init>()>();
+
+        virtualinvoke $r2.<android.app.ActivityManager: void getMemoryInfo(android.app.ActivityManager$MemoryInfo)>($r3);
+
+        $l0 = $r3.<android.app.ActivityManager$MemoryInfo: long availMem>;
+
+        virtualinvoke $r1.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("availMem", $l0);
+
+        $z0 = $r3.<android.app.ActivityManager$MemoryInfo: boolean lowMemory>;
+
+        virtualinvoke $r1.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,boolean)>("lowMemory", $z0);
+
+        $l0 = $r3.<android.app.ActivityManager$MemoryInfo: long threshold>;
+
+        virtualinvoke $r1.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("threshold", $l0);
+
+        $l0 = staticinvoke <com.apm.insight.l.n: long a(android.app.ActivityManager$MemoryInfo)>($r3);
+
+        virtualinvoke $r1.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("totalMem", $l0);
+
+        virtualinvoke $r0.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("sys_memory_info", $r1);
+
+        return;
+    }
+
+    public static boolean b(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r2;
+        android.content.pm.ApplicationInfo $r3;
+        boolean $z0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = staticinvoke <com.apm.insight.l.a: java.lang.String c(android.content.Context)>($r0);
+
+        if $r1 == null goto label1;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean contains(java.lang.CharSequence)>(":");
+
+        if $z0 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        if $r1 == null goto label2;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        if $r1 == null goto label3;
+
+        $r3 = virtualinvoke $r0.<android.content.Context: android.content.pm.ApplicationInfo getApplicationInfo()>();
+
+        $r2 = $r3.<android.content.pm.ApplicationInfo: java.lang.String processName>;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    public static java.lang.String c(android.content.Context)
+    {
+        java.lang.Throwable $r0;
+        android.app.ActivityManager$RunningAppProcessInfo $r7;
+        android.content.Context $r1;
+        android.app.ActivityManager $r4;
+        java.util.Iterator $r6;
+        java.util.List $r5;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        java.lang.String $r2;
+        boolean $z0;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = <com.apm.insight.l.a: java.lang.String a>;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label01;
+
+        $r2 = <com.apm.insight.l.a: java.lang.String a>;
+
+        return $r2;
+
+     label01:
+        $i1 = staticinvoke <android.os.Process: int myPid()>();
+
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("activity");
+
+        $r4 = (android.app.ActivityManager) $r3;
+
+     label02:
+        if $r4 == null goto label10;
+
+     label03:
+        $r5 = virtualinvoke $r4.<android.app.ActivityManager: java.util.List getRunningAppProcesses()>();
+
+        $r6 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label04:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+     label05:
+        if $z0 == 0 goto label10;
+
+     label06:
+        $r3 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (android.app.ActivityManager$RunningAppProcessInfo) $r3;
+
+        $i0 = $r7.<android.app.ActivityManager$RunningAppProcessInfo: int pid>;
+
+     label07:
+        if $i0 != $i1 goto label04;
+
+     label08:
+        $r2 = $r7.<android.app.ActivityManager$RunningAppProcessInfo: java.lang.String processName>;
+
+        <com.apm.insight.l.a: java.lang.String a> = $r2;
+
+     label09:
+        return $r2;
+
+     label10:
+        $r2 = staticinvoke <com.apm.insight.l.a: java.lang.String a()>();
+
+        <com.apm.insight.l.a: java.lang.String a> = $r2;
+
+        if $r2 != null goto label12;
+
+        return "";
+
+     label11:
+        $r0 := @caughtexception;
+
+        goto label10;
+
+     label12:
+        return $r2;
+
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.lang.Throwable from label03 to label05 with label11;
+        catch java.lang.Throwable from label06 to label07 with label11;
+        catch java.lang.Throwable from label08 to label09 with label11;
+    }
+
+    public static java.lang.String d(android.content.Context)
+    {
+        java.lang.Throwable $r0, $r1;
+        android.content.Context $r2;
+        java.lang.Class $r3;
+        java.lang.Object $r5;
+        java.lang.String $r6;
+        java.lang.reflect.Field $r4;
+
+        $r2 := @parameter0: android.content.Context;
+
+        $r3 = staticinvoke <com.apm.insight.l.a: java.lang.Class g(android.content.Context)>($r2);
+
+        $r4 = <com.apm.insight.l.a: java.lang.reflect.Field c>;
+
+        if $r4 != null goto label3;
+
+        if $r3 == null goto label3;
+
+     label1:
+        $r4 = virtualinvoke $r3.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("VERSION_NAME");
+
+     label2:
+        <com.apm.insight.l.a: java.lang.reflect.Field c> = $r4;
+
+        goto label3;
+
+     label3:
+        $r4 = <com.apm.insight.l.a: java.lang.reflect.Field c>;
+
+        if $r4 == null goto label6;
+
+     label4:
+        $r5 = virtualinvoke $r4.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(null);
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r5);
+
+     label5:
+        return $r6;
+
+     label6:
+        return "";
+
+     label7:
+        $r0 := @caughtexception;
+
+        goto label3;
+
+     label8:
+        $r1 := @caughtexception;
+
+        goto label6;
+
+        catch java.lang.NoSuchFieldException from label1 to label2 with label7;
+        catch java.lang.Throwable from label4 to label5 with label8;
+    }
+
+    public static int e(android.content.Context)
+    {
+        java.lang.Throwable $r0, $r1;
+        android.content.Context $r2;
+        java.lang.reflect.Field $r4;
+        java.lang.Integer $r6;
+        int $i0;
+        java.lang.Class $r3;
+        java.lang.Object $r5;
+
+        $r2 := @parameter0: android.content.Context;
+
+        $r3 = staticinvoke <com.apm.insight.l.a: java.lang.Class g(android.content.Context)>($r2);
+
+        $r4 = <com.apm.insight.l.a: java.lang.reflect.Field d>;
+
+        if $r4 != null goto label3;
+
+        if $r3 == null goto label3;
+
+     label1:
+        $r4 = virtualinvoke $r3.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("VERSION_CODE");
+
+     label2:
+        <com.apm.insight.l.a: java.lang.reflect.Field d> = $r4;
+
+        goto label3;
+
+     label3:
+        $r4 = <com.apm.insight.l.a: java.lang.reflect.Field d>;
+
+        if $r4 == null goto label6;
+
+     label4:
+        $r5 = virtualinvoke $r4.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(null);
+
+        $r6 = (java.lang.Integer) $r5;
+
+        $i0 = virtualinvoke $r6.<java.lang.Integer: int intValue()>();
+
+     label5:
+        return $i0;
+
+     label6:
+        return -1;
+
+     label7:
+        $r0 := @caughtexception;
+
+        goto label3;
+
+     label8:
+        $r1 := @caughtexception;
+
+        goto label6;
+
+        catch java.lang.NoSuchFieldException from label1 to label2 with label7;
+        catch java.lang.Throwable from label4 to label5 with label8;
+    }
+
+    private static boolean f(android.content.Context)
+    {
+        java.lang.Throwable $r0;
+        android.app.ActivityManager$RunningAppProcessInfo $r7;
+        android.content.Context $r1;
+        android.app.ActivityManager $r4;
+        java.util.Iterator $r6;
+        java.lang.String[] $r8;
+        java.util.List $r5;
+        int $i0;
+        java.lang.Object $r3;
+        java.lang.String $r2, $r9;
+        boolean $z0;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+     label01:
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("activity");
+
+        $r4 = (android.app.ActivityManager) $r3;
+
+     label02:
+        if $r4 != null goto label03;
+
+        return 0;
+
+     label03:
+        $r5 = virtualinvoke $r4.<android.app.ActivityManager: java.util.List getRunningAppProcesses()>();
+
+     label04:
+        if $r5 == null goto label12;
+
+     label05:
+        $r6 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label06:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+     label07:
+        if $z0 == 0 goto label14;
+
+     label08:
+        $r3 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (android.app.ActivityManager$RunningAppProcessInfo) $r3;
+
+        $i0 = $r7.<android.app.ActivityManager$RunningAppProcessInfo: int importance>;
+
+     label09:
+        if $i0 != 100 goto label06;
+
+     label10:
+        $r8 = $r7.<android.app.ActivityManager$RunningAppProcessInfo: java.lang.String[] pkgList>;
+
+        $r9 = $r8[0];
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r9);
+
+     label11:
+        return $z0;
+
+     label12:
+        return 0;
+
+     label13:
+        $r0 := @caughtexception;
+
+     label14:
+        return 0;
+
+        catch java.lang.Throwable from label01 to label02 with label13;
+        catch java.lang.Throwable from label03 to label04 with label13;
+        catch java.lang.Throwable from label05 to label07 with label13;
+        catch java.lang.Throwable from label08 to label09 with label13;
+        catch java.lang.Throwable from label10 to label11 with label13;
+    }
+
+    private static java.lang.Class g(android.content.Context)
+    {
+        android.content.Context $r1;
+        java.lang.ClassNotFoundException $r0;
+        java.lang.Class $r2;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4;
+        boolean $z0;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = <com.apm.insight.l.a: java.lang.Class b>;
+
+        if $r2 != null goto label4;
+
+        $z0 = <com.apm.insight.l.a: boolean e>;
+
+        if $z0 != 0 goto label4;
+
+        $r3 = new java.lang.StringBuilder;
+
+     label1:
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".BuildConfig");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>($r4);
+
+     label2:
+        <com.apm.insight.l.a: java.lang.Class b> = $r2;
+
+     label3:
+        <com.apm.insight.l.a: boolean e> = 1;
+
+     label4:
+        $r2 = <com.apm.insight.l.a: java.lang.Class b>;
+
+        return $r2;
+
+     label5:
+        $r0 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label5;
+    }
+}

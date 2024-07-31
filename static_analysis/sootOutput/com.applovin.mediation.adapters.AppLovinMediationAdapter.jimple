@@ -1,0 +1,1049 @@
+public class com.applovin.mediation.adapters.AppLovinMediationAdapter extends com.applovin.mediation.adapters.MediationAdapterBase implements com.applovin.mediation.adapter.MaxAdViewAdapter, com.applovin.mediation.adapter.MaxAppOpenAdapter, com.applovin.mediation.adapter.MaxInterstitialAdapter, com.applovin.mediation.adapter.MaxRewardedAdapter, com.applovin.mediation.adapter.MaxRewardedInterstitialAdapter, com.applovin.mediation.adapter.MaxSignalProvider
+{
+    protected com.applovin.adview.AppLovinAdView loadedAdView;
+    protected com.applovin.sdk.AppLovinAd loadedAppOpenAd;
+    protected com.applovin.sdk.AppLovinAd loadedInterstitialAd;
+    protected com.applovin.impl.sdk.nativeAd.AppLovinNativeAd loadedNativeAd;
+    protected com.applovin.sdk.AppLovinAd loadedRewardedAd;
+    protected com.applovin.sdk.AppLovinAd loadedRewardedInterstitialAd;
+
+    public void <init>(com.applovin.sdk.AppLovinSdk)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.sdk.AppLovinSdk $r1;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r1 := @parameter0: com.applovin.sdk.AppLovinSdk;
+
+        specialinvoke r0.<com.applovin.mediation.adapters.MediationAdapterBase: void <init>(com.applovin.sdk.AppLovinSdk)>($r1);
+
+        return;
+    }
+
+    protected static android.os.Bundle getExtraInfo(com.applovin.sdk.AppLovinAd)
+    {
+        android.os.Bundle $r0, $r1;
+        com.applovin.impl.sdk.ad.AppLovinAdImpl $r3;
+        com.applovin.sdk.AppLovinAd $r2;
+
+        $r2 := @parameter0: com.applovin.sdk.AppLovinAd;
+
+        $r0 = new android.os.Bundle;
+
+        specialinvoke $r0.<android.os.Bundle: void <init>(int)>(1);
+
+        $r3 = (com.applovin.impl.sdk.ad.AppLovinAdImpl) $r2;
+
+        $r1 = virtualinvoke $r3.<com.applovin.impl.sdk.ad.AppLovinAdImpl: android.os.Bundle getMAXAdValues()>();
+
+        virtualinvoke $r0.<android.os.Bundle: void putBundle(java.lang.String,android.os.Bundle)>("ad_values", $r1);
+
+        return $r0;
+    }
+
+    private void loadFullscreenAd(java.lang.String, com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, com.applovin.mediation.MaxAdFormat, java.lang.Object)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r2;
+        com.applovin.mediation.MaxAdFormat $r3;
+        com.applovin.impl.sdk.ad.i $r9;
+        com.applovin.sdk.AppLovinSdk $r7;
+        com.applovin.sdk.AppLovinAdService $r8;
+        java.lang.Object $r4;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r1, $r5;
+        boolean $z0;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r3 := @parameter2: com.applovin.mediation.MaxAdFormat;
+
+        $r4 := @parameter3: java.lang.Object;
+
+        $r5 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getBidResponse()>();
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.utils.StringUtils: boolean isValidString(java.lang.String)>($r5);
+
+        if $z0 == 0 goto label1;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Loading bidding ");
+
+        $r1 = virtualinvoke $r3.<com.applovin.mediation.MaxAdFormat: java.lang.String getLabel()>();
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ad...");
+
+        $r1 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r1);
+
+        $r7 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r8 = virtualinvoke $r7.<com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinAdService getAdService()>();
+
+        $r1 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getBidResponse()>();
+
+        $r9 = (com.applovin.impl.sdk.ad.i) $r4;
+
+        interfaceinvoke $r8.<com.applovin.sdk.AppLovinAdService: void loadNextAdForAdToken(java.lang.String,com.applovin.sdk.AppLovinAdLoadListener)>($r1, $r9);
+
+        return;
+
+     label1:
+        $r5 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.utils.StringUtils: boolean isValidString(java.lang.String)>($r5);
+
+        if $z0 == 0 goto label2;
+
+        $r1 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Loading mediated ");
+
+        $r5 = virtualinvoke $r3.<com.applovin.mediation.MaxAdFormat: java.lang.String getLabel()>();
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ad: ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+        $r5 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r8 = virtualinvoke $r7.<com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinAdService getAdService()>();
+
+        $r9 = (com.applovin.impl.sdk.ad.i) $r4;
+
+        interfaceinvoke $r8.<com.applovin.sdk.AppLovinAdService: void loadNextAdForZoneId(java.lang.String,com.applovin.sdk.AppLovinAdLoadListener)>($r1, $r9);
+
+        return;
+
+     label2:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Loading mediated ");
+
+        $r5 = virtualinvoke $r3.<com.applovin.mediation.MaxAdFormat: java.lang.String getLabel()>();
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ad...");
+
+        $r5 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r8 = virtualinvoke $r7.<com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinAdService getAdService()>();
+
+        $r9 = (com.applovin.impl.sdk.ad.i) $r4;
+
+        interfaceinvoke $r8.<com.applovin.sdk.AppLovinAdService: void loadNextAdForZoneId(java.lang.String,com.applovin.sdk.AppLovinAdLoadListener)>($r1, $r9);
+
+        return;
+    }
+
+    protected static com.applovin.mediation.adapter.MaxAdapterError toMaxError(com.applovin.impl.sdk.AppLovinError)
+    {
+        com.applovin.mediation.adapter.MaxAdapterError $r1, $r4;
+        int $i0, $i1;
+        java.lang.String $r2, $r3;
+        com.applovin.impl.sdk.AppLovinError $r0;
+
+        $r0 := @parameter0: com.applovin.impl.sdk.AppLovinError;
+
+        $i0 = virtualinvoke $r0.<com.applovin.impl.sdk.AppLovinError: int getCode()>();
+
+        if $i0 != -1009 goto label1;
+
+        $r1 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError NO_CONNECTION>;
+
+        goto label5;
+
+     label1:
+        $i0 = virtualinvoke $r0.<com.applovin.impl.sdk.AppLovinError: int getCode()>();
+
+        if $i0 != 204 goto label2;
+
+        $r1 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError NO_FILL>;
+
+        goto label5;
+
+     label2:
+        $i0 = virtualinvoke $r0.<com.applovin.impl.sdk.AppLovinError: int getCode()>();
+
+        if $i0 != -1 goto label3;
+
+        $r1 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError INTERNAL_ERROR>;
+
+        goto label5;
+
+     label3:
+        $i0 = virtualinvoke $r0.<com.applovin.impl.sdk.AppLovinError: int getCode()>();
+
+        if $i0 < 500 goto label4;
+
+        $r1 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError SERVER_ERROR>;
+
+        goto label5;
+
+     label4:
+        $r1 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError UNSPECIFIED>;
+
+     label5:
+        $r4 = new com.applovin.mediation.adapter.MaxAdapterError;
+
+        $i0 = virtualinvoke $r1.<com.applovin.mediation.adapter.MaxAdapterError: int getCode()>();
+
+        $r2 = virtualinvoke $r1.<com.applovin.mediation.adapter.MaxAdapterError: java.lang.String getErrorMessage()>();
+
+        $i1 = virtualinvoke $r0.<com.applovin.impl.sdk.AppLovinError: int getCode()>();
+
+        $r3 = virtualinvoke $r0.<com.applovin.impl.sdk.AppLovinError: java.lang.String getMessage()>();
+
+        specialinvoke $r4.<com.applovin.mediation.adapter.MaxAdapterError: void <init>(int,java.lang.String,int,java.lang.String)>($i0, $r2, $i1, $r3);
+
+        return $r4;
+    }
+
+    public void collectSignal(com.applovin.mediation.adapter.parameters.MaxAdapterSignalCollectionParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxSignalCollectionListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.listeners.MaxSignalCollectionListener $r2;
+        com.applovin.mediation.adapter.parameters.MaxAdapterSignalCollectionParameters $r3;
+        com.applovin.sdk.AppLovinSdk $r4;
+        com.applovin.sdk.AppLovinAdService $r5;
+        java.lang.String $r6;
+        android.app.Activity $r1;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r3 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterSignalCollectionParameters;
+
+        $r1 := @parameter1: android.app.Activity;
+
+        $r2 := @parameter2: com.applovin.mediation.adapter.listeners.MaxSignalCollectionListener;
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>("Collecting signal...");
+
+        $r4 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r5 = virtualinvoke $r4.<com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinAdService getAdService()>();
+
+        $r6 = interfaceinvoke $r5.<com.applovin.sdk.AppLovinAdService: java.lang.String getBidToken()>();
+
+        interfaceinvoke $r2.<com.applovin.mediation.adapter.listeners.MaxSignalCollectionListener: void onSignalCollected(java.lang.String)>($r6);
+
+        return;
+    }
+
+    public java.lang.String getAdapterVersion()
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        java.lang.String $r1;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r1 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: java.lang.String getSdkVersion()>();
+
+        return $r1;
+    }
+
+    public java.lang.String getSdkVersion()
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        java.lang.String r1;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        r1 = <com.applovin.sdk.AppLovinSdk: java.lang.String VERSION>;
+
+        return r1;
+    }
+
+    public void initialize(com.applovin.mediation.adapter.parameters.MaxAdapterInitializationParameters, android.app.Activity, com.applovin.mediation.adapter.MaxAdapter$OnCompletionListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.MaxAdapter$InitializationStatus $r4;
+        com.applovin.mediation.adapter.parameters.MaxAdapterInitializationParameters $r2;
+        com.applovin.mediation.adapter.MaxAdapter$OnCompletionListener $r1;
+        android.app.Activity $r3;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r2 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterInitializationParameters;
+
+        $r3 := @parameter1: android.app.Activity;
+
+        $r1 := @parameter2: com.applovin.mediation.adapter.MaxAdapter$OnCompletionListener;
+
+        $r4 = <com.applovin.mediation.adapter.MaxAdapter$InitializationStatus: com.applovin.mediation.adapter.MaxAdapter$InitializationStatus DOES_NOT_APPLY>;
+
+        interfaceinvoke $r1.<com.applovin.mediation.adapter.MaxAdapter$OnCompletionListener: void onCompletion(com.applovin.mediation.adapter.MaxAdapter$InitializationStatus,java.lang.String)>($r4, null);
+
+        return;
+    }
+
+    public void loadAdViewAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, com.applovin.mediation.MaxAdFormat, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r1;
+        com.applovin.mediation.MaxAdFormat $r2, $r11;
+        com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener $r4;
+        com.applovin.sdk.AppLovinAdSize $r12;
+        com.applovin.mediation.adapter.MaxAdapterError $r13;
+        com.applovin.sdk.AppLovinSdk $r8;
+        com.applovin.sdk.AppLovinAdService $r9;
+        com.applovin.mediation.adapters.AppLovinAdapterAdViewListener $r5;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r6, $r10;
+        android.app.Activity $r3;
+        boolean $z0;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r1 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r2 := @parameter1: com.applovin.mediation.MaxAdFormat;
+
+        $r3 := @parameter2: android.app.Activity;
+
+        $r4 := @parameter3: com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener;
+
+        $r5 = new com.applovin.mediation.adapters.AppLovinAdapterAdViewListener;
+
+        specialinvoke $r5.<com.applovin.mediation.adapters.AppLovinAdapterAdViewListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.MaxAdFormat,com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener)>(r0, $r2, $r4);
+
+        $r6 = interfaceinvoke $r1.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getBidResponse()>();
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.utils.StringUtils: boolean isValidString(java.lang.String)>($r6);
+
+        if $z0 == 0 goto label1;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Loading bidding ");
+
+        $r6 = virtualinvoke $r2.<com.applovin.mediation.MaxAdFormat: java.lang.String getLabel()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ad...");
+
+        $r6 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r9 = virtualinvoke $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinAdService getAdService()>();
+
+        $r6 = interfaceinvoke $r1.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getBidResponse()>();
+
+        interfaceinvoke $r9.<com.applovin.sdk.AppLovinAdService: void loadNextAdForAdToken(java.lang.String,com.applovin.sdk.AppLovinAdLoadListener)>($r6, $r5);
+
+        return;
+
+     label1:
+        $r6 = interfaceinvoke $r1.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.utils.StringUtils: boolean isValidString(java.lang.String)>($r6);
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke $r1.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Loading mediated ");
+
+        $r10 = virtualinvoke $r2.<com.applovin.mediation.MaxAdFormat: java.lang.String getLabel()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ad: ");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+        $r10 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r10);
+
+        $r8 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r9 = virtualinvoke $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinAdService getAdService()>();
+
+        interfaceinvoke $r9.<com.applovin.sdk.AppLovinAdService: void loadNextAdForZoneId(java.lang.String,com.applovin.sdk.AppLovinAdLoadListener)>($r6, $r5);
+
+        return;
+
+     label2:
+        $r11 = <com.applovin.mediation.MaxAdFormat: com.applovin.mediation.MaxAdFormat BANNER>;
+
+        if $r2 != $r11 goto label3;
+
+        $r12 = <com.applovin.sdk.AppLovinAdSize: com.applovin.sdk.AppLovinAdSize BANNER>;
+
+        goto label6;
+
+     label3:
+        $r11 = <com.applovin.mediation.MaxAdFormat: com.applovin.mediation.MaxAdFormat MREC>;
+
+        if $r2 != $r11 goto label4;
+
+        $r12 = <com.applovin.sdk.AppLovinAdSize: com.applovin.sdk.AppLovinAdSize MREC>;
+
+        goto label6;
+
+     label4:
+        $r11 = <com.applovin.mediation.MaxAdFormat: com.applovin.mediation.MaxAdFormat LEADER>;
+
+        if $r2 != $r11 goto label5;
+
+        $r12 = <com.applovin.sdk.AppLovinAdSize: com.applovin.sdk.AppLovinAdSize LEADER>;
+
+        goto label6;
+
+     label5:
+        $r12 = null;
+
+     label6:
+        if $r12 == null goto label7;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Loading regular ");
+
+        $r6 = virtualinvoke $r2.<com.applovin.mediation.MaxAdFormat: java.lang.String getLabel()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ad...");
+
+        $r6 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r9 = virtualinvoke $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinAdService getAdService()>();
+
+        interfaceinvoke $r9.<com.applovin.sdk.AppLovinAdService: void loadNextAd(com.applovin.sdk.AppLovinAdSize,com.applovin.sdk.AppLovinAdLoadListener)>($r12, $r5);
+
+        return;
+
+     label7:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failed to load ad for format: ");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r6 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r6);
+
+        $r13 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError INTERNAL_ERROR>;
+
+        interfaceinvoke $r4.<com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener: void onAdViewAdLoadFailed(com.applovin.mediation.adapter.MaxAdapterError)>($r13);
+
+        return;
+    }
+
+    public void loadAppOpenAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxAppOpenAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r1;
+        com.applovin.mediation.MaxAdFormat $r5;
+        com.applovin.mediation.adapters.AppLovinAdapterAppOpenListener $r2;
+        com.applovin.mediation.adapter.listeners.MaxAppOpenAdapterListener $r4;
+        android.app.Activity $r3;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r1 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r3 := @parameter1: android.app.Activity;
+
+        $r4 := @parameter2: com.applovin.mediation.adapter.listeners.MaxAppOpenAdapterListener;
+
+        $r5 = <com.applovin.mediation.MaxAdFormat: com.applovin.mediation.MaxAdFormat APP_OPEN>;
+
+        $r2 = new com.applovin.mediation.adapters.AppLovinAdapterAppOpenListener;
+
+        specialinvoke $r2.<com.applovin.mediation.adapters.AppLovinAdapterAppOpenListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxAppOpenAdapterListener)>(r0, $r4);
+
+        specialinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void loadFullscreenAd(java.lang.String,com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters,com.applovin.mediation.MaxAdFormat,java.lang.Object)>("inter_appopen", $r1, $r5, $r2);
+
+        return;
+    }
+
+    public void loadInterstitialAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener $r4;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r1;
+        com.applovin.mediation.MaxAdFormat $r5;
+        com.applovin.mediation.adapters.AppLovinAdapterInterstitialListener $r2;
+        android.app.Activity $r3;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r1 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r3 := @parameter1: android.app.Activity;
+
+        $r4 := @parameter2: com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener;
+
+        $r5 = <com.applovin.mediation.MaxAdFormat: com.applovin.mediation.MaxAdFormat INTERSTITIAL>;
+
+        $r2 = new com.applovin.mediation.adapters.AppLovinAdapterInterstitialListener;
+
+        specialinvoke $r2.<com.applovin.mediation.adapters.AppLovinAdapterInterstitialListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener)>(r0, $r4);
+
+        specialinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void loadFullscreenAd(java.lang.String,com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters,com.applovin.mediation.MaxAdFormat,java.lang.Object)>("inter_regular", $r1, $r5, $r2);
+
+        return;
+    }
+
+    public void loadNativeAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxNativeAdAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.listeners.MaxNativeAdAdapterListener $r1;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r3;
+        com.applovin.mediation.adapter.MaxAdapterError $r6;
+        com.applovin.sdk.AppLovinSdk $r7;
+        com.applovin.impl.sdk.nativeAd.AppLovinNativeAdService $r9;
+        com.applovin.mediation.adapters.AppLovinAdapterNativeListener $r2;
+        com.applovin.impl.sdk.o $r8;
+        java.lang.String $r5;
+        android.app.Activity $r4;
+        boolean $z0;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r3 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r4 := @parameter1: android.app.Activity;
+
+        $r1 := @parameter2: com.applovin.mediation.adapter.listeners.MaxNativeAdAdapterListener;
+
+        $r5 = interfaceinvoke $r3.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getBidResponse()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r5);
+
+        if $z0 == 0 goto label1;
+
+        $r6 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError INVALID_CONFIGURATION>;
+
+        interfaceinvoke $r1.<com.applovin.mediation.adapter.listeners.MaxNativeAdAdapterListener: void onNativeAdLoadFailed(com.applovin.mediation.adapter.MaxAdapterError)>($r6);
+
+        return;
+
+     label1:
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void d(java.lang.String)>("Loading bidding native ad...");
+
+        $r7 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r8 = $r7.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r9 = virtualinvoke $r8.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.nativeAd.AppLovinNativeAdService G()>();
+
+        $r5 = interfaceinvoke $r3.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getBidResponse()>();
+
+        $r2 = new com.applovin.mediation.adapters.AppLovinAdapterNativeListener;
+
+        specialinvoke $r2.<com.applovin.mediation.adapters.AppLovinAdapterNativeListener: void <init>(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters,com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxNativeAdAdapterListener)>($r3, r0, $r1);
+
+        virtualinvoke $r9.<com.applovin.impl.sdk.nativeAd.AppLovinNativeAdService: void loadNextAdForAdToken(java.lang.String,com.applovin.impl.sdk.nativeAd.AppLovinNativeAdLoadListener)>($r5, $r2);
+
+        return;
+    }
+
+    public void loadRewardedAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r1;
+        com.applovin.mediation.MaxAdFormat $r2;
+        com.applovin.mediation.adapters.AppLovinAdapterRewardedListener $r5;
+        com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener $r4;
+        android.app.Activity $r3;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r1 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r3 := @parameter1: android.app.Activity;
+
+        $r4 := @parameter2: com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener;
+
+        $r5 = new com.applovin.mediation.adapters.AppLovinAdapterRewardedListener;
+
+        specialinvoke $r5.<com.applovin.mediation.adapters.AppLovinAdapterRewardedListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener)>(r0, $r4);
+
+        $r2 = <com.applovin.mediation.MaxAdFormat: com.applovin.mediation.MaxAdFormat REWARDED>;
+
+        specialinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void loadFullscreenAd(java.lang.String,com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters,com.applovin.mediation.MaxAdFormat,java.lang.Object)>("inter_videoa", $r1, $r2, $r5);
+
+        return;
+    }
+
+    public void loadRewardedInterstitialAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxRewardedInterstitialAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.listeners.MaxRewardedInterstitialAdapterListener $r4;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r1;
+        com.applovin.mediation.MaxAdFormat $r2;
+        com.applovin.mediation.adapters.AppLovinAdapterRewardedInterstitialListener $r5;
+        android.app.Activity $r3;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r1 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r3 := @parameter1: android.app.Activity;
+
+        $r4 := @parameter2: com.applovin.mediation.adapter.listeners.MaxRewardedInterstitialAdapterListener;
+
+        $r5 = new com.applovin.mediation.adapters.AppLovinAdapterRewardedInterstitialListener;
+
+        specialinvoke $r5.<com.applovin.mediation.adapters.AppLovinAdapterRewardedInterstitialListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxRewardedInterstitialAdapterListener)>(r0, $r4);
+
+        $r2 = <com.applovin.mediation.MaxAdFormat: com.applovin.mediation.MaxAdFormat REWARDED_INTERSTITIAL>;
+
+        specialinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void loadFullscreenAd(java.lang.String,com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters,com.applovin.mediation.MaxAdFormat,java.lang.Object)>("inter_autorew", $r1, $r2, $r5);
+
+        return;
+    }
+
+    public void onDestroy()
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.impl.sdk.nativeAd.AppLovinNativeAd $r2;
+        com.applovin.adview.AppLovinAdView $r1;
+        com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl $r3;
+        boolean $z0;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedInterstitialAd> = null;
+
+        r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedAppOpenAd> = null;
+
+        r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedRewardedAd> = null;
+
+        r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedRewardedInterstitialAd> = null;
+
+        $r1 = r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.adview.AppLovinAdView loadedAdView>;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r1.<com.applovin.adview.AppLovinAdView: void destroy()>();
+
+        r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.adview.AppLovinAdView loadedAdView> = null;
+
+     label1:
+        $r2 = r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.impl.sdk.nativeAd.AppLovinNativeAd loadedNativeAd>;
+
+        $z0 = $r2 instanceof com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = (com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl) $r2;
+
+        virtualinvoke $r3.<com.applovin.impl.sdk.nativeAd.AppLovinNativeAdImpl: void destroy()>();
+
+        r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.impl.sdk.nativeAd.AppLovinNativeAd loadedNativeAd> = null;
+
+     label2:
+        return;
+    }
+
+    public void showAppOpenAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxAppOpenAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.impl.adview.AppLovinAppOpenAd $r6;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r2;
+        com.applovin.mediation.adapters.AppLovinAdapterAppOpenListener $r8;
+        com.applovin.sdk.AppLovinSdk $r7;
+        com.applovin.mediation.adapter.listeners.MaxAppOpenAdapterListener $r1;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        android.app.Activity $r3;
+        com.applovin.sdk.AppLovinAd $r9;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r2 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r3 := @parameter1: android.app.Activity;
+
+        $r1 := @parameter2: com.applovin.mediation.adapter.listeners.MaxAppOpenAdapterListener;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Showing app open ad: ");
+
+        $r5 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r5);
+
+        $r6 = new com.applovin.impl.adview.AppLovinAppOpenAd;
+
+        $r7 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        specialinvoke $r6.<com.applovin.impl.adview.AppLovinAppOpenAd: void <init>(com.applovin.sdk.AppLovinSdk)>($r7);
+
+        $r8 = new com.applovin.mediation.adapters.AppLovinAdapterAppOpenListener;
+
+        specialinvoke $r8.<com.applovin.mediation.adapters.AppLovinAdapterAppOpenListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxAppOpenAdapterListener)>(r0, $r1);
+
+        virtualinvoke $r6.<com.applovin.impl.adview.AppLovinAppOpenAd: void setAdDisplayListener(com.applovin.sdk.AppLovinAdDisplayListener)>($r8);
+
+        virtualinvoke $r6.<com.applovin.impl.adview.AppLovinAppOpenAd: void setAdClickListener(com.applovin.sdk.AppLovinAdClickListener)>($r8);
+
+        $r9 = r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedAppOpenAd>;
+
+        virtualinvoke $r6.<com.applovin.impl.adview.AppLovinAppOpenAd: void show(com.applovin.sdk.AppLovinAd)>($r9);
+
+        return;
+    }
+
+    public void showInterstitialAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener $r1;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r3;
+        com.applovin.sdk.AppLovinSdk $r6;
+        com.applovin.mediation.adapters.AppLovinAdapterInterstitialListener $r8;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r5;
+        android.app.Activity $r4;
+        com.applovin.adview.AppLovinInterstitialAdDialog $r7;
+        com.applovin.sdk.AppLovinAd $r9;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r3 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r4 := @parameter1: android.app.Activity;
+
+        $r1 := @parameter2: com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("Showing interstitial: ");
+
+        $r5 = interfaceinvoke $r3.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+        $r5 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r5);
+
+        $r6 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r7 = staticinvoke <com.applovin.adview.AppLovinInterstitialAd: com.applovin.adview.AppLovinInterstitialAdDialog create(com.applovin.sdk.AppLovinSdk,android.content.Context)>($r6, $r4);
+
+        $r8 = new com.applovin.mediation.adapters.AppLovinAdapterInterstitialListener;
+
+        specialinvoke $r8.<com.applovin.mediation.adapters.AppLovinAdapterInterstitialListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener)>(r0, $r1);
+
+        interfaceinvoke $r7.<com.applovin.adview.AppLovinInterstitialAdDialog: void setAdDisplayListener(com.applovin.sdk.AppLovinAdDisplayListener)>($r8);
+
+        interfaceinvoke $r7.<com.applovin.adview.AppLovinInterstitialAdDialog: void setAdClickListener(com.applovin.sdk.AppLovinAdClickListener)>($r8);
+
+        $r9 = r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedInterstitialAd>;
+
+        interfaceinvoke $r7.<com.applovin.adview.AppLovinInterstitialAdDialog: void showAndRender(com.applovin.sdk.AppLovinAd)>($r9);
+
+        return;
+    }
+
+    public void showInterstitialAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.view.ViewGroup, androidx.lifecycle.Lifecycle, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener $r3;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r5;
+        com.applovin.sdk.AppLovinSdk $r8;
+        com.applovin.mediation.adapters.AppLovinAdapterInterstitialListener $r10;
+        android.view.ViewGroup $r1;
+        androidx.lifecycle.Lifecycle $r2;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r7;
+        android.app.Activity $r6;
+        com.applovin.adview.AppLovinInterstitialAdDialog $r9;
+        com.applovin.sdk.AppLovinAd $r11;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r5 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r1 := @parameter1: android.view.ViewGroup;
+
+        $r2 := @parameter2: androidx.lifecycle.Lifecycle;
+
+        $r6 := @parameter3: android.app.Activity;
+
+        $r3 := @parameter4: com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Showing interstitial ad view: ");
+
+        $r7 = interfaceinvoke $r5.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r7);
+
+        $r8 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r9 = staticinvoke <com.applovin.adview.AppLovinInterstitialAd: com.applovin.adview.AppLovinInterstitialAdDialog create(com.applovin.sdk.AppLovinSdk,android.content.Context)>($r8, $r6);
+
+        $r10 = new com.applovin.mediation.adapters.AppLovinAdapterInterstitialListener;
+
+        specialinvoke $r10.<com.applovin.mediation.adapters.AppLovinAdapterInterstitialListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener)>(r0, $r3);
+
+        interfaceinvoke $r9.<com.applovin.adview.AppLovinInterstitialAdDialog: void setAdDisplayListener(com.applovin.sdk.AppLovinAdDisplayListener)>($r10);
+
+        interfaceinvoke $r9.<com.applovin.adview.AppLovinInterstitialAdDialog: void setAdClickListener(com.applovin.sdk.AppLovinAdClickListener)>($r10);
+
+        $r11 = r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedInterstitialAd>;
+
+        interfaceinvoke $r9.<com.applovin.adview.AppLovinInterstitialAdDialog: void showAndRender(com.applovin.sdk.AppLovinAd,android.view.ViewGroup,androidx.lifecycle.Lifecycle)>($r11, $r1, $r2);
+
+        return;
+    }
+
+    public void showRewardedAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r4;
+        com.applovin.sdk.AppLovinSdk $r7;
+        com.applovin.mediation.adapters.AppLovinAdapterRewardedListener $r3;
+        com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener $r2;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6;
+        android.app.Activity $r1;
+        com.applovin.adview.AppLovinIncentivizedInterstitial $r8;
+        com.applovin.sdk.AppLovinAd $r9;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r4 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r1 := @parameter1: android.app.Activity;
+
+        $r2 := @parameter2: com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Showing rewarded ad: ");
+
+        $r6 = interfaceinvoke $r4.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r6);
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void configureReward(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters)>($r4);
+
+        $r7 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r8 = staticinvoke <com.applovin.adview.AppLovinIncentivizedInterstitial: com.applovin.adview.AppLovinIncentivizedInterstitial create(com.applovin.sdk.AppLovinSdk)>($r7);
+
+        $r3 = new com.applovin.mediation.adapters.AppLovinAdapterRewardedListener;
+
+        specialinvoke $r3.<com.applovin.mediation.adapters.AppLovinAdapterRewardedListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener)>(r0, $r2);
+
+        $r9 = r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedRewardedAd>;
+
+        virtualinvoke $r8.<com.applovin.adview.AppLovinIncentivizedInterstitial: void show(com.applovin.sdk.AppLovinAd,android.content.Context,com.applovin.sdk.AppLovinAdRewardListener,com.applovin.sdk.AppLovinAdVideoPlaybackListener,com.applovin.sdk.AppLovinAdDisplayListener,com.applovin.sdk.AppLovinAdClickListener)>($r9, $r1, $r3, $r3, $r3, $r3);
+
+        return;
+    }
+
+    public void showRewardedAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.view.ViewGroup, androidx.lifecycle.Lifecycle, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r6;
+        com.applovin.sdk.AppLovinSdk $r9;
+        com.applovin.mediation.adapters.AppLovinAdapterRewardedListener $r5;
+        com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener $r4;
+        android.view.ViewGroup $r1;
+        androidx.lifecycle.Lifecycle $r2;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r8;
+        android.app.Activity $r3;
+        com.applovin.adview.AppLovinIncentivizedInterstitial $r10;
+        com.applovin.sdk.AppLovinAd $r11;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r6 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r1 := @parameter1: android.view.ViewGroup;
+
+        $r2 := @parameter2: androidx.lifecycle.Lifecycle;
+
+        $r3 := @parameter3: android.app.Activity;
+
+        $r4 := @parameter4: com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Showing rewarded ad view: ");
+
+        $r8 = interfaceinvoke $r6.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r8);
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void configureReward(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters)>($r6);
+
+        $r9 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r10 = staticinvoke <com.applovin.adview.AppLovinIncentivizedInterstitial: com.applovin.adview.AppLovinIncentivizedInterstitial create(com.applovin.sdk.AppLovinSdk)>($r9);
+
+        $r5 = new com.applovin.mediation.adapters.AppLovinAdapterRewardedListener;
+
+        specialinvoke $r5.<com.applovin.mediation.adapters.AppLovinAdapterRewardedListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener)>(r0, $r4);
+
+        $r11 = r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedRewardedAd>;
+
+        virtualinvoke $r10.<com.applovin.adview.AppLovinIncentivizedInterstitial: void show(com.applovin.sdk.AppLovinAd,android.view.ViewGroup,androidx.lifecycle.Lifecycle,android.content.Context,com.applovin.sdk.AppLovinAdRewardListener,com.applovin.sdk.AppLovinAdVideoPlaybackListener,com.applovin.sdk.AppLovinAdDisplayListener,com.applovin.sdk.AppLovinAdClickListener)>($r11, $r1, $r2, $r3, $r5, $r5, $r5, $r5);
+
+        return;
+    }
+
+    public void showRewardedInterstitialAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxRewardedInterstitialAdapterListener)
+    {
+        com.applovin.mediation.adapters.AppLovinMediationAdapter r0;
+        com.applovin.mediation.adapter.listeners.MaxRewardedInterstitialAdapterListener $r3;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r1;
+        com.applovin.impl.adview.AppLovinRewardedInterstitialAd $r10;
+        com.applovin.sdk.AppLovinSdk $r11;
+        com.applovin.mediation.adapters.AppLovinAdapterRewardedInterstitialListener $r6;
+        com.applovin.sdk.AppLovinAdType $r8, $r9;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        android.app.Activity $r2;
+        com.applovin.adview.AppLovinInterstitialAdDialog $r12;
+        com.applovin.sdk.AppLovinAd $r7;
+
+        r0 := @this: com.applovin.mediation.adapters.AppLovinMediationAdapter;
+
+        $r1 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r2 := @parameter1: android.app.Activity;
+
+        $r3 := @parameter2: com.applovin.mediation.adapter.listeners.MaxRewardedInterstitialAdapterListener;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Showing rewarded interstitial ad: ");
+
+        $r5 = interfaceinvoke $r1.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>($r5);
+
+        $r6 = new com.applovin.mediation.adapters.AppLovinAdapterRewardedInterstitialListener;
+
+        specialinvoke $r6.<com.applovin.mediation.adapters.AppLovinAdapterRewardedInterstitialListener: void <init>(com.applovin.mediation.adapters.AppLovinMediationAdapter,com.applovin.mediation.adapter.listeners.MaxRewardedInterstitialAdapterListener)>(r0, $r3);
+
+        $r7 = r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedRewardedInterstitialAd>;
+
+        $r8 = interfaceinvoke $r7.<com.applovin.sdk.AppLovinAd: com.applovin.sdk.AppLovinAdType getType()>();
+
+        $r9 = <com.applovin.sdk.AppLovinAdType: com.applovin.sdk.AppLovinAdType AUTO_INCENTIVIZED>;
+
+        if $r8 != $r9 goto label1;
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void configureReward(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters)>($r1);
+
+        $r10 = new com.applovin.impl.adview.AppLovinRewardedInterstitialAd;
+
+        $r11 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        specialinvoke $r10.<com.applovin.impl.adview.AppLovinRewardedInterstitialAd: void <init>(com.applovin.sdk.AppLovinSdk)>($r11);
+
+        virtualinvoke $r10.<com.applovin.impl.adview.AppLovinRewardedInterstitialAd: void setAdDisplayListener(com.applovin.sdk.AppLovinAdDisplayListener)>($r6);
+
+        virtualinvoke $r10.<com.applovin.impl.adview.AppLovinRewardedInterstitialAd: void setAdClickListener(com.applovin.sdk.AppLovinAdClickListener)>($r6);
+
+        virtualinvoke $r10.<com.applovin.impl.adview.AppLovinRewardedInterstitialAd: void setAdVideoPlaybackListener(com.applovin.sdk.AppLovinAdVideoPlaybackListener)>($r6);
+
+        $r7 = r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedRewardedInterstitialAd>;
+
+        virtualinvoke $r10.<com.applovin.impl.adview.AppLovinRewardedInterstitialAd: void show(com.applovin.sdk.AppLovinAd,android.content.Context,com.applovin.sdk.AppLovinAdRewardListener)>($r7, $r2, $r6);
+
+        return;
+
+     label1:
+        virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: void log(java.lang.String)>("Rewarded interstitial is regular interstitial");
+
+        $r11 = virtualinvoke r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinSdk getWrappingSdk()>();
+
+        $r12 = staticinvoke <com.applovin.adview.AppLovinInterstitialAd: com.applovin.adview.AppLovinInterstitialAdDialog create(com.applovin.sdk.AppLovinSdk,android.content.Context)>($r11, $r2);
+
+        interfaceinvoke $r12.<com.applovin.adview.AppLovinInterstitialAdDialog: void setAdDisplayListener(com.applovin.sdk.AppLovinAdDisplayListener)>($r6);
+
+        interfaceinvoke $r12.<com.applovin.adview.AppLovinInterstitialAdDialog: void setAdClickListener(com.applovin.sdk.AppLovinAdClickListener)>($r6);
+
+        interfaceinvoke $r12.<com.applovin.adview.AppLovinInterstitialAdDialog: void setAdVideoPlaybackListener(com.applovin.sdk.AppLovinAdVideoPlaybackListener)>($r6);
+
+        $r7 = r0.<com.applovin.mediation.adapters.AppLovinMediationAdapter: com.applovin.sdk.AppLovinAd loadedRewardedInterstitialAd>;
+
+        interfaceinvoke $r12.<com.applovin.adview.AppLovinInterstitialAdDialog: void showAndRender(com.applovin.sdk.AppLovinAd)>($r7);
+
+        return;
+    }
+}

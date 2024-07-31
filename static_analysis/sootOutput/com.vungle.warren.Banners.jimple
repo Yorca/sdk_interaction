@@ -1,0 +1,537 @@
+public final class com.vungle.warren.Banners extends java.lang.Object
+{
+    private static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        <com.vungle.warren.Banners: java.lang.String TAG> = "Banners";
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.vungle.warren.Banners r0;
+
+        r0 := @this: com.vungle.warren.Banners;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static java.lang.String access$000()
+    {
+        java.lang.String r0;
+
+        r0 = <com.vungle.warren.Banners: java.lang.String TAG>;
+
+        return r0;
+    }
+
+    static void access$100(java.lang.String, com.vungle.warren.PlayAdCallback, int)
+    {
+        int $i0;
+        com.vungle.warren.PlayAdCallback $r1;
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.vungle.warren.PlayAdCallback;
+
+        $i0 := @parameter2: int;
+
+        staticinvoke <com.vungle.warren.Banners: void onPlaybackError(java.lang.String,com.vungle.warren.PlayAdCallback,int)>($r0, $r1, $i0);
+
+        return;
+    }
+
+    public static boolean canPlayAd(java.lang.String, com.vungle.warren.AdConfig$AdSize)
+    {
+        java.lang.String $r1;
+        com.vungle.warren.AdConfig$AdSize $r0;
+        boolean $z0;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: com.vungle.warren.AdConfig$AdSize;
+
+        $z0 = staticinvoke <com.vungle.warren.Banners: boolean canPlayAd(java.lang.String,java.lang.String,com.vungle.warren.AdConfig$AdSize)>($r1, null, $r0);
+
+        return $z0;
+    }
+
+    public static boolean canPlayAd(java.lang.String, java.lang.String, com.vungle.warren.AdConfig$AdSize)
+    {
+        android.content.Context $r4;
+        com.vungle.warren.Banners$1 $r1;
+        com.vungle.warren.utility.VungleThreadPoolExecutor $r11;
+        com.vungle.warren.utility.Executors $r8;
+        long $l0;
+        com.vungle.warren.utility.TimeoutProvider $r9;
+        java.util.concurrent.Future $r12;
+        com.vungle.warren.model.admarkup.AdMarkup $r5;
+        java.lang.Boolean $r13;
+        java.lang.String $r2, $r3;
+        com.vungle.warren.AdConfig$AdSize $r0;
+        boolean $z0;
+        com.vungle.warren.ServiceLocator $r6;
+        java.util.concurrent.TimeUnit $r14;
+        java.lang.Object $r7;
+        com.vungle.warren.persistence.FutureResult $r10;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: java.lang.String;
+
+        $r0 := @parameter2: com.vungle.warren.AdConfig$AdSize;
+
+        $z0 = staticinvoke <com.vungle.warren.AdConfig$AdSize: boolean isBannerAdSize(com.vungle.warren.AdConfig$AdSize)>($r0);
+
+        if $z0 != 0 goto label1;
+
+        $r2 = <com.vungle.warren.Banners: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, "Invalid Ad Size. Cannot check loaded status of non banner size placements.");
+
+        return 0;
+
+     label1:
+        $r4 = staticinvoke <com.vungle.warren.Vungle: android.content.Context appContext()>();
+
+        if $r4 != null goto label2;
+
+        $r2 = <com.vungle.warren.Banners: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, "Context is null");
+
+        return 0;
+
+     label2:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 == 0 goto label3;
+
+        $r2 = <com.vungle.warren.Banners: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, "PlacementId is null");
+
+        return 0;
+
+     label3:
+        $r5 = staticinvoke <com.vungle.warren.utility.AdMarkupDecoder: com.vungle.warren.model.admarkup.AdMarkup decode(java.lang.String)>($r3);
+
+        if $r3 == null goto label4;
+
+        if $r5 != null goto label4;
+
+        $r2 = <com.vungle.warren.Banners: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, "Invalid AdMarkup");
+
+        return 0;
+
+     label4:
+        $r6 = staticinvoke <com.vungle.warren.ServiceLocator: com.vungle.warren.ServiceLocator getInstance(android.content.Context)>($r4);
+
+        $r7 = virtualinvoke $r6.<com.vungle.warren.ServiceLocator: java.lang.Object getService(java.lang.Class)>(class "Lcom/vungle/warren/utility/Executors;");
+
+        $r8 = (com.vungle.warren.utility.Executors) $r7;
+
+        $r7 = virtualinvoke $r6.<com.vungle.warren.ServiceLocator: java.lang.Object getService(java.lang.Class)>(class "Lcom/vungle/warren/utility/TimeoutProvider;");
+
+        $r9 = (com.vungle.warren.utility.TimeoutProvider) $r7;
+
+        $r10 = new com.vungle.warren.persistence.FutureResult;
+
+        $r11 = interfaceinvoke $r8.<com.vungle.warren.utility.Executors: com.vungle.warren.utility.VungleThreadPoolExecutor getApiExecutor()>();
+
+        $r1 = new com.vungle.warren.Banners$1;
+
+        specialinvoke $r1.<com.vungle.warren.Banners$1: void <init>(android.content.Context,com.vungle.warren.model.admarkup.AdMarkup,java.lang.String,com.vungle.warren.AdConfig$AdSize)>($r4, $r5, $r2, $r0);
+
+        $r12 = virtualinvoke $r11.<com.vungle.warren.utility.VungleThreadPoolExecutor: java.util.concurrent.Future submit(java.util.concurrent.Callable)>($r1);
+
+        specialinvoke $r10.<com.vungle.warren.persistence.FutureResult: void <init>(java.util.concurrent.Future)>($r12);
+
+        $r13 = <java.lang.Boolean: java.lang.Boolean TRUE>;
+
+        $l0 = interfaceinvoke $r9.<com.vungle.warren.utility.TimeoutProvider: long getTimeout()>();
+
+        $r14 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $r7 = virtualinvoke $r10.<com.vungle.warren.persistence.FutureResult: java.lang.Object get(long,java.util.concurrent.TimeUnit)>($l0, $r14);
+
+        $z0 = virtualinvoke $r13.<java.lang.Boolean: boolean equals(java.lang.Object)>($r7);
+
+        return $z0;
+    }
+
+    public static com.vungle.warren.VungleBanner getBanner(java.lang.String, com.vungle.warren.AdConfig$AdSize, com.vungle.warren.PlayAdCallback)
+    {
+        com.vungle.warren.PlayAdCallback $r1;
+        com.vungle.warren.VungleBanner $r3;
+        java.lang.String $r4;
+        com.vungle.warren.BannerAdConfig $r2;
+        com.vungle.warren.AdConfig$AdSize $r0;
+
+        $r4 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: com.vungle.warren.AdConfig$AdSize;
+
+        $r1 := @parameter2: com.vungle.warren.PlayAdCallback;
+
+        $r2 = new com.vungle.warren.BannerAdConfig;
+
+        specialinvoke $r2.<com.vungle.warren.BannerAdConfig: void <init>(com.vungle.warren.AdConfig$AdSize)>($r0);
+
+        $r3 = staticinvoke <com.vungle.warren.Banners: com.vungle.warren.VungleBanner getBanner(java.lang.String,com.vungle.warren.BannerAdConfig,com.vungle.warren.PlayAdCallback)>($r4, $r2, $r1);
+
+        return $r3;
+    }
+
+    public static com.vungle.warren.VungleBanner getBanner(java.lang.String, com.vungle.warren.BannerAdConfig, com.vungle.warren.PlayAdCallback)
+    {
+        com.vungle.warren.PlayAdCallback $r1;
+        com.vungle.warren.VungleBanner $r2;
+        java.lang.String $r3;
+        com.vungle.warren.BannerAdConfig $r0;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: com.vungle.warren.BannerAdConfig;
+
+        $r1 := @parameter2: com.vungle.warren.PlayAdCallback;
+
+        $r2 = staticinvoke <com.vungle.warren.Banners: com.vungle.warren.VungleBanner getBanner(java.lang.String,java.lang.String,com.vungle.warren.BannerAdConfig,com.vungle.warren.PlayAdCallback)>($r3, null, $r0, $r1);
+
+        return $r2;
+    }
+
+    public static com.vungle.warren.VungleBanner getBanner(java.lang.String, java.lang.String, com.vungle.warren.BannerAdConfig, com.vungle.warren.PlayAdCallback)
+    {
+        android.content.Context $r6;
+        com.vungle.warren.model.Placement $r24;
+        com.vungle.warren.utility.VungleThreadPoolExecutor $r17;
+        com.vungle.warren.utility.Executors $r10;
+        com.vungle.warren.Banners$2 $r18;
+        android.util.Pair $r21;
+        long $l0;
+        java.util.concurrent.atomic.AtomicReference $r14;
+        com.vungle.warren.utility.TimeoutProvider $r11;
+        java.util.concurrent.Future $r19;
+        int $i1;
+        com.vungle.warren.VungleSettings $r15;
+        java.lang.Boolean $r22;
+        java.lang.String $r0, $r1;
+        java.util.concurrent.ExecutorService $r16;
+        com.vungle.warren.AdConfig$AdSize $r7, $r23;
+        boolean $z0;
+        com.vungle.warren.RuntimeValues $r13;
+        com.vungle.warren.PlayAdCallback $r3;
+        com.vungle.warren.BannerAdConfig $r2;
+        com.vungle.warren.ServiceLocator $r8, $r12;
+        com.vungle.warren.PlayAdCallbackWrapper $r4;
+        java.util.concurrent.TimeUnit $r20;
+        com.vungle.warren.VungleBanner $r25;
+        java.lang.Object $r9;
+        com.vungle.warren.persistence.FutureResult $r5;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: com.vungle.warren.BannerAdConfig;
+
+        $r3 := @parameter3: com.vungle.warren.PlayAdCallback;
+
+        staticinvoke <com.vungle.warren.VungleLogger: void debug(java.lang.String,java.lang.String)>("VungleBanner#getBanner", "getBanner call invoked");
+
+        $r6 = staticinvoke <com.vungle.warren.Vungle: android.content.Context appContext()>();
+
+        if $r6 != null goto label1;
+
+        $r1 = <com.vungle.warren.Banners: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r1, "Vungle is not initialized, returned VungleBanner = null");
+
+        staticinvoke <com.vungle.warren.Banners: void onPlaybackError(java.lang.String,com.vungle.warren.PlayAdCallback,int)>($r0, $r3, 9);
+
+        return null;
+
+     label1:
+        $r7 = virtualinvoke $r2.<com.vungle.warren.BannerAdConfig: com.vungle.warren.AdConfig$AdSize getAdSize()>();
+
+        $r8 = staticinvoke <com.vungle.warren.ServiceLocator: com.vungle.warren.ServiceLocator getInstance(android.content.Context)>($r6);
+
+        $r9 = virtualinvoke $r8.<com.vungle.warren.ServiceLocator: java.lang.Object getService(java.lang.Class)>(class "Lcom/vungle/warren/utility/Executors;");
+
+        $r10 = (com.vungle.warren.utility.Executors) $r9;
+
+        $r9 = virtualinvoke $r8.<com.vungle.warren.ServiceLocator: java.lang.Object getService(java.lang.Class)>(class "Lcom/vungle/warren/utility/TimeoutProvider;");
+
+        $r11 = (com.vungle.warren.utility.TimeoutProvider) $r9;
+
+        $r12 = staticinvoke <com.vungle.warren.ServiceLocator: com.vungle.warren.ServiceLocator getInstance(android.content.Context)>($r6);
+
+        $r9 = virtualinvoke $r12.<com.vungle.warren.ServiceLocator: java.lang.Object getService(java.lang.Class)>(class "Lcom/vungle/warren/RuntimeValues;");
+
+        $r13 = (com.vungle.warren.RuntimeValues) $r9;
+
+        $r14 = $r13.<com.vungle.warren.RuntimeValues: java.util.concurrent.atomic.AtomicReference settings>;
+
+        $r9 = virtualinvoke $r14.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r15 = (com.vungle.warren.VungleSettings) $r9;
+
+        $r4 = new com.vungle.warren.PlayAdCallbackWrapper;
+
+        $r16 = interfaceinvoke $r10.<com.vungle.warren.utility.Executors: java.util.concurrent.ExecutorService getUIExecutor()>();
+
+        specialinvoke $r4.<com.vungle.warren.PlayAdCallbackWrapper: void <init>(java.util.concurrent.ExecutorService,com.vungle.warren.PlayAdCallback)>($r16, $r3);
+
+        $r5 = new com.vungle.warren.persistence.FutureResult;
+
+        $r17 = interfaceinvoke $r10.<com.vungle.warren.utility.Executors: com.vungle.warren.utility.VungleThreadPoolExecutor getBackgroundExecutor()>();
+
+        $r18 = new com.vungle.warren.Banners$2;
+
+        specialinvoke $r18.<com.vungle.warren.Banners$2: void <init>(java.lang.String,com.vungle.warren.PlayAdCallback,com.vungle.warren.ServiceLocator,com.vungle.warren.AdConfig$AdSize,java.lang.String)>($r0, $r4, $r8, $r7, $r1);
+
+        $r19 = virtualinvoke $r17.<com.vungle.warren.utility.VungleThreadPoolExecutor: java.util.concurrent.Future submit(java.util.concurrent.Callable)>($r18);
+
+        specialinvoke $r5.<com.vungle.warren.persistence.FutureResult: void <init>(java.util.concurrent.Future)>($r19);
+
+        $l0 = interfaceinvoke $r11.<com.vungle.warren.utility.TimeoutProvider: long getTimeout()>();
+
+        $r20 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $r9 = virtualinvoke $r5.<com.vungle.warren.persistence.FutureResult: java.lang.Object get(long,java.util.concurrent.TimeUnit)>($l0, $r20);
+
+        $r21 = (android.util.Pair) $r9;
+
+        if $r21 != null goto label2;
+
+        staticinvoke <com.vungle.warren.Banners: void onPlaybackError(java.lang.String,com.vungle.warren.PlayAdCallback,int)>($r0, $r3, 13);
+
+        return null;
+
+     label2:
+        $r9 = $r21.<android.util.Pair: java.lang.Object first>;
+
+        $r22 = (java.lang.Boolean) $r9;
+
+        $z0 = virtualinvoke $r22.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 != 0 goto label3;
+
+        return null;
+
+     label3:
+        $r23 = <com.vungle.warren.AdConfig$AdSize: com.vungle.warren.AdConfig$AdSize VUNGLE_MREC>;
+
+        if $r7 == $r23 goto label4;
+
+        $r9 = $r21.<android.util.Pair: java.lang.Object second>;
+
+        $r24 = (com.vungle.warren.model.Placement) $r9;
+
+        $i1 = virtualinvoke $r24.<com.vungle.warren.model.Placement: int getAdRefreshDuration()>();
+
+        goto label5;
+
+     label4:
+        $i1 = 0;
+
+     label5:
+        if $r15 == null goto label6;
+
+        $z0 = virtualinvoke $r15.<com.vungle.warren.VungleSettings: boolean getBannerRefreshDisabled()>();
+
+        if $z0 == 0 goto label6;
+
+        $i1 = 0;
+
+     label6:
+        $r25 = new com.vungle.warren.VungleBanner;
+
+        specialinvoke $r25.<com.vungle.warren.VungleBanner: void <init>(android.content.Context,java.lang.String,java.lang.String,int,com.vungle.warren.BannerAdConfig,com.vungle.warren.PlayAdCallback)>($r6, $r0, $r1, $i1, $r2, $r4);
+
+        return $r25;
+    }
+
+    public static void loadBanner(java.lang.String, com.vungle.warren.AdConfig$AdSize, com.vungle.warren.LoadAdCallback)
+    {
+        java.lang.String $r0;
+        com.vungle.warren.BannerAdConfig $r2;
+        com.vungle.warren.LoadAdCallback $r1;
+        com.vungle.warren.AdConfig$AdSize $r3;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: com.vungle.warren.AdConfig$AdSize;
+
+        $r1 := @parameter2: com.vungle.warren.LoadAdCallback;
+
+        if $r3 != null goto label1;
+
+        staticinvoke <com.vungle.warren.Banners: void onLoadError(java.lang.String,com.vungle.warren.LoadAdCallback,int)>($r0, $r1, 28);
+
+        return;
+
+     label1:
+        $r2 = new com.vungle.warren.BannerAdConfig;
+
+        specialinvoke $r2.<com.vungle.warren.BannerAdConfig: void <init>(com.vungle.warren.AdConfig$AdSize)>($r3);
+
+        staticinvoke <com.vungle.warren.Banners: void loadBanner(java.lang.String,com.vungle.warren.BannerAdConfig,com.vungle.warren.LoadAdCallback)>($r0, $r2, $r1);
+
+        return;
+    }
+
+    public static void loadBanner(java.lang.String, com.vungle.warren.BannerAdConfig, com.vungle.warren.LoadAdCallback)
+    {
+        java.lang.String $r0;
+        com.vungle.warren.BannerAdConfig $r1;
+        com.vungle.warren.LoadAdCallback $r2;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.vungle.warren.BannerAdConfig;
+
+        $r2 := @parameter2: com.vungle.warren.LoadAdCallback;
+
+        staticinvoke <com.vungle.warren.Banners: void loadBanner(java.lang.String,java.lang.String,com.vungle.warren.BannerAdConfig,com.vungle.warren.LoadAdCallback)>($r0, null, $r1, $r2);
+
+        return;
+    }
+
+    public static void loadBanner(java.lang.String, java.lang.String, com.vungle.warren.BannerAdConfig, com.vungle.warren.LoadAdCallback)
+    {
+        android.content.Context $r4;
+        com.vungle.warren.BannerAdConfig $r3;
+        com.vungle.warren.LoadAdCallback $r1;
+        com.vungle.warren.AdConfig $r5;
+        java.lang.String $r0, $r2;
+        boolean $z0;
+        com.vungle.warren.AdConfig$AdSize $r6;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: com.vungle.warren.BannerAdConfig;
+
+        $r1 := @parameter3: com.vungle.warren.LoadAdCallback;
+
+        staticinvoke <com.vungle.warren.VungleLogger: void debug(java.lang.String,java.lang.String)>("Banners#loadBanner", "loadBanner API call invoked");
+
+        $r4 = staticinvoke <com.vungle.warren.Vungle: android.content.Context appContext()>();
+
+        if $r4 == null goto label2;
+
+        $z0 = staticinvoke <com.vungle.warren.Vungle: boolean isInitialized()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = new com.vungle.warren.AdConfig;
+
+        specialinvoke $r5.<com.vungle.warren.AdConfig: void <init>(com.vungle.warren.BaseAdConfig)>($r3);
+
+        $r6 = virtualinvoke $r5.<com.vungle.warren.AdConfig: com.vungle.warren.AdConfig$AdSize getAdSize()>();
+
+        $z0 = staticinvoke <com.vungle.warren.AdConfig$AdSize: boolean isBannerAdSize(com.vungle.warren.AdConfig$AdSize)>($r6);
+
+        if $z0 != 0 goto label1;
+
+        staticinvoke <com.vungle.warren.Banners: void onLoadError(java.lang.String,com.vungle.warren.LoadAdCallback,int)>($r0, $r1, 30);
+
+        return;
+
+     label1:
+        staticinvoke <com.vungle.warren.Vungle: void loadAdInternal(java.lang.String,java.lang.String,com.vungle.warren.AdConfig,com.vungle.warren.LoadAdCallback)>($r0, $r2, $r5, $r1);
+
+        return;
+
+     label2:
+        staticinvoke <com.vungle.warren.Banners: void onLoadError(java.lang.String,com.vungle.warren.LoadAdCallback,int)>($r0, $r1, 9);
+
+        return;
+    }
+
+    private static void onLoadError(java.lang.String, com.vungle.warren.LoadAdCallback, int)
+    {
+        int $i0;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r1;
+        com.vungle.warren.error.VungleException $r0;
+        com.vungle.warren.LoadAdCallback $r2;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.vungle.warren.LoadAdCallback;
+
+        $i0 := @parameter2: int;
+
+        $r0 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r0.<com.vungle.warren.error.VungleException: void <init>(int)>($i0);
+
+        if $r2 == null goto label1;
+
+        interfaceinvoke $r2.<com.vungle.warren.LoadAdCallback: void onError(java.lang.String,com.vungle.warren.error.VungleException)>($r1, $r0);
+
+     label1:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Banner load error: ");
+
+        $r1 = virtualinvoke $r0.<com.vungle.warren.error.VungleException: java.lang.String getLocalizedMessage()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("Banners#onLoadError", $r1);
+
+        return;
+    }
+
+    private static void onPlaybackError(java.lang.String, com.vungle.warren.PlayAdCallback, int)
+    {
+        com.vungle.warren.PlayAdCallback $r2;
+        int $i0;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r1;
+        com.vungle.warren.error.VungleException $r0;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.vungle.warren.PlayAdCallback;
+
+        $i0 := @parameter2: int;
+
+        $r0 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r0.<com.vungle.warren.error.VungleException: void <init>(int)>($i0);
+
+        if $r2 == null goto label1;
+
+        interfaceinvoke $r2.<com.vungle.warren.PlayAdCallback: void onError(java.lang.String,com.vungle.warren.error.VungleException)>($r1, $r0);
+
+     label1:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Banner play error: ");
+
+        $r1 = virtualinvoke $r0.<com.vungle.warren.error.VungleException: java.lang.String getLocalizedMessage()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("Banners#onPlaybackError", $r1);
+
+        return;
+    }
+}

@@ -1,0 +1,1841 @@
+public abstract class com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer extends com.mbridge.msdk.playercommon.exoplayer2.BaseRenderer implements com.mbridge.msdk.playercommon.exoplayer2.util.MediaClock
+{
+    private static final int REINITIALIZATION_STATE_NONE;
+    private static final int REINITIALIZATION_STATE_SIGNAL_END_OF_STREAM;
+    private static final int REINITIALIZATION_STATE_WAIT_END_OF_STREAM;
+    private boolean allowFirstBufferPositionDiscontinuity;
+    private boolean allowPositionDiscontinuity;
+    private final com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink;
+    private boolean audioTrackNeedsConfigure;
+    private long currentPositionUs;
+    private com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder;
+    private com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters;
+    private boolean decoderReceivedBuffers;
+    private int decoderReinitializationState;
+    private com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession;
+    private final com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager;
+    private int encoderDelay;
+    private int encoderPadding;
+    private final com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher;
+    private final com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer flagsOnlyBuffer;
+    private final com.mbridge.msdk.playercommon.exoplayer2.FormatHolder formatHolder;
+    private com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer;
+    private com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat;
+    private boolean inputStreamEnded;
+    private com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer;
+    private boolean outputStreamEnded;
+    private com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession;
+    private final boolean playClearSamplesWithoutKeys;
+    private boolean waitingForKeys;
+
+    public void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 = newarray (com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor)[0];
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void <init>(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[])>(null, null, $r1);
+
+        return;
+    }
+
+    public void <init>(android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioCapabilities)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioCapabilities $r3;
+        android.os.Handler $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 := @parameter0: android.os.Handler;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioCapabilities;
+
+        $r4 = newarray (com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor)[0];
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void <init>(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioCapabilities,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager,boolean,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[])>($r1, $r2, $r3, null, 0, $r4);
+
+        return;
+    }
+
+    public transient void <init>(android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioCapabilities, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager, boolean, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[])
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[] $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioCapabilities $r3;
+        android.os.Handler $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.DefaultAudioSink $r6;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 := @parameter0: android.os.Handler;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioCapabilities;
+
+        $r4 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager;
+
+        $z0 := @parameter4: boolean;
+
+        $r5 := @parameter5: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[];
+
+        $r6 = new com.mbridge.msdk.playercommon.exoplayer2.audio.DefaultAudioSink;
+
+        specialinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.DefaultAudioSink: void <init>(com.mbridge.msdk.playercommon.exoplayer2.audio.AudioCapabilities,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[])>($r3, $r5);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void <init>(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager,boolean,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink)>($r1, $r2, $r4, $z0, $r6);
+
+        return;
+    }
+
+    public void <init>(android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager, boolean, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer$AudioSinkListener $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager $r5;
+        android.os.Handler $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.FormatHolder $r8;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r3 := @parameter0: android.os.Handler;
+
+        $r4 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener;
+
+        $r5 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager;
+
+        $z0 := @parameter3: boolean;
+
+        $r1 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.BaseRenderer: void <init>(int)>(1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager> = $r5;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean playClearSamplesWithoutKeys> = $z0;
+
+        $r6 = new com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher;
+
+        specialinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void <init>(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener)>($r3, $r4);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher> = $r6;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink> = $r1;
+
+        $r7 = new com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer$AudioSinkListener;
+
+        specialinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer$AudioSinkListener: void <init>(com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer,com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer$1)>(r0, null);
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void setListener(com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$Listener)>($r7);
+
+        $r8 = new com.mbridge.msdk.playercommon.exoplayer2.FormatHolder;
+
+        specialinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.FormatHolder: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.FormatHolder formatHolder> = $r8;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer newFlagsOnlyInstance()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer flagsOnlyBuffer> = $r2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int decoderReinitializationState> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean audioTrackNeedsConfigure> = 1;
+
+        return;
+    }
+
+    public transient void <init>(android.os.Handler, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[])
+    {
+        android.os.Handler $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 := @parameter0: android.os.Handler;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[];
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void <init>(android.os.Handler,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioCapabilities,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager,boolean,com.mbridge.msdk.playercommon.exoplayer2.audio.AudioProcessor[])>($r1, $r2, null, null, 0, $r3);
+
+        return;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher access$100(com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        return r1;
+    }
+
+    static boolean access$202(com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean allowPositionDiscontinuity> = $z0;
+
+        return $z0;
+    }
+
+    private boolean drainOutputBuffer() throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$ConfigurationException, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$InitializationException, com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$WriteException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer $r1;
+        long $l5;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        java.nio.ByteBuffer $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.OutputBuffer $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r4;
+        int $i0, $i1, $i2, $i3, $i4;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer>;
+
+        if $r1 != null goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+        $r3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder: com.mbridge.msdk.playercommon.exoplayer2.decoder.OutputBuffer dequeueOutputBuffer()>();
+
+        $r1 = (com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer) $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer> = $r1;
+
+        if $r1 != null goto label1;
+
+        return 0;
+
+     label1:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        $i0 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: int skippedOutputBufferCount>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer>;
+
+        $i1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer: int skippedOutputBufferCount>;
+
+        $i0 = $i0 + $i1;
+
+        $r4.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: int skippedOutputBufferCount> = $i0;
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer: boolean isEndOfStream()>();
+
+        if $z0 == 0 goto label4;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int decoderReinitializationState>;
+
+        if $i0 != 2 goto label3;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void releaseDecoder()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void maybeInitDecoder()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean audioTrackNeedsConfigure> = 1;
+
+        return 0;
+
+     label3:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer: void release()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer> = null;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void processEndOfStream()>();
+
+        return 0;
+
+     label4:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean audioTrackNeedsConfigure>;
+
+        if $z0 == 0 goto label5;
+
+        $r5 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format getOutputFormat()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        $i4 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.Format: int pcmEncoding>;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.Format: int channelCount>;
+
+        $i1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.Format: int sampleRate>;
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int encoderDelay>;
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int encoderPadding>;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void configure(int,int,int,int,int[],int,int)>($i4, $i0, $i1, 0, null, $i2, $i3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean audioTrackNeedsConfigure> = 0;
+
+     label5:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer>;
+
+        $r7 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer: java.nio.ByteBuffer data>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer>;
+
+        $l5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer: long timeUs>;
+
+        $z0 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: boolean handleBuffer(java.nio.ByteBuffer,long)>($r7, $l5);
+
+        if $z0 == 0 goto label6;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        $i0 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: int renderedOutputBufferCount>;
+
+        $i0 = $i0 + 1;
+
+        $r4.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: int renderedOutputBufferCount> = $i0;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer: void release()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer> = null;
+
+        return 1;
+
+     label6:
+        return 0;
+    }
+
+    private boolean feedInputBuffer() throws com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException, com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.FormatHolder $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r5;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+        if $r1 == null goto label10;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int decoderReinitializationState>;
+
+        if $i0 == 2 goto label10;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean inputStreamEnded>;
+
+        if $z0 == 0 goto label01;
+
+        return 0;
+
+     label01:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer>;
+
+        if $r2 != null goto label02;
+
+        $r2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer dequeueInputBuffer()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer> = $r2;
+
+        if $r2 != null goto label02;
+
+        return 0;
+
+     label02:
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int decoderReinitializationState>;
+
+        if $i0 != 1 goto label03;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: void setFlags(int)>(4);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder: void queueInputBuffer(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer)>($r2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int decoderReinitializationState> = 2;
+
+        return 0;
+
+     label03:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean waitingForKeys>;
+
+        if $z0 == 0 goto label04;
+
+        $i0 = -4;
+
+        goto label05;
+
+     label04:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.FormatHolder formatHolder>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer>;
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int readSource(com.mbridge.msdk.playercommon.exoplayer2.FormatHolder,com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer,boolean)>($r3, $r2, 0);
+
+     label05:
+        if $i0 != -3 goto label06;
+
+        return 0;
+
+     label06:
+        if $i0 != -5 goto label07;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.FormatHolder formatHolder>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.FormatHolder: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void onInputFormatChanged(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r4);
+
+        return 1;
+
+     label07:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer>;
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: boolean isEndOfStream()>();
+
+        if $z0 == 0 goto label08;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean inputStreamEnded> = 1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder: void queueInputBuffer(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer)>($r2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer> = null;
+
+        return 0;
+
+     label08:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer>;
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: boolean isEncrypted()>();
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean shouldWaitForKeys(boolean)>($z0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean waitingForKeys> = $z0;
+
+        if $z0 == 0 goto label09;
+
+        return 0;
+
+     label09:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: void flip()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void onQueueInputBuffer(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer)>($r2);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder: void queueInputBuffer(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer)>($r2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean decoderReceivedBuffers> = 1;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: int inputBufferCount>;
+
+        $i0 = $i0 + 1;
+
+        $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: int inputBufferCount> = $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer> = null;
+
+        return 1;
+
+     label10:
+        return 0;
+    }
+
+    private void flushDecoder() throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer $r1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean waitingForKeys> = 0;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int decoderReinitializationState>;
+
+        if $i0 == 0 goto label1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void releaseDecoder()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void maybeInitDecoder()>();
+
+        return;
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer> = null;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer>;
+
+        if $r1 == null goto label2;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer: void release()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer> = null;
+
+     label2:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder: void flush()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean decoderReceivedBuffers> = 0;
+
+        return;
+    }
+
+    private void maybeInitDecoder() throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession$DrmSessionException $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher $r7;
+        long $l0, $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaCrypto $r3, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r9;
+        int $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException $r11;
+        java.lang.String $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+        if $r1 == null goto label01;
+
+        return;
+
+     label01:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession> = $r2;
+
+        if $r2 == null goto label03;
+
+        $r3 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession: com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaCrypto getMediaCrypto()>();
+
+        $r4 = $r3;
+
+        if $r3 != null goto label04;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession>;
+
+        $r5 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession$DrmSessionException getError()>();
+
+        if $r5 == null goto label02;
+
+        goto label04;
+
+     label02:
+        return;
+
+     label03:
+        $r4 = null;
+
+     label04:
+        $l0 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.TraceUtil: void beginSection(java.lang.String)>("createAudioDecoder");
+
+     label05:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat>;
+
+     label06:
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder createDecoder(com.mbridge.msdk.playercommon.exoplayer2.Format,com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaCrypto)>($r6, $r4);
+
+     label07:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder> = $r1;
+
+     label08:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.TraceUtil: void endSection()>();
+
+        $l1 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+     label09:
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+     label10:
+        $r8 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder: java.lang.String getName()>();
+
+     label11:
+        $l0 = $l1 - $l0;
+
+     label12:
+        virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void decoderInitialized(java.lang.String,long,long)>($r8, $l1, $l0);
+
+     label13:
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        $i2 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: int decoderInitCount>;
+
+        $i2 = $i2 + 1;
+
+        $r9.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: int decoderInitCount> = $i2;
+
+        return;
+
+     label14:
+        $r10 := @caughtexception;
+
+        $i2 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int getIndex()>();
+
+        $r11 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException: com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException createForRenderer(java.lang.Exception,int)>($r10, $i2);
+
+        throw $r11;
+
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException from label04 to label05 with label14;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException from label06 to label07 with label14;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException from label08 to label09 with label14;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException from label10 to label11 with label14;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException from label12 to label13 with label14;
+    }
+
+    private void onInputFormatChanged(com.mbridge.msdk.playercommon.exoplayer2.Format) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        java.lang.IllegalStateException $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData $r3, $r4;
+        android.os.Looper $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession $r7, $r8;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r1, $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException $r10;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat> = $r1;
+
+        $r3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData drmInitData>;
+
+        if $r2 != null goto label1;
+
+        $r4 = null;
+
+        goto label2;
+
+     label1:
+        $r4 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData drmInitData>;
+
+     label2:
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: boolean areEqual(java.lang.Object,java.lang.Object)>($r3, $r4);
+
+        $z0 = $z0 ^ 1;
+
+        if $z0 == 0 goto label5;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData drmInitData>;
+
+        if $r3 == null goto label4;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager>;
+
+        if $r5 == null goto label3;
+
+        $r6 = staticinvoke <android.os.Looper: android.os.Looper myLooper()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData drmInitData>;
+
+        $r7 = interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession acquireSession(android.os.Looper,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData)>($r6, $r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession> = $r7;
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession>;
+
+        if $r7 != $r8 goto label5;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager>;
+
+        interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager: void releaseSession(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession)>($r7);
+
+        goto label5;
+
+     label3:
+        $r9 = new java.lang.IllegalStateException;
+
+        specialinvoke $r9.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Media requires a DrmSessionManager");
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int getIndex()>();
+
+        $r10 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException: com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException createForRenderer(java.lang.Exception,int)>($r9, $i0);
+
+        throw $r10;
+
+     label4:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession> = null;
+
+     label5:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean decoderReceivedBuffers>;
+
+        if $z0 == 0 goto label6;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int decoderReinitializationState> = 1;
+
+        goto label7;
+
+     label6:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void releaseDecoder()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void maybeInitDecoder()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean audioTrackNeedsConfigure> = 1;
+
+     label7:
+        $i0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.Format: int encoderDelay>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int encoderDelay> = $i0;
+
+        $i0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.Format: int encoderPadding>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int encoderPadding> = $i0;
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        virtualinvoke $r11.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void inputFormatChanged(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r1);
+
+        return;
+    }
+
+    private void onQueueInputBuffer(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer)
+    {
+        byte $b0;
+        int $i3;
+        long $l1, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean allowFirstBufferPositionDiscontinuity>;
+
+        if $z0 == 0 goto label2;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: boolean isDecodeOnly()>();
+
+        if $z0 != 0 goto label2;
+
+        $l1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: long timeUs>;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: long currentPositionUs>;
+
+        $l1 = $l1 - $l2;
+
+        $l1 = staticinvoke <java.lang.Math: long abs(long)>($l1);
+
+        $b0 = $l1 cmp 500000L;
+
+        $i3 = (int) $b0;
+
+        if $i3 <= 0 goto label1;
+
+        $l1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: long timeUs>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: long currentPositionUs> = $l1;
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean allowFirstBufferPositionDiscontinuity> = 0;
+
+     label2:
+        return;
+    }
+
+    private void processEndOfStream() throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$WriteException $r2;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean outputStreamEnded> = 1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+     label1:
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void playToEndOfStream()>();
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int getIndex()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException: com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException createForRenderer(java.lang.Exception,int)>($r2, $i0);
+
+        throw $r3;
+
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$WriteException from label1 to label2 with label3;
+    }
+
+    private void releaseDecoder()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r2;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer inputBuffer> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer> = null;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder: void release()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder> = null;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        $i0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: int decoderReleaseCount>;
+
+        $i0 = $i0 + 1;
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: int decoderReleaseCount> = $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int decoderReinitializationState> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean decoderReceivedBuffers> = 0;
+
+        return;
+    }
+
+    private boolean shouldWaitForKeys(boolean) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession$DrmSessionException $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession $r1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession>;
+
+        if $r1 == null goto label3;
+
+        if $z0 != 0 goto label1;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean playClearSamplesWithoutKeys>;
+
+        if $z0 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession: int getState()>();
+
+        if $i0 == 1 goto label2;
+
+        if $i0 == 4 goto label3;
+
+        return 1;
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession>;
+
+        $r2 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession$DrmSessionException getError()>();
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int getIndex()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException: com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException createForRenderer(java.lang.Exception,int)>($r2, $i0);
+
+        throw $r3;
+
+     label3:
+        return 0;
+    }
+
+    private void updateCurrentPosition()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        byte $b0;
+        long $l1, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean isEnded()>();
+
+        $l1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: long getCurrentPositionUs(boolean)>($z0);
+
+        $l2 = $l1;
+
+        $b0 = $l1 cmp -9223372036854775808L;
+
+        if $b0 == 0 goto label3;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean allowPositionDiscontinuity>;
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: long currentPositionUs>;
+
+        $l2 = staticinvoke <java.lang.Math: long max(long,long)>($l2, $l1);
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: long currentPositionUs> = $l2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean allowPositionDiscontinuity> = 0;
+
+     label3:
+        return;
+    }
+
+    protected abstract com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder createDecoder(com.mbridge.msdk.playercommon.exoplayer2.Format, com.mbridge.msdk.playercommon.exoplayer2.drm.ExoMediaCrypto) throws com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException;
+
+    public com.mbridge.msdk.playercommon.exoplayer2.util.MediaClock getMediaClock()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        return r0;
+    }
+
+    protected com.mbridge.msdk.playercommon.exoplayer2.Format getOutputFormat()
+    {
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat>;
+
+        $i0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.Format: int channelCount>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat>;
+
+        $i1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.Format: int sampleRate>;
+
+        $r1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format createAudioSampleFormat(java.lang.String,java.lang.String,java.lang.String,int,int,int,int,int,java.util.List,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,int,java.lang.String)>(null, "audio/raw", null, -1, -1, $i0, $i1, 2, null, null, 0, null);
+
+        return $r1;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters getPlaybackParameters()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters getPlaybackParameters()>();
+
+        return $r1;
+    }
+
+    public long getPositionUs()
+    {
+        int $i0;
+        long l1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int getState()>();
+
+        if $i0 != 2 goto label1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void updateCurrentPosition()>();
+
+     label1:
+        l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: long currentPositionUs>;
+
+        return l1;
+    }
+
+    public void handleMessage(int, java.lang.Object) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes $r2;
+        java.lang.Float $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r3;
+        int $i0;
+        float $f0;
+        java.lang.Object $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        if $i0 == 2 goto label2;
+
+        if $i0 == 3 goto label1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.BaseRenderer: void handleMessage(int,java.lang.Object)>($i0, $r1);
+
+        return;
+
+     label1:
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes) $r1;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void setAudioAttributes(com.mbridge.msdk.playercommon.exoplayer2.audio.AudioAttributes)>($r2);
+
+        return;
+
+     label2:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        $r4 = (java.lang.Float) $r1;
+
+        $f0 = virtualinvoke $r4.<java.lang.Float: float floatValue()>();
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void setVolume(float)>($f0);
+
+        return;
+    }
+
+    public boolean isEnded()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean outputStreamEnded>;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        $z0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: boolean isEnded()>();
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public boolean isReady()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        $z0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: boolean hasPendingData()>();
+
+        if $z0 != 0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat>;
+
+        if $r2 == null goto label1;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean waitingForKeys>;
+
+        if $z0 != 0 goto label1;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean isSourceReady()>();
+
+        if $z0 != 0 goto label2;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleOutputBuffer outputBuffer>;
+
+        if $r3 == null goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    protected void onAudioSessionId(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $i0 := @parameter0: int;
+
+        return;
+    }
+
+    protected void onAudioTrackPositionDiscontinuity()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        return;
+    }
+
+    protected void onAudioTrackUnderrun(int, long, long)
+    {
+        int $i0;
+        long $l1, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $i0 := @parameter0: int;
+
+        $l1 := @parameter1: long;
+
+        $l2 := @parameter2: long;
+
+        return;
+    }
+
+    protected void onDisabled()
+    {
+        java.lang.Throwable $r7, $r8, $r9, $r10, $r11, $r12, $r13;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession $r2, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean audioTrackNeedsConfigure> = 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean waitingForKeys> = 0;
+
+     label01:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void releaseDecoder()>();
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void release()>();
+
+     label02:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession>;
+
+     label03:
+        if $r2 == null goto label05;
+
+     label04:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager: void releaseSession(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession)>($r2);
+
+     label05:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession>;
+
+     label06:
+        if $r2 == null goto label10;
+
+     label07:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession>;
+
+     label08:
+        if $r2 == $r4 goto label10;
+
+     label09:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager: void releaseSession(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession)>($r2);
+
+     label10:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession> = null;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: void ensureUpdated()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void disabled(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)>($r5);
+
+        return;
+
+     label11:
+        $r7 := @caughtexception;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession> = null;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: void ensureUpdated()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void disabled(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)>($r5);
+
+        throw $r7;
+
+     label12:
+        $r8 := @caughtexception;
+
+     label13:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession>;
+
+     label14:
+        if $r2 == null goto label18;
+
+     label15:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession>;
+
+     label16:
+        if $r2 == $r4 goto label18;
+
+     label17:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager: void releaseSession(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession)>($r2);
+
+     label18:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession> = null;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: void ensureUpdated()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void disabled(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)>($r5);
+
+        throw $r8;
+
+     label19:
+        $r9 := @caughtexception;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession> = null;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: void ensureUpdated()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void disabled(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)>($r5);
+
+        throw $r9;
+
+     label20:
+        $r10 := @caughtexception;
+
+     label21:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession>;
+
+     label22:
+        if $r2 == null goto label24;
+
+     label23:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager: void releaseSession(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession)>($r2);
+
+     label24:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession>;
+
+     label25:
+        if $r2 == null goto label29;
+
+     label26:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession>;
+
+     label27:
+        if $r2 == $r4 goto label29;
+
+     label28:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager: void releaseSession(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession)>($r2);
+
+     label29:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession> = null;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: void ensureUpdated()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void disabled(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)>($r5);
+
+        throw $r10;
+
+     label30:
+        $r11 := @caughtexception;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession> = null;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: void ensureUpdated()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void disabled(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)>($r5);
+
+        throw $r11;
+
+     label31:
+        $r12 := @caughtexception;
+
+     label32:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession>;
+
+     label33:
+        if $r2 == null goto label37;
+
+     label34:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession>;
+
+     label35:
+        if $r2 == $r4 goto label37;
+
+     label36:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager: void releaseSession(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession)>($r2);
+
+     label37:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession> = null;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: void ensureUpdated()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void disabled(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)>($r5);
+
+        throw $r12;
+
+     label38:
+        $r13 := @caughtexception;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession drmSession> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSession pendingDrmSession> = null;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: void ensureUpdated()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void disabled(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)>($r5);
+
+        throw $r13;
+
+        catch java.lang.Throwable from label01 to label02 with label20;
+        catch java.lang.Throwable from label02 to label03 with label12;
+        catch java.lang.Throwable from label04 to label05 with label12;
+        catch java.lang.Throwable from label05 to label06 with label11;
+        catch java.lang.Throwable from label07 to label08 with label11;
+        catch java.lang.Throwable from label09 to label10 with label11;
+        catch java.lang.Throwable from label13 to label14 with label19;
+        catch java.lang.Throwable from label15 to label16 with label19;
+        catch java.lang.Throwable from label17 to label18 with label19;
+        catch java.lang.Throwable from label21 to label22 with label31;
+        catch java.lang.Throwable from label23 to label24 with label31;
+        catch java.lang.Throwable from label24 to label25 with label30;
+        catch java.lang.Throwable from label26 to label27 with label30;
+        catch java.lang.Throwable from label28 to label29 with label30;
+        catch java.lang.Throwable from label32 to label33 with label38;
+        catch java.lang.Throwable from label34 to label35 with label38;
+        catch java.lang.Throwable from label36 to label37 with label38;
+    }
+
+    protected void onEnabled(boolean) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher $r3;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $z0 := @parameter0: boolean;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters> = $r2;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher eventDispatcher>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioRendererEventListener$EventDispatcher: void enabled(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)>($r2);
+
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration getConfiguration()>();
+
+        $i0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration: int tunnelingAudioSessionId>;
+
+        if $i0 == 0 goto label1;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void enableTunnelingV21(int)>($i0);
+
+        return;
+
+     label1:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void disableTunneling()>();
+
+        return;
+    }
+
+    protected void onPositionReset(long, boolean) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $l0 := @parameter0: long;
+
+        $z0 := @parameter1: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void reset()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: long currentPositionUs> = $l0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean allowFirstBufferPositionDiscontinuity> = 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean allowPositionDiscontinuity> = 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean inputStreamEnded> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean outputStreamEnded> = 0;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+        if $r2 == null goto label1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void flushDecoder()>();
+
+     label1:
+        return;
+    }
+
+    protected void onStarted()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void play()>();
+
+        return;
+    }
+
+    protected void onStopped()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void updateCurrentPosition()>();
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void pause()>();
+
+        return;
+    }
+
+    public void render(long, long) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        long $l0, $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer $r5;
+        java.lang.Exception $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$WriteException $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.FormatHolder $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r8;
+        int $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder $r7;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $l0 := @parameter0: long;
+
+        $l1 := @parameter1: long;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean outputStreamEnded>;
+
+        if $z0 == 0 goto label04;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+     label01:
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: void playToEndOfStream()>();
+
+     label02:
+        return;
+
+     label03:
+        $r2 := @caughtexception;
+
+        $i2 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int getIndex()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException: com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException createForRenderer(java.lang.Exception,int)>($r2, $i2);
+
+        throw $r3;
+
+     label04:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.Format inputFormat>;
+
+        if $r4 != null goto label06;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer flagsOnlyBuffer>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: void clear()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.FormatHolder formatHolder>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer flagsOnlyBuffer>;
+
+        $i2 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int readSource(com.mbridge.msdk.playercommon.exoplayer2.FormatHolder,com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer,boolean)>($r6, $r5, 1);
+
+        if $i2 != -5 goto label05;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.FormatHolder formatHolder>;
+
+        $r4 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.FormatHolder: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void onInputFormatChanged(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r4);
+
+        goto label06;
+
+     label05:
+        if $i2 != -4 goto label19;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer flagsOnlyBuffer>;
+
+        $z0 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: boolean isEndOfStream()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean inputStreamEnded> = 1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void processEndOfStream()>();
+
+        return;
+
+     label06:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: void maybeInitDecoder()>();
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.SimpleDecoder decoder>;
+
+        if $r7 == null goto label19;
+
+     label07:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.TraceUtil: void beginSection(java.lang.String)>("drainAndFeed");
+
+     label08:
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean drainOutputBuffer()>();
+
+     label09:
+        if $z0 == 0 goto label10;
+
+        goto label08;
+
+     label10:
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: boolean feedInputBuffer()>();
+
+     label11:
+        if $z0 == 0 goto label12;
+
+        goto label10;
+
+     label12:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.TraceUtil: void endSection()>();
+
+     label13:
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters decoderCounters>;
+
+        virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters: void ensureUpdated()>();
+
+        return;
+
+     label14:
+        $r9 := @caughtexception;
+
+        goto label18;
+
+     label15:
+        $r9 := @caughtexception;
+
+        goto label18;
+
+     label16:
+        $r9 := @caughtexception;
+
+        goto label18;
+
+     label17:
+        $r9 := @caughtexception;
+
+     label18:
+        $i2 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int getIndex()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException: com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException createForRenderer(java.lang.Exception,int)>($r9, $i2);
+
+        throw $r3;
+
+     label19:
+        return;
+
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$WriteException from label01 to label02 with label03;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException from label07 to label09 with label17;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException from label10 to label11 with label17;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioDecoderException from label12 to label13 with label17;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$ConfigurationException from label07 to label09 with label16;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$ConfigurationException from label10 to label11 with label16;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$ConfigurationException from label12 to label13 with label16;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$InitializationException from label07 to label09 with label15;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$InitializationException from label10 to label11 with label15;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$InitializationException from label12 to label13 with label15;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$WriteException from label07 to label09 with label14;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$WriteException from label10 to label11 with label14;
+        catch com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink$WriteException from label12 to label13 with label14;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters setPlaybackParameters(com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        $r2 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters setPlaybackParameters(com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters)>($r2);
+
+        return $r2;
+    }
+
+    public final int supportsFormat(com.mbridge.msdk.playercommon.exoplayer2.Format)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager $r2;
+        byte $b2;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager drmSessionManager>;
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int supportsFormatInternal(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager,com.mbridge.msdk.playercommon.exoplayer2.Format)>($r2, $r1);
+
+        if $i0 > 2 goto label1;
+
+        return $i0;
+
+     label1:
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i1 < 21 goto label2;
+
+        $b2 = 32;
+
+        goto label3;
+
+     label2:
+        $b2 = 0;
+
+     label3:
+        $b2 = $b2 | 8;
+
+        $i0 = $i0 | $b2;
+
+        return $i0;
+    }
+
+    protected abstract int supportsFormatInternal(com.mbridge.msdk.playercommon.exoplayer2.drm.DrmSessionManager, com.mbridge.msdk.playercommon.exoplayer2.Format);
+
+    protected final boolean supportsOutputEncoding(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink $r1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink audioSink>;
+
+        $z0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioSink: boolean isEncodingSupported(int)>($i0);
+
+        return $z0;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int REINITIALIZATION_STATE_WAIT_END_OF_STREAM> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int REINITIALIZATION_STATE_SIGNAL_END_OF_STREAM> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.SimpleDecoderAudioRenderer: int REINITIALIZATION_STATE_NONE> = 0;
+
+        return;
+    }
+}

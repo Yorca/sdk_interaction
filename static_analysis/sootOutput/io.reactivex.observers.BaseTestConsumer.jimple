@@ -1,0 +1,2056 @@
+public abstract class io.reactivex.observers.BaseTestConsumer extends java.lang.Object implements io.reactivex.disposables.Disposable
+{
+    protected boolean checkSubscriptionOnce;
+    protected long completions;
+    protected final java.util.concurrent.CountDownLatch done;
+    protected final java.util.List errors;
+    protected int establishedFusionMode;
+    protected int initialFusionMode;
+    protected java.lang.Thread lastThread;
+    protected java.lang.CharSequence tag;
+    protected boolean timeout;
+    protected final java.util.List values;
+
+    public void <init>()
+    {
+        java.util.concurrent.CountDownLatch $r2;
+        io.reactivex.observers.BaseTestConsumer r0;
+        io.reactivex.internal.util.VolatileSizeArrayList $r1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new io.reactivex.internal.util.VolatileSizeArrayList;
+
+        specialinvoke $r1.<io.reactivex.internal.util.VolatileSizeArrayList: void <init>()>();
+
+        r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values> = $r1;
+
+        $r1 = new io.reactivex.internal.util.VolatileSizeArrayList;
+
+        specialinvoke $r1.<io.reactivex.internal.util.VolatileSizeArrayList: void <init>()>();
+
+        r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors> = $r1;
+
+        $r2 = new java.util.concurrent.CountDownLatch;
+
+        specialinvoke $r2.<java.util.concurrent.CountDownLatch: void <init>(int)>(1);
+
+        r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done> = $r2;
+
+        return;
+    }
+
+    public static java.lang.String valueAndClass(java.lang.Object)
+    {
+        java.lang.StringBuilder $r0;
+        java.lang.Object $r1;
+        java.lang.Class $r2;
+        java.lang.String $r3;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        if $r1 == null goto label1;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" (class: ");
+
+        $r2 = virtualinvoke $r1.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r3 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+
+     label1:
+        return "null";
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertComplete()
+    {
+        long $l0;
+        java.lang.AssertionError $r3;
+        io.reactivex.observers.BaseTestConsumer r0;
+        byte $b1;
+        int $i2;
+        java.lang.StringBuilder $r1, $r4;
+        java.lang.String $r2;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $l0 = r0.<io.reactivex.observers.BaseTestConsumer: long completions>;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 == 0 goto label2;
+
+        $b1 = $l0 cmp 1L;
+
+        $i2 = (int) $b1;
+
+        if $i2 > 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r4 = new java.lang.StringBuilder;
+
+        $r1 = $r4;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Multiple completions: ");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r2);
+
+        throw $r3;
+
+     label2:
+        $r3 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("Not completed");
+
+        throw $r3;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertEmpty()
+    {
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertSubscribed()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNoValues()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNoErrors()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNotComplete()>();
+
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertError(io.reactivex.functions.Predicate)
+    {
+        java.lang.Throwable $r5;
+        java.util.Iterator $r3;
+        java.lang.RuntimeException $r7;
+        java.lang.AssertionError $r8;
+        io.reactivex.observers.BaseTestConsumer r0;
+        io.reactivex.functions.Predicate $r1;
+        java.lang.Exception $r6;
+        java.util.List $r2;
+        int $i0;
+        java.lang.Object $r4;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: io.reactivex.functions.Predicate;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 == 0 goto label9;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.lang.Throwable) $r4;
+
+     label2:
+        $z0 = interfaceinvoke $r1.<io.reactivex.functions.Predicate: boolean test(java.lang.Object)>($r5);
+
+     label3:
+        if $z0 == 0 goto label1;
+
+        $z0 = 1;
+
+        goto label6;
+
+     label4:
+        $r6 := @caughtexception;
+
+        $r7 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.RuntimeException wrapOrThrow(java.lang.Throwable)>($r6);
+
+        throw $r7;
+
+     label5:
+        $z0 = 0;
+
+     label6:
+        if $z0 == 0 goto label8;
+
+        if $i0 != 1 goto label7;
+
+        return r0;
+
+     label7:
+        $r8 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("Error present but other errors as well");
+
+        throw $r8;
+
+     label8:
+        $r8 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("Error not present");
+
+        throw $r8;
+
+     label9:
+        $r8 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("No errors");
+
+        throw $r8;
+
+        catch java.lang.Exception from label2 to label3 with label4;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertError(java.lang.Class)
+    {
+        java.lang.Class $r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+        io.reactivex.functions.Predicate $r2;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.Class;
+
+        $r2 = staticinvoke <io.reactivex.internal.functions.Functions: io.reactivex.functions.Predicate isInstanceOf(java.lang.Class)>($r1);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertError(io.reactivex.functions.Predicate)>($r2);
+
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+        io.reactivex.functions.Predicate $r2;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = staticinvoke <io.reactivex.internal.functions.Functions: io.reactivex.functions.Predicate equalsWith(java.lang.Object)>($r1);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertError(io.reactivex.functions.Predicate)>($r2);
+
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertErrorMessage(java.lang.String)
+    {
+        java.lang.Throwable $r4;
+        java.lang.AssertionError $r7;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.List $r2;
+        int $i0;
+        java.lang.Object $r3;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r1, $r5;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 == 0 goto label3;
+
+        if $i0 != 1 goto label2;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r4 = (java.lang.Throwable) $r3;
+
+        $r5 = virtualinvoke $r4.<java.lang.Throwable: java.lang.String getMessage()>();
+
+        $z0 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: boolean equals(java.lang.Object,java.lang.Object)>($r1, $r5);
+
+        if $z0 == 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Error message differs; Expected: ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", Actual: ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r1 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r7 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r1);
+
+        throw $r7;
+
+     label2:
+        $r7 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("Multiple errors");
+
+        throw $r7;
+
+     label3:
+        $r7 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("No errors");
+
+        throw $r7;
+    }
+
+    public final transient io.reactivex.observers.BaseTestConsumer assertFailure(io.reactivex.functions.Predicate, java.lang.Object[])
+    {
+        java.lang.Object[] $r2;
+        io.reactivex.observers.BaseTestConsumer r0;
+        io.reactivex.functions.Predicate $r1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: io.reactivex.functions.Predicate;
+
+        $r2 := @parameter1: java.lang.Object[];
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertSubscribed()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertValues(java.lang.Object[])>($r2);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertError(io.reactivex.functions.Predicate)>($r1);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNotComplete()>();
+
+        return r0;
+    }
+
+    public final transient io.reactivex.observers.BaseTestConsumer assertFailure(java.lang.Class, java.lang.Object[])
+    {
+        java.lang.Class $r1;
+        java.lang.Object[] $r2;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.Class;
+
+        $r2 := @parameter1: java.lang.Object[];
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertSubscribed()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertValues(java.lang.Object[])>($r2);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertError(java.lang.Class)>($r1);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNotComplete()>();
+
+        return r0;
+    }
+
+    public final transient io.reactivex.observers.BaseTestConsumer assertFailureAndMessage(java.lang.Class, java.lang.String, java.lang.Object[])
+    {
+        java.lang.Object[] $r3;
+        java.lang.Class $r2;
+        java.lang.String $r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r2 := @parameter0: java.lang.Class;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.Object[];
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertSubscribed()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertValues(java.lang.Object[])>($r3);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertError(java.lang.Class)>($r2);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertErrorMessage(java.lang.String)>($r1);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNotComplete()>();
+
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertNever(io.reactivex.functions.Predicate)
+    {
+        java.lang.AssertionError $r6;
+        java.lang.RuntimeException $r8;
+        io.reactivex.observers.BaseTestConsumer r0;
+        io.reactivex.functions.Predicate $r1;
+        java.lang.Exception $r7;
+        java.util.List $r2;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: io.reactivex.functions.Predicate;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label7;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i1);
+
+     label2:
+        $z0 = interfaceinvoke $r1.<io.reactivex.functions.Predicate: boolean test(java.lang.Object)>($r3);
+
+     label3:
+        if $z0 != 0 goto label4;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label4:
+        $r4 = new java.lang.StringBuilder;
+
+     label5:
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Value at position ");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" matches predicate ");
+
+        $r5 = virtualinvoke $r1.<java.lang.Object: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", which was not expected.");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        $r8 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.RuntimeException wrapOrThrow(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+     label7:
+        return r0;
+
+        catch java.lang.Exception from label2 to label3 with label6;
+        catch java.lang.Exception from label5 to label6 with label6;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertNever(java.lang.Object)
+    {
+        java.lang.AssertionError $r6;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.List $r2;
+        int $i0, $i1;
+        java.lang.Object $r1, $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $z0 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: boolean equals(java.lang.Object,java.lang.Object)>($r3, $r1);
+
+        if $z0 != 0 goto label2;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Value at position ");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is equal to ");
+
+        $r5 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r1);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("; Expected them to be different");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r5);
+
+        throw $r6;
+
+     label3:
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertNoErrors()
+    {
+        java.util.List $r1;
+        int $i0;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+        java.lang.AssertionError $r4;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        if $i0 != 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("Error(s) present: ");
+
+        $r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r3);
+
+        throw $r4;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertNoTimeout()
+    {
+        java.lang.AssertionError $r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $z0 = r0.<io.reactivex.observers.BaseTestConsumer: boolean timeout>;
+
+        if $z0 != 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r1 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("Timeout?!");
+
+        throw $r1;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertNoValues()
+    {
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertValueCount(int)>(0);
+
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertNotComplete()
+    {
+        long $l1;
+        java.lang.AssertionError $r3;
+        io.reactivex.observers.BaseTestConsumer r0;
+        byte $b0;
+        int $i2;
+        java.lang.StringBuilder $r1, $r4;
+        java.lang.String $r2;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $l1 = r0.<io.reactivex.observers.BaseTestConsumer: long completions>;
+
+        $b0 = $l1 cmp 1L;
+
+        if $b0 == 0 goto label2;
+
+        $i2 = (int) $b0;
+
+        if $i2 > 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r4 = new java.lang.StringBuilder;
+
+        $r1 = $r4;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Multiple completions: ");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r2);
+
+        throw $r3;
+
+     label2:
+        $r3 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("Completed!");
+
+        throw $r3;
+    }
+
+    public abstract io.reactivex.observers.BaseTestConsumer assertNotSubscribed();
+
+    public final io.reactivex.observers.BaseTestConsumer assertNotTerminated()
+    {
+        java.util.concurrent.CountDownLatch $r1;
+        byte $b0;
+        long $l1;
+        java.lang.AssertionError $r2;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done>;
+
+        $l1 = virtualinvoke $r1.<java.util.concurrent.CountDownLatch: long getCount()>();
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 == 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r2 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("Subscriber terminated!");
+
+        throw $r2;
+    }
+
+    public final transient io.reactivex.observers.BaseTestConsumer assertResult(java.lang.Object[])
+    {
+        java.lang.Object[] $r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.Object[];
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertSubscribed()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertValues(java.lang.Object[])>($r1);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNoErrors()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertComplete()>();
+
+        return r0;
+    }
+
+    public abstract io.reactivex.observers.BaseTestConsumer assertSubscribed();
+
+    public final io.reactivex.observers.BaseTestConsumer assertTerminated()
+    {
+        long $l1;
+        java.lang.AssertionError $r5;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.concurrent.CountDownLatch $r1;
+        java.util.List $r2;
+        byte $b0;
+        int $i2;
+        java.lang.StringBuilder $r3, $r6;
+        java.lang.String $r4;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done>;
+
+        $l1 = virtualinvoke $r1.<java.util.concurrent.CountDownLatch: long getCount()>();
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 != 0 goto label4;
+
+        $l1 = r0.<io.reactivex.observers.BaseTestConsumer: long completions>;
+
+        $b0 = $l1 cmp 1L;
+
+        $i2 = (int) $b0;
+
+        if $i2 > 0 goto label3;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $i2 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i2 > 1 goto label2;
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 == 0 goto label5;
+
+        if $i2 != 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r6 = new java.lang.StringBuilder;
+
+        $r3 = $r6;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Terminated with multiple completions and errors: ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r4);
+
+        throw $r5;
+
+     label2:
+        $r6 = new java.lang.StringBuilder;
+
+        $r3 = $r6;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Terminated with multiple errors: ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r4);
+
+        throw $r5;
+
+     label3:
+        $r6 = new java.lang.StringBuilder;
+
+        $r3 = $r6;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Terminated with multiple completions: ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r4);
+
+        throw $r5;
+
+     label4:
+        $r5 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("Subscriber still running!");
+
+        throw $r5;
+
+     label5:
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertTimeout()
+    {
+        java.lang.AssertionError $r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $z0 = r0.<io.reactivex.observers.BaseTestConsumer: boolean timeout>;
+
+        if $z0 == 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r1 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("No timeout?!");
+
+        throw $r1;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertValue(io.reactivex.functions.Predicate)
+    {
+        java.util.List $r2;
+        int $i0;
+        java.lang.AssertionError $r3;
+        io.reactivex.observers.BaseTestConsumer r0;
+        io.reactivex.functions.Predicate $r1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: io.reactivex.functions.Predicate;
+
+        virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertValueAt(int,io.reactivex.functions.Predicate)>(0, $r1);
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 > 1 goto label1;
+
+        return r0;
+
+     label1:
+        $r3 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("Value present but other values as well");
+
+        throw $r3;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertValue(java.lang.Object)
+    {
+        java.lang.AssertionError $r6;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.List $r2;
+        int $i0;
+        java.lang.Object $r1, $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 != 1 goto label2;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>(0);
+
+        $z0 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: boolean equals(java.lang.Object,java.lang.Object)>($r1, $r3);
+
+        if $z0 == 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Expected: ");
+
+        $r5 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r1);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", Actual: ");
+
+        $r5 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r3);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r5);
+
+        throw $r6;
+
+     label2:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Expected: ");
+
+        $r5 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r1);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", Actual: ");
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r5);
+
+        throw $r6;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertValueAt(int, io.reactivex.functions.Predicate)
+    {
+        java.lang.AssertionError $r4;
+        java.lang.RuntimeException $r6;
+        io.reactivex.observers.BaseTestConsumer r0;
+        io.reactivex.functions.Predicate $r1;
+        java.lang.Exception $r5;
+        java.util.List $r2;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r8;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: io.reactivex.functions.Predicate;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i1 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i1 == 0 goto label6;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i1 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 >= $i1 goto label5;
+
+     label1:
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $z0 = interfaceinvoke $r1.<io.reactivex.functions.Predicate: boolean test(java.lang.Object)>($r3);
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        return r0;
+
+     label3:
+        $r4 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("Value not present");
+
+        throw $r4;
+
+     label4:
+        $r5 := @caughtexception;
+
+        $r6 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.RuntimeException wrapOrThrow(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label5:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Invalid index: ");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r8);
+
+        throw $r4;
+
+     label6:
+        $r4 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("No values");
+
+        throw $r4;
+
+        catch java.lang.Exception from label1 to label2 with label4;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertValueAt(int, java.lang.Object)
+    {
+        java.lang.AssertionError $r6;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.List $r2;
+        int $i0, $i1;
+        java.lang.Object $r1, $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i1 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i1 == 0 goto label3;
+
+        if $i0 >= $i1 goto label2;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $z0 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: boolean equals(java.lang.Object,java.lang.Object)>($r1, $r3);
+
+        if $z0 == 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Expected: ");
+
+        $r5 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r1);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", Actual: ");
+
+        $r5 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r3);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r5);
+
+        throw $r6;
+
+     label2:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Invalid index: ");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r5);
+
+        throw $r6;
+
+     label3:
+        $r6 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>("No values");
+
+        throw $r6;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertValueCount(int)
+    {
+        java.util.List $r2;
+        int $i0, $i1;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r3;
+        java.lang.AssertionError $r4;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $i0 := @parameter0: int;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i1 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i1 != $i0 goto label1;
+
+        return r0;
+
+     label1:
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("Value counts differ; Expected: ");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", Actual: ");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r3);
+
+        throw $r4;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertValueSequence(java.lang.Iterable)
+    {
+        java.util.Iterator $r3, $r4;
+        java.lang.AssertionError $r9;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.lang.Iterable $r1;
+        java.util.List $r2;
+        int $i0;
+        java.lang.Object $r5, $r6;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r8;
+        boolean $z0, $z1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.Iterable;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+        $r4 = interfaceinvoke $r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $i0 = 0;
+
+     label1:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        $z1 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        if $z0 != 0 goto label2;
+
+        goto label4;
+
+     label2:
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $z0 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: boolean equals(java.lang.Object,java.lang.Object)>($r5, $r6);
+
+        if $z0 == 0 goto label3;
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label3:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Values at position ");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" differ; Expected: ");
+
+        $r8 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r5);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", Actual: ");
+
+        $r8 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r6);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r9 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r8);
+
+        throw $r9;
+
+     label4:
+        if $z1 != 0 goto label6;
+
+        if $z0 != 0 goto label5;
+
+        return r0;
+
+     label5:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Fewer values received than expected (");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r9 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r8);
+
+        throw $r9;
+
+     label6:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("More values received than expected (");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r9 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r8);
+
+        throw $r9;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertValueSequenceOnly(java.lang.Iterable)
+    {
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.lang.Iterable $r1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.Iterable;
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertSubscribed()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertValueSequence(java.lang.Iterable)>($r1);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNoErrors()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNotComplete()>();
+
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertValueSet(java.util.Collection)
+    {
+        java.util.Iterator $r3;
+        java.util.Collection $r1;
+        java.lang.AssertionError $r7;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.List $r2;
+        java.lang.Object $r4;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.util.Collection;
+
+        $z0 = interfaceinvoke $r1.<java.util.Collection: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNoValues()>();
+
+        return r0;
+
+     label1:
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $z0 = interfaceinvoke $r1.<java.util.Collection: boolean contains(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label3;
+
+        goto label2;
+
+     label3:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Value not in the expected collection: ");
+
+        $r6 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r4);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r7 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r6);
+
+        throw $r7;
+
+     label4:
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer assertValueSetOnly(java.util.Collection)
+    {
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.Collection $r1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.util.Collection;
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertSubscribed()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertValueSet(java.util.Collection)>($r1);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNoErrors()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNotComplete()>();
+
+        return r0;
+    }
+
+    public final transient io.reactivex.observers.BaseTestConsumer assertValues(java.lang.Object[])
+    {
+        java.lang.Object[] $r2;
+        java.lang.AssertionError $r7;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.List $r3;
+        int $i0, $i1;
+        java.lang.Object $r1, $r4;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r2 := @parameter0: java.lang.Object[];
+
+        $r3 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        $i1 = lengthof $r2;
+
+        if $i0 != $i1 goto label3;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label4;
+
+        $r3 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $r1 = $r2[$i1];
+
+        $z0 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: boolean equals(java.lang.Object,java.lang.Object)>($r1, $r4);
+
+        if $z0 == 0 goto label2;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Values at position ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" differ; Expected: ");
+
+        $r6 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r1);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", Actual: ");
+
+        $r6 = staticinvoke <io.reactivex.observers.BaseTestConsumer: java.lang.String valueAndClass(java.lang.Object)>($r4);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r7 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r6);
+
+        throw $r7;
+
+     label3:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Value count differs; Expected: ");
+
+        $i1 = lengthof $r2;
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        $r6 = staticinvoke <java.util.Arrays: java.lang.String toString(java.lang.Object[])>($r2);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", Actual: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        $r3 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r7 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.lang.AssertionError fail(java.lang.String)>($r6);
+
+        throw $r7;
+
+     label4:
+        return r0;
+    }
+
+    public final transient io.reactivex.observers.BaseTestConsumer assertValuesOnly(java.lang.Object[])
+    {
+        java.lang.Object[] $r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.Object[];
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertSubscribed()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertValues(java.lang.Object[])>($r1);
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNoErrors()>();
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer assertNotComplete()>();
+
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer await() throws java.lang.InterruptedException
+    {
+        java.util.concurrent.CountDownLatch $r1;
+        byte $b0;
+        long $l1;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done>;
+
+        $l1 = virtualinvoke $r1.<java.util.concurrent.CountDownLatch: long getCount()>();
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 != 0 goto label1;
+
+        return r0;
+
+     label1:
+        $r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done>;
+
+        virtualinvoke $r1.<java.util.concurrent.CountDownLatch: void await()>();
+
+        return r0;
+    }
+
+    public final boolean await(long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException
+    {
+        long $l1, $l2;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.concurrent.TimeUnit $r1;
+        java.util.concurrent.CountDownLatch $r2;
+        byte $b0;
+        boolean $z0, $z1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $l1 := @parameter0: long;
+
+        $r1 := @parameter1: java.util.concurrent.TimeUnit;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done>;
+
+        $l2 = virtualinvoke $r2.<java.util.concurrent.CountDownLatch: long getCount()>();
+
+        $b0 = $l2 cmp 0L;
+
+        if $b0 == 0 goto label2;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done>;
+
+        $z0 = virtualinvoke $r2.<java.util.concurrent.CountDownLatch: boolean await(long,java.util.concurrent.TimeUnit)>($l1, $r1);
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+        goto label3;
+
+     label2:
+        $z1 = 1;
+
+     label3:
+        $z0 = $z1 ^ 1;
+
+        r0.<io.reactivex.observers.BaseTestConsumer: boolean timeout> = $z0;
+
+        return $z1;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer awaitCount(int)
+    {
+        int $i0;
+        io.reactivex.observers.BaseTestConsumer$TestWaitStrategy $r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $i0 := @parameter0: int;
+
+        $r1 = <io.reactivex.observers.BaseTestConsumer$TestWaitStrategy: io.reactivex.observers.BaseTestConsumer$TestWaitStrategy SLEEP_10MS>;
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer awaitCount(int,java.lang.Runnable,long)>($i0, $r1, 5000L);
+
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer awaitCount(int, java.lang.Runnable)
+    {
+        int $i0;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.lang.Runnable $r1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        r0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer awaitCount(int,java.lang.Runnable,long)>($i0, $r1, 5000L);
+
+        return r0;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer awaitCount(int, java.lang.Runnable, long)
+    {
+        long $l0, $l2, $l4;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.lang.Runnable $r1;
+        java.util.concurrent.CountDownLatch $r2;
+        java.util.List $r3;
+        byte $b3;
+        int $i1, $i5;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $i1 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        $l0 := @parameter2: long;
+
+        $l2 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+     label1:
+        $b3 = $l0 cmp 0L;
+
+        $i5 = (int) $b3;
+
+        if $i5 <= 0 goto label2;
+
+        $l4 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l4 = $l4 - $l2;
+
+        $b3 = $l4 cmp $l0;
+
+        $i5 = (int) $b3;
+
+        if $i5 < 0 goto label2;
+
+        r0.<io.reactivex.observers.BaseTestConsumer: boolean timeout> = 1;
+
+        return r0;
+
+     label2:
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done>;
+
+        $l4 = virtualinvoke $r2.<java.util.concurrent.CountDownLatch: long getCount()>();
+
+        $b3 = $l4 cmp 0L;
+
+        if $b3 != 0 goto label3;
+
+        return r0;
+
+     label3:
+        $r3 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i5 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i5 < $i1 goto label4;
+
+        return r0;
+
+     label4:
+        interfaceinvoke $r1.<java.lang.Runnable: void run()>();
+
+        goto label1;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer awaitDone(long, java.util.concurrent.TimeUnit)
+    {
+        java.util.concurrent.TimeUnit $r1;
+        java.lang.Throwable $r3;
+        java.util.concurrent.CountDownLatch $r2;
+        long $l0;
+        java.lang.RuntimeException $r4;
+        io.reactivex.observers.BaseTestConsumer r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.util.concurrent.TimeUnit;
+
+        $r2 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done>;
+
+     label1:
+        $z0 = virtualinvoke $r2.<java.util.concurrent.CountDownLatch: boolean await(long,java.util.concurrent.TimeUnit)>($l0, $r1);
+
+     label2:
+        if $z0 != 0 goto label6;
+
+        r0.<io.reactivex.observers.BaseTestConsumer: boolean timeout> = 1;
+
+     label3:
+        virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: void dispose()>();
+
+     label4:
+        return r0;
+
+     label5:
+        $r3 := @caughtexception;
+
+        virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: void dispose()>();
+
+        $r4 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.RuntimeException wrapOrThrow(java.lang.Throwable)>($r3);
+
+        throw $r4;
+
+     label6:
+        return r0;
+
+        catch java.lang.InterruptedException from label1 to label2 with label5;
+        catch java.lang.InterruptedException from label3 to label4 with label5;
+    }
+
+    public final boolean awaitTerminalEvent()
+    {
+        java.lang.Throwable $r2;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.lang.Thread $r1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+     label1:
+        virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: io.reactivex.observers.BaseTestConsumer await()>();
+
+     label2:
+        return 1;
+
+     label3:
+        $r1 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r1.<java.lang.Thread: void interrupt()>();
+
+        return 0;
+
+     label4:
+        $r2 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.InterruptedException from label1 to label2 with label4;
+    }
+
+    public final boolean awaitTerminalEvent(long, java.util.concurrent.TimeUnit)
+    {
+        java.util.concurrent.TimeUnit $r1;
+        java.lang.Throwable $r2;
+        java.lang.Thread $r3;
+        long $l0;
+        io.reactivex.observers.BaseTestConsumer r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.util.concurrent.TimeUnit;
+
+     label1:
+        $z0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: boolean await(long,java.util.concurrent.TimeUnit)>($l0, $r1);
+
+     label2:
+        return $z0;
+
+     label3:
+        $r3 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r3.<java.lang.Thread: void interrupt()>();
+
+        return 0;
+
+     label4:
+        $r2 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.InterruptedException from label1 to label2 with label4;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer clearTimeout()
+    {
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        r0.<io.reactivex.observers.BaseTestConsumer: boolean timeout> = 0;
+
+        return r0;
+    }
+
+    public final long completions()
+    {
+        long l0;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        l0 = r0.<io.reactivex.observers.BaseTestConsumer: long completions>;
+
+        return l0;
+    }
+
+    public final int errorCount()
+    {
+        int $i0;
+        java.util.List $r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        return $i0;
+    }
+
+    public final java.util.List errors()
+    {
+        java.util.List r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        return r1;
+    }
+
+    protected final java.lang.AssertionError fail(java.lang.String)
+    {
+        java.lang.Throwable $r8;
+        java.lang.CharSequence $r5;
+        io.reactivex.exceptions.CompositeException $r9;
+        long $l1;
+        java.lang.AssertionError $r6;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.concurrent.CountDownLatch $r3;
+        java.util.List $r4;
+        int $i0;
+        java.lang.StringBuilder $r2;
+        java.lang.Object $r7;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new java.lang.StringBuilder;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        $i0 = $i0 + 64;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(int)>($i0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" (latch = ");
+
+        $r3 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done>;
+
+        $l1 = virtualinvoke $r3.<java.util.concurrent.CountDownLatch: long getCount()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", values = ");
+
+        $r4 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", errors = ");
+
+        $r4 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", completions = ");
+
+        $l1 = r0.<io.reactivex.observers.BaseTestConsumer: long completions>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $z0 = r0.<io.reactivex.observers.BaseTestConsumer: boolean timeout>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", timeout!");
+
+     label1:
+        $z0 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: boolean isDisposed()>();
+
+        if $z0 == 0 goto label2;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", disposed!");
+
+     label2:
+        $r5 = r0.<io.reactivex.observers.BaseTestConsumer: java.lang.CharSequence tag>;
+
+        if $r5 == null goto label3;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", tag = ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.CharSequence)>($r5);
+
+     label3:
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(41);
+
+        $r6 = new java.lang.AssertionError;
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<java.lang.AssertionError: void <init>(java.lang.Object)>($r1);
+
+        $r4 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $z0 = interfaceinvoke $r4.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label5;
+
+        $r4 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        if $i0 != 1 goto label4;
+
+        $r4 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        $r7 = interfaceinvoke $r4.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r8 = (java.lang.Throwable) $r7;
+
+        virtualinvoke $r6.<java.lang.AssertionError: java.lang.Throwable initCause(java.lang.Throwable)>($r8);
+
+        return $r6;
+
+     label4:
+        $r9 = new io.reactivex.exceptions.CompositeException;
+
+        $r4 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors>;
+
+        specialinvoke $r9.<io.reactivex.exceptions.CompositeException: void <init>(java.lang.Iterable)>($r4);
+
+        virtualinvoke $r6.<java.lang.AssertionError: java.lang.Throwable initCause(java.lang.Throwable)>($r9);
+
+     label5:
+        return $r6;
+    }
+
+    public final java.util.List getEvents()
+    {
+        long $l1, $l2;
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.util.ArrayList $r1, $r3, $r5;
+        java.util.List $r2;
+        byte $b0;
+        int $i3;
+        io.reactivex.Notification $r4;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r3 = new java.util.ArrayList;
+
+        $r1 = $r3;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        $r2 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values()>();
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        $r2 = virtualinvoke r0.<io.reactivex.observers.BaseTestConsumer: java.util.List errors()>();
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        $r5 = new java.util.ArrayList;
+
+        $r3 = $r5;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        $l1 = 0L;
+
+     label1:
+        $l2 = r0.<io.reactivex.observers.BaseTestConsumer: long completions>;
+
+        $b0 = $l1 cmp $l2;
+
+        $i3 = (int) $b0;
+
+        if $i3 >= 0 goto label2;
+
+        $r4 = staticinvoke <io.reactivex.Notification: io.reactivex.Notification createOnComplete()>();
+
+        interfaceinvoke $r3.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        $l1 = $l1 + 1L;
+
+        goto label1;
+
+     label2:
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+        return $r1;
+    }
+
+    public final boolean isTerminated()
+    {
+        java.util.concurrent.CountDownLatch $r1;
+        byte $b0;
+        long $l1;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.concurrent.CountDownLatch done>;
+
+        $l1 = virtualinvoke $r1.<java.util.concurrent.CountDownLatch: long getCount()>();
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public final boolean isTimeout()
+    {
+        io.reactivex.observers.BaseTestConsumer r0;
+        boolean z0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        z0 = r0.<io.reactivex.observers.BaseTestConsumer: boolean timeout>;
+
+        return z0;
+    }
+
+    public final java.lang.Thread lastThread()
+    {
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.lang.Thread r1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.lang.Thread lastThread>;
+
+        return r1;
+    }
+
+    public final int valueCount()
+    {
+        int $i0;
+        java.util.List $r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        return $i0;
+    }
+
+    public final java.util.List values()
+    {
+        java.util.List r1;
+        io.reactivex.observers.BaseTestConsumer r0;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        r1 = r0.<io.reactivex.observers.BaseTestConsumer: java.util.List values>;
+
+        return r1;
+    }
+
+    public final io.reactivex.observers.BaseTestConsumer withTag(java.lang.CharSequence)
+    {
+        io.reactivex.observers.BaseTestConsumer r0;
+        java.lang.CharSequence $r1;
+
+        r0 := @this: io.reactivex.observers.BaseTestConsumer;
+
+        $r1 := @parameter0: java.lang.CharSequence;
+
+        r0.<io.reactivex.observers.BaseTestConsumer: java.lang.CharSequence tag> = $r1;
+
+        return r0;
+    }
+}

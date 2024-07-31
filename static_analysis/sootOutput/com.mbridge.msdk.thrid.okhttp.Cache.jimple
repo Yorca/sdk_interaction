@@ -1,0 +1,868 @@
+public final class com.mbridge.msdk.thrid.okhttp.Cache extends java.lang.Object implements java.io.Closeable, java.io.Flushable
+{
+    private static final int ENTRY_BODY;
+    private static final int ENTRY_COUNT;
+    private static final int ENTRY_METADATA;
+    private static final int VERSION;
+    final com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache;
+    private int hitCount;
+    final com.mbridge.msdk.thrid.okhttp.internal.cache.InternalCache internalCache;
+    private int networkCount;
+    private int requestCount;
+    int writeAbortCount;
+    int writeSuccessCount;
+
+    public void <init>(java.io.File, long)
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.io.FileSystem $r2;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+        long $l0;
+        java.io.File $r1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 := @parameter0: java.io.File;
+
+        $l0 := @parameter1: long;
+
+        $r2 = <com.mbridge.msdk.thrid.okhttp.internal.io.FileSystem: com.mbridge.msdk.thrid.okhttp.internal.io.FileSystem SYSTEM>;
+
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.Cache: void <init>(java.io.File,long,com.mbridge.msdk.thrid.okhttp.internal.io.FileSystem)>($r1, $l0, $r2);
+
+        return;
+    }
+
+    void <init>(java.io.File, long, com.mbridge.msdk.thrid.okhttp.internal.io.FileSystem)
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.io.FileSystem $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache$1 $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r3;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+        long $l0;
+        java.io.File $r4;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r4 := @parameter0: java.io.File;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: com.mbridge.msdk.thrid.okhttp.internal.io.FileSystem;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new com.mbridge.msdk.thrid.okhttp.Cache$1;
+
+        specialinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Cache$1: void <init>(com.mbridge.msdk.thrid.okhttp.Cache)>(r0);
+
+        r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.InternalCache internalCache> = $r2;
+
+        $r3 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache create(com.mbridge.msdk.thrid.okhttp.internal.io.FileSystem,java.io.File,int,int,long)>($r1, $r4, 201105, 2, $l0);
+
+        r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache> = $r3;
+
+        return;
+    }
+
+    private void abortQuietly(com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor)
+    {
+        java.lang.Throwable $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor;
+
+        if $r1 == null goto label4;
+
+     label1:
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor: void abort()>();
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+     label4:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public static java.lang.String key(com.mbridge.msdk.thrid.okhttp.HttpUrl)
+    {
+        com.mbridge.msdk.thrid.okhttp.HttpUrl $r0;
+        java.lang.String $r1;
+        com.mbridge.msdk.thrid.okio.ByteString $r2;
+
+        $r0 := @parameter0: com.mbridge.msdk.thrid.okhttp.HttpUrl;
+
+        $r1 = virtualinvoke $r0.<com.mbridge.msdk.thrid.okhttp.HttpUrl: java.lang.String toString()>();
+
+        $r2 = staticinvoke <com.mbridge.msdk.thrid.okio.ByteString: com.mbridge.msdk.thrid.okio.ByteString encodeUtf8(java.lang.String)>($r1);
+
+        $r2 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okio.ByteString: com.mbridge.msdk.thrid.okio.ByteString md5()>();
+
+        $r1 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okio.ByteString: java.lang.String hex()>();
+
+        return $r1;
+    }
+
+    static int readInt(com.mbridge.msdk.thrid.okio.BufferedSource) throws java.io.IOException
+    {
+        java.lang.Throwable $r3;
+        long $l0;
+        java.io.IOException $r5;
+        java.lang.NumberFormatException $r6;
+        byte $b1;
+        com.mbridge.msdk.thrid.okio.BufferedSource $r1;
+        int $i2;
+        java.lang.StringBuilder $r0, $r4;
+        java.lang.String $r2;
+        boolean $z0;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okio.BufferedSource;
+
+     label1:
+        $l0 = interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.BufferedSource: long readDecimalLong()>();
+
+        $r2 = interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.BufferedSource: java.lang.String readUtf8LineStrict()>();
+
+     label2:
+        $b1 = $l0 cmp 0L;
+
+        $i2 = (int) $b1;
+
+        if $i2 < 0 goto label5;
+
+        $b1 = $l0 cmp 2147483647L;
+
+        $i2 = (int) $b1;
+
+        if $i2 > 0 goto label5;
+
+     label3:
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean isEmpty()>();
+
+     label4:
+        if $z0 == 0 goto label5;
+
+        $i2 = (int) $l0;
+
+        return $i2;
+
+     label5:
+        $r5 = new java.io.IOException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        $r0 = $r4;
+
+     label6:
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("expected an int but was \"");
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\"");
+
+        $r2 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>($r2);
+
+     label7:
+        throw $r5;
+
+     label8:
+        $r3 := @caughtexception;
+
+        $r5 = new java.io.IOException;
+
+        $r6 = (java.lang.NumberFormatException) $r3;
+
+        $r2 = virtualinvoke $r6.<java.lang.NumberFormatException: java.lang.String getMessage()>();
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>($r2);
+
+        throw $r5;
+
+        catch java.lang.NumberFormatException from label1 to label2 with label8;
+        catch java.lang.NumberFormatException from label3 to label4 with label8;
+        catch java.lang.NumberFormatException from label6 to label7 with label8;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: void close()>();
+
+        return;
+    }
+
+    public void delete() throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: void delete()>();
+
+        return;
+    }
+
+    public java.io.File directory()
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r2;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+        java.io.File $r1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+        $r1 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: java.io.File getDirectory()>();
+
+        return $r1;
+    }
+
+    public void evictAll() throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: void evictAll()>();
+
+        return;
+    }
+
+    public void flush() throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: void flush()>();
+
+        return;
+    }
+
+    com.mbridge.msdk.thrid.okhttp.Response get(com.mbridge.msdk.thrid.okhttp.Request)
+    {
+        java.lang.Throwable $r1, $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r6;
+        com.mbridge.msdk.thrid.okhttp.Cache$Entry $r8;
+        com.mbridge.msdk.thrid.okhttp.ResponseBody $r11;
+        com.mbridge.msdk.thrid.okhttp.HttpUrl $r4;
+        com.mbridge.msdk.thrid.okhttp.Request $r3;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+        com.mbridge.msdk.thrid.okio.Source $r9;
+        java.lang.String $r5;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Snapshot $r7;
+        com.mbridge.msdk.thrid.okhttp.Response $r10;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r3 := @parameter0: com.mbridge.msdk.thrid.okhttp.Request;
+
+        $r4 = virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.HttpUrl url()>();
+
+        $r5 = staticinvoke <com.mbridge.msdk.thrid.okhttp.Cache: java.lang.String key(com.mbridge.msdk.thrid.okhttp.HttpUrl)>($r4);
+
+        $r6 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+     label1:
+        $r7 = virtualinvoke $r6.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Snapshot get(java.lang.String)>($r5);
+
+     label2:
+        if $r7 != null goto label3;
+
+        return null;
+
+     label3:
+        $r8 = new com.mbridge.msdk.thrid.okhttp.Cache$Entry;
+
+     label4:
+        $r9 = virtualinvoke $r7.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Snapshot: com.mbridge.msdk.thrid.okio.Source getSource(int)>(0);
+
+        specialinvoke $r8.<com.mbridge.msdk.thrid.okhttp.Cache$Entry: void <init>(com.mbridge.msdk.thrid.okio.Source)>($r9);
+
+     label5:
+        $r10 = virtualinvoke $r8.<com.mbridge.msdk.thrid.okhttp.Cache$Entry: com.mbridge.msdk.thrid.okhttp.Response response(com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Snapshot)>($r7);
+
+        $z0 = virtualinvoke $r8.<com.mbridge.msdk.thrid.okhttp.Cache$Entry: boolean matches(com.mbridge.msdk.thrid.okhttp.Request,com.mbridge.msdk.thrid.okhttp.Response)>($r3, $r10);
+
+        if $z0 != 0 goto label6;
+
+        $r11 = virtualinvoke $r10.<com.mbridge.msdk.thrid.okhttp.Response: com.mbridge.msdk.thrid.okhttp.ResponseBody body()>();
+
+        staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.Util: void closeQuietly(java.io.Closeable)>($r11);
+
+        return null;
+
+     label6:
+        return $r10;
+
+     label7:
+        staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.Util: void closeQuietly(java.io.Closeable)>($r7);
+
+        return null;
+
+     label8:
+        $r1 := @caughtexception;
+
+        return null;
+
+     label9:
+        $r2 := @caughtexception;
+
+        goto label7;
+
+        catch java.io.IOException from label1 to label2 with label8;
+        catch java.io.IOException from label4 to label5 with label9;
+    }
+
+    public int hitCount()
+    {
+        java.lang.Throwable $r1;
+        int i0;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        entermonitor r0;
+
+     label1:
+        i0 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: int hitCount>;
+
+     label2:
+        exitmonitor r0;
+
+        return i0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public void initialize() throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: void initialize()>();
+
+        return;
+    }
+
+    public boolean isClosed()
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: boolean isClosed()>();
+
+        return $z0;
+    }
+
+    public long maxSize()
+    {
+        long $l0;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+        $l0 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: long getMaxSize()>();
+
+        return $l0;
+    }
+
+    public int networkCount()
+    {
+        java.lang.Throwable $r1;
+        int i0;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        entermonitor r0;
+
+     label1:
+        i0 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: int networkCount>;
+
+     label2:
+        exitmonitor r0;
+
+        return i0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    com.mbridge.msdk.thrid.okhttp.internal.cache.CacheRequest put(com.mbridge.msdk.thrid.okhttp.Response)
+    {
+        java.lang.Throwable $r1, $r2, $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r9;
+        com.mbridge.msdk.thrid.okhttp.Cache$Entry $r8;
+        com.mbridge.msdk.thrid.okhttp.HttpUrl $r10;
+        com.mbridge.msdk.thrid.okhttp.Cache$CacheRequestImpl $r13;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor $r11, $r12;
+        com.mbridge.msdk.thrid.okhttp.Request $r5;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+        java.lang.String $r6, $r7;
+        com.mbridge.msdk.thrid.okhttp.Response $r4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r4 := @parameter0: com.mbridge.msdk.thrid.okhttp.Response;
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okhttp.Response: com.mbridge.msdk.thrid.okhttp.Request request()>();
+
+        $r6 = virtualinvoke $r5.<com.mbridge.msdk.thrid.okhttp.Request: java.lang.String method()>();
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okhttp.Response: com.mbridge.msdk.thrid.okhttp.Request request()>();
+
+        $r7 = virtualinvoke $r5.<com.mbridge.msdk.thrid.okhttp.Request: java.lang.String method()>();
+
+        $z0 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http.HttpMethod: boolean invalidatesCache(java.lang.String)>($r7);
+
+        if $z0 == 0 goto label03;
+
+     label01:
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okhttp.Response: com.mbridge.msdk.thrid.okhttp.Request request()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.Cache: void remove(com.mbridge.msdk.thrid.okhttp.Request)>($r5);
+
+     label02:
+        return null;
+
+     label03:
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>("GET");
+
+        if $z0 != 0 goto label04;
+
+        return null;
+
+     label04:
+        $z0 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http.HttpHeaders: boolean hasVaryAll(com.mbridge.msdk.thrid.okhttp.Response)>($r4);
+
+        if $z0 == 0 goto label05;
+
+        return null;
+
+     label05:
+        $r8 = new com.mbridge.msdk.thrid.okhttp.Cache$Entry;
+
+        specialinvoke $r8.<com.mbridge.msdk.thrid.okhttp.Cache$Entry: void <init>(com.mbridge.msdk.thrid.okhttp.Response)>($r4);
+
+        $r9 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+     label06:
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okhttp.Response: com.mbridge.msdk.thrid.okhttp.Request request()>();
+
+        $r10 = virtualinvoke $r5.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.HttpUrl url()>();
+
+        $r6 = staticinvoke <com.mbridge.msdk.thrid.okhttp.Cache: java.lang.String key(com.mbridge.msdk.thrid.okhttp.HttpUrl)>($r10);
+
+        $r11 = virtualinvoke $r9.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor edit(java.lang.String)>($r6);
+
+     label07:
+        $r12 = $r11;
+
+        if $r11 != null goto label08;
+
+        return null;
+
+     label08:
+        virtualinvoke $r8.<com.mbridge.msdk.thrid.okhttp.Cache$Entry: void writeTo(com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor)>($r11);
+
+     label09:
+        $r13 = new com.mbridge.msdk.thrid.okhttp.Cache$CacheRequestImpl;
+
+     label10:
+        specialinvoke $r13.<com.mbridge.msdk.thrid.okhttp.Cache$CacheRequestImpl: void <init>(com.mbridge.msdk.thrid.okhttp.Cache,com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor)>(r0, $r11);
+
+     label11:
+        return $r13;
+
+     label12:
+        $r12 = null;
+
+     label13:
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.Cache: void abortQuietly(com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor)>($r12);
+
+        return null;
+
+     label14:
+        $r1 := @caughtexception;
+
+        return null;
+
+     label15:
+        $r2 := @caughtexception;
+
+        goto label12;
+
+     label16:
+        $r3 := @caughtexception;
+
+        goto label13;
+
+        catch java.io.IOException from label01 to label02 with label14;
+        catch java.io.IOException from label06 to label07 with label15;
+        catch java.io.IOException from label08 to label09 with label16;
+        catch java.io.IOException from label10 to label11 with label16;
+    }
+
+    void remove(com.mbridge.msdk.thrid.okhttp.Request) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r1;
+        com.mbridge.msdk.thrid.okhttp.Request $r2;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+        com.mbridge.msdk.thrid.okhttp.HttpUrl $r3;
+        java.lang.String $r4;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r2 := @parameter0: com.mbridge.msdk.thrid.okhttp.Request;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+        $r3 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.HttpUrl url()>();
+
+        $r4 = staticinvoke <com.mbridge.msdk.thrid.okhttp.Cache: java.lang.String key(com.mbridge.msdk.thrid.okhttp.HttpUrl)>($r3);
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: boolean remove(java.lang.String)>($r4);
+
+        return;
+    }
+
+    public int requestCount()
+    {
+        java.lang.Throwable $r1;
+        int i0;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        entermonitor r0;
+
+     label1:
+        i0 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: int requestCount>;
+
+     label2:
+        exitmonitor r0;
+
+        return i0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public long size() throws java.io.IOException
+    {
+        long $l0;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache cache>;
+
+        $l0 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache: long size()>();
+
+        return $l0;
+    }
+
+    void trackConditionalCacheHit()
+    {
+        int $i0;
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        entermonitor r0;
+
+     label1:
+        $i0 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: int hitCount>;
+
+        $i0 = $i0 + 1;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.Cache: int hitCount> = $i0;
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    void trackResponse(com.mbridge.msdk.thrid.okhttp.internal.cache.CacheStrategy)
+    {
+        java.lang.Throwable $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.CacheStrategy $r1;
+        com.mbridge.msdk.thrid.okhttp.Request $r2;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+        int $i0;
+        com.mbridge.msdk.thrid.okhttp.Response $r3;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.internal.cache.CacheStrategy;
+
+        entermonitor r0;
+
+     label1:
+        $i0 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: int requestCount>;
+
+        $i0 = $i0 + 1;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.Cache: int requestCount> = $i0;
+
+        $r2 = $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.CacheStrategy: com.mbridge.msdk.thrid.okhttp.Request networkRequest>;
+
+        if $r2 == null goto label2;
+
+        $i0 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: int networkCount>;
+
+        $i0 = $i0 + 1;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.Cache: int networkCount> = $i0;
+
+        goto label3;
+
+     label2:
+        $r3 = $r1.<com.mbridge.msdk.thrid.okhttp.internal.cache.CacheStrategy: com.mbridge.msdk.thrid.okhttp.Response cacheResponse>;
+
+        if $r3 == null goto label3;
+
+        $i0 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: int hitCount>;
+
+        $i0 = $i0 + 1;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.Cache: int hitCount> = $i0;
+
+     label3:
+        exitmonitor r0;
+
+        return;
+
+     label4:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+
+    void update(com.mbridge.msdk.thrid.okhttp.Response, com.mbridge.msdk.thrid.okhttp.Response)
+    {
+        java.lang.Throwable $r3, $r4;
+        com.mbridge.msdk.thrid.okhttp.Cache$Entry $r2;
+        com.mbridge.msdk.thrid.okhttp.Cache$CacheResponseBody $r7;
+        com.mbridge.msdk.thrid.okhttp.ResponseBody $r6;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor $r9, $r10;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+        com.mbridge.msdk.thrid.okhttp.Response $r1, $r5;
+        com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Snapshot $r8;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r5 := @parameter0: com.mbridge.msdk.thrid.okhttp.Response;
+
+        $r1 := @parameter1: com.mbridge.msdk.thrid.okhttp.Response;
+
+        $r2 = new com.mbridge.msdk.thrid.okhttp.Cache$Entry;
+
+        specialinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Cache$Entry: void <init>(com.mbridge.msdk.thrid.okhttp.Response)>($r1);
+
+        $r6 = virtualinvoke $r5.<com.mbridge.msdk.thrid.okhttp.Response: com.mbridge.msdk.thrid.okhttp.ResponseBody body()>();
+
+        $r7 = (com.mbridge.msdk.thrid.okhttp.Cache$CacheResponseBody) $r6;
+
+        $r8 = $r7.<com.mbridge.msdk.thrid.okhttp.Cache$CacheResponseBody: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Snapshot snapshot>;
+
+     label1:
+        $r9 = virtualinvoke $r8.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Snapshot: com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor edit()>();
+
+     label2:
+        $r10 = $r9;
+
+        if $r9 == null goto label9;
+
+     label3:
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Cache$Entry: void writeTo(com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor)>($r9);
+
+        virtualinvoke $r9.<com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor: void commit()>();
+
+     label4:
+        return;
+
+     label5:
+        $r10 = null;
+
+     label6:
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.Cache: void abortQuietly(com.mbridge.msdk.thrid.okhttp.internal.cache.DiskLruCache$Editor)>($r10);
+
+        return;
+
+     label7:
+        $r3 := @caughtexception;
+
+        goto label5;
+
+     label8:
+        $r4 := @caughtexception;
+
+        goto label6;
+
+     label9:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label7;
+        catch java.io.IOException from label3 to label4 with label8;
+    }
+
+    public java.util.Iterator urls() throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.Cache$2 $r1;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        $r1 = new com.mbridge.msdk.thrid.okhttp.Cache$2;
+
+        specialinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Cache$2: void <init>(com.mbridge.msdk.thrid.okhttp.Cache)>(r0);
+
+        return $r1;
+    }
+
+    public int writeAbortCount()
+    {
+        java.lang.Throwable $r1;
+        int i0;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        entermonitor r0;
+
+     label1:
+        i0 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: int writeAbortCount>;
+
+     label2:
+        exitmonitor r0;
+
+        return i0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public int writeSuccessCount()
+    {
+        java.lang.Throwable $r1;
+        int i0;
+        com.mbridge.msdk.thrid.okhttp.Cache r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.Cache;
+
+        entermonitor r0;
+
+     label1:
+        i0 = r0.<com.mbridge.msdk.thrid.okhttp.Cache: int writeSuccessCount>;
+
+     label2:
+        exitmonitor r0;
+
+        return i0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.thrid.okhttp.Cache: int VERSION> = 201105;
+
+        <com.mbridge.msdk.thrid.okhttp.Cache: int ENTRY_METADATA> = 0;
+
+        <com.mbridge.msdk.thrid.okhttp.Cache: int ENTRY_COUNT> = 2;
+
+        <com.mbridge.msdk.thrid.okhttp.Cache: int ENTRY_BODY> = 1;
+
+        return;
+    }
+}

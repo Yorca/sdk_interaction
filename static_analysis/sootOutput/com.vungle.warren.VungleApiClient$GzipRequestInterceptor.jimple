@@ -1,0 +1,107 @@
+class com.vungle.warren.VungleApiClient$GzipRequestInterceptor extends java.lang.Object implements okhttp3.Interceptor
+{
+    private static final java.lang.String CONTENT_ENCODING;
+    private static final java.lang.String GZIP;
+
+    void <init>()
+    {
+        com.vungle.warren.VungleApiClient$GzipRequestInterceptor r0;
+
+        r0 := @this: com.vungle.warren.VungleApiClient$GzipRequestInterceptor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private okhttp3.RequestBody gzip(okhttp3.RequestBody) throws java.io.IOException
+    {
+        okio.Buffer $r2;
+        okio.GzipSink $r4;
+        com.vungle.warren.VungleApiClient$GzipRequestInterceptor$1 $r5;
+        okio.BufferedSink $r3;
+        com.vungle.warren.VungleApiClient$GzipRequestInterceptor r0;
+        okhttp3.RequestBody $r1;
+
+        r0 := @this: com.vungle.warren.VungleApiClient$GzipRequestInterceptor;
+
+        $r1 := @parameter0: okhttp3.RequestBody;
+
+        $r2 = new okio.Buffer;
+
+        specialinvoke $r2.<okio.Buffer: void <init>()>();
+
+        $r4 = new okio.GzipSink;
+
+        specialinvoke $r4.<okio.GzipSink: void <init>(okio.Sink)>($r2);
+
+        $r3 = staticinvoke <okio.Okio: okio.BufferedSink buffer(okio.Sink)>($r4);
+
+        virtualinvoke $r1.<okhttp3.RequestBody: void writeTo(okio.BufferedSink)>($r3);
+
+        interfaceinvoke $r3.<okio.BufferedSink: void close()>();
+
+        $r5 = new com.vungle.warren.VungleApiClient$GzipRequestInterceptor$1;
+
+        specialinvoke $r5.<com.vungle.warren.VungleApiClient$GzipRequestInterceptor$1: void <init>(com.vungle.warren.VungleApiClient$GzipRequestInterceptor,okhttp3.RequestBody,okio.Buffer)>(r0, $r1, $r2);
+
+        return $r5;
+    }
+
+    public okhttp3.Response intercept(okhttp3.Interceptor$Chain) throws java.io.IOException
+    {
+        okhttp3.Request $r2;
+        okhttp3.Request$Builder $r5;
+        okhttp3.Response $r6;
+        okhttp3.Interceptor$Chain $r1;
+        java.lang.String $r4;
+        com.vungle.warren.VungleApiClient$GzipRequestInterceptor r0;
+        okhttp3.RequestBody $r3;
+
+        r0 := @this: com.vungle.warren.VungleApiClient$GzipRequestInterceptor;
+
+        $r1 := @parameter0: okhttp3.Interceptor$Chain;
+
+        $r2 = interfaceinvoke $r1.<okhttp3.Interceptor$Chain: okhttp3.Request request()>();
+
+        $r3 = virtualinvoke $r2.<okhttp3.Request: okhttp3.RequestBody body()>();
+
+        if $r3 == null goto label1;
+
+        $r4 = virtualinvoke $r2.<okhttp3.Request: java.lang.String header(java.lang.String)>("Content-Encoding");
+
+        if $r4 != null goto label1;
+
+        $r5 = virtualinvoke $r2.<okhttp3.Request: okhttp3.Request$Builder newBuilder()>();
+
+        $r5 = virtualinvoke $r5.<okhttp3.Request$Builder: okhttp3.Request$Builder header(java.lang.String,java.lang.String)>("Content-Encoding", "gzip");
+
+        $r4 = virtualinvoke $r2.<okhttp3.Request: java.lang.String method()>();
+
+        $r3 = virtualinvoke $r2.<okhttp3.Request: okhttp3.RequestBody body()>();
+
+        $r3 = specialinvoke r0.<com.vungle.warren.VungleApiClient$GzipRequestInterceptor: okhttp3.RequestBody gzip(okhttp3.RequestBody)>($r3);
+
+        $r5 = virtualinvoke $r5.<okhttp3.Request$Builder: okhttp3.Request$Builder method(java.lang.String,okhttp3.RequestBody)>($r4, $r3);
+
+        $r2 = virtualinvoke $r5.<okhttp3.Request$Builder: okhttp3.Request build()>();
+
+        $r6 = interfaceinvoke $r1.<okhttp3.Interceptor$Chain: okhttp3.Response proceed(okhttp3.Request)>($r2);
+
+        return $r6;
+
+     label1:
+        $r6 = interfaceinvoke $r1.<okhttp3.Interceptor$Chain: okhttp3.Response proceed(okhttp3.Request)>($r2);
+
+        return $r6;
+    }
+
+    public static void <clinit>()
+    {
+        <com.vungle.warren.VungleApiClient$GzipRequestInterceptor: java.lang.String GZIP> = "gzip";
+
+        <com.vungle.warren.VungleApiClient$GzipRequestInterceptor: java.lang.String CONTENT_ENCODING> = "Content-Encoding";
+
+        return;
+    }
+}

@@ -325,7 +325,7 @@ public class PrivacyAPITracking {
 				if (hasNewTaint) {
 					try {
 						BufferedWriter writer;
-						writer = new BufferedWriter(new FileWriter("res/notifyFlowOut_idfa2.txt", true));
+						writer = new BufferedWriter(new FileWriter("res/notifyFlowOut_idfa3.txt", true));
 						writer.write(out_str);
 						writer.close();
 					} catch (IOException e) {

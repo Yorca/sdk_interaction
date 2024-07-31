@@ -1,0 +1,1931 @@
+public class com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.source.SampleStream, com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader, com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Callback, com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$ReleaseCallback
+{
+    private static final java.lang.String TAG;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback callback;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource chunkSource;
+    long decodeOnlyUntilPositionUs;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues;
+    private final com.mbridge.msdk.playercommon.exoplayer2.Format[] embeddedTrackFormats;
+    private final int[] embeddedTrackTypes;
+    private final boolean[] embeddedTracksSelected;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher;
+    private long lastSeekPositionUs;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader;
+    boolean loadingFinished;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunkOutput mediaChunkOutput;
+    private final java.util.ArrayList mediaChunks;
+    private final int minLoadableRetryCount;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder nextChunkHolder;
+    private long pendingResetPositionUs;
+    private com.mbridge.msdk.playercommon.exoplayer2.Format primaryDownstreamTrackFormat;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue;
+    public final int primaryTrackType;
+    private final java.util.List readOnlyMediaChunks;
+    private com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$ReleaseCallback releaseCallback;
+
+    public void <init>(int, int[], com.mbridge.msdk.playercommon.exoplayer2.Format[], com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource, com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback, com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator, long, int, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback $r6;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r14;
+        java.util.ArrayList $r10;
+        int[] $r1, $r13;
+        int $i1, $i2, $i3, $i4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator $r2;
+        boolean[] $r12;
+        com.mbridge.msdk.playercommon.exoplayer2.Format[] $r4;
+        java.util.List $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunkOutput $r16;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r11, $r15;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $i1 := @parameter0: int;
+
+        $r1 := @parameter1: int[];
+
+        $r4 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.Format[];
+
+        $r5 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource;
+
+        $r6 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback;
+
+        $r2 := @parameter5: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator;
+
+        $l0 := @parameter6: long;
+
+        $i2 := @parameter7: int;
+
+        $r7 := @parameter8: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int primaryTrackType> = $i1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int[] embeddedTrackTypes> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.Format[] embeddedTrackFormats> = $r4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource chunkSource> = $r5;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback callback> = $r6;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher> = $r7;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int minLoadableRetryCount> = $i2;
+
+        $r8 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader;
+
+        specialinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: void <init>(java.lang.String)>("Loader:ChunkSampleStream");
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader> = $r8;
+
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder nextChunkHolder> = $r9;
+
+        $r10 = new java.util.ArrayList;
+
+        specialinvoke $r10.<java.util.ArrayList: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks> = $r10;
+
+        $r3 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r10);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.List readOnlyMediaChunks> = $r3;
+
+        $i3 = 0;
+
+        if $r1 != null goto label1;
+
+        $i2 = 0;
+
+        goto label2;
+
+     label1:
+        $i2 = lengthof $r1;
+
+     label2:
+        $r11 = newarray (com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue)[$i2];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues> = $r11;
+
+        $r12 = newarray (boolean)[$i2];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean[] embeddedTracksSelected> = $r12;
+
+        $i4 = $i2 + 1;
+
+        $r13 = newarray (int)[$i4];
+
+        $r11 = newarray (com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue)[$i4];
+
+        $r14 = new com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        specialinvoke $r14.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator)>($r2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue> = $r14;
+
+        $r13[0] = $i1;
+
+        $r11[0] = $r14;
+
+     label3:
+        if $i3 >= $i2 goto label4;
+
+        $r14 = new com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        specialinvoke $r14.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator)>($r2);
+
+        $r15 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $r15[$i3] = $r14;
+
+        $i1 = $i3 + 1;
+
+        $r11[$i1] = $r14;
+
+        $i3 = $r1[$i3];
+
+        $r13[$i1] = $i3;
+
+        $i3 = $i1;
+
+        goto label3;
+
+     label4:
+        $r16 = new com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunkOutput;
+
+        specialinvoke $r16.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunkOutput: void <init>(int[],com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[])>($r13, $r11);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunkOutput mediaChunkOutput> = $r16;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs> = $l0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long lastSeekPositionUs> = $l0;
+
+        return;
+    }
+
+    static boolean[] access$000(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream)
+    {
+        boolean[] r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean[] embeddedTracksSelected>;
+
+        return r1;
+    }
+
+    static int[] access$100(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream $r0;
+        int[] r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int[] embeddedTrackTypes>;
+
+        return r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.Format[] access$200(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Format[] r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.Format[] embeddedTrackFormats>;
+
+        return r1;
+    }
+
+    static long access$300(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream)
+    {
+        long l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        l0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long lastSeekPositionUs>;
+
+        return l0;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher access$400(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        return r1;
+    }
+
+    private void discardDownstreamMediaChunks(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $i0 := @parameter0: int;
+
+        $i0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int primaryStreamIndexToMediaChunkIndex(int,int)>($i0, 0);
+
+        if $i0 <= 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: void removeRange(java.util.List,int,int)>($r1, 0, $i0);
+
+     label1:
+        return;
+    }
+
+    private com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk discardUpstreamMediaChunksFromIndex(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r4;
+        java.util.ArrayList $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i0, $i1;
+        java.lang.Object $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk) $r2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $i1 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: void removeRange(java.util.List,int,int)>($r1, $i0, $i1);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $i0 = 0;
+
+        $i1 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: int getFirstSampleIndex(int)>(0);
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardUpstreamSamples(int)>($i1);
+
+     label1:
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $i1 = lengthof $r5;
+
+        if $i0 >= $i1 goto label2;
+
+        $r4 = $r5[$i0];
+
+        $i0 = $i0 + 1;
+
+        $i1 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: int getFirstSampleIndex(int)>($i0);
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardUpstreamSamples(int)>($i1);
+
+        goto label1;
+
+     label2:
+        return $r3;
+    }
+
+    private com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk getLastMediaChunk()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i0, $i1;
+        java.lang.Object $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r3;
+        java.util.ArrayList $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $i0 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        $i1 = -1;
+
+        $i0 = $i0 + $i1;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk) $r2;
+
+        return $r3;
+    }
+
+    private boolean haveReadFromMediaChunk(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r4;
+        java.util.ArrayList $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i0, $i1, $i2;
+        java.lang.Object $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk) $r2;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $i0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int getReadIndex()>();
+
+        $i1 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: int getFirstSampleIndex(int)>(0);
+
+        if $i0 <= $i1 goto label1;
+
+        return 1;
+
+     label1:
+        $i0 = 0;
+
+     label2:
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $i1 = lengthof $r5;
+
+        if $i0 >= $i1 goto label3;
+
+        $r4 = $r5[$i0];
+
+        $i1 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int getReadIndex()>();
+
+        $i0 = $i0 + 1;
+
+        $i2 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: int getFirstSampleIndex(int)>($i0);
+
+        if $i1 <= $i2 goto label2;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    private boolean isMediaChunk(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk;
+
+        $z0 = $r1 instanceof com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk;
+
+        return $z0;
+    }
+
+    private void maybeNotifyPrimaryTrackFormatChanged(int)
+    {
+        long $l2;
+        java.util.ArrayList $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r2, $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r6;
+        java.lang.Object $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $i0 := @parameter0: int;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $r1 = virtualinvoke $r3.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk) $r1;
+
+        $r2 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: com.mbridge.msdk.playercommon.exoplayer2.Format trackFormat>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.Format primaryDownstreamTrackFormat>;
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Format: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 != 0 goto label1;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int primaryTrackType>;
+
+        $i1 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: int trackSelectionReason>;
+
+        $r1 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: java.lang.Object trackSelectionData>;
+
+        $l2 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: long startTimeUs>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void downstreamFormatChanged(int,com.mbridge.msdk.playercommon.exoplayer2.Format,int,java.lang.Object,long)>($i0, $r2, $i1, $r1, $l2);
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.Format primaryDownstreamTrackFormat> = $r2;
+
+        return;
+    }
+
+    private void maybeNotifyPrimaryTrackFormatChanged(int, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i0, $i1, $i2, $i3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $i1 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        $i2 = $i1 - $i0;
+
+        $i3 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int primaryStreamIndexToMediaChunkIndex(int,int)>($i2, 0);
+
+        $i2 = $i3;
+
+        if $i0 != 1 goto label1;
+
+        $i1 = $i3;
+
+        goto label2;
+
+     label1:
+        $i1 = $i1 - 1;
+
+        $i1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int primaryStreamIndexToMediaChunkIndex(int,int)>($i1, $i3);
+
+     label2:
+        if $i2 > $i1 goto label3;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: void maybeNotifyPrimaryTrackFormatChanged(int)>($i2);
+
+        $i2 = $i2 + 1;
+
+        goto label2;
+
+     label3:
+        return;
+    }
+
+    private int primaryStreamIndexToMediaChunkIndex(int, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i0, $i1, $i2;
+        java.lang.Object $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r3;
+        java.util.ArrayList $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+     label1:
+        $i1 = $i1 + 1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $i2 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        if $i1 >= $i2 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i1);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk) $r2;
+
+        $i2 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: int getFirstSampleIndex(int)>(0);
+
+        if $i2 <= $i0 goto label1;
+
+        $i0 = -1;
+
+        $i0 = $i1 + $i0;
+
+        return $i0;
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $i0 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        $i1 = -1;
+
+        $i0 = $i0 + $i1;
+
+        return $i0;
+    }
+
+    public boolean continueLoading(long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r2;
+        long $l0, $l3, $l6;
+        java.util.ArrayList $r10;
+        byte $b4;
+        int $i1, $i2, $i5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r5, $r6;
+        boolean $z0, $z1, $z2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunkOutput $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r12;
+        java.lang.Object $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $l0 := @parameter0: long;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean loadingFinished>;
+
+        $z1 = 0;
+
+        if $z0 != 0 goto label10;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        $z0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: boolean isLoading()>();
+
+        if $z0 == 0 goto label01;
+
+        return 0;
+
+     label01:
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean isPendingReset()>();
+
+        if $z0 == 0 goto label02;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs>;
+
+        $r5 = null;
+
+        goto label03;
+
+     label02:
+        $r6 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk getLastMediaChunk()>();
+
+        $r5 = $r6;
+
+        $l3 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.MediaChunk: long endTimeUs>;
+
+     label03:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource chunkSource>;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder nextChunkHolder>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource: void getNextChunk(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.MediaChunk,long,long,com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder)>($r5, $l0, $l3, $r7);
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder nextChunkHolder>;
+
+        $z2 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder: boolean endOfStream>;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder nextChunkHolder>;
+
+        $r8 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk chunk>;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder nextChunkHolder>;
+
+        virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkHolder: void clear()>();
+
+        if $z2 == 0 goto label04;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs> = -9223372036854775807L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean loadingFinished> = 1;
+
+        return 1;
+
+     label04:
+        if $r8 != null goto label05;
+
+        return 0;
+
+     label05:
+        $z2 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean isMediaChunk(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk)>($r8);
+
+        if $z2 == 0 goto label09;
+
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk) $r8;
+
+        if $z0 == 0 goto label08;
+
+        $l0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: long startTimeUs>;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs>;
+
+        $b4 = $l0 cmp $l3;
+
+        if $b4 != 0 goto label06;
+
+        $z1 = 1;
+
+     label06:
+        if $z1 == 0 goto label07;
+
+        $l3 = -9223372036854775808L;
+
+     label07:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long decodeOnlyUntilPositionUs> = $l3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs> = -9223372036854775807L;
+
+     label08:
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunkOutput mediaChunkOutput>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: void init(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunkOutput)>($r9);
+
+        $r10 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        virtualinvoke $r10.<java.util.ArrayList: boolean add(java.lang.Object)>($r5);
+
+     label09:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int minLoadableRetryCount>;
+
+        $l0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: long startLoading(com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable,com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Callback,int)>($r8, r0, $i1);
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $r2 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec dataSpec>;
+
+        $i5 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: int type>;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int primaryTrackType>;
+
+        $r12 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: com.mbridge.msdk.playercommon.exoplayer2.Format trackFormat>;
+
+        $i2 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: int trackSelectionReason>;
+
+        $r3 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: java.lang.Object trackSelectionData>;
+
+        $l3 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long startTimeUs>;
+
+        $l6 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long endTimeUs>;
+
+        virtualinvoke $r11.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void loadStarted(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int,int,com.mbridge.msdk.playercommon.exoplayer2.Format,int,java.lang.Object,long,long,long)>($r2, $i5, $i1, $r12, $i2, $r3, $l3, $l6, $l0);
+
+        return 1;
+
+     label10:
+        return 0;
+    }
+
+    public void discardBuffer(long, boolean)
+    {
+        boolean[] $r3;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i1, $i2, $i3;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $l0 := @parameter0: long;
+
+        $z0 := @parameter1: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $i1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int getFirstIndex()>();
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardTo(long,boolean,boolean)>($l0, $z0, 1);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $i2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int getFirstIndex()>();
+
+        if $i2 <= $i1 goto label3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $l0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long getFirstTimestampUs()>();
+
+        $i1 = 0;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $i3 = lengthof $r2;
+
+        if $i1 >= $i3 goto label2;
+
+        $r1 = $r2[$i1];
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean[] embeddedTracksSelected>;
+
+        $z1 = $r3[$i1];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardTo(long,boolean,boolean)>($l0, $z0, $z1);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: void discardDownstreamMediaChunks(int)>($i2);
+
+     label3:
+        return;
+    }
+
+    public long getAdjustedSeekPositionUs(long, com.mbridge.msdk.playercommon.exoplayer2.SeekParameters)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        com.mbridge.msdk.playercommon.exoplayer2.SeekParameters $r1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.SeekParameters;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource chunkSource>;
+
+        $l0 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource: long getAdjustedSeekPositionUs(long,com.mbridge.msdk.playercommon.exoplayer2.SeekParameters)>($l0, $r1);
+
+        return $l0;
+    }
+
+    public long getBufferedPositionUs()
+    {
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r5;
+        java.util.ArrayList $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i1, $i3;
+        java.lang.Object $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r1, $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean loadingFinished>;
+
+        if $z0 == 0 goto label1;
+
+        return -9223372036854775808L;
+
+     label1:
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean isPendingReset()>();
+
+        if $z0 == 0 goto label2;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs>;
+
+        return $l0;
+
+     label2:
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long lastSeekPositionUs>;
+
+        $r1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk getLastMediaChunk()>();
+
+        $r2 = $r1;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: boolean isLoadCompleted()>();
+
+        if $z0 == 0 goto label3;
+
+        goto label5;
+
+     label3:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $i1 = virtualinvoke $r3.<java.util.ArrayList: int size()>();
+
+        if $i1 <= 1 goto label4;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $i1 = virtualinvoke $r3.<java.util.ArrayList: int size()>();
+
+        $i3 = -2;
+
+        $i1 = $i1 + $i3;
+
+        $r4 = virtualinvoke $r3.<java.util.ArrayList: java.lang.Object get(int)>($i1);
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk) $r4;
+
+        goto label5;
+
+     label4:
+        $r2 = null;
+
+     label5:
+        if $r2 == null goto label6;
+
+        $l2 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: long endTimeUs>;
+
+        $l0 = staticinvoke <java.lang.Math: long max(long,long)>($l0, $l2);
+
+     label6:
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $l2 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long getLargestQueuedTimestampUs()>();
+
+        $l0 = staticinvoke <java.lang.Math: long max(long,long)>($l0, $l2);
+
+        return $l0;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource getChunkSource()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource chunkSource>;
+
+        return r1;
+    }
+
+    public long getNextLoadPositionUs()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        long l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean isPendingReset()>();
+
+        if $z0 == 0 goto label1;
+
+        l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs>;
+
+        return l0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean loadingFinished>;
+
+        if $z0 == 0 goto label2;
+
+        return -9223372036854775808L;
+
+     label2:
+        $r1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk getLastMediaChunk()>();
+
+        l0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: long endTimeUs>;
+
+        return l0;
+    }
+
+    boolean isPendingReset()
+    {
+        long $l1;
+        byte $b0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs>;
+
+        $b0 = $l1 cmp -9223372036854775807L;
+
+        if $b0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public boolean isReady()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean loadingFinished>;
+
+        if $z0 != 0 goto label2;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean isPendingReset()>();
+
+        if $z0 != 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: boolean hasNextSample()>();
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    public void maybeThrowError() throws java.io.IOException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: void maybeThrowError()>();
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: boolean isLoading()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource chunkSource>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource: void maybeThrowError()>();
+
+     label1:
+        return;
+    }
+
+    public void onLoadCanceled(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk, long, long, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r5;
+        long $l0, $l1, $l4, $l5, $l6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r6;
+        int $i2, $i3, $i7;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r4;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r2;
+        java.lang.Object $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r7;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $z0 := @parameter3: boolean;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec dataSpec>;
+
+        $i7 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: int type>;
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int primaryTrackType>;
+
+        $r2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: com.mbridge.msdk.playercommon.exoplayer2.Format trackFormat>;
+
+        $i3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: int trackSelectionReason>;
+
+        $r3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: java.lang.Object trackSelectionData>;
+
+        $l4 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long startTimeUs>;
+
+        $l5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long endTimeUs>;
+
+        $l6 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long bytesLoaded()>();
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void loadCanceled(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int,int,com.mbridge.msdk.playercommon.exoplayer2.Format,int,java.lang.Object,long,long,long,long,long)>($r5, $i7, $i2, $r2, $i3, $r3, $l4, $l5, $l0, $l1, $l6);
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $i2 = lengthof $r7;
+
+        $i3 = 0;
+
+     label1:
+        if $i3 >= $i2 goto label2;
+
+        $r6 = $r7[$i3];
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label2:
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback callback>;
+
+        interfaceinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback: void onContinueLoadingRequested(com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader)>(r0);
+
+        return;
+    }
+
+    public volatile void onLoadCanceled(com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable, long, long, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        long $l0, $l1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $z0 := @parameter3: boolean;
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk) $r1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: void onLoadCanceled(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk,long,long,boolean)>($r2, $l0, $l1, 0);
+
+        return;
+    }
+
+    public void onLoadCompleted(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk, long, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r2;
+        long $l0, $l1, $l5, $l6, $l7;
+        int $i2, $i3, $i4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r3;
+        java.lang.Object $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource chunkSource>;
+
+        interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource: void onChunkLoadCompleted(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk)>($r1);
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $r2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec dataSpec>;
+
+        $i2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: int type>;
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int primaryTrackType>;
+
+        $r3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: com.mbridge.msdk.playercommon.exoplayer2.Format trackFormat>;
+
+        $i4 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: int trackSelectionReason>;
+
+        $r4 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: java.lang.Object trackSelectionData>;
+
+        $l5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long startTimeUs>;
+
+        $l6 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long endTimeUs>;
+
+        $l7 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long bytesLoaded()>();
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void loadCompleted(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int,int,com.mbridge.msdk.playercommon.exoplayer2.Format,int,java.lang.Object,long,long,long,long,long)>($r2, $i2, $i3, $r3, $i4, $r4, $l5, $l6, $l0, $l1, $l7);
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback callback>;
+
+        interfaceinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback: void onContinueLoadingRequested(com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader)>(r0);
+
+        return;
+    }
+
+    public volatile void onLoadCompleted(com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable, long, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        long $l0, $l1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk) $r1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: void onLoadCompleted(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk,long,long)>($r2, $l0, $l1);
+
+        return;
+    }
+
+    public int onLoadError(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk, long, long, java.io.IOException)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r8;
+        long $l0, $l1, $l2, $l3, $l4;
+        java.util.ArrayList $r4;
+        byte $b6;
+        int $i5, $i7, $i8;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r6;
+        boolean $z0, $z1, $z2;
+        java.io.IOException $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r9;
+        java.lang.Object $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $r2 := @parameter3: java.io.IOException;
+
+        $l4 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long bytesLoaded()>();
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean isMediaChunk(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk)>($r1);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $i5 = virtualinvoke $r4.<java.util.ArrayList: int size()>();
+
+        $i5 = $i5 - 1;
+
+        $b6 = $l4 cmp 0L;
+
+        if $b6 == 0 goto label1;
+
+        if $z0 == 0 goto label1;
+
+        $z1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean haveReadFromMediaChunk(int)>($i5);
+
+        if $z1 == 0 goto label1;
+
+        $z1 = 0;
+
+        goto label2;
+
+     label1:
+        $z1 = 1;
+
+     label2:
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource chunkSource>;
+
+        $z2 = interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource: boolean onChunkLoadError(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk,boolean,java.lang.Exception)>($r1, $z1, $r2);
+
+        if $z2 == 0 goto label7;
+
+        if $z1 != 0 goto label3;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("ChunkSampleStream", "Ignoring attempt to cancel non-cancelable load.");
+
+        goto label7;
+
+     label3:
+        if $z0 == 0 goto label6;
+
+        $r6 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk discardUpstreamMediaChunksFromIndex(int)>($i5);
+
+        if $r6 != $r1 goto label4;
+
+        $z0 = 1;
+
+        goto label5;
+
+     label4:
+        $z0 = 0;
+
+     label5:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $z0 = virtualinvoke $r4.<java.util.ArrayList: boolean isEmpty()>();
+
+        if $z0 == 0 goto label6;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long lastSeekPositionUs>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs> = $l2;
+
+     label6:
+        $z0 = 1;
+
+        goto label8;
+
+     label7:
+        $z0 = 0;
+
+     label8:
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $r8 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec dataSpec>;
+
+        $i5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: int type>;
+
+        $i7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int primaryTrackType>;
+
+        $r9 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: com.mbridge.msdk.playercommon.exoplayer2.Format trackFormat>;
+
+        $i8 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: int trackSelectionReason>;
+
+        $r3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: java.lang.Object trackSelectionData>;
+
+        $l2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long startTimeUs>;
+
+        $l3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk: long endTimeUs>;
+
+        virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void loadError(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int,int,com.mbridge.msdk.playercommon.exoplayer2.Format,int,java.lang.Object,long,long,long,long,long,java.io.IOException,boolean)>($r8, $i5, $i7, $r9, $i8, $r3, $l2, $l3, $l0, $l1, $l4, $r2, $z0);
+
+        if $z0 == 0 goto label9;
+
+        $r10 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback callback>;
+
+        interfaceinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader$Callback: void onContinueLoadingRequested(com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader)>(r0);
+
+        return 2;
+
+     label9:
+        return 0;
+    }
+
+    public volatile int onLoadError(com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable, long, long, java.io.IOException)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i2;
+        long $l0, $l1;
+        java.io.IOException $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $r1 := @parameter3: java.io.IOException;
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk) $r2;
+
+        $i2 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int onLoadError(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.Chunk,long,long,java.io.IOException)>($r3, $l0, $l1, $r1);
+
+        return $i2;
+    }
+
+    public void onLoaderReleased()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$ReleaseCallback $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r1 = $r2[$i1];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$ReleaseCallback releaseCallback>;
+
+        if $r3 == null goto label3;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$ReleaseCallback: void onSampleStreamReleased(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream)>(r0);
+
+     label3:
+        return;
+    }
+
+    public int readData(com.mbridge.msdk.playercommon.exoplayer2.FormatHolder, com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer, boolean)
+    {
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        com.mbridge.msdk.playercommon.exoplayer2.FormatHolder $r1;
+        int $i1, $i2;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.FormatHolder;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer;
+
+        $z1 := @parameter2: boolean;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean isPendingReset()>();
+
+        if $z0 == 0 goto label1;
+
+        $i1 = -3;
+
+        return $i1;
+
+     label1:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean loadingFinished>;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long decodeOnlyUntilPositionUs>;
+
+        $i1 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int read(com.mbridge.msdk.playercommon.exoplayer2.FormatHolder,com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer,boolean,boolean,long)>($r1, $r2, $z1, $z0, $l0);
+
+        $i2 = -4;
+
+        if $i1 != $i2 goto label2;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $i2 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int getReadIndex()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: void maybeNotifyPrimaryTrackFormatChanged(int,int)>($i2, 1);
+
+     label2:
+        return $i1;
+    }
+
+    public void reevaluateBuffer(long)
+    {
+        long $l0, $l4;
+        java.util.ArrayList $r2;
+        java.util.List $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i1, $i2, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r5;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $l0 := @parameter0: long;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: boolean isLoading()>();
+
+        if $z0 != 0 goto label8;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean isPendingReset()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $i1 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource chunkSource>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.List readOnlyMediaChunks>;
+
+        $i2 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSource: int getPreferredQueueSize(long,java.util.List)>($l0, $r4);
+
+        $i3 = $i2;
+
+        if $i1 > $i2 goto label2;
+
+        return;
+
+     label2:
+        if $i3 >= $i1 goto label4;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean haveReadFromMediaChunk(int)>($i3);
+
+        if $z0 != 0 goto label3;
+
+        goto label5;
+
+     label3:
+        $i3 = $i3 + 1;
+
+        goto label2;
+
+     label4:
+        $i3 = $i1;
+
+     label5:
+        if $i3 != $i1 goto label6;
+
+        return;
+
+     label6:
+        $r5 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk getLastMediaChunk()>();
+
+        $l0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: long endTimeUs>;
+
+        $r5 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk discardUpstreamMediaChunksFromIndex(int)>($i3);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $z0 = virtualinvoke $r2.<java.util.ArrayList: boolean isEmpty()>();
+
+        if $z0 == 0 goto label7;
+
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long lastSeekPositionUs>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs> = $l4;
+
+     label7:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean loadingFinished> = 0;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int primaryTrackType>;
+
+        $l4 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: long startTimeUs>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void upstreamDiscarded(int,long,long)>($i1, $l4, $l0);
+
+     label8:
+        return;
+    }
+
+    public void release()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: void release(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$ReleaseCallback)>(null);
+
+        return;
+    }
+
+    public void release(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$ReleaseCallback)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$ReleaseCallback $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$ReleaseCallback;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$ReleaseCallback releaseCallback> = $r2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardToEnd()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r1 = $r3[$i1];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardToEnd()>();
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: void release(com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$ReleaseCallback)>(r0);
+
+        return;
+    }
+
+    public void seekToUs(long)
+    {
+        long $l3, $l6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r1;
+        java.util.ArrayList $r2;
+        byte $b1, $b2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i0, $i4, $i5;
+        java.lang.Object $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk $r4;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $l3 := @parameter0: long;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long lastSeekPositionUs> = $l3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void rewind()>();
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean isPendingReset()>();
+
+        $i4 = 0;
+
+        if $z0 == 0 goto label01;
+
+        $z0 = 0;
+
+        goto label12;
+
+     label01:
+        $i0 = 0;
+
+     label02:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $i5 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i5 goto label05;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        $r3 = virtualinvoke $r2.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk) $r3;
+
+        $l6 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: long startTimeUs>;
+
+        $b1 = $l6 cmp $l3;
+
+        if $b1 != 0 goto label03;
+
+        $l6 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: long seekTimeUs>;
+
+        $b2 = $l6 cmp -9223372036854775807L;
+
+        if $b2 != 0 goto label03;
+
+        goto label06;
+
+     label03:
+        $i5 = (int) $b1;
+
+        if $i5 <= 0 goto label04;
+
+        goto label05;
+
+     label04:
+        $i0 = $i0 + 1;
+
+        goto label02;
+
+     label05:
+        $r4 = null;
+
+     label06:
+        if $r4 == null goto label07;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $i0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.BaseMediaChunk: int getFirstSampleIndex(int)>(0);
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: boolean setReadPosition(int)>($i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long decodeOnlyUntilPositionUs> = -9223372036854775808L;
+
+        goto label12;
+
+     label07:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $l6 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long getNextLoadPositionUs()>();
+
+        $b1 = $l3 cmp $l6;
+
+        $i0 = (int) $b1;
+
+        if $i0 >= 0 goto label08;
+
+        $z0 = 1;
+
+        goto label09;
+
+     label08:
+        $z0 = 0;
+
+     label09:
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int advanceTo(long,boolean,boolean)>($l3, 1, $z0);
+
+        $i5 = -1;
+
+        if $i0 == $i5 goto label10;
+
+        $z0 = 1;
+
+        goto label11;
+
+     label10:
+        $z0 = 0;
+
+     label11:
+        $l6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long lastSeekPositionUs>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long decodeOnlyUntilPositionUs> = $l6;
+
+     label12:
+        if $z0 == 0 goto label14;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $i4 = lengthof $r5;
+
+        $i0 = 0;
+
+     label13:
+        if $i0 >= $i4 goto label17;
+
+        $r1 = $r5[$i0];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void rewind()>();
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int advanceTo(long,boolean,boolean)>($l3, 1, 0);
+
+        $i0 = $i0 + 1;
+
+        goto label13;
+
+     label14:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: long pendingResetPositionUs> = $l3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean loadingFinished> = 0;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.util.ArrayList mediaChunks>;
+
+        virtualinvoke $r2.<java.util.ArrayList: void clear()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        $z0 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: boolean isLoading()>();
+
+        if $z0 == 0 goto label15;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: void cancelLoading()>();
+
+        return;
+
+     label15:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $i0 = lengthof $r5;
+
+     label16:
+        if $i4 >= $i0 goto label17;
+
+        $r1 = $r5[$i4];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $i4 = $i4 + 1;
+
+        goto label16;
+
+     label17:
+        return;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$EmbeddedSampleStream selectEmbeddedTrack(long, int)
+    {
+        java.lang.IllegalStateException $r6;
+        boolean[] $r3;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$EmbeddedSampleStream $r5;
+        int $i1, $i2, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $l0 := @parameter0: long;
+
+        $i1 := @parameter1: int;
+
+        $i2 = 0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $i3 = lengthof $r1;
+
+        if $i2 >= $i3 goto label3;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: int[] embeddedTrackTypes>;
+
+        $i3 = $r2[$i2];
+
+        if $i3 != $i1 goto label2;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean[] embeddedTracksSelected>;
+
+        $z0 = $r3[$i2];
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean[] embeddedTracksSelected>;
+
+        $r3[$i2] = 1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $r4 = $r1[$i2];
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void rewind()>();
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $r4 = $r1[$i2];
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int advanceTo(long,boolean,boolean)>($l0, 1, 1);
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$EmbeddedSampleStream;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] embeddedSampleQueues>;
+
+        $r4 = $r1[$i2];
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream$EmbeddedSampleStream: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream,com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream,com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue,int)>(r0, r0, $r4, $i2);
+
+        return $r5;
+
+     label2:
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label3:
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r6;
+    }
+
+    public int skipData(long)
+    {
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r1;
+        byte $b3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream r0;
+        int $i1, $i4, $i5;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream;
+
+        $l0 := @parameter0: long;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean isPendingReset()>();
+
+        $i1 = 0;
+
+        if $z0 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: boolean loadingFinished>;
+
+        if $z0 == 0 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $l2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long getLargestQueuedTimestampUs()>();
+
+        $b3 = $l0 cmp $l2;
+
+        $i4 = (int) $b3;
+
+        if $i4 <= 0 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $i1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int advanceToEnd()>();
+
+        goto label4;
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $i4 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int advanceTo(long,boolean,boolean)>($l0, 1, 1);
+
+        $i5 = -1;
+
+        if $i4 != $i5 goto label3;
+
+        goto label4;
+
+     label3:
+        $i1 = $i4;
+
+     label4:
+        if $i1 <= 0 goto label5;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue primarySampleQueue>;
+
+        $i4 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int getReadIndex()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: void maybeNotifyPrimaryTrackFormatChanged(int,int)>($i4, $i1);
+
+     label5:
+        return $i1;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.source.chunk.ChunkSampleStream: java.lang.String TAG> = "ChunkSampleStream";
+
+        return;
+    }
+}

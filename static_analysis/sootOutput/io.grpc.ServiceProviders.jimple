@@ -1,0 +1,269 @@
+final class io.grpc.ServiceProviders extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        io.grpc.ServiceProviders r0;
+
+        r0 := @this: io.grpc.ServiceProviders;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static java.lang.Object createForHardCoded(java.lang.Class, java.lang.Class)
+    {
+        java.lang.Throwable $r7;
+        java.lang.Object[] $r5;
+        java.lang.Class[] $r3;
+        java.lang.ClassCastException $r0;
+        java.lang.reflect.Constructor $r4;
+        java.util.ServiceConfigurationError $r8;
+        java.lang.Class $r1, $r2;
+        java.lang.Object $r6;
+        java.lang.String $r9;
+
+        $r1 := @parameter0: java.lang.Class;
+
+        $r2 := @parameter1: java.lang.Class;
+
+     label1:
+        $r1 = virtualinvoke $r2.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>($r1);
+
+     label2:
+        $r3 = newarray (java.lang.Class)[0];
+
+     label3:
+        $r4 = virtualinvoke $r1.<java.lang.Class: java.lang.reflect.Constructor getConstructor(java.lang.Class[])>($r3);
+
+     label4:
+        $r5 = newarray (java.lang.Object)[0];
+
+     label5:
+        $r6 = virtualinvoke $r4.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r5);
+
+     label6:
+        return $r6;
+
+     label7:
+        $r7 := @caughtexception;
+
+        $r8 = new java.util.ServiceConfigurationError;
+
+        $r5 = newarray (java.lang.Object)[2];
+
+        $r9 = virtualinvoke $r2.<java.lang.Class: java.lang.String getName()>();
+
+        $r5[0] = $r9;
+
+        $r5[1] = $r7;
+
+        $r9 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Provider %s could not be instantiated %s", $r5);
+
+        specialinvoke $r8.<java.util.ServiceConfigurationError: void <init>(java.lang.String,java.lang.Throwable)>($r9, $r7);
+
+        throw $r8;
+
+     label8:
+        return null;
+
+     label9:
+        $r0 := @caughtexception;
+
+        goto label8;
+
+        catch java.lang.ClassCastException from label1 to label2 with label9;
+        catch java.lang.ClassCastException from label3 to label4 with label9;
+        catch java.lang.ClassCastException from label5 to label6 with label9;
+        catch java.lang.Throwable from label1 to label6 with label7;
+    }
+
+    static java.lang.Iterable getCandidatesViaHardCoded(java.lang.Class, java.lang.Iterable)
+    {
+        java.util.Iterator $r3;
+        java.lang.Class $r0, $r5;
+        java.lang.Object $r4;
+        java.lang.Iterable $r2;
+        java.util.ArrayList $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.Class;
+
+        $r2 := @parameter1: java.lang.Iterable;
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        $r3 = interfaceinvoke $r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.lang.Class) $r4;
+
+        $r4 = staticinvoke <io.grpc.ServiceProviders: java.lang.Object createForHardCoded(java.lang.Class,java.lang.Class)>($r0, $r5);
+
+        if $r4 == null goto label1;
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        goto label1;
+
+     label2:
+        return $r1;
+    }
+
+    public static java.lang.Iterable getCandidatesViaServiceLoader(java.lang.Class, java.lang.ClassLoader)
+    {
+        java.util.Iterator $r3;
+        java.lang.Class $r0;
+        java.util.ServiceLoader $r2;
+        java.lang.ClassLoader $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.Class;
+
+        $r1 := @parameter1: java.lang.ClassLoader;
+
+        $r2 = staticinvoke <java.util.ServiceLoader: java.util.ServiceLoader load(java.lang.Class,java.lang.ClassLoader)>($r0, $r1);
+
+        $r3 = interfaceinvoke $r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = staticinvoke <java.util.ServiceLoader: java.util.ServiceLoader load(java.lang.Class)>($r0);
+
+     label1:
+        return $r2;
+    }
+
+    static boolean isAndroid(java.lang.ClassLoader)
+    {
+        java.lang.ClassLoader $r1;
+        java.lang.Exception $r0;
+
+        $r1 := @parameter0: java.lang.ClassLoader;
+
+     label1:
+        staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String,boolean,java.lang.ClassLoader)>("android.app.Application", 0, $r1);
+
+     label2:
+        return 1;
+
+     label3:
+        $r0 := @caughtexception;
+
+        return 0;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public static java.lang.Object load(java.lang.Class, java.lang.Iterable, java.lang.ClassLoader, io.grpc.ServiceProviders$PriorityAccessor)
+    {
+        java.util.List $r4;
+        io.grpc.ServiceProviders$PriorityAccessor $r1;
+        java.lang.Class $r2;
+        java.lang.Object $r5;
+        java.lang.ClassLoader $r0;
+        java.lang.Iterable $r3;
+        boolean $z0;
+
+        $r2 := @parameter0: java.lang.Class;
+
+        $r3 := @parameter1: java.lang.Iterable;
+
+        $r0 := @parameter2: java.lang.ClassLoader;
+
+        $r1 := @parameter3: io.grpc.ServiceProviders$PriorityAccessor;
+
+        $r4 = staticinvoke <io.grpc.ServiceProviders: java.util.List loadAll(java.lang.Class,java.lang.Iterable,java.lang.ClassLoader,io.grpc.ServiceProviders$PriorityAccessor)>($r2, $r3, $r0, $r1);
+
+        $z0 = interfaceinvoke $r4.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        return null;
+
+     label1:
+        $r5 = interfaceinvoke $r4.<java.util.List: java.lang.Object get(int)>(0);
+
+        return $r5;
+    }
+
+    public static java.util.List loadAll(java.lang.Class, java.lang.Iterable, java.lang.ClassLoader, io.grpc.ServiceProviders$PriorityAccessor)
+    {
+        java.util.Iterator $r5;
+        java.lang.Iterable $r2;
+        java.util.ArrayList $r4;
+        java.util.List $r9;
+        io.grpc.ServiceProviders$PriorityAccessor $r0;
+        java.lang.Class $r1;
+        java.lang.Object $r6;
+        java.lang.ClassLoader $r3;
+        io.grpc.ServiceProviders$1 $r7;
+        java.util.Comparator $r8;
+        boolean $z0;
+
+        $r1 := @parameter0: java.lang.Class;
+
+        $r2 := @parameter1: java.lang.Iterable;
+
+        $r3 := @parameter2: java.lang.ClassLoader;
+
+        $r0 := @parameter3: io.grpc.ServiceProviders$PriorityAccessor;
+
+        $z0 = staticinvoke <io.grpc.ServiceProviders: boolean isAndroid(java.lang.ClassLoader)>($r3);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = staticinvoke <io.grpc.ServiceProviders: java.lang.Iterable getCandidatesViaHardCoded(java.lang.Class,java.lang.Iterable)>($r1, $r2);
+
+        goto label2;
+
+     label1:
+        $r2 = staticinvoke <io.grpc.ServiceProviders: java.lang.Iterable getCandidatesViaServiceLoader(java.lang.Class,java.lang.ClassLoader)>($r1, $r3);
+
+     label2:
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        $r5 = interfaceinvoke $r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $z0 = interfaceinvoke $r0.<io.grpc.ServiceProviders$PriorityAccessor: boolean isAvailable(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label3;
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        goto label3;
+
+     label4:
+        $r7 = new io.grpc.ServiceProviders$1;
+
+        specialinvoke $r7.<io.grpc.ServiceProviders$1: void <init>(io.grpc.ServiceProviders$PriorityAccessor)>($r0);
+
+        $r8 = staticinvoke <java.util.Collections: java.util.Comparator reverseOrder(java.util.Comparator)>($r7);
+
+        staticinvoke <java.util.Collections: void sort(java.util.List,java.util.Comparator)>($r4, $r8);
+
+        $r9 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r4);
+
+        return $r9;
+    }
+}

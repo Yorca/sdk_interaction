@@ -1,0 +1,935 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.extractor.Extractor
+{
+    private static final long AC3_FORMAT_IDENTIFIER;
+    private static final int BUFFER_SIZE;
+    private static final long E_AC3_FORMAT_IDENTIFIER;
+    public static final com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorsFactory FACTORY;
+    private static final long HEVC_FORMAT_IDENTIFIER;
+    private static final int MAX_PID_PLUS_ONE;
+    public static final int MODE_HLS;
+    public static final int MODE_MULTI_PMT;
+    public static final int MODE_SINGLE_PMT;
+    private static final int SNIFF_TS_PACKET_COUNT;
+    private static final int TS_PACKET_SIZE;
+    private static final int TS_PAT_PID;
+    public static final int TS_STREAM_TYPE_AAC_ADTS;
+    public static final int TS_STREAM_TYPE_AAC_LATM;
+    public static final int TS_STREAM_TYPE_AC3;
+    public static final int TS_STREAM_TYPE_DTS;
+    public static final int TS_STREAM_TYPE_DVBSUBS;
+    public static final int TS_STREAM_TYPE_E_AC3;
+    public static final int TS_STREAM_TYPE_H262;
+    public static final int TS_STREAM_TYPE_H264;
+    public static final int TS_STREAM_TYPE_H265;
+    public static final int TS_STREAM_TYPE_HDMV_DTS;
+    public static final int TS_STREAM_TYPE_ID3;
+    public static final int TS_STREAM_TYPE_MPA;
+    public static final int TS_STREAM_TYPE_MPA_LSF;
+    public static final int TS_STREAM_TYPE_SPLICE_INFO;
+    private static final int TS_SYNC_BYTE;
+    private int bytesSinceLastSync;
+    private final android.util.SparseIntArray continuityCounters;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader id3Reader;
+    private final int mode;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput output;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory payloadReaderFactory;
+    private int remainingPmts;
+    private final java.util.List timestampAdjusters;
+    private final android.util.SparseBooleanArray trackIds;
+    private boolean tracksEnded;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer;
+    private final android.util.SparseArray tsPayloadReaders;
+
+    static void <clinit>()
+    {
+        int $i0;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor$1 $r0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_SYNC_BYTE> = 71;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_SPLICE_INFO> = 134;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_MPA_LSF> = 4;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_MPA> = 3;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_ID3> = 21;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_HDMV_DTS> = 130;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_H265> = 36;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_H264> = 27;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_H262> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_E_AC3> = 135;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_DVBSUBS> = 89;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_DTS> = 138;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_AC3> = 129;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_AAC_LATM> = 17;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_STREAM_TYPE_AAC_ADTS> = 15;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_PAT_PID> = 0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int TS_PACKET_SIZE> = 188;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int SNIFF_TS_PACKET_COUNT> = 5;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int MODE_SINGLE_PMT> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int MODE_MULTI_PMT> = 0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int MODE_HLS> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int MAX_PID_PLUS_ONE> = 8192;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int BUFFER_SIZE> = 9400;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: long AC3_FORMAT_IDENTIFIER> = 0L;
+
+        $r0 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor$1;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor$1: void <init>()>();
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorsFactory FACTORY> = $r0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("AC-3");
+
+        $l1 = (long) $i0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: long AC3_FORMAT_IDENTIFIER> = $l1;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("EAC3");
+
+        $l1 = (long) $i0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: long E_AC3_FORMAT_IDENTIFIER> = $l1;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("HEVC");
+
+        $l1 = (long) $i0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: long HEVC_FORMAT_IDENTIFIER> = $l1;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: void <init>(int)>(0);
+
+        return;
+    }
+
+    public void <init>(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $i0 := @parameter0: int;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: void <init>(int,int)>(1, 0);
+
+        return;
+    }
+
+    public void <init>(int, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster $r1;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster: void <init>(long)>(0L);
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory: void <init>(int)>($i1);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: void <init>(int,com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster,com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory)>($i0, $r1, $r2);
+
+        return;
+    }
+
+    public void <init>(int, com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster, com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory)
+    {
+        byte[] $r7;
+        android.util.SparseIntArray $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r6;
+        java.util.ArrayList $r4;
+        android.util.SparseArray $r9;
+        java.util.List $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster $r1;
+        android.util.SparseBooleanArray $r8;
+        int $i0;
+        java.lang.Object $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster;
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory) $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory payloadReaderFactory> = $r2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int mode> = $i0;
+
+        if $i0 == 1 goto label1;
+
+        if $i0 == 2 goto label1;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: java.util.List timestampAdjusters> = $r4;
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r1);
+
+        goto label2;
+
+     label1:
+        $r5 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>($r1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: java.util.List timestampAdjusters> = $r5;
+
+     label2:
+        $r6 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $r7 = newarray (byte)[9400];
+
+        specialinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void <init>(byte[],int)>($r7, 0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer> = $r6;
+
+        $r8 = new android.util.SparseBooleanArray;
+
+        specialinvoke $r8.<android.util.SparseBooleanArray: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseBooleanArray trackIds> = $r8;
+
+        $r9 = new android.util.SparseArray;
+
+        specialinvoke $r9.<android.util.SparseArray: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseArray tsPayloadReaders> = $r9;
+
+        $r10 = new android.util.SparseIntArray;
+
+        specialinvoke $r10.<android.util.SparseIntArray: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseIntArray continuityCounters> = $r10;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: void resetPayloadReaders()>();
+
+        return;
+    }
+
+    static android.util.SparseArray access$000(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)
+    {
+        android.util.SparseArray r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseArray tsPayloadReaders>;
+
+        return r1;
+    }
+
+    static int access$100(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)
+    {
+        int i0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        i0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int remainingPmts>;
+
+        return i0;
+    }
+
+    static long access$1000()
+    {
+        long l0;
+
+        l0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: long E_AC3_FORMAT_IDENTIFIER>;
+
+        return l0;
+    }
+
+    static int access$102(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor, int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $i0 := @parameter1: int;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int remainingPmts> = $i0;
+
+        return $i0;
+    }
+
+    static int access$108(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)
+    {
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $i0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int remainingPmts>;
+
+        $i1 = $i0 + 1;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int remainingPmts> = $i1;
+
+        return $i0;
+    }
+
+    static long access$1100()
+    {
+        long l0;
+
+        l0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: long HEVC_FORMAT_IDENTIFIER>;
+
+        return l0;
+    }
+
+    static int access$200(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)
+    {
+        int i0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        i0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int mode>;
+
+        return i0;
+    }
+
+    static java.util.List access$300(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)
+    {
+        java.util.List r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: java.util.List timestampAdjusters>;
+
+        return r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader access$400(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader id3Reader>;
+
+        return r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader access$402(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor, com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader $r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader id3Reader> = $r1;
+
+        return $r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory access$500(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory payloadReaderFactory>;
+
+        return r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput access$600(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput output>;
+
+        return r1;
+    }
+
+    static android.util.SparseBooleanArray access$700(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+        android.util.SparseBooleanArray r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseBooleanArray trackIds>;
+
+        return r1;
+    }
+
+    static boolean access$800(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        z0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: boolean tracksEnded>;
+
+        return z0;
+    }
+
+    static boolean access$802(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: boolean tracksEnded> = 1;
+
+        return 1;
+    }
+
+    static long access$900()
+    {
+        long l0;
+
+        l0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: long AC3_FORMAT_IDENTIFIER>;
+
+        return l0;
+    }
+
+    private void resetPayloadReaders()
+    {
+        android.util.SparseArray $r1, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor r0;
+        android.util.SparseBooleanArray $r2;
+        int $i0, $i1, $i2;
+        java.lang.Object $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor$PatReader $r7;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseBooleanArray trackIds>;
+
+        virtualinvoke $r2.<android.util.SparseBooleanArray: void clear()>();
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseArray tsPayloadReaders>;
+
+        virtualinvoke $r1.<android.util.SparseArray: void clear()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory payloadReaderFactory>;
+
+        $r4 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$Factory: android.util.SparseArray createInitialPayloadReaders()>();
+
+        $i0 = virtualinvoke $r4.<android.util.SparseArray: int size()>();
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseArray tsPayloadReaders>;
+
+        $i2 = virtualinvoke $r4.<android.util.SparseArray: int keyAt(int)>($i1);
+
+        $r5 = virtualinvoke $r4.<android.util.SparseArray: java.lang.Object valueAt(int)>($i1);
+
+        virtualinvoke $r1.<android.util.SparseArray: void put(int,java.lang.Object)>($i2, $r5);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseArray tsPayloadReaders>;
+
+        $r6 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader;
+
+        $r7 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor$PatReader;
+
+        specialinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor$PatReader: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor)>(r0);
+
+        specialinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionReader: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SectionPayloadReader)>($r7);
+
+        virtualinvoke $r1.<android.util.SparseArray: void put(int,java.lang.Object)>(0, $r6);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader id3Reader> = null;
+
+        return;
+    }
+
+    public final void init(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap$Unseekable $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput output> = $r1;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap$Unseekable;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap$Unseekable: void <init>(long)>(-9223372036854775807L);
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput: void seekMap(com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap)>($r2);
+
+        return;
+    }
+
+    public final int read(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput, com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder) throws java.io.IOException, java.lang.InterruptedException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ParserException $r9;
+        byte[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        android.util.SparseIntArray $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r3;
+        byte $b4;
+        int $i0, $i1, $i2, $i3, $i5;
+        boolean $z0, $z1, $z2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder $r2;
+        android.util.SparseArray $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader $r7;
+        java.lang.Object $r6;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i0 = 9400 - $i0;
+
+        if $i0 >= 188 goto label02;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i0 <= 0 goto label01;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $i1 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, $i1, $r4, 0, $i0);
+
+     label01:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset(byte[],int)>($r4, $i0);
+
+     label02:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i0 >= 188 goto label04;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        $i1 = 9400 - $i0;
+
+        $i1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: int read(byte[],int,int)>($r4, $i0, $i1);
+
+        if $i1 != -1 goto label03;
+
+        return -1;
+
+     label03:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $i0 = $i0 + $i1;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setLimit(int)>($i0);
+
+        goto label02;
+
+     label04:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $i2 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i3 = $i2;
+
+     label05:
+        if $i3 >= $i0 goto label06;
+
+        $b4 = $r4[$i3];
+
+        $i1 = (int) $b4;
+
+        if $i1 == 71 goto label06;
+
+        $i3 = $i3 + 1;
+
+        goto label05;
+
+     label06:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i3);
+
+        $i1 = $i3 + 188;
+
+        if $i1 <= $i0 goto label08;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int bytesSinceLastSync>;
+
+        $i1 = $i3 - $i2;
+
+        $i0 = $i0 + $i1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int bytesSinceLastSync> = $i0;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int mode>;
+
+        if $i1 != 2 goto label22;
+
+        if $i0 > 376 goto label07;
+
+        return 0;
+
+     label07:
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.ParserException;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.ParserException: void <init>(java.lang.String)>("Cannot find sync byte. Most likely not a Transport Stream.");
+
+        throw $r9;
+
+     label08:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int bytesSinceLastSync> = 0;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $i3 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i2 = 8388608 & $i3;
+
+        if $i2 == 0 goto label09;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i1);
+
+        return 0;
+
+     label09:
+        $i2 = 4194304 & $i3;
+
+        if $i2 == 0 goto label10;
+
+        $z0 = 1;
+
+        goto label11;
+
+     label10:
+        $z0 = 0;
+
+     label11:
+        $i2 = 2096896 & $i3;
+
+        $i2 = $i2 >> 8;
+
+        $i5 = $i3 & 32;
+
+        if $i5 == 0 goto label12;
+
+        $z1 = 1;
+
+        goto label13;
+
+     label12:
+        $z1 = 0;
+
+     label13:
+        $i5 = $i3 & 16;
+
+        if $i5 == 0 goto label14;
+
+        $z2 = 1;
+
+        goto label15;
+
+     label14:
+        $z2 = 0;
+
+     label15:
+        if $z2 == 0 goto label16;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseArray tsPayloadReaders>;
+
+        $r6 = virtualinvoke $r5.<android.util.SparseArray: java.lang.Object get(int)>($i2);
+
+        $r7 = (com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader) $r6;
+
+        goto label17;
+
+     label16:
+        $r7 = null;
+
+     label17:
+        if $r7 != null goto label18;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i1);
+
+        return 0;
+
+     label18:
+        $i5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int mode>;
+
+        if $i5 == 2 goto label20;
+
+        $i3 = $i3 & 15;
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseIntArray continuityCounters>;
+
+        $i5 = $i3 + -1;
+
+        $i5 = virtualinvoke $r8.<android.util.SparseIntArray: int get(int,int)>($i2, $i5);
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseIntArray continuityCounters>;
+
+        virtualinvoke $r8.<android.util.SparseIntArray: void put(int,int)>($i2, $i3);
+
+        if $i5 != $i3 goto label19;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i1);
+
+        return 0;
+
+     label19:
+        $i2 = $i5 + 1;
+
+        $i2 = $i2 & 15;
+
+        if $i3 == $i2 goto label20;
+
+        interfaceinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader: void seek()>();
+
+     label20:
+        if $z1 == 0 goto label21;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $i2 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($i2);
+
+     label21:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setLimit(int)>($i1);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        interfaceinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader: void consume(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,boolean)>($r3, $z0);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setLimit(int)>($i0);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i1);
+
+     label22:
+        return 0;
+    }
+
+    public final void release()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        return;
+    }
+
+    public final void seek(long, long)
+    {
+        android.util.SparseIntArray $r5;
+        long $l0, $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r4;
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster $r3;
+        int $i2, $i3;
+        java.lang.Object $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $l0 := @parameter0: long;
+
+        $l1 := @parameter1: long;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: java.util.List timestampAdjusters>;
+
+        $i2 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        $i3 = 0;
+
+     label1:
+        if $i3 >= $i2 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: java.util.List timestampAdjusters>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i3);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster) $r2;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster: void reset()>();
+
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label2:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset()>();
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: android.util.SparseIntArray continuityCounters>;
+
+        virtualinvoke $r5.<android.util.SparseIntArray: void clear()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: void resetPayloadReaders()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: int bytesSinceLastSync> = 0;
+
+        return;
+    }
+
+    public final boolean sniff(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput) throws java.io.IOException, java.lang.InterruptedException
+    {
+        byte[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor r0;
+        byte $b3;
+        int $i0, $i1, $i2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsExtractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray tsPacketBuffer>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r3, 0, 940);
+
+        $i0 = 0;
+
+     label1:
+        if $i0 >= 188 goto label5;
+
+        $i1 = 0;
+
+     label2:
+        if $i1 != 5 goto label3;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void skipFully(int)>($i0);
+
+        return 1;
+
+     label3:
+        $i2 = $i1 * 188;
+
+        $i2 = $i2 + $i0;
+
+        $b3 = $r3[$i2];
+
+        $i2 = (int) $b3;
+
+        if $i2 == 71 goto label4;
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label4:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label5:
+        return 0;
+    }
+}

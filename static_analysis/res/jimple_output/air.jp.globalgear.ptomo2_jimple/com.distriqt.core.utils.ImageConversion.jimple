@@ -1,0 +1,351 @@
+public class com.distriqt.core.utils.ImageConversion extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        com.distriqt.core.utils.ImageConversion r0;
+
+        r0 := @this: com.distriqt.core.utils.ImageConversion;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static int BGRA_TO_ARGB(int)
+    {
+        int $i0, $i1, $i2;
+
+        $i0 := @parameter0: int;
+
+        $i1 = 16711680 & $i0;
+
+        $i1 = $i1 >> 16;
+
+        $i2 = 65280 & $i0;
+
+        $i2 = $i2 >> 8;
+
+        $i1 = $i1 | $i2;
+
+        $i0 = $i0 & 255;
+
+        $i0 = $i0 << 8;
+
+        $i0 = $i0 | $i1;
+
+        $i0 = $i0 | -16777216;
+
+        return $i0;
+    }
+
+    public static void JPEG_TO_RGB(byte[], byte[], int, int) throws java.lang.Exception
+    {
+        byte[] $r1, $r2;
+        android.graphics.Bitmap$Config $r4;
+        byte $b9;
+        int[] $r5;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8;
+        java.lang.Exception $r6;
+        android.graphics.Bitmap $r0;
+        android.graphics.BitmapFactory$Options $r3;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: byte[];
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        if $i0 > 2048 goto label5;
+
+        if $i1 > 2048 goto label5;
+
+        $r3 = new android.graphics.BitmapFactory$Options;
+
+        specialinvoke $r3.<android.graphics.BitmapFactory$Options: void <init>()>();
+
+        $r3.<android.graphics.BitmapFactory$Options: boolean inDither> = 0;
+
+        $r4 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config ARGB_8888>;
+
+        $r3.<android.graphics.BitmapFactory$Options: android.graphics.Bitmap$Config inPreferredConfig> = $r4;
+
+        $i2 = lengthof $r2;
+
+        $r0 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeByteArray(byte[],int,int,android.graphics.BitmapFactory$Options)>($r2, 0, $i2, $r3);
+
+        $i2 = $i0 * $i1;
+
+        $r5 = newarray (int)[$i2];
+
+        virtualinvoke $r0.<android.graphics.Bitmap: void getPixels(int[],int,int,int,int,int,int)>($r5, 0, $i0, 0, 0, $i0, $i1);
+
+        $i2 = 0;
+
+        $i3 = 0;
+
+     label1:
+        if $i2 >= $i1 goto label4;
+
+        $i4 = $i0 * $i2;
+
+        $i5 = 0;
+
+     label2:
+        if $i5 >= $i0 goto label3;
+
+        $i6 = $i4 + $i5;
+
+        $i6 = $r5[$i6];
+
+        $i7 = $i3 + 1;
+
+        $i8 = $i6 & 255;
+
+        $b9 = (byte) $i8;
+
+        $r1[$i3] = $b9;
+
+        $i3 = $i7 + 1;
+
+        $i8 = $i6 >> 8;
+
+        $i8 = $i8 & 255;
+
+        $b9 = (byte) $i8;
+
+        $r1[$i7] = $b9;
+
+        $i7 = $i3 + 1;
+
+        $i8 = $i6 >> 16;
+
+        $i8 = $i8 & 255;
+
+        $b9 = (byte) $i8;
+
+        $r1[$i3] = $b9;
+
+        $i3 = $i7 + 1;
+
+        $i6 = $i6 >> 24;
+
+        $i6 = $i6 & 255;
+
+        $b9 = (byte) $i6;
+
+        $r1[$i7] = $b9;
+
+        $i5 = $i5 + 1;
+
+        goto label2;
+
+     label3:
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label4:
+        return;
+
+     label5:
+        $r6 = new java.lang.Exception;
+
+        specialinvoke $r6.<java.lang.Exception: void <init>(java.lang.String)>("Image is too large to store in memory");
+
+        throw $r6;
+    }
+
+    public static void YUV_NV21_TO_RGB(byte[], byte[], int, int)
+    {
+        byte[] $r0, $r1;
+        short $s10, $s13, $s14;
+        byte $b9;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i11, $i12, $i15;
+        float $f0, $f1, $f2, $f3;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        $i2 = $i0 * $i1;
+
+        $i3 = 0;
+
+        $i4 = 0;
+
+        $i5 = 0;
+
+     label01:
+        if $i3 >= $i1 goto label12;
+
+        $i6 = 0;
+
+        $i7 = 0;
+
+     label02:
+        if $i6 >= $i0 goto label11;
+
+        $i8 = $i5 * $i0;
+
+        $i8 = $i8 + $i7;
+
+        $b9 = $r1[$i8];
+
+        $i8 = 255;
+
+        $s10 = $b9 & 255;
+
+        $i11 = $i5 >> 1;
+
+        $i11 = $i11 * $i0;
+
+        $i11 = $i11 + $i2;
+
+        $i12 = $i7 & -2;
+
+        $i11 = $i11 + $i12;
+
+        $b9 = $r1[$i11];
+
+        $s13 = (short) $b9;
+
+        $s13 = $s13 & 255;
+
+        $i11 = $i11 + 1;
+
+        $b9 = $r1[$i11];
+
+        $s14 = (short) $b9;
+
+        $s14 = $s14 & 255;
+
+        if $s10 >= 16 goto label03;
+
+        $s10 = 16;
+
+     label03:
+        $i11 = $s10 - 16;
+
+        $f0 = (float) $i11;
+
+        $f0 = $f0 * 1.164F;
+
+        $i11 = (int) $s13;
+
+        $i11 = $i11 + -128;
+
+        $f1 = (float) $i11;
+
+        $f2 = 1.596F * $f1;
+
+        $f2 = $f2 + $f0;
+
+        $i11 = (int) $f2;
+
+        $f1 = $f1 * 0.813F;
+
+        $f2 = $f0 - $f1;
+
+        $i12 = (int) $s14;
+
+        $i12 = $i12 + -128;
+
+        $f1 = (float) $i12;
+
+        $f3 = 0.391F * $f1;
+
+        $f2 = $f2 - $f3;
+
+        $i12 = (int) $f2;
+
+        $f1 = $f1 * 2.018F;
+
+        $f0 = $f0 + $f1;
+
+        $i15 = (int) $f0;
+
+        if $i11 >= 0 goto label04;
+
+        $i11 = 0;
+
+        goto label05;
+
+     label04:
+        if $i11 <= 255 goto label05;
+
+        $i11 = 255;
+
+     label05:
+        if $i12 >= 0 goto label06;
+
+        $i12 = 0;
+
+        goto label07;
+
+     label06:
+        if $i12 <= 255 goto label07;
+
+        $i12 = 255;
+
+     label07:
+        if $i15 >= 0 goto label08;
+
+        $i8 = 0;
+
+        goto label10;
+
+     label08:
+        if $i15 <= 255 goto label09;
+
+        goto label10;
+
+     label09:
+        $i8 = $i15;
+
+     label10:
+        $i15 = $i4 + 1;
+
+        $b9 = (byte) $i8;
+
+        $r0[$i4] = $b9;
+
+        $i4 = $i15 + 1;
+
+        $b9 = (byte) $i12;
+
+        $r0[$i15] = $b9;
+
+        $i8 = $i4 + 1;
+
+        $b9 = (byte) $i11;
+
+        $r0[$i4] = $b9;
+
+        $i4 = $i8 + 1;
+
+        $r0[$i8] = -1;
+
+        $i6 = $i6 + 1;
+
+        $i7 = $i7 + 1;
+
+        goto label02;
+
+     label11:
+        $i3 = $i3 + 1;
+
+        $i5 = $i5 + 1;
+
+        goto label01;
+
+     label12:
+        return;
+    }
+}

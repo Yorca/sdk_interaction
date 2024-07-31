@@ -1,0 +1,240 @@
+class com.vungle.warren.Vungle$12$1$1 extends java.lang.Object implements java.lang.Runnable
+{
+    final com.vungle.warren.Vungle$12$1 this$1;
+    final com.vungle.warren.network.Response val$response;
+
+    void <init>(com.vungle.warren.Vungle$12$1, com.vungle.warren.network.Response)
+    {
+        com.vungle.warren.Vungle$12$1$1 r0;
+        com.vungle.warren.Vungle$12$1 $r1;
+        com.vungle.warren.network.Response $r2;
+
+        r0 := @this: com.vungle.warren.Vungle$12$1$1;
+
+        $r1 := @parameter0: com.vungle.warren.Vungle$12$1;
+
+        $r2 := @parameter1: com.vungle.warren.network.Response;
+
+        r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1> = $r1;
+
+        r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.network.Response val$response> = $r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        java.lang.Throwable $r1, $r2;
+        com.google.gson.JsonObject $r6;
+        com.vungle.warren.model.Advertisement $r4, $r7;
+        com.vungle.warren.model.Placement $r18;
+        com.vungle.warren.Vungle$12 $r9;
+        com.vungle.warren.persistence.Repository $r11;
+        com.vungle.warren.AdConfig $r10;
+        java.lang.String $r12;
+        com.vungle.warren.error.VungleException $r16;
+        boolean $z0;
+        com.vungle.warren.PlayAdCallback $r15;
+        com.vungle.warren.network.Response $r3;
+        com.vungle.warren.Vungle$12$1 $r8;
+        com.vungle.warren.AdRequest $r17;
+        java.lang.Exception $r13;
+        com.vungle.warren.Vungle$12$1$1 r0;
+        java.lang.Object $r5;
+        java.lang.StringBuilder $r14;
+
+        r0 := @this: com.vungle.warren.Vungle$12$1$1;
+
+        $r3 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.network.Response val$response>;
+
+        $z0 = virtualinvoke $r3.<com.vungle.warren.network.Response: boolean isSuccessful()>();
+
+        $r4 = null;
+
+        if $z0 == 0 goto label14;
+
+        $r3 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.network.Response val$response>;
+
+        $r5 = virtualinvoke $r3.<com.vungle.warren.network.Response: java.lang.Object body()>();
+
+        $r6 = (com.google.gson.JsonObject) $r5;
+
+        if $r6 == null goto label14;
+
+        $z0 = virtualinvoke $r6.<com.google.gson.JsonObject: boolean has(java.lang.String)>("ad");
+
+        if $z0 == 0 goto label14;
+
+     label01:
+        $r6 = virtualinvoke $r6.<com.google.gson.JsonObject: com.google.gson.JsonObject getAsJsonObject(java.lang.String)>("ad");
+
+     label02:
+        $r7 = new com.vungle.warren.model.Advertisement;
+
+     label03:
+        specialinvoke $r7.<com.vungle.warren.model.Advertisement: void <init>(com.google.gson.JsonObject)>($r6);
+
+     label04:
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r9 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.Vungle$12 this$0>;
+
+        $r10 = $r9.<com.vungle.warren.Vungle$12: com.vungle.warren.AdConfig val$settings>;
+
+     label05:
+        virtualinvoke $r7.<com.vungle.warren.model.Advertisement: void configure(com.vungle.warren.AdConfig)>($r10);
+
+     label06:
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r9 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.Vungle$12 this$0>;
+
+        $r11 = $r9.<com.vungle.warren.Vungle$12: com.vungle.warren.persistence.Repository val$repository>;
+
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r9 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.Vungle$12 this$0>;
+
+        $r12 = $r9.<com.vungle.warren.Vungle$12: java.lang.String val$placementId>;
+
+     label07:
+        virtualinvoke $r11.<com.vungle.warren.persistence.Repository: void saveAndApplyState(com.vungle.warren.model.Advertisement,java.lang.String,int)>($r7, $r12, 0);
+
+     label08:
+        $r4 = $r7;
+
+        goto label14;
+
+     label09:
+        $r13 := @caughtexception;
+
+        $r4 = $r7;
+
+        goto label12;
+
+     label10:
+        $r4 = $r7;
+
+        goto label13;
+
+     label11:
+        $r13 := @caughtexception;
+
+     label12:
+        $r14 = new java.lang.StringBuilder;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>(java.lang.String)>("streaming ads Exception :");
+
+        $r12 = virtualinvoke $r13.<java.lang.Exception: java.lang.String getLocalizedMessage()>();
+
+        virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r12);
+
+        $r12 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("Vungle#playAd", $r12);
+
+        $r12 = staticinvoke <com.vungle.warren.Vungle: java.lang.String access$1500()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r12, "Error using will_play_ad!", $r13);
+
+        goto label14;
+
+     label13:
+        staticinvoke <com.vungle.warren.VungleLogger: void debug(java.lang.String,java.lang.String)>("Vungle#playAd", "streaming ads IllegalArgumentException");
+
+        $r12 = staticinvoke <com.vungle.warren.Vungle: java.lang.String access$1500()>();
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>($r12, "Will Play Ad did not respond with a replacement. Move on.");
+
+     label14:
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $z0 = $r8.<com.vungle.warren.Vungle$12$1: boolean val$finalStreamingOnly>;
+
+        if $z0 == 0 goto label16;
+
+        if $r4 != null goto label15;
+
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r9 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.Vungle$12 this$0>;
+
+        $r12 = $r9.<com.vungle.warren.Vungle$12: java.lang.String val$placementId>;
+
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r9 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.Vungle$12 this$0>;
+
+        $r15 = $r9.<com.vungle.warren.Vungle$12: com.vungle.warren.PlayAdCallback val$listener>;
+
+        $r16 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r16.<com.vungle.warren.error.VungleException: void <init>(int)>(1);
+
+        staticinvoke <com.vungle.warren.Vungle: void access$1600(java.lang.String,com.vungle.warren.PlayAdCallback,com.vungle.warren.error.VungleException)>($r12, $r15, $r16);
+
+        return;
+
+     label15:
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r17 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.AdRequest val$request>;
+
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r9 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.Vungle$12 this$0>;
+
+        $r15 = $r9.<com.vungle.warren.Vungle$12: com.vungle.warren.PlayAdCallback val$listener>;
+
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r18 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.model.Placement val$placement>;
+
+        staticinvoke <com.vungle.warren.Vungle: void access$1800(com.vungle.warren.AdRequest,com.vungle.warren.PlayAdCallback,com.vungle.warren.model.Placement,com.vungle.warren.model.Advertisement)>($r17, $r15, $r18, $r4);
+
+        return;
+
+     label16:
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r17 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.AdRequest val$request>;
+
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r9 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.Vungle$12 this$0>;
+
+        $r15 = $r9.<com.vungle.warren.Vungle$12: com.vungle.warren.PlayAdCallback val$listener>;
+
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r18 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.model.Placement val$placement>;
+
+        $r8 = r0.<com.vungle.warren.Vungle$12$1$1: com.vungle.warren.Vungle$12$1 this$1>;
+
+        $r4 = $r8.<com.vungle.warren.Vungle$12$1: com.vungle.warren.model.Advertisement val$finalAdvertisement>;
+
+        staticinvoke <com.vungle.warren.Vungle: void access$1800(com.vungle.warren.AdRequest,com.vungle.warren.PlayAdCallback,com.vungle.warren.model.Placement,com.vungle.warren.model.Advertisement)>($r17, $r15, $r18, $r4);
+
+        return;
+
+     label17:
+        $r1 := @caughtexception;
+
+        goto label13;
+
+     label18:
+        $r2 := @caughtexception;
+
+        goto label10;
+
+        catch java.lang.IllegalArgumentException from label01 to label02 with label17;
+        catch java.lang.IllegalArgumentException from label03 to label04 with label17;
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch java.lang.Exception from label03 to label04 with label11;
+        catch java.lang.IllegalArgumentException from label05 to label06 with label18;
+        catch java.lang.IllegalArgumentException from label07 to label08 with label18;
+        catch java.lang.Exception from label04 to label08 with label09;
+    }
+}

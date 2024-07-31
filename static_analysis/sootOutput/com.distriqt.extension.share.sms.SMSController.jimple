@@ -1,0 +1,1011 @@
+public class com.distriqt.extension.share.sms.SMSController extends com.distriqt.core.ActivityStateListener
+{
+    public static final java.lang.String TAG;
+    private com.distriqt.core.auth.Authorisation _auth;
+    private com.distriqt.core.utils.IExtensionContext _extContext;
+    private java.lang.String[] _permissions;
+    private com.distriqt.extension.share.receivers.SMSDeliveryReceiver _smsDeliveredReceiver;
+    private com.distriqt.extension.share.receivers.SMSSentReceiver _smsSentReceiver;
+
+    static void <clinit>()
+    {
+        <com.distriqt.extension.share.sms.SMSController: java.lang.String TAG> = "SMSController";
+
+        return;
+    }
+
+    public void <init>(com.distriqt.core.utils.IExtensionContext)
+    {
+        com.distriqt.extension.share.sms.SMSController r0;
+        java.lang.String[] $r4;
+        java.util.ArrayList $r6;
+        com.distriqt.core.utils.IExtensionContext $r1, $r3;
+        java.util.List $r7;
+        com.distriqt.core.auth.Authorisation $r2;
+        android.app.Activity $r5;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $r1 := @parameter0: com.distriqt.core.utils.IExtensionContext;
+
+        specialinvoke r0.<com.distriqt.core.ActivityStateListener: void <init>()>();
+
+        r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSSentReceiver _smsSentReceiver> = null;
+
+        r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSDeliveryReceiver _smsDeliveredReceiver> = null;
+
+        r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext> = $r1;
+
+        $r2 = new com.distriqt.core.auth.Authorisation;
+
+        $r3 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        specialinvoke $r2.<com.distriqt.core.auth.Authorisation: void <init>(com.distriqt.core.utils.IExtensionContext)>($r3);
+
+        r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.auth.Authorisation _auth> = $r2;
+
+        $r4 = newarray (java.lang.String)[3];
+
+        $r4[0] = "android.permission.SEND_SMS";
+
+        $r4[1] = "android.permission.READ_SMS";
+
+        $r4[2] = "android.permission.RECEIVE_SMS";
+
+        r0.<com.distriqt.extension.share.sms.SMSController: java.lang.String[] _permissions> = $r4;
+
+        $r5 = interfaceinvoke $r1.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        $r4 = newarray (java.lang.String)[4];
+
+        $r4[0] = "android.permission.SEND_SMS";
+
+        $r4[1] = "android.permission.READ_SMS";
+
+        $r4[2] = "android.permission.RECEIVE_SMS";
+
+        $r4[3] = "android.permission.READ_PHONE_STATE";
+
+        $r7 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r4);
+
+        $r4 = staticinvoke <com.distriqt.core.auth.Authorisation: java.lang.String[] filterOptionalPermissionsFromManifest(android.content.Context,java.util.List,java.util.List)>($r5, $r6, $r7);
+
+        r0.<com.distriqt.extension.share.sms.SMSController: java.lang.String[] _permissions> = $r4;
+
+        return;
+    }
+
+    private android.telephony.SmsManager getSmsManagerForSubscriptionId(int)
+    {
+        java.lang.Throwable $r10;
+        java.util.Iterator $r6;
+        com.distriqt.extension.share.sms.SMSController r0;
+        android.telephony.SmsManager $r1, $r9;
+        com.distriqt.core.utils.IExtensionContext $r2;
+        java.util.List $r5;
+        android.telephony.SubscriptionManager $r4;
+        int $i0, $i1;
+        java.lang.Object $r7;
+        java.lang.SecurityException $r11;
+        android.app.Activity $r3;
+        android.telephony.SubscriptionInfo $r8;
+        boolean $z0;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $i0 := @parameter0: int;
+
+        $r1 = null;
+
+        if $i0 == -1 goto label11;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 22 goto label11;
+
+        $r2 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+     label01:
+        $r3 = interfaceinvoke $r2.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r4 = staticinvoke <android.telephony.SubscriptionManager: android.telephony.SubscriptionManager 'from'(android.content.Context)>($r3);
+
+        $r5 = virtualinvoke $r4.<android.telephony.SubscriptionManager: java.util.List getActiveSubscriptionInfoList()>();
+
+        $r6 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label02:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+     label03:
+        if $z0 == 0 goto label11;
+
+     label04:
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+     label05:
+        $r8 = (android.telephony.SubscriptionInfo) $r7;
+
+     label06:
+        $i1 = virtualinvoke $r8.<android.telephony.SubscriptionInfo: int getSubscriptionId()>();
+
+     label07:
+        if $i0 != $i1 goto label02;
+
+     label08:
+        $r9 = staticinvoke <android.telephony.SmsManager: android.telephony.SmsManager getSmsManagerForSubscriptionId(int)>($i0);
+
+     label09:
+        $r1 = $r9;
+
+        goto label02;
+
+     label10:
+        $r10 := @caughtexception;
+
+        $r11 = (java.lang.SecurityException) $r10;
+
+        virtualinvoke $r11.<java.lang.SecurityException: void printStackTrace()>();
+
+     label11:
+        if $r1 != null goto label12;
+
+        $r1 = staticinvoke <android.telephony.SmsManager: android.telephony.SmsManager getDefault()>();
+
+     label12:
+        return $r1;
+
+        catch java.lang.SecurityException from label01 to label03 with label10;
+        catch java.lang.SecurityException from label04 to label05 with label10;
+        catch java.lang.SecurityException from label06 to label07 with label10;
+        catch java.lang.SecurityException from label08 to label09 with label10;
+    }
+
+    public static boolean isAndroidEmulator()
+    {
+        java.lang.String $r0;
+        boolean $z0;
+
+        $r0 = <android.os.Build: java.lang.String MODEL>;
+
+        $r0 = <android.os.Build: java.lang.String PRODUCT>;
+
+        if $r0 == null goto label2;
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean equals(java.lang.Object)>("sdk");
+
+        if $z0 != 0 goto label1;
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>("_sdk");
+
+        if $z0 != 0 goto label1;
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>("sdk_");
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    public java.lang.String authorisationStatus()
+    {
+        java.lang.Object[] $r2;
+        com.distriqt.extension.share.sms.SMSController r0;
+        com.distriqt.core.auth.Authorisation $r3;
+        java.lang.String[] $r4;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $r1 = <com.distriqt.extension.share.sms.SMSController: java.lang.String TAG>;
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r1, "authorisationStatus()", $r2);
+
+        $r3 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.auth.Authorisation _auth>;
+
+        $r4 = r0.<com.distriqt.extension.share.sms.SMSController: java.lang.String[] _permissions>;
+
+        $z0 = virtualinvoke $r3.<com.distriqt.core.auth.Authorisation: boolean hasPermissions(java.lang.String[])>($r4);
+
+        if $z0 == 0 goto label1;
+
+        return "authorised";
+
+     label1:
+        $r3 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.auth.Authorisation _auth>;
+
+        $r4 = r0.<com.distriqt.extension.share.sms.SMSController: java.lang.String[] _permissions>;
+
+        $z0 = virtualinvoke $r3.<com.distriqt.core.auth.Authorisation: boolean shouldExplainPermissions(java.lang.String[])>($r4);
+
+        if $z0 == 0 goto label2;
+
+        return "should_explain";
+
+     label2:
+        return "not_determined";
+    }
+
+    public void dispose()
+    {
+        com.distriqt.extension.share.sms.SMSController r0;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        virtualinvoke r0.<com.distriqt.extension.share.sms.SMSController: void unregisterSMSReceivers()>();
+
+        return;
+    }
+
+    public java.util.ArrayList getSubscriptions()
+    {
+        java.lang.Throwable $r9;
+        java.lang.Object[] $r2;
+        com.distriqt.extension.share.sms.SMSController r0;
+        java.lang.Exception $r8;
+        java.util.ArrayList $r3;
+        com.distriqt.core.utils.IExtensionContext $r4;
+        java.util.List $r7;
+        android.telephony.SubscriptionManager $r6;
+        int $i0;
+        java.lang.String $r1;
+        android.app.Activity $r5;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $r1 = <com.distriqt.extension.share.sms.SMSController: java.lang.String TAG>;
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r1, "getSubscriptions()", $r2);
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 22 goto label6;
+
+     label1:
+        $r4 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+     label2:
+        $r5 = interfaceinvoke $r4.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r6 = staticinvoke <android.telephony.SubscriptionManager: android.telephony.SubscriptionManager 'from'(android.content.Context)>($r5);
+
+        $r7 = virtualinvoke $r6.<android.telephony.SubscriptionManager: java.util.List getActiveSubscriptionInfoList()>();
+
+        virtualinvoke $r3.<java.util.ArrayList: boolean addAll(java.util.Collection)>($r7);
+
+     label3:
+        return $r3;
+
+     label4:
+        $r8 := @caughtexception;
+
+        staticinvoke <com.distriqt.extension.share.utils.Errors: void handleException(java.lang.Throwable)>($r8);
+
+        return $r3;
+
+     label5:
+        $r9 := @caughtexception;
+
+        staticinvoke <com.distriqt.extension.share.utils.Errors: void handleException(java.lang.Throwable)>($r9);
+
+     label6:
+        return $r3;
+
+        catch java.lang.SecurityException from label2 to label3 with label5;
+        catch java.lang.Exception from label1 to label3 with label4;
+    }
+
+    public boolean hasAuthorisation()
+    {
+        java.lang.Object[] $r2;
+        com.distriqt.extension.share.sms.SMSController r0;
+        com.distriqt.core.auth.Authorisation $r3;
+        java.lang.String[] $r4;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $r1 = <com.distriqt.extension.share.sms.SMSController: java.lang.String TAG>;
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r1, "hasAuthorisation()", $r2);
+
+        $r3 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.auth.Authorisation _auth>;
+
+        $r4 = r0.<com.distriqt.extension.share.sms.SMSController: java.lang.String[] _permissions>;
+
+        $z0 = virtualinvoke $r3.<com.distriqt.core.auth.Authorisation: boolean hasPermissions(java.lang.String[])>($r4);
+
+        return $z0;
+    }
+
+    public boolean isSupported()
+    {
+        com.distriqt.core.utils.IExtensionContext $r1;
+        android.content.pm.PackageManager $r3;
+        com.distriqt.extension.share.sms.SMSController r0;
+        android.app.Activity $r2;
+        boolean $z0;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $z0 = staticinvoke <com.distriqt.extension.share.sms.SMSController: boolean isAndroidEmulator()>();
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        $r1 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r2 = interfaceinvoke $r1.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r3 = virtualinvoke $r2.<android.app.Activity: android.content.pm.PackageManager getPackageManager()>();
+
+        $z0 = virtualinvoke $r3.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.telephony");
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    public void registerSMSReceivers()
+    {
+        com.distriqt.core.utils.IExtensionContext $r2;
+        com.distriqt.extension.share.receivers.SMSSentReceiver $r1;
+        com.distriqt.extension.share.sms.SMSController r0;
+        android.content.IntentFilter $r3;
+        android.app.Activity $r4;
+        com.distriqt.extension.share.receivers.SMSDeliveryReceiver $r5;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $r1 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSSentReceiver _smsSentReceiver>;
+
+        if $r1 != null goto label1;
+
+        $r1 = new com.distriqt.extension.share.receivers.SMSSentReceiver;
+
+        $r2 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        specialinvoke $r1.<com.distriqt.extension.share.receivers.SMSSentReceiver: void <init>(com.distriqt.core.utils.IExtensionContext)>($r2);
+
+        r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSSentReceiver _smsSentReceiver> = $r1;
+
+        $r3 = new android.content.IntentFilter;
+
+        specialinvoke $r3.<android.content.IntentFilter: void <init>(java.lang.String)>("com.distriqt.extension.message.SMS_SENT");
+
+        virtualinvoke $r3.<android.content.IntentFilter: void addDataScheme(java.lang.String)>("dtme");
+
+        $r2 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r4 = interfaceinvoke $r2.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r1 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSSentReceiver _smsSentReceiver>;
+
+        virtualinvoke $r4.<android.app.Activity: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>($r1, $r3);
+
+        $r3 = new android.content.IntentFilter;
+
+        specialinvoke $r3.<android.content.IntentFilter: void <init>(java.lang.String)>("com.distriqt.extension.message.SMS_SENT_PART");
+
+        virtualinvoke $r3.<android.content.IntentFilter: void addDataScheme(java.lang.String)>("dtme");
+
+        $r2 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r4 = interfaceinvoke $r2.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r1 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSSentReceiver _smsSentReceiver>;
+
+        virtualinvoke $r4.<android.app.Activity: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>($r1, $r3);
+
+     label1:
+        $r5 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSDeliveryReceiver _smsDeliveredReceiver>;
+
+        if $r5 != null goto label2;
+
+        $r5 = new com.distriqt.extension.share.receivers.SMSDeliveryReceiver;
+
+        $r2 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        specialinvoke $r5.<com.distriqt.extension.share.receivers.SMSDeliveryReceiver: void <init>(com.distriqt.core.utils.IExtensionContext)>($r2);
+
+        r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSDeliveryReceiver _smsDeliveredReceiver> = $r5;
+
+        $r3 = new android.content.IntentFilter;
+
+        specialinvoke $r3.<android.content.IntentFilter: void <init>(java.lang.String)>("com.distriqt.extension.message.SMS_DELIVERED");
+
+        virtualinvoke $r3.<android.content.IntentFilter: void addDataScheme(java.lang.String)>("dtme");
+
+        $r2 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r4 = interfaceinvoke $r2.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r5 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSDeliveryReceiver _smsDeliveredReceiver>;
+
+        virtualinvoke $r4.<android.app.Activity: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>($r5, $r3);
+
+        $r3 = new android.content.IntentFilter;
+
+        specialinvoke $r3.<android.content.IntentFilter: void <init>(java.lang.String)>("com.distriqt.extension.message.SMS_DELIVERED_PART");
+
+        virtualinvoke $r3.<android.content.IntentFilter: void addDataScheme(java.lang.String)>("dtme");
+
+        $r2 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r4 = interfaceinvoke $r2.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r5 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSDeliveryReceiver _smsDeliveredReceiver>;
+
+        virtualinvoke $r4.<android.app.Activity: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>($r5, $r3);
+
+     label2:
+        return;
+    }
+
+    public boolean requestAuthorisation()
+    {
+        java.lang.Object[] $r2;
+        com.distriqt.extension.share.sms.SMSController r0;
+        com.distriqt.core.auth.Authorisation $r3;
+        java.lang.String[] $r4;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $r1 = <com.distriqt.extension.share.sms.SMSController: java.lang.String TAG>;
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r1, "requestAuthorisation()", $r2);
+
+        $r3 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.auth.Authorisation _auth>;
+
+        $r4 = r0.<com.distriqt.extension.share.sms.SMSController: java.lang.String[] _permissions>;
+
+        $z0 = virtualinvoke $r3.<com.distriqt.core.auth.Authorisation: boolean requestPermissions(java.lang.String[])>($r4);
+
+        return $z0;
+    }
+
+    public boolean sendSMS(com.distriqt.extension.share.sms.SMS, int)
+    {
+        java.lang.Object[] $r4;
+        com.distriqt.extension.share.sms.SMSController r0;
+        android.telephony.SmsManager $r6, $r7;
+        android.net.Uri $r12;
+        android.content.Intent $r8, $r13;
+        android.app.PendingIntent $r14, $r15;
+        java.util.ArrayList $r2, $r17, $r18;
+        com.distriqt.core.utils.IExtensionContext $r9;
+        int $i0, $i1, $i2;
+        java.lang.String $r3, $r5, $r16;
+        com.distriqt.extension.share.sms.SMS $r1;
+        java.lang.StringBuilder $r11;
+        android.app.Activity $r10;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $r1 := @parameter0: com.distriqt.extension.share.sms.SMS;
+
+        $i0 := @parameter1: int;
+
+        $r3 = <com.distriqt.extension.share.sms.SMSController: java.lang.String TAG>;
+
+        $r4 = newarray (java.lang.Object)[4];
+
+        $r5 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        $r4[0] = $r5;
+
+        $r5 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String address>;
+
+        $r4[1] = $r5;
+
+        $r5 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String message>;
+
+        $r4[2] = $r5;
+
+        $r5 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        if $r5 != null goto label01;
+
+        $r5 = "null";
+
+        goto label02;
+
+     label01:
+        $r5 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+     label02:
+        $r4[3] = $r5;
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "sendSMS( [%s, %s, %s, %s] )", $r4);
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 23 goto label03;
+
+        $i1 = 67108864;
+
+        goto label04;
+
+     label03:
+        $i1 = 0;
+
+     label04:
+        virtualinvoke r0.<com.distriqt.extension.share.sms.SMSController: void registerSMSReceivers()>();
+
+        $r6 = specialinvoke r0.<com.distriqt.extension.share.sms.SMSController: android.telephony.SmsManager getSmsManagerForSubscriptionId(int)>($i0);
+
+        $r7 = $r6;
+
+        $r5 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String message>;
+
+        $i0 = virtualinvoke $r5.<java.lang.String: int length()>();
+
+        if $i0 >= 160 goto label07;
+
+        $r8 = new android.content.Intent;
+
+        $r9 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r10 = interfaceinvoke $r9.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        specialinvoke $r8.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>($r10, class "Lcom/distriqt/extension/share/receivers/SMSDeliveryReceiver;");
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("com.distriqt.extension.message.SMS_DELIVERED");
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("dtme://");
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r12 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r3);
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent setData(android.net.Uri)>($r12);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("id", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String address>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("address", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String message>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("message", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        if $r3 == null goto label05;
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("scAddress", $r3);
+
+     label05:
+        $r13 = new android.content.Intent;
+
+        $r9 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r10 = interfaceinvoke $r9.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        specialinvoke $r13.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>($r10, class "Lcom/distriqt/extension/share/receivers/SMSSentReceiver;");
+
+        virtualinvoke $r13.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("com.distriqt.extension.message.SMS_SENT");
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("dtme://");
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r12 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r3);
+
+        virtualinvoke $r13.<android.content.Intent: android.content.Intent setData(android.net.Uri)>($r12);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        virtualinvoke $r13.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("id", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String address>;
+
+        virtualinvoke $r13.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("address", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String message>;
+
+        virtualinvoke $r13.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("message", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        if $r3 == null goto label06;
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        virtualinvoke $r13.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("scAddress", $r3);
+
+     label06:
+        $r9 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r10 = interfaceinvoke $r9.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r14 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getBroadcast(android.content.Context,int,android.content.Intent,int)>($r10, 0, $r8, $i1);
+
+        $r9 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r10 = interfaceinvoke $r9.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r15 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getBroadcast(android.content.Context,int,android.content.Intent,int)>($r10, 0, $r13, $i1);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String address>;
+
+        $r5 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        $r16 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String message>;
+
+        virtualinvoke $r6.<android.telephony.SmsManager: void sendTextMessage(java.lang.String,java.lang.String,java.lang.String,android.app.PendingIntent,android.app.PendingIntent)>($r3, $r5, $r16, $r15, $r14);
+
+        goto label12;
+
+     label07:
+        $r4 = newarray (java.lang.Object)[0];
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "Sending multipart sms", $r4);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String message>;
+
+        $r17 = virtualinvoke $r6.<android.telephony.SmsManager: java.util.ArrayList divideMessage(java.lang.String)>($r3);
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        $r18 = new java.util.ArrayList;
+
+        specialinvoke $r18.<java.util.ArrayList: void <init>()>();
+
+        $i0 = 0;
+
+     label08:
+        $i2 = virtualinvoke $r17.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i2 goto label11;
+
+        $r8 = new android.content.Intent;
+
+        $r9 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r10 = interfaceinvoke $r9.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        specialinvoke $r8.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>($r10, class "Lcom/distriqt/extension/share/receivers/SMSDeliveryReceiver;");
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("com.distriqt.extension.message.SMS_DELIVERED_PART");
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("dtme://");
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".");
+
+        $r6 = $r7;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i0);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r12 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r3);
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent setData(android.net.Uri)>($r12);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("id", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String address>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("address", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String message>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("message", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        if $r3 == null goto label09;
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("scAddress", $r3);
+
+     label09:
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,int)>("partIndex", $i0);
+
+        $i2 = virtualinvoke $r17.<java.util.ArrayList: int size()>();
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,int)>("totalParts", $i2);
+
+        $r9 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r10 = interfaceinvoke $r9.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r14 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getBroadcast(android.content.Context,int,android.content.Intent,int)>($r10, 0, $r8, $i1);
+
+        virtualinvoke $r18.<java.util.ArrayList: boolean add(java.lang.Object)>($r14);
+
+        $r8 = new android.content.Intent;
+
+        $r9 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r10 = interfaceinvoke $r9.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        specialinvoke $r8.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>($r10, class "Lcom/distriqt/extension/share/receivers/SMSSentReceiver;");
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("com.distriqt.extension.message.SMS_SENT_PART");
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("dtme://");
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".");
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i0);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r12 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r3);
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent setData(android.net.Uri)>($r12);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("id", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String address>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("address", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String message>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("message", $r3);
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        if $r3 == null goto label10;
+
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("scAddress", $r3);
+
+     label10:
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,int)>("partIndex", $i0);
+
+        $i2 = virtualinvoke $r17.<java.util.ArrayList: int size()>();
+
+        virtualinvoke $r8.<android.content.Intent: android.content.Intent putExtra(java.lang.String,int)>("totalParts", $i2);
+
+        $r9 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r10 = interfaceinvoke $r9.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r14 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getBroadcast(android.content.Context,int,android.content.Intent,int)>($r10, 0, $r8, $i1);
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r14);
+
+        $i0 = $i0 + 1;
+
+        $r7 = $r6;
+
+        goto label08;
+
+     label11:
+        $r3 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String address>;
+
+        $r5 = $r1.<com.distriqt.extension.share.sms.SMS: java.lang.String scAddress>;
+
+        virtualinvoke $r7.<android.telephony.SmsManager: void sendMultipartTextMessage(java.lang.String,java.lang.String,java.util.ArrayList,java.util.ArrayList,java.util.ArrayList)>($r3, $r5, $r17, $r2, $r18);
+
+     label12:
+        return 1;
+    }
+
+    public boolean sendSMSWithUI(com.distriqt.extension.share.sms.SMS, boolean)
+    {
+        java.lang.Object[] $r4;
+        com.distriqt.extension.share.sms.SMS $r2;
+        com.distriqt.extension.share.sms.SMSController r0;
+        android.net.Uri $r7;
+        android.content.Intent $r5;
+        com.distriqt.core.utils.IExtensionContext $r8;
+        int $i0;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r1, $r3;
+        android.app.Activity $r9;
+        boolean $z0;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $r2 := @parameter0: com.distriqt.extension.share.sms.SMS;
+
+        $z0 := @parameter1: boolean;
+
+        $r3 = <com.distriqt.extension.share.sms.SMSController: java.lang.String TAG>;
+
+        $r4 = newarray (java.lang.Object)[3];
+
+        $r1 = $r2.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        $r4[0] = $r1;
+
+        $r1 = $r2.<com.distriqt.extension.share.sms.SMS: java.lang.String address>;
+
+        $r4[1] = $r1;
+
+        $r1 = $r2.<com.distriqt.extension.share.sms.SMS: java.lang.String message>;
+
+        $r4[2] = $r1;
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "sendSMSWithUI( [%s, %s, %s] )", $r4);
+
+        $r5 = new android.content.Intent;
+
+        specialinvoke $r5.<android.content.Intent: void <init>()>();
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("sms:");
+
+        $r3 = $r2.<com.distriqt.extension.share.sms.SMS: java.lang.String address>;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r7 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r3);
+
+        virtualinvoke $r5.<android.content.Intent: android.content.Intent setData(android.net.Uri)>($r7);
+
+        $r3 = $r2.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        $i0 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        if $i0 <= 0 goto label1;
+
+        $r3 = $r2.<com.distriqt.extension.share.sms.SMS: java.lang.String id>;
+
+        virtualinvoke $r5.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("id", $r3);
+
+     label1:
+        $r3 = $r2.<com.distriqt.extension.share.sms.SMS: java.lang.String address>;
+
+        virtualinvoke $r5.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("address", $r3);
+
+        virtualinvoke $r5.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("android.intent.action.SENDTO");
+
+        $r3 = $r2.<com.distriqt.extension.share.sms.SMS: java.lang.String message>;
+
+        virtualinvoke $r5.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("sms_body", $r3);
+
+        if $z0 == 0 goto label2;
+
+        $r8 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r9 = interfaceinvoke $r8.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r5 = staticinvoke <android.content.Intent: android.content.Intent createChooser(android.content.Intent,java.lang.CharSequence)>($r5, "Send message");
+
+        virtualinvoke $r9.<android.app.Activity: void startActivity(android.content.Intent)>($r5);
+
+        return 1;
+
+     label2:
+        $r8 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r9 = interfaceinvoke $r8.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r3 = staticinvoke <android.provider.Telephony$Sms: java.lang.String getDefaultSmsPackage(android.content.Context)>($r9);
+
+        if $r3 == null goto label3;
+
+        virtualinvoke $r5.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>($r3);
+
+     label3:
+        $r8 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r9 = interfaceinvoke $r8.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        virtualinvoke $r9.<android.app.Activity: void startActivity(android.content.Intent)>($r5);
+
+        return 1;
+    }
+
+    public void unregisterSMSReceivers()
+    {
+        com.distriqt.core.utils.IExtensionContext $r2;
+        com.distriqt.extension.share.receivers.SMSSentReceiver $r1;
+        com.distriqt.extension.share.sms.SMSController r0;
+        android.app.Activity $r3;
+        com.distriqt.extension.share.receivers.SMSDeliveryReceiver $r4;
+
+        r0 := @this: com.distriqt.extension.share.sms.SMSController;
+
+        $r1 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSSentReceiver _smsSentReceiver>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r3 = interfaceinvoke $r2.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r1 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSSentReceiver _smsSentReceiver>;
+
+        virtualinvoke $r3.<android.app.Activity: void unregisterReceiver(android.content.BroadcastReceiver)>($r1);
+
+        r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSSentReceiver _smsSentReceiver> = null;
+
+     label1:
+        $r4 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSDeliveryReceiver _smsDeliveredReceiver>;
+
+        if $r4 == null goto label2;
+
+        $r2 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r3 = interfaceinvoke $r2.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r4 = r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSDeliveryReceiver _smsDeliveredReceiver>;
+
+        virtualinvoke $r3.<android.app.Activity: void unregisterReceiver(android.content.BroadcastReceiver)>($r4);
+
+        r0.<com.distriqt.extension.share.sms.SMSController: com.distriqt.extension.share.receivers.SMSDeliveryReceiver _smsDeliveredReceiver> = null;
+
+     label2:
+        return;
+    }
+}

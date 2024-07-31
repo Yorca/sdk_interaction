@@ -1,0 +1,250 @@
+public class com.unity3d.ads.metadata.InAppPurchaseMetaData extends com.unity3d.ads.metadata.MetaData
+{
+    public static final java.lang.String IAP_KEY;
+    public static final java.lang.String KEY_CURRENCY;
+    public static final java.lang.String KEY_PRICE;
+    public static final java.lang.String KEY_PRODUCT_ID;
+    public static final java.lang.String KEY_RECEIPT_PURCHASE_DATA;
+    public static final java.lang.String KEY_SIGNATURE;
+
+    public void <init>(android.content.Context)
+    {
+        android.content.Context $r1;
+        com.unity3d.ads.metadata.InAppPurchaseMetaData r0;
+
+        r0 := @this: com.unity3d.ads.metadata.InAppPurchaseMetaData;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<com.unity3d.ads.metadata.MetaData: void <init>(android.content.Context)>($r1);
+
+        return;
+    }
+
+    public void commit()
+    {
+        android.content.Context $r3;
+        com.unity3d.services.core.device.StorageManager$StorageType $r4;
+        long $l0;
+        com.unity3d.ads.metadata.InAppPurchaseMetaData r0;
+        java.lang.Exception $r1;
+        com.unity3d.services.core.device.Storage $r5;
+        org.json.JSONException $r2;
+        org.json.JSONObject $r6;
+        com.unity3d.services.core.device.StorageEvent $r9;
+        java.lang.Object $r7;
+        org.json.JSONArray $r8;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.ads.metadata.InAppPurchaseMetaData;
+
+        $r3 = r0.<com.unity3d.ads.metadata.InAppPurchaseMetaData: android.content.Context _context>;
+
+        $z0 = staticinvoke <com.unity3d.services.core.device.StorageManager: boolean init(android.content.Context)>($r3);
+
+        if $z0 == 0 goto label10;
+
+        $r4 = <com.unity3d.services.core.device.StorageManager$StorageType: com.unity3d.services.core.device.StorageManager$StorageType PUBLIC>;
+
+        $r5 = staticinvoke <com.unity3d.services.core.device.StorageManager: com.unity3d.services.core.device.Storage getStorage(com.unity3d.services.core.device.StorageManager$StorageType)>($r4);
+
+        $r6 = virtualinvoke r0.<com.unity3d.ads.metadata.InAppPurchaseMetaData: org.json.JSONObject getData()>();
+
+        if $r6 == null goto label13;
+
+        if $r5 == null goto label13;
+
+        $r7 = virtualinvoke $r5.<com.unity3d.services.core.device.Storage: java.lang.Object get(java.lang.String)>("iap.purchases");
+
+        if $r7 == null goto label04;
+
+     label01:
+        $r8 = (org.json.JSONArray) $r7;
+
+     label02:
+        goto label05;
+
+     label03:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Invalid object type for purchases");
+
+     label04:
+        $r8 = null;
+
+     label05:
+        if $r8 != null goto label06;
+
+        $r8 = new org.json.JSONArray;
+
+        specialinvoke $r8.<org.json.JSONArray: void <init>()>();
+
+     label06:
+        $r6 = virtualinvoke r0.<com.unity3d.ads.metadata.InAppPurchaseMetaData: org.json.JSONObject getData()>();
+
+     label07:
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        virtualinvoke $r6.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("ts", $l0);
+
+     label08:
+        virtualinvoke $r8.<org.json.JSONArray: org.json.JSONArray put(java.lang.Object)>($r6);
+
+        virtualinvoke $r5.<com.unity3d.services.core.device.Storage: boolean set(java.lang.String,java.lang.Object)>("iap.purchases", $r8);
+
+        virtualinvoke $r5.<com.unity3d.services.core.device.Storage: boolean writeStorage()>();
+
+        $r9 = <com.unity3d.services.core.device.StorageEvent: com.unity3d.services.core.device.StorageEvent SET>;
+
+        $r7 = virtualinvoke $r5.<com.unity3d.services.core.device.Storage: java.lang.Object get(java.lang.String)>("iap.purchases");
+
+        virtualinvoke $r5.<com.unity3d.services.core.device.Storage: void sendEvent(com.unity3d.services.core.device.StorageEvent,java.lang.Object)>($r9, $r7);
+
+        return;
+
+     label09:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Error constructing purchase object");
+
+        return;
+
+     label10:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Unity Ads could not commit metadata due to storage error or the data is null");
+
+        return;
+
+     label11:
+        $r1 := @caughtexception;
+
+        goto label03;
+
+     label12:
+        $r2 := @caughtexception;
+
+        goto label09;
+
+     label13:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch org.json.JSONException from label07 to label08 with label12;
+    }
+
+    public boolean set(java.lang.String, java.lang.Object)
+    {
+        java.lang.Throwable $r3;
+        java.lang.Object $r1;
+        java.lang.String $r2;
+        com.unity3d.ads.metadata.InAppPurchaseMetaData r0;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.ads.metadata.InAppPurchaseMetaData;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = virtualinvoke r0.<com.unity3d.ads.metadata.InAppPurchaseMetaData: boolean setRaw(java.lang.String,java.lang.Object)>($r2, $r1);
+
+     label2:
+        exitmonitor r0;
+
+        return $z0;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public void setCurrency(java.lang.String)
+    {
+        java.lang.String $r1;
+        com.unity3d.ads.metadata.InAppPurchaseMetaData r0;
+
+        r0 := @this: com.unity3d.ads.metadata.InAppPurchaseMetaData;
+
+        $r1 := @parameter0: java.lang.String;
+
+        virtualinvoke r0.<com.unity3d.ads.metadata.InAppPurchaseMetaData: boolean set(java.lang.String,java.lang.Object)>("currency", $r1);
+
+        return;
+    }
+
+    public void setPrice(java.lang.Double)
+    {
+        com.unity3d.ads.metadata.InAppPurchaseMetaData r0;
+        java.lang.Double $r1;
+
+        r0 := @this: com.unity3d.ads.metadata.InAppPurchaseMetaData;
+
+        $r1 := @parameter0: java.lang.Double;
+
+        virtualinvoke r0.<com.unity3d.ads.metadata.InAppPurchaseMetaData: boolean set(java.lang.String,java.lang.Object)>("price", $r1);
+
+        return;
+    }
+
+    public void setProductId(java.lang.String)
+    {
+        java.lang.String $r1;
+        com.unity3d.ads.metadata.InAppPurchaseMetaData r0;
+
+        r0 := @this: com.unity3d.ads.metadata.InAppPurchaseMetaData;
+
+        $r1 := @parameter0: java.lang.String;
+
+        virtualinvoke r0.<com.unity3d.ads.metadata.InAppPurchaseMetaData: boolean set(java.lang.String,java.lang.Object)>("productId", $r1);
+
+        return;
+    }
+
+    public void setReceiptPurchaseData(java.lang.String)
+    {
+        java.lang.String $r1;
+        com.unity3d.ads.metadata.InAppPurchaseMetaData r0;
+
+        r0 := @this: com.unity3d.ads.metadata.InAppPurchaseMetaData;
+
+        $r1 := @parameter0: java.lang.String;
+
+        virtualinvoke r0.<com.unity3d.ads.metadata.InAppPurchaseMetaData: boolean set(java.lang.String,java.lang.Object)>("receiptPurchaseData", $r1);
+
+        return;
+    }
+
+    public void setSignature(java.lang.String)
+    {
+        java.lang.String $r1;
+        com.unity3d.ads.metadata.InAppPurchaseMetaData r0;
+
+        r0 := @this: com.unity3d.ads.metadata.InAppPurchaseMetaData;
+
+        $r1 := @parameter0: java.lang.String;
+
+        virtualinvoke r0.<com.unity3d.ads.metadata.InAppPurchaseMetaData: boolean set(java.lang.String,java.lang.Object)>("signature", $r1);
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.unity3d.ads.metadata.InAppPurchaseMetaData: java.lang.String KEY_SIGNATURE> = "signature";
+
+        <com.unity3d.ads.metadata.InAppPurchaseMetaData: java.lang.String KEY_RECEIPT_PURCHASE_DATA> = "receiptPurchaseData";
+
+        <com.unity3d.ads.metadata.InAppPurchaseMetaData: java.lang.String KEY_PRODUCT_ID> = "productId";
+
+        <com.unity3d.ads.metadata.InAppPurchaseMetaData: java.lang.String KEY_PRICE> = "price";
+
+        <com.unity3d.ads.metadata.InAppPurchaseMetaData: java.lang.String KEY_CURRENCY> = "currency";
+
+        <com.unity3d.ads.metadata.InAppPurchaseMetaData: java.lang.String IAP_KEY> = "iap";
+
+        return;
+    }
+}

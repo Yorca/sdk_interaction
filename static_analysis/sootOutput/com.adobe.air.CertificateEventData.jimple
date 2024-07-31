@@ -1,0 +1,159 @@
+public class com.adobe.air.CertificateEventData extends java.lang.Object
+{
+    private java.util.concurrent.locks.Condition m_condition;
+    private java.util.concurrent.locks.Lock m_lock;
+    private java.lang.String m_message;
+    private long m_nativeObject;
+    private int m_result;
+
+    public void <init>(long, java.lang.String)
+    {
+        java.util.concurrent.locks.Condition $r2;
+        com.adobe.air.CertificateEventData r0;
+        java.util.concurrent.locks.ReentrantLock $r3, $r4;
+        int $i1;
+        long $l0;
+        java.lang.String $r1;
+
+        r0 := @this: com.adobe.air.CertificateEventData;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.lang.String;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $i1 = -1;
+
+        r0.<com.adobe.air.CertificateEventData: int m_result> = $i1;
+
+        r0.<com.adobe.air.CertificateEventData: java.lang.String m_message> = $r1;
+
+        r0.<com.adobe.air.CertificateEventData: long m_nativeObject> = $l0;
+
+        $r4 = new java.util.concurrent.locks.ReentrantLock;
+
+        $r3 = $r4;
+
+        specialinvoke $r4.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        r0.<com.adobe.air.CertificateEventData: java.util.concurrent.locks.Lock m_lock> = $r3;
+
+        $r2 = interfaceinvoke $r3.<java.util.concurrent.locks.Lock: java.util.concurrent.locks.Condition newCondition()>();
+
+        r0.<com.adobe.air.CertificateEventData: java.util.concurrent.locks.Condition m_condition> = $r2;
+
+        return;
+    }
+
+    public java.lang.String getMessage()
+    {
+        com.adobe.air.CertificateEventData r0;
+        java.lang.String r1;
+
+        r0 := @this: com.adobe.air.CertificateEventData;
+
+        r1 = r0.<com.adobe.air.CertificateEventData: java.lang.String m_message>;
+
+        return r1;
+    }
+
+    public long getNativeObject()
+    {
+        long l0;
+        com.adobe.air.CertificateEventData r0;
+
+        r0 := @this: com.adobe.air.CertificateEventData;
+
+        l0 = r0.<com.adobe.air.CertificateEventData: long m_nativeObject>;
+
+        return l0;
+    }
+
+    public void setResult(int)
+    {
+        java.util.concurrent.locks.Lock $r1;
+        java.util.concurrent.locks.Condition $r2;
+        com.adobe.air.CertificateEventData r0;
+        int $i0;
+
+        r0 := @this: com.adobe.air.CertificateEventData;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.adobe.air.CertificateEventData: java.util.concurrent.locks.Lock m_lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+        r0.<com.adobe.air.CertificateEventData: int m_result> = $i0;
+
+        $r2 = r0.<com.adobe.air.CertificateEventData: java.util.concurrent.locks.Condition m_condition>;
+
+        interfaceinvoke $r2.<java.util.concurrent.locks.Condition: void signal()>();
+
+        $r1 = r0.<com.adobe.air.CertificateEventData: java.util.concurrent.locks.Lock m_lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return;
+    }
+
+    public int waitForResult()
+    {
+        java.lang.Throwable $r1, $r4;
+        java.util.concurrent.locks.Lock $r2;
+        java.util.concurrent.locks.Condition $r3;
+        com.adobe.air.CertificateEventData r0;
+        int $i0, $i1;
+
+        r0 := @this: com.adobe.air.CertificateEventData;
+
+        $r2 = r0.<com.adobe.air.CertificateEventData: java.util.concurrent.locks.Lock m_lock>;
+
+        interfaceinvoke $r2.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label1:
+        $i0 = r0.<com.adobe.air.CertificateEventData: int m_result>;
+
+     label2:
+        $i1 = -1;
+
+        if $i0 != $i1 goto label7;
+
+     label3:
+        $r3 = r0.<com.adobe.air.CertificateEventData: java.util.concurrent.locks.Condition m_condition>;
+
+     label4:
+        interfaceinvoke $r3.<java.util.concurrent.locks.Condition: void await()>();
+
+     label5:
+        goto label7;
+
+     label6:
+        $r4 := @caughtexception;
+
+        $r2 = r0.<com.adobe.air.CertificateEventData: java.util.concurrent.locks.Lock m_lock>;
+
+        interfaceinvoke $r2.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r4;
+
+     label7:
+        $r2 = r0.<com.adobe.air.CertificateEventData: java.util.concurrent.locks.Lock m_lock>;
+
+        interfaceinvoke $r2.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        $i0 = r0.<com.adobe.air.CertificateEventData: int m_result>;
+
+        return $i0;
+
+     label8:
+        $r1 := @caughtexception;
+
+        goto label7;
+
+        catch java.lang.InterruptedException from label4 to label5 with label8;
+        catch java.lang.Throwable from label1 to label2 with label6;
+        catch java.lang.Throwable from label3 to label5 with label6;
+    }
+}

@@ -1,0 +1,331 @@
+final class io.grpc.stub.ClientCalls$BlockingResponseStream extends java.lang.Object implements java.util.Iterator
+{
+    private final java.util.concurrent.BlockingQueue buffer;
+    private final io.grpc.ClientCall call;
+    private java.lang.Object last;
+    private final io.grpc.stub.ClientCalls$StartableListener listener;
+    private final io.grpc.stub.ClientCalls$ThreadlessExecutor threadless;
+
+    void <init>(io.grpc.ClientCall)
+    {
+        io.grpc.stub.ClientCalls$BlockingResponseStream r0;
+        io.grpc.ClientCall $r1;
+
+        r0 := @this: io.grpc.stub.ClientCalls$BlockingResponseStream;
+
+        $r1 := @parameter0: io.grpc.ClientCall;
+
+        specialinvoke r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: void <init>(io.grpc.ClientCall,io.grpc.stub.ClientCalls$ThreadlessExecutor)>($r1, null);
+
+        return;
+    }
+
+    void <init>(io.grpc.ClientCall, io.grpc.stub.ClientCalls$ThreadlessExecutor)
+    {
+        java.util.concurrent.ArrayBlockingQueue $r3;
+        io.grpc.stub.ClientCalls$BlockingResponseStream$QueuingListener $r4;
+        io.grpc.stub.ClientCalls$ThreadlessExecutor $r2;
+        io.grpc.stub.ClientCalls$BlockingResponseStream r0;
+        io.grpc.ClientCall $r1;
+
+        r0 := @this: io.grpc.stub.ClientCalls$BlockingResponseStream;
+
+        $r1 := @parameter0: io.grpc.ClientCall;
+
+        $r2 := @parameter1: io.grpc.stub.ClientCalls$ThreadlessExecutor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new java.util.concurrent.ArrayBlockingQueue;
+
+        specialinvoke $r3.<java.util.concurrent.ArrayBlockingQueue: void <init>(int)>(3);
+
+        r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: java.util.concurrent.BlockingQueue buffer> = $r3;
+
+        $r4 = new io.grpc.stub.ClientCalls$BlockingResponseStream$QueuingListener;
+
+        specialinvoke $r4.<io.grpc.stub.ClientCalls$BlockingResponseStream$QueuingListener: void <init>(io.grpc.stub.ClientCalls$BlockingResponseStream)>(r0);
+
+        r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.stub.ClientCalls$StartableListener listener> = $r4;
+
+        r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.ClientCall call> = $r1;
+
+        r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.stub.ClientCalls$ThreadlessExecutor threadless> = $r2;
+
+        return;
+    }
+
+    static java.util.concurrent.BlockingQueue access$700(io.grpc.stub.ClientCalls$BlockingResponseStream)
+    {
+        io.grpc.stub.ClientCalls$BlockingResponseStream $r0;
+        java.util.concurrent.BlockingQueue r1;
+
+        $r0 := @parameter0: io.grpc.stub.ClientCalls$BlockingResponseStream;
+
+        r1 = $r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: java.util.concurrent.BlockingQueue buffer>;
+
+        return r1;
+    }
+
+    static io.grpc.ClientCall access$800(io.grpc.stub.ClientCalls$BlockingResponseStream)
+    {
+        io.grpc.stub.ClientCalls$BlockingResponseStream $r0;
+        io.grpc.ClientCall r1;
+
+        $r0 := @parameter0: io.grpc.stub.ClientCalls$BlockingResponseStream;
+
+        r1 = $r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.ClientCall call>;
+
+        return r1;
+    }
+
+    private java.lang.Object waitForNext()
+    {
+        java.lang.Throwable $r5, $r7, $r8;
+        io.grpc.stub.ClientCalls$ThreadlessExecutor $r1;
+        io.grpc.stub.ClientCalls$BlockingResponseStream r0;
+        java.util.concurrent.BlockingQueue $r2;
+        io.grpc.ClientCall $r6;
+        java.lang.Thread $r4;
+        java.lang.Object $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.stub.ClientCalls$BlockingResponseStream;
+
+        $z0 = 0;
+
+     label01:
+        $r1 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.stub.ClientCalls$ThreadlessExecutor threadless>;
+
+     label02:
+        if $r1 != null goto label10;
+
+     label03:
+        $r2 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: java.util.concurrent.BlockingQueue buffer>;
+
+     label04:
+        $r3 = interfaceinvoke $r2.<java.util.concurrent.BlockingQueue: java.lang.Object take()>();
+
+     label05:
+        if $z0 == 0 goto label26;
+
+        $r4 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r4.<java.lang.Thread: void interrupt()>();
+
+        return $r3;
+
+     label06:
+        $r5 := @caughtexception;
+
+     label07:
+        $r6 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.ClientCall call>;
+
+        virtualinvoke $r6.<io.grpc.ClientCall: void cancel(java.lang.String,java.lang.Throwable)>("Thread interrupted", $r5);
+
+     label08:
+        $z0 = 1;
+
+        goto label03;
+
+     label09:
+        $r7 := @caughtexception;
+
+        $z0 = 1;
+
+        goto label24;
+
+     label10:
+        $r2 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: java.util.concurrent.BlockingQueue buffer>;
+
+        $r3 = interfaceinvoke $r2.<java.util.concurrent.BlockingQueue: java.lang.Object poll()>();
+
+     label11:
+        if $r3 != null goto label18;
+
+     label12:
+        $r1 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.stub.ClientCalls$ThreadlessExecutor threadless>;
+
+     label13:
+        virtualinvoke $r1.<io.grpc.stub.ClientCalls$ThreadlessExecutor: void waitAndDrain()>();
+
+     label14:
+        goto label10;
+
+     label15:
+        $r8 := @caughtexception;
+
+     label16:
+        $r6 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.ClientCall call>;
+
+        virtualinvoke $r6.<io.grpc.ClientCall: void cancel(java.lang.String,java.lang.Throwable)>("Thread interrupted", $r8);
+
+     label17:
+        $z0 = 1;
+
+        goto label10;
+
+     label18:
+        if $r3 == r0 goto label21;
+
+     label19:
+        $z1 = $r3 instanceof io.grpc.StatusRuntimeException;
+
+     label20:
+        if $z1 == 0 goto label22;
+
+     label21:
+        $r1 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.stub.ClientCalls$ThreadlessExecutor threadless>;
+
+        virtualinvoke $r1.<io.grpc.stub.ClientCalls$ThreadlessExecutor: void shutdown()>();
+
+     label22:
+        if $z0 == 0 goto label26;
+
+        $r4 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r4.<java.lang.Thread: void interrupt()>();
+
+        return $r3;
+
+     label23:
+        $r7 := @caughtexception;
+
+     label24:
+        if $z0 == 0 goto label25;
+
+        $r4 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r4.<java.lang.Thread: void interrupt()>();
+
+     label25:
+        throw $r7;
+
+     label26:
+        return $r3;
+
+        catch java.lang.Throwable from label01 to label02 with label23;
+        catch java.lang.InterruptedException from label04 to label05 with label06;
+        catch java.lang.Throwable from label03 to label05 with label23;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label10 to label11 with label23;
+        catch java.lang.InterruptedException from label13 to label14 with label15;
+        catch java.lang.Throwable from label12 to label14 with label23;
+        catch java.lang.Throwable from label16 to label17 with label09;
+        catch java.lang.Throwable from label19 to label20 with label23;
+        catch java.lang.Throwable from label21 to label22 with label23;
+    }
+
+    public boolean hasNext()
+    {
+        io.grpc.StatusRuntimeException $r2;
+        io.grpc.stub.ClientCalls$BlockingResponseStream r0;
+        java.lang.Object $r1;
+        io.grpc.Metadata $r4;
+        io.grpc.Status $r3;
+        boolean $z0;
+
+        r0 := @this: io.grpc.stub.ClientCalls$BlockingResponseStream;
+
+     label1:
+        $r1 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: java.lang.Object last>;
+
+        if $r1 != null goto label2;
+
+        $r1 = specialinvoke r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: java.lang.Object waitForNext()>();
+
+        r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: java.lang.Object last> = $r1;
+
+        goto label1;
+
+     label2:
+        $z0 = $r1 instanceof io.grpc.StatusRuntimeException;
+
+        if $z0 != 0 goto label4;
+
+        if $r1 == r0 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+
+     label4:
+        $r2 = (io.grpc.StatusRuntimeException) $r1;
+
+        $r3 = virtualinvoke $r2.<io.grpc.StatusRuntimeException: io.grpc.Status getStatus()>();
+
+        $r4 = virtualinvoke $r2.<io.grpc.StatusRuntimeException: io.grpc.Metadata getTrailers()>();
+
+        $r2 = virtualinvoke $r3.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException(io.grpc.Metadata)>($r4);
+
+        throw $r2;
+    }
+
+    io.grpc.stub.ClientCalls$StartableListener listener()
+    {
+        io.grpc.stub.ClientCalls$BlockingResponseStream r0;
+        io.grpc.stub.ClientCalls$StartableListener r1;
+
+        r0 := @this: io.grpc.stub.ClientCalls$BlockingResponseStream;
+
+        r1 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.stub.ClientCalls$StartableListener listener>;
+
+        return r1;
+    }
+
+    public java.lang.Object next()
+    {
+        io.grpc.stub.ClientCalls$BlockingResponseStream r0;
+        java.lang.Object $r1;
+        java.util.NoSuchElementException $r3;
+        io.grpc.ClientCall $r2;
+        boolean $z0;
+
+        r0 := @this: io.grpc.stub.ClientCalls$BlockingResponseStream;
+
+        $r1 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: java.lang.Object last>;
+
+        $z0 = $r1 instanceof io.grpc.StatusRuntimeException;
+
+        if $z0 != 0 goto label1;
+
+        if $r1 == r0 goto label1;
+
+        $r2 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: io.grpc.ClientCall call>;
+
+        virtualinvoke $r2.<io.grpc.ClientCall: void request(int)>(1);
+
+     label1:
+        $z0 = virtualinvoke r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r1 = r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: java.lang.Object last>;
+
+        r0.<io.grpc.stub.ClientCalls$BlockingResponseStream: java.lang.Object last> = null;
+
+        return $r1;
+
+     label2:
+        $r3 = new java.util.NoSuchElementException;
+
+        specialinvoke $r3.<java.util.NoSuchElementException: void <init>()>();
+
+        throw $r3;
+    }
+
+    public void remove()
+    {
+        java.lang.UnsupportedOperationException $r1;
+        io.grpc.stub.ClientCalls$BlockingResponseStream r0;
+
+        r0 := @this: io.grpc.stub.ClientCalls$BlockingResponseStream;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+}

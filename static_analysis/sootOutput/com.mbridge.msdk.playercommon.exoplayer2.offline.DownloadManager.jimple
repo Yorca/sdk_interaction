@@ -1,0 +1,1331 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager extends java.lang.Object
+{
+    private static final boolean DEBUG;
+    public static final int DEFAULT_MAX_SIMULTANEOUS_DOWNLOADS;
+    public static final int DEFAULT_MIN_RETRY_COUNT;
+    private static final java.lang.String TAG;
+    private final com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile actionFile;
+    private final java.util.ArrayList activeDownloadTasks;
+    private final com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] deserializers;
+    private final com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper downloaderConstructorHelper;
+    private boolean downloadsStopped;
+    private final android.os.Handler fileIOHandler;
+    private final android.os.HandlerThread fileIOThread;
+    private final android.os.Handler handler;
+    private boolean initialized;
+    private final java.util.concurrent.CopyOnWriteArraySet listeners;
+    private final int maxActiveDownloadTasks;
+    private final int minRetryCount;
+    private int nextTaskId;
+    private boolean released;
+    private final java.util.ArrayList tasks;
+
+    public transient void <init>(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper, int, int, java.io.File, com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[])
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        java.util.concurrent.CopyOnWriteArraySet $r10;
+        java.io.File $r1;
+        java.util.ArrayList $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper $r3;
+        android.os.HandlerThread $r9;
+        android.os.Looper $r6, $r7;
+        android.os.Handler $r8;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile $r4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper;
+
+        $i1 := @parameter1: int;
+
+        $i0 := @parameter2: int;
+
+        $r1 := @parameter3: java.io.File;
+
+        $r2 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[];
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $i2 = lengthof $r2;
+
+        if $i2 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, "At least one Deserializer is required.");
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper downloaderConstructorHelper> = $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int maxActiveDownloadTasks> = $i1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int minRetryCount> = $i0;
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile: void <init>(java.io.File)>($r1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile actionFile> = $r4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] deserializers> = $r2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean downloadsStopped> = 1;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks> = $r5;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList activeDownloadTasks> = $r5;
+
+        $r6 = staticinvoke <android.os.Looper: android.os.Looper myLooper()>();
+
+        $r7 = $r6;
+
+        if $r6 != null goto label3;
+
+        $r7 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+     label3:
+        $r8 = new android.os.Handler;
+
+        specialinvoke $r8.<android.os.Handler: void <init>(android.os.Looper)>($r7);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: android.os.Handler handler> = $r8;
+
+        $r9 = new android.os.HandlerThread;
+
+        specialinvoke $r9.<android.os.HandlerThread: void <init>(java.lang.String)>("DownloadManager file i/o");
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: android.os.HandlerThread fileIOThread> = $r9;
+
+        virtualinvoke $r9.<android.os.HandlerThread: void start()>();
+
+        $r8 = new android.os.Handler;
+
+        $r6 = virtualinvoke $r9.<android.os.HandlerThread: android.os.Looper getLooper()>();
+
+        specialinvoke $r8.<android.os.Handler: void <init>(android.os.Looper)>($r6);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: android.os.Handler fileIOHandler> = $r8;
+
+        $r10 = new java.util.concurrent.CopyOnWriteArraySet;
+
+        specialinvoke $r10.<java.util.concurrent.CopyOnWriteArraySet: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.concurrent.CopyOnWriteArraySet listeners> = $r10;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void loadActions()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String)>("Created");
+
+        return;
+    }
+
+    public transient void <init>(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper, java.io.File, com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[])
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        java.io.File $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper;
+
+        $r2 := @parameter1: java.io.File;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[];
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void <init>(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper,int,int,java.io.File,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[])>($r1, 1, 5, $r2, $r3);
+
+        return;
+    }
+
+    public transient void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache, com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource$Factory, java.io.File, com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[])
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource$Factory $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r1;
+        java.io.File $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource$Factory;
+
+        $r3 := @parameter2: java.io.File;
+
+        $r4 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[];
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource$Factory)>($r1, $r2);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void <init>(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper,java.io.File,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[])>($r5, $r3, $r4);
+
+        return;
+    }
+
+    static void access$1000(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String)>($r0);
+
+        return;
+    }
+
+    static boolean access$1100(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        z0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        return z0;
+    }
+
+    static java.util.ArrayList access$1200(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+        java.util.ArrayList r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        return r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task access$1300(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager, com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r2;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r0 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction;
+
+        $r1 = specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task addTaskForAction(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction)>($r0);
+
+        return $r1;
+    }
+
+    static boolean access$1402(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean initialized> = 1;
+
+        return 1;
+    }
+
+    static java.util.concurrent.CopyOnWriteArraySet access$1500(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)
+    {
+        java.util.concurrent.CopyOnWriteArraySet r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.concurrent.CopyOnWriteArraySet listeners>;
+
+        return r1;
+    }
+
+    static void access$1600(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void saveActions()>();
+
+        return;
+    }
+
+    static void access$1700(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void maybeStartTasks()>();
+
+        return;
+    }
+
+    static void access$1800(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager, com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void notifyListenersTaskStateChange(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r1);
+
+        return;
+    }
+
+    static android.os.Handler access$1900(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+        android.os.Handler r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: android.os.Handler handler>;
+
+        return r1;
+    }
+
+    static void access$2200(java.lang.String, com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r1;
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r0, $r1);
+
+        return;
+    }
+
+    static void access$2300(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager, com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void onTaskStateChange(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r1);
+
+        return;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper access$2400(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloaderConstructorHelper downloaderConstructorHelper>;
+
+        return r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] access$800(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] deserializers>;
+
+        return r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile access$900(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile actionFile>;
+
+        return r1;
+    }
+
+    private com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task addTaskForAction(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r2;
+        java.util.ArrayList $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int nextTaskId>;
+
+        $i1 = $i0 + 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int nextTaskId> = $i1;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int minRetryCount>;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: void <init>(int,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction,int,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$1)>($i0, r0, $r2, $i1, null);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        virtualinvoke $r3.<java.util.ArrayList: boolean add(java.lang.Object)>($r1);
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>("Task is added", $r1);
+
+        return $r1;
+    }
+
+    private void loadActions()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$2 $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        android.os.Handler $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: android.os.Handler fileIOHandler>;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$2;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$2: void <init>(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)>(r0);
+
+        virtualinvoke $r1.<android.os.Handler: boolean post(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    private static void logd(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        return;
+    }
+
+    private static void logd(java.lang.String, com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": ");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String)>($r2);
+
+        return;
+    }
+
+    private void maybeNotifyListenersIdle()
+    {
+        java.util.Iterator $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener $r4;
+        java.lang.Object $r3;
+        java.util.concurrent.CopyOnWriteArraySet $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean isIdle()>();
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String)>("Notify idle state");
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.concurrent.CopyOnWriteArraySet listeners>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.CopyOnWriteArraySet: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener) $r3;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener: void onIdle(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager)>(r0);
+
+        goto label2;
+
+     label3:
+        return;
+    }
+
+    private void maybeStartTasks()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r3, $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r4, $r6;
+        java.util.ArrayList $r1;
+        int $i0, $i1, $i2;
+        java.lang.String $r8;
+        boolean $z0, $z1, $z2, $z3;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        java.lang.Object $r2;
+        java.lang.StringBuilder $r7;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean initialized>;
+
+        if $z1 == 0 goto label12;
+
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        if $z1 == 0 goto label01;
+
+        return;
+
+     label01:
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean downloadsStopped>;
+
+        if $z1 != 0 goto label02;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList activeDownloadTasks>;
+
+        $i0 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int maxActiveDownloadTasks>;
+
+        if $i0 == $i1 goto label02;
+
+        $z1 = 0;
+
+        goto label03;
+
+     label02:
+        $z1 = 1;
+
+     label03:
+        $i0 = 0;
+
+     label04:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $i1 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label12;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task) $r2;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: boolean access$500(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r3);
+
+        if $z0 == 0 goto label11;
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction access$300(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r3);
+
+        $z0 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction: boolean isRemoveAction>;
+
+        if $z0 != 0 goto label05;
+
+        if $z1 != 0 goto label11;
+
+     label05:
+        $i1 = 0;
+
+        $z2 = 1;
+
+     label06:
+        if $i1 >= $i0 goto label09;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i1);
+
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task) $r2;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction access$300(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r5);
+
+        $z3 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction: boolean isSameMedia(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction)>($r4);
+
+        if $z3 == 0 goto label08;
+
+        if $z0 == 0 goto label07;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" clashes with ");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r5);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String)>($r8);
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: void access$600(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r5);
+
+        $z2 = 0;
+
+        goto label08;
+
+     label07:
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction access$300(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r5);
+
+        $z3 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction: boolean isRemoveAction>;
+
+        if $z3 == 0 goto label08;
+
+        $z1 = 1;
+
+        $z2 = 0;
+
+        goto label09;
+
+     label08:
+        $i1 = $i1 + 1;
+
+        goto label06;
+
+     label09:
+        if $z2 == 0 goto label11;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: void access$700(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r3);
+
+        if $z0 != 0 goto label11;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList activeDownloadTasks>;
+
+        virtualinvoke $r1.<java.util.ArrayList: boolean add(java.lang.Object)>($r3);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList activeDownloadTasks>;
+
+        $i1 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int maxActiveDownloadTasks>;
+
+        if $i1 != $i2 goto label10;
+
+        $z1 = 1;
+
+        goto label11;
+
+     label10:
+        $z1 = 0;
+
+     label11:
+        $i0 = $i0 + 1;
+
+        goto label04;
+
+     label12:
+        return;
+    }
+
+    private void notifyListenersTaskStateChange(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)
+    {
+        java.util.Iterator $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState $r2;
+        java.util.concurrent.CopyOnWriteArraySet $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener $r6;
+        java.lang.Object $r5;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>("Task state is changed", $r1);
+
+        $r2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState getDownloadState()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.concurrent.CopyOnWriteArraySet listeners>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.CopyOnWriteArraySet: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener) $r5;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener: void onTaskStateChanged(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState)>(r0, $r2);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void onTaskStateChange(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r1;
+        boolean $z0, $z1;
+        java.util.ArrayList $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: boolean isActive()>();
+
+        $z0 = $z0 ^ 1;
+
+        if $z0 == 0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList activeDownloadTasks>;
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean remove(java.lang.Object)>($r1);
+
+     label2:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void notifyListenersTaskStateChange(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r1);
+
+        $z1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: boolean isFinished()>();
+
+        if $z1 == 0 goto label3;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean remove(java.lang.Object)>($r1);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void saveActions()>();
+
+     label3:
+        if $z0 == 0 goto label4;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void maybeStartTasks()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void maybeNotifyListenersIdle()>();
+
+     label4:
+        return;
+    }
+
+    private void saveActions()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r5;
+        java.util.ArrayList $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$3 $r7;
+        android.os.Handler $r6;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $i0 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        $r2 = newarray (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction)[$i0];
+
+        $i0 = 0;
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $i1 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $r3 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task) $r3;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction access$300(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r4);
+
+        $r2[$i0] = $r5;
+
+        $i0 = $i0 + 1;
+
+        goto label2;
+
+     label3:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: android.os.Handler fileIOHandler>;
+
+        $r7 = new com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$3;
+
+        specialinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$3: void <init>(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction[])>(r0, $r2);
+
+        virtualinvoke $r6.<android.os.Handler: boolean post(java.lang.Runnable)>($r7);
+
+        return;
+    }
+
+    public final void addListener(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener $r1;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.concurrent.CopyOnWriteArraySet listeners>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean add(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState[] getAllTaskStates()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState $r5;
+        java.util.ArrayList $r2;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $i0 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        $r1 = newarray (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState)[$i0];
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $r3 = virtualinvoke $r2.<java.util.ArrayList: java.lang.Object get(int)>($i1);
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task) $r3;
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState getDownloadState()>();
+
+        $r1[$i1] = $r5;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        return $r1;
+    }
+
+    public final int getDownloadCount()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r4;
+        java.util.ArrayList $r1;
+        int $i0, $i1, $i2;
+        java.lang.Object $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $i0 = 0;
+
+        $i1 = 0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $i2 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i2 goto label3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task) $r2;
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction access$300(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r3);
+
+        $z0 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction: boolean isRemoveAction>;
+
+        if $z0 != 0 goto label2;
+
+        $i1 = $i1 + 1;
+
+     label2:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label3:
+        return $i1;
+    }
+
+    public final int getTaskCount()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        int $i0;
+        boolean $z0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $i0 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        return $i0;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState getTaskState(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState $r4;
+        java.util.ArrayList $r1;
+        int $i0, $i1, $i2;
+        java.lang.Object $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $i0 := @parameter0: int;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $i1 = 0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $i2 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        if $i1 >= $i2 goto label3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i1);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task) $r2;
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: int access$200(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r3);
+
+        if $i2 != $i0 goto label2;
+
+        $r4 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState getDownloadState()>();
+
+        return $r4;
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        return null;
+    }
+
+    public final int handleAction(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $r2 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task addTaskForAction(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction)>($r1);
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean initialized>;
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void saveActions()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void maybeStartTasks()>();
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: int access$100(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r2);
+
+        if $i0 != 0 goto label1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void notifyListenersTaskStateChange(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r2);
+
+     label1:
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: int access$200(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r2);
+
+        return $i0;
+    }
+
+    public final int handleAction(byte[]) throws java.io.IOException
+    {
+        byte[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] $r3;
+        java.io.ByteArrayInputStream $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 := @parameter0: byte[];
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $r2 = new java.io.ByteArrayInputStream;
+
+        specialinvoke $r2.<java.io.ByteArrayInputStream: void <init>(byte[])>($r1);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] deserializers>;
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction deserializeFromStream(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[],java.io.InputStream)>($r3, $r2);
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int handleAction(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction)>($r4);
+
+        return $i0;
+    }
+
+    public final boolean isIdle()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r3;
+        java.lang.Object $r2;
+        boolean $z0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean initialized>;
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $i0 = 0;
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $i1 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label4;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task) $r2;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: boolean isActive()>();
+
+        if $z0 == 0 goto label3;
+
+        return 0;
+
+     label3:
+        $i0 = $i0 + 1;
+
+        goto label2;
+
+     label4:
+        return 1;
+    }
+
+    public final boolean isInitialized()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean initialized>;
+
+        return $z0;
+    }
+
+    public final void release()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r4;
+        android.os.ConditionVariable $r5;
+        java.util.ArrayList $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$1 $r1;
+        android.os.HandlerThread $r7;
+        android.os.Handler $r6;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released> = 1;
+
+        $i0 = 0;
+
+     label2:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $i1 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label3;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList tasks>;
+
+        $r3 = virtualinvoke $r2.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task) $r3;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: void access$000(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r4);
+
+        $i0 = $i0 + 1;
+
+        goto label2;
+
+     label3:
+        $r5 = new android.os.ConditionVariable;
+
+        specialinvoke $r5.<android.os.ConditionVariable: void <init>()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: android.os.Handler fileIOHandler>;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$1;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$1: void <init>(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager,android.os.ConditionVariable)>(r0, $r5);
+
+        virtualinvoke $r6.<android.os.Handler: boolean post(java.lang.Runnable)>($r1);
+
+        virtualinvoke $r5.<android.os.ConditionVariable: void block()>();
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: android.os.HandlerThread fileIOThread>;
+
+        virtualinvoke $r7.<android.os.HandlerThread: boolean quit()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String)>("Released");
+
+        return;
+    }
+
+    public final void removeListener(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener $r1;
+        java.util.concurrent.CopyOnWriteArraySet $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.concurrent.CopyOnWriteArraySet listeners>;
+
+        virtualinvoke $r2.<java.util.concurrent.CopyOnWriteArraySet: boolean remove(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public final void startDownloads()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean downloadsStopped>;
+
+        if $z0 == 0 goto label1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean downloadsStopped> = 0;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void maybeStartTasks()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String)>("Downloads are started");
+
+     label1:
+        return;
+    }
+
+    public final void stopDownloads()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task $r3;
+        java.lang.Object $r2;
+        boolean $z0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean released>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean downloadsStopped>;
+
+        if $z0 != 0 goto label3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean downloadsStopped> = 1;
+
+        $i0 = 0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList activeDownloadTasks>;
+
+        $i1 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.util.ArrayList activeDownloadTasks>;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task) $r2;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task: void access$000(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Task)>($r3);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void logd(java.lang.String)>("Downloads are stopping");
+
+     label3:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: java.lang.String TAG> = "DownloadManager";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int DEFAULT_MIN_RETRY_COUNT> = 5;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int DEFAULT_MAX_SIMULTANEOUS_DOWNLOADS> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean DEBUG> = 0;
+
+        return;
+    }
+}

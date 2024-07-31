@@ -1,0 +1,1777 @@
+final class io.grpc.internal.ClientCallImpl extends io.grpc.ClientCall
+{
+    private static final byte[] FULL_STREAM_DECOMPRESSION_ENCODINGS;
+    private static final double NANO_TO_SECS;
+    private static final java.util.logging.Logger log;
+    private final java.util.concurrent.Executor callExecutor;
+    private final boolean callExecutorIsDirect;
+    private io.grpc.CallOptions callOptions;
+    private boolean cancelCalled;
+    private volatile boolean cancelListenersShouldBeRemoved;
+    private final io.grpc.internal.ClientCallImpl$ContextCancellationListener cancellationListener;
+    private final io.grpc.internal.CallTracer channelCallsTracer;
+    private final io.grpc.internal.ClientCallImpl$ClientStreamProvider clientStreamProvider;
+    private io.grpc.CompressorRegistry compressorRegistry;
+    private final io.grpc.Context context;
+    private final java.util.concurrent.ScheduledExecutorService deadlineCancellationExecutor;
+    private volatile java.util.concurrent.ScheduledFuture deadlineCancellationFuture;
+    private io.grpc.DecompressorRegistry decompressorRegistry;
+    private boolean fullStreamDecompression;
+    private boolean halfCloseCalled;
+    private final io.grpc.MethodDescriptor method;
+    private io.grpc.internal.ClientStream stream;
+    private final io.perfmark.Tag tag;
+    private final boolean unaryRequest;
+
+    static void <clinit>()
+    {
+        byte[] $r4;
+        long $l0;
+        java.util.logging.Logger $r2;
+        java.util.concurrent.TimeUnit $r5;
+        java.nio.charset.Charset $r3;
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        double $d0;
+
+        $r0 = class "Lio/grpc/internal/ClientCallImpl;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <io.grpc.internal.ClientCallImpl: java.util.logging.Logger log> = $r2;
+
+        $r3 = staticinvoke <java.nio.charset.Charset: java.nio.charset.Charset forName(java.lang.String)>("US-ASCII");
+
+        $r1 = "gzip";
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r3);
+
+        <io.grpc.internal.ClientCallImpl: byte[] FULL_STREAM_DECOMPRESSION_ENCODINGS> = $r4;
+
+        $r5 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $l0 = virtualinvoke $r5.<java.util.concurrent.TimeUnit: long toNanos(long)>(1L);
+
+        $d0 = (double) $l0;
+
+        $d0 = $d0 * 1.0;
+
+        <io.grpc.internal.ClientCallImpl: double NANO_TO_SECS> = $d0;
+
+        return;
+    }
+
+    void <init>(io.grpc.MethodDescriptor, java.util.concurrent.Executor, io.grpc.CallOptions, io.grpc.internal.ClientCallImpl$ClientStreamProvider, java.util.concurrent.ScheduledExecutorService, io.grpc.internal.CallTracer, io.grpc.InternalConfigSelector)
+    {
+        io.grpc.CallOptions $r1;
+        io.grpc.internal.CallTracer $r6;
+        io.grpc.Context $r16;
+        long $l1;
+        io.grpc.DecompressorRegistry $r9;
+        java.util.concurrent.ScheduledExecutorService $r3;
+        int $i0;
+        io.grpc.MethodDescriptor $r4;
+        java.lang.String $r11;
+        io.grpc.InternalConfigSelector $r7;
+        io.grpc.internal.ClientCallImpl$ContextCancellationListener $r8;
+        boolean $z0;
+        io.grpc.internal.SerializingExecutor $r15;
+        io.grpc.internal.ClientCallImpl r0;
+        java.util.concurrent.Executor $r5, $r13;
+        io.grpc.internal.SerializeReentrantCallsDirectExecutor $r14;
+        io.grpc.internal.ClientCallImpl$ClientStreamProvider $r2;
+        io.perfmark.Tag $r12;
+        io.grpc.CompressorRegistry $r10;
+        io.grpc.MethodDescriptor$MethodType $r17, $r18;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r4 := @parameter0: io.grpc.MethodDescriptor;
+
+        $r5 := @parameter1: java.util.concurrent.Executor;
+
+        $r1 := @parameter2: io.grpc.CallOptions;
+
+        $r2 := @parameter3: io.grpc.internal.ClientCallImpl$ClientStreamProvider;
+
+        $r3 := @parameter4: java.util.concurrent.ScheduledExecutorService;
+
+        $r6 := @parameter5: io.grpc.internal.CallTracer;
+
+        $r7 := @parameter6: io.grpc.InternalConfigSelector;
+
+        specialinvoke r0.<io.grpc.ClientCall: void <init>()>();
+
+        $r8 = new io.grpc.internal.ClientCallImpl$ContextCancellationListener;
+
+        specialinvoke $r8.<io.grpc.internal.ClientCallImpl$ContextCancellationListener: void <init>(io.grpc.internal.ClientCallImpl,io.grpc.internal.ClientCallImpl$1)>(r0, null);
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientCallImpl$ContextCancellationListener cancellationListener> = $r8;
+
+        $r9 = staticinvoke <io.grpc.DecompressorRegistry: io.grpc.DecompressorRegistry getDefaultInstance()>();
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.DecompressorRegistry decompressorRegistry> = $r9;
+
+        $r10 = staticinvoke <io.grpc.CompressorRegistry: io.grpc.CompressorRegistry getDefaultInstance()>();
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.CompressorRegistry compressorRegistry> = $r10;
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.MethodDescriptor method> = $r4;
+
+        $r11 = virtualinvoke $r4.<io.grpc.MethodDescriptor: java.lang.String getFullMethodName()>();
+
+        $i0 = staticinvoke <java.lang.System: int identityHashCode(java.lang.Object)>(r0);
+
+        $l1 = (long) $i0;
+
+        $r12 = staticinvoke <io.perfmark.PerfMark: io.perfmark.Tag createTag(java.lang.String,long)>($r11, $l1);
+
+        r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag> = $r12;
+
+        $r13 = staticinvoke <com.google.common.util.concurrent.MoreExecutors: java.util.concurrent.Executor directExecutor()>();
+
+        $z0 = 1;
+
+        if $r5 != $r13 goto label1;
+
+        $r14 = new io.grpc.internal.SerializeReentrantCallsDirectExecutor;
+
+        specialinvoke $r14.<io.grpc.internal.SerializeReentrantCallsDirectExecutor: void <init>()>();
+
+        r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.Executor callExecutor> = $r14;
+
+        r0.<io.grpc.internal.ClientCallImpl: boolean callExecutorIsDirect> = 1;
+
+        goto label2;
+
+     label1:
+        $r15 = new io.grpc.internal.SerializingExecutor;
+
+        specialinvoke $r15.<io.grpc.internal.SerializingExecutor: void <init>(java.util.concurrent.Executor)>($r5);
+
+        r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.Executor callExecutor> = $r15;
+
+        r0.<io.grpc.internal.ClientCallImpl: boolean callExecutorIsDirect> = 0;
+
+     label2:
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.CallTracer channelCallsTracer> = $r6;
+
+        $r16 = staticinvoke <io.grpc.Context: io.grpc.Context current()>();
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.Context context> = $r16;
+
+        $r17 = virtualinvoke $r4.<io.grpc.MethodDescriptor: io.grpc.MethodDescriptor$MethodType getType()>();
+
+        $r18 = <io.grpc.MethodDescriptor$MethodType: io.grpc.MethodDescriptor$MethodType UNARY>;
+
+        if $r17 == $r18 goto label4;
+
+        $r17 = virtualinvoke $r4.<io.grpc.MethodDescriptor: io.grpc.MethodDescriptor$MethodType getType()>();
+
+        $r18 = <io.grpc.MethodDescriptor$MethodType: io.grpc.MethodDescriptor$MethodType SERVER_STREAMING>;
+
+        if $r17 != $r18 goto label3;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        r0.<io.grpc.internal.ClientCallImpl: boolean unaryRequest> = $z0;
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions> = $r1;
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientCallImpl$ClientStreamProvider clientStreamProvider> = $r2;
+
+        r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.ScheduledExecutorService deadlineCancellationExecutor> = $r3;
+
+        staticinvoke <io.perfmark.PerfMark: void event(java.lang.String,io.perfmark.Tag)>("ClientCall.<init>", $r12);
+
+        return;
+    }
+
+    static io.grpc.internal.ClientStream access$100(io.grpc.internal.ClientCallImpl)
+    {
+        io.grpc.internal.ClientCallImpl $r0;
+        io.grpc.internal.ClientStream r1;
+
+        $r0 := @parameter0: io.grpc.internal.ClientCallImpl;
+
+        r1 = $r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        return r1;
+    }
+
+    static io.grpc.Deadline access$1000(io.grpc.internal.ClientCallImpl)
+    {
+        io.grpc.internal.ClientCallImpl $r1;
+        io.grpc.Deadline $r0;
+
+        $r1 := @parameter0: io.grpc.internal.ClientCallImpl;
+
+        $r0 = specialinvoke $r1.<io.grpc.internal.ClientCallImpl: io.grpc.Deadline effectiveDeadline()>();
+
+        return $r0;
+    }
+
+    static boolean access$1102(io.grpc.internal.ClientCallImpl, boolean)
+    {
+        io.grpc.internal.ClientCallImpl $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: io.grpc.internal.ClientCallImpl;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<io.grpc.internal.ClientCallImpl: boolean cancelListenersShouldBeRemoved> = $z0;
+
+        return $z0;
+    }
+
+    static void access$1200(io.grpc.internal.ClientCallImpl)
+    {
+        io.grpc.internal.ClientCallImpl $r0;
+
+        $r0 := @parameter0: io.grpc.internal.ClientCallImpl;
+
+        specialinvoke $r0.<io.grpc.internal.ClientCallImpl: void removeContextListenerAndCancelDeadlineFuture()>();
+
+        return;
+    }
+
+    static io.grpc.internal.CallTracer access$1300(io.grpc.internal.ClientCallImpl)
+    {
+        io.grpc.internal.ClientCallImpl $r0;
+        io.grpc.internal.CallTracer r1;
+
+        $r0 := @parameter0: io.grpc.internal.ClientCallImpl;
+
+        r1 = $r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.CallTracer channelCallsTracer>;
+
+        return r1;
+    }
+
+    static io.grpc.Context access$200(io.grpc.internal.ClientCallImpl)
+    {
+        io.grpc.internal.ClientCallImpl $r0;
+        io.grpc.Context r1;
+
+        $r0 := @parameter0: io.grpc.internal.ClientCallImpl;
+
+        r1 = $r0.<io.grpc.internal.ClientCallImpl: io.grpc.Context context>;
+
+        return r1;
+    }
+
+    static void access$300(io.grpc.internal.ClientCallImpl, io.grpc.ClientCall$Listener, io.grpc.Status, io.grpc.Metadata)
+    {
+        io.grpc.ClientCall$Listener $r1;
+        io.grpc.internal.ClientCallImpl $r0;
+        io.grpc.Metadata $r3;
+        io.grpc.Status $r2;
+
+        $r0 := @parameter0: io.grpc.internal.ClientCallImpl;
+
+        $r1 := @parameter1: io.grpc.ClientCall$Listener;
+
+        $r2 := @parameter2: io.grpc.Status;
+
+        $r3 := @parameter3: io.grpc.Metadata;
+
+        specialinvoke $r0.<io.grpc.internal.ClientCallImpl: void closeObserver(io.grpc.ClientCall$Listener,io.grpc.Status,io.grpc.Metadata)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    static io.perfmark.Tag access$400(io.grpc.internal.ClientCallImpl)
+    {
+        io.grpc.internal.ClientCallImpl $r0;
+        io.perfmark.Tag r1;
+
+        $r0 := @parameter0: io.grpc.internal.ClientCallImpl;
+
+        r1 = $r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        return r1;
+    }
+
+    static java.util.concurrent.Executor access$800(io.grpc.internal.ClientCallImpl)
+    {
+        io.grpc.internal.ClientCallImpl $r0;
+        java.util.concurrent.Executor r1;
+
+        $r0 := @parameter0: io.grpc.internal.ClientCallImpl;
+
+        r1 = $r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.Executor callExecutor>;
+
+        return r1;
+    }
+
+    static io.grpc.MethodDescriptor access$900(io.grpc.internal.ClientCallImpl)
+    {
+        io.grpc.MethodDescriptor r1;
+        io.grpc.internal.ClientCallImpl $r0;
+
+        $r0 := @parameter0: io.grpc.internal.ClientCallImpl;
+
+        r1 = $r0.<io.grpc.internal.ClientCallImpl: io.grpc.MethodDescriptor method>;
+
+        return r1;
+    }
+
+    private void applyMethodConfig()
+    {
+        io.grpc.CallOptions $r1;
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.Deadline $r7, $r8;
+        io.grpc.CallOptions$Key $r2;
+        io.grpc.internal.ManagedChannelServiceConfig$MethodInfo $r4;
+        long $l0;
+        java.lang.Integer $r10;
+        java.util.concurrent.TimeUnit $r6;
+        java.lang.Long $r5;
+        int $i1, $i2;
+        java.lang.Boolean $r9;
+        java.lang.Object $r3;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r2 = <io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: io.grpc.CallOptions$Key KEY>;
+
+        $r3 = virtualinvoke $r1.<io.grpc.CallOptions: java.lang.Object getOption(io.grpc.CallOptions$Key)>($r2);
+
+        $r4 = (io.grpc.internal.ManagedChannelServiceConfig$MethodInfo) $r3;
+
+        if $r4 != null goto label01;
+
+        return;
+
+     label01:
+        $r5 = $r4.<io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: java.lang.Long timeoutNanos>;
+
+        if $r5 == null goto label03;
+
+        $r5 = $r4.<io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: java.lang.Long timeoutNanos>;
+
+        $l0 = virtualinvoke $r5.<java.lang.Long: long longValue()>();
+
+        $r6 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r7 = staticinvoke <io.grpc.Deadline: io.grpc.Deadline after(long,java.util.concurrent.TimeUnit)>($l0, $r6);
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r8 = virtualinvoke $r1.<io.grpc.CallOptions: io.grpc.Deadline getDeadline()>();
+
+        if $r8 == null goto label02;
+
+        $i1 = virtualinvoke $r7.<io.grpc.Deadline: int compareTo(io.grpc.Deadline)>($r8);
+
+        if $i1 >= 0 goto label03;
+
+     label02:
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r1 = virtualinvoke $r1.<io.grpc.CallOptions: io.grpc.CallOptions withDeadline(io.grpc.Deadline)>($r7);
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions> = $r1;
+
+     label03:
+        $r9 = $r4.<io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: java.lang.Boolean waitForReady>;
+
+        if $r9 == null goto label06;
+
+        $r9 = $r4.<io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: java.lang.Boolean waitForReady>;
+
+        $z0 = virtualinvoke $r9.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label04;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r1 = virtualinvoke $r1.<io.grpc.CallOptions: io.grpc.CallOptions withWaitForReady()>();
+
+        goto label05;
+
+     label04:
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r1 = virtualinvoke $r1.<io.grpc.CallOptions: io.grpc.CallOptions withoutWaitForReady()>();
+
+     label05:
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions> = $r1;
+
+     label06:
+        $r10 = $r4.<io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: java.lang.Integer maxInboundMessageSize>;
+
+        if $r10 == null goto label08;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r10 = virtualinvoke $r1.<io.grpc.CallOptions: java.lang.Integer getMaxInboundMessageSize()>();
+
+        if $r10 == null goto label07;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $i1 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        $r10 = $r4.<io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: java.lang.Integer maxInboundMessageSize>;
+
+        $i2 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        $i1 = staticinvoke <java.lang.Math: int min(int,int)>($i1, $i2);
+
+        $r1 = virtualinvoke $r1.<io.grpc.CallOptions: io.grpc.CallOptions withMaxInboundMessageSize(int)>($i1);
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions> = $r1;
+
+        goto label08;
+
+     label07:
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r10 = $r4.<io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: java.lang.Integer maxInboundMessageSize>;
+
+        $i1 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        $r1 = virtualinvoke $r1.<io.grpc.CallOptions: io.grpc.CallOptions withMaxInboundMessageSize(int)>($i1);
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions> = $r1;
+
+     label08:
+        $r10 = $r4.<io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: java.lang.Integer maxOutboundMessageSize>;
+
+        if $r10 == null goto label10;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r10 = virtualinvoke $r1.<io.grpc.CallOptions: java.lang.Integer getMaxOutboundMessageSize()>();
+
+        if $r10 == null goto label09;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $i1 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        $r10 = $r4.<io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: java.lang.Integer maxOutboundMessageSize>;
+
+        $i2 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        $i1 = staticinvoke <java.lang.Math: int min(int,int)>($i1, $i2);
+
+        $r1 = virtualinvoke $r1.<io.grpc.CallOptions: io.grpc.CallOptions withMaxOutboundMessageSize(int)>($i1);
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions> = $r1;
+
+        return;
+
+     label09:
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r10 = $r4.<io.grpc.internal.ManagedChannelServiceConfig$MethodInfo: java.lang.Integer maxOutboundMessageSize>;
+
+        $i1 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        $r1 = virtualinvoke $r1.<io.grpc.CallOptions: io.grpc.CallOptions withMaxOutboundMessageSize(int)>($i1);
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions> = $r1;
+
+     label10:
+        return;
+    }
+
+    private void cancelInternal(java.lang.String, java.lang.Throwable)
+    {
+        java.lang.Throwable $r7;
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.internal.ClientStream $r5;
+        java.util.concurrent.CancellationException $r8;
+        java.util.logging.Logger $r4;
+        java.util.logging.Level $r1;
+        java.lang.Object $r3;
+        java.lang.String $r2;
+        io.grpc.Status $r6;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: java.lang.Throwable;
+
+        if $r2 != null goto label01;
+
+        if $r3 != null goto label01;
+
+        $r8 = new java.util.concurrent.CancellationException;
+
+        $r3 = $r8;
+
+        specialinvoke $r8.<java.util.concurrent.CancellationException: void <init>(java.lang.String)>("Cancelled without a message or cause");
+
+        $r4 = <io.grpc.internal.ClientCallImpl: java.util.logging.Logger log>;
+
+        $r1 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        $r7 = (java.lang.Throwable) $r8;
+
+        virtualinvoke $r4.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String,java.lang.Throwable)>($r1, "Cancelling without a message or cause is suboptimal", $r7);
+
+     label01:
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean cancelCalled>;
+
+        if $z0 == 0 goto label02;
+
+        return;
+
+     label02:
+        r0.<io.grpc.internal.ClientCallImpl: boolean cancelCalled> = 1;
+
+     label03:
+        $r5 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+     label04:
+        if $r5 == null goto label13;
+
+     label05:
+        $r6 = <io.grpc.Status: io.grpc.Status CANCELLED>;
+
+     label06:
+        if $r2 == null goto label09;
+
+     label07:
+        $r6 = virtualinvoke $r6.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>($r2);
+
+     label08:
+        goto label10;
+
+     label09:
+        $r6 = virtualinvoke $r6.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Call cancelled without message");
+
+     label10:
+        if $r3 == null goto label12;
+
+     label11:
+        $r7 = (java.lang.Throwable) $r3;
+
+        $r6 = virtualinvoke $r6.<io.grpc.Status: io.grpc.Status withCause(java.lang.Throwable)>($r7);
+
+     label12:
+        $r5 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        interfaceinvoke $r5.<io.grpc.internal.ClientStream: void cancel(io.grpc.Status)>($r6);
+
+     label13:
+        specialinvoke r0.<io.grpc.internal.ClientCallImpl: void removeContextListenerAndCancelDeadlineFuture()>();
+
+        return;
+
+     label14:
+        $r7 := @caughtexception;
+
+        specialinvoke r0.<io.grpc.internal.ClientCallImpl: void removeContextListenerAndCancelDeadlineFuture()>();
+
+        throw $r7;
+
+        catch java.lang.Throwable from label03 to label04 with label14;
+        catch java.lang.Throwable from label05 to label06 with label14;
+        catch java.lang.Throwable from label07 to label08 with label14;
+        catch java.lang.Throwable from label09 to label10 with label14;
+        catch java.lang.Throwable from label11 to label12 with label14;
+        catch java.lang.Throwable from label12 to label13 with label14;
+    }
+
+    private void closeObserver(io.grpc.ClientCall$Listener, io.grpc.Status, io.grpc.Metadata)
+    {
+        io.grpc.ClientCall$Listener $r1;
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.Metadata $r3;
+        io.grpc.Status $r2;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 := @parameter0: io.grpc.ClientCall$Listener;
+
+        $r2 := @parameter1: io.grpc.Status;
+
+        $r3 := @parameter2: io.grpc.Metadata;
+
+        virtualinvoke $r1.<io.grpc.ClientCall$Listener: void onClose(io.grpc.Status,io.grpc.Metadata)>($r2, $r3);
+
+        return;
+    }
+
+    private io.grpc.Deadline effectiveDeadline()
+    {
+        io.grpc.CallOptions $r1;
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.Deadline $r2, $r4;
+        io.grpc.Context $r3;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r2 = virtualinvoke $r1.<io.grpc.CallOptions: io.grpc.Deadline getDeadline()>();
+
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.Context context>;
+
+        $r4 = virtualinvoke $r3.<io.grpc.Context: io.grpc.Deadline getDeadline()>();
+
+        $r2 = staticinvoke <io.grpc.internal.ClientCallImpl: io.grpc.Deadline min(io.grpc.Deadline,io.grpc.Deadline)>($r2, $r4);
+
+        return $r2;
+    }
+
+    private void halfCloseInternal()
+    {
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.internal.ClientStream $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Not started");
+
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean cancelCalled>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "call was cancelled");
+
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean halfCloseCalled>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "call already half-closed");
+
+        r0.<io.grpc.internal.ClientCallImpl: boolean halfCloseCalled> = 1;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        interfaceinvoke $r1.<io.grpc.internal.ClientStream: void halfClose()>();
+
+        return;
+    }
+
+    private static boolean isFirstMin(io.grpc.Deadline, io.grpc.Deadline)
+    {
+        io.grpc.Deadline $r0, $r1;
+        boolean $z0;
+
+        $r1 := @parameter0: io.grpc.Deadline;
+
+        $r0 := @parameter1: io.grpc.Deadline;
+
+        if $r1 != null goto label1;
+
+        return 0;
+
+     label1:
+        if $r0 != null goto label2;
+
+        return 1;
+
+     label2:
+        $z0 = virtualinvoke $r1.<io.grpc.Deadline: boolean isBefore(io.grpc.Deadline)>($r0);
+
+        return $z0;
+    }
+
+    private static void logIfContextNarrowedTimeout(io.grpc.Deadline, io.grpc.Deadline, io.grpc.Deadline)
+    {
+        java.lang.Object[] $r8;
+        io.grpc.Deadline $r1, $r2, $r3;
+        long $l0;
+        java.util.logging.Logger $r0;
+        java.util.logging.Level $r4;
+        java.util.concurrent.TimeUnit $r5;
+        java.lang.Long $r9;
+        java.util.Locale $r7;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r10;
+        boolean $z0;
+
+        $r1 := @parameter0: io.grpc.Deadline;
+
+        $r2 := @parameter1: io.grpc.Deadline;
+
+        $r3 := @parameter2: io.grpc.Deadline;
+
+        $r0 = <io.grpc.internal.ClientCallImpl: java.util.logging.Logger log>;
+
+        $r4 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        $z0 = virtualinvoke $r0.<java.util.logging.Logger: boolean isLoggable(java.util.logging.Level)>($r4);
+
+        if $z0 == 0 goto label4;
+
+        if $r1 == null goto label4;
+
+        $z0 = virtualinvoke $r1.<io.grpc.Deadline: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r5 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l0 = virtualinvoke $r1.<io.grpc.Deadline: long timeRemaining(java.util.concurrent.TimeUnit)>($r5);
+
+        $l0 = staticinvoke <java.lang.Math: long max(long,long)>(0L, $l0);
+
+        $r6 = new java.lang.StringBuilder;
+
+        $r7 = <java.util.Locale: java.util.Locale US>;
+
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $r8[0] = $r9;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r7, "Call timeout set to \'%d\' ns, due to context deadline.", $r8);
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>($r10);
+
+        if $r3 != null goto label2;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" Explicit call timeout was not set.");
+
+        goto label3;
+
+     label2:
+        $r5 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l0 = virtualinvoke $r3.<io.grpc.Deadline: long timeRemaining(java.util.concurrent.TimeUnit)>($r5);
+
+        $r7 = <java.util.Locale: java.util.Locale US>;
+
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $r8[0] = $r9;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r7, " Explicit call timeout was \'%d\' ns.", $r8);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+     label3:
+        $r10 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<java.util.logging.Logger: void fine(java.lang.String)>($r10);
+
+     label4:
+        return;
+    }
+
+    private static io.grpc.Deadline min(io.grpc.Deadline, io.grpc.Deadline)
+    {
+        io.grpc.Deadline $r0, $r1;
+
+        $r1 := @parameter0: io.grpc.Deadline;
+
+        $r0 := @parameter1: io.grpc.Deadline;
+
+        if $r1 != null goto label1;
+
+        return $r0;
+
+     label1:
+        if $r0 != null goto label2;
+
+        return $r1;
+
+     label2:
+        $r1 = virtualinvoke $r1.<io.grpc.Deadline: io.grpc.Deadline minimum(io.grpc.Deadline)>($r0);
+
+        return $r1;
+    }
+
+    static void prepareHeaders(io.grpc.Metadata, io.grpc.DecompressorRegistry, io.grpc.Compressor, boolean)
+    {
+        byte[] $r6;
+        io.grpc.Compressor $r2;
+        io.grpc.Metadata$Key $r3;
+        io.grpc.DecompressorRegistry $r1;
+        int $i0;
+        io.grpc.Metadata $r0;
+        java.lang.String $r5;
+        io.grpc.Codec $r4;
+        boolean $z0;
+
+        $r0 := @parameter0: io.grpc.Metadata;
+
+        $r1 := @parameter1: io.grpc.DecompressorRegistry;
+
+        $r2 := @parameter2: io.grpc.Compressor;
+
+        $z0 := @parameter3: boolean;
+
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key CONTENT_LENGTH_KEY>;
+
+        virtualinvoke $r0.<io.grpc.Metadata: void discardAll(io.grpc.Metadata$Key)>($r3);
+
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key MESSAGE_ENCODING_KEY>;
+
+        virtualinvoke $r0.<io.grpc.Metadata: void discardAll(io.grpc.Metadata$Key)>($r3);
+
+        $r4 = <io.grpc.Codec$Identity: io.grpc.Codec NONE>;
+
+        if $r2 == $r4 goto label1;
+
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key MESSAGE_ENCODING_KEY>;
+
+        $r5 = interfaceinvoke $r2.<io.grpc.Compressor: java.lang.String getMessageEncoding()>();
+
+        virtualinvoke $r0.<io.grpc.Metadata: void put(io.grpc.Metadata$Key,java.lang.Object)>($r3, $r5);
+
+     label1:
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key MESSAGE_ACCEPT_ENCODING_KEY>;
+
+        virtualinvoke $r0.<io.grpc.Metadata: void discardAll(io.grpc.Metadata$Key)>($r3);
+
+        $r6 = staticinvoke <io.grpc.InternalDecompressorRegistry: byte[] getRawAdvertisedMessageEncodings(io.grpc.DecompressorRegistry)>($r1);
+
+        $i0 = lengthof $r6;
+
+        if $i0 == 0 goto label2;
+
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key MESSAGE_ACCEPT_ENCODING_KEY>;
+
+        virtualinvoke $r0.<io.grpc.Metadata: void put(io.grpc.Metadata$Key,java.lang.Object)>($r3, $r6);
+
+     label2:
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key CONTENT_ENCODING_KEY>;
+
+        virtualinvoke $r0.<io.grpc.Metadata: void discardAll(io.grpc.Metadata$Key)>($r3);
+
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key CONTENT_ACCEPT_ENCODING_KEY>;
+
+        virtualinvoke $r0.<io.grpc.Metadata: void discardAll(io.grpc.Metadata$Key)>($r3);
+
+        if $z0 == 0 goto label3;
+
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key CONTENT_ACCEPT_ENCODING_KEY>;
+
+        $r6 = <io.grpc.internal.ClientCallImpl: byte[] FULL_STREAM_DECOMPRESSION_ENCODINGS>;
+
+        virtualinvoke $r0.<io.grpc.Metadata: void put(io.grpc.Metadata$Key,java.lang.Object)>($r3, $r6);
+
+     label3:
+        return;
+    }
+
+    private void removeContextListenerAndCancelDeadlineFuture()
+    {
+        io.grpc.internal.ClientCallImpl r0;
+        java.util.concurrent.ScheduledFuture $r3;
+        io.grpc.Context $r1;
+        io.grpc.internal.ClientCallImpl$ContextCancellationListener $r2;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.Context context>;
+
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientCallImpl$ContextCancellationListener cancellationListener>;
+
+        virtualinvoke $r1.<io.grpc.Context: void removeListener(io.grpc.Context$CancellationListener)>($r2);
+
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.ScheduledFuture deadlineCancellationFuture>;
+
+        if $r3 == null goto label1;
+
+        interfaceinvoke $r3.<java.util.concurrent.ScheduledFuture: boolean cancel(boolean)>(0);
+
+     label1:
+        return;
+    }
+
+    private void sendMessageInternal(java.lang.Object)
+    {
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.internal.ClientStream $r2;
+        java.lang.Error $r6;
+        io.grpc.internal.RetriableStream $r3;
+        java.lang.RuntimeException $r8;
+        io.grpc.MethodDescriptor $r4;
+        java.lang.Object $r1;
+        io.grpc.Status $r7;
+        boolean $z0;
+        java.io.InputStream $r5;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        if $r2 == null goto label01;
+
+        $z0 = 1;
+
+        goto label02;
+
+     label01:
+        $z0 = 0;
+
+     label02:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Not started");
+
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean cancelCalled>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "call was cancelled");
+
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean halfCloseCalled>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "call was half-closed");
+
+     label03:
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+     label04:
+        $z0 = $r2 instanceof io.grpc.internal.RetriableStream;
+
+     label05:
+        if $z0 == 0 goto label08;
+
+     label06:
+        $r3 = (io.grpc.internal.RetriableStream) $r2;
+
+        virtualinvoke $r3.<io.grpc.internal.RetriableStream: void sendMessage(java.lang.Object)>($r1);
+
+     label07:
+        goto label09;
+
+     label08:
+        $r4 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.MethodDescriptor method>;
+
+        $r5 = virtualinvoke $r4.<io.grpc.MethodDescriptor: java.io.InputStream streamRequest(java.lang.Object)>($r1);
+
+        interfaceinvoke $r2.<io.grpc.internal.ClientStream: void writeMessage(java.io.InputStream)>($r5);
+
+     label09:
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean unaryRequest>;
+
+        if $z0 != 0 goto label12;
+
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        interfaceinvoke $r2.<io.grpc.internal.ClientStream: void flush()>();
+
+        return;
+
+     label10:
+        $r6 := @caughtexception;
+
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        $r7 = <io.grpc.Status: io.grpc.Status CANCELLED>;
+
+        $r7 = virtualinvoke $r7.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Client sendMessage() failed with Error");
+
+        interfaceinvoke $r2.<io.grpc.internal.ClientStream: void cancel(io.grpc.Status)>($r7);
+
+        throw $r6;
+
+     label11:
+        $r8 := @caughtexception;
+
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        $r7 = <io.grpc.Status: io.grpc.Status CANCELLED>;
+
+        $r7 = virtualinvoke $r7.<io.grpc.Status: io.grpc.Status withCause(java.lang.Throwable)>($r8);
+
+        $r7 = virtualinvoke $r7.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Failed to stream message");
+
+        interfaceinvoke $r2.<io.grpc.internal.ClientStream: void cancel(io.grpc.Status)>($r7);
+
+     label12:
+        return;
+
+        catch java.lang.RuntimeException from label03 to label04 with label11;
+        catch java.lang.RuntimeException from label06 to label07 with label11;
+        catch java.lang.RuntimeException from label08 to label09 with label11;
+        catch java.lang.Error from label03 to label05 with label10;
+        catch java.lang.Error from label06 to label07 with label10;
+        catch java.lang.Error from label08 to label09 with label10;
+    }
+
+    private java.util.concurrent.ScheduledFuture startDeadlineTimer(io.grpc.Deadline)
+    {
+        io.grpc.internal.ClientCallImpl r0;
+        java.util.concurrent.ScheduledFuture $r6;
+        io.grpc.Deadline $r2;
+        long $l0;
+        java.util.concurrent.TimeUnit $r3;
+        io.grpc.internal.ClientCallImpl$DeadlineTimer $r5;
+        java.util.concurrent.ScheduledExecutorService $r4;
+        io.grpc.internal.LogExceptionRunnable $r1;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r2 := @parameter0: io.grpc.Deadline;
+
+        $r3 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l0 = virtualinvoke $r2.<io.grpc.Deadline: long timeRemaining(java.util.concurrent.TimeUnit)>($r3);
+
+        $r4 = r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.ScheduledExecutorService deadlineCancellationExecutor>;
+
+        $r1 = new io.grpc.internal.LogExceptionRunnable;
+
+        $r5 = new io.grpc.internal.ClientCallImpl$DeadlineTimer;
+
+        specialinvoke $r5.<io.grpc.internal.ClientCallImpl$DeadlineTimer: void <init>(io.grpc.internal.ClientCallImpl,long)>(r0, $l0);
+
+        specialinvoke $r1.<io.grpc.internal.LogExceptionRunnable: void <init>(java.lang.Runnable)>($r5);
+
+        $r3 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r6 = interfaceinvoke $r4.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r1, $l0, $r3);
+
+        return $r6;
+    }
+
+    private void startInternal(io.grpc.ClientCall$Listener, io.grpc.Metadata)
+    {
+        io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl $r28;
+        java.util.concurrent.ScheduledFuture $r31;
+        io.grpc.Context $r4;
+        io.grpc.internal.ClientStream $r3;
+        java.lang.Integer $r26;
+        io.grpc.Status $r25;
+        boolean $z0;
+        io.grpc.ClientCall$Listener $r1;
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.internal.ClientCallImpl$ClientStreamProvider $r18;
+        io.grpc.internal.ClientCallImpl$1ClosedByNotFoundCompressor $r13;
+        io.grpc.CompressorRegistry $r10;
+        io.grpc.Metadata $r2;
+        io.grpc.CallOptions $r8;
+        io.grpc.internal.CallTracer $r27;
+        java.lang.Object[] $r21;
+        io.grpc.Deadline $r15, $r16, $r17;
+        io.grpc.Compressor $r11, $r12;
+        java.lang.Double $r23;
+        io.grpc.internal.FailingClientStream $r24;
+        long $l0;
+        io.grpc.internal.NoopClientStream $r5;
+        io.grpc.DecompressorRegistry $r14;
+        int $i1;
+        java.util.concurrent.ScheduledExecutorService $r30;
+        io.grpc.MethodDescriptor $r19;
+        java.lang.String $r9;
+        io.grpc.internal.ClientCallImpl$ContextCancellationListener $r29;
+        double $d0, $d1;
+        io.grpc.ClientStreamTracer[] $r20;
+        java.util.concurrent.Executor $r6;
+        java.util.concurrent.TimeUnit $r22;
+        io.grpc.internal.ClientCallImpl$1ClosedByContext $r7;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 := @parameter0: io.grpc.ClientCall$Listener;
+
+        $r2 := @parameter1: io.grpc.Metadata;
+
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        if $r3 != null goto label01;
+
+        $z0 = 1;
+
+        goto label02;
+
+     label01:
+        $z0 = 0;
+
+     label02:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Already started");
+
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean cancelCalled>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "call was cancelled");
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "observer");
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "headers");
+
+        $r4 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.Context context>;
+
+        $z0 = virtualinvoke $r4.<io.grpc.Context: boolean isCancelled()>();
+
+        if $z0 == 0 goto label03;
+
+        $r5 = <io.grpc.internal.NoopClientStream: io.grpc.internal.NoopClientStream INSTANCE>;
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream> = $r5;
+
+        $r6 = r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.Executor callExecutor>;
+
+        $r7 = new io.grpc.internal.ClientCallImpl$1ClosedByContext;
+
+        specialinvoke $r7.<io.grpc.internal.ClientCallImpl$1ClosedByContext: void <init>(io.grpc.internal.ClientCallImpl,io.grpc.ClientCall$Listener)>(r0, $r1);
+
+        interfaceinvoke $r6.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r7);
+
+        return;
+
+     label03:
+        specialinvoke r0.<io.grpc.internal.ClientCallImpl: void applyMethodConfig()>();
+
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r9 = virtualinvoke $r8.<io.grpc.CallOptions: java.lang.String getCompressor()>();
+
+        if $r9 == null goto label04;
+
+        $r10 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CompressorRegistry compressorRegistry>;
+
+        $r11 = virtualinvoke $r10.<io.grpc.CompressorRegistry: io.grpc.Compressor lookupCompressor(java.lang.String)>($r9);
+
+        $r12 = $r11;
+
+        if $r11 != null goto label05;
+
+        $r5 = <io.grpc.internal.NoopClientStream: io.grpc.internal.NoopClientStream INSTANCE>;
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream> = $r5;
+
+        $r6 = r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.Executor callExecutor>;
+
+        $r13 = new io.grpc.internal.ClientCallImpl$1ClosedByNotFoundCompressor;
+
+        specialinvoke $r13.<io.grpc.internal.ClientCallImpl$1ClosedByNotFoundCompressor: void <init>(io.grpc.internal.ClientCallImpl,io.grpc.ClientCall$Listener,java.lang.String)>(r0, $r1, $r9);
+
+        interfaceinvoke $r6.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r13);
+
+        return;
+
+     label04:
+        $r12 = <io.grpc.Codec$Identity: io.grpc.Codec NONE>;
+
+     label05:
+        $r14 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.DecompressorRegistry decompressorRegistry>;
+
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean fullStreamDecompression>;
+
+        staticinvoke <io.grpc.internal.ClientCallImpl: void prepareHeaders(io.grpc.Metadata,io.grpc.DecompressorRegistry,io.grpc.Compressor,boolean)>($r2, $r14, $r12, $z0);
+
+        $r15 = specialinvoke r0.<io.grpc.internal.ClientCallImpl: io.grpc.Deadline effectiveDeadline()>();
+
+        if $r15 == null goto label06;
+
+        $z0 = virtualinvoke $r15.<io.grpc.Deadline: boolean isExpired()>();
+
+        if $z0 == 0 goto label06;
+
+        $z0 = 1;
+
+        goto label07;
+
+     label06:
+        $z0 = 0;
+
+     label07:
+        if $z0 != 0 goto label08;
+
+        $r4 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.Context context>;
+
+        $r16 = virtualinvoke $r4.<io.grpc.Context: io.grpc.Deadline getDeadline()>();
+
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r17 = virtualinvoke $r8.<io.grpc.CallOptions: io.grpc.Deadline getDeadline()>();
+
+        staticinvoke <io.grpc.internal.ClientCallImpl: void logIfContextNarrowedTimeout(io.grpc.Deadline,io.grpc.Deadline,io.grpc.Deadline)>($r15, $r16, $r17);
+
+        $r18 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientCallImpl$ClientStreamProvider clientStreamProvider>;
+
+        $r19 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.MethodDescriptor method>;
+
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r4 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.Context context>;
+
+        $r3 = interfaceinvoke $r18.<io.grpc.internal.ClientCallImpl$ClientStreamProvider: io.grpc.internal.ClientStream newStream(io.grpc.MethodDescriptor,io.grpc.CallOptions,io.grpc.Metadata,io.grpc.Context)>($r19, $r8, $r2, $r4);
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream> = $r3;
+
+        goto label11;
+
+     label08:
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r20 = staticinvoke <io.grpc.internal.GrpcUtil: io.grpc.ClientStreamTracer[] getClientStreamTracers(io.grpc.CallOptions,io.grpc.Metadata,int,boolean)>($r8, $r2, 0, 0);
+
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r16 = virtualinvoke $r8.<io.grpc.CallOptions: io.grpc.Deadline getDeadline()>();
+
+        $r4 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.Context context>;
+
+        $r17 = virtualinvoke $r4.<io.grpc.Context: io.grpc.Deadline getDeadline()>();
+
+        $z0 = staticinvoke <io.grpc.internal.ClientCallImpl: boolean isFirstMin(io.grpc.Deadline,io.grpc.Deadline)>($r16, $r17);
+
+        if $z0 == 0 goto label09;
+
+        $r9 = "CallOptions";
+
+        goto label10;
+
+     label09:
+        $r9 = "Context";
+
+     label10:
+        $r21 = newarray (java.lang.Object)[2];
+
+        $r21[0] = $r9;
+
+        $r22 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l0 = virtualinvoke $r15.<io.grpc.Deadline: long timeRemaining(java.util.concurrent.TimeUnit)>($r22);
+
+        $d1 = (double) $l0;
+
+        $d0 = <io.grpc.internal.ClientCallImpl: double NANO_TO_SECS>;
+
+        $d0 = $d1 / $d0;
+
+        $r23 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d0);
+
+        $r21[1] = $r23;
+
+        $r9 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("ClientCall started after %s deadline was exceeded .9%f seconds ago", $r21);
+
+        $r24 = new io.grpc.internal.FailingClientStream;
+
+        $r25 = <io.grpc.Status: io.grpc.Status DEADLINE_EXCEEDED>;
+
+        $r25 = virtualinvoke $r25.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>($r9);
+
+        specialinvoke $r24.<io.grpc.internal.FailingClientStream: void <init>(io.grpc.Status,io.grpc.ClientStreamTracer[])>($r25, $r20);
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream> = $r24;
+
+     label11:
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean callExecutorIsDirect>;
+
+        if $z0 == 0 goto label12;
+
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        interfaceinvoke $r3.<io.grpc.internal.ClientStream: void optimizeForDirectExecutor()>();
+
+     label12:
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r9 = virtualinvoke $r8.<io.grpc.CallOptions: java.lang.String getAuthority()>();
+
+        if $r9 == null goto label13;
+
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r9 = virtualinvoke $r8.<io.grpc.CallOptions: java.lang.String getAuthority()>();
+
+        interfaceinvoke $r3.<io.grpc.internal.ClientStream: void setAuthority(java.lang.String)>($r9);
+
+     label13:
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r26 = virtualinvoke $r8.<io.grpc.CallOptions: java.lang.Integer getMaxInboundMessageSize()>();
+
+        if $r26 == null goto label14;
+
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r26 = virtualinvoke $r8.<io.grpc.CallOptions: java.lang.Integer getMaxInboundMessageSize()>();
+
+        $i1 = virtualinvoke $r26.<java.lang.Integer: int intValue()>();
+
+        interfaceinvoke $r3.<io.grpc.internal.ClientStream: void setMaxInboundMessageSize(int)>($i1);
+
+     label14:
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r26 = virtualinvoke $r8.<io.grpc.CallOptions: java.lang.Integer getMaxOutboundMessageSize()>();
+
+        if $r26 == null goto label15;
+
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        $r8 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.CallOptions callOptions>;
+
+        $r26 = virtualinvoke $r8.<io.grpc.CallOptions: java.lang.Integer getMaxOutboundMessageSize()>();
+
+        $i1 = virtualinvoke $r26.<java.lang.Integer: int intValue()>();
+
+        interfaceinvoke $r3.<io.grpc.internal.ClientStream: void setMaxOutboundMessageSize(int)>($i1);
+
+     label15:
+        if $r15 == null goto label16;
+
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        interfaceinvoke $r3.<io.grpc.internal.ClientStream: void setDeadline(io.grpc.Deadline)>($r15);
+
+     label16:
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        interfaceinvoke $r3.<io.grpc.internal.ClientStream: void setCompressor(io.grpc.Compressor)>($r12);
+
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean fullStreamDecompression>;
+
+        if $z0 == 0 goto label17;
+
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        interfaceinvoke $r3.<io.grpc.internal.ClientStream: void setFullStreamDecompression(boolean)>($z0);
+
+     label17:
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        $r14 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.DecompressorRegistry decompressorRegistry>;
+
+        interfaceinvoke $r3.<io.grpc.internal.ClientStream: void setDecompressorRegistry(io.grpc.DecompressorRegistry)>($r14);
+
+        $r27 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.CallTracer channelCallsTracer>;
+
+        virtualinvoke $r27.<io.grpc.internal.CallTracer: void reportCallStarted()>();
+
+        $r3 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        $r28 = new io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl;
+
+        specialinvoke $r28.<io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl: void <init>(io.grpc.internal.ClientCallImpl,io.grpc.ClientCall$Listener)>(r0, $r1);
+
+        interfaceinvoke $r3.<io.grpc.internal.ClientStream: void start(io.grpc.internal.ClientStreamListener)>($r28);
+
+        $r4 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.Context context>;
+
+        $r29 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientCallImpl$ContextCancellationListener cancellationListener>;
+
+        $r6 = staticinvoke <com.google.common.util.concurrent.MoreExecutors: java.util.concurrent.Executor directExecutor()>();
+
+        virtualinvoke $r4.<io.grpc.Context: void addListener(io.grpc.Context$CancellationListener,java.util.concurrent.Executor)>($r29, $r6);
+
+        if $r15 == null goto label18;
+
+        $r4 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.Context context>;
+
+        $r16 = virtualinvoke $r4.<io.grpc.Context: io.grpc.Deadline getDeadline()>();
+
+        $z0 = virtualinvoke $r15.<io.grpc.Deadline: boolean equals(java.lang.Object)>($r16);
+
+        if $z0 != 0 goto label18;
+
+        $r30 = r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.ScheduledExecutorService deadlineCancellationExecutor>;
+
+        if $r30 == null goto label18;
+
+        $r31 = specialinvoke r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.ScheduledFuture startDeadlineTimer(io.grpc.Deadline)>($r15);
+
+        r0.<io.grpc.internal.ClientCallImpl: java.util.concurrent.ScheduledFuture deadlineCancellationFuture> = $r31;
+
+     label18:
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean cancelListenersShouldBeRemoved>;
+
+        if $z0 == 0 goto label19;
+
+        specialinvoke r0.<io.grpc.internal.ClientCallImpl: void removeContextListenerAndCancelDeadlineFuture()>();
+
+     label19:
+        return;
+    }
+
+    public void cancel(java.lang.String, java.lang.Throwable)
+    {
+        java.lang.Throwable $r3, $r4;
+        io.grpc.internal.ClientCallImpl r0;
+        io.perfmark.Tag $r1;
+        java.lang.String $r2;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: java.lang.Throwable;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void startTask(java.lang.String,io.perfmark.Tag)>("ClientCall.cancel", $r1);
+
+     label1:
+        specialinvoke r0.<io.grpc.internal.ClientCallImpl: void cancelInternal(java.lang.String,java.lang.Throwable)>($r2, $r3);
+
+     label2:
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String,io.perfmark.Tag)>("ClientCall.cancel", $r1);
+
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String,io.perfmark.Tag)>("ClientCall.cancel", $r1);
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public io.grpc.Attributes getAttributes()
+    {
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.Attributes $r1;
+        io.grpc.internal.ClientStream $r2;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        if $r2 == null goto label1;
+
+        $r1 = interfaceinvoke $r2.<io.grpc.internal.ClientStream: io.grpc.Attributes getAttributes()>();
+
+        return $r1;
+
+     label1:
+        $r1 = <io.grpc.Attributes: io.grpc.Attributes EMPTY>;
+
+        return $r1;
+    }
+
+    public void halfClose()
+    {
+        java.lang.Throwable $r2;
+        io.grpc.internal.ClientCallImpl r0;
+        io.perfmark.Tag $r1;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void startTask(java.lang.String,io.perfmark.Tag)>("ClientCall.halfClose", $r1);
+
+     label1:
+        specialinvoke r0.<io.grpc.internal.ClientCallImpl: void halfCloseInternal()>();
+
+     label2:
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String,io.perfmark.Tag)>("ClientCall.halfClose", $r1);
+
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String,io.perfmark.Tag)>("ClientCall.halfClose", $r1);
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public boolean isReady()
+    {
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.internal.ClientStream $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $z0 = r0.<io.grpc.internal.ClientCallImpl: boolean halfCloseCalled>;
+
+        if $z0 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        $z0 = interfaceinvoke $r1.<io.grpc.internal.ClientStream: boolean isReady()>();
+
+        return $z0;
+    }
+
+    public void request(int)
+    {
+        java.lang.Throwable $r3;
+        io.grpc.internal.ClientCallImpl r0;
+        io.perfmark.Tag $r1;
+        io.grpc.internal.ClientStream $r2;
+        int $i0;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void startTask(java.lang.String,io.perfmark.Tag)>("ClientCall.request", $r1);
+
+     label1:
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+     label2:
+        $z0 = 1;
+
+        if $r2 == null goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z1, "Not started");
+
+     label5:
+        if $i0 < 0 goto label6;
+
+        goto label7;
+
+     label6:
+        $z0 = 0;
+
+     label7:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "Number requested must be non-negative");
+
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        interfaceinvoke $r2.<io.grpc.internal.ClientStream: void request(int)>($i0);
+
+     label8:
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String,io.perfmark.Tag)>("ClientCall.request", $r1);
+
+        return;
+
+     label9:
+        $r3 := @caughtexception;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String,io.perfmark.Tag)>("ClientCall.request", $r1);
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label9;
+        catch java.lang.Throwable from label4 to label5 with label9;
+        catch java.lang.Throwable from label7 to label8 with label9;
+    }
+
+    public void sendMessage(java.lang.Object)
+    {
+        java.lang.Throwable $r3;
+        io.grpc.internal.ClientCallImpl r0;
+        io.perfmark.Tag $r2;
+        java.lang.Object $r1;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void startTask(java.lang.String,io.perfmark.Tag)>("ClientCall.sendMessage", $r2);
+
+     label1:
+        specialinvoke r0.<io.grpc.internal.ClientCallImpl: void sendMessageInternal(java.lang.Object)>($r1);
+
+     label2:
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String,io.perfmark.Tag)>("ClientCall.sendMessage", $r2);
+
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        $r2 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String,io.perfmark.Tag)>("ClientCall.sendMessage", $r2);
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    io.grpc.internal.ClientCallImpl setCompressorRegistry(io.grpc.CompressorRegistry)
+    {
+        io.grpc.CompressorRegistry $r1;
+        io.grpc.internal.ClientCallImpl r0;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 := @parameter0: io.grpc.CompressorRegistry;
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.CompressorRegistry compressorRegistry> = $r1;
+
+        return r0;
+    }
+
+    io.grpc.internal.ClientCallImpl setDecompressorRegistry(io.grpc.DecompressorRegistry)
+    {
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.DecompressorRegistry $r1;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r1 := @parameter0: io.grpc.DecompressorRegistry;
+
+        r0.<io.grpc.internal.ClientCallImpl: io.grpc.DecompressorRegistry decompressorRegistry> = $r1;
+
+        return r0;
+    }
+
+    io.grpc.internal.ClientCallImpl setFullStreamDecompression(boolean)
+    {
+        io.grpc.internal.ClientCallImpl r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $z0 := @parameter0: boolean;
+
+        r0.<io.grpc.internal.ClientCallImpl: boolean fullStreamDecompression> = $z0;
+
+        return r0;
+    }
+
+    public void setMessageCompression(boolean)
+    {
+        io.grpc.internal.ClientCallImpl r0;
+        io.grpc.internal.ClientStream $r1;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        if $r1 == null goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z1, "Not started");
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.internal.ClientStream stream>;
+
+        interfaceinvoke $r1.<io.grpc.internal.ClientStream: void setMessageCompression(boolean)>($z0);
+
+        return;
+    }
+
+    public void start(io.grpc.ClientCall$Listener, io.grpc.Metadata)
+    {
+        io.grpc.ClientCall$Listener $r2;
+        java.lang.Throwable $r4;
+        io.grpc.internal.ClientCallImpl r0;
+        io.perfmark.Tag $r1;
+        io.grpc.Metadata $r3;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r2 := @parameter0: io.grpc.ClientCall$Listener;
+
+        $r3 := @parameter1: io.grpc.Metadata;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void startTask(java.lang.String,io.perfmark.Tag)>("ClientCall.start", $r1);
+
+     label1:
+        specialinvoke r0.<io.grpc.internal.ClientCallImpl: void startInternal(io.grpc.ClientCall$Listener,io.grpc.Metadata)>($r2, $r3);
+
+     label2:
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String,io.perfmark.Tag)>("ClientCall.start", $r1);
+
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String,io.perfmark.Tag)>("ClientCall.start", $r1);
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public java.lang.String toString()
+    {
+        io.grpc.internal.ClientCallImpl r0;
+        com.google.common.base.MoreObjects$ToStringHelper $r2;
+        io.grpc.MethodDescriptor $r1;
+        java.lang.String $r3;
+
+        r0 := @this: io.grpc.internal.ClientCallImpl;
+
+        $r2 = staticinvoke <com.google.common.base.MoreObjects: com.google.common.base.MoreObjects$ToStringHelper toStringHelper(java.lang.Object)>(r0);
+
+        $r1 = r0.<io.grpc.internal.ClientCallImpl: io.grpc.MethodDescriptor method>;
+
+        $r2 = virtualinvoke $r2.<com.google.common.base.MoreObjects$ToStringHelper: com.google.common.base.MoreObjects$ToStringHelper add(java.lang.String,java.lang.Object)>("method", $r1);
+
+        $r3 = virtualinvoke $r2.<com.google.common.base.MoreObjects$ToStringHelper: java.lang.String toString()>();
+
+        return $r3;
+    }
+}

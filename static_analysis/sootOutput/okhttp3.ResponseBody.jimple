@@ -1,0 +1,436 @@
+public abstract class okhttp3.ResponseBody extends java.lang.Object implements java.io.Closeable
+{
+    private java.io.Reader reader;
+
+    private static void $closeResource(java.lang.Throwable, java.lang.AutoCloseable)
+    {
+        java.lang.Throwable $r0, $r2;
+        java.lang.AutoCloseable $r1;
+
+        $r0 := @parameter0: java.lang.Throwable;
+
+        $r1 := @parameter1: java.lang.AutoCloseable;
+
+        if $r0 == null goto label4;
+
+     label1:
+        interfaceinvoke $r1.<java.lang.AutoCloseable: void close()>();
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r0.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r2);
+
+        return;
+
+     label4:
+        interfaceinvoke $r1.<java.lang.AutoCloseable: void close()>();
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public void <init>()
+    {
+        okhttp3.ResponseBody r0;
+
+        r0 := @this: okhttp3.ResponseBody;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private java.nio.charset.Charset charset()
+    {
+        java.nio.charset.Charset $r1;
+        okhttp3.ResponseBody r0;
+        okhttp3.MediaType $r2;
+
+        r0 := @this: okhttp3.ResponseBody;
+
+        $r2 = virtualinvoke r0.<okhttp3.ResponseBody: okhttp3.MediaType contentType()>();
+
+        if $r2 == null goto label1;
+
+        $r1 = <java.nio.charset.StandardCharsets: java.nio.charset.Charset UTF_8>;
+
+        $r1 = virtualinvoke $r2.<okhttp3.MediaType: java.nio.charset.Charset charset(java.nio.charset.Charset)>($r1);
+
+        return $r1;
+
+     label1:
+        $r1 = <java.nio.charset.StandardCharsets: java.nio.charset.Charset UTF_8>;
+
+        return $r1;
+    }
+
+    public static okhttp3.ResponseBody create(okhttp3.MediaType, long, okio.BufferedSource)
+    {
+        okio.BufferedSource $r0;
+        okhttp3.ResponseBody$1 $r1;
+        long $l0;
+        okhttp3.MediaType $r2;
+        java.lang.NullPointerException $r3;
+
+        $r2 := @parameter0: okhttp3.MediaType;
+
+        $l0 := @parameter1: long;
+
+        $r0 := @parameter2: okio.BufferedSource;
+
+        if $r0 == null goto label1;
+
+        $r1 = new okhttp3.ResponseBody$1;
+
+        specialinvoke $r1.<okhttp3.ResponseBody$1: void <init>(okhttp3.MediaType,long,okio.BufferedSource)>($r2, $l0, $r0);
+
+        return $r1;
+
+     label1:
+        $r3 = new java.lang.NullPointerException;
+
+        specialinvoke $r3.<java.lang.NullPointerException: void <init>(java.lang.String)>("source == null");
+
+        throw $r3;
+    }
+
+    public static okhttp3.ResponseBody create(okhttp3.MediaType, java.lang.String)
+    {
+        okio.Buffer $r6;
+        long $l0;
+        java.nio.charset.Charset $r2, $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r1, $r5;
+        okhttp3.MediaType $r0;
+        okhttp3.ResponseBody $r7;
+
+        $r0 := @parameter0: okhttp3.MediaType;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = <java.nio.charset.StandardCharsets: java.nio.charset.Charset UTF_8>;
+
+        if $r0 == null goto label1;
+
+        $r3 = virtualinvoke $r0.<okhttp3.MediaType: java.nio.charset.Charset charset()>();
+
+        $r2 = $r3;
+
+        if $r3 != null goto label1;
+
+        $r2 = <java.nio.charset.StandardCharsets: java.nio.charset.Charset UTF_8>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("; charset=utf-8");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r0 = staticinvoke <okhttp3.MediaType: okhttp3.MediaType parse(java.lang.String)>($r5);
+
+     label1:
+        $r6 = new okio.Buffer;
+
+        specialinvoke $r6.<okio.Buffer: void <init>()>();
+
+        $r6 = virtualinvoke $r6.<okio.Buffer: okio.Buffer writeString(java.lang.String,java.nio.charset.Charset)>("{\"Error\":\"Retry-After\"}", $r2);
+
+        $l0 = virtualinvoke $r6.<okio.Buffer: long size()>();
+
+        $r7 = staticinvoke <okhttp3.ResponseBody: okhttp3.ResponseBody create(okhttp3.MediaType,long,okio.BufferedSource)>($r0, $l0, $r6);
+
+        return $r7;
+    }
+
+    public static okhttp3.ResponseBody create(okhttp3.MediaType, okio.ByteString)
+    {
+        okio.Buffer $r2;
+        okio.ByteString $r1;
+        int $i1;
+        long $l0;
+        okhttp3.MediaType $r0;
+        okhttp3.ResponseBody $r3;
+
+        $r0 := @parameter0: okhttp3.MediaType;
+
+        $r1 := @parameter1: okio.ByteString;
+
+        $r2 = new okio.Buffer;
+
+        specialinvoke $r2.<okio.Buffer: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<okio.Buffer: okio.Buffer write(okio.ByteString)>($r1);
+
+        $i1 = virtualinvoke $r1.<okio.ByteString: int size()>();
+
+        $l0 = (long) $i1;
+
+        $r3 = staticinvoke <okhttp3.ResponseBody: okhttp3.ResponseBody create(okhttp3.MediaType,long,okio.BufferedSource)>($r0, $l0, $r2);
+
+        return $r3;
+    }
+
+    public static okhttp3.ResponseBody create(okhttp3.MediaType, byte[])
+    {
+        byte[] $r1;
+        okio.Buffer $r2;
+        int $i1;
+        long $l0;
+        okhttp3.MediaType $r0;
+        okhttp3.ResponseBody $r3;
+
+        $r0 := @parameter0: okhttp3.MediaType;
+
+        $r1 := @parameter1: byte[];
+
+        $r2 = new okio.Buffer;
+
+        specialinvoke $r2.<okio.Buffer: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<okio.Buffer: okio.Buffer write(byte[])>($r1);
+
+        $i1 = lengthof $r1;
+
+        $l0 = (long) $i1;
+
+        $r3 = staticinvoke <okhttp3.ResponseBody: okhttp3.ResponseBody create(okhttp3.MediaType,long,okio.BufferedSource)>(null, $l0, $r2);
+
+        return $r3;
+    }
+
+    public final java.io.InputStream byteStream()
+    {
+        okio.BufferedSource $r1;
+        okhttp3.ResponseBody r0;
+        java.io.InputStream $r2;
+
+        r0 := @this: okhttp3.ResponseBody;
+
+        $r1 = virtualinvoke r0.<okhttp3.ResponseBody: okio.BufferedSource source()>();
+
+        $r2 = interfaceinvoke $r1.<okio.BufferedSource: java.io.InputStream inputStream()>();
+
+        return $r2;
+    }
+
+    public final byte[] bytes() throws java.io.IOException
+    {
+        java.lang.Throwable $r1, $r6;
+        byte[] $r3;
+        long $l0, $l3;
+        java.io.IOException $r8;
+        okio.BufferedSource $r2;
+        byte $b1;
+        int $i2;
+        java.lang.StringBuilder $r4, $r7;
+        java.lang.String $r5;
+        okhttp3.ResponseBody r0;
+
+        r0 := @this: okhttp3.ResponseBody;
+
+        $l0 = virtualinvoke r0.<okhttp3.ResponseBody: long contentLength()>();
+
+        $b1 = $l0 cmp 2147483647L;
+
+        $i2 = (int) $b1;
+
+        if $i2 > 0 goto label09;
+
+        $r2 = virtualinvoke r0.<okhttp3.ResponseBody: okio.BufferedSource source()>();
+
+     label01:
+        $r3 = interfaceinvoke $r2.<okio.BufferedSource: byte[] readByteArray()>();
+
+     label02:
+        if $r2 == null goto label03;
+
+        staticinvoke <okhttp3.ResponseBody: void $closeResource(java.lang.Throwable,java.lang.AutoCloseable)>(null, $r2);
+
+     label03:
+        $b1 = $l0 cmp -1L;
+
+        if $b1 == 0 goto label10;
+
+        $i2 = lengthof $r3;
+
+        $l3 = (long) $i2;
+
+        $b1 = $l0 cmp $l3;
+
+        if $b1 != 0 goto label04;
+
+        return $r3;
+
+     label04:
+        $r8 = new java.io.IOException;
+
+        $r7 = new java.lang.StringBuilder;
+
+        $r4 = $r7;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Content-Length (");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") and stream length (");
+
+        $i2 = lengthof $r3;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") disagree");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.io.IOException: void <init>(java.lang.String)>($r5);
+
+        throw $r8;
+
+     label05:
+        $r6 := @caughtexception;
+
+     label06:
+        throw $r6;
+
+     label07:
+        $r1 := @caughtexception;
+
+        if $r2 == null goto label08;
+
+        staticinvoke <okhttp3.ResponseBody: void $closeResource(java.lang.Throwable,java.lang.AutoCloseable)>($r6, $r2);
+
+     label08:
+        throw $r1;
+
+     label09:
+        $r8 = new java.io.IOException;
+
+        $r7 = new java.lang.StringBuilder;
+
+        $r4 = $r7;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Cannot buffer entire body for content length: ");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.io.IOException: void <init>(java.lang.String)>($r5);
+
+        throw $r8;
+
+     label10:
+        return $r3;
+
+        catch java.lang.Throwable from label01 to label02 with label05;
+        catch java.lang.Throwable from label06 to label07 with label07;
+    }
+
+    public final java.io.Reader charStream()
+    {
+        okio.BufferedSource $r3;
+        okhttp3.ResponseBody$BomAwareReader $r2;
+        java.nio.charset.Charset $r4;
+        java.io.Reader $r1;
+        okhttp3.ResponseBody r0;
+
+        r0 := @this: okhttp3.ResponseBody;
+
+        $r1 = r0.<okhttp3.ResponseBody: java.io.Reader reader>;
+
+        if $r1 == null goto label1;
+
+        return $r1;
+
+     label1:
+        $r2 = new okhttp3.ResponseBody$BomAwareReader;
+
+        $r3 = virtualinvoke r0.<okhttp3.ResponseBody: okio.BufferedSource source()>();
+
+        $r4 = specialinvoke r0.<okhttp3.ResponseBody: java.nio.charset.Charset charset()>();
+
+        specialinvoke $r2.<okhttp3.ResponseBody$BomAwareReader: void <init>(okio.BufferedSource,java.nio.charset.Charset)>($r3, $r4);
+
+        r0.<okhttp3.ResponseBody: java.io.Reader reader> = $r2;
+
+        return $r2;
+    }
+
+    public void close()
+    {
+        okio.BufferedSource $r1;
+        okhttp3.ResponseBody r0;
+
+        r0 := @this: okhttp3.ResponseBody;
+
+        $r1 = virtualinvoke r0.<okhttp3.ResponseBody: okio.BufferedSource source()>();
+
+        staticinvoke <okhttp3.internal.Util: void closeQuietly(java.io.Closeable)>($r1);
+
+        return;
+    }
+
+    public abstract long contentLength();
+
+    public abstract okhttp3.MediaType contentType();
+
+    public abstract okio.BufferedSource source();
+
+    public final java.lang.String string() throws java.io.IOException
+    {
+        java.lang.Throwable $r4, $r5;
+        okio.BufferedSource $r1;
+        java.nio.charset.Charset $r2;
+        java.lang.String $r3;
+        okhttp3.ResponseBody r0;
+
+        r0 := @this: okhttp3.ResponseBody;
+
+        $r1 = virtualinvoke r0.<okhttp3.ResponseBody: okio.BufferedSource source()>();
+
+     label1:
+        $r2 = specialinvoke r0.<okhttp3.ResponseBody: java.nio.charset.Charset charset()>();
+
+        $r2 = staticinvoke <okhttp3.internal.Util: java.nio.charset.Charset bomAwareCharset(okio.BufferedSource,java.nio.charset.Charset)>($r1, $r2);
+
+        $r3 = interfaceinvoke $r1.<okio.BufferedSource: java.lang.String readString(java.nio.charset.Charset)>($r2);
+
+     label2:
+        if $r1 == null goto label7;
+
+        staticinvoke <okhttp3.ResponseBody: void $closeResource(java.lang.Throwable,java.lang.AutoCloseable)>(null, $r1);
+
+        return $r3;
+
+     label3:
+        $r4 := @caughtexception;
+
+     label4:
+        throw $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        if $r1 == null goto label6;
+
+        staticinvoke <okhttp3.ResponseBody: void $closeResource(java.lang.Throwable,java.lang.AutoCloseable)>($r4, $r1);
+
+     label6:
+        throw $r5;
+
+     label7:
+        return $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label4 to label5 with label5;
+    }
+}

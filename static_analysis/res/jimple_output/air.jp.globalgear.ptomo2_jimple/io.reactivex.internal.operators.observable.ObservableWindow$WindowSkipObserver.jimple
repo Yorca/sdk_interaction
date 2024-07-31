@@ -1,0 +1,330 @@
+final class io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver extends java.util.concurrent.atomic.AtomicBoolean implements io.reactivex.Observer, io.reactivex.disposables.Disposable, java.lang.Runnable
+{
+    private static final long serialVersionUID;
+    final io.reactivex.Observer actual;
+    volatile boolean cancelled;
+    final int capacityHint;
+    final long count;
+    long firstEmission;
+    long index;
+    io.reactivex.disposables.Disposable s;
+    final long skip;
+    final java.util.ArrayDeque windows;
+    final java.util.concurrent.atomic.AtomicInteger wip;
+
+    void <init>(io.reactivex.Observer, long, long, int)
+    {
+        io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver r0;
+        java.util.concurrent.atomic.AtomicInteger $r1;
+        int $i2;
+        io.reactivex.Observer $r2;
+        long $l0, $l1;
+        java.util.ArrayDeque $r3;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver;
+
+        $r2 := @parameter0: io.reactivex.Observer;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $i2 := @parameter3: int;
+
+        specialinvoke r0.<java.util.concurrent.atomic.AtomicBoolean: void <init>()>();
+
+        $r1 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r1.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: java.util.concurrent.atomic.AtomicInteger wip> = $r1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: io.reactivex.Observer actual> = $r2;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: long count> = $l0;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: long skip> = $l1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: int capacityHint> = $i2;
+
+        $r3 = new java.util.ArrayDeque;
+
+        specialinvoke $r3.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: java.util.ArrayDeque windows> = $r3;
+
+        return;
+    }
+
+    public void dispose()
+    {
+        io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver r0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: boolean cancelled> = 1;
+
+        return;
+    }
+
+    public boolean isDisposed()
+    {
+        io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver r0;
+        boolean z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver;
+
+        z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: boolean cancelled>;
+
+        return z0;
+    }
+
+    public void onComplete()
+    {
+        io.reactivex.subjects.UnicastSubject $r3;
+        io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver r0;
+        io.reactivex.Observer $r4;
+        java.lang.Object $r2;
+        java.util.ArrayDeque $r1;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: java.util.ArrayDeque windows>;
+
+     label1:
+        $z0 = virtualinvoke $r1.<java.util.ArrayDeque: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayDeque: java.lang.Object poll()>();
+
+        $r3 = (io.reactivex.subjects.UnicastSubject) $r2;
+
+        virtualinvoke $r3.<io.reactivex.subjects.UnicastSubject: void onComplete()>();
+
+        goto label1;
+
+     label2:
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r4.<io.reactivex.Observer: void onComplete()>();
+
+        return;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.subjects.UnicastSubject $r4;
+        io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver r0;
+        io.reactivex.Observer $r5;
+        java.lang.Object $r3;
+        java.util.ArrayDeque $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: java.util.ArrayDeque windows>;
+
+     label1:
+        $z0 = virtualinvoke $r2.<java.util.ArrayDeque: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $r3 = virtualinvoke $r2.<java.util.ArrayDeque: java.lang.Object poll()>();
+
+        $r4 = (io.reactivex.subjects.UnicastSubject) $r3;
+
+        virtualinvoke $r4.<io.reactivex.subjects.UnicastSubject: void onError(java.lang.Throwable)>($r1);
+
+        goto label1;
+
+     label2:
+        $r5 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r5.<io.reactivex.Observer: void onError(java.lang.Throwable)>($r1);
+
+        return;
+    }
+
+    public void onNext(java.lang.Object)
+    {
+        long $l0, $l1, $l2, $l5;
+        byte $b3;
+        java.util.concurrent.atomic.AtomicInteger $r4;
+        int $i4;
+        boolean $z0;
+        io.reactivex.subjects.UnicastSubject $r5;
+        java.util.Iterator $r6;
+        io.reactivex.disposables.Disposable $r8;
+        io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver r0;
+        io.reactivex.Observer $r2;
+        java.lang.Object $r3, $r7;
+        java.util.ArrayDeque $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver;
+
+        $r3 := @parameter0: java.lang.Object;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: java.util.ArrayDeque windows>;
+
+        $l1 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: long index>;
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: long skip>;
+
+        $l2 = $l1 % $l0;
+
+        $b3 = $l2 cmp 0L;
+
+        if $b3 != 0 goto label1;
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: boolean cancelled>;
+
+        if $z0 != 0 goto label1;
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: java.util.concurrent.atomic.AtomicInteger wip>;
+
+        virtualinvoke $r4.<java.util.concurrent.atomic.AtomicInteger: int getAndIncrement()>();
+
+        $i4 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: int capacityHint>;
+
+        $r5 = staticinvoke <io.reactivex.subjects.UnicastSubject: io.reactivex.subjects.UnicastSubject create(int,java.lang.Runnable)>($i4, r0);
+
+        virtualinvoke $r1.<java.util.ArrayDeque: boolean offer(java.lang.Object)>($r5);
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r2.<io.reactivex.Observer: void onNext(java.lang.Object)>($r5);
+
+     label1:
+        $l2 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: long firstEmission>;
+
+        $l2 = $l2 + 1L;
+
+        $r6 = virtualinvoke $r1.<java.util.ArrayDeque: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (io.reactivex.subjects.UnicastSubject) $r7;
+
+        virtualinvoke $r5.<io.reactivex.subjects.UnicastSubject: void onNext(java.lang.Object)>($r3);
+
+        goto label2;
+
+     label3:
+        $l5 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: long count>;
+
+        $b3 = $l2 cmp $l5;
+
+        $i4 = (int) $b3;
+
+        if $i4 < 0 goto label5;
+
+        $r3 = virtualinvoke $r1.<java.util.ArrayDeque: java.lang.Object poll()>();
+
+        $r5 = (io.reactivex.subjects.UnicastSubject) $r3;
+
+        virtualinvoke $r5.<io.reactivex.subjects.UnicastSubject: void onComplete()>();
+
+        $z0 = virtualinvoke $r1.<java.util.ArrayDeque: boolean isEmpty()>();
+
+        if $z0 == 0 goto label4;
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: boolean cancelled>;
+
+        if $z0 == 0 goto label4;
+
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: io.reactivex.disposables.Disposable s>;
+
+        interfaceinvoke $r8.<io.reactivex.disposables.Disposable: void dispose()>();
+
+        return;
+
+     label4:
+        $l0 = $l2 - $l0;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: long firstEmission> = $l0;
+
+        goto label6;
+
+     label5:
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: long firstEmission> = $l2;
+
+     label6:
+        $l1 = $l1 + 1L;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: long index> = $l1;
+
+        return;
+    }
+
+    public void onSubscribe(io.reactivex.disposables.Disposable)
+    {
+        io.reactivex.disposables.Disposable $r1, $r2;
+        io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver r0;
+        io.reactivex.Observer $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver;
+
+        $r1 := @parameter0: io.reactivex.disposables.Disposable;
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: io.reactivex.disposables.Disposable s>;
+
+        $z0 = staticinvoke <io.reactivex.internal.disposables.DisposableHelper: boolean validate(io.reactivex.disposables.Disposable,io.reactivex.disposables.Disposable)>($r2, $r1);
+
+        if $z0 == 0 goto label1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: io.reactivex.disposables.Disposable s> = $r1;
+
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r3.<io.reactivex.Observer: void onSubscribe(io.reactivex.disposables.Disposable)>(r0);
+
+     label1:
+        return;
+    }
+
+    public void run()
+    {
+        io.reactivex.disposables.Disposable $r2;
+        io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver r0;
+        java.util.concurrent.atomic.AtomicInteger $r1;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: java.util.concurrent.atomic.AtomicInteger wip>;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicInteger: int decrementAndGet()>();
+
+        if $i0 != 0 goto label1;
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: boolean cancelled>;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: io.reactivex.disposables.Disposable s>;
+
+        interfaceinvoke $r2.<io.reactivex.disposables.Disposable: void dispose()>();
+
+     label1:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <io.reactivex.internal.operators.observable.ObservableWindow$WindowSkipObserver: long serialVersionUID> = 3366976432059579510L;
+
+        return;
+    }
+}

@@ -1,0 +1,367 @@
+public abstract class com.google.common.util.concurrent.Striped extends java.lang.Object
+{
+    private static final int ALL_SET;
+    private static final int LARGE_LAZY_CUTOFF;
+    private static final com.google.common.base.Supplier READ_WRITE_LOCK_SUPPLIER;
+    private static final com.google.common.base.Supplier WEAK_SAFE_READ_WRITE_LOCK_SUPPLIER;
+
+    static void <clinit>()
+    {
+        com.google.common.util.concurrent.Striped$6 $r1;
+        com.google.common.util.concurrent.Striped$5 $r0;
+
+        <com.google.common.util.concurrent.Striped: int LARGE_LAZY_CUTOFF> = 1024;
+
+        <com.google.common.util.concurrent.Striped: int ALL_SET> = -1;
+
+        $r0 = new com.google.common.util.concurrent.Striped$5;
+
+        specialinvoke $r0.<com.google.common.util.concurrent.Striped$5: void <init>()>();
+
+        <com.google.common.util.concurrent.Striped: com.google.common.base.Supplier READ_WRITE_LOCK_SUPPLIER> = $r0;
+
+        $r1 = new com.google.common.util.concurrent.Striped$6;
+
+        specialinvoke $r1.<com.google.common.util.concurrent.Striped$6: void <init>()>();
+
+        <com.google.common.util.concurrent.Striped: com.google.common.base.Supplier WEAK_SAFE_READ_WRITE_LOCK_SUPPLIER> = $r1;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        com.google.common.util.concurrent.Striped r0;
+
+        r0 := @this: com.google.common.util.concurrent.Striped;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    void <init>(com.google.common.util.concurrent.Striped$1)
+    {
+        com.google.common.util.concurrent.Striped$1 $r1;
+        com.google.common.util.concurrent.Striped r0;
+
+        r0 := @this: com.google.common.util.concurrent.Striped;
+
+        $r1 := @parameter0: com.google.common.util.concurrent.Striped$1;
+
+        specialinvoke r0.<com.google.common.util.concurrent.Striped: void <init>()>();
+
+        return;
+    }
+
+    static int access$200(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        $i0 = staticinvoke <com.google.common.util.concurrent.Striped: int ceilToPowerOfTwo(int)>($i0);
+
+        return $i0;
+    }
+
+    static int access$300(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        $i0 = staticinvoke <com.google.common.util.concurrent.Striped: int smear(int)>($i0);
+
+        return $i0;
+    }
+
+    private static int ceilToPowerOfTwo(int)
+    {
+        int $i0;
+        java.math.RoundingMode $r0;
+
+        $i0 := @parameter0: int;
+
+        $r0 = <java.math.RoundingMode: java.math.RoundingMode CEILING>;
+
+        $i0 = staticinvoke <com.google.common.math.IntMath: int log2(int,java.math.RoundingMode)>($i0, $r0);
+
+        $i0 = 1 << $i0;
+
+        return $i0;
+    }
+
+    static com.google.common.util.concurrent.Striped custom(int, com.google.common.base.Supplier)
+    {
+        int $i0;
+        com.google.common.base.Supplier $r0;
+        com.google.common.util.concurrent.Striped$CompactStriped $r1;
+
+        $i0 := @parameter0: int;
+
+        $r0 := @parameter1: com.google.common.base.Supplier;
+
+        $r1 = new com.google.common.util.concurrent.Striped$CompactStriped;
+
+        specialinvoke $r1.<com.google.common.util.concurrent.Striped$CompactStriped: void <init>(int,com.google.common.base.Supplier,com.google.common.util.concurrent.Striped$1)>($i0, $r0, null);
+
+        return $r1;
+    }
+
+    private static com.google.common.util.concurrent.Striped lazy(int, com.google.common.base.Supplier)
+    {
+        com.google.common.util.concurrent.Striped$SmallLazyStriped $r1;
+        int $i0;
+        com.google.common.base.Supplier $r0;
+        com.google.common.util.concurrent.Striped$LargeLazyStriped $r2;
+
+        $i0 := @parameter0: int;
+
+        $r0 := @parameter1: com.google.common.base.Supplier;
+
+        if $i0 >= 1024 goto label1;
+
+        $r1 = new com.google.common.util.concurrent.Striped$SmallLazyStriped;
+
+        specialinvoke $r1.<com.google.common.util.concurrent.Striped$SmallLazyStriped: void <init>(int,com.google.common.base.Supplier)>($i0, $r0);
+
+        return $r1;
+
+     label1:
+        $r2 = new com.google.common.util.concurrent.Striped$LargeLazyStriped;
+
+        specialinvoke $r2.<com.google.common.util.concurrent.Striped$LargeLazyStriped: void <init>(int,com.google.common.base.Supplier)>($i0, $r0);
+
+        return $r2;
+    }
+
+    public static com.google.common.util.concurrent.Striped lazyWeakLock(int)
+    {
+        com.google.common.util.concurrent.Striped$2 $r0;
+        int $i0;
+        com.google.common.util.concurrent.Striped $r1;
+
+        $i0 := @parameter0: int;
+
+        $r0 = new com.google.common.util.concurrent.Striped$2;
+
+        specialinvoke $r0.<com.google.common.util.concurrent.Striped$2: void <init>()>();
+
+        $r1 = staticinvoke <com.google.common.util.concurrent.Striped: com.google.common.util.concurrent.Striped lazy(int,com.google.common.base.Supplier)>($i0, $r0);
+
+        return $r1;
+    }
+
+    public static com.google.common.util.concurrent.Striped lazyWeakReadWriteLock(int)
+    {
+        com.google.common.base.Supplier $r0;
+        int $i0;
+        com.google.common.util.concurrent.Striped $r1;
+
+        $i0 := @parameter0: int;
+
+        $r0 = <com.google.common.util.concurrent.Striped: com.google.common.base.Supplier WEAK_SAFE_READ_WRITE_LOCK_SUPPLIER>;
+
+        $r1 = staticinvoke <com.google.common.util.concurrent.Striped: com.google.common.util.concurrent.Striped lazy(int,com.google.common.base.Supplier)>($i0, $r0);
+
+        return $r1;
+    }
+
+    public static com.google.common.util.concurrent.Striped lazyWeakSemaphore(int, int)
+    {
+        com.google.common.util.concurrent.Striped $r1;
+        int $i0, $i1;
+        com.google.common.util.concurrent.Striped$4 $r0;
+
+        $i1 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        $r0 = new com.google.common.util.concurrent.Striped$4;
+
+        specialinvoke $r0.<com.google.common.util.concurrent.Striped$4: void <init>(int)>($i0);
+
+        $r1 = staticinvoke <com.google.common.util.concurrent.Striped: com.google.common.util.concurrent.Striped lazy(int,com.google.common.base.Supplier)>($i1, $r0);
+
+        return $r1;
+    }
+
+    public static com.google.common.util.concurrent.Striped lock(int)
+    {
+        int $i0;
+        com.google.common.util.concurrent.Striped$1 $r0;
+        com.google.common.util.concurrent.Striped $r1;
+
+        $i0 := @parameter0: int;
+
+        $r0 = new com.google.common.util.concurrent.Striped$1;
+
+        specialinvoke $r0.<com.google.common.util.concurrent.Striped$1: void <init>()>();
+
+        $r1 = staticinvoke <com.google.common.util.concurrent.Striped: com.google.common.util.concurrent.Striped custom(int,com.google.common.base.Supplier)>($i0, $r0);
+
+        return $r1;
+    }
+
+    public static com.google.common.util.concurrent.Striped readWriteLock(int)
+    {
+        com.google.common.base.Supplier $r0;
+        int $i0;
+        com.google.common.util.concurrent.Striped $r1;
+
+        $i0 := @parameter0: int;
+
+        $r0 = <com.google.common.util.concurrent.Striped: com.google.common.base.Supplier READ_WRITE_LOCK_SUPPLIER>;
+
+        $r1 = staticinvoke <com.google.common.util.concurrent.Striped: com.google.common.util.concurrent.Striped custom(int,com.google.common.base.Supplier)>($i0, $r0);
+
+        return $r1;
+    }
+
+    public static com.google.common.util.concurrent.Striped semaphore(int, int)
+    {
+        com.google.common.util.concurrent.Striped $r1;
+        int $i0, $i1;
+        com.google.common.util.concurrent.Striped$3 $r0;
+
+        $i1 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        $r0 = new com.google.common.util.concurrent.Striped$3;
+
+        specialinvoke $r0.<com.google.common.util.concurrent.Striped$3: void <init>(int)>($i0);
+
+        $r1 = staticinvoke <com.google.common.util.concurrent.Striped: com.google.common.util.concurrent.Striped custom(int,com.google.common.base.Supplier)>($i1, $r0);
+
+        return $r1;
+    }
+
+    private static int smear(int)
+    {
+        int $i0, $i1, $i2;
+
+        $i1 := @parameter0: int;
+
+        $i2 = $i1 >>> 20;
+
+        $i0 = $i1 >>> 12;
+
+        $i0 = $i2 ^ $i0;
+
+        $i1 = $i1 ^ $i0;
+
+        $i0 = $i1 >>> 7;
+
+        $i0 = $i0 ^ $i1;
+
+        $i1 = $i1 >>> 4;
+
+        $i1 = $i1 ^ $i0;
+
+        return $i1;
+    }
+
+    public java.lang.Iterable bulkGet(java.lang.Iterable)
+    {
+        com.google.common.util.concurrent.Striped r0;
+        java.lang.Iterable $r1;
+        java.util.ArrayList $r2;
+        java.util.List $r6;
+        com.google.common.collect.ImmutableList $r3;
+        int[] $r4;
+        int $i0, $i1, $i2;
+        java.lang.Object $r5;
+        boolean $z0;
+
+        r0 := @this: com.google.common.util.concurrent.Striped;
+
+        $r1 := @parameter0: java.lang.Iterable;
+
+        $r2 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList(java.lang.Iterable)>($r1);
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r3 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of()>();
+
+        return $r3;
+
+     label1:
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        $r4 = newarray (int)[$i0];
+
+        $i0 = 0;
+
+     label2:
+        $i1 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 >= $i1 goto label3;
+
+        $r5 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $i1 = virtualinvoke r0.<com.google.common.util.concurrent.Striped: int indexFor(java.lang.Object)>($r5);
+
+        $r4[$i0] = $i1;
+
+        $i0 = $i0 + 1;
+
+        goto label2;
+
+     label3:
+        staticinvoke <java.util.Arrays: void sort(int[])>($r4);
+
+        $i0 = $r4[0];
+
+        $r5 = virtualinvoke r0.<com.google.common.util.concurrent.Striped: java.lang.Object getAt(int)>($i0);
+
+        interfaceinvoke $r2.<java.util.List: java.lang.Object set(int,java.lang.Object)>(0, $r5);
+
+        $i1 = 1;
+
+     label4:
+        $i2 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i1 >= $i2 goto label7;
+
+        $i2 = $r4[$i1];
+
+        if $i2 != $i0 goto label5;
+
+        $i2 = $i1 + -1;
+
+        $r5 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i2);
+
+        interfaceinvoke $r2.<java.util.List: java.lang.Object set(int,java.lang.Object)>($i1, $r5);
+
+        goto label6;
+
+     label5:
+        $r5 = virtualinvoke r0.<com.google.common.util.concurrent.Striped: java.lang.Object getAt(int)>($i2);
+
+        interfaceinvoke $r2.<java.util.List: java.lang.Object set(int,java.lang.Object)>($i1, $r5);
+
+        $i0 = $i2;
+
+     label6:
+        $i1 = $i1 + 1;
+
+        goto label4;
+
+     label7:
+        $r6 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r2);
+
+        return $r6;
+    }
+
+    public abstract java.lang.Object get(java.lang.Object);
+
+    public abstract java.lang.Object getAt(int);
+
+    abstract int indexFor(java.lang.Object);
+
+    public abstract int size();
+}

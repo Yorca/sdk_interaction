@@ -1,0 +1,125 @@
+public class com.unity3d.services.core.configuration.ConfigurationRequestFactory extends java.lang.Object
+{
+    private final com.unity3d.services.core.configuration.Configuration _configuration;
+    private final com.unity3d.services.core.device.reader.IDeviceInfoDataContainer _deviceInfoDataContainer;
+
+    public void <init>(com.unity3d.services.core.configuration.Configuration)
+    {
+        com.unity3d.services.core.configuration.ConfigurationRequestFactory r0;
+        com.unity3d.services.core.configuration.Configuration $r1;
+
+        r0 := @this: com.unity3d.services.core.configuration.ConfigurationRequestFactory;
+
+        $r1 := @parameter0: com.unity3d.services.core.configuration.Configuration;
+
+        specialinvoke r0.<com.unity3d.services.core.configuration.ConfigurationRequestFactory: void <init>(com.unity3d.services.core.configuration.Configuration,com.unity3d.services.core.device.reader.IDeviceInfoDataContainer)>($r1, null);
+
+        return;
+    }
+
+    public void <init>(com.unity3d.services.core.configuration.Configuration, com.unity3d.services.core.device.reader.IDeviceInfoDataContainer)
+    {
+        com.unity3d.services.core.device.reader.IDeviceInfoDataContainer $r2;
+        com.unity3d.services.core.configuration.ConfigurationRequestFactory r0;
+        com.unity3d.services.core.configuration.Configuration $r1;
+
+        r0 := @this: com.unity3d.services.core.configuration.ConfigurationRequestFactory;
+
+        $r1 := @parameter0: com.unity3d.services.core.configuration.Configuration;
+
+        $r2 := @parameter1: com.unity3d.services.core.device.reader.IDeviceInfoDataContainer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.unity3d.services.core.configuration.ConfigurationRequestFactory: com.unity3d.services.core.configuration.Configuration _configuration> = $r1;
+
+        r0.<com.unity3d.services.core.configuration.ConfigurationRequestFactory: com.unity3d.services.core.device.reader.IDeviceInfoDataContainer _deviceInfoDataContainer> = $r2;
+
+        return;
+    }
+
+    public com.unity3d.services.core.configuration.Configuration getConfiguration()
+    {
+        com.unity3d.services.core.configuration.ConfigurationRequestFactory r0;
+        com.unity3d.services.core.configuration.Configuration r1;
+
+        r0 := @this: com.unity3d.services.core.configuration.ConfigurationRequestFactory;
+
+        r1 = r0.<com.unity3d.services.core.configuration.ConfigurationRequestFactory: com.unity3d.services.core.configuration.Configuration _configuration>;
+
+        return r1;
+    }
+
+    public com.unity3d.services.core.request.WebRequest getWebRequest() throws java.net.MalformedURLException
+    {
+        byte[] $r8;
+        com.unity3d.services.core.device.reader.IDeviceInfoDataContainer $r7;
+        java.net.MalformedURLException $r10;
+        com.unity3d.services.core.configuration.Configuration $r1;
+        java.util.HashMap $r4;
+        com.unity3d.services.core.request.WebRequest $r6;
+        java.util.List $r5;
+        com.unity3d.services.core.configuration.ConfigurationRequestFactory r0;
+        java.lang.StringBuilder $r3, $r9;
+        java.lang.String $r2;
+
+        r0 := @this: com.unity3d.services.core.configuration.ConfigurationRequestFactory;
+
+        $r1 = r0.<com.unity3d.services.core.configuration.ConfigurationRequestFactory: com.unity3d.services.core.configuration.Configuration _configuration>;
+
+        $r2 = virtualinvoke $r1.<com.unity3d.services.core.configuration.Configuration: java.lang.String getConfigUrl()>();
+
+        if $r2 == null goto label3;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>($r2);
+
+        $r4 = new java.util.HashMap;
+
+        specialinvoke $r4.<java.util.HashMap: void <init>()>();
+
+        $r5 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>("gzip");
+
+        interfaceinvoke $r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("Content-Encoding", $r5);
+
+        $r6 = new com.unity3d.services.core.request.WebRequest;
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<com.unity3d.services.core.request.WebRequest: void <init>(java.lang.String,java.lang.String,java.util.Map)>($r2, "POST", $r4);
+
+        $r7 = r0.<com.unity3d.services.core.configuration.ConfigurationRequestFactory: com.unity3d.services.core.device.reader.IDeviceInfoDataContainer _deviceInfoDataContainer>;
+
+        if $r7 == null goto label1;
+
+        $r8 = interfaceinvoke $r7.<com.unity3d.services.core.device.reader.IDeviceInfoDataContainer: byte[] getDeviceData()>();
+
+        goto label2;
+
+     label1:
+        $r8 = null;
+
+     label2:
+        virtualinvoke $r6.<com.unity3d.services.core.request.WebRequest: void setBody(byte[])>($r8);
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("Requesting configuration with: ");
+
+        virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r2 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>($r2);
+
+        return $r6;
+
+     label3:
+        $r10 = new java.net.MalformedURLException;
+
+        specialinvoke $r10.<java.net.MalformedURLException: void <init>(java.lang.String)>("Base URL is null");
+
+        throw $r10;
+    }
+}

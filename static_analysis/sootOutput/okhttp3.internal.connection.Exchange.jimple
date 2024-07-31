@@ -1,0 +1,653 @@
+public final class okhttp3.internal.connection.Exchange extends java.lang.Object
+{
+    final okhttp3.Call call;
+    final okhttp3.internal.http.ExchangeCodec codec;
+    private boolean duplex;
+    final okhttp3.EventListener eventListener;
+    final okhttp3.internal.connection.ExchangeFinder finder;
+    final okhttp3.internal.connection.Transmitter transmitter;
+
+    public void <init>(okhttp3.internal.connection.Transmitter, okhttp3.Call, okhttp3.EventListener, okhttp3.internal.connection.ExchangeFinder, okhttp3.internal.http.ExchangeCodec)
+    {
+        okhttp3.internal.connection.Transmitter $r1;
+        okhttp3.EventListener $r3;
+        okhttp3.internal.connection.ExchangeFinder $r4;
+        okhttp3.Call $r2;
+        okhttp3.internal.http.ExchangeCodec $r5;
+        okhttp3.internal.connection.Exchange r0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 := @parameter0: okhttp3.internal.connection.Transmitter;
+
+        $r2 := @parameter1: okhttp3.Call;
+
+        $r3 := @parameter2: okhttp3.EventListener;
+
+        $r4 := @parameter3: okhttp3.internal.connection.ExchangeFinder;
+
+        $r5 := @parameter4: okhttp3.internal.http.ExchangeCodec;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.connection.Transmitter transmitter> = $r1;
+
+        r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call> = $r2;
+
+        r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener> = $r3;
+
+        r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.connection.ExchangeFinder finder> = $r4;
+
+        r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec> = $r5;
+
+        return;
+    }
+
+    java.io.IOException bodyComplete(long, boolean, boolean, java.io.IOException)
+    {
+        okhttp3.internal.connection.Transmitter $r4;
+        java.io.IOException $r2;
+        long $l0;
+        okhttp3.EventListener $r3;
+        okhttp3.Call $r1;
+        okhttp3.internal.connection.Exchange r0;
+        boolean $z0, $z1;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $l0 := @parameter0: long;
+
+        $z0 := @parameter1: boolean;
+
+        $z1 := @parameter2: boolean;
+
+        $r2 := @parameter3: java.io.IOException;
+
+        if $r2 == null goto label1;
+
+        virtualinvoke r0.<okhttp3.internal.connection.Exchange: void trackFailure(java.io.IOException)>($r2);
+
+     label1:
+        if $z1 == 0 goto label3;
+
+        if $r2 == null goto label2;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        virtualinvoke $r3.<okhttp3.EventListener: void requestFailed(okhttp3.Call,java.io.IOException)>($r1, $r2);
+
+        goto label3;
+
+     label2:
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        virtualinvoke $r3.<okhttp3.EventListener: void requestBodyEnd(okhttp3.Call,long)>($r1, $l0);
+
+     label3:
+        if $z0 == 0 goto label5;
+
+        if $r2 == null goto label4;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        virtualinvoke $r3.<okhttp3.EventListener: void responseFailed(okhttp3.Call,java.io.IOException)>($r1, $r2);
+
+        goto label5;
+
+     label4:
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        virtualinvoke $r3.<okhttp3.EventListener: void responseBodyEnd(okhttp3.Call,long)>($r1, $l0);
+
+     label5:
+        $r4 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.connection.Transmitter transmitter>;
+
+        $r2 = virtualinvoke $r4.<okhttp3.internal.connection.Transmitter: java.io.IOException exchangeMessageDone(okhttp3.internal.connection.Exchange,boolean,boolean,java.io.IOException)>(r0, $z1, $z0, $r2);
+
+        return $r2;
+    }
+
+    public void cancel()
+    {
+        okhttp3.internal.http.ExchangeCodec $r1;
+        okhttp3.internal.connection.Exchange r0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+        interfaceinvoke $r1.<okhttp3.internal.http.ExchangeCodec: void cancel()>();
+
+        return;
+    }
+
+    public okhttp3.internal.connection.RealConnection connection()
+    {
+        okhttp3.internal.http.ExchangeCodec $r2;
+        okhttp3.internal.connection.Exchange r0;
+        okhttp3.internal.connection.RealConnection $r1;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+        $r1 = interfaceinvoke $r2.<okhttp3.internal.http.ExchangeCodec: okhttp3.internal.connection.RealConnection connection()>();
+
+        return $r1;
+    }
+
+    public okio.Sink createRequestBody(okhttp3.Request, boolean) throws java.io.IOException
+    {
+        okhttp3.Request $r2;
+        long $l0;
+        okio.Sink $r6;
+        okhttp3.RequestBody $r3;
+        okhttp3.internal.connection.Exchange$RequestBodySink $r7;
+        okhttp3.EventListener $r4;
+        okhttp3.Call $r1;
+        okhttp3.internal.http.ExchangeCodec $r5;
+        okhttp3.internal.connection.Exchange r0;
+        boolean $z0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r2 := @parameter0: okhttp3.Request;
+
+        $z0 := @parameter1: boolean;
+
+        r0.<okhttp3.internal.connection.Exchange: boolean duplex> = $z0;
+
+        $r3 = virtualinvoke $r2.<okhttp3.Request: okhttp3.RequestBody body()>();
+
+        $l0 = virtualinvoke $r3.<okhttp3.RequestBody: long contentLength()>();
+
+        $r4 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        virtualinvoke $r4.<okhttp3.EventListener: void requestBodyStart(okhttp3.Call)>($r1);
+
+        $r5 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+        $r6 = interfaceinvoke $r5.<okhttp3.internal.http.ExchangeCodec: okio.Sink createRequestBody(okhttp3.Request,long)>($r2, $l0);
+
+        $r7 = new okhttp3.internal.connection.Exchange$RequestBodySink;
+
+        specialinvoke $r7.<okhttp3.internal.connection.Exchange$RequestBodySink: void <init>(okhttp3.internal.connection.Exchange,okio.Sink,long)>(r0, $r6, $l0);
+
+        return $r7;
+    }
+
+    public void detachWithViolence()
+    {
+        okhttp3.internal.http.ExchangeCodec $r1;
+        okhttp3.internal.connection.Exchange r0;
+        okhttp3.internal.connection.Transmitter $r2;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+        interfaceinvoke $r1.<okhttp3.internal.http.ExchangeCodec: void cancel()>();
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.connection.Transmitter transmitter>;
+
+        virtualinvoke $r2.<okhttp3.internal.connection.Transmitter: java.io.IOException exchangeMessageDone(okhttp3.internal.connection.Exchange,boolean,boolean,java.io.IOException)>(r0, 1, 1, null);
+
+        return;
+    }
+
+    public void finishRequest() throws java.io.IOException
+    {
+        java.lang.Throwable $r4;
+        okhttp3.EventListener $r1;
+        okhttp3.Call $r2;
+        java.io.IOException $r5;
+        okhttp3.internal.http.ExchangeCodec $r3;
+        okhttp3.internal.connection.Exchange r0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+     label1:
+        interfaceinvoke $r3.<okhttp3.internal.http.ExchangeCodec: void finishRequest()>();
+
+     label2:
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        $r5 = (java.io.IOException) $r4;
+
+        virtualinvoke $r1.<okhttp3.EventListener: void requestFailed(okhttp3.Call,java.io.IOException)>($r2, $r5);
+
+        $r5 = (java.io.IOException) $r4;
+
+        virtualinvoke r0.<okhttp3.internal.connection.Exchange: void trackFailure(java.io.IOException)>($r5);
+
+        throw $r4;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public void flushRequest() throws java.io.IOException
+    {
+        java.lang.Throwable $r4;
+        okhttp3.EventListener $r1;
+        okhttp3.Call $r2;
+        java.io.IOException $r5;
+        okhttp3.internal.http.ExchangeCodec $r3;
+        okhttp3.internal.connection.Exchange r0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+     label1:
+        interfaceinvoke $r3.<okhttp3.internal.http.ExchangeCodec: void flushRequest()>();
+
+     label2:
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        $r5 = (java.io.IOException) $r4;
+
+        virtualinvoke $r1.<okhttp3.EventListener: void requestFailed(okhttp3.Call,java.io.IOException)>($r2, $r5);
+
+        $r5 = (java.io.IOException) $r4;
+
+        virtualinvoke r0.<okhttp3.internal.connection.Exchange: void trackFailure(java.io.IOException)>($r5);
+
+        throw $r4;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public boolean isDuplex()
+    {
+        okhttp3.internal.connection.Exchange r0;
+        boolean z0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        z0 = r0.<okhttp3.internal.connection.Exchange: boolean duplex>;
+
+        return z0;
+    }
+
+    public okhttp3.internal.ws.RealWebSocket$Streams newWebSocketStreams() throws java.net.SocketException
+    {
+        okhttp3.internal.connection.Transmitter $r1;
+        okhttp3.internal.http.ExchangeCodec $r2;
+        okhttp3.internal.ws.RealWebSocket$Streams $r4;
+        okhttp3.internal.connection.Exchange r0;
+        okhttp3.internal.connection.RealConnection $r3;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.connection.Transmitter transmitter>;
+
+        virtualinvoke $r1.<okhttp3.internal.connection.Transmitter: void timeoutEarlyExit()>();
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+        $r3 = interfaceinvoke $r2.<okhttp3.internal.http.ExchangeCodec: okhttp3.internal.connection.RealConnection connection()>();
+
+        $r4 = virtualinvoke $r3.<okhttp3.internal.connection.RealConnection: okhttp3.internal.ws.RealWebSocket$Streams newWebSocketStreams(okhttp3.internal.connection.Exchange)>(r0);
+
+        return $r4;
+    }
+
+    public void noNewExchangesOnConnection()
+    {
+        okhttp3.internal.http.ExchangeCodec $r2;
+        okhttp3.internal.connection.Exchange r0;
+        okhttp3.internal.connection.RealConnection $r1;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+        $r1 = interfaceinvoke $r2.<okhttp3.internal.http.ExchangeCodec: okhttp3.internal.connection.RealConnection connection()>();
+
+        virtualinvoke $r1.<okhttp3.internal.connection.RealConnection: void noNewExchanges()>();
+
+        return;
+    }
+
+    public void noRequestBody()
+    {
+        okhttp3.internal.connection.Exchange r0;
+        okhttp3.internal.connection.Transmitter $r1;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.connection.Transmitter transmitter>;
+
+        virtualinvoke $r1.<okhttp3.internal.connection.Transmitter: java.io.IOException exchangeMessageDone(okhttp3.internal.connection.Exchange,boolean,boolean,java.io.IOException)>(r0, 1, 0, null);
+
+        return;
+    }
+
+    public okhttp3.ResponseBody openResponseBody(okhttp3.Response) throws java.io.IOException
+    {
+        java.lang.Throwable $r9;
+        okio.Source $r6;
+        okhttp3.internal.connection.Exchange$ResponseBodySource $r7, $r10;
+        long $l0;
+        java.io.IOException $r12;
+        okio.BufferedSource $r8;
+        okhttp3.EventListener $r2;
+        okhttp3.Response $r1;
+        okhttp3.Call $r3;
+        java.lang.String $r4;
+        okhttp3.internal.http.ExchangeCodec $r5;
+        okhttp3.internal.http.RealResponseBody $r11;
+        okhttp3.internal.connection.Exchange r0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 := @parameter0: okhttp3.Response;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+     label01:
+        virtualinvoke $r2.<okhttp3.EventListener: void responseBodyStart(okhttp3.Call)>($r3);
+
+        $r4 = virtualinvoke $r1.<okhttp3.Response: java.lang.String header(java.lang.String)>("Content-Type");
+
+     label02:
+        $r5 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+     label03:
+        $l0 = interfaceinvoke $r5.<okhttp3.internal.http.ExchangeCodec: long reportedContentLength(okhttp3.Response)>($r1);
+
+     label04:
+        $r5 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+     label05:
+        $r6 = interfaceinvoke $r5.<okhttp3.internal.http.ExchangeCodec: okio.Source openResponseBodySource(okhttp3.Response)>($r1);
+
+     label06:
+        $r10 = new okhttp3.internal.connection.Exchange$ResponseBodySource;
+
+        $r7 = $r10;
+
+     label07:
+        specialinvoke $r10.<okhttp3.internal.connection.Exchange$ResponseBodySource: void <init>(okhttp3.internal.connection.Exchange,okio.Source,long)>(r0, $r6, $l0);
+
+     label08:
+        $r11 = new okhttp3.internal.http.RealResponseBody;
+
+     label09:
+        $r8 = staticinvoke <okio.Okio: okio.BufferedSource buffer(okio.Source)>($r7);
+
+        specialinvoke $r11.<okhttp3.internal.http.RealResponseBody: void <init>(java.lang.String,long,okio.BufferedSource)>($r4, $l0, $r8);
+
+     label10:
+        return $r11;
+
+     label11:
+        $r9 := @caughtexception;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        $r12 = (java.io.IOException) $r9;
+
+        virtualinvoke $r2.<okhttp3.EventListener: void responseFailed(okhttp3.Call,java.io.IOException)>($r3, $r12);
+
+        $r12 = (java.io.IOException) $r9;
+
+        virtualinvoke r0.<okhttp3.internal.connection.Exchange: void trackFailure(java.io.IOException)>($r12);
+
+        throw $r9;
+
+        catch java.io.IOException from label01 to label02 with label11;
+        catch java.io.IOException from label03 to label04 with label11;
+        catch java.io.IOException from label05 to label06 with label11;
+        catch java.io.IOException from label07 to label08 with label11;
+        catch java.io.IOException from label09 to label10 with label11;
+    }
+
+    public okhttp3.Response$Builder readResponseHeaders(boolean) throws java.io.IOException
+    {
+        java.lang.Throwable $r5;
+        java.io.IOException $r7;
+        okhttp3.internal.Internal $r4;
+        okhttp3.EventListener $r6;
+        okhttp3.Response$Builder $r2;
+        okhttp3.Call $r1;
+        okhttp3.internal.http.ExchangeCodec $r3;
+        okhttp3.internal.connection.Exchange r0;
+        boolean $z0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $z0 := @parameter0: boolean;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+     label1:
+        $r2 = interfaceinvoke $r3.<okhttp3.internal.http.ExchangeCodec: okhttp3.Response$Builder readResponseHeaders(boolean)>($z0);
+
+     label2:
+        if $r2 == null goto label6;
+
+        $r4 = <okhttp3.internal.Internal: okhttp3.internal.Internal instance>;
+
+     label3:
+        virtualinvoke $r4.<okhttp3.internal.Internal: void initExchange(okhttp3.Response$Builder,okhttp3.internal.connection.Exchange)>($r2, r0);
+
+     label4:
+        return $r2;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        $r7 = (java.io.IOException) $r5;
+
+        virtualinvoke $r6.<okhttp3.EventListener: void responseFailed(okhttp3.Call,java.io.IOException)>($r1, $r7);
+
+        $r7 = (java.io.IOException) $r5;
+
+        virtualinvoke r0.<okhttp3.internal.connection.Exchange: void trackFailure(java.io.IOException)>($r7);
+
+        throw $r5;
+
+     label6:
+        return $r2;
+
+        catch java.io.IOException from label1 to label2 with label5;
+        catch java.io.IOException from label3 to label4 with label5;
+    }
+
+    public void responseHeadersEnd(okhttp3.Response)
+    {
+        okhttp3.EventListener $r2;
+        okhttp3.Response $r1;
+        okhttp3.Call $r3;
+        okhttp3.internal.connection.Exchange r0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 := @parameter0: okhttp3.Response;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        virtualinvoke $r2.<okhttp3.EventListener: void responseHeadersEnd(okhttp3.Call,okhttp3.Response)>($r3, $r1);
+
+        return;
+    }
+
+    public void responseHeadersStart()
+    {
+        okhttp3.Call $r2;
+        okhttp3.internal.connection.Exchange r0;
+        okhttp3.EventListener $r1;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        virtualinvoke $r1.<okhttp3.EventListener: void responseHeadersStart(okhttp3.Call)>($r2);
+
+        return;
+    }
+
+    public void timeoutEarlyExit()
+    {
+        okhttp3.internal.connection.Exchange r0;
+        okhttp3.internal.connection.Transmitter $r1;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.connection.Transmitter transmitter>;
+
+        virtualinvoke $r1.<okhttp3.internal.connection.Transmitter: void timeoutEarlyExit()>();
+
+        return;
+    }
+
+    void trackFailure(java.io.IOException)
+    {
+        okhttp3.internal.connection.ExchangeFinder $r3;
+        java.io.IOException $r1;
+        okhttp3.internal.http.ExchangeCodec $r4;
+        okhttp3.internal.connection.Exchange r0;
+        okhttp3.internal.connection.RealConnection $r2;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 := @parameter0: java.io.IOException;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.connection.ExchangeFinder finder>;
+
+        virtualinvoke $r3.<okhttp3.internal.connection.ExchangeFinder: void trackFailure()>();
+
+        $r4 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+        $r2 = interfaceinvoke $r4.<okhttp3.internal.http.ExchangeCodec: okhttp3.internal.connection.RealConnection connection()>();
+
+        virtualinvoke $r2.<okhttp3.internal.connection.RealConnection: void trackFailure(java.io.IOException)>($r1);
+
+        return;
+    }
+
+    public okhttp3.Headers trailers() throws java.io.IOException
+    {
+        okhttp3.internal.http.ExchangeCodec $r2;
+        okhttp3.internal.connection.Exchange r0;
+        okhttp3.Headers $r1;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+        $r1 = interfaceinvoke $r2.<okhttp3.internal.http.ExchangeCodec: okhttp3.Headers trailers()>();
+
+        return $r1;
+    }
+
+    public void webSocketUpgradeFailed()
+    {
+        okhttp3.internal.connection.Exchange r0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        virtualinvoke r0.<okhttp3.internal.connection.Exchange: java.io.IOException bodyComplete(long,boolean,boolean,java.io.IOException)>(-1L, 1, 1, null);
+
+        return;
+    }
+
+    public void writeRequestHeaders(okhttp3.Request) throws java.io.IOException
+    {
+        java.lang.Throwable $r5;
+        okhttp3.Request $r1;
+        okhttp3.EventListener $r2;
+        okhttp3.Call $r3;
+        java.io.IOException $r6;
+        okhttp3.internal.http.ExchangeCodec $r4;
+        okhttp3.internal.connection.Exchange r0;
+
+        r0 := @this: okhttp3.internal.connection.Exchange;
+
+        $r1 := @parameter0: okhttp3.Request;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+     label1:
+        virtualinvoke $r2.<okhttp3.EventListener: void requestHeadersStart(okhttp3.Call)>($r3);
+
+     label2:
+        $r4 = r0.<okhttp3.internal.connection.Exchange: okhttp3.internal.http.ExchangeCodec codec>;
+
+     label3:
+        interfaceinvoke $r4.<okhttp3.internal.http.ExchangeCodec: void writeRequestHeaders(okhttp3.Request)>($r1);
+
+     label4:
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+     label5:
+        virtualinvoke $r2.<okhttp3.EventListener: void requestHeadersEnd(okhttp3.Call,okhttp3.Request)>($r3, $r1);
+
+     label6:
+        return;
+
+     label7:
+        $r5 := @caughtexception;
+
+        $r2 = r0.<okhttp3.internal.connection.Exchange: okhttp3.EventListener eventListener>;
+
+        $r3 = r0.<okhttp3.internal.connection.Exchange: okhttp3.Call call>;
+
+        $r6 = (java.io.IOException) $r5;
+
+        virtualinvoke $r2.<okhttp3.EventListener: void requestFailed(okhttp3.Call,java.io.IOException)>($r3, $r6);
+
+        $r6 = (java.io.IOException) $r5;
+
+        virtualinvoke r0.<okhttp3.internal.connection.Exchange: void trackFailure(java.io.IOException)>($r6);
+
+        throw $r5;
+
+        catch java.io.IOException from label1 to label2 with label7;
+        catch java.io.IOException from label3 to label4 with label7;
+        catch java.io.IOException from label5 to label6 with label7;
+    }
+}

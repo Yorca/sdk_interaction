@@ -1,0 +1,2139 @@
+public class com.unity3d.services.core.device.Device extends java.lang.Object
+{
+    private static com.unity3d.services.core.request.metrics.SDKMetricsSender sdkMetricsSender;
+
+    static void <clinit>()
+    {
+        java.lang.Object $r0;
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.misc.Utilities: java.lang.Object getService(java.lang.Class)>(class "Lcom/unity3d/services/core/request/metrics/SDKMetricsSender;");
+
+        $r1 = (com.unity3d.services.core.request.metrics.SDKMetricsSender) $r0;
+
+        <com.unity3d.services.core.device.Device: com.unity3d.services.core.request.metrics.SDKMetricsSender sdkMetricsSender> = $r1;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.unity3d.services.core.device.Device r0;
+
+        r0 := @this: com.unity3d.services.core.device.Device;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String getAdvertisingTrackingId()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.device.AdvertisingId: java.lang.String getAdvertisingTrackingId()>();
+
+        return $r0;
+    }
+
+    public static int getApiLevel()
+    {
+        int i0;
+
+        i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        return i0;
+    }
+
+    public static java.lang.String getApkDigest() throws java.lang.Exception
+    {
+        java.lang.Throwable $r0, $r1, $r10;
+        android.content.Context $r2;
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r8;
+        long $l0, $l1, $l2;
+        byte $b3;
+        java.lang.Long $r9;
+        int $i4;
+        com.unity3d.services.core.request.metrics.Metric $r13;
+        java.lang.String $r3;
+        java.io.FileInputStream $r4, $r6, $r12;
+        java.io.File $r5, $r11;
+        java.util.concurrent.TimeUnit $r7;
+
+        $r2 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageCodePath()>();
+
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r4 = null;
+
+     label01:
+        $r11 = new java.io.File;
+
+     label02:
+        $r5 = $r11;
+
+     label03:
+        specialinvoke $r11.<java.io.File: void <init>(java.lang.String)>($r3);
+
+        $l1 = virtualinvoke $r5.<java.io.File: long length()>();
+
+     label04:
+        $l1 = $l1 / 1048576L;
+
+     label05:
+        $r12 = new java.io.FileInputStream;
+
+     label06:
+        $r6 = $r12;
+
+     label07:
+        specialinvoke $r12.<java.io.FileInputStream: void <init>(java.io.File)>($r5);
+
+     label08:
+        $r3 = staticinvoke <com.unity3d.services.core.misc.Utilities: java.lang.String Sha256(java.io.InputStream)>($r6);
+
+     label09:
+        virtualinvoke $r6.<java.io.InputStream: void close()>();
+
+     label10:
+        goto label11;
+
+     label11:
+        $r7 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l2 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l0 = $l2 - $l0;
+
+        $l0 = virtualinvoke $r7.<java.util.concurrent.TimeUnit: long toMillis(long)>($l0);
+
+        $b3 = $l0 cmp 5000L;
+
+        $i4 = (int) $b3;
+
+        if $i4 <= 0 goto label12;
+
+        $r8 = <com.unity3d.services.core.device.Device: com.unity3d.services.core.request.metrics.SDKMetricsSender sdkMetricsSender>;
+
+        $r13 = new com.unity3d.services.core.request.metrics.Metric;
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        specialinvoke $r13.<com.unity3d.services.core.request.metrics.Metric: void <init>(java.lang.String,java.lang.Object)>("native_device_info_apk_digest_timeout", $r9);
+
+        interfaceinvoke $r8.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetric(com.unity3d.services.core.request.metrics.Metric)>($r13);
+
+     label12:
+        $r8 = <com.unity3d.services.core.device.Device: com.unity3d.services.core.request.metrics.SDKMetricsSender sdkMetricsSender>;
+
+        $r13 = new com.unity3d.services.core.request.metrics.Metric;
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        specialinvoke $r13.<com.unity3d.services.core.request.metrics.Metric: void <init>(java.lang.String,java.lang.Object)>("native_device_info_apk_size", $r9);
+
+        interfaceinvoke $r8.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetric(com.unity3d.services.core.request.metrics.Metric)>($r13);
+
+        return $r3;
+
+     label13:
+        $r10 := @caughtexception;
+
+        $r4 = $r6;
+
+        goto label15;
+
+     label14:
+        $r10 := @caughtexception;
+
+     label15:
+        if $r4 == null goto label17;
+
+     label16:
+        virtualinvoke $r4.<java.io.InputStream: void close()>();
+
+     label17:
+        throw $r10;
+
+     label18:
+        $r0 := @caughtexception;
+
+        goto label11;
+
+     label19:
+        $r1 := @caughtexception;
+
+        goto label17;
+
+        catch java.lang.Throwable from label01 to label02 with label14;
+        catch java.lang.Throwable from label03 to label04 with label14;
+        catch java.lang.Throwable from label05 to label06 with label14;
+        catch java.lang.Throwable from label07 to label08 with label14;
+        catch java.lang.Throwable from label08 to label09 with label13;
+        catch java.io.IOException from label09 to label10 with label18;
+        catch java.io.IOException from label16 to label17 with label19;
+    }
+
+    public static java.lang.String getAuid()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.preferences.AndroidPreferences: java.lang.String getString(java.lang.String,java.lang.String)>("supersonic_shared_preferen", "auid");
+
+        return $r0;
+    }
+
+    public static float getBatteryLevel()
+    {
+        android.content.Context $r0;
+        int $i0, $i1;
+        android.content.IntentFilter $r2;
+        float $f0, $f1;
+        android.content.Intent $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r2 = new android.content.IntentFilter;
+
+        specialinvoke $r2.<android.content.IntentFilter: void <init>(java.lang.String)>("android.intent.action.BATTERY_CHANGED");
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>(null, $r2);
+
+        if $r1 == null goto label1;
+
+        $i0 = virtualinvoke $r1.<android.content.Intent: int getIntExtra(java.lang.String,int)>("level", -1);
+
+        $i1 = virtualinvoke $r1.<android.content.Intent: int getIntExtra(java.lang.String,int)>("scale", -1);
+
+        $f0 = (float) $i0;
+
+        $f1 = (float) $i1;
+
+        $f0 = $f0 / $f1;
+
+        return $f0;
+
+     label1:
+        return -1.0F;
+    }
+
+    public static int getBatteryStatus()
+    {
+        android.content.Context $r0;
+        int $i0;
+        android.content.IntentFilter $r2;
+        android.content.Intent $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r2 = new android.content.IntentFilter;
+
+        specialinvoke $r2.<android.content.IntentFilter: void <init>(java.lang.String)>("android.intent.action.BATTERY_CHANGED");
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>(null, $r2);
+
+        if $r1 == null goto label2;
+
+        $i0 = virtualinvoke $r1.<android.content.Intent: int getIntExtra(java.lang.String,int)>("status", -1);
+
+        return $i0;
+
+     label1:
+        return -1;
+
+     label2:
+        return -1;
+    }
+
+    public static java.lang.String getBoard()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String BOARD>;
+
+        return r0;
+    }
+
+    public static java.lang.String getBootloader()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String BOOTLOADER>;
+
+        return r0;
+    }
+
+    public static java.lang.String getBrand()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String BRAND>;
+
+        return r0;
+    }
+
+    public static java.lang.String getBuildId()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String ID>;
+
+        return r0;
+    }
+
+    public static java.lang.String getBuildVersionIncremental()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build$VERSION: java.lang.String INCREMENTAL>;
+
+        return r0;
+    }
+
+    public static long getCPUCount()
+    {
+        int $i0;
+        long $l1;
+        java.lang.Runtime $r0;
+
+        $r0 = staticinvoke <java.lang.Runtime: java.lang.Runtime getRuntime()>();
+
+        $i0 = virtualinvoke $r0.<java.lang.Runtime: int availableProcessors()>();
+
+        $l1 = (long) $i0;
+
+        return $l1;
+    }
+
+    public static java.lang.String getCertificateFingerprint()
+    {
+        java.security.cert.X509Certificate $r10;
+        android.content.Context $r0;
+        byte[] $r8;
+        java.security.cert.CertificateFactory $r5;
+        android.content.pm.PackageManager $r1;
+        java.security.MessageDigest $r11;
+        android.content.pm.PackageInfo $r3;
+        android.content.pm.Signature[] $r4;
+        java.lang.Exception $r12;
+        java.security.cert.Certificate $r9;
+        java.io.ByteArrayInputStream $r6;
+        int $i0;
+        java.lang.String $r2;
+        android.content.pm.Signature $r7;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+     label01:
+        $r3 = virtualinvoke $r1.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r2, 64);
+
+        $r4 = $r3.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+     label02:
+        if $r4 == null goto label10;
+
+     label03:
+        $i0 = lengthof $r4;
+
+     label04:
+        if $i0 < 1 goto label10;
+
+     label05:
+        $r5 = staticinvoke <java.security.cert.CertificateFactory: java.security.cert.CertificateFactory getInstance(java.lang.String)>("X.509");
+
+     label06:
+        $r6 = new java.io.ByteArrayInputStream;
+
+     label07:
+        $r7 = $r4[0];
+
+        $r8 = virtualinvoke $r7.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        specialinvoke $r6.<java.io.ByteArrayInputStream: void <init>(byte[])>($r8);
+
+        $r9 = virtualinvoke $r5.<java.security.cert.CertificateFactory: java.security.cert.Certificate generateCertificate(java.io.InputStream)>($r6);
+
+        $r10 = (java.security.cert.X509Certificate) $r9;
+
+        $r11 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA-1");
+
+        $r8 = virtualinvoke $r10.<java.security.cert.X509Certificate: byte[] getEncoded()>();
+
+        $r8 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest(byte[])>($r8);
+
+        $r2 = staticinvoke <com.unity3d.services.core.misc.Utilities: java.lang.String toHexString(byte[])>($r8);
+
+     label08:
+        return $r2;
+
+     label09:
+        $r12 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Exception when signing certificate fingerprint", $r12);
+
+     label10:
+        return null;
+
+        catch java.lang.Exception from label01 to label02 with label09;
+        catch java.lang.Exception from label03 to label04 with label09;
+        catch java.lang.Exception from label05 to label06 with label09;
+        catch java.lang.Exception from label07 to label08 with label09;
+    }
+
+    public static java.lang.String getConnectionType()
+    {
+        boolean $z0;
+
+        $z0 = staticinvoke <com.unity3d.services.core.device.Device: boolean isUsingWifi()>();
+
+        if $z0 == 0 goto label1;
+
+        return "wifi";
+
+     label1:
+        $z0 = staticinvoke <com.unity3d.services.core.device.Device: boolean isActiveNetworkConnected()>();
+
+        if $z0 == 0 goto label2;
+
+        return "cellular";
+
+     label2:
+        return "none";
+    }
+
+    public static java.lang.String getDevice()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String DEVICE>;
+
+        return r0;
+    }
+
+    public static float getDisplayMetricDensity()
+    {
+        android.content.Context $r0;
+        float f0;
+        android.util.DisplayMetrics $r2;
+        android.content.res.Resources $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r1.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        f0 = $r2.<android.util.DisplayMetrics: float density>;
+
+        return f0;
+
+     label1:
+        return -1.0F;
+    }
+
+    public static long getElapsedRealtime()
+    {
+        long $l0;
+
+        $l0 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        return $l0;
+    }
+
+    public static java.lang.String getFingerprint()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String FINGERPRINT>;
+
+        return r0;
+    }
+
+    public static long getFreeMemory()
+    {
+        long $l0;
+        com.unity3d.services.core.device.Device$MemoryInfoType $r0;
+
+        $r0 = <com.unity3d.services.core.device.Device$MemoryInfoType: com.unity3d.services.core.device.Device$MemoryInfoType FREE_MEMORY>;
+
+        $l0 = staticinvoke <com.unity3d.services.core.device.Device: long getMemoryInfo(com.unity3d.services.core.device.Device$MemoryInfoType)>($r0);
+
+        return $l0;
+    }
+
+    public static long getFreeSpace(java.io.File)
+    {
+        int $i1;
+        float $f0;
+        long $l0;
+        java.io.File $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.io.File;
+
+        if $r0 == null goto label1;
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label1;
+
+        $l0 = virtualinvoke $r0.<java.io.File: long getFreeSpace()>();
+
+        $l0 = $l0 / 1024L;
+
+        $f0 = (float) $l0;
+
+        $i1 = staticinvoke <java.lang.Math: int round(float)>($f0);
+
+        $l0 = (long) $i1;
+
+        return $l0;
+
+     label1:
+        return -1L;
+    }
+
+    public static java.lang.String getGLVersion()
+    {
+        android.content.Context $r0;
+        android.app.ActivityManager $r2;
+        android.content.pm.ConfigurationInfo $r3;
+        java.lang.Object $r1;
+        java.lang.String $r4;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("activity");
+
+        $r2 = (android.app.ActivityManager) $r1;
+
+        if $r2 == null goto label1;
+
+        $r3 = virtualinvoke $r2.<android.app.ActivityManager: android.content.pm.ConfigurationInfo getDeviceConfigurationInfo()>();
+
+        if $r3 == null goto label1;
+
+        $r4 = virtualinvoke $r3.<android.content.pm.ConfigurationInfo: java.lang.String getGlEsVersion()>();
+
+        return $r4;
+
+     label1:
+        return null;
+    }
+
+    public static java.lang.String getHardware()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String HARDWARE>;
+
+        return r0;
+    }
+
+    public static java.lang.String getHost()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String HOST>;
+
+        return r0;
+    }
+
+    public static java.lang.String getIdfi()
+    {
+        java.lang.String $r0, $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.preferences.AndroidPreferences: java.lang.String getString(java.lang.String,java.lang.String)>("unityads-installinfo", "unityads-idfi");
+
+        $r1 = $r0;
+
+        if $r0 != null goto label1;
+
+        $r1 = staticinvoke <com.unity3d.services.core.device.Device: java.lang.String getAuid()>();
+
+     label1:
+        if $r1 != null goto label2;
+
+        $r0 = staticinvoke <com.unity3d.services.core.device.Device: java.lang.String getUniqueEventId()>();
+
+        staticinvoke <com.unity3d.services.core.preferences.AndroidPreferences: void setString(java.lang.String,java.lang.String,java.lang.String)>("unityads-installinfo", "unityads-idfi", $r0);
+
+        return $r0;
+
+     label2:
+        return $r1;
+    }
+
+    public static java.lang.String getManufacturer()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String MANUFACTURER>;
+
+        return r0;
+    }
+
+    private static long getMemoryInfo(com.unity3d.services.core.device.Device$MemoryInfoType)
+    {
+        java.lang.Throwable $r5, $r6, $r7, $r8, $r10, $r11;
+        java.io.RandomAccessFile $r3, $r12;
+        long $l2;
+        byte $b1;
+        int[] $r1;
+        int $i0;
+        java.lang.String $r4;
+        java.lang.Exception $r14;
+        com.unity3d.services.core.device.Device$MemoryInfoType $r0;
+        java.lang.Object $r2;
+        java.lang.StringBuilder $r9, $r13;
+
+        $r0 := @parameter0: com.unity3d.services.core.device.Device$MemoryInfoType;
+
+        $r1 = <com.unity3d.services.core.device.Device$1: int[] $SwitchMap$com$unity3d$services$core$device$Device$MemoryInfoType>;
+
+        $i0 = virtualinvoke $r0.<com.unity3d.services.core.device.Device$MemoryInfoType: int ordinal()>();
+
+        $i0 = $r1[$i0];
+
+        $b1 = 1;
+
+        if $i0 == 1 goto label01;
+
+        $b1 = 2;
+
+        if $i0 == 2 goto label01;
+
+        $b1 = -1;
+
+     label01:
+        $r2 = null;
+
+     label02:
+        $r12 = new java.io.RandomAccessFile;
+
+     label03:
+        $r3 = $r12;
+
+     label04:
+        specialinvoke $r12.<java.io.RandomAccessFile: void <init>(java.lang.String,java.lang.String)>("/proc/meminfo", "r");
+
+     label05:
+        $i0 = 0;
+
+     label06:
+        if $i0 >= $b1 goto label09;
+
+     label07:
+        $r4 = virtualinvoke $r3.<java.io.RandomAccessFile: java.lang.String readLine()>();
+
+     label08:
+        $r2 = $r4;
+
+        $i0 = $i0 + 1;
+
+        goto label06;
+
+     label09:
+        $r4 = (java.lang.String) $r2;
+
+     label10:
+        $l2 = staticinvoke <com.unity3d.services.core.device.Device: long getMemoryValueFromString(java.lang.String)>($r4);
+
+     label11:
+        virtualinvoke $r3.<java.io.RandomAccessFile: void close()>();
+
+     label12:
+        return $l2;
+
+     label13:
+        $r5 := @caughtexception;
+
+        $r14 = (java.lang.Exception) $r5;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing RandomAccessFile", $r14);
+
+        return $l2;
+
+     label14:
+        $r6 := @caughtexception;
+
+        goto label17;
+
+     label15:
+        $r7 := @caughtexception;
+
+        goto label26;
+
+     label16:
+        $r8 := @caughtexception;
+
+        $r3 = null;
+
+        $r6 = $r8;
+
+     label17:
+        $r13 = new java.lang.StringBuilder;
+
+     label18:
+        $r9 = $r13;
+
+     label19:
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Error while reading memory info: ");
+
+        virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        $r4 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r14 = (java.lang.Exception) $r6;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>($r4, $r14);
+
+     label20:
+        if $r3 == null goto label24;
+
+     label21:
+        virtualinvoke $r3.<java.io.RandomAccessFile: void close()>();
+
+     label22:
+        goto label24;
+
+     label23:
+        $r10 := @caughtexception;
+
+        $r14 = (java.lang.Exception) $r10;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing RandomAccessFile", $r14);
+
+     label24:
+        return -1L;
+
+     label25:
+        $r7 := @caughtexception;
+
+        $r2 = $r3;
+
+     label26:
+        if $r2 == null goto label30;
+
+        $r3 = (java.io.RandomAccessFile) $r2;
+
+     label27:
+        virtualinvoke $r3.<java.io.RandomAccessFile: void close()>();
+
+     label28:
+        goto label30;
+
+     label29:
+        $r11 := @caughtexception;
+
+        $r14 = (java.lang.Exception) $r11;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing RandomAccessFile", $r14);
+
+     label30:
+        throw $r7;
+
+        catch java.io.IOException from label04 to label05 with label16;
+        catch java.lang.Throwable from label02 to label03 with label15;
+        catch java.lang.Throwable from label04 to label05 with label15;
+        catch java.io.IOException from label07 to label08 with label14;
+        catch java.io.IOException from label10 to label11 with label14;
+        catch java.lang.Throwable from label07 to label08 with label25;
+        catch java.lang.Throwable from label09 to label11 with label25;
+        catch java.io.IOException from label11 to label12 with label13;
+        catch java.lang.Throwable from label17 to label18 with label25;
+        catch java.lang.Throwable from label19 to label20 with label25;
+        catch java.io.IOException from label21 to label22 with label23;
+        catch java.io.IOException from label27 to label28 with label29;
+    }
+
+    private static long getMemoryValueFromString(java.lang.String)
+    {
+        java.util.regex.Matcher $r2;
+        long $l0;
+        java.lang.String $r0;
+        java.util.regex.Pattern $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label3;
+
+        $r1 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("(\\d+)");
+
+        $r2 = virtualinvoke $r1.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r0);
+
+        $r0 = "";
+
+     label1:
+        $z0 = virtualinvoke $r2.<java.util.regex.Matcher: boolean find()>();
+
+        if $z0 == 0 goto label2;
+
+        $r0 = virtualinvoke $r2.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        goto label1;
+
+     label2:
+        $l0 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r0);
+
+        return $l0;
+
+     label3:
+        return -1L;
+    }
+
+    public static java.lang.String getModel()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String MODEL>;
+
+        return r0;
+    }
+
+    public static java.lang.String getNetworkCountryISO()
+    {
+        android.content.Context $r0;
+        android.telephony.TelephonyManager $r2;
+        java.lang.Object $r1;
+        java.lang.String $r3;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("phone");
+
+        $r2 = (android.telephony.TelephonyManager) $r1;
+
+        $r3 = virtualinvoke $r2.<android.telephony.TelephonyManager: java.lang.String getNetworkCountryIso()>();
+
+        return $r3;
+
+     label1:
+        return "";
+    }
+
+    public static boolean getNetworkMetered()
+    {
+        android.net.ConnectivityManager $r2;
+        android.content.Context $r0;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label2;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r2 = (android.net.ConnectivityManager) $r1;
+
+        if $r2 != null goto label1;
+
+        return 0;
+
+     label1:
+        $z0 = virtualinvoke $r2.<android.net.ConnectivityManager: boolean isActiveNetworkMetered()>();
+
+        return $z0;
+
+     label2:
+        return 0;
+    }
+
+    public static java.lang.String getNetworkOperator()
+    {
+        android.content.Context $r0;
+        android.telephony.TelephonyManager $r2;
+        java.lang.Object $r1;
+        java.lang.String $r3;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("phone");
+
+        $r2 = (android.telephony.TelephonyManager) $r1;
+
+        $r3 = virtualinvoke $r2.<android.telephony.TelephonyManager: java.lang.String getNetworkOperator()>();
+
+        return $r3;
+
+     label1:
+        return "";
+    }
+
+    public static java.lang.String getNetworkOperatorName()
+    {
+        android.content.Context $r0;
+        android.telephony.TelephonyManager $r2;
+        java.lang.Object $r1;
+        java.lang.String $r3;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("phone");
+
+        $r2 = (android.telephony.TelephonyManager) $r1;
+
+        $r3 = virtualinvoke $r2.<android.telephony.TelephonyManager: java.lang.String getNetworkOperatorName()>();
+
+        return $r3;
+
+     label1:
+        return "";
+    }
+
+    public static int getNetworkType()
+    {
+        java.lang.Throwable $r0;
+        android.content.Context $r1;
+        android.telephony.TelephonyManager $r3;
+        int $i0;
+        java.lang.Object $r2;
+
+        $r1 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r1 == null goto label4;
+
+        $r1 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("phone");
+
+        $r3 = (android.telephony.TelephonyManager) $r2;
+
+     label1:
+        $i0 = virtualinvoke $r3.<android.telephony.TelephonyManager: int getNetworkType()>();
+
+     label2:
+        return $i0;
+
+     label3:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void warning(java.lang.String)>("Unity Ads was not able to get current network type due to missing permission");
+
+     label4:
+        return -1;
+
+     label5:
+        $r0 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.SecurityException from label1 to label2 with label5;
+    }
+
+    private static java.util.ArrayList getNewAbiList()
+    {
+        java.util.List $r1;
+        java.lang.String[] $r2;
+        java.util.ArrayList $r0;
+
+        $r0 = new java.util.ArrayList;
+
+        specialinvoke $r0.<java.util.ArrayList: void <init>()>();
+
+        $r2 = <android.os.Build: java.lang.String[] SUPPORTED_ABIS>;
+
+        $r1 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r2);
+
+        virtualinvoke $r0.<java.util.ArrayList: boolean addAll(java.util.Collection)>($r1);
+
+        return $r0;
+    }
+
+    private static java.util.ArrayList getOldAbiList()
+    {
+        java.lang.String $r1;
+        java.util.ArrayList $r0;
+
+        $r0 = new java.util.ArrayList;
+
+        specialinvoke $r0.<java.util.ArrayList: void <init>()>();
+
+        $r1 = <android.os.Build: java.lang.String CPU_ABI>;
+
+        virtualinvoke $r0.<java.util.ArrayList: boolean add(java.lang.Object)>($r1);
+
+        $r1 = <android.os.Build: java.lang.String CPU_ABI2>;
+
+        virtualinvoke $r0.<java.util.ArrayList: boolean add(java.lang.Object)>($r1);
+
+        return $r0;
+    }
+
+    public static java.lang.String getOpenAdvertisingTrackingId()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.device.OpenAdvertisingId: java.lang.String getOpenAdvertisingTrackingId()>();
+
+        return $r0;
+    }
+
+    public static java.lang.String getOsVersion()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build$VERSION: java.lang.String RELEASE>;
+
+        return r0;
+    }
+
+    public static org.json.JSONObject getPackageInfo(android.content.pm.PackageManager) throws android.content.pm.PackageManager$NameNotFoundException, org.json.JSONException
+    {
+        org.json.JSONObject $r0;
+        android.content.pm.PackageManager $r1;
+        int $i1;
+        long $l0;
+        java.lang.String $r2;
+        android.content.pm.PackageInfo $r3;
+
+        $r1 := @parameter0: android.content.pm.PackageManager;
+
+        $r2 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: java.lang.String getAppName()>();
+
+        $r3 = virtualinvoke $r1.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r2, 0);
+
+        $r0 = new org.json.JSONObject;
+
+        specialinvoke $r0.<org.json.JSONObject: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<android.content.pm.PackageManager: java.lang.String getInstallerPackageName(java.lang.String)>($r2);
+
+        virtualinvoke $r0.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("installer", $r2);
+
+        $l0 = $r3.<android.content.pm.PackageInfo: long firstInstallTime>;
+
+        virtualinvoke $r0.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("firstInstallTime", $l0);
+
+        $l0 = $r3.<android.content.pm.PackageInfo: long lastUpdateTime>;
+
+        virtualinvoke $r0.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>("lastUpdateTime", $l0);
+
+        $i1 = $r3.<android.content.pm.PackageInfo: int versionCode>;
+
+        virtualinvoke $r0.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,int)>("versionCode", $i1);
+
+        $r2 = $r3.<android.content.pm.PackageInfo: java.lang.String versionName>;
+
+        virtualinvoke $r0.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("versionName", $r2);
+
+        $r2 = $r3.<android.content.pm.PackageInfo: java.lang.String packageName>;
+
+        virtualinvoke $r0.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("packageName", $r2);
+
+        return $r0;
+    }
+
+    public static java.util.Map getProcessInfo()
+    {
+        java.lang.Throwable $r4, $r5, $r6, $r7, $r8;
+        java.io.RandomAccessFile $r2, $r3, $r10;
+        java.util.HashMap $r1, $r9;
+        java.lang.Exception $r11;
+        java.lang.String $r0;
+
+        $r9 = new java.util.HashMap;
+
+        $r1 = $r9;
+
+        specialinvoke $r9.<java.util.HashMap: void <init>()>();
+
+        $r2 = null;
+
+     label01:
+        $r10 = new java.io.RandomAccessFile;
+
+     label02:
+        $r3 = $r10;
+
+     label03:
+        specialinvoke $r10.<java.io.RandomAccessFile: void <init>(java.lang.String,java.lang.String)>("/proc/self/stat", "r");
+
+     label04:
+        $r0 = virtualinvoke $r3.<java.io.RandomAccessFile: java.lang.String readLine()>();
+
+        virtualinvoke $r1.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("stat", $r0);
+
+     label05:
+        virtualinvoke $r3.<java.io.RandomAccessFile: void close()>();
+
+     label06:
+        return $r1;
+
+     label07:
+        $r4 := @caughtexception;
+
+        goto label10;
+
+     label08:
+        $r5 := @caughtexception;
+
+        goto label16;
+
+     label09:
+        $r6 := @caughtexception;
+
+        $r3 = null;
+
+        $r4 = $r6;
+
+     label10:
+        $r11 = (java.lang.Exception) $r4;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error while reading processor info: ", $r11);
+
+     label11:
+        if $r3 == null goto label21;
+
+     label12:
+        virtualinvoke $r3.<java.io.RandomAccessFile: void close()>();
+
+     label13:
+        return $r1;
+
+     label14:
+        $r7 := @caughtexception;
+
+        $r11 = (java.lang.Exception) $r7;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing RandomAccessFile", $r11);
+
+        return $r1;
+
+     label15:
+        $r5 := @caughtexception;
+
+        $r2 = $r3;
+
+     label16:
+        if $r2 == null goto label20;
+
+     label17:
+        virtualinvoke $r2.<java.io.RandomAccessFile: void close()>();
+
+     label18:
+        goto label20;
+
+     label19:
+        $r8 := @caughtexception;
+
+        $r11 = (java.lang.Exception) $r8;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error closing RandomAccessFile", $r11);
+
+     label20:
+        throw $r5;
+
+     label21:
+        return $r1;
+
+        catch java.io.IOException from label03 to label04 with label09;
+        catch java.lang.Throwable from label01 to label02 with label08;
+        catch java.lang.Throwable from label03 to label04 with label08;
+        catch java.io.IOException from label04 to label05 with label07;
+        catch java.lang.Throwable from label04 to label05 with label15;
+        catch java.io.IOException from label05 to label06 with label14;
+        catch java.lang.Throwable from label10 to label11 with label15;
+        catch java.io.IOException from label12 to label13 with label14;
+        catch java.io.IOException from label17 to label18 with label19;
+    }
+
+    public static java.lang.String getProduct()
+    {
+        java.lang.String r0;
+
+        r0 = <android.os.Build: java.lang.String PRODUCT>;
+
+        return r0;
+    }
+
+    public static int getRingerMode()
+    {
+        android.content.Context $r0;
+        int $i0;
+        java.lang.Object $r1;
+        android.media.AudioManager $r2;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label2;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("audio");
+
+        $r2 = (android.media.AudioManager) $r1;
+
+        if $r2 == null goto label1;
+
+        $i0 = virtualinvoke $r2.<android.media.AudioManager: int getRingerMode()>();
+
+        return $i0;
+
+     label1:
+        $i0 = -2;
+
+        return $i0;
+
+     label2:
+        $i0 = -1;
+
+        return $i0;
+    }
+
+    public static int getScreenBrightness()
+    {
+        int $i0;
+        android.content.Context $r0;
+        android.content.ContentResolver $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $i0 = -1;
+
+        $i0 = staticinvoke <android.provider.Settings$System: int getInt(android.content.ContentResolver,java.lang.String,int)>($r1, "screen_brightness", $i0);
+
+        return $i0;
+
+     label1:
+        $i0 = -1;
+
+        return $i0;
+    }
+
+    public static int getScreenDensity()
+    {
+        android.content.Context $r0;
+        int i0;
+        android.util.DisplayMetrics $r2;
+        android.content.res.Resources $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r1.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        i0 = $r2.<android.util.DisplayMetrics: int densityDpi>;
+
+        return i0;
+
+     label1:
+        return -1;
+    }
+
+    public static int getScreenHeight()
+    {
+        android.content.Context $r0;
+        int i0;
+        android.util.DisplayMetrics $r2;
+        android.content.res.Resources $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r1.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        i0 = $r2.<android.util.DisplayMetrics: int heightPixels>;
+
+        return i0;
+
+     label1:
+        return -1;
+    }
+
+    public static int getScreenLayout()
+    {
+        android.content.Context $r0;
+        android.content.res.Configuration $r2;
+        int i0;
+        android.content.res.Resources $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r1.<android.content.res.Resources: android.content.res.Configuration getConfiguration()>();
+
+        i0 = $r2.<android.content.res.Configuration: int screenLayout>;
+
+        return i0;
+
+     label1:
+        return -1;
+    }
+
+    public static int getScreenWidth()
+    {
+        android.content.Context $r0;
+        int i0;
+        android.util.DisplayMetrics $r2;
+        android.content.res.Resources $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r1.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        i0 = $r2.<android.util.DisplayMetrics: int widthPixels>;
+
+        return i0;
+
+     label1:
+        return -1;
+    }
+
+    public static java.util.List getSensorList()
+    {
+        android.content.Context $r0;
+        android.hardware.SensorManager $r2;
+        java.util.List $r3;
+        int $i0;
+        java.lang.Object $r1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("sensor");
+
+        $r2 = (android.hardware.SensorManager) $r1;
+
+        $i0 = -1;
+
+        $r3 = virtualinvoke $r2.<android.hardware.SensorManager: java.util.List getSensorList(int)>($i0);
+
+        return $r3;
+
+     label1:
+        return null;
+    }
+
+    public static int getStreamMaxVolume(int)
+    {
+        android.content.Context $r0;
+        int $i0;
+        java.lang.Object $r1;
+        android.media.AudioManager $r2;
+
+        $i0 := @parameter0: int;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label2;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("audio");
+
+        $r2 = (android.media.AudioManager) $r1;
+
+        if $r2 == null goto label1;
+
+        $i0 = virtualinvoke $r2.<android.media.AudioManager: int getStreamMaxVolume(int)>($i0);
+
+        return $i0;
+
+     label1:
+        $i0 = -2;
+
+        return $i0;
+
+     label2:
+        $i0 = -1;
+
+        return $i0;
+    }
+
+    public static int getStreamVolume(int)
+    {
+        android.content.Context $r0;
+        int $i0;
+        java.lang.Object $r1;
+        android.media.AudioManager $r2;
+
+        $i0 := @parameter0: int;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label2;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("audio");
+
+        $r2 = (android.media.AudioManager) $r1;
+
+        if $r2 == null goto label1;
+
+        $i0 = virtualinvoke $r2.<android.media.AudioManager: int getStreamVolume(int)>(1);
+
+        return $i0;
+
+     label1:
+        return -2;
+
+     label2:
+        return -1;
+    }
+
+    public static java.util.ArrayList getSupportedAbis()
+    {
+        int $i0;
+        java.util.ArrayList $r0;
+
+        $i0 = staticinvoke <com.unity3d.services.core.device.Device: int getApiLevel()>();
+
+        if $i0 >= 21 goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.device.Device: java.util.ArrayList getOldAbiList()>();
+
+        return $r0;
+
+     label1:
+        $r0 = staticinvoke <com.unity3d.services.core.device.Device: java.util.ArrayList getNewAbiList()>();
+
+        return $r0;
+    }
+
+    public static java.lang.String getSystemProperty(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $r1 = staticinvoke <java.lang.System: java.lang.String getProperty(java.lang.String,java.lang.String)>($r1, $r0);
+
+        return $r1;
+
+     label1:
+        $r1 = staticinvoke <java.lang.System: java.lang.String getProperty(java.lang.String)>($r1);
+
+        return $r1;
+    }
+
+    public static long getTotalMemory()
+    {
+        long $l0;
+        com.unity3d.services.core.device.Device$MemoryInfoType $r0;
+
+        $r0 = <com.unity3d.services.core.device.Device$MemoryInfoType: com.unity3d.services.core.device.Device$MemoryInfoType TOTAL_MEMORY>;
+
+        $l0 = staticinvoke <com.unity3d.services.core.device.Device: long getMemoryInfo(com.unity3d.services.core.device.Device$MemoryInfoType)>($r0);
+
+        return $l0;
+    }
+
+    public static long getTotalSpace(java.io.File)
+    {
+        int $i1;
+        float $f0;
+        long $l0;
+        java.io.File $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.io.File;
+
+        if $r0 == null goto label1;
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label1;
+
+        $l0 = virtualinvoke $r0.<java.io.File: long getTotalSpace()>();
+
+        $l0 = $l0 / 1024L;
+
+        $f0 = (float) $l0;
+
+        $i1 = staticinvoke <java.lang.Math: int round(float)>($f0);
+
+        $l0 = (long) $i1;
+
+        return $l0;
+
+     label1:
+        return -1L;
+    }
+
+    public static java.lang.String getUniqueEventId()
+    {
+        java.util.UUID $r0;
+        java.lang.String $r1;
+
+        $r0 = staticinvoke <java.util.UUID: java.util.UUID randomUUID()>();
+
+        $r1 = virtualinvoke $r0.<java.util.UUID: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public static long getUptime()
+    {
+        long $l0;
+
+        $l0 = staticinvoke <android.os.SystemClock: long uptimeMillis()>();
+
+        return $l0;
+    }
+
+    public static boolean hasX264Decoder()
+    {
+        int $i0;
+        java.util.List $r0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.device.Device: java.util.List selectAllDecodeCodecs(java.lang.String)>("video/avc");
+
+        $i0 = interfaceinvoke $r0.<java.util.List: int size()>();
+
+        if $i0 <= 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public static boolean hasX265Decoder()
+    {
+        int $i0;
+        java.util.List $r0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.device.Device: java.util.List selectAllDecodeCodecs(java.lang.String)>("video/hevc");
+
+        $i0 = interfaceinvoke $r0.<java.util.List: int size()>();
+
+        if $i0 <= 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public static boolean isActiveNetworkConnected()
+    {
+        android.net.ConnectivityManager $r2;
+        android.content.Context $r0;
+        android.net.NetworkInfo $r3;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r2 = (android.net.ConnectivityManager) $r1;
+
+        if $r2 == null goto label1;
+
+        $r3 = virtualinvoke $r2.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if $r3 == null goto label1;
+
+        $z0 = virtualinvoke $r3.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public static java.lang.Boolean isAdbEnabled()
+    {
+        int $i0;
+        java.lang.Boolean $r0;
+
+        $i0 = staticinvoke <com.unity3d.services.core.device.Device: int getApiLevel()>();
+
+        if $i0 >= 17 goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.device.Device: java.lang.Boolean oldAdbStatus()>();
+
+        return $r0;
+
+     label1:
+        $r0 = staticinvoke <com.unity3d.services.core.device.Device: java.lang.Boolean newAdbStatus()>();
+
+        return $r0;
+    }
+
+    private static boolean isHardwareAccelerated(android.media.MediaCodecInfo, java.lang.String)
+    {
+        android.media.MediaCodecInfo $r1;
+        int $i0;
+        java.lang.String $r0;
+        boolean $z0;
+
+        $r1 := @parameter0: android.media.MediaCodecInfo;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $i0 = staticinvoke <com.unity3d.services.core.device.Device: int getApiLevel()>();
+
+        if $i0 < 29 goto label1;
+
+        $z0 = staticinvoke <com.unity3d.services.core.device.Device: boolean isHardwareAcceleratedV29(android.media.MediaCodecInfo)>($r1);
+
+        return $z0;
+
+     label1:
+        $z0 = staticinvoke <com.unity3d.services.core.device.Device: boolean isSoftwareOnly(android.media.MediaCodecInfo,java.lang.String)>($r1, $r0);
+
+        $z0 = $z0 ^ 1;
+
+        return $z0;
+    }
+
+    private static boolean isHardwareAcceleratedV29(android.media.MediaCodecInfo)
+    {
+        android.media.MediaCodecInfo $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: android.media.MediaCodecInfo;
+
+        $z0 = virtualinvoke $r0.<android.media.MediaCodecInfo: boolean isHardwareAccelerated()>();
+
+        return $z0;
+    }
+
+    public static boolean isLimitAdTrackingEnabled()
+    {
+        boolean $z0;
+
+        $z0 = staticinvoke <com.unity3d.services.core.device.AdvertisingId: boolean getLimitedAdTracking()>();
+
+        return $z0;
+    }
+
+    public static boolean isLimitOpenAdTrackingEnabled()
+    {
+        boolean $z0;
+
+        $z0 = staticinvoke <com.unity3d.services.core.device.OpenAdvertisingId: boolean getLimitedOpenAdTracking()>();
+
+        return $z0;
+    }
+
+    public static boolean isRooted()
+    {
+        java.lang.Exception $r0;
+        boolean $z0;
+
+     label1:
+        $z0 = staticinvoke <com.unity3d.services.core.device.Device: boolean searchPathForBinary(java.lang.String)>("su");
+
+     label2:
+        return $z0;
+
+     label3:
+        $r0 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Rooted check failed", $r0);
+
+        return 0;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    private static boolean isSoftwareOnly(android.media.MediaCodecInfo, java.lang.String)
+    {
+        android.media.MediaCodecInfo $r0;
+        int $i0;
+        java.lang.String $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: android.media.MediaCodecInfo;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $i0 = staticinvoke <com.unity3d.services.core.device.Device: int getApiLevel()>();
+
+        if $i0 < 29 goto label1;
+
+        $z0 = staticinvoke <com.unity3d.services.core.device.Device: boolean isSoftwareOnlyV29(android.media.MediaCodecInfo)>($r0);
+
+        return $z0;
+
+     label1:
+        $r1 = virtualinvoke $r0.<android.media.MediaCodecInfo: java.lang.String getName()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String toLowerCase()>();
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>("arc.");
+
+        if $z0 == 0 goto label2;
+
+        return 0;
+
+     label2:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>("omx.google.");
+
+        if $z0 != 0 goto label4;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>("omx.ffmpeg.");
+
+        if $z0 != 0 goto label4;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>("omx.sec.");
+
+        if $z0 == 0 goto label3;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean contains(java.lang.CharSequence)>(".sw.");
+
+        if $z0 != 0 goto label4;
+
+     label3:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("omx.qcom.video.decoder.hevcswvdec");
+
+        if $z0 != 0 goto label4;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>("c2.android.");
+
+        if $z0 != 0 goto label4;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>("c2.google.");
+
+        if $z0 != 0 goto label4;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>("omx.");
+
+        if $z0 != 0 goto label5;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>("c2.");
+
+        if $z0 != 0 goto label5;
+
+     label4:
+        return 1;
+
+     label5:
+        return 0;
+    }
+
+    private static boolean isSoftwareOnlyV29(android.media.MediaCodecInfo)
+    {
+        android.media.MediaCodecInfo $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: android.media.MediaCodecInfo;
+
+        $z0 = virtualinvoke $r0.<android.media.MediaCodecInfo: boolean isSoftwareOnly()>();
+
+        return $z0;
+    }
+
+    public static boolean isUSBConnected()
+    {
+        android.content.Context $r0;
+        android.content.IntentFilter $r1;
+        android.content.Intent $r2;
+        boolean $z0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = new android.content.IntentFilter;
+
+        specialinvoke $r1.<android.content.IntentFilter: void <init>(java.lang.String)>("android.hardware.usb.action.USB_STATE");
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>(null, $r1);
+
+        if $r2 == null goto label1;
+
+        $z0 = virtualinvoke $r2.<android.content.Intent: boolean getBooleanExtra(java.lang.String,boolean)>("connected", 0);
+
+        return $z0;
+
+     label1:
+        return 0;
+    }
+
+    public static boolean isUsingWifi()
+    {
+        android.net.ConnectivityManager $r2;
+        android.content.Context $r0;
+        android.net.NetworkInfo $r4, $r5;
+        android.telephony.TelephonyManager $r3;
+        int $i0;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label3;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r2 = (android.net.ConnectivityManager) $r1;
+
+        if $r2 != null goto label1;
+
+        return 0;
+
+     label1:
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("phone");
+
+        $r3 = (android.telephony.TelephonyManager) $r1;
+
+        $r4 = virtualinvoke $r2.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if $r4 == null goto label3;
+
+        $z0 = virtualinvoke $r2.<android.net.ConnectivityManager: boolean getBackgroundDataSetting()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = virtualinvoke $r2.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        $z0 = virtualinvoke $r5.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 == 0 goto label3;
+
+        if $r3 != null goto label2;
+
+        return 0;
+
+     label2:
+        $i0 = virtualinvoke $r4.<android.net.NetworkInfo: int getType()>();
+
+        if $i0 != 1 goto label3;
+
+        $z0 = virtualinvoke $r4.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 == 0 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    public static boolean isWiredHeadsetOn()
+    {
+        android.content.Context $r0;
+        java.lang.Object $r1;
+        android.media.AudioManager $r2;
+        boolean $z0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        if $r0 == null goto label1;
+
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("audio");
+
+        $r2 = (android.media.AudioManager) $r1;
+
+        $z0 = virtualinvoke $r2.<android.media.AudioManager: boolean isWiredHeadsetOn()>();
+
+        return $z0;
+
+     label1:
+        return 0;
+    }
+
+    private static java.lang.Boolean newAdbStatus()
+    {
+        android.content.Context $r0;
+        android.content.ContentResolver $r1;
+        int $i0;
+        java.lang.Boolean $r2;
+        java.lang.Exception $r3;
+        boolean $z0;
+
+     label1:
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        $i0 = staticinvoke <android.provider.Settings$Global: int getInt(android.content.ContentResolver,java.lang.String,int)>($r1, "adb_enabled", 0);
+
+     label4:
+        if 1 != $i0 goto label5;
+
+        $z0 = 1;
+
+     label5:
+        $r2 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+     label6:
+        return $r2;
+
+     label7:
+        $r3 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Problems fetching adb enabled status", $r3);
+
+        return null;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    private static java.lang.Boolean oldAdbStatus()
+    {
+        android.content.Context $r0;
+        android.content.ContentResolver $r1;
+        int $i0;
+        java.lang.Boolean $r2;
+        java.lang.Exception $r3;
+        boolean $z0;
+
+     label1:
+        $r0 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        $i0 = staticinvoke <android.provider.Settings$Secure: int getInt(android.content.ContentResolver,java.lang.String,int)>($r1, "adb_enabled", 0);
+
+     label4:
+        if 1 != $i0 goto label5;
+
+        $z0 = 1;
+
+     label5:
+        $r2 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+     label6:
+        return $r2;
+
+     label7:
+        $r3 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Problems fetching adb enabled status", $r3);
+
+        return null;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    private static boolean searchPathForBinary(java.lang.String)
+    {
+        java.lang.String[] $r2;
+        java.io.File $r3;
+        int $i0, $i1, $i2, $i3;
+        java.lang.String $r0, $r1;
+        java.io.File[] $r4;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.System: java.lang.String getenv(java.lang.String)>("PATH");
+
+        $r2 = virtualinvoke $r1.<java.lang.String: java.lang.String[] split(java.lang.String)>(":");
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label5;
+
+        $r1 = $r2[$i1];
+
+        $r3 = new java.io.File;
+
+        specialinvoke $r3.<java.io.File: void <init>(java.lang.String)>($r1);
+
+        $z0 = virtualinvoke $r3.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label4;
+
+        $z0 = virtualinvoke $r3.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label4;
+
+        $r4 = virtualinvoke $r3.<java.io.File: java.io.File[] listFiles()>();
+
+        if $r4 == null goto label4;
+
+        $i2 = lengthof $r4;
+
+        $i3 = 0;
+
+     label2:
+        if $i3 >= $i2 goto label4;
+
+        $r3 = $r4[$i3];
+
+        $r1 = virtualinvoke $r3.<java.io.File: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("su");
+
+        if $z0 == 0 goto label3;
+
+        return 1;
+
+     label3:
+        $i3 = $i3 + 1;
+
+        goto label2;
+
+     label4:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label5:
+        return 0;
+    }
+
+    public static java.util.List selectAllDecodeCodecs(java.lang.String)
+    {
+        java.lang.String[] $r3;
+        java.util.ArrayList $r1;
+        android.media.MediaCodecInfo $r2;
+        int $i0, $i1, $i2, $i3;
+        java.lang.String $r0, $r4;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        $i0 = staticinvoke <android.media.MediaCodecList: int getCodecCount()>();
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label5;
+
+        $r2 = staticinvoke <android.media.MediaCodecList: android.media.MediaCodecInfo getCodecInfoAt(int)>($i1);
+
+        $z0 = virtualinvoke $r2.<android.media.MediaCodecInfo: boolean isEncoder()>();
+
+        if $z0 != 0 goto label4;
+
+        $r3 = virtualinvoke $r2.<android.media.MediaCodecInfo: java.lang.String[] getSupportedTypes()>();
+
+        $i2 = 0;
+
+     label2:
+        $i3 = lengthof $r3;
+
+        if $i2 >= $i3 goto label4;
+
+        $r4 = $r3[$i2];
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r0);
+
+        if $z0 == 0 goto label3;
+
+        $z0 = staticinvoke <com.unity3d.services.core.device.Device: boolean isHardwareAccelerated(android.media.MediaCodecInfo,java.lang.String)>($r2, $r0);
+
+        if $z0 == 0 goto label3;
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+     label3:
+        $i2 = $i2 + 1;
+
+        goto label2;
+
+     label4:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label5:
+        return $r1;
+    }
+}

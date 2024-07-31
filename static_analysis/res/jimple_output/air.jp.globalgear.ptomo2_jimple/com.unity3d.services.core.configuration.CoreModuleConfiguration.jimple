@@ -1,0 +1,236 @@
+public class com.unity3d.services.core.configuration.CoreModuleConfiguration extends java.lang.Object implements com.unity3d.services.core.configuration.IModuleConfiguration
+{
+
+    public void <init>()
+    {
+        com.unity3d.services.core.configuration.CoreModuleConfiguration r0;
+
+        r0 := @this: com.unity3d.services.core.configuration.CoreModuleConfiguration;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private void collectMetrics()
+    {
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r4;
+        java.lang.Integer $r2;
+        java.util.ArrayList $r5;
+        com.unity3d.services.core.configuration.CoreModuleConfiguration r0;
+        int $i0;
+        com.unity3d.services.core.request.metrics.Metric $r6;
+        java.lang.Object $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: com.unity3d.services.core.configuration.CoreModuleConfiguration;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        $z0 = staticinvoke <com.unity3d.services.core.device.Device: boolean hasX264Decoder()>();
+
+        $z1 = staticinvoke <com.unity3d.services.core.device.Device: boolean hasX265Decoder()>();
+
+        $r6 = new com.unity3d.services.core.request.metrics.Metric;
+
+        $i0 = (int) $z0;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        specialinvoke $r6.<com.unity3d.services.core.request.metrics.Metric: void <init>(java.lang.String,java.lang.Object)>("native_device_decoder_x264", $r2);
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        $r6 = new com.unity3d.services.core.request.metrics.Metric;
+
+        $i0 = (int) $z1;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        specialinvoke $r6.<com.unity3d.services.core.request.metrics.Metric: void <init>(java.lang.String,java.lang.Object)>("native_device_decoder_x265", $r2);
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        $r3 = staticinvoke <com.unity3d.services.core.misc.Utilities: java.lang.Object getService(java.lang.Class)>(class "Lcom/unity3d/services/core/request/metrics/SDKMetricsSender;");
+
+        $r4 = (com.unity3d.services.core.request.metrics.SDKMetricsSender) $r3;
+
+        interfaceinvoke $r4.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetrics(java.util.List)>($r5);
+
+        return;
+    }
+
+    public java.lang.Class[] getWebAppApiClassList()
+    {
+        java.lang.Class[] $r1;
+        com.unity3d.services.core.configuration.CoreModuleConfiguration r0;
+
+        r0 := @this: com.unity3d.services.core.configuration.CoreModuleConfiguration;
+
+        $r1 = newarray (java.lang.Class)[14];
+
+        $r1[0] = class "Lcom/unity3d/services/core/api/Broadcast;";
+
+        $r1[1] = class "Lcom/unity3d/services/core/api/Cache;";
+
+        $r1[2] = class "Lcom/unity3d/services/core/api/Connectivity;";
+
+        $r1[3] = class "Lcom/unity3d/services/core/api/DeviceInfo;";
+
+        $r1[4] = class "Lcom/unity3d/services/core/api/ClassDetection;";
+
+        $r1[5] = class "Lcom/unity3d/services/core/api/Storage;";
+
+        $r1[6] = class "Lcom/unity3d/services/core/api/Sdk;";
+
+        $r1[7] = class "Lcom/unity3d/services/core/api/Request;";
+
+        $r1[8] = class "Lcom/unity3d/services/core/api/Resolve;";
+
+        $r1[9] = class "Lcom/unity3d/services/core/api/Intent;";
+
+        $r1[10] = class "Lcom/unity3d/services/core/api/Lifecycle;";
+
+        $r1[11] = class "Lcom/unity3d/services/core/api/Preferences;";
+
+        $r1[12] = class "Lcom/unity3d/services/core/api/SensorInfo;";
+
+        $r1[13] = class "Lcom/unity3d/services/core/api/Permissions;";
+
+        return $r1;
+    }
+
+    public boolean initCompleteState(com.unity3d.services.core.configuration.Configuration)
+    {
+        com.unity3d.services.core.configuration.CoreModuleConfiguration$2 $r3;
+        com.unity3d.services.core.configuration.CoreModuleConfiguration r0;
+        com.unity3d.services.core.configuration.Configuration $r2;
+        com.unity3d.services.core.configuration.InitializationNotificationCenter $r1;
+
+        r0 := @this: com.unity3d.services.core.configuration.CoreModuleConfiguration;
+
+        $r2 := @parameter0: com.unity3d.services.core.configuration.Configuration;
+
+        staticinvoke <com.unity3d.services.core.request.metrics.SDKMetrics: void setConfiguration(com.unity3d.services.core.configuration.Configuration)>($r2);
+
+        $r1 = staticinvoke <com.unity3d.services.core.configuration.InitializationNotificationCenter: com.unity3d.services.core.configuration.InitializationNotificationCenter getInstance()>();
+
+        virtualinvoke $r1.<com.unity3d.services.core.configuration.InitializationNotificationCenter: void triggerOnSdkInitialized()>();
+
+        $r3 = new com.unity3d.services.core.configuration.CoreModuleConfiguration$2;
+
+        specialinvoke $r3.<com.unity3d.services.core.configuration.CoreModuleConfiguration$2: void <init>(com.unity3d.services.core.configuration.CoreModuleConfiguration)>(r0);
+
+        staticinvoke <com.unity3d.services.core.misc.Utilities: void runOnUiThread(java.lang.Runnable)>($r3);
+
+        specialinvoke r0.<com.unity3d.services.core.configuration.CoreModuleConfiguration: void collectMetrics()>();
+
+        return 1;
+    }
+
+    public boolean initErrorState(com.unity3d.services.core.configuration.Configuration, com.unity3d.services.core.configuration.ErrorState, java.lang.String)
+    {
+        com.unity3d.services.core.configuration.Configuration $r1;
+        com.unity3d.ads.UnityAds$UnityAdsInitializationError $r5;
+        com.unity3d.services.core.configuration.CoreModuleConfiguration$1 $r7;
+        int[] $r4;
+        com.unity3d.services.core.configuration.CoreModuleConfiguration r0;
+        int $i0;
+        com.unity3d.services.core.configuration.InitializationNotificationCenter $r6;
+        com.unity3d.services.core.configuration.ErrorState $r2;
+        java.lang.String $r3;
+
+        r0 := @this: com.unity3d.services.core.configuration.CoreModuleConfiguration;
+
+        $r1 := @parameter0: com.unity3d.services.core.configuration.Configuration;
+
+        $r2 := @parameter1: com.unity3d.services.core.configuration.ErrorState;
+
+        $r3 := @parameter2: java.lang.String;
+
+        staticinvoke <com.unity3d.services.core.request.metrics.SDKMetrics: void setConfiguration(com.unity3d.services.core.configuration.Configuration)>($r1);
+
+        $r4 = <com.unity3d.services.core.configuration.CoreModuleConfiguration$3: int[] $SwitchMap$com$unity3d$services$core$configuration$ErrorState>;
+
+        $i0 = virtualinvoke $r2.<com.unity3d.services.core.configuration.ErrorState: int ordinal()>();
+
+        $i0 = $r4[$i0];
+
+        if $i0 == 1 goto label2;
+
+        if $i0 == 2 goto label1;
+
+        $r5 = <com.unity3d.ads.UnityAds$UnityAdsInitializationError: com.unity3d.ads.UnityAds$UnityAdsInitializationError INTERNAL_ERROR>;
+
+        $r3 = "Unity Ads failed to initialize due to internal error";
+
+        goto label3;
+
+     label1:
+        $r5 = <com.unity3d.ads.UnityAds$UnityAdsInitializationError: com.unity3d.ads.UnityAds$UnityAdsInitializationError AD_BLOCKER_DETECTED>;
+
+        goto label3;
+
+     label2:
+        $r5 = <com.unity3d.ads.UnityAds$UnityAdsInitializationError: com.unity3d.ads.UnityAds$UnityAdsInitializationError INTERNAL_ERROR>;
+
+     label3:
+        $r6 = staticinvoke <com.unity3d.services.core.configuration.InitializationNotificationCenter: com.unity3d.services.core.configuration.InitializationNotificationCenter getInstance()>();
+
+        virtualinvoke $r6.<com.unity3d.services.core.configuration.InitializationNotificationCenter: void triggerOnSdkInitializationFailed(java.lang.String,com.unity3d.services.core.configuration.ErrorState,int)>($r3, $r2, 0);
+
+        $r7 = new com.unity3d.services.core.configuration.CoreModuleConfiguration$1;
+
+        specialinvoke $r7.<com.unity3d.services.core.configuration.CoreModuleConfiguration$1: void <init>(com.unity3d.services.core.configuration.CoreModuleConfiguration,com.unity3d.ads.UnityAds$UnityAdsInitializationError,java.lang.String)>(r0, $r5, $r3);
+
+        staticinvoke <com.unity3d.services.core.misc.Utilities: void runOnUiThread(java.lang.Runnable)>($r7);
+
+        return 1;
+    }
+
+    public boolean resetState(com.unity3d.services.core.configuration.Configuration)
+    {
+        com.unity3d.services.core.broadcast.BroadcastMonitor $r2;
+        android.content.Context $r3;
+        com.unity3d.services.core.configuration.CoreModuleConfiguration r0;
+        com.unity3d.services.core.configuration.Configuration $r1;
+        java.lang.Object $r4;
+        com.unity3d.services.core.device.VolumeChange $r5;
+
+        r0 := @this: com.unity3d.services.core.configuration.CoreModuleConfiguration;
+
+        $r1 := @parameter0: com.unity3d.services.core.configuration.Configuration;
+
+        $r2 = staticinvoke <com.unity3d.services.core.broadcast.BroadcastMonitor: com.unity3d.services.core.broadcast.BroadcastMonitor getInstance()>();
+
+        virtualinvoke $r2.<com.unity3d.services.core.broadcast.BroadcastMonitor: void removeAllBroadcastListeners()>();
+
+        staticinvoke <com.unity3d.services.core.cache.CacheThread: void cancel()>();
+
+        staticinvoke <com.unity3d.services.core.request.WebRequestThread: void cancel()>();
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void stopAll()>();
+
+        $r3 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        staticinvoke <com.unity3d.services.core.device.StorageManager: boolean init(android.content.Context)>($r3);
+
+        $r3 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        staticinvoke <com.unity3d.services.core.device.AdvertisingId: void init(android.content.Context)>($r3);
+
+        $r3 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        staticinvoke <com.unity3d.services.core.device.OpenAdvertisingId: void init(android.content.Context)>($r3);
+
+        $r4 = staticinvoke <com.unity3d.services.core.misc.Utilities: java.lang.Object getService(java.lang.Class)>(class "Lcom/unity3d/services/core/device/VolumeChange;");
+
+        $r5 = (com.unity3d.services.core.device.VolumeChange) $r4;
+
+        interfaceinvoke $r5.<com.unity3d.services.core.device.VolumeChange: void clearAllListeners()>();
+
+        return 1;
+    }
+}

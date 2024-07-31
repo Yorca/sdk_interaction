@@ -1,0 +1,394 @@
+abstract class com.google.common.util.concurrent.InterruptibleTask extends java.util.concurrent.atomic.AtomicReference implements java.lang.Runnable
+{
+    private static final java.lang.Runnable DONE;
+    private static final int MAX_BUSY_WAIT_SPINS;
+    private static final java.lang.Runnable PARKED;
+
+    static void <clinit>()
+    {
+        com.google.common.util.concurrent.InterruptibleTask$DoNothingRunnable $r0;
+
+        <com.google.common.util.concurrent.InterruptibleTask: int MAX_BUSY_WAIT_SPINS> = 1000;
+
+        $r0 = new com.google.common.util.concurrent.InterruptibleTask$DoNothingRunnable;
+
+        specialinvoke $r0.<com.google.common.util.concurrent.InterruptibleTask$DoNothingRunnable: void <init>(com.google.common.util.concurrent.InterruptibleTask$1)>(null);
+
+        <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable DONE> = $r0;
+
+        $r0 = new com.google.common.util.concurrent.InterruptibleTask$DoNothingRunnable;
+
+        specialinvoke $r0.<com.google.common.util.concurrent.InterruptibleTask$DoNothingRunnable: void <init>(com.google.common.util.concurrent.InterruptibleTask$1)>(null);
+
+        <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable PARKED> = $r0;
+
+        return;
+    }
+
+    void <init>()
+    {
+        com.google.common.util.concurrent.InterruptibleTask r0;
+
+        r0 := @this: com.google.common.util.concurrent.InterruptibleTask;
+
+        specialinvoke r0.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        return;
+    }
+
+    private void waitForInterrupt(java.lang.Thread)
+    {
+        java.lang.Runnable $r3, $r5;
+        com.google.common.util.concurrent.InterruptibleTask r0;
+        java.lang.Thread $r1;
+        int $i0;
+        java.lang.Object $r2;
+        com.google.common.util.concurrent.InterruptibleTask$Blocker $r4;
+        boolean $z0, $z1;
+
+        r0 := @this: com.google.common.util.concurrent.InterruptibleTask;
+
+        $r1 := @parameter0: java.lang.Thread;
+
+        $r2 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: java.lang.Object get()>();
+
+        $r3 = (java.lang.Runnable) $r2;
+
+        $r4 = null;
+
+        $z0 = 0;
+
+        $i0 = 0;
+
+     label01:
+        $z1 = $r3 instanceof com.google.common.util.concurrent.InterruptibleTask$Blocker;
+
+        if $z1 != 0 goto label03;
+
+        $r5 = <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable PARKED>;
+
+        if $r3 != $r5 goto label02;
+
+        goto label03;
+
+     label02:
+        if $z0 == 0 goto label11;
+
+        virtualinvoke $r1.<java.lang.Thread: void interrupt()>();
+
+        return;
+
+     label03:
+        if $z1 == 0 goto label04;
+
+        $r4 = (com.google.common.util.concurrent.InterruptibleTask$Blocker) $r3;
+
+     label04:
+        $i0 = $i0 + 1;
+
+        if $i0 <= 1000 goto label09;
+
+        $r5 = <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable PARKED>;
+
+        if $r3 == $r5 goto label05;
+
+        $z1 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r3, $r5);
+
+        if $z1 == 0 goto label10;
+
+     label05:
+        $z1 = staticinvoke <java.lang.Thread: boolean interrupted()>();
+
+        if $z1 != 0 goto label07;
+
+        if $z0 == 0 goto label06;
+
+        goto label07;
+
+     label06:
+        $z0 = 0;
+
+        goto label08;
+
+     label07:
+        $z0 = 1;
+
+     label08:
+        staticinvoke <java.util.concurrent.locks.LockSupport: void park(java.lang.Object)>($r4);
+
+        goto label10;
+
+     label09:
+        staticinvoke <java.lang.Thread: void yield()>();
+
+     label10:
+        $r2 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: java.lang.Object get()>();
+
+        $r3 = (java.lang.Runnable) $r2;
+
+        goto label01;
+
+     label11:
+        return;
+    }
+
+    abstract void afterRanInterruptiblyFailure(java.lang.Throwable);
+
+    abstract void afterRanInterruptiblySuccess(java.lang.Object);
+
+    final void interruptTask()
+    {
+        java.lang.Throwable $r7;
+        java.lang.Runnable $r1, $r3, $r6;
+        com.google.common.util.concurrent.InterruptibleTask r0;
+        java.lang.Thread $r5;
+        java.lang.Object $r2;
+        com.google.common.util.concurrent.InterruptibleTask$Blocker $r4;
+        boolean $z0;
+
+        r0 := @this: com.google.common.util.concurrent.InterruptibleTask;
+
+        $r2 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: java.lang.Object get()>();
+
+        $r3 = (java.lang.Runnable) $r2;
+
+        $z0 = $r3 instanceof java.lang.Thread;
+
+        if $z0 == 0 goto label5;
+
+        $r4 = new com.google.common.util.concurrent.InterruptibleTask$Blocker;
+
+        specialinvoke $r4.<com.google.common.util.concurrent.InterruptibleTask$Blocker: void <init>(com.google.common.util.concurrent.InterruptibleTask,com.google.common.util.concurrent.InterruptibleTask$1)>(r0, null);
+
+        $r5 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        staticinvoke <com.google.common.util.concurrent.InterruptibleTask$Blocker: void access$200(com.google.common.util.concurrent.InterruptibleTask$Blocker,java.lang.Thread)>($r4, $r5);
+
+        $z0 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r3, $r4);
+
+        if $z0 == 0 goto label5;
+
+     label1:
+        $r5 = (java.lang.Thread) $r3;
+
+        virtualinvoke $r5.<java.lang.Thread: void interrupt()>();
+
+     label2:
+        $r1 = <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable DONE>;
+
+        $r2 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: java.lang.Object getAndSet(java.lang.Object)>($r1);
+
+        $r1 = (java.lang.Runnable) $r2;
+
+        $r6 = <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable PARKED>;
+
+        if $r1 != $r6 goto label5;
+
+        $r5 = (java.lang.Thread) $r3;
+
+        staticinvoke <java.util.concurrent.locks.LockSupport: void unpark(java.lang.Thread)>($r5);
+
+        return;
+
+     label3:
+        $r7 := @caughtexception;
+
+        $r1 = <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable DONE>;
+
+        $r2 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: java.lang.Object getAndSet(java.lang.Object)>($r1);
+
+        $r6 = (java.lang.Runnable) $r2;
+
+        $r1 = <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable PARKED>;
+
+        if $r6 != $r1 goto label4;
+
+        $r5 = (java.lang.Thread) $r3;
+
+        staticinvoke <java.util.concurrent.locks.LockSupport: void unpark(java.lang.Thread)>($r5);
+
+     label4:
+        throw $r7;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    abstract boolean isDone();
+
+    public final void run()
+    {
+        java.lang.Throwable $r3;
+        java.lang.Thread $r1;
+        java.lang.Object $r2;
+        java.lang.Runnable $r4;
+        com.google.common.util.concurrent.InterruptibleTask r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.google.common.util.concurrent.InterruptibleTask;
+
+        $r1 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        $r2 = null;
+
+        $z0 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: boolean compareAndSet(java.lang.Object,java.lang.Object)>(null, $r1);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $z0 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: boolean isDone()>();
+
+        $z0 = $z0 ^ 1;
+
+        if $z0 == 0 goto label6;
+
+     label2:
+        $r2 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: java.lang.Object runInterruptibly()>();
+
+     label3:
+        goto label6;
+
+     label4:
+        $r3 := @caughtexception;
+
+        $r4 = <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable DONE>;
+
+        $z1 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r1, $r4);
+
+        if $z1 != 0 goto label5;
+
+        specialinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: void waitForInterrupt(java.lang.Thread)>($r1);
+
+     label5:
+        if $z0 == 0 goto label8;
+
+        virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: void afterRanInterruptiblyFailure(java.lang.Throwable)>($r3);
+
+        return;
+
+     label6:
+        $r4 = <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable DONE>;
+
+        $z1 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r1, $r4);
+
+        if $z1 != 0 goto label7;
+
+        specialinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: void waitForInterrupt(java.lang.Thread)>($r1);
+
+     label7:
+        if $z0 == 0 goto label8;
+
+        $r2 = staticinvoke <com.google.common.util.concurrent.NullnessCasts: java.lang.Object uncheckedCastNullableTToT(java.lang.Object)>($r2);
+
+        virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: void afterRanInterruptiblySuccess(java.lang.Object)>($r2);
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label2 to label3 with label4;
+    }
+
+    abstract java.lang.Object runInterruptibly() throws java.lang.Exception;
+
+    abstract java.lang.String toPendingString();
+
+    public final java.lang.String toString()
+    {
+        java.lang.Runnable $r2, $r3;
+        com.google.common.util.concurrent.InterruptibleTask r0;
+        java.lang.Thread $r5;
+        int $i0, $i1;
+        java.lang.Object $r1;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r4, $r6, $r8;
+        boolean $z0;
+
+        r0 := @this: com.google.common.util.concurrent.InterruptibleTask;
+
+        $r1 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: java.lang.Object get()>();
+
+        $r2 = (java.lang.Runnable) $r1;
+
+        $r3 = <com.google.common.util.concurrent.InterruptibleTask: java.lang.Runnable DONE>;
+
+        if $r2 != $r3 goto label1;
+
+        $r4 = "running=[DONE]";
+
+        goto label4;
+
+     label1:
+        $z0 = $r2 instanceof com.google.common.util.concurrent.InterruptibleTask$Blocker;
+
+        if $z0 == 0 goto label2;
+
+        $r4 = "running=[INTERRUPTED]";
+
+        goto label4;
+
+     label2:
+        $z0 = $r2 instanceof java.lang.Thread;
+
+        if $z0 == 0 goto label3;
+
+        $r5 = (java.lang.Thread) $r2;
+
+        $r4 = virtualinvoke $r5.<java.lang.Thread: java.lang.String getName()>();
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r4);
+
+        $i0 = virtualinvoke $r6.<java.lang.String: int length()>();
+
+        $i0 = $i0 + 21;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(int)>($i0);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("running=[RUNNING ON ");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r4 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label4;
+
+     label3:
+        $r4 = "running=[NOT STARTED YET]";
+
+     label4:
+        $r6 = virtualinvoke r0.<com.google.common.util.concurrent.InterruptibleTask: java.lang.String toPendingString()>();
+
+        $r8 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r4);
+
+        $i0 = virtualinvoke $r8.<java.lang.String: int length()>();
+
+        $i0 = $i0 + 2;
+
+        $r8 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r6);
+
+        $i1 = virtualinvoke $r8.<java.lang.String: int length()>();
+
+        $i0 = $i0 + $i1;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(int)>($i0);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r4 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+    }
+}

@@ -1,0 +1,639 @@
+final class io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver extends io.reactivex.internal.observers.QueueDrainObserver implements io.reactivex.disposables.Disposable
+{
+    final int bufferSize;
+    long count;
+    final long maxSize;
+    long producerIndex;
+    final boolean restartTimerOnMaxSize;
+    io.reactivex.disposables.Disposable s;
+    final io.reactivex.Scheduler scheduler;
+    volatile boolean terminated;
+    final java.util.concurrent.atomic.AtomicReference timer;
+    final long timespan;
+    final java.util.concurrent.TimeUnit unit;
+    io.reactivex.subjects.UnicastSubject window;
+    final io.reactivex.Scheduler$Worker worker;
+
+    void <init>(io.reactivex.Observer, long, java.util.concurrent.TimeUnit, io.reactivex.Scheduler, int, long, boolean)
+    {
+        long $l0, $l2;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver r0;
+        java.util.concurrent.atomic.AtomicReference $r6;
+        java.util.concurrent.TimeUnit $r1;
+        io.reactivex.Scheduler $r2;
+        io.reactivex.internal.queue.MpscLinkedQueue $r3;
+        int $i1;
+        io.reactivex.Observer $r5;
+        io.reactivex.Scheduler$Worker $r4;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        $r5 := @parameter0: io.reactivex.Observer;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: java.util.concurrent.TimeUnit;
+
+        $r2 := @parameter3: io.reactivex.Scheduler;
+
+        $i1 := @parameter4: int;
+
+        $l2 := @parameter5: long;
+
+        $z0 := @parameter6: boolean;
+
+        $r3 = new io.reactivex.internal.queue.MpscLinkedQueue;
+
+        specialinvoke $r3.<io.reactivex.internal.queue.MpscLinkedQueue: void <init>()>();
+
+        specialinvoke r0.<io.reactivex.internal.observers.QueueDrainObserver: void <init>(io.reactivex.Observer,io.reactivex.internal.fuseable.SimplePlainQueue)>($r5, $r3);
+
+        $r6 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r6.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.atomic.AtomicReference timer> = $r6;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long timespan> = $l0;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.TimeUnit unit> = $r1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Scheduler scheduler> = $r2;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: int bufferSize> = $i1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long maxSize> = $l2;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean restartTimerOnMaxSize> = $z0;
+
+        if $z0 == 0 goto label1;
+
+        $r4 = virtualinvoke $r2.<io.reactivex.Scheduler: io.reactivex.Scheduler$Worker createWorker()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Scheduler$Worker worker> = $r4;
+
+        return;
+
+     label1:
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Scheduler$Worker worker> = null;
+
+        return;
+    }
+
+    static boolean access$000(io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver)
+    {
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver $r0;
+        boolean z0;
+
+        $r0 := @parameter0: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        z0 = $r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean cancelled>;
+
+        return z0;
+    }
+
+    static io.reactivex.internal.fuseable.SimplePlainQueue access$100(io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver)
+    {
+        io.reactivex.internal.fuseable.SimplePlainQueue r1;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver $r0;
+
+        $r0 := @parameter0: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        r1 = $r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.internal.fuseable.SimplePlainQueue queue>;
+
+        return r1;
+    }
+
+    public void dispose()
+    {
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver r0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean cancelled> = 1;
+
+        return;
+    }
+
+    void disposeTimer()
+    {
+        io.reactivex.Scheduler$Worker $r2;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver r0;
+        java.util.concurrent.atomic.AtomicReference $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.atomic.AtomicReference timer>;
+
+        staticinvoke <io.reactivex.internal.disposables.DisposableHelper: boolean dispose(java.util.concurrent.atomic.AtomicReference)>($r1);
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Scheduler$Worker worker>;
+
+        if $r2 == null goto label1;
+
+        virtualinvoke $r2.<io.reactivex.Scheduler$Worker: void dispose()>();
+
+     label1:
+        return;
+    }
+
+    void drainLoop()
+    {
+        java.lang.Throwable $r8;
+        long $l0, $l4;
+        java.util.concurrent.atomic.AtomicReference $r12;
+        byte $b1;
+        int $i2, $i3;
+        io.reactivex.Scheduler$Worker $r13;
+        io.reactivex.internal.fuseable.SimplePlainQueue $r2;
+        boolean $z0, $z1, $z2;
+        io.reactivex.subjects.UnicastSubject $r5, $r10;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder $r9, $r15;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver r0;
+        java.util.concurrent.TimeUnit $r1;
+        io.reactivex.disposables.Disposable $r6, $r14;
+        io.reactivex.internal.queue.MpscLinkedQueue $r3;
+        io.reactivex.Observer $r4, $r11;
+        java.lang.Object $r7;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.internal.fuseable.SimplePlainQueue queue>;
+
+        $r3 = (io.reactivex.internal.queue.MpscLinkedQueue) $r2;
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Observer actual>;
+
+        $r5 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.subjects.UnicastSubject window>;
+
+        $i2 = 1;
+
+     label01:
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean terminated>;
+
+        if $z0 == 0 goto label02;
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.disposables.Disposable s>;
+
+        interfaceinvoke $r6.<io.reactivex.disposables.Disposable: void dispose()>();
+
+        virtualinvoke $r3.<io.reactivex.internal.queue.MpscLinkedQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: void disposeTimer()>();
+
+        return;
+
+     label02:
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean done>;
+
+        $r7 = virtualinvoke $r3.<io.reactivex.internal.queue.MpscLinkedQueue: java.lang.Object poll()>();
+
+        if $r7 != null goto label03;
+
+        $z1 = 1;
+
+        goto label04;
+
+     label03:
+        $z1 = 0;
+
+     label04:
+        $z2 = $r7 instanceof io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder;
+
+        if $z0 == 0 goto label07;
+
+        if $z1 != 0 goto label05;
+
+        if $z2 == 0 goto label07;
+
+     label05:
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.subjects.UnicastSubject window> = null;
+
+        virtualinvoke $r3.<io.reactivex.internal.queue.MpscLinkedQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: void disposeTimer()>();
+
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.lang.Throwable error>;
+
+        if $r8 == null goto label06;
+
+        virtualinvoke $r5.<io.reactivex.subjects.UnicastSubject: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label06:
+        virtualinvoke $r5.<io.reactivex.subjects.UnicastSubject: void onComplete()>();
+
+        return;
+
+     label07:
+        if $z1 == 0 goto label08;
+
+        $i2 = neg $i2;
+
+        $i3 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: int leave(int)>($i2);
+
+        $i2 = $i3;
+
+        if $i3 != 0 goto label01;
+
+        return;
+
+     label08:
+        if $z2 == 0 goto label10;
+
+        $r9 = (io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder) $r7;
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean restartTimerOnMaxSize>;
+
+        if $z0 != 0 goto label09;
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long producerIndex>;
+
+        $l4 = $r9.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder: long index>;
+
+        $b1 = $l0 cmp $l4;
+
+        if $b1 != 0 goto label01;
+
+     label09:
+        virtualinvoke $r5.<io.reactivex.subjects.UnicastSubject: void onComplete()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long count> = 0L;
+
+        $i3 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: int bufferSize>;
+
+        $r10 = staticinvoke <io.reactivex.subjects.UnicastSubject: io.reactivex.subjects.UnicastSubject create(int)>($i3);
+
+        $r5 = $r10;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.subjects.UnicastSubject window> = $r10;
+
+        interfaceinvoke $r4.<io.reactivex.Observer: void onNext(java.lang.Object)>($r10);
+
+        goto label01;
+
+     label10:
+        $r7 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object getValue(java.lang.Object)>($r7);
+
+        virtualinvoke $r5.<io.reactivex.subjects.UnicastSubject: void onNext(java.lang.Object)>($r7);
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long count>;
+
+        $l0 = $l0 + 1L;
+
+        $l4 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long maxSize>;
+
+        $b1 = $l0 cmp $l4;
+
+        $i3 = (int) $b1;
+
+        if $i3 < 0 goto label11;
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long producerIndex>;
+
+        $l0 = $l0 + 1L;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long producerIndex> = $l0;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long count> = 0L;
+
+        virtualinvoke $r5.<io.reactivex.subjects.UnicastSubject: void onComplete()>();
+
+        $i3 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: int bufferSize>;
+
+        $r10 = staticinvoke <io.reactivex.subjects.UnicastSubject: io.reactivex.subjects.UnicastSubject create(int)>($i3);
+
+        $r5 = $r10;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.subjects.UnicastSubject window> = $r10;
+
+        $r11 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r11.<io.reactivex.Observer: void onNext(java.lang.Object)>($r10);
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean restartTimerOnMaxSize>;
+
+        if $z0 == 0 goto label01;
+
+        $r12 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.atomic.AtomicReference timer>;
+
+        $r7 = virtualinvoke $r12.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r6 = (io.reactivex.disposables.Disposable) $r7;
+
+        interfaceinvoke $r6.<io.reactivex.disposables.Disposable: void dispose()>();
+
+        $r13 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Scheduler$Worker worker>;
+
+        $r15 = new io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder;
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long producerIndex>;
+
+        specialinvoke $r15.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder: void <init>(long,io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver)>($l0, r0);
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long timespan>;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.TimeUnit unit>;
+
+        $r14 = virtualinvoke $r13.<io.reactivex.Scheduler$Worker: io.reactivex.disposables.Disposable schedulePeriodically(java.lang.Runnable,long,long,java.util.concurrent.TimeUnit)>($r15, $l0, $l0, $r1);
+
+        $r12 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.atomic.AtomicReference timer>;
+
+        $z0 = staticinvoke <kotlin.UByte$$ExternalSyntheticBackport0: boolean m(java.util.concurrent.atomic.AtomicReference,java.lang.Object,java.lang.Object)>($r12, $r6, $r14);
+
+        if $z0 != 0 goto label01;
+
+        interfaceinvoke $r14.<io.reactivex.disposables.Disposable: void dispose()>();
+
+        goto label01;
+
+     label11:
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long count> = $l0;
+
+        goto label01;
+    }
+
+    public boolean isDisposed()
+    {
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver r0;
+        boolean z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean cancelled>;
+
+        return z0;
+    }
+
+    public void onComplete()
+    {
+        io.reactivex.Observer $r1;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean done> = 1;
+
+        $z0 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean enter()>();
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: void drainLoop()>();
+
+     label1:
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r1.<io.reactivex.Observer: void onComplete()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: void disposeTimer()>();
+
+        return;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.Observer $r2;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.lang.Throwable error> = $r1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean done> = 1;
+
+        $z0 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean enter()>();
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: void drainLoop()>();
+
+     label1:
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r2.<io.reactivex.Observer: void onError(java.lang.Throwable)>($r1);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: void disposeTimer()>();
+
+        return;
+    }
+
+    public void onNext(java.lang.Object)
+    {
+        io.reactivex.subjects.UnicastSubject $r3;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder $r9;
+        long $l0, $l1;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver r0;
+        java.util.concurrent.atomic.AtomicReference $r5;
+        java.util.concurrent.TimeUnit $r1;
+        io.reactivex.disposables.Disposable $r6;
+        byte $b2;
+        int $i3;
+        io.reactivex.Observer $r4;
+        java.lang.Object $r2;
+        io.reactivex.Scheduler$Worker $r7;
+        io.reactivex.internal.fuseable.SimplePlainQueue $r8;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        $r2 := @parameter0: java.lang.Object;
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean terminated>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $z0 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean fastEnter()>();
+
+        if $z0 == 0 goto label4;
+
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.subjects.UnicastSubject window>;
+
+        virtualinvoke $r3.<io.reactivex.subjects.UnicastSubject: void onNext(java.lang.Object)>($r2);
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long count>;
+
+        $l1 = $l0 + 1L;
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long maxSize>;
+
+        $b2 = $l1 cmp $l0;
+
+        $i3 = (int) $b2;
+
+        if $i3 < 0 goto label2;
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long producerIndex>;
+
+        $l0 = $l0 + 1L;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long producerIndex> = $l0;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long count> = 0L;
+
+        virtualinvoke $r3.<io.reactivex.subjects.UnicastSubject: void onComplete()>();
+
+        $i3 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: int bufferSize>;
+
+        $r3 = staticinvoke <io.reactivex.subjects.UnicastSubject: io.reactivex.subjects.UnicastSubject create(int)>($i3);
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.subjects.UnicastSubject window> = $r3;
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r4.<io.reactivex.Observer: void onNext(java.lang.Object)>($r3);
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean restartTimerOnMaxSize>;
+
+        if $z0 == 0 goto label3;
+
+        $r5 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.atomic.AtomicReference timer>;
+
+        $r2 = virtualinvoke $r5.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r6 = (io.reactivex.disposables.Disposable) $r2;
+
+        interfaceinvoke $r6.<io.reactivex.disposables.Disposable: void dispose()>();
+
+        $r7 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Scheduler$Worker worker>;
+
+        $r9 = new io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder;
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long producerIndex>;
+
+        specialinvoke $r9.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder: void <init>(long,io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver)>($l0, r0);
+
+        $l0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long timespan>;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.TimeUnit unit>;
+
+        $r6 = virtualinvoke $r7.<io.reactivex.Scheduler$Worker: io.reactivex.disposables.Disposable schedulePeriodically(java.lang.Runnable,long,long,java.util.concurrent.TimeUnit)>($r9, $l0, $l0, $r1);
+
+        $r5 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.atomic.AtomicReference timer>;
+
+        staticinvoke <io.reactivex.internal.disposables.DisposableHelper: boolean replace(java.util.concurrent.atomic.AtomicReference,io.reactivex.disposables.Disposable)>($r5, $r6);
+
+        goto label3;
+
+     label2:
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long count> = $l1;
+
+     label3:
+        $i3 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: int leave(int)>(-1);
+
+        if $i3 != 0 goto label5;
+
+        return;
+
+     label4:
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.internal.fuseable.SimplePlainQueue queue>;
+
+        $r2 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object next(java.lang.Object)>($r2);
+
+        interfaceinvoke $r8.<io.reactivex.internal.fuseable.SimplePlainQueue: boolean offer(java.lang.Object)>($r2);
+
+        $z0 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean enter()>();
+
+        if $z0 != 0 goto label5;
+
+        return;
+
+     label5:
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: void drainLoop()>();
+
+        return;
+    }
+
+    public void onSubscribe(io.reactivex.disposables.Disposable)
+    {
+        io.reactivex.subjects.UnicastSubject $r5;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder $r1;
+        long $l1;
+        io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver r0;
+        java.util.concurrent.atomic.AtomicReference $r9;
+        java.util.concurrent.TimeUnit $r7;
+        io.reactivex.disposables.Disposable $r2, $r3;
+        io.reactivex.Scheduler $r8;
+        io.reactivex.Observer $r4;
+        int $i0;
+        io.reactivex.Scheduler$Worker $r6;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver;
+
+        $r2 := @parameter0: io.reactivex.disposables.Disposable;
+
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.disposables.Disposable s>;
+
+        $z0 = staticinvoke <io.reactivex.internal.disposables.DisposableHelper: boolean validate(io.reactivex.disposables.Disposable,io.reactivex.disposables.Disposable)>($r3, $r2);
+
+        if $z0 == 0 goto label4;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.disposables.Disposable s> = $r2;
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r4.<io.reactivex.Observer: void onSubscribe(io.reactivex.disposables.Disposable)>(r0);
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean cancelled>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $i0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: int bufferSize>;
+
+        $r5 = staticinvoke <io.reactivex.subjects.UnicastSubject: io.reactivex.subjects.UnicastSubject create(int)>($i0);
+
+        r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.subjects.UnicastSubject window> = $r5;
+
+        interfaceinvoke $r4.<io.reactivex.Observer: void onNext(java.lang.Object)>($r5);
+
+        $r1 = new io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder;
+
+        $l1 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long producerIndex>;
+
+        specialinvoke $r1.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver$ConsumerIndexHolder: void <init>(long,io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver)>($l1, r0);
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: boolean restartTimerOnMaxSize>;
+
+        if $z0 == 0 goto label2;
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Scheduler$Worker worker>;
+
+        $l1 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long timespan>;
+
+        $r7 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.TimeUnit unit>;
+
+        $r2 = virtualinvoke $r6.<io.reactivex.Scheduler$Worker: io.reactivex.disposables.Disposable schedulePeriodically(java.lang.Runnable,long,long,java.util.concurrent.TimeUnit)>($r1, $l1, $l1, $r7);
+
+        goto label3;
+
+     label2:
+        $r8 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: io.reactivex.Scheduler scheduler>;
+
+        $l1 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: long timespan>;
+
+        $r7 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.TimeUnit unit>;
+
+        $r2 = virtualinvoke $r8.<io.reactivex.Scheduler: io.reactivex.disposables.Disposable schedulePeriodicallyDirect(java.lang.Runnable,long,long,java.util.concurrent.TimeUnit)>($r1, $l1, $l1, $r7);
+
+     label3:
+        $r9 = r0.<io.reactivex.internal.operators.observable.ObservableWindowTimed$WindowExactBoundedObserver: java.util.concurrent.atomic.AtomicReference timer>;
+
+        staticinvoke <io.reactivex.internal.disposables.DisposableHelper: boolean replace(java.util.concurrent.atomic.AtomicReference,io.reactivex.disposables.Disposable)>($r9, $r2);
+
+     label4:
+        return;
+    }
+}

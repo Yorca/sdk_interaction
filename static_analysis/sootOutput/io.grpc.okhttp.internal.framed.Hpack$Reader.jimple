@@ -1,0 +1,933 @@
+final class io.grpc.okhttp.internal.framed.Hpack$Reader extends java.lang.Object
+{
+    io.grpc.okhttp.internal.framed.Header[] dynamicTable;
+    int dynamicTableByteCount;
+    int dynamicTableHeaderCount;
+    private final java.util.List headerList;
+    private int headerTableSizeSetting;
+    private int maxDynamicTableByteCount;
+    int nextDynamicTableIndex;
+    private final okio.BufferedSource source;
+
+    void <init>(int, int, okio.Source)
+    {
+        io.grpc.okhttp.internal.framed.Header[] $r3;
+        okio.Source $r1;
+        java.util.ArrayList $r4;
+        okio.BufferedSource $r2;
+        int $i0, $i1, $i2;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i1 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: okio.Source;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: java.util.List headerList> = $r4;
+
+        $r3 = newarray (io.grpc.okhttp.internal.framed.Header)[8];
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable> = $r3;
+
+        $i2 = lengthof $r3;
+
+        $i2 = $i2 + -1;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int nextDynamicTableIndex> = $i2;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableHeaderCount> = 0;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableByteCount> = 0;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int headerTableSizeSetting> = 4096;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int maxDynamicTableByteCount> = 4096;
+
+        $r2 = staticinvoke <okio.Okio: okio.BufferedSource buffer(okio.Source)>($r1);
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.BufferedSource source> = $r2;
+
+        return;
+    }
+
+    void <init>(int, okio.Source)
+    {
+        int $i0;
+        okio.Source $r1;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: okio.Source;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void <init>(int,int,okio.Source)>(4096, 4096, $r1);
+
+        return;
+    }
+
+    private void adjustDynamicTableByteCount()
+    {
+        int $i0, $i1;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int maxDynamicTableByteCount>;
+
+        $i1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableByteCount>;
+
+        if $i0 >= $i1 goto label2;
+
+        if $i0 != 0 goto label1;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void clearDynamicTable()>();
+
+        return;
+
+     label1:
+        $i0 = $i1 - $i0;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int evictToRecoverBytes(int)>($i0);
+
+     label2:
+        return;
+    }
+
+    private void clearDynamicTable()
+    {
+        io.grpc.okhttp.internal.framed.Header[] $r1;
+        int $i0;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        staticinvoke <java.util.Arrays: void fill(java.lang.Object[],java.lang.Object)>($r1, null);
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        $i0 = lengthof $r1;
+
+        $i0 = $i0 + -1;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int nextDynamicTableIndex> = $i0;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableHeaderCount> = 0;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableByteCount> = 0;
+
+        return;
+    }
+
+    private int dynamicTableIndex(int)
+    {
+        int $i0, $i1;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 := @parameter0: int;
+
+        $i1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int nextDynamicTableIndex>;
+
+        $i1 = $i1 + 1;
+
+        $i0 = $i1 + $i0;
+
+        return $i0;
+    }
+
+    private int evictToRecoverBytes(int)
+    {
+        io.grpc.okhttp.internal.framed.Header[] $r1;
+        int $i0, $i1, $i2, $i3, $i4;
+        io.grpc.okhttp.internal.framed.Header $r2;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 := @parameter0: int;
+
+        $i1 = 0;
+
+        if $i0 <= 0 goto label3;
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        $i2 = lengthof $r1;
+
+        $i2 = $i2 + -1;
+
+     label1:
+        $i3 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int nextDynamicTableIndex>;
+
+        if $i2 < $i3 goto label2;
+
+        if $i0 <= 0 goto label2;
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        $r2 = $r1[$i2];
+
+        $i3 = $r2.<io.grpc.okhttp.internal.framed.Header: int hpackSize>;
+
+        $i0 = $i0 - $i3;
+
+        $i3 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableByteCount>;
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        $r2 = $r1[$i2];
+
+        $i4 = $r2.<io.grpc.okhttp.internal.framed.Header: int hpackSize>;
+
+        $i3 = $i3 - $i4;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableByteCount> = $i3;
+
+        $i3 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableHeaderCount>;
+
+        $i3 = $i3 + -1;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableHeaderCount> = $i3;
+
+        $i1 = $i1 + 1;
+
+        $i2 = $i2 + -1;
+
+        goto label1;
+
+     label2:
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        $i0 = $i3 + 1;
+
+        $i2 = $i3 + 1;
+
+        $i2 = $i2 + $i1;
+
+        $i3 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableHeaderCount>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r1, $i0, $r1, $i2, $i3);
+
+        $i0 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int nextDynamicTableIndex>;
+
+        $i0 = $i0 + $i1;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int nextDynamicTableIndex> = $i0;
+
+        return $i1;
+
+     label3:
+        return 0;
+    }
+
+    private okio.ByteString getName(int) throws java.io.IOException
+    {
+        io.grpc.okhttp.internal.framed.Header[] $r1;
+        java.io.IOException $r3;
+        okio.ByteString r6;
+        int $i0, $i1, $i2;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        io.grpc.okhttp.internal.framed.Header $r2;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 := @parameter0: int;
+
+        $z0 = specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: boolean isStaticHeader(int)>($i0);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = staticinvoke <io.grpc.okhttp.internal.framed.Hpack: io.grpc.okhttp.internal.framed.Header[] access$000()>();
+
+        $r2 = $r1[$i0];
+
+        r6 = $r2.<io.grpc.okhttp.internal.framed.Header: okio.ByteString name>;
+
+        return r6;
+
+     label1:
+        $r1 = staticinvoke <io.grpc.okhttp.internal.framed.Hpack: io.grpc.okhttp.internal.framed.Header[] access$000()>();
+
+        $i1 = lengthof $r1;
+
+        $i1 = $i0 - $i1;
+
+        $i1 = specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableIndex(int)>($i1);
+
+        if $i1 < 0 goto label2;
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        $i2 = lengthof $r1;
+
+        if $i1 >= $i2 goto label2;
+
+        $r2 = $r1[$i1];
+
+        r6 = $r2.<io.grpc.okhttp.internal.framed.Header: okio.ByteString name>;
+
+        return r6;
+
+     label2:
+        $r3 = new java.io.IOException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Header index too large ");
+
+        $i0 = $i0 + 1;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.io.IOException: void <init>(java.lang.String)>($r5);
+
+        throw $r3;
+    }
+
+    private void insertIntoDynamicTable(int, io.grpc.okhttp.internal.framed.Header)
+    {
+        io.grpc.okhttp.internal.framed.Header[] $r3, $r5;
+        java.util.List $r2;
+        int $i0, $i1, $i2, $i3;
+        io.grpc.okhttp.internal.framed.Header $r1;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: io.grpc.okhttp.internal.framed.Header;
+
+        $r2 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: java.util.List headerList>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r1);
+
+        $i1 = $r1.<io.grpc.okhttp.internal.framed.Header: int hpackSize>;
+
+        goto label1;
+
+     label1:
+        $i2 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int maxDynamicTableByteCount>;
+
+        if $i1 <= $i2 goto label2;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void clearDynamicTable()>();
+
+        return;
+
+     label2:
+        $i3 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableByteCount>;
+
+        $i3 = $i3 + $i1;
+
+        $i2 = $i3 - $i2;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int evictToRecoverBytes(int)>($i2);
+
+        $i0 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableHeaderCount>;
+
+        $i0 = $i0 + 1;
+
+        $r5 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        $i2 = lengthof $r5;
+
+        if $i0 <= $i2 goto label3;
+
+        $i0 = lengthof $r5;
+
+        $i0 = $i0 * 2;
+
+        $r3 = newarray (io.grpc.okhttp.internal.framed.Header)[$i0];
+
+        $i0 = lengthof $r5;
+
+        $i2 = lengthof $r5;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r5, 0, $r3, $i0, $i2);
+
+        $r5 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        $i0 = lengthof $r5;
+
+        $i0 = $i0 + -1;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int nextDynamicTableIndex> = $i0;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable> = $r3;
+
+     label3:
+        $i0 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int nextDynamicTableIndex>;
+
+        $i2 = $i0 + -1;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int nextDynamicTableIndex> = $i2;
+
+        $r3 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        $r3[$i0] = $r1;
+
+        $i0 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableHeaderCount>;
+
+        $i0 = $i0 + 1;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableHeaderCount> = $i0;
+
+        goto label4;
+
+     label4:
+        $i0 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableByteCount>;
+
+        $i0 = $i0 + $i1;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableByteCount> = $i0;
+
+        return;
+    }
+
+    private boolean isStaticHeader(int)
+    {
+        io.grpc.okhttp.internal.framed.Header[] $r1;
+        int $i0, $i1;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 := @parameter0: int;
+
+        if $i0 < 0 goto label1;
+
+        $r1 = staticinvoke <io.grpc.okhttp.internal.framed.Hpack: io.grpc.okhttp.internal.framed.Header[] access$000()>();
+
+        $i1 = lengthof $r1;
+
+        $i1 = $i1 - 1;
+
+        if $i0 > $i1 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private int readByte() throws java.io.IOException
+    {
+        okio.BufferedSource $r1;
+        short $s1;
+        byte $b0;
+        int $i2;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.BufferedSource source>;
+
+        $b0 = interfaceinvoke $r1.<okio.BufferedSource: byte readByte()>();
+
+        $s1 = (short) $b0;
+
+        $s1 = $s1 & 255;
+
+        $i2 = (int) $s1;
+
+        return $i2;
+    }
+
+    private void readIndexedHeader(int) throws java.io.IOException
+    {
+        io.grpc.okhttp.internal.framed.Header[] $r1;
+        java.io.IOException $r7;
+        java.util.List $r3;
+        int $i0, $i1, $i2;
+        java.lang.StringBuilder $r4, $r6;
+        java.lang.String $r5;
+        io.grpc.okhttp.internal.framed.Header $r2;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 := @parameter0: int;
+
+        $z0 = specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: boolean isStaticHeader(int)>($i0);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = staticinvoke <io.grpc.okhttp.internal.framed.Hpack: io.grpc.okhttp.internal.framed.Header[] access$000()>();
+
+        $r2 = $r1[$i0];
+
+        $r3 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: java.util.List headerList>;
+
+        interfaceinvoke $r3.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        return;
+
+     label1:
+        $r1 = staticinvoke <io.grpc.okhttp.internal.framed.Hpack: io.grpc.okhttp.internal.framed.Header[] access$000()>();
+
+        $i1 = lengthof $r1;
+
+        $i1 = $i0 - $i1;
+
+        $i1 = specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int dynamicTableIndex(int)>($i1);
+
+        if $i1 < 0 goto label2;
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: io.grpc.okhttp.internal.framed.Header[] dynamicTable>;
+
+        $i2 = lengthof $r1;
+
+        $i2 = $i2 + -1;
+
+        if $i1 > $i2 goto label2;
+
+        $r3 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: java.util.List headerList>;
+
+        $r2 = $r1[$i1];
+
+        interfaceinvoke $r3.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        return;
+
+     label2:
+        $r7 = new java.io.IOException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        $r4 = $r6;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Header index too large ");
+
+        $i0 = $i0 + 1;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r7.<java.io.IOException: void <init>(java.lang.String)>($r5);
+
+        throw $r7;
+    }
+
+    private void readLiteralHeaderWithIncrementalIndexingIndexedName(int) throws java.io.IOException
+    {
+        okio.ByteString $r1, $r2;
+        int $i0;
+        io.grpc.okhttp.internal.framed.Header $r3;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 := @parameter0: int;
+
+        $r1 = specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.ByteString getName(int)>($i0);
+
+        $r2 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.ByteString readByteString()>();
+
+        $r3 = new io.grpc.okhttp.internal.framed.Header;
+
+        specialinvoke $r3.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,okio.ByteString)>($r1, $r2);
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void insertIntoDynamicTable(int,io.grpc.okhttp.internal.framed.Header)>(-1, $r3);
+
+        return;
+    }
+
+    private void readLiteralHeaderWithIncrementalIndexingNewName() throws java.io.IOException
+    {
+        okio.ByteString $r1, $r2;
+        io.grpc.okhttp.internal.framed.Header $r3;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $r1 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.ByteString readByteString()>();
+
+        $r1 = staticinvoke <io.grpc.okhttp.internal.framed.Hpack: okio.ByteString access$100(okio.ByteString)>($r1);
+
+        $r2 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.ByteString readByteString()>();
+
+        $r3 = new io.grpc.okhttp.internal.framed.Header;
+
+        specialinvoke $r3.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,okio.ByteString)>($r1, $r2);
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void insertIntoDynamicTable(int,io.grpc.okhttp.internal.framed.Header)>(-1, $r3);
+
+        return;
+    }
+
+    private void readLiteralHeaderWithoutIndexingIndexedName(int) throws java.io.IOException
+    {
+        java.util.List $r1;
+        okio.ByteString $r3, $r4;
+        int $i0;
+        io.grpc.okhttp.internal.framed.Header $r2;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 := @parameter0: int;
+
+        $r3 = specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.ByteString getName(int)>($i0);
+
+        $r4 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.ByteString readByteString()>();
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: java.util.List headerList>;
+
+        $r2 = new io.grpc.okhttp.internal.framed.Header;
+
+        specialinvoke $r2.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,okio.ByteString)>($r3, $r4);
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        return;
+    }
+
+    private void readLiteralHeaderWithoutIndexingNewName() throws java.io.IOException
+    {
+        java.util.List $r1;
+        okio.ByteString $r3, $r4;
+        io.grpc.okhttp.internal.framed.Header $r2;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $r3 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.ByteString readByteString()>();
+
+        $r3 = staticinvoke <io.grpc.okhttp.internal.framed.Hpack: okio.ByteString access$100(okio.ByteString)>($r3);
+
+        $r4 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.ByteString readByteString()>();
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: java.util.List headerList>;
+
+        $r2 = new io.grpc.okhttp.internal.framed.Header;
+
+        specialinvoke $r2.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,okio.ByteString)>($r3, $r4);
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        return;
+    }
+
+    public java.util.List getAndResetHeaderList()
+    {
+        java.util.List $r2;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $r1 = new java.util.ArrayList;
+
+        $r2 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: java.util.List headerList>;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>(java.util.Collection)>($r2);
+
+        $r2 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: java.util.List headerList>;
+
+        interfaceinvoke $r2.<java.util.List: void clear()>();
+
+        return $r1;
+    }
+
+    void headerTableSizeSetting(int)
+    {
+        int $i0;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i0 := @parameter0: int;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int headerTableSizeSetting> = $i0;
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int maxDynamicTableByteCount> = $i0;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void adjustDynamicTableByteCount()>();
+
+        return;
+    }
+
+    int maxDynamicTableByteCount()
+    {
+        int i0;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        i0 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int maxDynamicTableByteCount>;
+
+        return i0;
+    }
+
+    okio.ByteString readByteString() throws java.io.IOException
+    {
+        byte[] $r3;
+        long $l0;
+        io.grpc.okhttp.internal.framed.Huffman $r1;
+        okio.BufferedSource $r2;
+        okio.ByteString $r4;
+        int $i1, $i2;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i1 = specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int readByte()>();
+
+        $i2 = $i1 & 128;
+
+        if $i2 != 128 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $i1 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int readInt(int,int)>($i1, 127);
+
+        if $z0 == 0 goto label3;
+
+        $r1 = staticinvoke <io.grpc.okhttp.internal.framed.Huffman: io.grpc.okhttp.internal.framed.Huffman get()>();
+
+        $r2 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.BufferedSource source>;
+
+        $l0 = (long) $i1;
+
+        $r3 = interfaceinvoke $r2.<okio.BufferedSource: byte[] readByteArray(long)>($l0);
+
+        $r3 = virtualinvoke $r1.<io.grpc.okhttp.internal.framed.Huffman: byte[] decode(byte[])>($r3);
+
+        $r4 = staticinvoke <okio.ByteString: okio.ByteString of(byte[])>($r3);
+
+        return $r4;
+
+     label3:
+        $r2 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.BufferedSource source>;
+
+        $l0 = (long) $i1;
+
+        $r4 = interfaceinvoke $r2.<okio.BufferedSource: okio.ByteString readByteString(long)>($l0);
+
+        return $r4;
+    }
+
+    void readHeaders() throws java.io.IOException
+    {
+        java.io.IOException $r5;
+        okio.BufferedSource $r1;
+        short $s1, $s2;
+        byte $b0;
+        int $i3, $i4;
+        java.lang.StringBuilder $r2, $r4;
+        java.lang.String $r3;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+     label1:
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.BufferedSource source>;
+
+        $z0 = interfaceinvoke $r1.<okio.BufferedSource: boolean exhausted()>();
+
+        if $z0 != 0 goto label9;
+
+        $r1 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: okio.BufferedSource source>;
+
+        $b0 = interfaceinvoke $r1.<okio.BufferedSource: byte readByte()>();
+
+        $s1 = (short) $b0;
+
+        $s1 = $s1 & 255;
+
+        $i3 = (int) $s1;
+
+        if $i3 == 128 goto label8;
+
+        $s2 = $s1 & 128;
+
+        $i3 = (int) $s2;
+
+        if $i3 != 128 goto label2;
+
+        $i3 = (int) $s1;
+
+        $i3 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int readInt(int,int)>($i3, 127);
+
+        $i3 = $i3 + -1;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void readIndexedHeader(int)>($i3);
+
+        goto label1;
+
+     label2:
+        $i3 = (int) $s1;
+
+        if $i3 != 64 goto label3;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void readLiteralHeaderWithIncrementalIndexingNewName()>();
+
+        goto label1;
+
+     label3:
+        $s2 = $s1 & 64;
+
+        $i3 = (int) $s2;
+
+        if $i3 != 64 goto label4;
+
+        $i3 = (int) $s1;
+
+        $i3 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int readInt(int,int)>($i3, 63);
+
+        $i3 = $i3 + -1;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void readLiteralHeaderWithIncrementalIndexingIndexedName(int)>($i3);
+
+        goto label1;
+
+     label4:
+        $s2 = $s1 & 32;
+
+        $i3 = (int) $s2;
+
+        if $i3 != 32 goto label6;
+
+        $i3 = (int) $s1;
+
+        $i3 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int readInt(int,int)>($i3, 31);
+
+        r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int maxDynamicTableByteCount> = $i3;
+
+        if $i3 < 0 goto label5;
+
+        $i4 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int headerTableSizeSetting>;
+
+        if $i3 > $i4 goto label5;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void adjustDynamicTableByteCount()>();
+
+        goto label1;
+
+     label5:
+        $r5 = new java.io.IOException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        $r2 = $r4;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Invalid dynamic table size update ");
+
+        $i3 = r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int maxDynamicTableByteCount>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>($r3);
+
+        throw $r5;
+
+     label6:
+        $i3 = (int) $s1;
+
+        if $i3 == 16 goto label7;
+
+        if $s1 == 0 goto label7;
+
+        $i3 = (int) $s1;
+
+        $i3 = virtualinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int readInt(int,int)>($i3, 15);
+
+        $i3 = $i3 + -1;
+
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void readLiteralHeaderWithoutIndexingIndexedName(int)>($i3);
+
+        goto label1;
+
+     label7:
+        specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: void readLiteralHeaderWithoutIndexingNewName()>();
+
+        goto label1;
+
+     label8:
+        $r5 = new java.io.IOException;
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>("index == 0");
+
+        throw $r5;
+
+     label9:
+        return;
+    }
+
+    int readInt(int, int) throws java.io.IOException
+    {
+        int $i0, $i1, $i2, $i3;
+        io.grpc.okhttp.internal.framed.Hpack$Reader r0;
+
+        r0 := @this: io.grpc.okhttp.internal.framed.Hpack$Reader;
+
+        $i2 := @parameter0: int;
+
+        $i3 := @parameter1: int;
+
+        $i2 = $i2 & $i3;
+
+        if $i2 >= $i3 goto label1;
+
+        return $i2;
+
+     label1:
+        $i2 = 0;
+
+     label2:
+        $i1 = specialinvoke r0.<io.grpc.okhttp.internal.framed.Hpack$Reader: int readByte()>();
+
+        $i0 = $i1 & 128;
+
+        if $i0 == 0 goto label3;
+
+        $i0 = $i1 & 127;
+
+        $i0 = $i0 << $i2;
+
+        $i3 = $i3 + $i0;
+
+        $i2 = $i2 + 7;
+
+        goto label2;
+
+     label3:
+        $i2 = $i1 << $i2;
+
+        $i2 = $i3 + $i2;
+
+        return $i2;
+    }
+}

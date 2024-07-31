@@ -1,0 +1,322 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder extends com.mbridge.msdk.playercommon.exoplayer2.text.SimpleSubtitleDecoder
+{
+    private static final java.lang.String COMMENT_START;
+    private static final int EVENT_COMMENT;
+    private static final int EVENT_CUE;
+    private static final int EVENT_END_OF_FILE;
+    private static final int EVENT_NONE;
+    private static final int EVENT_STYLE_BLOCK;
+    private static final java.lang.String STYLE_START;
+    private final com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.CssParser cssParser;
+    private final com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCueParser cueParser;
+    private final java.util.List definedStyles;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray parsableWebvttData;
+    private final com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder webvttCueBuilder;
+
+    public void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.CssParser $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder r0;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCueParser $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+        java.util.ArrayList $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.text.SimpleSubtitleDecoder: void <init>(java.lang.String)>("WebvttDecoder");
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCueParser;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCueParser: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCueParser cueParser> = $r1;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray parsableWebvttData> = $r2;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder webvttCueBuilder> = $r3;
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.CssParser;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.CssParser: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.CssParser cssParser> = $r4;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: java.util.List definedStyles> = $r5;
+
+        return;
+    }
+
+    private static int getNextEvent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        byte $b0;
+        int $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        java.lang.String $r1, $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $b0 = -1;
+
+        $i1 = 0;
+
+     label1:
+        if $b0 != -1 goto label5;
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $r1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: java.lang.String readLine()>();
+
+        if $r1 != null goto label2;
+
+        $b0 = 0;
+
+        goto label1;
+
+     label2:
+        $r2 = "STYLE";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label3;
+
+        $b0 = 2;
+
+        goto label1;
+
+     label3:
+        $r2 = "NOTE";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean startsWith(java.lang.String)>($r1);
+
+        if $z0 == 0 goto label4;
+
+        $b0 = 1;
+
+        goto label1;
+
+     label4:
+        $b0 = 3;
+
+        goto label1;
+
+     label5:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i1);
+
+        return $b0;
+    }
+
+    private static void skipComment(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        java.lang.String $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+     label1:
+        $r1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: java.lang.String readLine()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected final volatile com.mbridge.msdk.playercommon.exoplayer2.text.Subtitle decode(byte[], int, boolean) throws com.mbridge.msdk.playercommon.exoplayer2.text.SubtitleDecoderException
+    {
+        byte[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder r0;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttSubtitle $r1;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder;
+
+        $r2 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $z0 := @parameter2: boolean;
+
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttSubtitle decode(byte[],int,boolean)>($r2, $i0, $z0);
+
+        return $r1;
+    }
+
+    protected final com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttSubtitle decode(byte[], int, boolean) throws com.mbridge.msdk.playercommon.exoplayer2.text.SubtitleDecoderException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue $r11;
+        byte[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCueParser $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttSubtitle $r12;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r4;
+        java.util.ArrayList $r6;
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.CssParser $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder r0;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCssStyle $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.text.SubtitleDecoderException $r9;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder;
+
+        $r3 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $z0 := @parameter2: boolean;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray parsableWebvttData>;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset(byte[],int)>($r3, $i0);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder webvttCueBuilder>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder: void reset()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: java.util.List definedStyles>;
+
+        interfaceinvoke $r2.<java.util.List: void clear()>();
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray parsableWebvttData>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttParserUtil: void validateWebvttHeaderLine(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r4);
+
+     label1:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray parsableWebvttData>;
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: java.lang.String readLine()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r5);
+
+        if $z0 != 0 goto label2;
+
+        goto label1;
+
+     label2:
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+     label3:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray parsableWebvttData>;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: int getNextEvent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r4);
+
+        if $i0 == 0 goto label7;
+
+        if $i0 != 1 goto label4;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray parsableWebvttData>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: void skipComment(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r4);
+
+        goto label3;
+
+     label4:
+        if $i0 != 2 goto label6;
+
+        $z0 = virtualinvoke $r6.<java.util.ArrayList: boolean isEmpty()>();
+
+        if $z0 == 0 goto label5;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray parsableWebvttData>;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: java.lang.String readLine()>();
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.CssParser cssParser>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray parsableWebvttData>;
+
+        $r8 = virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.CssParser: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCssStyle parseBlock(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r4);
+
+        if $r8 == null goto label3;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: java.util.List definedStyles>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r8);
+
+        goto label3;
+
+     label5:
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.text.SubtitleDecoderException;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.text.SubtitleDecoderException: void <init>(java.lang.String)>("A style block was found after the first cue.");
+
+        throw $r9;
+
+     label6:
+        if $i0 != 3 goto label3;
+
+        $r10 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCueParser cueParser>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray parsableWebvttData>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder webvttCueBuilder>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: java.util.List definedStyles>;
+
+        $z0 = virtualinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCueParser: boolean parseCue(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder,java.util.List)>($r4, $r1, $r2);
+
+        if $z0 == 0 goto label3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder webvttCueBuilder>;
+
+        $r11 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue build()>();
+
+        virtualinvoke $r6.<java.util.ArrayList: boolean add(java.lang.Object)>($r11);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder webvttCueBuilder>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttCue$Builder: void reset()>();
+
+        goto label3;
+
+     label7:
+        $r12 = new com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttSubtitle;
+
+        specialinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttSubtitle: void <init>(java.util.List)>($r6);
+
+        return $r12;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: java.lang.String STYLE_START> = "STYLE";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: int EVENT_STYLE_BLOCK> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: int EVENT_NONE> = -1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: int EVENT_END_OF_FILE> = 0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: int EVENT_CUE> = 3;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: int EVENT_COMMENT> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.text.webvtt.WebvttDecoder: java.lang.String COMMENT_START> = "NOTE";
+
+        return;
+    }
+}

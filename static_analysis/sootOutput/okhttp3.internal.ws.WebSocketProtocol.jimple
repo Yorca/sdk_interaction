@@ -1,0 +1,237 @@
+public final class okhttp3.internal.ws.WebSocketProtocol extends java.lang.Object
+{
+    static final java.lang.String ACCEPT_MAGIC;
+    static final int B0_FLAG_FIN;
+    static final int B0_FLAG_RSV1;
+    static final int B0_FLAG_RSV2;
+    static final int B0_FLAG_RSV3;
+    static final int B0_MASK_OPCODE;
+    static final int B1_FLAG_MASK;
+    static final int B1_MASK_LENGTH;
+    static final int CLOSE_CLIENT_GOING_AWAY;
+    static final long CLOSE_MESSAGE_MAX;
+    static final int CLOSE_NO_STATUS_CODE;
+    static final int OPCODE_BINARY;
+    static final int OPCODE_CONTINUATION;
+    static final int OPCODE_CONTROL_CLOSE;
+    static final int OPCODE_CONTROL_PING;
+    static final int OPCODE_CONTROL_PONG;
+    static final int OPCODE_FLAG_CONTROL;
+    static final int OPCODE_TEXT;
+    static final long PAYLOAD_BYTE_MAX;
+    static final int PAYLOAD_LONG;
+    static final int PAYLOAD_SHORT;
+    static final long PAYLOAD_SHORT_MAX;
+
+    private void <init>()
+    {
+        java.lang.AssertionError $r1;
+        okhttp3.internal.ws.WebSocketProtocol r0;
+
+        r0 := @this: okhttp3.internal.ws.WebSocketProtocol;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.lang.AssertionError;
+
+        specialinvoke $r1.<java.lang.AssertionError: void <init>(java.lang.Object)>("No instances.");
+
+        throw $r1;
+    }
+
+    public static java.lang.String acceptHeader(java.lang.String)
+    {
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1;
+        okio.ByteString $r2;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = staticinvoke <okio.ByteString: okio.ByteString encodeUtf8(java.lang.String)>($r1);
+
+        $r2 = virtualinvoke $r2.<okio.ByteString: okio.ByteString sha1()>();
+
+        $r1 = virtualinvoke $r2.<okio.ByteString: java.lang.String base64()>();
+
+        return $r1;
+    }
+
+    static java.lang.String closeCodeExceptionMessage(int)
+    {
+        int $i0;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1;
+
+        $i0 := @parameter0: int;
+
+        if $i0 < 1000 goto label4;
+
+        if $i0 >= 5000 goto label4;
+
+        if $i0 < 1004 goto label1;
+
+        if $i0 <= 1006 goto label2;
+
+     label1:
+        if $i0 < 1012 goto label3;
+
+        if $i0 > 2999 goto label3;
+
+     label2:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("Code ");
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is reserved and may not be used.");
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label3:
+        return null;
+
+     label4:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("Code must be in range [1000,5000): ");
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    static void toggleMask(okio.Buffer$UnsafeCursor, byte[])
+    {
+        byte[] $r1, $r2;
+        okio.Buffer$UnsafeCursor $r0;
+        byte $b2, $b5;
+        int $i0, $i1, $i3, $i4;
+
+        $r0 := @parameter0: okio.Buffer$UnsafeCursor;
+
+        $r1 := @parameter1: byte[];
+
+        $i0 = lengthof $r1;
+
+        $i3 = 0;
+
+     label1:
+        $r2 = $r0.<okio.Buffer$UnsafeCursor: byte[] data>;
+
+        $i4 = $r0.<okio.Buffer$UnsafeCursor: int start>;
+
+        $i1 = $r0.<okio.Buffer$UnsafeCursor: int end>;
+
+     label2:
+        if $i4 >= $i1 goto label3;
+
+        $i3 = $i3 % $i0;
+
+        $b5 = $r2[$i4];
+
+        $b2 = $r1[$i3];
+
+        $b2 = $b5 ^ $b2;
+
+        $r2[$i4] = $b2;
+
+        $i4 = $i4 + 1;
+
+        $i3 = $i3 + 1;
+
+        goto label2;
+
+     label3:
+        $i1 = virtualinvoke $r0.<okio.Buffer$UnsafeCursor: int next()>();
+
+        if $i1 != -1 goto label1;
+
+        return;
+    }
+
+    static void validateCloseCode(int)
+    {
+        int $i0;
+        java.lang.String $r1;
+        java.lang.IllegalArgumentException $r0;
+
+        $i0 := @parameter0: int;
+
+        $r1 = staticinvoke <okhttp3.internal.ws.WebSocketProtocol: java.lang.String closeCodeExceptionMessage(int)>($i0);
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r0 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r0.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r1);
+
+        throw $r0;
+    }
+
+    public static void <clinit>()
+    {
+        <okhttp3.internal.ws.WebSocketProtocol: long PAYLOAD_SHORT_MAX> = 65535L;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int PAYLOAD_SHORT> = 126;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int PAYLOAD_LONG> = 127;
+
+        <okhttp3.internal.ws.WebSocketProtocol: long PAYLOAD_BYTE_MAX> = 125L;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int OPCODE_TEXT> = 1;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int OPCODE_FLAG_CONTROL> = 8;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int OPCODE_CONTROL_PONG> = 10;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int OPCODE_CONTROL_PING> = 9;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int OPCODE_CONTROL_CLOSE> = 8;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int OPCODE_CONTINUATION> = 0;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int OPCODE_BINARY> = 2;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int CLOSE_NO_STATUS_CODE> = 1005;
+
+        <okhttp3.internal.ws.WebSocketProtocol: long CLOSE_MESSAGE_MAX> = 123L;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int CLOSE_CLIENT_GOING_AWAY> = 1001;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int B1_MASK_LENGTH> = 127;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int B1_FLAG_MASK> = 128;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int B0_MASK_OPCODE> = 15;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int B0_FLAG_RSV3> = 16;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int B0_FLAG_RSV2> = 32;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int B0_FLAG_RSV1> = 64;
+
+        <okhttp3.internal.ws.WebSocketProtocol: int B0_FLAG_FIN> = 128;
+
+        <okhttp3.internal.ws.WebSocketProtocol: java.lang.String ACCEPT_MAGIC> = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+
+        return;
+    }
+}

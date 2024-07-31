@@ -1,0 +1,373 @@
+public class com.vungle.warren.persistence.GraphicDesigner extends java.lang.Object implements com.vungle.warren.persistence.Designer, com.vungle.warren.persistence.CacheManager$Listener
+{
+    private static final java.lang.String FOLDER_NAME;
+    private static final java.lang.String TAG;
+    private com.vungle.warren.persistence.CacheManager cacheManager;
+
+    static void <clinit>()
+    {
+        <com.vungle.warren.persistence.GraphicDesigner: java.lang.String TAG> = "GraphicDesigner";
+
+        <com.vungle.warren.persistence.GraphicDesigner: java.lang.String FOLDER_NAME> = "vungle";
+
+        return;
+    }
+
+    public void <init>(com.vungle.warren.persistence.CacheManager)
+    {
+        com.vungle.warren.persistence.GraphicDesigner r0;
+        com.vungle.warren.persistence.CacheManager $r2;
+        java.io.File $r1;
+
+        r0 := @this: com.vungle.warren.persistence.GraphicDesigner;
+
+        $r2 := @parameter0: com.vungle.warren.persistence.CacheManager;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.vungle.warren.persistence.GraphicDesigner: com.vungle.warren.persistence.CacheManager cacheManager> = $r2;
+
+        virtualinvoke $r2.<com.vungle.warren.persistence.CacheManager: void addListener(com.vungle.warren.persistence.CacheManager$Listener)>(r0);
+
+        $r1 = virtualinvoke r0.<com.vungle.warren.persistence.GraphicDesigner: java.io.File getCacheDirectory()>();
+
+        staticinvoke <com.vungle.warren.utility.FileUtility: void printDirectoryTree(java.io.File)>($r1);
+
+        return;
+    }
+
+    public void clearCache()
+    {
+        java.lang.Throwable $r6;
+        com.vungle.warren.persistence.CacheManager $r2;
+        java.io.IOException $r10;
+        java.io.File $r3, $r4, $r9;
+        com.vungle.warren.persistence.GraphicDesigner r0;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r5, $r7;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.persistence.GraphicDesigner;
+
+        $r2 = r0.<com.vungle.warren.persistence.GraphicDesigner: com.vungle.warren.persistence.CacheManager cacheManager>;
+
+        if $r2 == null goto label6;
+
+        $r3 = virtualinvoke $r2.<com.vungle.warren.persistence.CacheManager: java.io.File getCache()>();
+
+        if $r3 != null goto label1;
+
+        return;
+
+     label1:
+        $r9 = new java.io.File;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = r0.<com.vungle.warren.persistence.GraphicDesigner: com.vungle.warren.persistence.CacheManager cacheManager>;
+
+        $r4 = virtualinvoke $r2.<com.vungle.warren.persistence.CacheManager: java.io.File getCache()>();
+
+        $r5 = virtualinvoke $r4.<java.io.File: java.lang.String getPath()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("vungle");
+
+        $r5 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r9.<java.io.File: void <init>(java.lang.String)>($r5);
+
+        $z0 = virtualinvoke $r9.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label5;
+
+     label2:
+        staticinvoke <com.vungle.warren.utility.FileUtility: void delete(java.io.File)>($r9);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r6 := @caughtexception;
+
+        $r5 = <com.vungle.warren.persistence.GraphicDesigner: java.lang.String TAG>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failed to delete cached files. Reason: ");
+
+        $r10 = (java.io.IOException) $r6;
+
+        $r7 = virtualinvoke $r10.<java.io.IOException: java.lang.String getLocalizedMessage()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r5, $r7);
+
+     label5:
+        $z0 = virtualinvoke $r9.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label6;
+
+        virtualinvoke $r9.<java.io.File: boolean mkdir()>();
+
+     label6:
+        return;
+
+        catch java.io.IOException from label2 to label3 with label4;
+    }
+
+    public void deleteAssets(java.lang.String) throws java.io.IOException, java.lang.IllegalStateException
+    {
+        java.io.File $r2;
+        com.vungle.warren.persistence.GraphicDesigner r0;
+        int $i0, $i1;
+        java.lang.String $r1, $r4;
+        java.io.File[] $r3;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.persistence.GraphicDesigner;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<com.vungle.warren.persistence.GraphicDesigner: java.io.File getCacheDirectory()>();
+
+        $r3 = virtualinvoke $r2.<java.io.File: java.io.File[] listFiles()>();
+
+        if $r3 != null goto label1;
+
+        return;
+
+     label1:
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label2:
+        if $i1 >= $i0 goto label4;
+
+        $r2 = $r3[$i1];
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label3;
+
+        $r4 = virtualinvoke $r2.<java.io.File: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label3;
+
+        staticinvoke <com.vungle.warren.utility.FileUtility: void delete(java.io.File)>($r2);
+
+     label3:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label4:
+        return;
+    }
+
+    public java.io.File getAssetDirectory(java.lang.String) throws java.lang.IllegalStateException
+    {
+        com.vungle.warren.persistence.GraphicDesigner r0;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3, $r5;
+        java.io.File $r1, $r4;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.persistence.GraphicDesigner;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r1 = new java.io.File;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke r0.<com.vungle.warren.persistence.GraphicDesigner: java.io.File getCacheDirectory()>();
+
+        $r5 = virtualinvoke $r4.<java.io.File: java.lang.String getPath()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.io.File: void <init>(java.lang.String)>($r3);
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label1;
+
+        virtualinvoke $r1.<java.io.File: boolean mkdir()>();
+
+     label1:
+        return $r1;
+    }
+
+    public java.io.File getCacheDirectory() throws java.lang.IllegalStateException
+    {
+        java.lang.IllegalStateException $r6;
+        com.vungle.warren.persistence.CacheManager $r1;
+        java.io.File $r2, $r4;
+        com.vungle.warren.persistence.GraphicDesigner r0;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.persistence.GraphicDesigner;
+
+        $r1 = r0.<com.vungle.warren.persistence.GraphicDesigner: com.vungle.warren.persistence.CacheManager cacheManager>;
+
+        if $r1 == null goto label1;
+
+        $r2 = new java.io.File;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = r0.<com.vungle.warren.persistence.GraphicDesigner: com.vungle.warren.persistence.CacheManager cacheManager>;
+
+        $r4 = virtualinvoke $r1.<com.vungle.warren.persistence.CacheManager: java.io.File getCache()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r5 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("vungle");
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r5);
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label2;
+
+        virtualinvoke $r2.<java.io.File: boolean mkdir()>();
+
+        return $r2;
+
+     label1:
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Context has expired, cannot continue.");
+
+        throw $r6;
+
+     label2:
+        return $r2;
+    }
+
+    public void onCacheChanged()
+    {
+        java.lang.Throwable $r9;
+        com.vungle.warren.persistence.CacheManager $r1;
+        java.util.Iterator $r3;
+        java.io.IOException $r13;
+        java.io.File $r5, $r12;
+        java.util.List $r2;
+        com.vungle.warren.persistence.GraphicDesigner r0;
+        java.lang.Object $r4;
+        java.lang.StringBuilder $r11;
+        java.lang.String $r8, $r10;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.persistence.GraphicDesigner;
+
+        $r1 = r0.<com.vungle.warren.persistence.GraphicDesigner: com.vungle.warren.persistence.CacheManager cacheManager>;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r2 = virtualinvoke $r1.<com.vungle.warren.persistence.CacheManager: java.util.List getOldCaches()>();
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label8;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.io.File) $r4;
+
+        $r12 = new java.io.File;
+
+        $r11 = new java.lang.StringBuilder;
+
+     label3:
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r5.<java.io.File: java.lang.String getPath()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+     label4:
+        $r8 = <java.io.File: java.lang.String separator>;
+
+     label5:
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("vungle");
+
+        $r8 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r12.<java.io.File: void <init>(java.lang.String)>($r8);
+
+        staticinvoke <com.vungle.warren.utility.FileUtility: void delete(java.io.File)>($r12);
+
+     label6:
+        goto label2;
+
+     label7:
+        $r9 := @caughtexception;
+
+        $r8 = <com.vungle.warren.persistence.GraphicDesigner: java.lang.String TAG>;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failed to delete cached files. Reason: ");
+
+        $r13 = (java.io.IOException) $r9;
+
+        $r10 = virtualinvoke $r13.<java.io.IOException: java.lang.String getLocalizedMessage()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r10 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r8, $r10);
+
+        goto label2;
+
+     label8:
+        return;
+
+        catch java.io.IOException from label3 to label4 with label7;
+        catch java.io.IOException from label5 to label6 with label7;
+    }
+}

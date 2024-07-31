@@ -1,0 +1,145 @@
+public class com.distriqt.extension.share.functions.sms.GetSubscriptionInfoFunction extends java.lang.Object implements com.adobe.fre.FREFunction
+{
+
+    public void <init>()
+    {
+        com.distriqt.extension.share.functions.sms.GetSubscriptionInfoFunction r0;
+
+        r0 := @this: com.distriqt.extension.share.functions.sms.GetSubscriptionInfoFunction;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public com.adobe.fre.FREObject call(com.adobe.fre.FREContext, com.adobe.fre.FREObject[])
+    {
+        com.distriqt.extension.share.sms.SMSController $r5;
+        com.adobe.fre.FREObject $r13;
+        java.util.ArrayList $r6;
+        com.adobe.fre.FREObject[] $r3;
+        org.json.JSONObject $r10;
+        int $i0;
+        java.lang.String $r12;
+        android.telephony.SubscriptionInfo $r9;
+        boolean $z0;
+        com.distriqt.extension.share.ShareContext $r4;
+        java.util.Iterator $r7;
+        java.lang.CharSequence $r11;
+        com.adobe.fre.FREContext $r2;
+        com.distriqt.extension.share.functions.sms.GetSubscriptionInfoFunction r0;
+        java.lang.Exception $r14;
+        java.lang.Object $r8;
+        org.json.JSONArray $r1;
+
+        r0 := @this: com.distriqt.extension.share.functions.sms.GetSubscriptionInfoFunction;
+
+        $r2 := @parameter0: com.adobe.fre.FREContext;
+
+        $r3 := @parameter1: com.adobe.fre.FREObject[];
+
+     label01:
+        $r4 = (com.distriqt.extension.share.ShareContext) $r2;
+
+     label02:
+        $r1 = new org.json.JSONArray;
+
+     label03:
+        specialinvoke $r1.<org.json.JSONArray: void <init>()>();
+
+     label04:
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 22 goto label12;
+
+     label05:
+        $r5 = virtualinvoke $r4.<com.distriqt.extension.share.ShareContext: com.distriqt.extension.share.sms.SMSController smsController()>();
+
+        $r6 = virtualinvoke $r5.<com.distriqt.extension.share.sms.SMSController: java.util.ArrayList getSubscriptions()>();
+
+        $r7 = virtualinvoke $r6.<java.util.ArrayList: java.util.Iterator iterator()>();
+
+     label06:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+     label07:
+        if $z0 == 0 goto label12;
+
+     label08:
+        $r8 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (android.telephony.SubscriptionInfo) $r8;
+
+     label09:
+        $r10 = new org.json.JSONObject;
+
+     label10:
+        specialinvoke $r10.<org.json.JSONObject: void <init>()>();
+
+        $i0 = virtualinvoke $r9.<android.telephony.SubscriptionInfo: int getSubscriptionId()>();
+
+        virtualinvoke $r10.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,int)>("id", $i0);
+
+        $r11 = virtualinvoke $r9.<android.telephony.SubscriptionInfo: java.lang.CharSequence getDisplayName()>();
+
+        $r12 = interfaceinvoke $r11.<java.lang.CharSequence: java.lang.String toString()>();
+
+        virtualinvoke $r10.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("displayName", $r12);
+
+        $r11 = virtualinvoke $r9.<android.telephony.SubscriptionInfo: java.lang.CharSequence getCarrierName()>();
+
+        $r12 = interfaceinvoke $r11.<java.lang.CharSequence: java.lang.String toString()>();
+
+        virtualinvoke $r10.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("carrierName", $r12);
+
+        $r12 = virtualinvoke $r9.<android.telephony.SubscriptionInfo: java.lang.String getCountryIso()>();
+
+        virtualinvoke $r10.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("country", $r12);
+
+        $r12 = virtualinvoke $r9.<android.telephony.SubscriptionInfo: java.lang.String getNumber()>();
+
+        virtualinvoke $r10.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("number", $r12);
+
+        $r12 = virtualinvoke $r9.<android.telephony.SubscriptionInfo: java.lang.String getIccId()>();
+
+        virtualinvoke $r10.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("ICCID", $r12);
+
+        $i0 = virtualinvoke $r9.<android.telephony.SubscriptionInfo: int getSimSlotIndex()>();
+
+        virtualinvoke $r10.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,int)>("simSlotIndex", $i0);
+
+        virtualinvoke $r1.<org.json.JSONArray: org.json.JSONArray put(java.lang.Object)>($r10);
+
+     label11:
+        goto label06;
+
+     label12:
+        $r10 = new org.json.JSONObject;
+
+     label13:
+        specialinvoke $r10.<org.json.JSONObject: void <init>()>();
+
+        virtualinvoke $r10.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>("subscriptions", $r1);
+
+        $r12 = virtualinvoke $r10.<org.json.JSONObject: java.lang.String toString()>();
+
+        $r13 = staticinvoke <com.adobe.fre.FREObject: com.adobe.fre.FREObject newObject(java.lang.String)>($r12);
+
+     label14:
+        return $r13;
+
+     label15:
+        $r14 := @caughtexception;
+
+        staticinvoke <com.distriqt.extension.share.utils.Errors: void handleException(com.adobe.fre.FREContext,java.lang.Throwable)>($r2, $r14);
+
+        return null;
+
+        catch java.lang.Exception from label01 to label02 with label15;
+        catch java.lang.Exception from label03 to label04 with label15;
+        catch java.lang.Exception from label05 to label07 with label15;
+        catch java.lang.Exception from label08 to label09 with label15;
+        catch java.lang.Exception from label10 to label11 with label15;
+        catch java.lang.Exception from label13 to label14 with label15;
+    }
+}

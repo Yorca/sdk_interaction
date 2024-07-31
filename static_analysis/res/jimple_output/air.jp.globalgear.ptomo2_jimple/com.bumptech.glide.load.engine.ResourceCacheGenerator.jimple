@@ -1,0 +1,406 @@
+class com.bumptech.glide.load.engine.ResourceCacheGenerator extends java.lang.Object implements com.bumptech.glide.load.engine.DataFetcherGenerator, com.bumptech.glide.load.data.DataFetcher$DataCallback
+{
+    private java.io.File cacheFile;
+    private final com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback cb;
+    private com.bumptech.glide.load.engine.ResourceCacheKey currentKey;
+    private final com.bumptech.glide.load.engine.DecodeHelper helper;
+    private volatile com.bumptech.glide.load.model.ModelLoader$LoadData loadData;
+    private int modelLoaderIndex;
+    private java.util.List modelLoaders;
+    private int resourceClassIndex;
+    private int sourceIdIndex;
+    private com.bumptech.glide.load.Key sourceKey;
+
+    void <init>(com.bumptech.glide.load.engine.DecodeHelper, com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback)
+    {
+        com.bumptech.glide.load.engine.DecodeHelper $r1;
+        com.bumptech.glide.load.engine.ResourceCacheGenerator r0;
+        com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback $r2;
+
+        r0 := @this: com.bumptech.glide.load.engine.ResourceCacheGenerator;
+
+        $r1 := @parameter0: com.bumptech.glide.load.engine.DecodeHelper;
+
+        $r2 := @parameter1: com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int resourceClassIndex> = -1;
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper> = $r1;
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback cb> = $r2;
+
+        return;
+    }
+
+    private boolean hasNextModelLoader()
+    {
+        java.util.List $r1;
+        com.bumptech.glide.load.engine.ResourceCacheGenerator r0;
+        int $i0, $i1;
+
+        r0 := @this: com.bumptech.glide.load.engine.ResourceCacheGenerator;
+
+        $i1 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int modelLoaderIndex>;
+
+        $r1 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: java.util.List modelLoaders>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        if $i1 >= $i0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public void cancel()
+    {
+        com.bumptech.glide.load.model.ModelLoader$LoadData $r1;
+        com.bumptech.glide.load.data.DataFetcher $r2;
+        com.bumptech.glide.load.engine.ResourceCacheGenerator r0;
+
+        r0 := @this: com.bumptech.glide.load.engine.ResourceCacheGenerator;
+
+        $r1 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.model.ModelLoader$LoadData loadData>;
+
+        if $r1 == null goto label1;
+
+        $r2 = $r1.<com.bumptech.glide.load.model.ModelLoader$LoadData: com.bumptech.glide.load.data.DataFetcher fetcher>;
+
+        interfaceinvoke $r2.<com.bumptech.glide.load.data.DataFetcher: void cancel()>();
+
+     label1:
+        return;
+    }
+
+    public void onDataReady(java.lang.Object)
+    {
+        com.bumptech.glide.load.DataSource $r5;
+        com.bumptech.glide.load.data.DataFetcher $r4;
+        com.bumptech.glide.load.engine.ResourceCacheKey $r6;
+        com.bumptech.glide.load.engine.ResourceCacheGenerator r0;
+        com.bumptech.glide.load.Key $r3;
+        com.bumptech.glide.load.model.ModelLoader$LoadData $r7;
+        java.lang.Object $r1;
+        com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback $r2;
+
+        r0 := @this: com.bumptech.glide.load.engine.ResourceCacheGenerator;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback cb>;
+
+        $r3 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.Key sourceKey>;
+
+        $r7 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.model.ModelLoader$LoadData loadData>;
+
+        $r4 = $r7.<com.bumptech.glide.load.model.ModelLoader$LoadData: com.bumptech.glide.load.data.DataFetcher fetcher>;
+
+        $r5 = <com.bumptech.glide.load.DataSource: com.bumptech.glide.load.DataSource RESOURCE_DISK_CACHE>;
+
+        $r6 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.ResourceCacheKey currentKey>;
+
+        interfaceinvoke $r2.<com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback: void onDataFetcherReady(com.bumptech.glide.load.Key,java.lang.Object,com.bumptech.glide.load.data.DataFetcher,com.bumptech.glide.load.DataSource,com.bumptech.glide.load.Key)>($r3, $r1, $r4, $r5, $r6);
+
+        return;
+    }
+
+    public void onLoadFailed(java.lang.Exception)
+    {
+        com.bumptech.glide.load.engine.ResourceCacheGenerator r0;
+        com.bumptech.glide.load.DataSource $r4;
+        com.bumptech.glide.load.model.ModelLoader$LoadData $r5;
+        com.bumptech.glide.load.engine.ResourceCacheKey $r3;
+        com.bumptech.glide.load.data.DataFetcher $r6;
+        com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback $r2;
+        java.lang.Exception $r1;
+
+        r0 := @this: com.bumptech.glide.load.engine.ResourceCacheGenerator;
+
+        $r1 := @parameter0: java.lang.Exception;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback cb>;
+
+        $r3 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.ResourceCacheKey currentKey>;
+
+        $r5 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.model.ModelLoader$LoadData loadData>;
+
+        $r6 = $r5.<com.bumptech.glide.load.model.ModelLoader$LoadData: com.bumptech.glide.load.data.DataFetcher fetcher>;
+
+        $r4 = <com.bumptech.glide.load.DataSource: com.bumptech.glide.load.DataSource RESOURCE_DISK_CACHE>;
+
+        interfaceinvoke $r2.<com.bumptech.glide.load.engine.DataFetcherGenerator$FetcherReadyCallback: void onDataFetcherFailed(com.bumptech.glide.load.Key,java.lang.Exception,com.bumptech.glide.load.data.DataFetcher,com.bumptech.glide.load.DataSource)>($r3, $r1, $r6, $r4);
+
+        return;
+    }
+
+    public boolean startNext()
+    {
+        java.lang.IllegalStateException $r7;
+        com.bumptech.glide.load.engine.bitmap_recycle.ArrayPool $r20;
+        com.bumptech.glide.load.model.ModelLoader $r12;
+        com.bumptech.glide.load.engine.DecodeHelper $r2;
+        com.bumptech.glide.Priority $r17;
+        com.bumptech.glide.load.Key $r18, $r21;
+        int $i0, $i1;
+        com.bumptech.glide.load.model.ModelLoader$LoadData $r15;
+        java.lang.String $r9;
+        boolean $z0, $z1;
+        com.bumptech.glide.load.engine.cache.DiskCache $r22;
+        com.bumptech.glide.load.Transformation $r19;
+        com.bumptech.glide.load.engine.ResourceCacheKey $r1;
+        com.bumptech.glide.load.data.DataFetcher $r16;
+        java.io.File $r13;
+        java.util.List $r3, $r4, $r10;
+        com.bumptech.glide.load.engine.ResourceCacheGenerator r0;
+        com.bumptech.glide.load.Options $r14;
+        java.lang.Class $r5, $r6;
+        java.lang.StringBuilder $r8;
+        java.lang.Object $r11;
+
+        r0 := @this: com.bumptech.glide.load.engine.ResourceCacheGenerator;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r3 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: java.util.List getCacheKeys()>();
+
+        $z0 = interfaceinvoke $r3.<java.util.List: boolean isEmpty()>();
+
+        $z1 = 0;
+
+        if $z0 == 0 goto label01;
+
+        return 0;
+
+     label01:
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r4 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: java.util.List getRegisteredResourceClasses()>();
+
+        $z0 = interfaceinvoke $r4.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label03;
+
+        $r5 = class "Ljava/io/File;";
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r6 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: java.lang.Class getTranscodeClass()>();
+
+        $z1 = virtualinvoke $r5.<java.lang.Object: boolean equals(java.lang.Object)>($r6);
+
+        if $z1 == 0 goto label02;
+
+        return 0;
+
+     label02:
+        $r7 = new java.lang.IllegalStateException;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failed to find any load path from ");
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r5 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: java.lang.Class getModelClass()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r5);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" to ");
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r5 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: java.lang.Class getTranscodeClass()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r5);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r9);
+
+        throw $r7;
+
+     label03:
+        $r10 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: java.util.List modelLoaders>;
+
+        if $r10 == null goto label07;
+
+        $z0 = specialinvoke r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: boolean hasNextModelLoader()>();
+
+        if $z0 != 0 goto label04;
+
+        goto label07;
+
+     label04:
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.model.ModelLoader$LoadData loadData> = null;
+
+     label05:
+        if $z1 != 0 goto label06;
+
+        $z0 = specialinvoke r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: boolean hasNextModelLoader()>();
+
+        if $z0 == 0 goto label10;
+
+        $r3 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: java.util.List modelLoaders>;
+
+        $i0 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int modelLoaderIndex>;
+
+        $i1 = $i0 + 1;
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int modelLoaderIndex> = $i1;
+
+        $r11 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.bumptech.glide.load.model.ModelLoader) $r11;
+
+        $r13 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: java.io.File cacheFile>;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $i0 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: int getWidth()>();
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $i1 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: int getHeight()>();
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r14 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: com.bumptech.glide.load.Options getOptions()>();
+
+        $r15 = interfaceinvoke $r12.<com.bumptech.glide.load.model.ModelLoader: com.bumptech.glide.load.model.ModelLoader$LoadData buildLoadData(java.lang.Object,int,int,com.bumptech.glide.load.Options)>($r13, $i0, $i1, $r14);
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.model.ModelLoader$LoadData loadData> = $r15;
+
+        $r15 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.model.ModelLoader$LoadData loadData>;
+
+        if $r15 == null goto label05;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r15 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.model.ModelLoader$LoadData loadData>;
+
+        $r16 = $r15.<com.bumptech.glide.load.model.ModelLoader$LoadData: com.bumptech.glide.load.data.DataFetcher fetcher>;
+
+        $r5 = interfaceinvoke $r16.<com.bumptech.glide.load.data.DataFetcher: java.lang.Class getDataClass()>();
+
+        $z0 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: boolean hasLoadPath(java.lang.Class)>($r5);
+
+        if $z0 == 0 goto label05;
+
+        $r15 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.model.ModelLoader$LoadData loadData>;
+
+        $r16 = $r15.<com.bumptech.glide.load.model.ModelLoader$LoadData: com.bumptech.glide.load.data.DataFetcher fetcher>;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r17 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: com.bumptech.glide.Priority getPriority()>();
+
+        interfaceinvoke $r16.<com.bumptech.glide.load.data.DataFetcher: void loadData(com.bumptech.glide.Priority,com.bumptech.glide.load.data.DataFetcher$DataCallback)>($r17, r0);
+
+        $z1 = 1;
+
+        goto label05;
+
+     label06:
+        return $z1;
+
+     label07:
+        $i0 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int resourceClassIndex>;
+
+        $i0 = $i0 + 1;
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int resourceClassIndex> = $i0;
+
+        $i1 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        if $i0 < $i1 goto label09;
+
+        $i0 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int sourceIdIndex>;
+
+        $i0 = $i0 + 1;
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int sourceIdIndex> = $i0;
+
+        $i1 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i0 < $i1 goto label08;
+
+        return 0;
+
+     label08:
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int resourceClassIndex> = 0;
+
+     label09:
+        $i0 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int sourceIdIndex>;
+
+        $r11 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r18 = (com.bumptech.glide.load.Key) $r11;
+
+        $i0 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int resourceClassIndex>;
+
+        $r11 = interfaceinvoke $r4.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r5 = (java.lang.Class) $r11;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r19 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: com.bumptech.glide.load.Transformation getTransformation(java.lang.Class)>($r5);
+
+        $r1 = new com.bumptech.glide.load.engine.ResourceCacheKey;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r20 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: com.bumptech.glide.load.engine.bitmap_recycle.ArrayPool getArrayPool()>();
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r21 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: com.bumptech.glide.load.Key getSignature()>();
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $i0 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: int getWidth()>();
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $i1 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: int getHeight()>();
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r14 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: com.bumptech.glide.load.Options getOptions()>();
+
+        specialinvoke $r1.<com.bumptech.glide.load.engine.ResourceCacheKey: void <init>(com.bumptech.glide.load.engine.bitmap_recycle.ArrayPool,com.bumptech.glide.load.Key,com.bumptech.glide.load.Key,int,int,com.bumptech.glide.load.Transformation,java.lang.Class,com.bumptech.glide.load.Options)>($r20, $r18, $r21, $i0, $i1, $r19, $r5, $r14);
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.ResourceCacheKey currentKey> = $r1;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r22 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: com.bumptech.glide.load.engine.cache.DiskCache getDiskCache()>();
+
+        $r1 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.ResourceCacheKey currentKey>;
+
+        $r13 = interfaceinvoke $r22.<com.bumptech.glide.load.engine.cache.DiskCache: java.io.File get(com.bumptech.glide.load.Key)>($r1);
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: java.io.File cacheFile> = $r13;
+
+        if $r13 == null goto label03;
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.Key sourceKey> = $r18;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: com.bumptech.glide.load.engine.DecodeHelper helper>;
+
+        $r10 = virtualinvoke $r2.<com.bumptech.glide.load.engine.DecodeHelper: java.util.List getModelLoaders(java.io.File)>($r13);
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: java.util.List modelLoaders> = $r10;
+
+        r0.<com.bumptech.glide.load.engine.ResourceCacheGenerator: int modelLoaderIndex> = 0;
+
+        goto label03;
+
+     label10:
+        return $z1;
+    }
+}

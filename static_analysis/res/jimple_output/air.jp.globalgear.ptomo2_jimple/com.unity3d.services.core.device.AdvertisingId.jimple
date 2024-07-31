@@ -1,0 +1,185 @@
+public class com.unity3d.services.core.device.AdvertisingId extends java.lang.Object
+{
+    private static final java.lang.String ADVERTISING_ID_SERVICE_NAME;
+    private static com.unity3d.services.core.device.AdvertisingId instance;
+    private java.lang.String advertisingIdentifier;
+    private boolean limitedAdvertisingTracking;
+
+    static void <clinit>()
+    {
+        <com.unity3d.services.core.device.AdvertisingId: java.lang.String ADVERTISING_ID_SERVICE_NAME> = "com.google.android.gms.ads.identifier.internal.IAdvertisingIdService";
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.unity3d.services.core.device.AdvertisingId r0;
+
+        r0 := @this: com.unity3d.services.core.device.AdvertisingId;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.unity3d.services.core.device.AdvertisingId: java.lang.String advertisingIdentifier> = null;
+
+        r0.<com.unity3d.services.core.device.AdvertisingId: boolean limitedAdvertisingTracking> = 0;
+
+        return;
+    }
+
+    private void fetchAdvertisingId(android.content.Context)
+    {
+        java.lang.Throwable $r8;
+        android.content.Context $r1;
+        android.content.Intent $r3;
+        java.lang.Exception $r4, $r9;
+        android.os.IBinder $r5;
+        com.unity3d.services.core.device.AdvertisingId$GoogleAdvertisingServiceConnection $r2;
+        com.unity3d.services.core.device.AdvertisingId r0;
+        com.unity3d.services.core.device.AdvertisingId$GoogleAdvertisingInfo $r6;
+        java.lang.String $r7;
+        boolean $z0, $z1;
+
+        r0 := @this: com.unity3d.services.core.device.AdvertisingId;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = new com.unity3d.services.core.device.AdvertisingId$GoogleAdvertisingServiceConnection;
+
+        specialinvoke $r2.<com.unity3d.services.core.device.AdvertisingId$GoogleAdvertisingServiceConnection: void <init>(com.unity3d.services.core.device.AdvertisingId,com.unity3d.services.core.device.AdvertisingId$1)>(r0, null);
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(java.lang.String)>("com.google.android.gms.ads.identifier.service.START");
+
+        virtualinvoke $r3.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>("com.google.android.gms");
+
+     label01:
+        $z0 = virtualinvoke $r1.<android.content.Context: boolean bindService(android.content.Intent,android.content.ServiceConnection,int)>($r3, $r2, 1);
+
+     label02:
+        goto label04;
+
+     label03:
+        $r4 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Couldn\'t bind to identifier service intent", $r4);
+
+        $z0 = 0;
+
+     label04:
+        if $z0 == 0 goto label13;
+
+     label05:
+        $r5 = virtualinvoke $r2.<com.unity3d.services.core.device.AdvertisingId$GoogleAdvertisingServiceConnection: android.os.IBinder getBinder()>();
+
+        $r6 = staticinvoke <com.unity3d.services.core.device.AdvertisingId$GoogleAdvertisingInfo$GoogleAdvertisingInfoBinder: com.unity3d.services.core.device.AdvertisingId$GoogleAdvertisingInfo create(android.os.IBinder)>($r5);
+
+        $r7 = interfaceinvoke $r6.<com.unity3d.services.core.device.AdvertisingId$GoogleAdvertisingInfo: java.lang.String getId()>();
+
+        r0.<com.unity3d.services.core.device.AdvertisingId: java.lang.String advertisingIdentifier> = $r7;
+
+        $z1 = interfaceinvoke $r6.<com.unity3d.services.core.device.AdvertisingId$GoogleAdvertisingInfo: boolean getEnabled(boolean)>(1);
+
+        r0.<com.unity3d.services.core.device.AdvertisingId: boolean limitedAdvertisingTracking> = $z1;
+
+     label06:
+        goto label13;
+
+     label07:
+        $r8 := @caughtexception;
+
+        goto label11;
+
+     label08:
+        $r9 := @caughtexception;
+
+     label09:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Couldn\'t get advertising info", $r9);
+
+     label10:
+        if $z0 == 0 goto label15;
+
+        goto label14;
+
+     label11:
+        if $z0 == 0 goto label12;
+
+        virtualinvoke $r1.<android.content.Context: void unbindService(android.content.ServiceConnection)>($r2);
+
+     label12:
+        throw $r8;
+
+     label13:
+        if $z0 == 0 goto label15;
+
+     label14:
+        virtualinvoke $r1.<android.content.Context: void unbindService(android.content.ServiceConnection)>($r2);
+
+     label15:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label03;
+        catch java.lang.Exception from label05 to label06 with label08;
+        catch java.lang.Throwable from label05 to label06 with label07;
+        catch java.lang.Throwable from label09 to label10 with label07;
+    }
+
+    public static java.lang.String getAdvertisingTrackingId()
+    {
+        java.lang.String r1;
+        com.unity3d.services.core.device.AdvertisingId $r0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.device.AdvertisingId: com.unity3d.services.core.device.AdvertisingId getInstance()>();
+
+        r1 = $r0.<com.unity3d.services.core.device.AdvertisingId: java.lang.String advertisingIdentifier>;
+
+        return r1;
+    }
+
+    private static com.unity3d.services.core.device.AdvertisingId getInstance()
+    {
+        com.unity3d.services.core.device.AdvertisingId $r0;
+
+        $r0 = <com.unity3d.services.core.device.AdvertisingId: com.unity3d.services.core.device.AdvertisingId instance>;
+
+        if $r0 != null goto label1;
+
+        $r0 = new com.unity3d.services.core.device.AdvertisingId;
+
+        specialinvoke $r0.<com.unity3d.services.core.device.AdvertisingId: void <init>()>();
+
+        <com.unity3d.services.core.device.AdvertisingId: com.unity3d.services.core.device.AdvertisingId instance> = $r0;
+
+     label1:
+        $r0 = <com.unity3d.services.core.device.AdvertisingId: com.unity3d.services.core.device.AdvertisingId instance>;
+
+        return $r0;
+    }
+
+    public static boolean getLimitedAdTracking()
+    {
+        com.unity3d.services.core.device.AdvertisingId $r0;
+        boolean z0;
+
+        $r0 = staticinvoke <com.unity3d.services.core.device.AdvertisingId: com.unity3d.services.core.device.AdvertisingId getInstance()>();
+
+        z0 = $r0.<com.unity3d.services.core.device.AdvertisingId: boolean limitedAdvertisingTracking>;
+
+        return z0;
+    }
+
+    public static void init(android.content.Context)
+    {
+        android.content.Context $r0;
+        com.unity3d.services.core.device.AdvertisingId $r1;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = staticinvoke <com.unity3d.services.core.device.AdvertisingId: com.unity3d.services.core.device.AdvertisingId getInstance()>();
+
+        specialinvoke $r1.<com.unity3d.services.core.device.AdvertisingId: void fetchAdvertisingId(android.content.Context)>($r0);
+
+        return;
+    }
+}

@@ -1,0 +1,790 @@
+public class com.adobe.air.microphone.AIRMicrophoneRecorder extends java.lang.Object implements java.lang.Runnable
+{
+    public static final java.lang.String[] BLACKLIST;
+    private android.media.audiofx.AcousticEchoCanceler echoCanceler;
+    private boolean hardwareAEC;
+    private java.nio.ByteBuffer mBuffer_toWrite;
+    public volatile boolean mKeepAlive;
+    private byte[] mMicBuffer;
+    private int m_audioFormat;
+    private int m_audioSource;
+    private int m_bufferSize;
+    private int m_channelConfiguration;
+    public short m_delay;
+    public boolean m_isEnhancedMicrophone;
+    private volatile boolean m_isPaused;
+    private volatile boolean m_isRecording;
+    private android.media.AudioRecord m_recorder;
+    private int m_sampleRate;
+    private final java.lang.Object mutex;
+    private android.media.audiofx.NoiseSuppressor noiseSuppressor;
+    private long t_analyze;
+    private long t_capture;
+    private long t_process;
+    private long t_render;
+
+    static void <clinit>()
+    {
+        java.lang.String[] $r0;
+
+        $r0 = newarray (java.lang.String)[4];
+
+        $r0[0] = "Nexus 9";
+
+        $r0[1] = "Nexus 10";
+
+        $r0[2] = "ONE A2005";
+
+        $r0[3] = "D6503";
+
+        <com.adobe.air.microphone.AIRMicrophoneRecorder: java.lang.String[] BLACKLIST> = $r0;
+
+        return;
+    }
+
+    public void <init>(int, int, int, int, int)
+    {
+        byte[] $r2;
+        com.adobe.air.microphone.AIRMicrophoneRecorder r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.Object $r1;
+
+        r0 := @this: com.adobe.air.microphone.AIRMicrophoneRecorder;
+
+        $i4 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $i3 := @parameter4: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_audioSource> = 0;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_sampleRate> = 0;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_channelConfiguration> = 0;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_audioFormat> = 0;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_bufferSize> = 0;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.audiofx.AcousticEchoCanceler echoCanceler> = null;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.audiofx.NoiseSuppressor noiseSuppressor> = null;
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.lang.Object mutex> = $r1;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean m_isEnhancedMicrophone> = 0;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean mKeepAlive> = 1;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: long t_render> = 0L;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: long t_analyze> = 0L;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: long t_process> = 0L;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: long t_capture> = 0L;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: short m_delay> = 0;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean hardwareAEC> = 0;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_audioSource> = $i4;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_sampleRate> = $i0;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_channelConfiguration> = $i1;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_audioFormat> = $i2;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_bufferSize> = $i3;
+
+        $r2 = newarray (byte)[$i3];
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: byte[] mMicBuffer> = $r2;
+
+        return;
+    }
+
+    public static boolean deviceIsBlackListed()
+    {
+        java.util.List $r2;
+        java.lang.String[] $r1;
+        java.lang.String $r0;
+        boolean $z0;
+
+        $r1 = <com.adobe.air.microphone.AIRMicrophoneRecorder: java.lang.String[] BLACKLIST>;
+
+        $r2 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r1);
+
+        $r0 = <android.os.Build: java.lang.String MODEL>;
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean contains(java.lang.Object)>($r0);
+
+        return $z0;
+    }
+
+    private boolean doAECM()
+    {
+        byte[] $r4, $r12;
+        java.io.ByteArrayOutputStream $r3, $r15;
+        java.nio.ShortBuffer $r11;
+        long $l1;
+        java.nio.ByteBuffer $r8;
+        java.io.ByteArrayInputStream $r2, $r14;
+        int $i0, $i2;
+        com.adobe.air.microphone.MobileAEC$AggressiveMode $r6;
+        com.adobe.air.microphone.MobileAEC $r1, $r7;
+        java.lang.Exception $r13;
+        java.nio.ByteOrder $r10;
+        com.adobe.air.microphone.AIRMicrophoneRecorder r0;
+        short[] $r5, $r9;
+
+        r0 := @this: com.adobe.air.microphone.AIRMicrophoneRecorder;
+
+        $r7 = new com.adobe.air.microphone.MobileAEC;
+
+        $r1 = $r7;
+
+     label01:
+        specialinvoke $r7.<com.adobe.air.microphone.MobileAEC: void <init>(com.adobe.air.microphone.MobileAEC$SamplingFrequency)>(null);
+
+     label02:
+        $r6 = <com.adobe.air.microphone.MobileAEC$AggressiveMode: com.adobe.air.microphone.MobileAEC$AggressiveMode MOST_AGGRESSIVE>;
+
+     label03:
+        $r7 = virtualinvoke $r1.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC setAecmMode(com.adobe.air.microphone.MobileAEC$AggressiveMode)>($r6);
+
+        virtualinvoke $r7.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC prepare()>();
+
+     label04:
+        $r14 = new java.io.ByteArrayInputStream;
+
+        $r2 = $r14;
+
+     label05:
+        $r4 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: byte[] mMicBuffer>;
+
+        specialinvoke $r14.<java.io.ByteArrayInputStream: void <init>(byte[])>($r4);
+
+     label06:
+        $r15 = new java.io.ByteArrayOutputStream;
+
+        $r3 = $r15;
+
+     label07:
+        $r8 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.nio.ByteBuffer mBuffer_toWrite>;
+
+        $i0 = virtualinvoke $r8.<java.nio.ByteBuffer: int capacity()>();
+
+        specialinvoke $r15.<java.io.ByteArrayOutputStream: void <init>(int)>($i0);
+
+     label08:
+        $r4 = newarray (byte)[320];
+
+     label09:
+        $i0 = virtualinvoke $r2.<java.io.ByteArrayInputStream: int read(byte[],int,int)>($r4, 0, 320);
+
+     label10:
+        $i2 = -1;
+
+        if $i0 == $i2 goto label19;
+
+        $r9 = newarray (short)[160];
+
+        $r5 = newarray (short)[160];
+
+     label11:
+        $r8 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>($r4);
+
+     label12:
+        $r10 = <java.nio.ByteOrder: java.nio.ByteOrder LITTLE_ENDIAN>;
+
+     label13:
+        $r8 = virtualinvoke $r8.<java.nio.ByteBuffer: java.nio.ByteBuffer order(java.nio.ByteOrder)>($r10);
+
+        $r11 = virtualinvoke $r8.<java.nio.ByteBuffer: java.nio.ShortBuffer asShortBuffer()>();
+
+        virtualinvoke $r11.<java.nio.ShortBuffer: java.nio.ShortBuffer get(short[])>($r9);
+
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: long t_analyze> = $l1;
+
+        virtualinvoke $r1.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC farendBuffer(short[],int)>($r9, 160);
+
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: long t_process> = $l1;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: short m_delay> = 200;
+
+        virtualinvoke $r1.<com.adobe.air.microphone.MobileAEC: void echoCancellation(short[],short[],short[],short,short)>($r9, null, $r5, 160, 200);
+
+     label14:
+        $r12 = newarray (byte)[320];
+
+     label15:
+        $r8 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>($r12);
+
+     label16:
+        $r10 = <java.nio.ByteOrder: java.nio.ByteOrder LITTLE_ENDIAN>;
+
+     label17:
+        $r8 = virtualinvoke $r8.<java.nio.ByteBuffer: java.nio.ByteBuffer order(java.nio.ByteOrder)>($r10);
+
+        $r11 = virtualinvoke $r8.<java.nio.ByteBuffer: java.nio.ShortBuffer asShortBuffer()>();
+
+        virtualinvoke $r11.<java.nio.ShortBuffer: java.nio.ShortBuffer put(short[])>($r5);
+
+        virtualinvoke $r3.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r12, 0, 320);
+
+     label18:
+        goto label09;
+
+     label19:
+        $r8 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.nio.ByteBuffer mBuffer_toWrite>;
+
+        virtualinvoke $r8.<java.nio.ByteBuffer: java.nio.Buffer clear()>();
+
+        $i0 = virtualinvoke $r3.<java.io.ByteArrayOutputStream: int size()>();
+
+        $r8 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocateDirect(int)>($i0);
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.nio.ByteBuffer mBuffer_toWrite> = $r8;
+
+        $r4 = virtualinvoke $r3.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        virtualinvoke $r8.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte[])>($r4);
+
+        virtualinvoke $r3.<java.io.ByteArrayOutputStream: void close()>();
+
+        virtualinvoke $r2.<java.io.ByteArrayInputStream: void close()>();
+
+        virtualinvoke $r1.<com.adobe.air.microphone.MobileAEC: void close()>();
+
+     label20:
+        return 1;
+
+     label21:
+        $r13 := @caughtexception;
+
+        virtualinvoke $r13.<java.lang.Exception: void printStackTrace()>();
+
+        return 0;
+
+        catch java.lang.Exception from label01 to label02 with label21;
+        catch java.lang.Exception from label03 to label04 with label21;
+        catch java.lang.Exception from label05 to label06 with label21;
+        catch java.lang.Exception from label07 to label08 with label21;
+        catch java.lang.Exception from label09 to label10 with label21;
+        catch java.lang.Exception from label11 to label12 with label21;
+        catch java.lang.Exception from label13 to label14 with label21;
+        catch java.lang.Exception from label15 to label16 with label21;
+        catch java.lang.Exception from label17 to label18 with label21;
+        catch java.lang.Exception from label19 to label20 with label21;
+    }
+
+    public static java.util.List getBlackListedModels()
+    {
+        java.util.List $r0;
+        java.lang.String[] $r1;
+
+        $r1 = <com.adobe.air.microphone.AIRMicrophoneRecorder: java.lang.String[] BLACKLIST>;
+
+        $r0 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r1);
+
+        return $r0;
+    }
+
+    public java.lang.Boolean Open()
+    {
+        java.lang.Throwable $r4;
+        android.media.AudioRecord $r2, $r5;
+        java.lang.IllegalArgumentException $r6;
+        java.nio.ByteBuffer $r1;
+        com.adobe.air.microphone.AIRMicrophoneRecorder r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.Boolean $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.microphone.AIRMicrophoneRecorder;
+
+        $i0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_sampleRate>;
+
+        $i1 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_channelConfiguration>;
+
+        $i2 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_audioFormat>;
+
+        $i0 = staticinvoke <android.media.AudioRecord: int getMinBufferSize(int,int,int)>($i0, $i1, $i2);
+
+        $z0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean m_isEnhancedMicrophone>;
+
+        if $z0 == 0 goto label03;
+
+        $i1 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_bufferSize>;
+
+        if $i1 <= $i0 goto label01;
+
+        $i0 = $i1;
+
+        goto label02;
+
+     label01:
+        $i0 = $i0 * 2;
+
+     label02:
+        $r1 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocateDirect(int)>($i1);
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.nio.ByteBuffer mBuffer_toWrite> = $r1;
+
+        goto label05;
+
+     label03:
+        $i1 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_bufferSize>;
+
+        if $i1 <= $i0 goto label04;
+
+        $i0 = $i1;
+
+        goto label05;
+
+     label04:
+        $i0 = $i0 * 2;
+
+     label05:
+        $z0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean m_isEnhancedMicrophone>;
+
+        if $z0 == 0 goto label08;
+
+        $r5 = new android.media.AudioRecord;
+
+        $i1 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_sampleRate>;
+
+        $i2 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_channelConfiguration>;
+
+        $i3 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_audioFormat>;
+
+     label06:
+        specialinvoke $r5.<android.media.AudioRecord: void <init>(int,int,int,int,int)>(7, $i1, $i2, $i3, $i0);
+
+     label07:
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.AudioRecord m_recorder> = $r5;
+
+        goto label11;
+
+     label08:
+        $r5 = new android.media.AudioRecord;
+
+        $i1 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_audioSource>;
+
+        $i2 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_sampleRate>;
+
+        $i3 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_channelConfiguration>;
+
+        $i4 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_audioFormat>;
+
+     label09:
+        specialinvoke $r5.<android.media.AudioRecord: void <init>(int,int,int,int,int)>($i1, $i2, $i3, $i4, $i0);
+
+     label10:
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.AudioRecord m_recorder> = $r5;
+
+     label11:
+        $r2 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.AudioRecord m_recorder>;
+
+        if $r2 == null goto label12;
+
+        $i0 = virtualinvoke $r2.<android.media.AudioRecord: int getState()>();
+
+        if $i0 != 1 goto label12;
+
+        $r3 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+        return $r3;
+
+     label12:
+        $r3 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(0);
+
+        return $r3;
+
+     label13:
+        $r4 := @caughtexception;
+
+        $r6 = (java.lang.IllegalArgumentException) $r4;
+
+        virtualinvoke $r6.<java.lang.IllegalArgumentException: void printStackTrace()>();
+
+        $r3 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(0);
+
+        return $r3;
+
+        catch java.lang.IllegalArgumentException from label06 to label07 with label13;
+        catch java.lang.IllegalArgumentException from label09 to label10 with label13;
+    }
+
+    public byte[] getBuffer()
+    {
+        byte[] $r2;
+        com.adobe.air.microphone.AIRMicrophoneRecorder r0;
+        int $i0;
+        long $l1;
+        android.media.AudioRecord $r1;
+        java.nio.ByteBuffer $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.microphone.AIRMicrophoneRecorder;
+
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: long t_capture> = $l1;
+
+        $r1 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.AudioRecord m_recorder>;
+
+        $r2 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: byte[] mMicBuffer>;
+
+        $i0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_bufferSize>;
+
+        virtualinvoke $r1.<android.media.AudioRecord: int read(byte[],int,int)>($r2, 0, $i0);
+
+        $z0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean m_isEnhancedMicrophone>;
+
+        if $z0 != 1 goto label2;
+
+        $z0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean hardwareAEC>;
+
+        if $z0 == 0 goto label1;
+
+        $z0 = staticinvoke <com.adobe.air.microphone.AIRMicrophoneRecorder: boolean deviceIsBlackListed()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: long t_render> = $l1;
+
+        $z0 = specialinvoke r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean doAECM()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.nio.ByteBuffer mBuffer_toWrite>;
+
+        $r2 = virtualinvoke $r3.<java.nio.ByteBuffer: byte[] array()>();
+
+        $i0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: int m_bufferSize>;
+
+        $r2 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>($r2, $i0);
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: byte[] mMicBuffer> = $r2;
+
+     label2:
+        $r2 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: byte[] mMicBuffer>;
+
+        return $r2;
+    }
+
+    public boolean isRecording()
+    {
+        java.lang.Throwable $r2;
+        com.adobe.air.microphone.AIRMicrophoneRecorder r0;
+        java.lang.Object $r1;
+        boolean z0;
+
+        r0 := @this: com.adobe.air.microphone.AIRMicrophoneRecorder;
+
+        $r1 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.lang.Object mutex>;
+
+        entermonitor $r1;
+
+     label1:
+        z0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean m_isRecording>;
+
+        exitmonitor $r1;
+
+     label2:
+        return z0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void run()
+    {
+        java.lang.Throwable $r1, $r4, $r13;
+        java.lang.IllegalStateException $r14;
+        android.media.AudioManager $r8;
+        int $i0;
+        com.adobe.air.AndroidActivityWrapper $r6;
+        java.lang.String $r11;
+        boolean $z0;
+        android.media.audiofx.NoiseSuppressor $r12;
+        android.media.AudioRecord $r5;
+        android.media.audiofx.AcousticEchoCanceler $r9;
+        com.adobe.air.microphone.AIRMicrophoneRecorder r0;
+        java.lang.Object $r2, $r3;
+        java.lang.StringBuilder $r10, $r15;
+        android.app.Activity $r7;
+
+        r0 := @this: com.adobe.air.microphone.AIRMicrophoneRecorder;
+
+        $r2 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.lang.Object mutex>;
+
+        entermonitor $r2;
+
+     label01:
+        $z0 = virtualinvoke r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean isRecording()>();
+
+     label02:
+        if $z0 != 0 goto label08;
+
+     label03:
+        $r3 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.lang.Object mutex>;
+
+     label04:
+        virtualinvoke $r3.<java.lang.Object: void wait()>();
+
+     label05:
+        goto label01;
+
+     label06:
+        $r4 := @caughtexception;
+
+     label07:
+        $r14 = new java.lang.IllegalStateException;
+
+        specialinvoke $r14.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Wait interrupted", $r4);
+
+        throw $r14;
+
+     label08:
+        exitmonitor $r2;
+
+     label09:
+        staticinvoke <android.os.Process: void setThreadPriority(int)>(-19);
+
+        $r5 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.AudioRecord m_recorder>;
+
+        if $r5 == null goto label34;
+
+        $z0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean m_isEnhancedMicrophone>;
+
+        if $z0 == 0 goto label27;
+
+     label10:
+        $r6 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r7 = virtualinvoke $r6.<com.adobe.air.AndroidActivityWrapper: android.app.Activity getActivity()>();
+
+        $r2 = virtualinvoke $r7.<android.app.Activity: java.lang.Object getSystemService(java.lang.String)>("audio");
+
+     label11:
+        $r8 = (android.media.AudioManager) $r2;
+
+     label12:
+        virtualinvoke $r8.<android.media.AudioManager: void setMode(int)>(3);
+
+     label13:
+        $r5 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.AudioRecord m_recorder>;
+
+     label14:
+        $i0 = virtualinvoke $r5.<android.media.AudioRecord: int getAudioSessionId()>();
+
+        $z0 = staticinvoke <android.media.audiofx.AcousticEchoCanceler: boolean isAvailable()>();
+
+     label15:
+        if $z0 == 0 goto label18;
+
+     label16:
+        $z0 = staticinvoke <android.media.audiofx.NoiseSuppressor: boolean isAvailable()>();
+
+     label17:
+        if $z0 == 0 goto label18;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean hardwareAEC> = 1;
+
+        goto label19;
+
+     label18:
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean hardwareAEC> = 0;
+
+     label19:
+        $z0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean hardwareAEC>;
+
+        if $z0 == 0 goto label27;
+
+     label20:
+        $r9 = staticinvoke <android.media.audiofx.AcousticEchoCanceler: android.media.audiofx.AcousticEchoCanceler create(int)>($i0);
+
+     label21:
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.audiofx.AcousticEchoCanceler echoCanceler> = $r9;
+
+        if $r9 == null goto label23;
+
+     label22:
+        virtualinvoke $r9.<android.media.audiofx.AcousticEchoCanceler: int setEnabled(boolean)>(1);
+
+     label23:
+        $r15 = new java.lang.StringBuilder;
+
+        $r10 = $r15;
+
+     label24:
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("IS Hardware NoiseSuppressor enabled ");
+
+        $z0 = staticinvoke <android.media.audiofx.NoiseSuppressor: boolean isAvailable()>();
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("AJAudioRecord", $r11);
+
+        $r12 = staticinvoke <android.media.audiofx.NoiseSuppressor: android.media.audiofx.NoiseSuppressor create(int)>($i0);
+
+     label25:
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.audiofx.NoiseSuppressor noiseSuppressor> = $r12;
+
+        if $r12 == null goto label27;
+
+     label26:
+        virtualinvoke $r12.<android.media.audiofx.NoiseSuppressor: int setEnabled(boolean)>(1);
+
+     label27:
+        $r5 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.AudioRecord m_recorder>;
+
+     label28:
+        virtualinvoke $r5.<android.media.AudioRecord: void startRecording()>();
+
+     label29:
+        return;
+
+     label30:
+        $r13 := @caughtexception;
+
+     label31:
+        exitmonitor $r2;
+
+     label32:
+        throw $r13;
+
+     label33:
+        $r1 := @caughtexception;
+
+     label34:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label30;
+        catch java.lang.InterruptedException from label04 to label05 with label06;
+        catch java.lang.Throwable from label03 to label05 with label30;
+        catch java.lang.Throwable from label07 to label09 with label30;
+        catch java.lang.IllegalStateException from label10 to label11 with label33;
+        catch java.lang.IllegalStateException from label12 to label13 with label33;
+        catch java.lang.IllegalStateException from label14 to label15 with label33;
+        catch java.lang.IllegalStateException from label16 to label17 with label33;
+        catch java.lang.IllegalStateException from label20 to label21 with label33;
+        catch java.lang.IllegalStateException from label22 to label23 with label33;
+        catch java.lang.IllegalStateException from label24 to label25 with label33;
+        catch java.lang.IllegalStateException from label26 to label27 with label33;
+        catch java.lang.IllegalStateException from label28 to label29 with label33;
+        catch java.lang.Throwable from label31 to label32 with label30;
+    }
+
+    public void setIsEnhanced(boolean)
+    {
+        com.adobe.air.microphone.AIRMicrophoneRecorder r0;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.microphone.AIRMicrophoneRecorder;
+
+        $z0 := @parameter0: boolean;
+
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean m_isEnhancedMicrophone> = $z0;
+
+        return;
+    }
+
+    public void setRecording(boolean)
+    {
+        java.lang.Throwable $r4;
+        com.adobe.air.microphone.AIRMicrophoneRecorder r0;
+        int $i0;
+        java.lang.Object $r1, $r2;
+        android.media.AudioRecord $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.microphone.AIRMicrophoneRecorder;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.lang.Object mutex>;
+
+        entermonitor $r1;
+
+     label1:
+        r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean m_isRecording> = $z0;
+
+        $z0 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: boolean m_isRecording>;
+
+        if $z0 == 0 goto label2;
+
+        $r2 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: java.lang.Object mutex>;
+
+        virtualinvoke $r2.<java.lang.Object: void notify()>();
+
+        goto label4;
+
+     label2:
+        $r3 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.AudioRecord m_recorder>;
+
+        $i0 = virtualinvoke $r3.<android.media.AudioRecord: int getState()>();
+
+        if $i0 != 1 goto label3;
+
+        $r3 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.AudioRecord m_recorder>;
+
+        virtualinvoke $r3.<android.media.AudioRecord: void stop()>();
+
+     label3:
+        $r3 = r0.<com.adobe.air.microphone.AIRMicrophoneRecorder: android.media.AudioRecord m_recorder>;
+
+        virtualinvoke $r3.<android.media.AudioRecord: void release()>();
+
+     label4:
+        exitmonitor $r1;
+
+     label5:
+        return;
+
+     label6:
+        $r4 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label7:
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+}

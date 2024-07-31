@@ -1,0 +1,521 @@
+public class com.google.firebase.messaging.ServiceStarter extends java.lang.Object
+{
+    static final java.lang.String ACTION_MESSAGING_EVENT;
+    static final int ERROR_ILLEGAL_STATE_EXCEPTION;
+    static final int ERROR_ILLEGAL_STATE_EXCEPTION_FALLBACK_TO_BIND;
+    static final int ERROR_NOT_FOUND;
+    static final int ERROR_SECURITY_EXCEPTION;
+    public static final int ERROR_UNKNOWN;
+    private static final java.lang.String EXTRA_WRAPPED_INTENT;
+    private static final java.lang.String PERMISSIONS_MISSING_HINT;
+    public static final int SUCCESS;
+    private static com.google.firebase.messaging.ServiceStarter instance;
+    private java.lang.String firebaseMessagingServiceClassName;
+    private java.lang.Boolean hasAccessNetworkStatePermission;
+    private java.lang.Boolean hasWakeLockPermission;
+    private final java.util.Queue messagingEvents;
+
+    private void <init>()
+    {
+        com.google.firebase.messaging.ServiceStarter r0;
+        java.util.ArrayDeque $r1;
+
+        r0 := @this: com.google.firebase.messaging.ServiceStarter;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.google.firebase.messaging.ServiceStarter: java.lang.String firebaseMessagingServiceClassName> = null;
+
+        r0.<com.google.firebase.messaging.ServiceStarter: java.lang.Boolean hasWakeLockPermission> = null;
+
+        r0.<com.google.firebase.messaging.ServiceStarter: java.lang.Boolean hasAccessNetworkStatePermission> = null;
+
+        $r1 = new java.util.ArrayDeque;
+
+        specialinvoke $r1.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<com.google.firebase.messaging.ServiceStarter: java.util.Queue messagingEvents> = $r1;
+
+        return;
+    }
+
+    private int doStartService(android.content.Context, android.content.Intent)
+    {
+        java.lang.Throwable $r7, $r8;
+        android.content.Context $r1;
+        android.content.ComponentName $r6;
+        com.google.firebase.messaging.ServiceStarter r0;
+        android.content.Intent $r2;
+        java.lang.StringBuilder $r4, $r9;
+        java.lang.String $r3, $r5;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.ServiceStarter;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: android.content.Intent;
+
+        $r3 = specialinvoke r0.<com.google.firebase.messaging.ServiceStarter: java.lang.String resolveServiceClassName(android.content.Context,android.content.Intent)>($r1, $r2);
+
+        if $r3 == null goto label02;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z0 == 0 goto label01;
+
+        $r9 = new java.lang.StringBuilder;
+
+        $r4 = $r9;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("Restricting intent to a specific service: ");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("FirebaseMessaging", $r5);
+
+     label01:
+        $r5 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke $r2.<android.content.Intent: android.content.Intent setClassName(java.lang.String,java.lang.String)>($r5, $r3);
+
+     label02:
+        $z0 = virtualinvoke r0.<com.google.firebase.messaging.ServiceStarter: boolean hasWakeLockPermission(android.content.Context)>($r1);
+
+     label03:
+        if $z0 == 0 goto label06;
+
+     label04:
+        $r6 = staticinvoke <com.google.firebase.messaging.WakeLockHolder: android.content.ComponentName startWakefulService(android.content.Context,android.content.Intent)>($r1, $r2);
+
+     label05:
+        goto label08;
+
+     label06:
+        $r6 = virtualinvoke $r1.<android.content.Context: android.content.ComponentName startService(android.content.Intent)>($r2);
+
+     label07:
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("FirebaseMessaging", "Missing wake lock permission, service start may be delayed");
+
+     label08:
+        if $r6 != null goto label11;
+
+     label09:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", "Error while delivering the message: ServiceIntent not found.");
+
+     label10:
+        return 404;
+
+     label11:
+        return -1;
+
+     label12:
+        $r7 := @caughtexception;
+
+        $r9 = new java.lang.StringBuilder;
+
+        $r4 = $r9;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failed to start service while in background: ");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r7);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", $r3);
+
+        return 402;
+
+     label13:
+        $r8 := @caughtexception;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("FirebaseMessaging", "Error while delivering the message to the serviceIntent", $r8);
+
+        return 401;
+
+        catch java.lang.SecurityException from label02 to label03 with label13;
+        catch java.lang.SecurityException from label04 to label05 with label13;
+        catch java.lang.SecurityException from label06 to label07 with label13;
+        catch java.lang.SecurityException from label07 to label08 with label13;
+        catch java.lang.SecurityException from label09 to label10 with label13;
+        catch java.lang.IllegalStateException from label02 to label03 with label12;
+        catch java.lang.IllegalStateException from label04 to label05 with label12;
+        catch java.lang.IllegalStateException from label06 to label07 with label12;
+        catch java.lang.IllegalStateException from label07 to label08 with label12;
+        catch java.lang.IllegalStateException from label09 to label10 with label12;
+    }
+
+    static com.google.firebase.messaging.ServiceStarter getInstance()
+    {
+        com.google.firebase.messaging.ServiceStarter $r0;
+        java.lang.Throwable $r1;
+
+        entermonitor class "Lcom/google/firebase/messaging/ServiceStarter;";
+
+     label1:
+        $r0 = <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter instance>;
+
+        if $r0 != null goto label2;
+
+        $r0 = new com.google.firebase.messaging.ServiceStarter;
+
+        specialinvoke $r0.<com.google.firebase.messaging.ServiceStarter: void <init>()>();
+
+        <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter instance> = $r0;
+
+     label2:
+        $r0 = <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter instance>;
+
+     label3:
+        exitmonitor class "Lcom/google/firebase/messaging/ServiceStarter;";
+
+        return $r0;
+
+     label4:
+        $r1 := @caughtexception;
+
+        exitmonitor class "Lcom/google/firebase/messaging/ServiceStarter;";
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+
+    private java.lang.String resolveServiceClassName(android.content.Context, android.content.Intent)
+    {
+        java.lang.Throwable $r9;
+        android.content.Context $r2;
+        android.content.pm.PackageManager $r4;
+        com.google.firebase.messaging.ServiceStarter r0;
+        android.content.Intent $r3;
+        android.content.pm.ResolveInfo $r5;
+        android.content.pm.ServiceInfo $r6;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r1, $r7;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.ServiceStarter;
+
+        $r2 := @parameter0: android.content.Context;
+
+        $r3 := @parameter1: android.content.Intent;
+
+        entermonitor r0;
+
+     label01:
+        $r1 = r0.<com.google.firebase.messaging.ServiceStarter: java.lang.String firebaseMessagingServiceClassName>;
+
+     label02:
+        if $r1 == null goto label03;
+
+        exitmonitor r0;
+
+        return $r1;
+
+     label03:
+        $r4 = virtualinvoke $r2.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r5 = virtualinvoke $r4.<android.content.pm.PackageManager: android.content.pm.ResolveInfo resolveService(android.content.Intent,int)>($r3, 0);
+
+        if $r5 == null goto label09;
+
+        $r6 = $r5.<android.content.pm.ResolveInfo: android.content.pm.ServiceInfo serviceInfo>;
+
+        if $r6 == null goto label09;
+
+        $r6 = $r5.<android.content.pm.ResolveInfo: android.content.pm.ServiceInfo serviceInfo>;
+
+        $r7 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r1 = $r6.<android.content.pm.ServiceInfo: java.lang.String packageName>;
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label07;
+
+        $r1 = $r6.<android.content.pm.ServiceInfo: java.lang.String name>;
+
+        if $r1 == null goto label07;
+
+        $r1 = $r6.<android.content.pm.ServiceInfo: java.lang.String name>;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>(".");
+
+        if $z0 == 0 goto label04;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = $r6.<android.content.pm.ServiceInfo: java.lang.String name>;
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r0.<com.google.firebase.messaging.ServiceStarter: java.lang.String firebaseMessagingServiceClassName> = $r1;
+
+        goto label05;
+
+     label04:
+        $r1 = $r6.<android.content.pm.ServiceInfo: java.lang.String name>;
+
+        r0.<com.google.firebase.messaging.ServiceStarter: java.lang.String firebaseMessagingServiceClassName> = $r1;
+
+     label05:
+        $r1 = r0.<com.google.firebase.messaging.ServiceStarter: java.lang.String firebaseMessagingServiceClassName>;
+
+     label06:
+        exitmonitor r0;
+
+        return $r1;
+
+     label07:
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("Error resolving target intent service, skipping classname enforcement. Resolved service was: ");
+
+        $r1 = $r6.<android.content.pm.ServiceInfo: java.lang.String packageName>;
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/");
+
+        $r1 = $r6.<android.content.pm.ServiceInfo: java.lang.String name>;
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", $r1);
+
+     label08:
+        exitmonitor r0;
+
+        return null;
+
+     label09:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", "Failed to resolve target intent service, skipping classname enforcement");
+
+     label10:
+        exitmonitor r0;
+
+        return null;
+
+     label11:
+        $r9 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r9;
+
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.lang.Throwable from label03 to label06 with label11;
+        catch java.lang.Throwable from label07 to label08 with label11;
+        catch java.lang.Throwable from label09 to label10 with label11;
+    }
+
+    public static void setForTesting(com.google.firebase.messaging.ServiceStarter)
+    {
+        com.google.firebase.messaging.ServiceStarter $r0;
+
+        $r0 := @parameter0: com.google.firebase.messaging.ServiceStarter;
+
+        <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter instance> = $r0;
+
+        return;
+    }
+
+    android.content.Intent getMessagingEvent()
+    {
+        com.google.firebase.messaging.ServiceStarter r0;
+        java.lang.Object $r1;
+        android.content.Intent $r3;
+        java.util.Queue $r2;
+
+        r0 := @this: com.google.firebase.messaging.ServiceStarter;
+
+        $r2 = r0.<com.google.firebase.messaging.ServiceStarter: java.util.Queue messagingEvents>;
+
+        $r1 = interfaceinvoke $r2.<java.util.Queue: java.lang.Object poll()>();
+
+        $r3 = (android.content.Intent) $r1;
+
+        return $r3;
+    }
+
+    boolean hasAccessNetworkStatePermission(android.content.Context)
+    {
+        android.content.Context $r1;
+        com.google.firebase.messaging.ServiceStarter r0;
+        int $i0;
+        java.lang.Boolean $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.ServiceStarter;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = r0.<com.google.firebase.messaging.ServiceStarter: java.lang.Boolean hasAccessNetworkStatePermission>;
+
+        if $r2 != null goto label3;
+
+        $i0 = virtualinvoke $r1.<android.content.Context: int checkCallingOrSelfPermission(java.lang.String)>("android.permission.ACCESS_NETWORK_STATE");
+
+        if $i0 != 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r2 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        r0.<com.google.firebase.messaging.ServiceStarter: java.lang.Boolean hasAccessNetworkStatePermission> = $r2;
+
+     label3:
+        $r2 = r0.<com.google.firebase.messaging.ServiceStarter: java.lang.Boolean hasWakeLockPermission>;
+
+        $z0 = virtualinvoke $r2.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 != 0 goto label4;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z0 == 0 goto label4;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("FirebaseMessaging", "Missing Permission: android.permission.ACCESS_NETWORK_STATE this should normally be included by the manifest merger, but may needed to be manually added to your manifest");
+
+     label4:
+        $r2 = r0.<com.google.firebase.messaging.ServiceStarter: java.lang.Boolean hasAccessNetworkStatePermission>;
+
+        $z0 = virtualinvoke $r2.<java.lang.Boolean: boolean booleanValue()>();
+
+        return $z0;
+    }
+
+    boolean hasWakeLockPermission(android.content.Context)
+    {
+        android.content.Context $r1;
+        com.google.firebase.messaging.ServiceStarter r0;
+        int $i0;
+        java.lang.Boolean $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.ServiceStarter;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = r0.<com.google.firebase.messaging.ServiceStarter: java.lang.Boolean hasWakeLockPermission>;
+
+        if $r2 != null goto label3;
+
+        $i0 = virtualinvoke $r1.<android.content.Context: int checkCallingOrSelfPermission(java.lang.String)>("android.permission.WAKE_LOCK");
+
+        if $i0 != 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r2 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        r0.<com.google.firebase.messaging.ServiceStarter: java.lang.Boolean hasWakeLockPermission> = $r2;
+
+     label3:
+        $r2 = r0.<com.google.firebase.messaging.ServiceStarter: java.lang.Boolean hasWakeLockPermission>;
+
+        $z0 = virtualinvoke $r2.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 != 0 goto label4;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z0 == 0 goto label4;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("FirebaseMessaging", "Missing Permission: android.permission.WAKE_LOCK this should normally be included by the manifest merger, but may needed to be manually added to your manifest");
+
+     label4:
+        $r2 = r0.<com.google.firebase.messaging.ServiceStarter: java.lang.Boolean hasWakeLockPermission>;
+
+        $z0 = virtualinvoke $r2.<java.lang.Boolean: boolean booleanValue()>();
+
+        return $z0;
+    }
+
+    public int startMessagingService(android.content.Context, android.content.Intent)
+    {
+        android.content.Context $r1;
+        com.google.firebase.messaging.ServiceStarter r0;
+        int $i0;
+        android.content.Intent $r2;
+        java.util.Queue $r3;
+        java.lang.String $r4;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.ServiceStarter;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: android.content.Intent;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("FirebaseMessaging", "Starting service");
+
+     label1:
+        $r3 = r0.<com.google.firebase.messaging.ServiceStarter: java.util.Queue messagingEvents>;
+
+        interfaceinvoke $r3.<java.util.Queue: boolean offer(java.lang.Object)>($r2);
+
+        $r2 = new android.content.Intent;
+
+        specialinvoke $r2.<android.content.Intent: void <init>(java.lang.String)>("com.google.firebase.MESSAGING_EVENT");
+
+        $r4 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke $r2.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>($r4);
+
+        $i0 = specialinvoke r0.<com.google.firebase.messaging.ServiceStarter: int doStartService(android.content.Context,android.content.Intent)>($r1, $r2);
+
+        return $i0;
+    }
+
+    public static void <clinit>()
+    {
+        <com.google.firebase.messaging.ServiceStarter: int SUCCESS> = -1;
+
+        <com.google.firebase.messaging.ServiceStarter: java.lang.String PERMISSIONS_MISSING_HINT> = "this should normally be included by the manifest merger, but may needed to be manually added to your manifest";
+
+        <com.google.firebase.messaging.ServiceStarter: java.lang.String EXTRA_WRAPPED_INTENT> = "wrapped_intent";
+
+        <com.google.firebase.messaging.ServiceStarter: int ERROR_UNKNOWN> = 500;
+
+        <com.google.firebase.messaging.ServiceStarter: int ERROR_SECURITY_EXCEPTION> = 401;
+
+        <com.google.firebase.messaging.ServiceStarter: int ERROR_NOT_FOUND> = 404;
+
+        <com.google.firebase.messaging.ServiceStarter: int ERROR_ILLEGAL_STATE_EXCEPTION_FALLBACK_TO_BIND> = 403;
+
+        <com.google.firebase.messaging.ServiceStarter: int ERROR_ILLEGAL_STATE_EXCEPTION> = 402;
+
+        <com.google.firebase.messaging.ServiceStarter: java.lang.String ACTION_MESSAGING_EVENT> = "com.google.firebase.MESSAGING_EVENT";
+
+        return;
+    }
+}

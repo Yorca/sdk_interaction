@@ -1,0 +1,573 @@
+public final class com.bumptech.glide.load.engine.executor.GlideExecutor extends java.lang.Object implements java.util.concurrent.ExecutorService
+{
+    private static final java.lang.String DEFAULT_ANIMATION_EXECUTOR_NAME;
+    private static final java.lang.String DEFAULT_DISK_CACHE_EXECUTOR_NAME;
+    private static final int DEFAULT_DISK_CACHE_EXECUTOR_THREADS;
+    private static final java.lang.String DEFAULT_SOURCE_EXECUTOR_NAME;
+    private static final java.lang.String DEFAULT_SOURCE_UNLIMITED_EXECUTOR_NAME;
+    private static final long KEEP_ALIVE_TIME_MS;
+    private static final int MAXIMUM_AUTOMATIC_THREAD_COUNT;
+    private static final java.lang.String TAG;
+    private static volatile int bestThreadCount;
+    private final java.util.concurrent.ExecutorService delegate;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.TimeUnit $r0;
+        long $l0;
+
+        <com.bumptech.glide.load.engine.executor.GlideExecutor: java.lang.String TAG> = "GlideExecutor";
+
+        <com.bumptech.glide.load.engine.executor.GlideExecutor: int MAXIMUM_AUTOMATIC_THREAD_COUNT> = 4;
+
+        <com.bumptech.glide.load.engine.executor.GlideExecutor: java.lang.String DEFAULT_SOURCE_UNLIMITED_EXECUTOR_NAME> = "source-unlimited";
+
+        <com.bumptech.glide.load.engine.executor.GlideExecutor: java.lang.String DEFAULT_SOURCE_EXECUTOR_NAME> = "source";
+
+        <com.bumptech.glide.load.engine.executor.GlideExecutor: int DEFAULT_DISK_CACHE_EXECUTOR_THREADS> = 1;
+
+        <com.bumptech.glide.load.engine.executor.GlideExecutor: java.lang.String DEFAULT_DISK_CACHE_EXECUTOR_NAME> = "disk-cache";
+
+        <com.bumptech.glide.load.engine.executor.GlideExecutor: java.lang.String DEFAULT_ANIMATION_EXECUTOR_NAME> = "animation";
+
+        $r0 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $l0 = virtualinvoke $r0.<java.util.concurrent.TimeUnit: long toMillis(long)>(10L);
+
+        <com.bumptech.glide.load.engine.executor.GlideExecutor: long KEEP_ALIVE_TIME_MS> = $l0;
+
+        return;
+    }
+
+    void <init>(java.util.concurrent.ExecutorService)
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r1;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r1 := @parameter0: java.util.concurrent.ExecutorService;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate> = $r1;
+
+        return;
+    }
+
+    public static int calculateBestThreadCount()
+    {
+        int $i0;
+
+        $i0 = <com.bumptech.glide.load.engine.executor.GlideExecutor: int bestThreadCount>;
+
+        if $i0 != 0 goto label1;
+
+        $i0 = staticinvoke <com.bumptech.glide.load.engine.executor.RuntimeCompat: int availableProcessors()>();
+
+        $i0 = staticinvoke <java.lang.Math: int min(int,int)>(4, $i0);
+
+        <com.bumptech.glide.load.engine.executor.GlideExecutor: int bestThreadCount> = $i0;
+
+     label1:
+        $i0 = <com.bumptech.glide.load.engine.executor.GlideExecutor: int bestThreadCount>;
+
+        return $i0;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newAnimationBuilder()
+    {
+        int $i0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r0;
+        byte $b1;
+
+        $i0 = staticinvoke <com.bumptech.glide.load.engine.executor.GlideExecutor: int calculateBestThreadCount()>();
+
+        if $i0 < 4 goto label1;
+
+        $b1 = 2;
+
+        goto label2;
+
+     label1:
+        $b1 = 1;
+
+     label2:
+        $r0 = new com.bumptech.glide.load.engine.executor.GlideExecutor$Builder;
+
+        specialinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: void <init>(boolean)>(1);
+
+        $r0 = virtualinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setThreadCount(int)>($b1);
+
+        $r0 = virtualinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setName(java.lang.String)>("animation");
+
+        return $r0;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor newAnimationExecutor()
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor $r1;
+
+        $r0 = staticinvoke <com.bumptech.glide.load.engine.executor.GlideExecutor: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newAnimationBuilder()>();
+
+        $r1 = virtualinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor build()>();
+
+        return $r1;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor newAnimationExecutor(int, com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy)
+    {
+        int $i0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy $r0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r1;
+        com.bumptech.glide.load.engine.executor.GlideExecutor $r2;
+
+        $i0 := @parameter0: int;
+
+        $r0 := @parameter1: com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy;
+
+        $r1 = staticinvoke <com.bumptech.glide.load.engine.executor.GlideExecutor: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newAnimationBuilder()>();
+
+        $r1 = virtualinvoke $r1.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setThreadCount(int)>($i0);
+
+        $r1 = virtualinvoke $r1.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setUncaughtThrowableStrategy(com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy)>($r0);
+
+        $r2 = virtualinvoke $r1.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor build()>();
+
+        return $r2;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newDiskCacheBuilder()
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r0;
+
+        $r0 = new com.bumptech.glide.load.engine.executor.GlideExecutor$Builder;
+
+        specialinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: void <init>(boolean)>(1);
+
+        $r0 = virtualinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setThreadCount(int)>(1);
+
+        $r0 = virtualinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setName(java.lang.String)>("disk-cache");
+
+        return $r0;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor newDiskCacheExecutor()
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor $r1;
+
+        $r0 = staticinvoke <com.bumptech.glide.load.engine.executor.GlideExecutor: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newDiskCacheBuilder()>();
+
+        $r1 = virtualinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor build()>();
+
+        return $r1;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor newDiskCacheExecutor(int, java.lang.String, com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy)
+    {
+        int $i0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy $r1;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r2;
+        java.lang.String $r0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor $r3;
+
+        $i0 := @parameter0: int;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy;
+
+        $r2 = staticinvoke <com.bumptech.glide.load.engine.executor.GlideExecutor: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newDiskCacheBuilder()>();
+
+        $r2 = virtualinvoke $r2.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setThreadCount(int)>($i0);
+
+        $r2 = virtualinvoke $r2.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setName(java.lang.String)>($r0);
+
+        $r2 = virtualinvoke $r2.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setUncaughtThrowableStrategy(com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy)>($r1);
+
+        $r3 = virtualinvoke $r2.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor build()>();
+
+        return $r3;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor newDiskCacheExecutor(com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy)
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy $r0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r1;
+        com.bumptech.glide.load.engine.executor.GlideExecutor $r2;
+
+        $r0 := @parameter0: com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy;
+
+        $r1 = staticinvoke <com.bumptech.glide.load.engine.executor.GlideExecutor: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newDiskCacheBuilder()>();
+
+        $r1 = virtualinvoke $r1.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setUncaughtThrowableStrategy(com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy)>($r0);
+
+        $r2 = virtualinvoke $r1.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor build()>();
+
+        return $r2;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newSourceBuilder()
+    {
+        int $i0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r0;
+
+        $r0 = new com.bumptech.glide.load.engine.executor.GlideExecutor$Builder;
+
+        specialinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: void <init>(boolean)>(0);
+
+        $i0 = staticinvoke <com.bumptech.glide.load.engine.executor.GlideExecutor: int calculateBestThreadCount()>();
+
+        $r0 = virtualinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setThreadCount(int)>($i0);
+
+        $r0 = virtualinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setName(java.lang.String)>("source");
+
+        return $r0;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor newSourceExecutor()
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor $r1;
+
+        $r0 = staticinvoke <com.bumptech.glide.load.engine.executor.GlideExecutor: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newSourceBuilder()>();
+
+        $r1 = virtualinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor build()>();
+
+        return $r1;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor newSourceExecutor(int, java.lang.String, com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy)
+    {
+        int $i0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy $r1;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r2;
+        java.lang.String $r0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor $r3;
+
+        $i0 := @parameter0: int;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy;
+
+        $r2 = staticinvoke <com.bumptech.glide.load.engine.executor.GlideExecutor: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newSourceBuilder()>();
+
+        $r2 = virtualinvoke $r2.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setThreadCount(int)>($i0);
+
+        $r2 = virtualinvoke $r2.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setName(java.lang.String)>($r0);
+
+        $r2 = virtualinvoke $r2.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setUncaughtThrowableStrategy(com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy)>($r1);
+
+        $r3 = virtualinvoke $r2.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor build()>();
+
+        return $r3;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor newSourceExecutor(com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy)
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy $r0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$Builder $r1;
+        com.bumptech.glide.load.engine.executor.GlideExecutor $r2;
+
+        $r0 := @parameter0: com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy;
+
+        $r1 = staticinvoke <com.bumptech.glide.load.engine.executor.GlideExecutor: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder newSourceBuilder()>();
+
+        $r1 = virtualinvoke $r1.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor$Builder setUncaughtThrowableStrategy(com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy)>($r0);
+
+        $r2 = virtualinvoke $r1.<com.bumptech.glide.load.engine.executor.GlideExecutor$Builder: com.bumptech.glide.load.engine.executor.GlideExecutor build()>();
+
+        return $r2;
+    }
+
+    public static com.bumptech.glide.load.engine.executor.GlideExecutor newUnlimitedSourceExecutor()
+    {
+        java.util.concurrent.TimeUnit $r1;
+        java.util.concurrent.SynchronousQueue $r2;
+        java.util.concurrent.ThreadPoolExecutor $r4;
+        long $l0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$DefaultThreadFactory $r3;
+        com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy $r5;
+        com.bumptech.glide.load.engine.executor.GlideExecutor $r0;
+
+        $r0 = new com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r4 = new java.util.concurrent.ThreadPoolExecutor;
+
+        $l0 = <com.bumptech.glide.load.engine.executor.GlideExecutor: long KEEP_ALIVE_TIME_MS>;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $r2 = new java.util.concurrent.SynchronousQueue;
+
+        specialinvoke $r2.<java.util.concurrent.SynchronousQueue: void <init>()>();
+
+        $r3 = new com.bumptech.glide.load.engine.executor.GlideExecutor$DefaultThreadFactory;
+
+        $r5 = <com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy: com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy DEFAULT>;
+
+        specialinvoke $r3.<com.bumptech.glide.load.engine.executor.GlideExecutor$DefaultThreadFactory: void <init>(java.lang.String,com.bumptech.glide.load.engine.executor.GlideExecutor$UncaughtThrowableStrategy,boolean)>("source-unlimited", $r5, 0);
+
+        specialinvoke $r4.<java.util.concurrent.ThreadPoolExecutor: void <init>(int,int,long,java.util.concurrent.TimeUnit,java.util.concurrent.BlockingQueue,java.util.concurrent.ThreadFactory)>(0, 2147483647, $l0, $r1, $r2, $r3);
+
+        specialinvoke $r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: void <init>(java.util.concurrent.ExecutorService)>($r4);
+
+        return $r0;
+    }
+
+    public boolean awaitTermination(long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException
+    {
+        java.util.concurrent.TimeUnit $r1;
+        long $l0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r2;
+        boolean $z0;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.util.concurrent.TimeUnit;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $z0 = interfaceinvoke $r2.<java.util.concurrent.ExecutorService: boolean awaitTermination(long,java.util.concurrent.TimeUnit)>($l0, $r1);
+
+        return $z0;
+    }
+
+    public void execute(java.lang.Runnable)
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.lang.Runnable $r1;
+        java.util.concurrent.ExecutorService $r2;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        interfaceinvoke $r2.<java.util.concurrent.ExecutorService: void execute(java.lang.Runnable)>($r1);
+
+        return;
+    }
+
+    public java.util.List invokeAll(java.util.Collection) throws java.lang.InterruptedException
+    {
+        java.util.List $r2;
+        java.util.Collection $r3;
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r1;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r3 := @parameter0: java.util.Collection;
+
+        $r1 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $r2 = interfaceinvoke $r1.<java.util.concurrent.ExecutorService: java.util.List invokeAll(java.util.Collection)>($r3);
+
+        return $r2;
+    }
+
+    public java.util.List invokeAll(java.util.Collection, long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException
+    {
+        java.util.concurrent.TimeUnit $r1;
+        java.util.List $r3;
+        java.util.Collection $r4;
+        long $l0;
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r2;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r4 := @parameter0: java.util.Collection;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: java.util.concurrent.TimeUnit;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $r3 = interfaceinvoke $r2.<java.util.concurrent.ExecutorService: java.util.List invokeAll(java.util.Collection,long,java.util.concurrent.TimeUnit)>($r4, $l0, $r1);
+
+        return $r3;
+    }
+
+    public java.lang.Object invokeAny(java.util.Collection) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException
+    {
+        java.util.Collection $r3;
+        java.lang.Object $r2;
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r1;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r3 := @parameter0: java.util.Collection;
+
+        $r1 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $r2 = interfaceinvoke $r1.<java.util.concurrent.ExecutorService: java.lang.Object invokeAny(java.util.Collection)>($r3);
+
+        return $r2;
+    }
+
+    public java.lang.Object invokeAny(java.util.Collection, long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException, java.util.concurrent.TimeoutException
+    {
+        java.util.concurrent.TimeUnit $r1;
+        java.util.Collection $r4;
+        long $l0;
+        java.lang.Object $r3;
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r2;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r4 := @parameter0: java.util.Collection;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: java.util.concurrent.TimeUnit;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $r3 = interfaceinvoke $r2.<java.util.concurrent.ExecutorService: java.lang.Object invokeAny(java.util.Collection,long,java.util.concurrent.TimeUnit)>($r4, $l0, $r1);
+
+        return $r3;
+    }
+
+    public boolean isShutdown()
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r1;
+        boolean $z0;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r1 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $z0 = interfaceinvoke $r1.<java.util.concurrent.ExecutorService: boolean isShutdown()>();
+
+        return $z0;
+    }
+
+    public boolean isTerminated()
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r1;
+        boolean $z0;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r1 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $z0 = interfaceinvoke $r1.<java.util.concurrent.ExecutorService: boolean isTerminated()>();
+
+        return $z0;
+    }
+
+    public void shutdown()
+    {
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r1;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r1 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        interfaceinvoke $r1.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+        return;
+    }
+
+    public java.util.List shutdownNow()
+    {
+        java.util.List $r1;
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r2;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $r1 = interfaceinvoke $r2.<java.util.concurrent.ExecutorService: java.util.List shutdownNow()>();
+
+        return $r1;
+    }
+
+    public java.util.concurrent.Future submit(java.lang.Runnable)
+    {
+        java.util.concurrent.Future $r2;
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.lang.Runnable $r3;
+        java.util.concurrent.ExecutorService $r1;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r3 := @parameter0: java.lang.Runnable;
+
+        $r1 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $r2 = interfaceinvoke $r1.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.lang.Runnable)>($r3);
+
+        return $r2;
+    }
+
+    public java.util.concurrent.Future submit(java.lang.Runnable, java.lang.Object)
+    {
+        java.util.concurrent.Future $r3;
+        java.lang.Object $r1;
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.lang.Runnable $r4;
+        java.util.concurrent.ExecutorService $r2;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r4 := @parameter0: java.lang.Runnable;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $r3 = interfaceinvoke $r2.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.lang.Runnable,java.lang.Object)>($r4, $r1);
+
+        return $r3;
+    }
+
+    public java.util.concurrent.Future submit(java.util.concurrent.Callable)
+    {
+        java.util.concurrent.Future $r2;
+        java.util.concurrent.Callable $r3;
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r1;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r3 := @parameter0: java.util.concurrent.Callable;
+
+        $r1 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $r2 = interfaceinvoke $r1.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.util.concurrent.Callable)>($r3);
+
+        return $r2;
+    }
+
+    public java.lang.String toString()
+    {
+        java.lang.String $r1;
+        com.bumptech.glide.load.engine.executor.GlideExecutor r0;
+        java.util.concurrent.ExecutorService $r2;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.GlideExecutor;
+
+        $r2 = r0.<com.bumptech.glide.load.engine.executor.GlideExecutor: java.util.concurrent.ExecutorService delegate>;
+
+        $r1 = virtualinvoke $r2.<java.lang.Object: java.lang.String toString()>();
+
+        return $r1;
+    }
+}

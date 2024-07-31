@@ -1,0 +1,379 @@
+public class com.vungle.warren.CacheBustManager extends java.lang.Object
+{
+    public static final java.lang.String CACHE_BUST_INTERVAL;
+    private static final int DEFAULT_REFRESH_RATE;
+    static final long MINIMUM_REFRESH_RATE;
+    public static final java.lang.String NEXT_CACHE_BUST;
+    public static final int NO_VALUE;
+    private com.vungle.warren.tasks.JobRunner jobRunner;
+    private long overrideRefreshRate;
+    private long refreshElapsed;
+    long refreshRate;
+    private long startTrackingTime;
+    private int status;
+
+    protected void <init>(com.vungle.warren.tasks.JobRunner)
+    {
+        com.vungle.warren.tasks.JobRunner $r1;
+        com.vungle.warren.utility.ActivityManager $r2;
+        com.vungle.warren.CacheBustManager r0;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.CacheBustManager;
+
+        $r1 := @parameter0: com.vungle.warren.tasks.JobRunner;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.vungle.warren.CacheBustManager: long refreshRate> = 0L;
+
+        r0.<com.vungle.warren.CacheBustManager: long overrideRefreshRate> = -2147483648L;
+
+        r0.<com.vungle.warren.CacheBustManager: com.vungle.warren.tasks.JobRunner jobRunner> = $r1;
+
+        $r2 = staticinvoke <com.vungle.warren.utility.ActivityManager: com.vungle.warren.utility.ActivityManager getInstance()>();
+
+        $z0 = virtualinvoke $r2.<com.vungle.warren.utility.ActivityManager: boolean isInitialized()>();
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<com.vungle.warren.CacheBustManager: void setLifecycleListener()>();
+
+        goto label2;
+
+     label1:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("CacheBustManager", "No lifecycle listener set");
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("CacheBustManager#deliverError", "No lifecycle listener set");
+
+     label2:
+        r0.<com.vungle.warren.CacheBustManager: int status> = 0;
+
+        return;
+    }
+
+    private void setLifecycleListener()
+    {
+        com.vungle.warren.CacheBustManager$1 $r1;
+        com.vungle.warren.utility.ActivityManager $r2;
+        com.vungle.warren.CacheBustManager r0;
+
+        r0 := @this: com.vungle.warren.CacheBustManager;
+
+        $r2 = staticinvoke <com.vungle.warren.utility.ActivityManager: com.vungle.warren.utility.ActivityManager getInstance()>();
+
+        $r1 = new com.vungle.warren.CacheBustManager$1;
+
+        specialinvoke $r1.<com.vungle.warren.CacheBustManager$1: void <init>(com.vungle.warren.CacheBustManager)>(r0);
+
+        virtualinvoke $r2.<com.vungle.warren.utility.ActivityManager: void addListener(com.vungle.warren.utility.ActivityManager$LifeCycleCallback)>($r1);
+
+        return;
+    }
+
+    long getCurrentTime()
+    {
+        long $l0;
+        com.vungle.warren.CacheBustManager r0;
+
+        r0 := @this: com.vungle.warren.CacheBustManager;
+
+        $l0 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        return $l0;
+    }
+
+    void overrideRefreshRate(long)
+    {
+        long $l0;
+        com.vungle.warren.CacheBustManager r0;
+
+        r0 := @this: com.vungle.warren.CacheBustManager;
+
+        $l0 := @parameter0: long;
+
+        r0.<com.vungle.warren.CacheBustManager: long overrideRefreshRate> = $l0;
+
+        r0.<com.vungle.warren.CacheBustManager: long refreshRate> = $l0;
+
+        return;
+    }
+
+    void resumeCacheBust()
+    {
+        android.os.Bundle $r1;
+        long $l0, $l3;
+        com.vungle.warren.CacheBustManager r0;
+        byte $b2;
+        com.vungle.warren.tasks.JobRunner $r2;
+        int $i1;
+        com.vungle.warren.tasks.JobInfo $r3;
+
+        r0 := @this: com.vungle.warren.CacheBustManager;
+
+        $i1 = r0.<com.vungle.warren.CacheBustManager: int status>;
+
+        if $i1 != 0 goto label1;
+
+        $l0 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        $b2 = $l0 cmp 0L;
+
+        if $b2 == 0 goto label1;
+
+        r0.<com.vungle.warren.CacheBustManager: int status> = 1;
+
+        $r1 = new android.os.Bundle;
+
+        specialinvoke $r1.<android.os.Bundle: void <init>()>();
+
+        $l0 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        virtualinvoke $r1.<android.os.Bundle: void putLong(java.lang.String,long)>("cache_bust_interval", $l0);
+
+        $l3 = virtualinvoke r0.<com.vungle.warren.CacheBustManager: long getCurrentTime()>();
+
+        $l0 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        $l0 = $l3 + $l0;
+
+        virtualinvoke $r1.<android.os.Bundle: void putLong(java.lang.String,long)>("next_cache_bust", $l0);
+
+        $r2 = r0.<com.vungle.warren.CacheBustManager: com.vungle.warren.tasks.JobRunner jobRunner>;
+
+        $r3 = staticinvoke <com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.tasks.JobInfo makeJobInfo()>();
+
+        $l0 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        $l3 = r0.<com.vungle.warren.CacheBustManager: long refreshElapsed>;
+
+        $l0 = $l0 - $l3;
+
+        $r3 = virtualinvoke $r3.<com.vungle.warren.tasks.JobInfo: com.vungle.warren.tasks.JobInfo setDelay(long)>($l0);
+
+        $l0 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        $r3 = virtualinvoke $r3.<com.vungle.warren.tasks.JobInfo: com.vungle.warren.tasks.JobInfo setReschedulePolicy(long,int)>($l0, 0);
+
+        $r3 = virtualinvoke $r3.<com.vungle.warren.tasks.JobInfo: com.vungle.warren.tasks.JobInfo setExtras(android.os.Bundle)>($r1);
+
+        interfaceinvoke $r2.<com.vungle.warren.tasks.JobRunner: void execute(com.vungle.warren.tasks.JobInfo)>($r3);
+
+        r0.<com.vungle.warren.CacheBustManager: long refreshElapsed> = 0L;
+
+        $l0 = virtualinvoke r0.<com.vungle.warren.CacheBustManager: long getCurrentTime()>();
+
+        r0.<com.vungle.warren.CacheBustManager: long startTrackingTime> = $l0;
+
+     label1:
+        return;
+    }
+
+    public void setRefreshRate(long)
+    {
+        byte $b0;
+        com.vungle.warren.tasks.JobRunner $r1;
+        int $i3;
+        long $l1, $l2;
+        java.lang.String $r2;
+        com.vungle.warren.CacheBustManager r0;
+
+        r0 := @this: com.vungle.warren.CacheBustManager;
+
+        $l1 := @parameter0: long;
+
+        $l2 = r0.<com.vungle.warren.CacheBustManager: long overrideRefreshRate>;
+
+        $b0 = $l2 cmp -2147483648L;
+
+        if $b0 == 0 goto label1;
+
+        r0.<com.vungle.warren.CacheBustManager: long refreshRate> = $l2;
+
+        return;
+
+     label1:
+        $l2 = 0L;
+
+        $b0 = $l1 cmp 0L;
+
+        $i3 = (int) $b0;
+
+        if $i3 <= 0 goto label2;
+
+        $l2 = staticinvoke <java.lang.Math: long max(long,long)>($l1, 900000L);
+
+     label2:
+        $l1 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        $b0 = $l2 cmp $l1;
+
+        if $b0 == 0 goto label3;
+
+        r0.<com.vungle.warren.CacheBustManager: long refreshRate> = $l2;
+
+        $i3 = r0.<com.vungle.warren.CacheBustManager: int status>;
+
+        if $i3 != 1 goto label3;
+
+        $r1 = r0.<com.vungle.warren.CacheBustManager: com.vungle.warren.tasks.JobRunner jobRunner>;
+
+        $r2 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        interfaceinvoke $r1.<com.vungle.warren.tasks.JobRunner: void cancelPendingJob(java.lang.String)>($r2);
+
+        r0.<com.vungle.warren.CacheBustManager: int status> = 0;
+
+        virtualinvoke r0.<com.vungle.warren.CacheBustManager: void startBust()>();
+
+     label3:
+        return;
+    }
+
+    public void startBust()
+    {
+        java.lang.Throwable $r4;
+        android.os.Bundle $r3;
+        long $l0, $l3;
+        com.vungle.warren.CacheBustManager r0;
+        byte $b2;
+        com.vungle.warren.tasks.JobRunner $r1;
+        int $i1;
+        com.vungle.warren.tasks.JobInfo $r2;
+
+        r0 := @this: com.vungle.warren.CacheBustManager;
+
+        entermonitor r0;
+
+     label1:
+        $i1 = r0.<com.vungle.warren.CacheBustManager: int status>;
+
+     label2:
+        if $i1 != 1 goto label3;
+
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        r0.<com.vungle.warren.CacheBustManager: int status> = 1;
+
+        $l0 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        $b2 = $l0 cmp 0L;
+
+        if $b2 != 0 goto label4;
+
+        $r1 = r0.<com.vungle.warren.CacheBustManager: com.vungle.warren.tasks.JobRunner jobRunner>;
+
+        $r2 = staticinvoke <com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.tasks.JobInfo makeJobInfo()>();
+
+        interfaceinvoke $r1.<com.vungle.warren.tasks.JobRunner: void execute(com.vungle.warren.tasks.JobInfo)>($r2);
+
+        goto label5;
+
+     label4:
+        $r3 = new android.os.Bundle;
+
+        specialinvoke $r3.<android.os.Bundle: void <init>()>();
+
+        $l0 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        virtualinvoke $r3.<android.os.Bundle: void putLong(java.lang.String,long)>("cache_bust_interval", $l0);
+
+        $l0 = virtualinvoke r0.<com.vungle.warren.CacheBustManager: long getCurrentTime()>();
+
+        $l3 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        $l0 = $l0 + $l3;
+
+        virtualinvoke $r3.<android.os.Bundle: void putLong(java.lang.String,long)>("next_cache_bust", $l0);
+
+        $r1 = r0.<com.vungle.warren.CacheBustManager: com.vungle.warren.tasks.JobRunner jobRunner>;
+
+        $r2 = staticinvoke <com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.tasks.JobInfo makeJobInfo()>();
+
+        $l0 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        $r2 = virtualinvoke $r2.<com.vungle.warren.tasks.JobInfo: com.vungle.warren.tasks.JobInfo setReschedulePolicy(long,int)>($l0, 0);
+
+        $r2 = virtualinvoke $r2.<com.vungle.warren.tasks.JobInfo: com.vungle.warren.tasks.JobInfo setExtras(android.os.Bundle)>($r3);
+
+        interfaceinvoke $r1.<com.vungle.warren.tasks.JobRunner: void execute(com.vungle.warren.tasks.JobInfo)>($r2);
+
+     label5:
+        $l0 = virtualinvoke r0.<com.vungle.warren.CacheBustManager: long getCurrentTime()>();
+
+        r0.<com.vungle.warren.CacheBustManager: long startTrackingTime> = $l0;
+
+     label6:
+        exitmonitor r0;
+
+        return;
+
+     label7:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label7;
+        catch java.lang.Throwable from label3 to label6 with label7;
+    }
+
+    void stopCacheBust()
+    {
+        byte $b0;
+        com.vungle.warren.tasks.JobRunner $r2;
+        long $l1, $l2;
+        java.lang.String $r1;
+        com.vungle.warren.CacheBustManager r0;
+
+        r0 := @this: com.vungle.warren.CacheBustManager;
+
+        $l1 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 == 0 goto label1;
+
+        $l1 = virtualinvoke r0.<com.vungle.warren.CacheBustManager: long getCurrentTime()>();
+
+        $l2 = r0.<com.vungle.warren.CacheBustManager: long startTrackingTime>;
+
+        $l1 = $l1 - $l2;
+
+        $l2 = r0.<com.vungle.warren.CacheBustManager: long refreshRate>;
+
+        $l1 = $l1 % $l2;
+
+        r0.<com.vungle.warren.CacheBustManager: long refreshElapsed> = $l1;
+
+     label1:
+        $r2 = r0.<com.vungle.warren.CacheBustManager: com.vungle.warren.tasks.JobRunner jobRunner>;
+
+        $r1 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        interfaceinvoke $r2.<com.vungle.warren.tasks.JobRunner: void cancelPendingJob(java.lang.String)>($r1);
+
+        r0.<com.vungle.warren.CacheBustManager: int status> = 0;
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.vungle.warren.CacheBustManager: int NO_VALUE> = -2147483648;
+
+        <com.vungle.warren.CacheBustManager: java.lang.String NEXT_CACHE_BUST> = "next_cache_bust";
+
+        <com.vungle.warren.CacheBustManager: long MINIMUM_REFRESH_RATE> = 900000L;
+
+        <com.vungle.warren.CacheBustManager: int DEFAULT_REFRESH_RATE> = 0;
+
+        <com.vungle.warren.CacheBustManager: java.lang.String CACHE_BUST_INTERVAL> = "cache_bust_interval";
+
+        return;
+    }
+}

@@ -1,0 +1,621 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader
+{
+    private static final int NAL_UNIT_TYPE_PPS;
+    private static final int NAL_UNIT_TYPE_SEI;
+    private static final int NAL_UNIT_TYPE_SPS;
+    private final boolean allowNonIdrKeyframes;
+    private final boolean detectAccessUnits;
+    private java.lang.String formatId;
+    private boolean hasOutputFormat;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput output;
+    private long pesTimeUs;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps;
+    private final boolean[] prefixFlags;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sei;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader seiReader;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray seiWrapper;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps;
+    private long totalBytesWritten;
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader, boolean, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader r0;
+        boolean[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader $r1;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader;
+
+        $z0 := @parameter1: boolean;
+
+        $z1 := @parameter2: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader seiReader> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean allowNonIdrKeyframes> = $z0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean detectAccessUnits> = $z1;
+
+        $r2 = newarray (boolean)[3];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean[] prefixFlags> = $r2;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void <init>(int,int)>(7, 128);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps> = $r3;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void <init>(int,int)>(8, 128);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps> = $r3;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void <init>(int,int)>(6, 128);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sei> = $r3;
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray seiWrapper> = $r4;
+
+        return;
+    }
+
+    private void endNalUnit(long, int, int, long)
+    {
+        byte[] $r4;
+        long $l0, $l3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$SpsData $r5;
+        java.util.ArrayList $r1, $r12;
+        int $i1, $i2, $i4, $i5;
+        java.lang.String $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r7;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$PpsData $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader r0;
+        float $f0;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader;
+
+        $l0 := @parameter0: long;
+
+        $i1 := @parameter1: int;
+
+        $i2 := @parameter2: int;
+
+        $l3 := @parameter3: long;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean hasOutputFormat>;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: boolean needsSpsPps()>();
+
+        if $z0 == 0 goto label4;
+
+     label1:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: boolean endNalUnit(int)>($i2);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: boolean endNalUnit(int)>($i2);
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean hasOutputFormat>;
+
+        if $z0 != 0 goto label2;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: boolean isCompleted()>();
+
+        if $z0 == 0 goto label4;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: boolean isCompleted()>();
+
+        if $z0 == 0 goto label4;
+
+        $r12 = new java.util.ArrayList;
+
+        $r1 = $r12;
+
+        specialinvoke $r12.<java.util.ArrayList: void <init>()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: byte[] nalData>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: int nalLength>;
+
+        $r4 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>($r4, $i4);
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: byte[] nalData>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: int nalLength>;
+
+        $r4 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>($r4, $i4);
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: byte[] nalData>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: int nalLength>;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil: com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$SpsData parseSpsNalUnit(byte[],int,int)>($r4, 3, $i4);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: byte[] nalData>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: int nalLength>;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil: com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$PpsData parsePpsNalUnit(byte[],int,int)>($r4, 3, $i4);
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput output>;
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: java.lang.String formatId>;
+
+        $i4 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$SpsData: int width>;
+
+        $i5 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$SpsData: int height>;
+
+        $f0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$SpsData: float pixelWidthAspectRatio>;
+
+        $r9 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format createVideoSampleFormat(java.lang.String,java.lang.String,java.lang.String,int,int,int,int,float,java.util.List,int,float,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData)>($r8, "video/avc", null, -1, -1, $i4, $i5, -1.0F, $r1, -1, $f0, null);
+
+        interfaceinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void format(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r9);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean hasOutputFormat> = 1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: void putSps(com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$SpsData)>($r5);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: void putPps(com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$PpsData)>($r6);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void reset()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void reset()>();
+
+        goto label4;
+
+     label2:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: boolean isCompleted()>();
+
+        if $z0 == 0 goto label3;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: byte[] nalData>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: int nalLength>;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil: com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$SpsData parseSpsNalUnit(byte[],int,int)>($r4, 3, $i4);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: void putSps(com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$SpsData)>($r5);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void reset()>();
+
+        goto label4;
+
+     label3:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: boolean isCompleted()>();
+
+        if $z0 == 0 goto label4;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: byte[] nalData>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: int nalLength>;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil: com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$PpsData parsePpsNalUnit(byte[],int,int)>($r4, 3, $i4);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: void putPps(com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil$PpsData)>($r6);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void reset()>();
+
+     label4:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sei>;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: boolean endNalUnit(int)>($i2);
+
+        if $z0 == 0 goto label5;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sei>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: byte[] nalData>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sei>;
+
+        $i2 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: int nalLength>;
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil: int unescapeStream(byte[],int)>($r4, $i2);
+
+        $r10 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray seiWrapper>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sei>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: byte[] nalData>;
+
+        virtualinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset(byte[],int)>($r4, $i2);
+
+        $r10 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray seiWrapper>;
+
+        virtualinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(4);
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader seiReader>;
+
+        $r10 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray seiWrapper>;
+
+        virtualinvoke $r11.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader: void consume(long,com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($l3, $r10);
+
+     label5:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: void endNalUnit(long,int)>($l0, $i1);
+
+        return;
+    }
+
+    private void nalUnitData(byte[], int, int)
+    {
+        byte[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader $r2;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader;
+
+        $r1 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean hasOutputFormat>;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: boolean needsSpsPps()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void appendToNalUnit(byte[],int,int)>($r1, $i0, $i1);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void appendToNalUnit(byte[],int,int)>($r1, $i0, $i1);
+
+     label2:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sei>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void appendToNalUnit(byte[],int,int)>($r1, $i0, $i1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: void appendToNalUnit(byte[],int,int)>($r1, $i0, $i1);
+
+        return;
+    }
+
+    private void startNalUnit(long, int, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader r0;
+        int $i1;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader $r1;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader;
+
+        $l0 := @parameter0: long;
+
+        $i1 := @parameter1: int;
+
+        $l2 := @parameter2: long;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean hasOutputFormat>;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: boolean needsSpsPps()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void startNalUnit(int)>($i1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void startNalUnit(int)>($i1);
+
+     label2:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sei>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void startNalUnit(int)>($i1);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: void startNalUnit(long,int,long)>($l0, $i1, $l2);
+
+        return;
+    }
+
+    public final void consume(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        byte[] $r1;
+        boolean[] $r4;
+        long $l1, $l3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader r0;
+        int $i0, $i2, $i4, $i5, $i6;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i2 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        $r1 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: long totalBytesWritten>;
+
+        $i4 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        $l1 = (long) $i4;
+
+        $l3 = $l3 + $l1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: long totalBytesWritten> = $l3;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput output>;
+
+        $i4 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void sampleData(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r2, $i4);
+
+     label1:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean[] prefixFlags>;
+
+        $i4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil: int findNalUnit(byte[],int,int,boolean[])>($r1, $i0, $i2, $r4);
+
+        if $i4 != $i2 goto label2;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: void nalUnitData(byte[],int,int)>($r1, $i0, $i2);
+
+        return;
+
+     label2:
+        $i5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil: int getNalUnitType(byte[],int)>($r1, $i4);
+
+        $i6 = $i4 - $i0;
+
+        if $i6 <= 0 goto label3;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: void nalUnitData(byte[],int,int)>($r1, $i0, $i4);
+
+     label3:
+        $i0 = $i2 - $i4;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: long totalBytesWritten>;
+
+        $l1 = (long) $i0;
+
+        $l3 = $l3 - $l1;
+
+        if $i6 >= 0 goto label4;
+
+        $i6 = neg $i6;
+
+        goto label5;
+
+     label4:
+        $i6 = 0;
+
+     label5:
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: long pesTimeUs>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: void endNalUnit(long,int,int,long)>($l3, $i0, $i6, $l1);
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: long pesTimeUs>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: void startNalUnit(long,int,long)>($l3, $i5, $l1);
+
+        $i0 = $i4 + 3;
+
+        goto label1;
+    }
+
+    public final void createTracks(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput, com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader r0;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader $r5;
+        java.lang.String $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r4;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator: void generateNewId()>();
+
+        $r3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator: java.lang.String getFormatId()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: java.lang.String formatId> = $r3;
+
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator: int getTrackId()>();
+
+        $r4 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput track(int,int)>($i0, 2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput output> = $r4;
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean allowNonIdrKeyframes>;
+
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean detectAccessUnits>;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput,boolean,boolean)>($r4, $z0, $z1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader> = $r5;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader seiReader>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.SeiReader: void createTracks(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput,com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator)>($r1, $r2);
+
+        return;
+    }
+
+    public final void packetFinished()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader;
+
+        return;
+    }
+
+    public final void packetStarted(long, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader r0;
+        long $l0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader;
+
+        $l0 := @parameter0: long;
+
+        $z0 := @parameter1: boolean;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: long pesTimeUs> = $l0;
+
+        return;
+    }
+
+    public final void seek()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader r0;
+        boolean[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: boolean[] prefixFlags>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.NalUnitUtil: void clearPrefixFlags(boolean[])>($r1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sps>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void reset()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer pps>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void reset()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer sei>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.NalUnitTargetBuffer: void reset()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader sampleReader>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader$SampleReader: void reset()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: long totalBytesWritten> = 0L;
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: int NAL_UNIT_TYPE_SPS> = 7;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: int NAL_UNIT_TYPE_SEI> = 6;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.H264Reader: int NAL_UNIT_TYPE_PPS> = 8;
+
+        return;
+    }
+}

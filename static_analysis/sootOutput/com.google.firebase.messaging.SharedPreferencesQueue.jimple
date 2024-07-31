@@ -1,0 +1,732 @@
+final class com.google.firebase.messaging.SharedPreferencesQueue extends java.lang.Object
+{
+    private boolean bulkOperation;
+    final java.util.ArrayDeque internalQueue;
+    private final java.lang.String itemSeparator;
+    private final java.lang.String queueName;
+    private final android.content.SharedPreferences sharedPreferences;
+    private final java.util.concurrent.Executor syncExecutor;
+
+    public static void $r8$lambda$_dijO1NT18aM7vHHk9LEtlzE6xQ(com.google.firebase.messaging.SharedPreferencesQueue)
+    {
+        com.google.firebase.messaging.SharedPreferencesQueue $r0;
+
+        $r0 := @parameter0: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        specialinvoke $r0.<com.google.firebase.messaging.SharedPreferencesQueue: void syncState()>();
+
+        return;
+    }
+
+    private void <init>(android.content.SharedPreferences, java.lang.String, java.lang.String, java.util.concurrent.Executor)
+    {
+        android.content.SharedPreferences $r1;
+        java.util.concurrent.Executor $r4;
+        java.lang.String $r2, $r3;
+        java.util.ArrayDeque $r5;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 := @parameter0: android.content.SharedPreferences;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.util.concurrent.Executor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r5 = new java.util.ArrayDeque;
+
+        specialinvoke $r5.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue> = $r5;
+
+        r0.<com.google.firebase.messaging.SharedPreferencesQueue: boolean bulkOperation> = 0;
+
+        r0.<com.google.firebase.messaging.SharedPreferencesQueue: android.content.SharedPreferences sharedPreferences> = $r1;
+
+        r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String queueName> = $r2;
+
+        r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String itemSeparator> = $r3;
+
+        r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.concurrent.Executor syncExecutor> = $r4;
+
+        return;
+    }
+
+    private java.lang.String checkAndSyncState(java.lang.String)
+    {
+        java.lang.String $r1;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 := @parameter0: java.lang.String;
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        specialinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: boolean checkAndSyncState(boolean)>($z0);
+
+        return $r1;
+    }
+
+    private boolean checkAndSyncState(boolean)
+    {
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $z0 := @parameter0: boolean;
+
+        if $z0 == 0 goto label1;
+
+        $z1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: boolean bulkOperation>;
+
+        if $z1 != 0 goto label1;
+
+        specialinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: void syncStateAsync()>();
+
+     label1:
+        return $z0;
+    }
+
+    static com.google.firebase.messaging.SharedPreferencesQueue createInstance(android.content.SharedPreferences, java.lang.String, java.lang.String, java.util.concurrent.Executor)
+    {
+        android.content.SharedPreferences $r0;
+        java.util.concurrent.Executor $r3;
+        java.lang.String $r1, $r2;
+        com.google.firebase.messaging.SharedPreferencesQueue $r4;
+
+        $r0 := @parameter0: android.content.SharedPreferences;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.util.concurrent.Executor;
+
+        $r4 = new com.google.firebase.messaging.SharedPreferencesQueue;
+
+        specialinvoke $r4.<com.google.firebase.messaging.SharedPreferencesQueue: void <init>(android.content.SharedPreferences,java.lang.String,java.lang.String,java.util.concurrent.Executor)>($r0, $r1, $r2, $r3);
+
+        specialinvoke $r4.<com.google.firebase.messaging.SharedPreferencesQueue: void initQueue()>();
+
+        return $r4;
+    }
+
+    private void initQueue()
+    {
+        java.lang.Throwable $r7;
+        java.lang.String[] $r6;
+        android.content.SharedPreferences $r4;
+        int $i0, $i1;
+        java.lang.String $r2, $r5;
+        java.util.ArrayDeque $r1, $r3;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label01:
+        $r3 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        virtualinvoke $r3.<java.util.ArrayDeque: void clear()>();
+
+        $r4 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: android.content.SharedPreferences sharedPreferences>;
+
+        $r2 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String queueName>;
+
+        $r2 = interfaceinvoke $r4.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>($r2, "");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label07;
+
+        $r5 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String itemSeparator>;
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean contains(java.lang.CharSequence)>($r5);
+
+        if $z0 == 0 goto label07;
+
+        $r5 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String itemSeparator>;
+
+        $r6 = virtualinvoke $r2.<java.lang.String: java.lang.String[] split(java.lang.String,int)>($r5, -1);
+
+        $i0 = lengthof $r6;
+
+        if $i0 != 0 goto label02;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", "Corrupted queue. Please check the queue contents and item separator provided");
+
+     label02:
+        $i0 = lengthof $r6;
+
+        $i1 = 0;
+
+     label03:
+        if $i1 >= $i0 goto label05;
+
+        $r2 = $r6[$i1];
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label04;
+
+        $r3 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        virtualinvoke $r3.<java.util.ArrayDeque: boolean add(java.lang.Object)>($r2);
+
+     label04:
+        $i1 = $i1 + 1;
+
+        goto label03;
+
+     label05:
+        exitmonitor $r1;
+
+     label06:
+        return;
+
+     label07:
+        exitmonitor $r1;
+
+     label08:
+        return;
+
+     label09:
+        $r7 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label10:
+        throw $r7;
+
+        catch java.lang.Throwable from label01 to label06 with label09;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label09 to label10 with label09;
+    }
+
+    private void syncState()
+    {
+        android.content.SharedPreferences$Editor $r4;
+        java.lang.Throwable $r6;
+        android.content.SharedPreferences $r3;
+        java.lang.String $r2, $r5;
+        java.util.ArrayDeque $r1;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label1:
+        $r3 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: android.content.SharedPreferences sharedPreferences>;
+
+        $r4 = interfaceinvoke $r3.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        $r2 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String queueName>;
+
+        $r5 = virtualinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String serialize()>();
+
+        $r4 = interfaceinvoke $r4.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>($r2, $r5);
+
+        interfaceinvoke $r4.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        exitmonitor $r1;
+
+     label2:
+        return;
+
+     label3:
+        $r6 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    private void syncStateAsync()
+    {
+        com.google.firebase.messaging.SharedPreferencesQueue$$ExternalSyntheticLambda0 $r2;
+        java.util.concurrent.Executor $r1;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.concurrent.Executor syncExecutor>;
+
+        $r2 = new com.google.firebase.messaging.SharedPreferencesQueue$$ExternalSyntheticLambda0;
+
+        specialinvoke $r2.<com.google.firebase.messaging.SharedPreferencesQueue$$ExternalSyntheticLambda0: void <init>(com.google.firebase.messaging.SharedPreferencesQueue)>(r0);
+
+        interfaceinvoke $r1.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    public boolean add(java.lang.String)
+    {
+        java.lang.Throwable $r5;
+        java.lang.String $r2, $r3;
+        java.util.ArrayDeque $r1, $r4;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label5;
+
+        $r3 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String itemSeparator>;
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean contains(java.lang.CharSequence)>($r3);
+
+        if $z0 != 0 goto label5;
+
+        $r4 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r4;
+
+     label1:
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        $z0 = virtualinvoke $r1.<java.util.ArrayDeque: boolean add(java.lang.Object)>($r2);
+
+        $z0 = specialinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: boolean checkAndSyncState(boolean)>($z0);
+
+        exitmonitor $r4;
+
+     label2:
+        return $z0;
+
+     label3:
+        $r5 := @caughtexception;
+
+        exitmonitor $r4;
+
+     label4:
+        throw $r5;
+
+     label5:
+        return 0;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void beginTransaction()
+    {
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        r0.<com.google.firebase.messaging.SharedPreferencesQueue: boolean bulkOperation> = 1;
+
+        return;
+    }
+
+    void beginTransactionSync()
+    {
+        java.lang.Throwable $r2;
+        java.util.ArrayDeque $r1;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label1:
+        virtualinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: void beginTransaction()>();
+
+        exitmonitor $r1;
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void clear()
+    {
+        java.lang.Throwable $r3;
+        java.util.ArrayDeque $r1, $r2;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label1:
+        $r2 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        virtualinvoke $r2.<java.util.ArrayDeque: void clear()>();
+
+        specialinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: boolean checkAndSyncState(boolean)>(1);
+
+        exitmonitor $r1;
+
+     label2:
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void commitTransaction()
+    {
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        r0.<com.google.firebase.messaging.SharedPreferencesQueue: boolean bulkOperation> = 0;
+
+        specialinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: void syncStateAsync()>();
+
+        return;
+    }
+
+    void commitTransactionSync()
+    {
+        java.lang.Throwable $r2;
+        java.util.ArrayDeque $r1;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label1:
+        virtualinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: void commitTransaction()>();
+
+        exitmonitor $r1;
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public java.lang.String peek()
+    {
+        java.lang.Throwable $r5;
+        java.lang.Object $r2;
+        java.lang.String $r4;
+        java.util.ArrayDeque $r1, $r3;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label1:
+        $r3 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        $r2 = virtualinvoke $r3.<java.util.ArrayDeque: java.lang.Object peek()>();
+
+        $r4 = (java.lang.String) $r2;
+
+        exitmonitor $r1;
+
+     label2:
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public java.lang.String remove()
+    {
+        java.lang.Throwable $r5;
+        java.lang.Object $r3;
+        java.lang.String $r4;
+        java.util.ArrayDeque $r1, $r2;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label1:
+        $r2 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        $r3 = virtualinvoke $r2.<java.util.ArrayDeque: java.lang.Object remove()>();
+
+        $r4 = (java.lang.String) $r3;
+
+        $r4 = specialinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String checkAndSyncState(java.lang.String)>($r4);
+
+        exitmonitor $r1;
+
+     label2:
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public boolean remove(java.lang.Object)
+    {
+        java.lang.Throwable $r4;
+        java.lang.Object $r3;
+        java.util.ArrayDeque $r1, $r2;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r3 := @parameter0: java.lang.Object;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label1:
+        $r2 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        $z0 = virtualinvoke $r2.<java.util.ArrayDeque: boolean remove(java.lang.Object)>($r3);
+
+        $z0 = specialinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: boolean checkAndSyncState(boolean)>($z0);
+
+        exitmonitor $r1;
+
+     label2:
+        return $z0;
+
+     label3:
+        $r4 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public java.lang.String serialize()
+    {
+        java.util.Iterator $r3;
+        java.lang.StringBuilder $r1;
+        java.lang.Object $r4;
+        java.lang.String $r5;
+        java.util.ArrayDeque $r2;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        $r3 = virtualinvoke $r2.<java.util.ArrayDeque: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.lang.String) $r4;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String itemSeparator>;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        goto label1;
+
+     label2:
+        $r5 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r5;
+    }
+
+    public java.lang.String serializeSync()
+    {
+        java.lang.Throwable $r3;
+        java.lang.String $r2;
+        java.util.ArrayDeque $r1;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label1:
+        $r2 = virtualinvoke r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.lang.String serialize()>();
+
+        exitmonitor $r1;
+
+     label2:
+        return $r2;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public int size()
+    {
+        java.lang.Throwable $r3;
+        int $i0;
+        java.util.ArrayDeque $r1, $r2;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label1:
+        $r2 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        $i0 = virtualinvoke $r2.<java.util.ArrayDeque: int size()>();
+
+        exitmonitor $r1;
+
+     label2:
+        return $i0;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public java.util.List toList()
+    {
+        java.lang.Throwable $r4;
+        java.util.ArrayDeque $r1, $r2;
+        com.google.firebase.messaging.SharedPreferencesQueue r0;
+        java.util.ArrayList $r3;
+
+        r0 := @this: com.google.firebase.messaging.SharedPreferencesQueue;
+
+        $r1 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        entermonitor $r1;
+
+     label1:
+        $r3 = new java.util.ArrayList;
+
+        $r2 = r0.<com.google.firebase.messaging.SharedPreferencesQueue: java.util.ArrayDeque internalQueue>;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>(java.util.Collection)>($r2);
+
+        exitmonitor $r1;
+
+     label2:
+        return $r3;
+
+     label3:
+        $r4 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+}

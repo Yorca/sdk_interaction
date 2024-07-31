@@ -1,0 +1,2025 @@
+public class com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener
+{
+    private static final int MAX_TIMELINE_ITEM_LINES;
+    private static final java.lang.String TAG;
+    private static final java.text.NumberFormat TIME_FORMAT;
+    private final com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period period;
+    private final long startTimeMs;
+    private final com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector trackSelector;
+    private final com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window;
+
+    static void <clinit>()
+    {
+        java.text.NumberFormat $r0;
+        java.util.Locale $r1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String TAG> = "EventLogger";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: int MAX_TIMELINE_ITEM_LINES> = 3;
+
+        $r1 = <java.util.Locale: java.util.Locale US>;
+
+        $r0 = staticinvoke <java.text.NumberFormat: java.text.NumberFormat getInstance(java.util.Locale)>($r1);
+
+        <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.text.NumberFormat TIME_FORMAT> = $r0;
+
+        virtualinvoke $r0.<java.text.NumberFormat: void setMinimumFractionDigits(int)>(2);
+
+        virtualinvoke $r0.<java.text.NumberFormat: void setMaximumFractionDigits(int)>(2);
+
+        virtualinvoke $r0.<java.text.NumberFormat: void setGroupingUsed(boolean)>(0);
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector trackSelector> = $r1;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window> = $r2;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period period> = $r3;
+
+        $l0 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: long startTimeMs> = $l0;
+
+        return;
+    }
+
+    private static java.lang.String getAdaptiveSupportString(int, int)
+    {
+        int $i0, $i1;
+
+        $i1 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        if $i1 >= 2 goto label1;
+
+        return "N/A";
+
+     label1:
+        if $i0 == 0 goto label4;
+
+        if $i0 == 8 goto label3;
+
+        if $i0 == 16 goto label2;
+
+        return "?";
+
+     label2:
+        return "YES";
+
+     label3:
+        return "YES_NOT_SEAMLESS";
+
+     label4:
+        return "NO";
+    }
+
+    private static java.lang.String getDiscontinuityReasonString(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        if $i0 == 0 goto label5;
+
+        if $i0 == 1 goto label4;
+
+        if $i0 == 2 goto label3;
+
+        if $i0 == 3 goto label2;
+
+        if $i0 == 4 goto label1;
+
+        return "?";
+
+     label1:
+        return "INTERNAL";
+
+     label2:
+        return "AD_INSERTION";
+
+     label3:
+        return "SEEK_ADJUSTMENT";
+
+     label4:
+        return "SEEK";
+
+     label5:
+        return "PERIOD_TRANSITION";
+    }
+
+    private java.lang.String getEventString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, java.lang.String)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r3 := @parameter1: java.lang.String;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" [");
+
+        $r3 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getEventTimeString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)>($r2);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+    private java.lang.String getEventString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, java.lang.String, java.lang.String)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r1, $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r4 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" [");
+
+        $r4 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getEventTimeString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+    }
+
+    private java.lang.String getEventTimeString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId $r5;
+        int $i1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3, $r4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("window=");
+
+        $i1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: int windowIndex>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = $r3;
+
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId mediaPeriodId>;
+
+        if $r5 == null goto label1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", period=");
+
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId mediaPeriodId>;
+
+        $i1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: int periodIndex>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = $r3;
+
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId mediaPeriodId>;
+
+        $z0 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: boolean isAd()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", adGroup=");
+
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId mediaPeriodId>;
+
+        $i1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: int adGroupIndex>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ad=");
+
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId mediaPeriodId>;
+
+        $i1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: int adIndexInAdGroup>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label1:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $l2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: long realtimeMs>;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: long startTimeMs>;
+
+        $l0 = $l2 - $l0;
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTimeString(long)>($l0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $l0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: long currentPlaybackPositionMs>;
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTimeString(long)>($l0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+    }
+
+    private static java.lang.String getFormatSupportString(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        if $i0 == 0 goto label5;
+
+        if $i0 == 1 goto label4;
+
+        if $i0 == 2 goto label3;
+
+        if $i0 == 3 goto label2;
+
+        if $i0 == 4 goto label1;
+
+        return "?";
+
+     label1:
+        return "YES";
+
+     label2:
+        return "NO_EXCEEDS_CAPABILITIES";
+
+     label3:
+        return "NO_UNSUPPORTED_DRM";
+
+     label4:
+        return "NO_UNSUPPORTED_TYPE";
+
+     label5:
+        return "NO";
+    }
+
+    private static java.lang.String getRepeatModeString(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        if $i0 == 0 goto label3;
+
+        if $i0 == 1 goto label2;
+
+        if $i0 == 2 goto label1;
+
+        return "?";
+
+     label1:
+        return "ALL";
+
+     label2:
+        return "ONE";
+
+     label3:
+        return "OFF";
+    }
+
+    private static java.lang.String getStateString(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        if $i0 == 1 goto label4;
+
+        if $i0 == 2 goto label3;
+
+        if $i0 == 3 goto label2;
+
+        if $i0 == 4 goto label1;
+
+        return "?";
+
+     label1:
+        return "ENDED";
+
+     label2:
+        return "READY";
+
+     label3:
+        return "BUFFERING";
+
+     label4:
+        return "IDLE";
+    }
+
+    private static java.lang.String getTimeString(long)
+    {
+        byte $b0;
+        float $f0;
+        long $l1;
+        java.lang.String $r0;
+        java.text.NumberFormat $r1;
+        double $d0;
+
+        $l1 := @parameter0: long;
+
+        $b0 = $l1 cmp -9223372036854775807L;
+
+        if $b0 != 0 goto label1;
+
+        return "?";
+
+     label1:
+        $r1 = <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.text.NumberFormat TIME_FORMAT>;
+
+        $f0 = (float) $l1;
+
+        $f0 = $f0 / 1000.0F;
+
+        $d0 = (double) $f0;
+
+        $r0 = virtualinvoke $r1.<java.text.NumberFormat: java.lang.String format(double)>($d0);
+
+        return $r0;
+    }
+
+    private static java.lang.String getTimelineChangeReasonString(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        if $i0 == 0 goto label3;
+
+        if $i0 == 1 goto label2;
+
+        if $i0 == 2 goto label1;
+
+        return "?";
+
+     label1:
+        return "DYNAMIC";
+
+     label2:
+        return "RESET";
+
+     label3:
+        return "PREPARED";
+    }
+
+    private static java.lang.String getTrackStatusString(com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection, com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r1, $r2;
+        int $i0;
+        java.lang.String $r3;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup;
+
+        $i0 := @parameter2: int;
+
+        if $r0 == null goto label1;
+
+        $r2 = interfaceinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup getTrackGroup()>();
+
+        if $r2 != $r1 goto label1;
+
+        $i0 = interfaceinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection: int indexOf(int)>($i0);
+
+        if $i0 == -1 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTrackStatusString(boolean)>($z0);
+
+        return $r3;
+    }
+
+    private static java.lang.String getTrackStatusString(boolean)
+    {
+        boolean $z0;
+
+        $z0 := @parameter0: boolean;
+
+        if $z0 == 0 goto label1;
+
+        return "[X]";
+
+     label1:
+        return "[ ]";
+    }
+
+    private static java.lang.String getTrackTypeString(int)
+    {
+        int $i0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r0;
+
+        $i0 := @parameter0: int;
+
+        if $i0 == 0 goto label7;
+
+        if $i0 == 1 goto label6;
+
+        if $i0 == 2 goto label5;
+
+        if $i0 == 3 goto label4;
+
+        if $i0 == 4 goto label3;
+
+        if $i0 == 5 goto label2;
+
+        if $i0 < 10000 goto label1;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("custom (");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r0 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r0;
+
+     label1:
+        return "?";
+
+     label2:
+        return "none";
+
+     label3:
+        return "metadata";
+
+     label4:
+        return "text";
+
+     label5:
+        return "video";
+
+     label6:
+        return "audio";
+
+     label7:
+        return "default";
+    }
+
+    private void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, java.lang.String)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r2;
+        java.lang.String $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getEventString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String)>($r2, $r1);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r1);
+
+        return;
+    }
+
+    private void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, java.lang.String, java.lang.String)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.String $r1, $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getEventString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r3, $r1, $r2);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r1);
+
+        return;
+    }
+
+    private void loge(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, java.lang.String, java.lang.String, java.lang.Throwable)
+    {
+        java.lang.Throwable $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.String $r1, $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r4 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.lang.Throwable;
+
+        $r1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getEventString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r4, $r1, $r2);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void loge(java.lang.String,java.lang.Throwable)>($r1, $r3);
+
+        return;
+    }
+
+    private void loge(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, java.lang.String, java.lang.Throwable)
+    {
+        java.lang.Throwable $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.String $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.Throwable;
+
+        $r1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getEventString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String)>($r3, $r1);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void loge(java.lang.String,java.lang.Throwable)>($r1, $r2);
+
+        return;
+    }
+
+    private void printInternalError(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, java.lang.String, java.lang.Exception)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.String $r2;
+        java.lang.Exception $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.Exception;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void loge(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String,java.lang.Throwable)>($r1, "internalError", $r2, $r3);
+
+        return;
+    }
+
+    private void printMetadata(com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata, java.lang.String)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata$Entry $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata $r1;
+        int $i0, $i1;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r2, $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata: int length()>();
+
+        if $i0 >= $i1 goto label2;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata$Entry get(int)>($i0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r5);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected void logd(java.lang.String)
+    {
+        java.lang.String $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: java.lang.String;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("EventLogger", $r1);
+
+        return;
+    }
+
+    protected void loge(java.lang.String, java.lang.Throwable)
+    {
+        java.lang.Throwable $r2;
+        java.lang.String $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.Throwable;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("EventLogger", $r1, $r2);
+
+        return;
+    }
+
+    public void onAudioSessionId(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        int $i0;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "audioSessionId", $r2);
+
+        return;
+    }
+
+    public void onAudioUnderrun(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int, long, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        int $i1;
+        long $l0, $l2;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i1 := @parameter1: int;
+
+        $l2 := @parameter2: long;
+
+        $l0 := @parameter3: long;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l2);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void loge(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String,java.lang.Throwable)>($r1, "audioTrackUnderrun", $r3, null);
+
+        return;
+    }
+
+    public void onBandwidthEstimate(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int, long, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        int $i0;
+        long $l1, $l2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $l1 := @parameter2: long;
+
+        $l2 := @parameter3: long;
+
+        return;
+    }
+
+    public void onDecoderDisabled(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int, com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r3;
+        int $i0;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTrackTypeString(int)>($i0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "decoderDisabled", $r2);
+
+        return;
+    }
+
+    public void onDecoderEnabled(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int, com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters $r3;
+        int $i0;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderCounters;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTrackTypeString(int)>($i0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "decoderEnabled", $r2);
+
+        return;
+    }
+
+    public void onDecoderInitialized(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int, java.lang.String, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        int $i0;
+        long $l1;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r2, $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $l1 := @parameter3: long;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTrackTypeString(int)>($i0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "decoderInitialized", $r2);
+
+        return;
+    }
+
+    public void onDecoderInputFormatChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int, com.mbridge.msdk.playercommon.exoplayer2.Format)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r3;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTrackTypeString(int)>($i0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String toLogString(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "decoderInputFormatChanged", $r4);
+
+        return;
+    }
+
+    public void onDownstreamFormatChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r4;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r3 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData: com.mbridge.msdk.playercommon.exoplayer2.Format trackFormat>;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String toLogString(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r4);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "downstreamFormatChanged", $r2);
+
+        return;
+    }
+
+    public void onDrmKeysLoaded(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String)>($r1, "drmKeysLoaded");
+
+        return;
+    }
+
+    public void onDrmKeysRemoved(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String)>($r1, "drmKeysRemoved");
+
+        return;
+    }
+
+    public void onDrmKeysRestored(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String)>($r1, "drmKeysRestored");
+
+        return;
+    }
+
+    public void onDrmSessionManagerError(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, java.lang.Exception)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.Exception $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r2 := @parameter1: java.lang.Exception;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void printInternalError(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.Exception)>($r1, "drmSessionManagerError", $r2);
+
+        return;
+    }
+
+    public void onDroppedVideoFrames(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        int $i0;
+        long $l1;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $l1 := @parameter2: long;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "droppedFrames", $r2);
+
+        return;
+    }
+
+    public void onLoadCanceled(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData;
+
+        return;
+    }
+
+    public void onLoadCompleted(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData;
+
+        return;
+    }
+
+    public void onLoadError(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData, java.io.IOException, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.io.IOException $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo $r4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r4 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo;
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData;
+
+        $r3 := @parameter3: java.io.IOException;
+
+        $z0 := @parameter4: boolean;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void printInternalError(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.Exception)>($r1, "loadError", $r3);
+
+        return;
+    }
+
+    public void onLoadStarted(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$LoadEventInfo;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData;
+
+        return;
+    }
+
+    public void onLoadingChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $z0 := @parameter1: boolean;
+
+        $r2 = staticinvoke <java.lang.Boolean: java.lang.String toString(boolean)>($z0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "loading", $r2);
+
+        return;
+    }
+
+    public void onMediaPeriodCreated(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String)>($r1, "mediaPeriodCreated");
+
+        return;
+    }
+
+    public void onMediaPeriodReleased(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String)>($r1, "mediaPeriodReleased");
+
+        return;
+    }
+
+    public void onMetadata(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("metadata [");
+
+        $r4 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getEventTimeString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r4);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void printMetadata(com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata,java.lang.String)>($r1, "  ");
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("]");
+
+        return;
+    }
+
+    public void onNetworkTypeChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, android.net.NetworkInfo)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        android.net.NetworkInfo $r3;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r3 := @parameter1: android.net.NetworkInfo;
+
+        if $r3 != null goto label1;
+
+        $r2 = "none";
+
+        goto label2;
+
+     label1:
+        $r2 = virtualinvoke $r3.<android.net.NetworkInfo: java.lang.String toString()>();
+
+     label2:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "networkTypeChanged", $r2);
+
+        return;
+    }
+
+    public void onPlaybackParametersChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters)
+    {
+        java.lang.Float $r4;
+        java.lang.Object[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters $r2;
+        float $f0;
+        java.lang.Boolean $r5;
+        java.lang.String $r6;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters;
+
+        $r3 = newarray (java.lang.Object)[3];
+
+        $f0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters: float speed>;
+
+        $r4 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>($f0);
+
+        $r3[0] = $r4;
+
+        $f0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters: float pitch>;
+
+        $r4 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>($f0);
+
+        $r3[1] = $r4;
+
+        $z0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.PlaybackParameters: boolean skipSilence>;
+
+        $r5 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r3[2] = $r5;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: java.lang.String formatInvariant(java.lang.String,java.lang.Object[])>("speed=%.2f, pitch=%.2f, skipSilence=%s", $r3);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "playbackParameters", $r6);
+
+        return;
+    }
+
+    public void onPlayerError(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void loge(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.Throwable)>($r1, "playerFailed", $r2);
+
+        return;
+    }
+
+    public void onPlayerStateChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, boolean, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        int $i0;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $z0 := @parameter1: boolean;
+
+        $i0 := @parameter2: int;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getStateString(int)>($i0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "state", $r3);
+
+        return;
+    }
+
+    public void onPositionDiscontinuity(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        int $i0;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getDiscontinuityReasonString(int)>($i0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "positionDiscontinuity", $r2);
+
+        return;
+    }
+
+    public void onReadingStarted(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String)>($r1, "mediaPeriodReadingStarted");
+
+        return;
+    }
+
+    public void onRenderedFirstFrame(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, android.view.Surface)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        android.view.Surface $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r3 := @parameter1: android.view.Surface;
+
+        $r2 = virtualinvoke $r3.<android.view.Surface: java.lang.String toString()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "renderedFirstFrame", $r2);
+
+        return;
+    }
+
+    public void onRepeatModeChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        int $i0;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getRepeatModeString(int)>($i0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "repeatMode", $r2);
+
+        return;
+    }
+
+    public void onSeekProcessed(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String)>($r1, "seekProcessed");
+
+        return;
+    }
+
+    public void onSeekStarted(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String)>($r1, "seekStarted");
+
+        return;
+    }
+
+    public void onShuffleModeChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $z0 := @parameter1: boolean;
+
+        $r2 = staticinvoke <java.lang.Boolean: java.lang.String toString(boolean)>($z0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "shuffleModeEnabled", $r2);
+
+        return;
+    }
+
+    public void onTimelineChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        long $l5;
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period $r5;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $r2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: com.mbridge.msdk.playercommon.exoplayer2.Timeline timeline>;
+
+        $i1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: int getPeriodCount()>();
+
+        $r2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: com.mbridge.msdk.playercommon.exoplayer2.Timeline timeline>;
+
+        $i2 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: int getWindowCount()>();
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("timelineChanged [");
+
+        $r4 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getEventTimeString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)>($r1);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", periodCount=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", windowCount=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", reason=");
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTimelineChangeReasonString(int)>($i0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r4);
+
+        $i0 = 0;
+
+        $i3 = 0;
+
+     label1:
+        $i4 = staticinvoke <java.lang.Math: int min(int,int)>($i1, 3);
+
+        if $i3 >= $i4 goto label2;
+
+        $r2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: com.mbridge.msdk.playercommon.exoplayer2.Timeline timeline>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period period>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period getPeriod(int,com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period)>($i3, $r5);
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("  period [");
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period period>;
+
+        $l5 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.Timeline$Period: long getDurationMs()>();
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTimeString(long)>($l5);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r4);
+
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label2:
+        if $i1 <= 3 goto label3;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("  ...");
+
+     label3:
+        $i1 = staticinvoke <java.lang.Math: int min(int,int)>($i2, 3);
+
+        if $i0 >= $i1 goto label4;
+
+        $r2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime: com.mbridge.msdk.playercommon.exoplayer2.Timeline timeline>;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window getWindow(int,com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window)>($i0, $r6);
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("  window [");
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window>;
+
+        $l5 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window: long getDurationMs()>();
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTimeString(long)>($l5);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window>;
+
+        $z0 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window: boolean isSeekable>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window>;
+
+        $z0 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window: boolean isDynamic>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r4);
+
+        $i0 = $i0 + 1;
+
+        goto label3;
+
+     label4:
+        if $i2 <= 3 goto label5;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("  ...");
+
+     label5:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("]");
+
+        return;
+    }
+
+    public void onTracksChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray, com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r12;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo $r5;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.String $r7, $r8, $r11, $r13;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r3, $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata $r15;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r14;
+        java.lang.StringBuilder $r6;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r3 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector trackSelector>;
+
+        if $r4 == null goto label01;
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo getCurrentMappedTrackInfo()>();
+
+        goto label02;
+
+     label01:
+        $r5 = null;
+
+     label02:
+        if $r5 != null goto label03;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "tracksChanged", "[]");
+
+        return;
+
+     label03:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("tracksChanged [");
+
+        $r7 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getEventTimeString(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime)>($r1);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r7);
+
+        $i1 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: int getRendererCount()>();
+
+        $i0 = 0;
+
+     label04:
+        if $i0 >= $i1 goto label13;
+
+        $r3 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getTrackGroups(int)>($i0);
+
+        $r9 = $r3;
+
+        $r10 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelectionArray: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection get(int)>($i0);
+
+        $i2 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int length>;
+
+        if $i2 <= 0 goto label12;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("  Renderer:");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" [");
+
+        $r11 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r11);
+
+        $i2 = 0;
+
+     label05:
+        $i3 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int length>;
+
+        if $i2 >= $i3 goto label08;
+
+        $r12 = virtualinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i2);
+
+        $r3 = $r9;
+
+        $i3 = $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        $i4 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: int getAdaptiveSupport(int,int,boolean)>($i0, $i2, 0);
+
+        $r11 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getAdaptiveSupportString(int,int)>($i3, $i4);
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("    Group:");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", adaptive_supported=");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" [");
+
+        $r11 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r11);
+
+        $i3 = 0;
+
+     label06:
+        $i4 = $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i3 >= $i4 goto label07;
+
+        $r13 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTrackStatusString(com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection,com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int)>($r10, $r12, $i3);
+
+        $i4 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: int getTrackSupport(int,int,int)>($i0, $i2, $i3);
+
+        $r11 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getFormatSupportString(int)>($i4);
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("      ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r13);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" Track:");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i3);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r14 = virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i3);
+
+        $r13 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String toLogString(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r14);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r13);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", supported=");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r11 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r11);
+
+        $i3 = $i3 + 1;
+
+        goto label06;
+
+     label07:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("    ]");
+
+        $i2 = $i2 + 1;
+
+        $r9 = $r3;
+
+        goto label05;
+
+     label08:
+        if $r10 == null goto label11;
+
+        $i2 = 0;
+
+     label09:
+        $i3 = interfaceinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection: int length()>();
+
+        if $i2 >= $i3 goto label11;
+
+        $r14 = interfaceinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i2);
+
+        $r15 = $r14.<com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata metadata>;
+
+        if $r15 == null goto label10;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("    Metadata [");
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void printMetadata(com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata,java.lang.String)>($r15, "      ");
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("    ]");
+
+        goto label11;
+
+     label10:
+        $i2 = $i2 + 1;
+
+        goto label09;
+
+     label11:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("  ]");
+
+        goto label12;
+
+     label12:
+        $i0 = $i0 + 1;
+
+        goto label04;
+
+     label13:
+        $r8 = " [";
+
+        $r3 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getUnmappedTrackGroups()>();
+
+        $i0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int length>;
+
+        if $i0 <= 0 goto label18;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("  Renderer:None [");
+
+        $i0 = 0;
+
+     label14:
+        $i1 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int length>;
+
+        if $i0 >= $i1 goto label17;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("    Group:");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r7 = $r8;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r8);
+
+        $r12 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i0);
+
+        $i1 = 0;
+
+     label15:
+        $i2 = $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i1 >= $i2 goto label16;
+
+        $r11 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getTrackStatusString(boolean)>(0);
+
+        $r8 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: java.lang.String getFormatSupportString(int)>(0);
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("      ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" Track:");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r14 = virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i1);
+
+        $r11 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String toLogString(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r14);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", supported=");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>($r8);
+
+        $i1 = $i1 + 1;
+
+        goto label15;
+
+     label16:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("    ]");
+
+        $i0 = $i0 + 1;
+
+        $r8 = $r7;
+
+        goto label14;
+
+     label17:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("  ]");
+
+     label18:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(java.lang.String)>("]");
+
+        return;
+    }
+
+    public void onUpstreamDiscarded(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r4;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $r3 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$MediaLoadData: com.mbridge.msdk.playercommon.exoplayer2.Format trackFormat>;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String toLogString(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r4);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "upstreamDiscarded", $r2);
+
+        return;
+    }
+
+    public void onVideoSizeChanged(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int, int, int, float)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        int $i0, $i1, $i2;
+        float $f0;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $f0 := @parameter4: float;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "videoSizeChanged", $r2);
+
+        return;
+    }
+
+    public void onViewportSizeChange(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime, int, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger r0;
+        int $i0, $i1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.util.EventLogger: void logd(com.mbridge.msdk.playercommon.exoplayer2.analytics.AnalyticsListener$EventTime,java.lang.String,java.lang.String)>($r1, "viewportSizeChanged", $r3);
+
+        return;
+    }
+}

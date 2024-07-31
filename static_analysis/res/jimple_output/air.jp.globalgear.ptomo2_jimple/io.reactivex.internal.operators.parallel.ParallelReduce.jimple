@@ -1,0 +1,155 @@
+public final class io.reactivex.internal.operators.parallel.ParallelReduce extends io.reactivex.parallel.ParallelFlowable
+{
+    final java.util.concurrent.Callable initialSupplier;
+    final io.reactivex.functions.BiFunction reducer;
+    final io.reactivex.parallel.ParallelFlowable source;
+
+    public void <init>(io.reactivex.parallel.ParallelFlowable, java.util.concurrent.Callable, io.reactivex.functions.BiFunction)
+    {
+        io.reactivex.functions.BiFunction $r3;
+        io.reactivex.parallel.ParallelFlowable $r1;
+        java.util.concurrent.Callable $r2;
+        io.reactivex.internal.operators.parallel.ParallelReduce r0;
+
+        r0 := @this: io.reactivex.internal.operators.parallel.ParallelReduce;
+
+        $r1 := @parameter0: io.reactivex.parallel.ParallelFlowable;
+
+        $r2 := @parameter1: java.util.concurrent.Callable;
+
+        $r3 := @parameter2: io.reactivex.functions.BiFunction;
+
+        specialinvoke r0.<io.reactivex.parallel.ParallelFlowable: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.parallel.ParallelReduce: io.reactivex.parallel.ParallelFlowable source> = $r1;
+
+        r0.<io.reactivex.internal.operators.parallel.ParallelReduce: java.util.concurrent.Callable initialSupplier> = $r2;
+
+        r0.<io.reactivex.internal.operators.parallel.ParallelReduce: io.reactivex.functions.BiFunction reducer> = $r3;
+
+        return;
+    }
+
+    public int parallelism()
+    {
+        int $i0;
+        io.reactivex.parallel.ParallelFlowable $r1;
+        io.reactivex.internal.operators.parallel.ParallelReduce r0;
+
+        r0 := @this: io.reactivex.internal.operators.parallel.ParallelReduce;
+
+        $r1 = r0.<io.reactivex.internal.operators.parallel.ParallelReduce: io.reactivex.parallel.ParallelFlowable source>;
+
+        $i0 = virtualinvoke $r1.<io.reactivex.parallel.ParallelFlowable: int parallelism()>();
+
+        return $i0;
+    }
+
+    void reportError(org.reactivestreams.Subscriber[], java.lang.Throwable)
+    {
+        java.lang.Throwable $r2;
+        int $i0, $i1;
+        io.reactivex.internal.operators.parallel.ParallelReduce r0;
+        org.reactivestreams.Subscriber $r3;
+        org.reactivestreams.Subscriber[] $r1;
+
+        r0 := @this: io.reactivex.internal.operators.parallel.ParallelReduce;
+
+        $r1 := @parameter0: org.reactivestreams.Subscriber[];
+
+        $r2 := @parameter1: java.lang.Throwable;
+
+        $i0 = lengthof $r1;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r3 = $r1[$i1];
+
+        staticinvoke <io.reactivex.internal.subscriptions.EmptySubscription: void error(java.lang.Throwable,org.reactivestreams.Subscriber)>($r2, $r3);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void subscribe(org.reactivestreams.Subscriber[])
+    {
+        io.reactivex.functions.BiFunction $r3;
+        java.lang.Throwable $r8;
+        java.util.concurrent.Callable $r5;
+        org.reactivestreams.Subscriber[] $r1, $r4;
+        io.reactivex.parallel.ParallelFlowable $r9;
+        int $i0, $i1;
+        java.lang.Object $r6;
+        io.reactivex.internal.operators.parallel.ParallelReduce$ParallelReduceSubscriber $r7;
+        io.reactivex.internal.operators.parallel.ParallelReduce r0;
+        org.reactivestreams.Subscriber $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.parallel.ParallelReduce;
+
+        $r4 := @parameter0: org.reactivestreams.Subscriber[];
+
+        $z0 = virtualinvoke r0.<io.reactivex.internal.operators.parallel.ParallelReduce: boolean validate(org.reactivestreams.Subscriber[])>($r4);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $i0 = lengthof $r4;
+
+        $r1 = newarray (org.reactivestreams.Subscriber)[$i0];
+
+        $i1 = 0;
+
+     label2:
+        if $i1 >= $i0 goto label6;
+
+     label3:
+        $r5 = r0.<io.reactivex.internal.operators.parallel.ParallelReduce: java.util.concurrent.Callable initialSupplier>;
+
+        $r6 = interfaceinvoke $r5.<java.util.concurrent.Callable: java.lang.Object call()>();
+
+        $r6 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: java.lang.Object requireNonNull(java.lang.Object,java.lang.String)>($r6, "The initialSupplier returned a null value");
+
+     label4:
+        $r7 = new io.reactivex.internal.operators.parallel.ParallelReduce$ParallelReduceSubscriber;
+
+        $r2 = $r4[$i1];
+
+        $r3 = r0.<io.reactivex.internal.operators.parallel.ParallelReduce: io.reactivex.functions.BiFunction reducer>;
+
+        specialinvoke $r7.<io.reactivex.internal.operators.parallel.ParallelReduce$ParallelReduceSubscriber: void <init>(org.reactivestreams.Subscriber,java.lang.Object,io.reactivex.functions.BiFunction)>($r2, $r6, $r3);
+
+        $r1[$i1] = $r7;
+
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label5:
+        $r8 := @caughtexception;
+
+        staticinvoke <io.reactivex.exceptions.Exceptions: void throwIfFatal(java.lang.Throwable)>($r8);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.parallel.ParallelReduce: void reportError(org.reactivestreams.Subscriber[],java.lang.Throwable)>($r4, $r8);
+
+        return;
+
+     label6:
+        $r9 = r0.<io.reactivex.internal.operators.parallel.ParallelReduce: io.reactivex.parallel.ParallelFlowable source>;
+
+        virtualinvoke $r9.<io.reactivex.parallel.ParallelFlowable: void subscribe(org.reactivestreams.Subscriber[])>($r1);
+
+        return;
+
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+}

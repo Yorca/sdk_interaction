@@ -1,0 +1,561 @@
+public class com.distriqt.core.utils.FileProviderUtils extends java.lang.Object
+{
+    private static final java.lang.String FILEPROVIDER_SUFFIX;
+    public static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        <com.distriqt.core.utils.FileProviderUtils: java.lang.String TAG> = "com.distriqt.core.utils.FileProviderUtils";
+
+        <com.distriqt.core.utils.FileProviderUtils: java.lang.String FILEPROVIDER_SUFFIX> = ".fileprovider";
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.distriqt.core.utils.FileProviderUtils r0;
+
+        r0 := @this: com.distriqt.core.utils.FileProviderUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static android.net.Uri copyAssetToProvider(android.content.Context, java.lang.String)
+    {
+        android.content.Context $r1;
+        android.net.Uri $r4;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r0, $r3;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".fileprovider");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = staticinvoke <com.distriqt.core.utils.FileProviderUtils: android.net.Uri copyAssetToProvider(android.content.Context,java.lang.String,java.lang.String)>($r1, $r0, $r3);
+
+        return $r4;
+    }
+
+    public static android.net.Uri copyAssetToProvider(android.content.Context, java.lang.String, java.lang.String)
+    {
+        android.content.Context $r1;
+        java.lang.Object[] $r4;
+        android.net.Uri $r10;
+        java.io.FileOutputStream $r7;
+        java.io.File $r5, $r6;
+        java.lang.Exception $r11;
+        android.content.res.AssetManager $r8;
+        java.lang.String $r0, $r2, $r3;
+        boolean $z0;
+        java.io.InputStream $r9;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 = <com.distriqt.core.utils.FileProviderUtils: java.lang.String TAG>;
+
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r4[0] = $r2;
+
+        staticinvoke <com.distriqt.core.utils.FREUtils: void log(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "copyAssetToProvider( %s )", $r4);
+
+        $z0 = staticinvoke <com.distriqt.core.utils.Assets: boolean exists(android.content.Context,java.lang.String)>($r1, $r2);
+
+        if $z0 != 0 goto label01;
+
+        return null;
+
+     label01:
+        $r3 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(0, 1);
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("/");
+
+     label02:
+        if $z0 == 0 goto label04;
+
+     label03:
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int)>(1);
+
+     label04:
+        $r3 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>("/", "_");
+
+     label05:
+        $r5 = new java.io.File;
+
+     label06:
+        $r6 = virtualinvoke $r1.<android.content.Context: java.io.File getFilesDir()>();
+
+        specialinvoke $r5.<java.io.File: void <init>(java.io.File,java.lang.String)>($r6, ".distriqt_files");
+
+        virtualinvoke $r5.<java.io.File: boolean mkdirs()>();
+
+     label07:
+        $r6 = new java.io.File;
+
+     label08:
+        specialinvoke $r6.<java.io.File: void <init>(java.io.File,java.lang.String)>($r5, $r3);
+
+        $z0 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+     label09:
+        if $z0 != 0 goto label11;
+
+        $r7 = new java.io.FileOutputStream;
+
+     label10:
+        specialinvoke $r7.<java.io.FileOutputStream: void <init>(java.io.File)>($r6);
+
+        $r8 = virtualinvoke $r1.<android.content.Context: android.content.res.AssetManager getAssets()>();
+
+        $r9 = virtualinvoke $r8.<android.content.res.AssetManager: java.io.InputStream open(java.lang.String)>($r2);
+
+        staticinvoke <com.distriqt.core.utils.FileProviderUtils: void copyFile(java.io.InputStream,java.io.OutputStream)>($r9, $r7);
+
+        virtualinvoke $r7.<java.io.FileOutputStream: void close()>();
+
+        virtualinvoke $r9.<java.io.InputStream: void close()>();
+
+     label11:
+        $r10 = staticinvoke <com.distriqt.core.utils.FileProviderUtils: android.net.Uri getUriForFile(android.content.Context,java.lang.String,java.io.File)>($r1, $r0, $r6);
+
+     label12:
+        return $r10;
+
+     label13:
+        $r11 := @caughtexception;
+
+        virtualinvoke $r11.<java.lang.Exception: void printStackTrace()>();
+
+        return null;
+
+        catch java.lang.Exception from label01 to label02 with label13;
+        catch java.lang.Exception from label03 to label04 with label13;
+        catch java.lang.Exception from label04 to label05 with label13;
+        catch java.lang.Exception from label06 to label07 with label13;
+        catch java.lang.Exception from label08 to label09 with label13;
+        catch java.lang.Exception from label10 to label12 with label13;
+    }
+
+    public static void copyFile(java.io.InputStream, java.io.OutputStream) throws java.io.IOException
+    {
+        java.io.OutputStream $r1;
+        byte[] $r2;
+        int $i0;
+        java.io.InputStream $r0;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r1 := @parameter1: java.io.OutputStream;
+
+        $r2 = newarray (byte)[1024];
+
+     label1:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r2);
+
+        if $i0 == -1 goto label2;
+
+        virtualinvoke $r1.<java.io.OutputStream: void write(byte[],int,int)>($r2, 0, $i0);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public static android.net.Uri copyFileToProvider(android.content.Context, java.lang.String)
+    {
+        android.net.Uri $r1;
+        android.content.Context $r2;
+        java.lang.String $r0;
+
+        $r2 := @parameter0: android.content.Context;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r1 = staticinvoke <com.distriqt.core.utils.FileProviderUtils: android.net.Uri copyFileToProvider(android.content.Context,java.lang.String,boolean)>($r2, $r0, 1);
+
+        return $r1;
+    }
+
+    public static android.net.Uri copyFileToProvider(android.content.Context, java.lang.String, java.lang.String, boolean)
+    {
+        android.content.Context $r3;
+        android.net.Uri $r5;
+        java.lang.String $r0, $r1;
+        java.io.File $r2, $r4;
+        boolean $z0;
+
+        $r3 := @parameter0: android.content.Context;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $z0 := @parameter3: boolean;
+
+        $r2 = new java.io.File;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: java.io.File getFilesDir()>();
+
+        specialinvoke $r2.<java.io.File: void <init>(java.io.File,java.lang.String)>($r4, ".distriqt_files");
+
+        $r5 = staticinvoke <com.distriqt.core.utils.FileProviderUtils: android.net.Uri copyFileToProviderDir(android.content.Context,java.lang.String,java.io.File,java.lang.String,boolean)>($r3, $r0, $r2, $r1, $z0);
+
+        return $r5;
+    }
+
+    public static android.net.Uri copyFileToProvider(android.content.Context, java.lang.String, boolean)
+    {
+        android.content.Context $r1;
+        android.net.Uri $r4;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r0, $r3;
+        boolean $z0;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $z0 := @parameter2: boolean;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".fileprovider");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = staticinvoke <com.distriqt.core.utils.FileProviderUtils: android.net.Uri copyFileToProvider(android.content.Context,java.lang.String,java.lang.String,boolean)>($r1, $r3, $r0, $z0);
+
+        return $r4;
+    }
+
+    public static android.net.Uri copyFileToProviderCache(android.content.Context, java.lang.String, java.lang.String, boolean)
+    {
+        android.content.Context $r3;
+        android.net.Uri $r5;
+        java.lang.String $r0, $r1;
+        java.io.File $r2, $r4;
+        boolean $z0;
+
+        $r3 := @parameter0: android.content.Context;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $z0 := @parameter3: boolean;
+
+        $r2 = new java.io.File;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: java.io.File getCacheDir()>();
+
+        specialinvoke $r2.<java.io.File: void <init>(java.io.File,java.lang.String)>($r4, ".distriqt_cache");
+
+        $r5 = staticinvoke <com.distriqt.core.utils.FileProviderUtils: android.net.Uri copyFileToProviderDir(android.content.Context,java.lang.String,java.io.File,java.lang.String,boolean)>($r3, $r0, $r2, $r1, $z0);
+
+        return $r5;
+    }
+
+    private static android.net.Uri copyFileToProviderDir(android.content.Context, java.lang.String, java.io.File, java.lang.String, boolean)
+    {
+        android.content.Context $r0;
+        java.lang.Object[] $r9;
+        android.net.Uri $r10;
+        java.io.FileOutputStream $r7;
+        java.io.FileInputStream $r8;
+        java.io.File $r2, $r5, $r6;
+        java.lang.Exception $r11;
+        java.lang.String $r1, $r3, $r4;
+        boolean $z0, $z1;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.io.File;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $z0 := @parameter4: boolean;
+
+     label01:
+        $r4 = virtualinvoke $r3.<java.lang.String: java.lang.String substring(int,int)>(0, 7);
+
+        $z1 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("file://");
+
+     label02:
+        if $z1 == 0 goto label04;
+
+     label03:
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String substring(int)>(7);
+
+     label04:
+        $r5 = new java.io.File;
+
+     label05:
+        specialinvoke $r5.<java.io.File: void <init>(java.lang.String)>($r3);
+
+        $z1 = virtualinvoke $r5.<java.io.File: boolean exists()>();
+
+     label06:
+        if $z1 == 0 goto label24;
+
+     label07:
+        virtualinvoke $r2.<java.io.File: boolean mkdirs()>();
+
+     label08:
+        $r6 = new java.io.File;
+
+     label09:
+        $r4 = virtualinvoke $r5.<java.io.File: java.lang.String getName()>();
+
+        specialinvoke $r6.<java.io.File: void <init>(java.io.File,java.lang.String)>($r2, $r4);
+
+     label10:
+        if $z0 == 0 goto label14;
+
+     label11:
+        $z0 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+     label12:
+        if $z0 == 0 goto label14;
+
+     label13:
+        virtualinvoke $r6.<java.io.File: boolean delete()>();
+
+     label14:
+        $z0 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+     label15:
+        if $z0 != 0 goto label20;
+
+        $r7 = new java.io.FileOutputStream;
+
+     label16:
+        specialinvoke $r7.<java.io.FileOutputStream: void <init>(java.io.File)>($r6);
+
+     label17:
+        $r8 = new java.io.FileInputStream;
+
+        $r2 = new java.io.File;
+
+     label18:
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r3);
+
+        specialinvoke $r8.<java.io.FileInputStream: void <init>(java.io.File)>($r2);
+
+        staticinvoke <com.distriqt.core.utils.FileProviderUtils: void copyFile(java.io.InputStream,java.io.OutputStream)>($r8, $r7);
+
+        virtualinvoke $r7.<java.io.FileOutputStream: void close()>();
+
+        virtualinvoke $r8.<java.io.FileInputStream: void close()>();
+
+     label19:
+        goto label22;
+
+     label20:
+        $r3 = <com.distriqt.core.utils.FileProviderUtils: java.lang.String TAG>;
+
+        $r9 = newarray (java.lang.Object)[0];
+
+     label21:
+        staticinvoke <com.distriqt.core.utils.FREUtils: void log(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "file provider file exists", $r9);
+
+     label22:
+        $r10 = staticinvoke <com.distriqt.core.utils.FileProviderUtils: android.net.Uri getUriForFile(android.content.Context,java.lang.String,java.io.File)>($r0, $r1, $r6);
+
+     label23:
+        return $r10;
+
+     label24:
+        $r1 = <com.distriqt.core.utils.FileProviderUtils: java.lang.String TAG>;
+
+        $r9 = newarray (java.lang.Object)[0];
+
+     label25:
+        staticinvoke <com.distriqt.core.utils.FREUtils: void log(java.lang.String,java.lang.String,java.lang.Object[])>($r1, "file doesn\'t exist", $r9);
+
+     label26:
+        return null;
+
+     label27:
+        $r11 := @caughtexception;
+
+        virtualinvoke $r11.<java.lang.Exception: void printStackTrace()>();
+
+        return null;
+
+        catch java.lang.Exception from label01 to label02 with label27;
+        catch java.lang.Exception from label03 to label04 with label27;
+        catch java.lang.Exception from label05 to label06 with label27;
+        catch java.lang.Exception from label07 to label08 with label27;
+        catch java.lang.Exception from label09 to label10 with label27;
+        catch java.lang.Exception from label11 to label12 with label27;
+        catch java.lang.Exception from label13 to label15 with label27;
+        catch java.lang.Exception from label16 to label17 with label27;
+        catch java.lang.Exception from label18 to label19 with label27;
+        catch java.lang.Exception from label21 to label23 with label27;
+        catch java.lang.Exception from label25 to label26 with label27;
+    }
+
+    private static android.net.Uri getUriForFile(android.content.Context, java.lang.String, java.io.File)
+    {
+        android.content.Context $r1;
+        java.lang.Object[] $r4;
+        android.net.Uri $r6;
+        java.io.File $r0;
+        java.lang.Exception $r7;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r2, $r3, $r5;
+        boolean $z0;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r0 := @parameter2: java.io.File;
+
+        $r3 = <com.distriqt.core.utils.FileProviderUtils: java.lang.String TAG>;
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r4[0] = $r2;
+
+        $r5 = virtualinvoke $r0.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r4[1] = $r5;
+
+        staticinvoke <com.distriqt.core.utils.FREUtils: void log(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "getUriForFile( ..., %s, %s )", $r4);
+
+     label1:
+        $r6 = staticinvoke <androidx.core.content.FileProvider: android.net.Uri getUriForFile(android.content.Context,java.lang.String,java.io.File)>($r1, $r2, $r0);
+
+     label2:
+        return $r6;
+
+     label3:
+        $r7 := @caughtexception;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".fileprovider");
+
+        $r3 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 != 0 goto label4;
+
+        $r2 = <com.distriqt.core.utils.FileProviderUtils: java.lang.String TAG>;
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r4[0] = $r3;
+
+        $r5 = virtualinvoke $r0.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r4[1] = $r5;
+
+        staticinvoke <com.distriqt.core.utils.FREUtils: void log(java.lang.String,java.lang.String,java.lang.Object[])>($r2, "getUriForFile( ..., %s, %s )", $r4);
+
+        $r6 = staticinvoke <androidx.core.content.FileProvider: android.net.Uri getUriForFile(android.content.Context,java.lang.String,java.io.File)>($r1, $r3, $r0);
+
+        return $r6;
+
+     label4:
+        throw $r7;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public static void grantPermissions(android.content.Context, android.content.Intent, android.net.Uri)
+    {
+        android.content.Context $r0;
+        java.util.Iterator $r5;
+        android.content.pm.PackageManager $r3;
+        android.net.Uri $r1;
+        android.content.Intent $r2;
+        android.content.pm.ResolveInfo $r7;
+        java.util.List $r4;
+        int $i0;
+        android.content.pm.ActivityInfo $r8;
+        java.lang.Object $r6;
+        java.lang.String $r9;
+        boolean $z0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: android.content.Intent;
+
+        $r1 := @parameter2: android.net.Uri;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 23 goto label1;
+
+        $r3 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r4 = virtualinvoke $r3.<android.content.pm.PackageManager: java.util.List queryIntentActivities(android.content.Intent,int)>($r2, 131072);
+
+        goto label2;
+
+     label1:
+        $r3 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r4 = virtualinvoke $r3.<android.content.pm.PackageManager: java.util.List queryIntentActivities(android.content.Intent,int)>($r2, 65536);
+
+     label2:
+        $r5 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (android.content.pm.ResolveInfo) $r6;
+
+        $r8 = $r7.<android.content.pm.ResolveInfo: android.content.pm.ActivityInfo activityInfo>;
+
+        $r9 = $r8.<android.content.pm.ActivityInfo: java.lang.String packageName>;
+
+        virtualinvoke $r0.<android.content.Context: void grantUriPermission(java.lang.String,android.net.Uri,int)>($r9, $r1, 3);
+
+        goto label3;
+
+     label4:
+        return;
+    }
+}

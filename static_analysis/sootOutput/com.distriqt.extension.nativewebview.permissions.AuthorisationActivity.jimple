@@ -1,0 +1,227 @@
+public class com.distriqt.extension.nativewebview.permissions.AuthorisationActivity extends android.app.Activity
+{
+    public static final java.lang.String EXTRA_PERMISSIONS;
+    private static final int PERMISSIONS_REQUEST;
+    private static final java.lang.String TAG;
+    public static com.distriqt.extension.nativewebview.permissions.AuthorisationCallback callback;
+    private java.lang.String[] _permissions;
+    public android.content.Intent ipcIntent;
+    public android.content.Intent ipcResultIntent;
+
+    static void <clinit>()
+    {
+        <com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: java.lang.String TAG> = "AuthorisationActivity";
+
+        <com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: int PERMISSIONS_REQUEST> = 11;
+
+        <com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: java.lang.String EXTRA_PERMISSIONS> = "extra_permissions";
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.distriqt.extension.nativewebview.permissions.AuthorisationActivity r0;
+
+        r0 := @this: com.distriqt.extension.nativewebview.permissions.AuthorisationActivity;
+
+        specialinvoke r0.<android.app.Activity: void <init>()>();
+
+        return;
+    }
+
+    protected void onCreate(android.os.Bundle)
+    {
+        android.os.Bundle $r1;
+        com.distriqt.extension.nativewebview.permissions.AuthorisationActivity r0;
+        android.content.Intent $r2;
+        java.lang.String[] $r3;
+
+        r0 := @this: com.distriqt.extension.nativewebview.permissions.AuthorisationActivity;
+
+        $r1 := @parameter0: android.os.Bundle;
+
+        specialinvoke r0.<android.app.Activity: void onCreate(android.os.Bundle)>($r1);
+
+        $r2 = virtualinvoke r0.<com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: android.content.Intent getIntent()>();
+
+        $r1 = virtualinvoke $r2.<android.content.Intent: android.os.Bundle getExtras()>();
+
+        $r3 = virtualinvoke $r1.<android.os.Bundle: java.lang.String[] getStringArray(java.lang.String)>("extra_permissions");
+
+        r0.<com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: java.lang.String[] _permissions> = $r3;
+
+        return;
+    }
+
+    public void onRequestPermissionsResult(int, java.lang.String[], int[])
+    {
+        java.lang.Object[] $r1;
+        java.lang.String[] $r2;
+        java.lang.Integer $r5;
+        com.distriqt.core.utils.IExtensionContext $r8;
+        com.distriqt.extension.nativewebview.permissions.AuthorisationCallback $r9;
+        com.distriqt.extension.nativewebview.permissions.AuthorisationActivity r0;
+        int[] $r3;
+        int $i0, $i1, $i2;
+        java.lang.String $r4, $r6, $r7;
+        boolean $z0;
+
+        r0 := @this: com.distriqt.extension.nativewebview.permissions.AuthorisationActivity;
+
+        $i0 := @parameter0: int;
+
+        $r2 := @parameter1: java.lang.String[];
+
+        $r3 := @parameter2: int[];
+
+        $r4 = <com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: java.lang.String TAG>;
+
+        $r1 = newarray (java.lang.Object)[3];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r1[0] = $r5;
+
+        $r1[1] = "";
+
+        $r1[2] = "";
+
+        staticinvoke <com.distriqt.extension.nativewebview.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r4, "onRequestPermissionsResult( %d, %s, %s )", $r1);
+
+        $r4 = "authorised";
+
+        $i1 = 0;
+
+     label1:
+        $i2 = lengthof $r2;
+
+        if $i1 >= $i2 goto label4;
+
+        $r6 = <com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: java.lang.String TAG>;
+
+        $r1 = newarray (java.lang.Object)[2];
+
+        $r7 = $r2[$i1];
+
+        $r1[0] = $r7;
+
+        $i2 = $r3[$i1];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        $r1[1] = $r5;
+
+        staticinvoke <com.distriqt.extension.nativewebview.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r6, "%s=%d", $r1);
+
+        $i2 = $r3[$i1];
+
+        if $i2 == 0 goto label3;
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("denied");
+
+        if $z0 != 0 goto label2;
+
+        $r4 = $r2[$i1];
+
+        $z0 = staticinvoke <androidx.core.app.ActivityCompat: boolean shouldShowRequestPermissionRationale(android.app.Activity,java.lang.String)>(r0, $r4);
+
+        if $z0 == 0 goto label2;
+
+        $r4 = "should_explain";
+
+        goto label3;
+
+     label2:
+        $r4 = "denied";
+
+     label3:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label4:
+        if 11 != $i0 goto label5;
+
+        $r8 = <com.distriqt.extension.nativewebview.permissions.Authorisation: com.distriqt.core.utils.IExtensionContext extContext>;
+
+        if $r8 == null goto label5;
+
+        $r8 = <com.distriqt.extension.nativewebview.permissions.Authorisation: com.distriqt.core.utils.IExtensionContext extContext>;
+
+        $r6 = staticinvoke <com.distriqt.extension.nativewebview.permissions.events.AuthorisationEvent: java.lang.String formatForEvent(java.lang.String)>($r4);
+
+        interfaceinvoke $r8.<com.distriqt.core.utils.IExtensionContext: void dispatchEvent(java.lang.String,java.lang.String)>("authorisation:changed", $r6);
+
+     label5:
+        $r9 = <com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: com.distriqt.extension.nativewebview.permissions.AuthorisationCallback callback>;
+
+        if $r9 == null goto label6;
+
+        interfaceinvoke $r9.<com.distriqt.extension.nativewebview.permissions.AuthorisationCallback: void onRequestPermissionsResult(java.lang.String)>($r4);
+
+     label6:
+        virtualinvoke r0.<com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: void finish()>();
+
+        return;
+    }
+
+    protected void onStart()
+    {
+        java.lang.String[] $r1;
+        com.distriqt.extension.nativewebview.permissions.AuthorisationActivity r0;
+
+        r0 := @this: com.distriqt.extension.nativewebview.permissions.AuthorisationActivity;
+
+        specialinvoke r0.<android.app.Activity: void onStart()>();
+
+        $r1 = r0.<com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: java.lang.String[] _permissions>;
+
+        staticinvoke <androidx.core.app.ActivityCompat: void requestPermissions(android.app.Activity,java.lang.String[],int)>(r0, $r1, 11);
+
+        return;
+    }
+
+    public android.content.Intent getIntent()
+    {
+        android.content.Intent $r0;
+        com.distriqt.extension.nativewebview.permissions.AuthorisationActivity this;
+
+        this := @this: com.distriqt.extension.nativewebview.permissions.AuthorisationActivity;
+
+        $r0 = this.<com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: android.content.Intent ipcIntent>;
+
+        return $r0;
+    }
+
+    public void setIntent(android.content.Intent)
+    {
+        android.content.Intent parameter0;
+        com.distriqt.extension.nativewebview.permissions.AuthorisationActivity this;
+
+        this := @this: com.distriqt.extension.nativewebview.permissions.AuthorisationActivity;
+
+        parameter0 := @parameter0: android.content.Intent;
+
+        this.<com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: android.content.Intent ipcIntent> = parameter0;
+
+        return;
+    }
+
+    public void setResult(int, android.content.Intent)
+    {
+        int parameter0;
+        android.content.Intent parameter1;
+        com.distriqt.extension.nativewebview.permissions.AuthorisationActivity this;
+
+        this := @this: com.distriqt.extension.nativewebview.permissions.AuthorisationActivity;
+
+        parameter0 := @parameter0: int;
+
+        parameter1 := @parameter1: android.content.Intent;
+
+        this.<com.distriqt.extension.nativewebview.permissions.AuthorisationActivity: android.content.Intent ipcResultIntent> = parameter1;
+
+        return;
+    }
+}

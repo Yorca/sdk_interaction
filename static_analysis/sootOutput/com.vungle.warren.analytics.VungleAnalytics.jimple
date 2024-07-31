@@ -1,0 +1,390 @@
+public class com.vungle.warren.analytics.VungleAnalytics extends java.lang.Object implements com.vungle.warren.analytics.AdAnalytics
+{
+    private static final java.lang.String TAG;
+    private final com.vungle.warren.VungleApiClient client;
+    private final com.vungle.warren.persistence.Repository repository;
+
+    static void <clinit>()
+    {
+        <com.vungle.warren.analytics.VungleAnalytics: java.lang.String TAG> = "VungleAnalytics";
+
+        return;
+    }
+
+    public void <init>(com.vungle.warren.VungleApiClient, com.vungle.warren.persistence.Repository)
+    {
+        com.vungle.warren.persistence.Repository $r2;
+        com.vungle.warren.analytics.VungleAnalytics r0;
+        com.vungle.warren.VungleApiClient $r1;
+
+        r0 := @this: com.vungle.warren.analytics.VungleAnalytics;
+
+        $r1 := @parameter0: com.vungle.warren.VungleApiClient;
+
+        $r2 := @parameter1: com.vungle.warren.persistence.Repository;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.vungle.warren.analytics.VungleAnalytics: com.vungle.warren.VungleApiClient client> = $r1;
+
+        r0.<com.vungle.warren.analytics.VungleAnalytics: com.vungle.warren.persistence.Repository repository> = $r2;
+
+        return;
+    }
+
+    static java.lang.String access$000()
+    {
+        java.lang.String r0;
+
+        r0 = <com.vungle.warren.analytics.VungleAnalytics: java.lang.String TAG>;
+
+        return r0;
+    }
+
+    public java.lang.String[] ping(java.lang.String[])
+    {
+        java.lang.Throwable $r2;
+        java.lang.Object[] $r14;
+        com.vungle.warren.VungleApiClient $r8;
+        java.lang.String[] $r5;
+        java.util.ArrayList $r6;
+        com.vungle.warren.persistence.DatabaseHelper$DBException $r3, $r4;
+        com.vungle.warren.persistence.Repository $r9;
+        com.vungle.warren.VungleApiClient$ClearTextTrafficException $r1;
+        int $i0, $i1;
+        java.lang.String $r7, $r11, $r13;
+        boolean $z0;
+        com.vungle.warren.model.AnalyticUrl $r10;
+        com.vungle.warren.analytics.VungleAnalytics r0;
+        java.lang.StringBuilder $r12;
+
+        r0 := @this: com.vungle.warren.analytics.VungleAnalytics;
+
+        $r5 := @parameter0: java.lang.String[];
+
+        $i0 = lengthof $r5;
+
+        if $i0 != 0 goto label01;
+
+        return $r5;
+
+     label01:
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        $i0 = lengthof $r5;
+
+        $i1 = 0;
+
+     label02:
+        if $i1 >= $i0 goto label18;
+
+        $r7 = $r5[$i1];
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r7);
+
+        if $z0 != 0 goto label17;
+
+        $r8 = r0.<com.vungle.warren.analytics.VungleAnalytics: com.vungle.warren.VungleApiClient client>;
+
+     label03:
+        $z0 = virtualinvoke $r8.<com.vungle.warren.VungleApiClient: boolean pingTPAT(java.lang.String)>($r7);
+
+     label04:
+        if $z0 != 0 goto label07;
+
+     label05:
+        virtualinvoke $r6.<java.util.ArrayList: boolean add(java.lang.Object)>($r7);
+
+     label06:
+        goto label17;
+
+     label07:
+        $r9 = r0.<com.vungle.warren.analytics.VungleAnalytics: com.vungle.warren.persistence.Repository repository>;
+
+        $r10 = new com.vungle.warren.model.AnalyticUrl;
+
+     label08:
+        specialinvoke $r10.<com.vungle.warren.model.AnalyticUrl: void <init>(java.lang.String)>($r7);
+
+        virtualinvoke $r9.<com.vungle.warren.persistence.Repository: void delete(java.lang.Object)>($r10);
+
+     label09:
+        goto label17;
+
+     label10:
+        $r11 = <com.vungle.warren.analytics.VungleAnalytics: java.lang.String TAG>;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>(java.lang.String)>("Can\'t delete sent ping URL : ");
+
+        virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r11, $r7);
+
+        goto label17;
+
+     label11:
+        $r9 = r0.<com.vungle.warren.analytics.VungleAnalytics: com.vungle.warren.persistence.Repository repository>;
+
+        $r10 = new com.vungle.warren.model.AnalyticUrl;
+
+     label12:
+        specialinvoke $r10.<com.vungle.warren.model.AnalyticUrl: void <init>(java.lang.String)>($r7);
+
+        virtualinvoke $r9.<com.vungle.warren.persistence.Repository: void delete(java.lang.Object)>($r10);
+
+     label13:
+        goto label15;
+
+     label14:
+        $r11 = <com.vungle.warren.analytics.VungleAnalytics: java.lang.String TAG>;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>(java.lang.String)>("DBException deleting : ");
+
+        virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r11, $r13);
+
+     label15:
+        $r11 = <com.vungle.warren.analytics.VungleAnalytics: java.lang.String TAG>;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>(java.lang.String)>("Invalid Url : ");
+
+        virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r11, $r7);
+
+        goto label17;
+
+     label16:
+        $r11 = <com.vungle.warren.analytics.VungleAnalytics: java.lang.String TAG>;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>(java.lang.String)>("Cleartext Network Traffic is Blocked : ");
+
+        virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r11, $r7);
+
+     label17:
+        $i1 = $i1 + 1;
+
+        goto label02;
+
+     label18:
+        $r5 = newarray (java.lang.String)[0];
+
+        $r14 = virtualinvoke $r6.<java.util.ArrayList: java.lang.Object[] toArray(java.lang.Object[])>($r5);
+
+        $r5 = (java.lang.String[]) $r14;
+
+        return $r5;
+
+     label19:
+        $r1 := @caughtexception;
+
+        goto label16;
+
+     label20:
+        $r2 := @caughtexception;
+
+        goto label11;
+
+     label21:
+        $r3 := @caughtexception;
+
+        goto label10;
+
+     label22:
+        $r4 := @caughtexception;
+
+        goto label14;
+
+        catch com.vungle.warren.VungleApiClient$ClearTextTrafficException from label03 to label04 with label19;
+        catch com.vungle.warren.VungleApiClient$ClearTextTrafficException from label05 to label06 with label19;
+        catch com.vungle.warren.VungleApiClient$ClearTextTrafficException from label08 to label09 with label19;
+        catch java.net.MalformedURLException from label03 to label04 with label20;
+        catch java.net.MalformedURLException from label05 to label06 with label20;
+        catch java.net.MalformedURLException from label08 to label09 with label20;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label03 to label04 with label21;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label05 to label06 with label21;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label08 to label09 with label21;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label12 to label13 with label22;
+    }
+
+    public java.lang.String[] retryUnsent()
+    {
+        java.lang.String[] $r1;
+        com.vungle.warren.model.AnalyticUrl $r6;
+        com.vungle.warren.analytics.VungleAnalytics r0;
+        java.util.List $r5;
+        com.vungle.warren.persistence.Repository $r2;
+        int $i0, $i1;
+        java.lang.Object $r4;
+        java.lang.String $r7;
+        com.vungle.warren.persistence.FutureResult $r3;
+
+        r0 := @this: com.vungle.warren.analytics.VungleAnalytics;
+
+        $r2 = r0.<com.vungle.warren.analytics.VungleAnalytics: com.vungle.warren.persistence.Repository repository>;
+
+        $r3 = virtualinvoke $r2.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult loadAll(java.lang.Class)>(class "Lcom/vungle/warren/model/AnalyticUrl;");
+
+        $r4 = virtualinvoke $r3.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r5 = (java.util.List) $r4;
+
+        $i0 = 0;
+
+        if $r5 == null goto label3;
+
+        $i1 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+        if $i1 <= 0 goto label3;
+
+        $i1 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+        $r1 = newarray (java.lang.String)[$i1];
+
+     label1:
+        if $i0 >= $i1 goto label2;
+
+        $r4 = interfaceinvoke $r5.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r6 = (com.vungle.warren.model.AnalyticUrl) $r4;
+
+        $r7 = $r6.<com.vungle.warren.model.AnalyticUrl: java.lang.String url>;
+
+        $r1[$i0] = $r7;
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        $r1 = virtualinvoke r0.<com.vungle.warren.analytics.VungleAnalytics: java.lang.String[] ping(java.lang.String[])>($r1);
+
+        return $r1;
+
+     label3:
+        $r1 = newarray (java.lang.String)[0];
+
+        return $r1;
+    }
+
+    public void ri(com.google.gson.JsonObject)
+    {
+        com.google.gson.JsonObject $r2;
+        com.vungle.warren.analytics.VungleAnalytics$1 $r4;
+        com.vungle.warren.network.Call $r1;
+        com.vungle.warren.VungleApiClient $r3;
+        com.vungle.warren.analytics.VungleAnalytics r0;
+
+        r0 := @this: com.vungle.warren.analytics.VungleAnalytics;
+
+        $r2 := @parameter0: com.google.gson.JsonObject;
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<com.vungle.warren.analytics.VungleAnalytics: com.vungle.warren.VungleApiClient client>;
+
+        $r1 = virtualinvoke $r3.<com.vungle.warren.VungleApiClient: com.vungle.warren.network.Call ri(com.google.gson.JsonObject)>($r2);
+
+        $r4 = new com.vungle.warren.analytics.VungleAnalytics$1;
+
+        specialinvoke $r4.<com.vungle.warren.analytics.VungleAnalytics$1: void <init>(com.vungle.warren.analytics.VungleAnalytics)>(r0);
+
+        interfaceinvoke $r1.<com.vungle.warren.network.Call: void enqueue(com.vungle.warren.network.Callback)>($r4);
+
+        return;
+    }
+
+    public void saveVungleUrls(java.lang.String[])
+    {
+        java.lang.String[] $r1;
+        com.vungle.warren.model.AnalyticUrl $r5;
+        com.vungle.warren.analytics.VungleAnalytics r0;
+        com.vungle.warren.persistence.DatabaseHelper$DBException $r2;
+        com.vungle.warren.persistence.Repository $r4;
+        int $i0, $i1;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r3, $r6;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.analytics.VungleAnalytics;
+
+        $r1 := @parameter0: java.lang.String[];
+
+        $i0 = lengthof $r1;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label6;
+
+        $r3 = $r1[$i1];
+
+        $z0 = staticinvoke <com.vungle.warren.utility.VungleUrlUtility: boolean isVungleUrl(java.lang.String)>($r3);
+
+        if $z0 == 0 goto label5;
+
+        $r4 = r0.<com.vungle.warren.analytics.VungleAnalytics: com.vungle.warren.persistence.Repository repository>;
+
+        $r5 = new com.vungle.warren.model.AnalyticUrl;
+
+     label2:
+        specialinvoke $r5.<com.vungle.warren.model.AnalyticUrl: void <init>(java.lang.String)>($r3);
+
+        virtualinvoke $r4.<com.vungle.warren.persistence.Repository: void save(java.lang.Object)>($r5);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r6 = <com.vungle.warren.analytics.VungleAnalytics: java.lang.String TAG>;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Can\'t save failed to ping URL : ");
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r6, $r3);
+
+     label5:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label6:
+        return;
+
+     label7:
+        $r2 := @caughtexception;
+
+        goto label4;
+
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label2 to label3 with label7;
+    }
+}

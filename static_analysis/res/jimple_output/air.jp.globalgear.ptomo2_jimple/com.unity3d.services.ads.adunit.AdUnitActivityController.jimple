@@ -1,0 +1,1790 @@
+public class com.unity3d.services.ads.adunit.AdUnitActivityController extends java.lang.Object
+{
+    private int _activityId;
+    private final com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity;
+    private final com.unity3d.services.ads.adunit.IAdUnitViewHandlerFactory _adUnitViewHandlerFactory;
+    private int _displayCutoutMode;
+    private final com.unity3d.services.core.webview.bridge.IEventSender _eventSender;
+    boolean _keepScreenOn;
+    private java.util.ArrayList _keyEventList;
+    protected com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout;
+    private int _orientation;
+    private int _systemUiVisibility;
+    private java.util.Map _viewHandlers;
+    private java.lang.String[] _views;
+
+    public void <init>(com.unity3d.services.ads.adunit.IAdUnitActivity, com.unity3d.services.core.webview.bridge.IEventSender, com.unity3d.services.ads.adunit.IAdUnitViewHandlerFactory)
+    {
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        com.unity3d.services.core.webview.bridge.IEventSender $r2;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r1;
+        com.unity3d.services.ads.adunit.IAdUnitViewHandlerFactory $r3;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 := @parameter0: com.unity3d.services.ads.adunit.IAdUnitActivity;
+
+        $r2 := @parameter1: com.unity3d.services.core.webview.bridge.IEventSender;
+
+        $r3 := @parameter2: com.unity3d.services.ads.adunit.IAdUnitViewHandlerFactory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _orientation> = -1;
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity> = $r1;
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender> = $r2;
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitViewHandlerFactory _adUnitViewHandlerFactory> = $r3;
+
+        return;
+    }
+
+    private com.unity3d.services.ads.adunit.IAdUnitViewHandler createViewHandler(java.lang.String)
+    {
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r2;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        java.lang.String $r3;
+        com.unity3d.services.ads.adunit.IAdUnitViewHandlerFactory $r1;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitViewHandlerFactory _adUnitViewHandlerFactory>;
+
+        $r2 = interfaceinvoke $r1.<com.unity3d.services.ads.adunit.IAdUnitViewHandlerFactory: com.unity3d.services.ads.adunit.IAdUnitViewHandler createViewHandler(java.lang.String)>($r3);
+
+        return $r2;
+    }
+
+    private boolean handleViewPlacement(android.view.View)
+    {
+        android.widget.RelativeLayout$LayoutParams $r6;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        android.view.ViewParent $r3;
+        android.view.View $r1;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r2;
+        com.unity3d.services.ads.adunit.AdUnitRelativeLayout $r4;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 := @parameter0: android.view.View;
+
+        if $r1 != null goto label1;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: void finish()>();
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Could not place view because it is null, finishing activity");
+
+        return 0;
+
+     label1:
+        $r3 = virtualinvoke $r1.<android.view.View: android.view.ViewParent getParent()>();
+
+        if $r3 == null goto label2;
+
+        $r3 = virtualinvoke $r1.<android.view.View: android.view.ViewParent getParent()>();
+
+        $r4 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        $z0 = virtualinvoke $r3.<java.lang.Object: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label2;
+
+        $r4 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        virtualinvoke $r4.<com.unity3d.services.ads.adunit.AdUnitRelativeLayout: void bringChildToFront(android.view.View)>($r1);
+
+        goto label3;
+
+     label2:
+        staticinvoke <com.unity3d.services.core.misc.ViewUtilities: void removeViewFromParent(android.view.View)>($r1);
+
+        $r6 = new android.widget.RelativeLayout$LayoutParams;
+
+        specialinvoke $r6.<android.widget.RelativeLayout$LayoutParams: void <init>(int,int)>(-1, -1);
+
+        virtualinvoke $r6.<android.widget.RelativeLayout$LayoutParams: void addRule(int)>(13);
+
+        virtualinvoke $r6.<android.widget.RelativeLayout$LayoutParams: void setMargins(int,int,int,int)>(0, 0, 0, 0);
+
+        virtualinvoke $r1.<android.view.View: void setPadding(int,int,int,int)>(0, 0, 0, 0);
+
+        $r4 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        virtualinvoke $r4.<com.unity3d.services.ads.adunit.AdUnitRelativeLayout: void addView(android.view.View,android.view.ViewGroup$LayoutParams)>($r1, $r6);
+
+     label3:
+        return 1;
+    }
+
+    protected void createLayout()
+    {
+        android.widget.RelativeLayout$LayoutParams $r5;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        android.content.Context $r1;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r3;
+        android.graphics.drawable.ColorDrawable $r6;
+        com.unity3d.services.ads.adunit.AdUnitRelativeLayout $r2, $r4;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        if $r2 == null goto label1;
+
+        return;
+
+     label1:
+        $r4 = new com.unity3d.services.ads.adunit.AdUnitRelativeLayout;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r1 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Context getContext()>();
+
+        specialinvoke $r4.<com.unity3d.services.ads.adunit.AdUnitRelativeLayout: void <init>(android.content.Context)>($r1);
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout> = $r4;
+
+        $r5 = new android.widget.RelativeLayout$LayoutParams;
+
+        specialinvoke $r5.<android.widget.RelativeLayout$LayoutParams: void <init>(int,int)>(-1, -1);
+
+        virtualinvoke $r4.<com.unity3d.services.ads.adunit.AdUnitRelativeLayout: void setLayoutParams(android.view.ViewGroup$LayoutParams)>($r5);
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        $r6 = new android.graphics.drawable.ColorDrawable;
+
+        specialinvoke $r6.<android.graphics.drawable.ColorDrawable: void <init>(int)>(-16777216);
+
+        staticinvoke <com.unity3d.services.core.misc.ViewUtilities: void setBackground(android.view.View,android.graphics.drawable.Drawable)>($r2, $r6);
+
+        return;
+    }
+
+    public com.unity3d.services.ads.adunit.AdUnitRelativeLayout getLayout()
+    {
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        com.unity3d.services.ads.adunit.AdUnitRelativeLayout r1;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        return r1;
+    }
+
+    public java.util.Map getViewFrame(java.lang.String)
+    {
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r2;
+        android.view.ViewGroup$LayoutParams $r4;
+        java.util.HashMap $r6;
+        java.lang.Integer $r7;
+        android.widget.RelativeLayout$LayoutParams $r9;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        int $i0;
+        android.view.View $r8;
+        java.lang.String $r1;
+        com.unity3d.services.ads.adunit.AdUnitRelativeLayout $r3;
+        android.widget.FrameLayout$LayoutParams $r5;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitViewHandler getViewHandler(java.lang.String)>($r1);
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("adunit");
+
+        if $z0 == 0 goto label1;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        $r4 = virtualinvoke $r3.<com.unity3d.services.ads.adunit.AdUnitRelativeLayout: android.view.ViewGroup$LayoutParams getLayoutParams()>();
+
+        $r5 = (android.widget.FrameLayout$LayoutParams) $r4;
+
+        $r6 = new java.util.HashMap;
+
+        specialinvoke $r6.<java.util.HashMap: void <init>()>();
+
+        $i0 = $r5.<android.widget.FrameLayout$LayoutParams: int leftMargin>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        virtualinvoke $r6.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("x", $r7);
+
+        $i0 = $r5.<android.widget.FrameLayout$LayoutParams: int topMargin>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        virtualinvoke $r6.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("y", $r7);
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        $i0 = virtualinvoke $r3.<com.unity3d.services.ads.adunit.AdUnitRelativeLayout: int getWidth()>();
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        virtualinvoke $r6.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("width", $r7);
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        $i0 = virtualinvoke $r3.<com.unity3d.services.ads.adunit.AdUnitRelativeLayout: int getHeight()>();
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        virtualinvoke $r6.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("height", $r7);
+
+        return $r6;
+
+     label1:
+        if $r2 == null goto label2;
+
+        $r8 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: android.view.View getView()>();
+
+        goto label3;
+
+     label2:
+        $r8 = null;
+
+     label3:
+        if $r8 == null goto label4;
+
+        $r4 = virtualinvoke $r8.<android.view.View: android.view.ViewGroup$LayoutParams getLayoutParams()>();
+
+        $r9 = (android.widget.RelativeLayout$LayoutParams) $r4;
+
+        $r6 = new java.util.HashMap;
+
+        specialinvoke $r6.<java.util.HashMap: void <init>()>();
+
+        $i0 = $r9.<android.widget.RelativeLayout$LayoutParams: int leftMargin>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        virtualinvoke $r6.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("x", $r7);
+
+        $i0 = $r9.<android.widget.RelativeLayout$LayoutParams: int topMargin>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        virtualinvoke $r6.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("y", $r7);
+
+        $i0 = virtualinvoke $r8.<android.view.View: int getWidth()>();
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        virtualinvoke $r6.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("width", $r7);
+
+        $i0 = virtualinvoke $r8.<android.view.View: int getHeight()>();
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        virtualinvoke $r6.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("height", $r7);
+
+        return $r6;
+
+     label4:
+        return null;
+    }
+
+    public com.unity3d.services.ads.adunit.IAdUnitViewHandler getViewHandler(java.lang.String)
+    {
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r4;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        java.util.Map $r2;
+        java.lang.Object $r3;
+        java.util.HashMap $r5;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.Map _viewHandlers>;
+
+        if $r2 == null goto label1;
+
+        $z0 = interfaceinvoke $r2.<java.util.Map: boolean containsKey(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.Map _viewHandlers>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>($r1);
+
+        $r4 = (com.unity3d.services.ads.adunit.IAdUnitViewHandler) $r3;
+
+        return $r4;
+
+     label1:
+        $r4 = specialinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitViewHandler createViewHandler(java.lang.String)>($r1);
+
+        if $r4 == null goto label3;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.Map _viewHandlers>;
+
+        if $r2 != null goto label2;
+
+        $r5 = new java.util.HashMap;
+
+        specialinvoke $r5.<java.util.HashMap: void <init>()>();
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.Map _viewHandlers> = $r5;
+
+     label2:
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.Map _viewHandlers>;
+
+        interfaceinvoke $r2.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r1, $r4);
+
+     label3:
+        return $r4;
+    }
+
+    public java.lang.String[] getViews()
+    {
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        java.lang.String[] r1;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.lang.String[] _views>;
+
+        return r1;
+    }
+
+    public void onCreate(android.os.Bundle)
+    {
+        android.os.Bundle $r1;
+        java.lang.Object[] $r14;
+        com.unity3d.services.ads.adunit.AdUnitEvent $r10;
+        android.content.Intent $r7;
+        java.lang.String[] $r8;
+        java.lang.Integer $r15;
+        java.util.ArrayList $r9;
+        com.unity3d.services.core.webview.WebViewEventCategory $r13;
+        int $i0, $i1;
+        java.lang.String $r11;
+        com.unity3d.services.ads.adunit.AdUnitRelativeLayout $r5;
+        boolean $z0;
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r12;
+        com.unity3d.services.core.webview.bridge.IEventSender $r2;
+        android.view.ViewGroup$LayoutParams $r6;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r3;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        android.app.Activity $r4;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 := @parameter0: android.os.Bundle;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $z0 = interfaceinvoke $r2.<com.unity3d.services.core.webview.bridge.IEventSender: boolean canSend()>();
+
+        if $z0 != 0 goto label01;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Unity Ads web app is null, closing Unity Ads activity from onCreate");
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: void finish()>();
+
+        return;
+
+     label01:
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        staticinvoke <com.unity3d.services.ads.api.AdUnit: void setAdUnitActivity(com.unity3d.services.ads.adunit.IAdUnitActivity)>($r3);
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r4 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.app.Activity getActivity()>();
+
+        staticinvoke <com.unity3d.services.core.api.Intent: void setActiveActivity(android.app.Activity)>($r4);
+
+        virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: void createLayout()>();
+
+        $r5 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        staticinvoke <com.unity3d.services.core.misc.ViewUtilities: void removeViewFromParent(android.view.View)>($r5);
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r5 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        $r6 = virtualinvoke $r5.<com.unity3d.services.ads.adunit.AdUnitRelativeLayout: android.view.ViewGroup$LayoutParams getLayoutParams()>();
+
+        interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: void addContentView(android.view.View,android.view.ViewGroup$LayoutParams)>($r5, $r6);
+
+        if $r1 != null goto label06;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r7 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Intent getIntent()>();
+
+        $r8 = virtualinvoke $r7.<android.content.Intent: java.lang.String[] getStringArrayExtra(java.lang.String)>("views");
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.lang.String[] _views> = $r8;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r7 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Intent getIntent()>();
+
+        $r9 = virtualinvoke $r7.<android.content.Intent: java.util.ArrayList getIntegerArrayListExtra(java.lang.String)>("keyEvents");
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.ArrayList _keyEventList> = $r9;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r7 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Intent getIntent()>();
+
+        $z0 = virtualinvoke $r7.<android.content.Intent: boolean hasExtra(java.lang.String)>("orientation");
+
+        if $z0 == 0 goto label02;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r7 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Intent getIntent()>();
+
+        $i0 = virtualinvoke $r7.<android.content.Intent: int getIntExtra(java.lang.String,int)>("orientation", -1);
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _orientation> = $i0;
+
+     label02:
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r7 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Intent getIntent()>();
+
+        $z0 = virtualinvoke $r7.<android.content.Intent: boolean hasExtra(java.lang.String)>("systemUiVisibility");
+
+        if $z0 == 0 goto label03;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r7 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Intent getIntent()>();
+
+        $i0 = virtualinvoke $r7.<android.content.Intent: int getIntExtra(java.lang.String,int)>("systemUiVisibility", 0);
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _systemUiVisibility> = $i0;
+
+     label03:
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r7 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Intent getIntent()>();
+
+        $z0 = virtualinvoke $r7.<android.content.Intent: boolean hasExtra(java.lang.String)>("activityId");
+
+        if $z0 == 0 goto label04;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r7 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Intent getIntent()>();
+
+        $i0 = virtualinvoke $r7.<android.content.Intent: int getIntExtra(java.lang.String,int)>("activityId", -1);
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId> = $i0;
+
+     label04:
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r7 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Intent getIntent()>();
+
+        $z0 = virtualinvoke $r7.<android.content.Intent: boolean hasExtra(java.lang.String)>("displayCutoutMode");
+
+        if $z0 == 0 goto label05;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r7 = interfaceinvoke $r3.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.content.Intent getIntent()>();
+
+        $i0 = virtualinvoke $r7.<android.content.Intent: int getIntExtra(java.lang.String,int)>("displayCutoutMode", 0);
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _displayCutoutMode> = $i0;
+
+     label05:
+        $r10 = <com.unity3d.services.ads.adunit.AdUnitEvent: com.unity3d.services.ads.adunit.AdUnitEvent ON_CREATE>;
+
+        goto label07;
+
+     label06:
+        $r8 = virtualinvoke $r1.<android.os.Bundle: java.lang.String[] getStringArray(java.lang.String)>("views");
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.lang.String[] _views> = $r8;
+
+        $i0 = virtualinvoke $r1.<android.os.Bundle: int getInt(java.lang.String,int)>("orientation", -1);
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _orientation> = $i0;
+
+        $i0 = virtualinvoke $r1.<android.os.Bundle: int getInt(java.lang.String,int)>("systemUiVisibility", 0);
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _systemUiVisibility> = $i0;
+
+        $r9 = virtualinvoke $r1.<android.os.Bundle: java.util.ArrayList getIntegerArrayList(java.lang.String)>("keyEvents");
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.ArrayList _keyEventList> = $r9;
+
+        $z0 = virtualinvoke $r1.<android.os.Bundle: boolean getBoolean(java.lang.String)>("keepScreenOn");
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: boolean _keepScreenOn> = $z0;
+
+        $i0 = virtualinvoke $r1.<android.os.Bundle: int getInt(java.lang.String,int)>("activityId", -1);
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId> = $i0;
+
+        $i0 = virtualinvoke $r1.<android.os.Bundle: int getInt(java.lang.String,int)>("displayCutoutMode", 0);
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _displayCutoutMode> = $i0;
+
+        $z0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: boolean _keepScreenOn>;
+
+        virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: boolean setKeepScreenOn(boolean)>($z0);
+
+        $r10 = <com.unity3d.services.ads.adunit.AdUnitEvent: com.unity3d.services.ads.adunit.AdUnitEvent ON_RESTORE>;
+
+     label07:
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _orientation>;
+
+        virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: void setOrientation(int)>($i0);
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _systemUiVisibility>;
+
+        virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: boolean setSystemUiVisibility(int)>($i0);
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _displayCutoutMode>;
+
+        virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: void setLayoutInDisplayCutoutMode(int)>($i0);
+
+        $r8 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.lang.String[] _views>;
+
+        if $r8 == null goto label10;
+
+        $i0 = lengthof $r8;
+
+        $i1 = 0;
+
+     label08:
+        if $i1 >= $i0 goto label10;
+
+        $r11 = $r8[$i1];
+
+        $r12 = virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitViewHandler getViewHandler(java.lang.String)>($r11);
+
+        if $r12 == null goto label09;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r12.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: void onCreate(com.unity3d.services.ads.adunit.IAdUnitActivity,android.os.Bundle)>($r3, $r1);
+
+     label09:
+        $i1 = $i1 + 1;
+
+        goto label08;
+
+     label10:
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r13 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory ADUNIT>;
+
+        $r14 = newarray (java.lang.Object)[1];
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        $r15 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r14[0] = $r15;
+
+        interfaceinvoke $r2.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r13, $r10, $r14);
+
+        return;
+    }
+
+    public void onDestroy()
+    {
+        java.lang.Object[] $r5;
+        com.unity3d.services.ads.adunit.AdUnitEvent $r4;
+        java.lang.Integer $r7;
+        com.unity3d.services.core.webview.WebViewEventCategory $r3;
+        java.util.Map $r8;
+        int $i0, $i1;
+        java.lang.Boolean $r6;
+        boolean $z0;
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r13;
+        com.unity3d.services.core.webview.bridge.IEventSender $r1;
+        java.util.Map$Entry $r12;
+        java.util.Iterator $r10;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r2;
+        java.util.Set $r9;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        java.lang.Object $r11;
+        android.app.Activity $r14;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $z0 = interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean canSend()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $z0 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: boolean isFinishing()>();
+
+        if $z0 != 0 goto label5;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Unity Ads web app is null, closing Unity Ads activity from onDestroy");
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: void finish()>();
+
+        return;
+
+     label1:
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r3 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory ADUNIT>;
+
+        $r4 = <com.unity3d.services.ads.adunit.AdUnitEvent: com.unity3d.services.ads.adunit.AdUnitEvent ON_DESTROY>;
+
+        $r5 = newarray (java.lang.Object)[2];
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $z0 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: boolean isFinishing()>();
+
+        $r6 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r5[0] = $r6;
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r5[1] = $r7;
+
+        interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r3, $r4, $r5);
+
+        $r8 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.Map _viewHandlers>;
+
+        if $r8 == null goto label3;
+
+        $r9 = interfaceinvoke $r8.<java.util.Map: java.util.Set entrySet()>();
+
+        $r10 = interfaceinvoke $r9.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r10.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r11 = interfaceinvoke $r10.<java.util.Iterator: java.lang.Object next()>();
+
+        $r12 = (java.util.Map$Entry) $r11;
+
+        $r11 = interfaceinvoke $r12.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        if $r11 == null goto label2;
+
+        $r11 = interfaceinvoke $r12.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r13 = (com.unity3d.services.ads.adunit.IAdUnitViewHandler) $r11;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r13.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: void onDestroy(com.unity3d.services.ads.adunit.IAdUnitActivity)>($r2);
+
+        goto label2;
+
+     label3:
+        $i0 = staticinvoke <com.unity3d.services.ads.api.AdUnit: int getCurrentAdUnitActivityId()>();
+
+        $i1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        if $i0 != $i1 goto label4;
+
+        staticinvoke <com.unity3d.services.ads.api.AdUnit: void setAdUnitActivity(com.unity3d.services.ads.adunit.IAdUnitActivity)>(null);
+
+     label4:
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r14 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.app.Activity getActivity()>();
+
+        staticinvoke <com.unity3d.services.core.api.Intent: void removeActiveActivity(android.app.Activity)>($r14);
+
+     label5:
+        return;
+    }
+
+    public boolean onKeyDown(int, android.view.KeyEvent)
+    {
+        com.unity3d.services.core.webview.bridge.IEventSender $r5;
+        android.view.KeyEvent $r2;
+        java.lang.Object[] $r7;
+        com.unity3d.services.ads.adunit.AdUnitEvent $r1;
+        long $l1;
+        java.lang.Integer $r4;
+        java.util.ArrayList $r3;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        com.unity3d.services.core.webview.WebViewEventCategory $r6;
+        java.lang.Long $r8;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $i0 := @parameter0: int;
+
+        $r2 := @parameter1: android.view.KeyEvent;
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.ArrayList _keyEventList>;
+
+        if $r3 == null goto label1;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $z0 = virtualinvoke $r3.<java.util.ArrayList: boolean contains(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label1;
+
+        $r5 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r6 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory ADUNIT>;
+
+        $r1 = <com.unity3d.services.ads.adunit.AdUnitEvent: com.unity3d.services.ads.adunit.AdUnitEvent KEY_DOWN>;
+
+        $r7 = newarray (java.lang.Object)[5];
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r7[0] = $r4;
+
+        $l1 = virtualinvoke $r2.<android.view.KeyEvent: long getEventTime()>();
+
+        $r8 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        $r7[1] = $r8;
+
+        $l1 = virtualinvoke $r2.<android.view.KeyEvent: long getDownTime()>();
+
+        $r8 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        $r7[2] = $r8;
+
+        $i0 = virtualinvoke $r2.<android.view.KeyEvent: int getRepeatCount()>();
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r7[3] = $r4;
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r7[4] = $r4;
+
+        interfaceinvoke $r5.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r6, $r1, $r7);
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public void onPause()
+    {
+        java.lang.Object[] $r13;
+        com.unity3d.services.ads.adunit.AdUnitEvent $r12;
+        java.lang.Integer $r15;
+        com.unity3d.services.core.webview.WebViewEventCategory $r11;
+        java.util.Map $r5;
+        int $i0;
+        java.lang.Boolean $r14;
+        com.unity3d.services.core.webview.WebViewApp $r3;
+        boolean $z0;
+        com.unity3d.services.core.webview.WebView $r4;
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r10;
+        com.unity3d.services.core.webview.bridge.IEventSender $r1;
+        java.util.Map$Entry $r9;
+        java.util.Iterator $r7;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r2;
+        java.util.Set $r6;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        java.lang.Object $r8;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $z0 = interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean canSend()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $z0 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: boolean isFinishing()>();
+
+        if $z0 != 0 goto label6;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Unity Ads web app is null, closing Unity Ads activity from onPause");
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: void finish()>();
+
+        return;
+
+     label1:
+        $r3 = staticinvoke <com.unity3d.services.core.webview.WebViewApp: com.unity3d.services.core.webview.WebViewApp getCurrentApp()>();
+
+        $r4 = virtualinvoke $r3.<com.unity3d.services.core.webview.WebViewApp: com.unity3d.services.core.webview.WebView getWebView()>();
+
+        if $r4 != null goto label2;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void warning(java.lang.String)>("Unity Ads web view is null, from onPause");
+
+        goto label3;
+
+     label2:
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $z0 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: boolean isFinishing()>();
+
+        if $z0 == 0 goto label3;
+
+        $r3 = staticinvoke <com.unity3d.services.core.webview.WebViewApp: com.unity3d.services.core.webview.WebViewApp getCurrentApp()>();
+
+        $r4 = virtualinvoke $r3.<com.unity3d.services.core.webview.WebViewApp: com.unity3d.services.core.webview.WebView getWebView()>();
+
+        staticinvoke <com.unity3d.services.core.misc.ViewUtilities: void removeViewFromParent(android.view.View)>($r4);
+
+     label3:
+        $r5 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.Map _viewHandlers>;
+
+        if $r5 == null goto label5;
+
+        $r6 = interfaceinvoke $r5.<java.util.Map: java.util.Set entrySet()>();
+
+        $r7 = interfaceinvoke $r6.<java.util.Set: java.util.Iterator iterator()>();
+
+     label4:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r8 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (java.util.Map$Entry) $r8;
+
+        $r8 = interfaceinvoke $r9.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        if $r8 == null goto label4;
+
+        $r8 = interfaceinvoke $r9.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r10 = (com.unity3d.services.ads.adunit.IAdUnitViewHandler) $r8;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r10.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: void onPause(com.unity3d.services.ads.adunit.IAdUnitActivity)>($r2);
+
+        goto label4;
+
+     label5:
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r11 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory ADUNIT>;
+
+        $r12 = <com.unity3d.services.ads.adunit.AdUnitEvent: com.unity3d.services.ads.adunit.AdUnitEvent ON_PAUSE>;
+
+        $r13 = newarray (java.lang.Object)[2];
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $z0 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: boolean isFinishing()>();
+
+        $r14 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r13[0] = $r14;
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        $r15 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r13[1] = $r15;
+
+        interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r11, $r12, $r13);
+
+     label6:
+        return;
+    }
+
+    public void onRequestPermissionsResult(int, java.lang.String[], int[])
+    {
+        java.lang.Object[] $r9;
+        java.lang.String[] $r3;
+        java.lang.Integer $r10;
+        com.unity3d.services.core.webview.WebViewEventCategory $r7;
+        int[] $r4;
+        int $i0, $i1, $i2, $i3;
+        java.lang.String $r2;
+        com.unity3d.services.ads.adunit.PermissionsEvent $r8;
+        com.unity3d.services.core.webview.bridge.IEventSender $r6;
+        java.lang.Exception $r11;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        org.json.JSONArray $r1, $r5;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $i0 := @parameter0: int;
+
+        $r3 := @parameter1: java.lang.String[];
+
+        $r4 := @parameter2: int[];
+
+        $r5 = new org.json.JSONArray;
+
+     label01:
+        specialinvoke $r5.<org.json.JSONArray: void <init>()>();
+
+     label02:
+        $r1 = new org.json.JSONArray;
+
+     label03:
+        specialinvoke $r1.<org.json.JSONArray: void <init>()>();
+
+        $i1 = lengthof $r3;
+
+     label04:
+        $i2 = 0;
+
+     label05:
+        if $i2 >= $i1 goto label08;
+
+     label06:
+        $r2 = $r3[$i2];
+
+        virtualinvoke $r5.<org.json.JSONArray: org.json.JSONArray put(java.lang.Object)>($r2);
+
+     label07:
+        $i2 = $i2 + 1;
+
+        goto label05;
+
+     label08:
+        $i1 = lengthof $r4;
+
+     label09:
+        $i2 = 0;
+
+     label10:
+        if $i2 >= $i1 goto label13;
+
+     label11:
+        $i3 = $r4[$i2];
+
+        virtualinvoke $r1.<org.json.JSONArray: org.json.JSONArray put(int)>($i3);
+
+     label12:
+        $i2 = $i2 + 1;
+
+        goto label10;
+
+     label13:
+        $r6 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+     label14:
+        $r7 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory PERMISSIONS>;
+
+        $r8 = <com.unity3d.services.ads.adunit.PermissionsEvent: com.unity3d.services.ads.adunit.PermissionsEvent PERMISSIONS_RESULT>;
+
+        $r9 = newarray (java.lang.Object)[3];
+
+     label15:
+        $r10 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r9[0] = $r10;
+
+        $r9[1] = $r5;
+
+        $r9[2] = $r1;
+
+        interfaceinvoke $r6.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r7, $r8, $r9);
+
+     label16:
+        return;
+
+     label17:
+        $r11 := @caughtexception;
+
+        $r6 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r7 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory PERMISSIONS>;
+
+        $r8 = <com.unity3d.services.ads.adunit.PermissionsEvent: com.unity3d.services.ads.adunit.PermissionsEvent PERMISSIONS_ERROR>;
+
+        $r9 = newarray (java.lang.Object)[1];
+
+        $r2 = virtualinvoke $r11.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r9[0] = $r2;
+
+        interfaceinvoke $r6.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r7, $r8, $r9);
+
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label17;
+        catch java.lang.Exception from label03 to label04 with label17;
+        catch java.lang.Exception from label06 to label07 with label17;
+        catch java.lang.Exception from label08 to label09 with label17;
+        catch java.lang.Exception from label11 to label12 with label17;
+        catch java.lang.Exception from label13 to label14 with label17;
+        catch java.lang.Exception from label15 to label16 with label17;
+    }
+
+    public void onResume()
+    {
+        java.lang.Object[] $r12;
+        com.unity3d.services.ads.adunit.AdUnitEvent $r11;
+        java.lang.String[] $r3;
+        java.lang.Integer $r13;
+        com.unity3d.services.core.webview.WebViewEventCategory $r10;
+        java.util.Map $r4;
+        int $i0;
+        boolean $z0;
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r9;
+        com.unity3d.services.core.webview.bridge.IEventSender $r1;
+        java.util.Map$Entry $r8;
+        java.util.Iterator $r6;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r2;
+        java.util.Set $r5;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        java.lang.Object $r7;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $z0 = interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean canSend()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $z0 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: boolean isFinishing()>();
+
+        if $z0 != 0 goto label4;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Unity Ads web app is null, closing Unity Ads activity from onResume");
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: void finish()>();
+
+        return;
+
+     label1:
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.lang.String[] _views>;
+
+        virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: void setViews(java.lang.String[])>($r3);
+
+        $r4 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.Map _viewHandlers>;
+
+        if $r4 == null goto label3;
+
+        $r5 = interfaceinvoke $r4.<java.util.Map: java.util.Set entrySet()>();
+
+        $r6 = interfaceinvoke $r5.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (java.util.Map$Entry) $r7;
+
+        $r7 = interfaceinvoke $r8.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        if $r7 == null goto label2;
+
+        $r7 = interfaceinvoke $r8.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r9 = (com.unity3d.services.ads.adunit.IAdUnitViewHandler) $r7;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r9.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: void onResume(com.unity3d.services.ads.adunit.IAdUnitActivity)>($r2);
+
+        goto label2;
+
+     label3:
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r10 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory ADUNIT>;
+
+        $r11 = <com.unity3d.services.ads.adunit.AdUnitEvent: com.unity3d.services.ads.adunit.AdUnitEvent ON_RESUME>;
+
+        $r12 = newarray (java.lang.Object)[1];
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        $r13 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r12[0] = $r13;
+
+        interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r10, $r11, $r12);
+
+     label4:
+        return;
+    }
+
+    public void onSaveInstanceState(android.os.Bundle)
+    {
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        android.os.Bundle $r1;
+        int $i0;
+        java.lang.String[] $r3;
+        java.util.ArrayList $r2;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 := @parameter0: android.os.Bundle;
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _orientation>;
+
+        virtualinvoke $r1.<android.os.Bundle: void putInt(java.lang.String,int)>("orientation", $i0);
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _systemUiVisibility>;
+
+        virtualinvoke $r1.<android.os.Bundle: void putInt(java.lang.String,int)>("systemUiVisibility", $i0);
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.ArrayList _keyEventList>;
+
+        virtualinvoke $r1.<android.os.Bundle: void putIntegerArrayList(java.lang.String,java.util.ArrayList)>("keyEvents", $r2);
+
+        $z0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: boolean _keepScreenOn>;
+
+        virtualinvoke $r1.<android.os.Bundle: void putBoolean(java.lang.String,boolean)>("keepScreenOn", $z0);
+
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.lang.String[] _views>;
+
+        virtualinvoke $r1.<android.os.Bundle: void putStringArray(java.lang.String,java.lang.String[])>("views", $r3);
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        virtualinvoke $r1.<android.os.Bundle: void putInt(java.lang.String,int)>("activityId", $i0);
+
+        return;
+    }
+
+    public void onStart()
+    {
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r8;
+        com.unity3d.services.core.webview.bridge.IEventSender $r1;
+        java.util.Map$Entry $r7;
+        java.lang.Object[] $r11;
+        java.util.Iterator $r5;
+        com.unity3d.services.ads.adunit.AdUnitEvent $r10;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r2;
+        java.util.Set $r4;
+        java.lang.Integer $r12;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        com.unity3d.services.core.webview.WebViewEventCategory $r9;
+        java.util.Map $r3;
+        int $i0;
+        java.lang.Object $r6;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $z0 = interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean canSend()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $z0 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: boolean isFinishing()>();
+
+        if $z0 != 0 goto label4;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Unity Ads web app is null, closing Unity Ads activity from onStart");
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: void finish()>();
+
+        return;
+
+     label1:
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.Map _viewHandlers>;
+
+        if $r3 == null goto label3;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.util.Set entrySet()>();
+
+        $r5 = interfaceinvoke $r4.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (java.util.Map$Entry) $r6;
+
+        $r6 = interfaceinvoke $r7.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        if $r6 == null goto label2;
+
+        $r6 = interfaceinvoke $r7.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r8 = (com.unity3d.services.ads.adunit.IAdUnitViewHandler) $r6;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r8.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: void onStart(com.unity3d.services.ads.adunit.IAdUnitActivity)>($r2);
+
+        goto label2;
+
+     label3:
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r9 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory ADUNIT>;
+
+        $r10 = <com.unity3d.services.ads.adunit.AdUnitEvent: com.unity3d.services.ads.adunit.AdUnitEvent ON_START>;
+
+        $r11 = newarray (java.lang.Object)[1];
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r11[0] = $r12;
+
+        interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r9, $r10, $r11);
+
+     label4:
+        return;
+    }
+
+    public void onStop()
+    {
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r8;
+        com.unity3d.services.core.webview.bridge.IEventSender $r1;
+        java.util.Map$Entry $r7;
+        java.lang.Object[] $r11;
+        java.util.Iterator $r5;
+        com.unity3d.services.ads.adunit.AdUnitEvent $r10;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r2;
+        java.util.Set $r4;
+        java.lang.Integer $r12;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        com.unity3d.services.core.webview.WebViewEventCategory $r9;
+        java.util.Map $r3;
+        int $i0;
+        java.lang.Object $r6;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $z0 = interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean canSend()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $z0 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: boolean isFinishing()>();
+
+        if $z0 != 0 goto label4;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Unity Ads web app is null, closing Unity Ads activity from onStop");
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitActivity: void finish()>();
+
+        return;
+
+     label1:
+        $r3 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.Map _viewHandlers>;
+
+        if $r3 == null goto label3;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.util.Set entrySet()>();
+
+        $r5 = interfaceinvoke $r4.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (java.util.Map$Entry) $r6;
+
+        $r6 = interfaceinvoke $r7.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        if $r6 == null goto label2;
+
+        $r6 = interfaceinvoke $r7.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r8 = (com.unity3d.services.ads.adunit.IAdUnitViewHandler) $r6;
+
+        $r2 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r8.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: void onStop(com.unity3d.services.ads.adunit.IAdUnitActivity)>($r2);
+
+        goto label2;
+
+     label3:
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r9 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory ADUNIT>;
+
+        $r10 = <com.unity3d.services.ads.adunit.AdUnitEvent: com.unity3d.services.ads.adunit.AdUnitEvent ON_STOP>;
+
+        $r11 = newarray (java.lang.Object)[1];
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r11[0] = $r12;
+
+        interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r9, $r10, $r11);
+
+     label4:
+        return;
+    }
+
+    public void onWindowFocusChanged(boolean)
+    {
+        com.unity3d.services.core.webview.bridge.IEventSender $r1;
+        java.lang.Object[] $r4;
+        com.unity3d.services.ads.adunit.AdUnitEvent $r3;
+        java.lang.Integer $r5;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        com.unity3d.services.core.webview.WebViewEventCategory $r2;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $z0 := @parameter0: boolean;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r2 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory ADUNIT>;
+
+        $r3 = <com.unity3d.services.ads.adunit.AdUnitEvent: com.unity3d.services.ads.adunit.AdUnitEvent ON_FOCUS_GAINED>;
+
+        $r4 = newarray (java.lang.Object)[1];
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r2, $r3, $r4);
+
+        return;
+
+     label1:
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r2 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory ADUNIT>;
+
+        $r3 = <com.unity3d.services.ads.adunit.AdUnitEvent: com.unity3d.services.ads.adunit.AdUnitEvent ON_FOCUS_LOST>;
+
+        $r4 = newarray (java.lang.Object)[1];
+
+        $i0 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _activityId>;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        interfaceinvoke $r1.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r2, $r3, $r4);
+
+        return;
+    }
+
+    public boolean setKeepScreenOn(boolean)
+    {
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r1;
+        android.view.Window $r2;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $z0 := @parameter0: boolean;
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: boolean _keepScreenOn> = $z0;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r2 = interfaceinvoke $r1.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.view.Window getWindow()>();
+
+        if $r2 != null goto label1;
+
+        return 0;
+
+     label1:
+        if $z0 == 0 goto label2;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r2 = interfaceinvoke $r1.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.view.Window getWindow()>();
+
+        virtualinvoke $r2.<android.view.Window: void addFlags(int)>(128);
+
+        goto label3;
+
+     label2:
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r2 = interfaceinvoke $r1.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.view.Window getWindow()>();
+
+        virtualinvoke $r2.<android.view.Window: void clearFlags(int)>(128);
+
+     label3:
+        return 1;
+    }
+
+    public void setKeyEventList(java.util.ArrayList)
+    {
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 := @parameter0: java.util.ArrayList;
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.util.ArrayList _keyEventList> = $r1;
+
+        return;
+    }
+
+    public void setLayoutInDisplayCutoutMode(int)
+    {
+        java.lang.Throwable $r6, $r8;
+        java.lang.Object[] $r7;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r1;
+        java.lang.reflect.Field $r5;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        int $i0, $i1;
+        java.lang.Class $r4;
+        android.view.Window $r2;
+        android.view.WindowManager$LayoutParams $r3;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $i0 := @parameter0: int;
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _displayCutoutMode> = $i0;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 28 goto label5;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r2 = interfaceinvoke $r1.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.view.Window getWindow()>();
+
+        if $r2 == null goto label5;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r2 = interfaceinvoke $r1.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.view.Window getWindow()>();
+
+        $r3 = virtualinvoke $r2.<android.view.Window: android.view.WindowManager$LayoutParams getAttributes()>();
+
+     label1:
+        $r4 = virtualinvoke $r3.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.Class: java.lang.reflect.Field getField(java.lang.String)>("layoutInDisplayCutoutMode");
+
+        virtualinvoke $r5.<java.lang.reflect.Field: void setInt(java.lang.Object,int)>($r3, $i0);
+
+     label2:
+        return;
+
+     label3:
+        $r6 := @caughtexception;
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r7[0] = $r6;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String,java.lang.Object[])>("Error getting layoutInDisplayCutoutMode", $r7);
+
+        return;
+
+     label4:
+        $r8 := @caughtexception;
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r7[0] = $r8;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String,java.lang.Object[])>("Error setting layoutInDisplayCutoutMode", $r7);
+
+     label5:
+        return;
+
+        catch java.lang.IllegalAccessException from label1 to label2 with label4;
+        catch java.lang.NoSuchFieldException from label1 to label2 with label3;
+    }
+
+    public void setOrientation(int)
+    {
+        int $i0;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r1;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $i0 := @parameter0: int;
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _orientation> = $i0;
+
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r1.<com.unity3d.services.ads.adunit.IAdUnitActivity: void setRequestedOrientation(int)>($i0);
+
+        return;
+    }
+
+    public boolean setSystemUiVisibility(int)
+    {
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        int $i0;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r1;
+        android.view.View $r3;
+        android.view.Window $r2;
+        java.lang.Exception $r4;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $i0 := @parameter0: int;
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: int _systemUiVisibility> = $i0;
+
+     label1:
+        $r1 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        $r2 = interfaceinvoke $r1.<com.unity3d.services.ads.adunit.IAdUnitActivity: android.view.Window getWindow()>();
+
+        $r3 = virtualinvoke $r2.<android.view.Window: android.view.View getDecorView()>();
+
+        virtualinvoke $r3.<android.view.View: void setSystemUiVisibility(int)>($i0);
+
+     label2:
+        return 1;
+
+     label3:
+        $r4 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error while setting SystemUIVisibility", $r4);
+
+        return 0;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public void setViewFrame(java.lang.String, int, int, int, int)
+    {
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r2;
+        android.widget.RelativeLayout$LayoutParams $r6;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        int $i0, $i1, $i2, $i3;
+        android.view.View $r5;
+        java.lang.String $r1;
+        android.widget.FrameLayout$LayoutParams $r3;
+        com.unity3d.services.ads.adunit.AdUnitRelativeLayout $r4;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $i3 := @parameter4: int;
+
+        $r2 = virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitViewHandler getViewHandler(java.lang.String)>($r1);
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("adunit");
+
+        if $z0 == 0 goto label1;
+
+        $r3 = new android.widget.FrameLayout$LayoutParams;
+
+        specialinvoke $r3.<android.widget.FrameLayout$LayoutParams: void <init>(int,int)>($i2, $i3);
+
+        virtualinvoke $r3.<android.widget.FrameLayout$LayoutParams: void setMargins(int,int,int,int)>($i0, $i1, 0, 0);
+
+        $r4 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.AdUnitRelativeLayout _layout>;
+
+        virtualinvoke $r4.<com.unity3d.services.ads.adunit.AdUnitRelativeLayout: void setLayoutParams(android.view.ViewGroup$LayoutParams)>($r3);
+
+        goto label2;
+
+     label1:
+        if $r2 == null goto label2;
+
+        $r5 = interfaceinvoke $r2.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: android.view.View getView()>();
+
+        goto label3;
+
+     label2:
+        $r5 = null;
+
+     label3:
+        if $r5 == null goto label4;
+
+        $r6 = new android.widget.RelativeLayout$LayoutParams;
+
+        specialinvoke $r6.<android.widget.RelativeLayout$LayoutParams: void <init>(int,int)>($i2, $i3);
+
+        virtualinvoke $r6.<android.widget.RelativeLayout$LayoutParams: void setMargins(int,int,int,int)>($i0, $i1, 0, 0);
+
+        virtualinvoke $r5.<android.view.View: void setLayoutParams(android.view.ViewGroup$LayoutParams)>($r6);
+
+     label4:
+        return;
+    }
+
+    public void setViews(java.lang.String[])
+    {
+        com.unity3d.services.ads.adunit.IAdUnitViewHandler $r9;
+        java.util.Iterator $r6;
+        com.unity3d.services.ads.adunit.IAdUnitActivity $r10;
+        java.lang.String[] $r1, $r4;
+        java.util.ArrayList $r2, $r5;
+        com.unity3d.services.ads.adunit.AdUnitActivityController r0;
+        java.util.List $r3;
+        int $i0, $i1;
+        android.view.View $r11;
+        java.lang.Object $r7;
+        java.lang.String $r8;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.adunit.AdUnitActivityController;
+
+        $r1 := @parameter0: java.lang.String[];
+
+        $i0 = 0;
+
+        if $r1 != null goto label1;
+
+        $r1 = newarray (java.lang.String)[0];
+
+     label1:
+        $r2 = new java.util.ArrayList;
+
+        $r3 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r1);
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>(java.util.Collection)>($r3);
+
+        $r4 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.lang.String[] _views>;
+
+        if $r4 != null goto label2;
+
+        $r4 = newarray (java.lang.String)[0];
+
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.lang.String[] _views> = $r4;
+
+     label2:
+        $r5 = new java.util.ArrayList;
+
+        $r4 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.lang.String[] _views>;
+
+        $r3 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r4);
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>(java.util.Collection)>($r3);
+
+        virtualinvoke $r5.<java.util.ArrayList: boolean removeAll(java.util.Collection)>($r2);
+
+        $r6 = virtualinvoke $r5.<java.util.ArrayList: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (java.lang.String) $r7;
+
+        $r9 = virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitViewHandler getViewHandler(java.lang.String)>($r8);
+
+        interfaceinvoke $r9.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: boolean destroy()>();
+
+        goto label3;
+
+     label4:
+        r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: java.lang.String[] _views> = $r1;
+
+        $i1 = lengthof $r1;
+
+     label5:
+        if $i0 >= $i1 goto label8;
+
+        $r8 = $r1[$i0];
+
+        if $r8 != null goto label6;
+
+        goto label7;
+
+     label6:
+        $r9 = virtualinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitViewHandler getViewHandler(java.lang.String)>($r8);
+
+        $r10 = r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: com.unity3d.services.ads.adunit.IAdUnitActivity _adUnitActivity>;
+
+        interfaceinvoke $r9.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: boolean create(com.unity3d.services.ads.adunit.IAdUnitActivity)>($r10);
+
+        $r11 = interfaceinvoke $r9.<com.unity3d.services.ads.adunit.IAdUnitViewHandler: android.view.View getView()>();
+
+        $z0 = specialinvoke r0.<com.unity3d.services.ads.adunit.AdUnitActivityController: boolean handleViewPlacement(android.view.View)>($r11);
+
+        if $z0 != 0 goto label7;
+
+        return;
+
+     label7:
+        $i0 = $i0 + 1;
+
+        goto label5;
+
+     label8:
+        return;
+    }
+}

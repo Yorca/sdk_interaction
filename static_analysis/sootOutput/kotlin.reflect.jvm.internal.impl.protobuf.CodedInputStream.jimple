@@ -1,0 +1,2333 @@
+public final class kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream extends java.lang.Object
+{
+    private final byte[] buffer;
+    private final boolean bufferIsImmutable;
+    private int bufferPos;
+    private int bufferSize;
+    private int bufferSizeAfterLimit;
+    private int currentLimit;
+    private boolean enableAliasing;
+    private final java.io.InputStream input;
+    private int lastTag;
+    private int recursionDepth;
+    private int recursionLimit;
+    private kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream$RefillCallback refillCallback;
+    private int sizeLimit;
+    private int totalBytesRetired;
+
+    private void <init>(java.io.InputStream)
+    {
+        byte[] $r2;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        java.io.InputStream $r1;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean enableAliasing> = 0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int currentLimit> = 2147483647;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionLimit> = 64;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int sizeLimit> = 67108864;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream$RefillCallback refillCallback> = null;
+
+        $r2 = newarray (byte)[4096];
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer> = $r2;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize> = 0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = 0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired> = 0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: java.io.InputStream input> = $r1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean bufferIsImmutable> = 0;
+
+        return;
+    }
+
+    private void <init>(kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString)
+    {
+        byte[] $r2;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString $r1;
+        int $i0, $i1;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $r1 := @parameter0: kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean enableAliasing> = 0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int currentLimit> = 2147483647;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionLimit> = 64;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int sizeLimit> = 67108864;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream$RefillCallback refillCallback> = null;
+
+        $r2 = $r1.<kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString: byte[] bytes>;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer> = $r2;
+
+        $i0 = virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString: int getOffsetIntoBytes()>();
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i0;
+
+        $i1 = virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString: int size()>();
+
+        $i0 = $i0 + $i1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize> = $i0;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i0 = neg $i0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired> = $i0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: java.io.InputStream input> = null;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean bufferIsImmutable> = 1;
+
+        return;
+    }
+
+    public static int decodeZigZag32(int)
+    {
+        int $i0, $i1;
+
+        $i1 := @parameter0: int;
+
+        $i0 = $i1 >>> 1;
+
+        $i1 = $i1 & 1;
+
+        $i1 = neg $i1;
+
+        $i1 = $i1 ^ $i0;
+
+        return $i1;
+    }
+
+    public static long decodeZigZag64(long)
+    {
+        long $l0, $l1;
+
+        $l0 := @parameter0: long;
+
+        $l1 = $l0 >>> 1;
+
+        $l0 = $l0 & 1L;
+
+        $l0 = neg $l0;
+
+        $l0 = $l0 ^ $l1;
+
+        return $l0;
+    }
+
+    private void ensureAvailable(int) throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 := @parameter0: int;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i1 = $i2 - $i1;
+
+        if $i1 >= $i0 goto label1;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void refillBuffer(int)>($i0);
+
+     label1:
+        return;
+    }
+
+    public static kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream newInstance(java.io.InputStream)
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream $r1;
+        java.io.InputStream $r0;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r1 = new kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        specialinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void <init>(java.io.InputStream)>($r0);
+
+        return $r1;
+    }
+
+    static kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream newInstance(kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString)
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString $r0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream $r1;
+        int $i0;
+        java.lang.IllegalArgumentException $r3;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r2;
+
+        $r0 := @parameter0: kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString;
+
+        $r1 = new kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        specialinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void <init>(kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString)>($r0);
+
+     label1:
+        $i0 = virtualinvoke $r0.<kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString: int size()>();
+
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int pushLimit(int)>($i0);
+
+     label2:
+        return $r1;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r3 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r2);
+
+        throw $r3;
+
+        catch kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException from label1 to label2 with label3;
+    }
+
+    private byte[] readRawBytesSlowPath(int) throws java.io.IOException
+    {
+        byte[] $r2, $r4;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r3;
+        java.util.ArrayList $r1, $r8;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+        boolean $z0;
+        java.util.Iterator $r6;
+        java.lang.Object $r7;
+        java.io.InputStream $r5;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i1 := @parameter0: int;
+
+        if $i1 > 0 goto label02;
+
+        if $i1 != 0 goto label01;
+
+        $r2 = <kotlin.reflect.jvm.internal.impl.protobuf.Internal: byte[] EMPTY_BYTE_ARRAY>;
+
+        return $r2;
+
+     label01:
+        $r3 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException negativeSize()>();
+
+        throw $r3;
+
+     label02:
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired>;
+
+        $i3 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i4 = $i2 + $i3;
+
+        $i4 = $i4 + $i1;
+
+        $i5 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int currentLimit>;
+
+        if $i4 > $i5 goto label13;
+
+        if $i1 >= 4096 goto label03;
+
+        $r2 = newarray (byte)[$i1];
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i2 = $i2 - $i3;
+
+        $r4 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, $i3, $r2, 0, $i2);
+
+        $i3 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i3;
+
+        $i1 = $i1 - $i2;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void ensureAvailable(int)>($i1);
+
+        $r4 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, 0, $r2, $i2, $i1);
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i1;
+
+        return $r2;
+
+     label03:
+        $i4 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i2 = $i2 + $i4;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired> = $i2;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = 0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize> = 0;
+
+        $i2 = $i4 - $i3;
+
+        $i4 = $i1 - $i2;
+
+        $r8 = new java.util.ArrayList;
+
+        $r1 = $r8;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+     label04:
+        if $i4 <= 0 goto label10;
+
+        $i5 = staticinvoke <java.lang.Math: int min(int,int)>($i4, 4096);
+
+        $r2 = newarray (byte)[$i5];
+
+        $i6 = 0;
+
+     label05:
+        if $i6 >= $i5 goto label09;
+
+        $r5 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: java.io.InputStream input>;
+
+        if $r5 != null goto label06;
+
+        $i0 = -1;
+
+        goto label07;
+
+     label06:
+        $i0 = $i5 - $i6;
+
+        $i0 = virtualinvoke $r5.<java.io.InputStream: int read(byte[],int,int)>($r2, $i6, $i0);
+
+     label07:
+        if $i0 == -1 goto label08;
+
+        $i7 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired>;
+
+        $i7 = $i7 + $i0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired> = $i7;
+
+        $i6 = $i6 + $i0;
+
+        goto label05;
+
+     label08:
+        $r3 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException truncatedMessage()>();
+
+        throw $r3;
+
+     label09:
+        $i4 = $i4 - $i5;
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        goto label04;
+
+     label10:
+        $r2 = newarray (byte)[$i1];
+
+        $r4 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, $i3, $r2, 0, $i2);
+
+        $r6 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label11:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label12;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (byte[]) $r7;
+
+        $i1 = lengthof $r4;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, 0, $r2, $i2, $i1);
+
+        $i1 = lengthof $r4;
+
+        $i2 = $i2 + $i1;
+
+        goto label11;
+
+     label12:
+        return $r2;
+
+     label13:
+        $i1 = $i5 - $i2;
+
+        $i1 = $i1 - $i3;
+
+        virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void skipRawBytes(int)>($i1);
+
+        $r3 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException truncatedMessage()>();
+
+        throw $r3;
+    }
+
+    public static int readRawVarint32(int, java.io.InputStream) throws java.io.IOException
+    {
+        int $i0, $i1, $i2, $i3;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r1;
+        java.io.InputStream $r0;
+
+        $i0 := @parameter0: int;
+
+        $r0 := @parameter1: java.io.InputStream;
+
+        $i1 = $i0 & 128;
+
+        if $i1 != 0 goto label1;
+
+        return $i0;
+
+     label1:
+        $i0 = $i0 & 127;
+
+        $i1 = 7;
+
+     label2:
+        if $i1 >= 32 goto label5;
+
+        $i2 = virtualinvoke $r0.<java.io.InputStream: int read()>();
+
+        if $i2 == -1 goto label4;
+
+        $i3 = $i2 & 127;
+
+        $i3 = $i3 << $i1;
+
+        $i0 = $i0 | $i3;
+
+        $i2 = $i2 & 128;
+
+        if $i2 != 0 goto label3;
+
+        return $i0;
+
+     label3:
+        $i1 = $i1 + 7;
+
+        goto label2;
+
+     label4:
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException truncatedMessage()>();
+
+        throw $r1;
+
+     label5:
+        if $i1 >= 64 goto label8;
+
+        $i2 = virtualinvoke $r0.<java.io.InputStream: int read()>();
+
+        if $i2 == -1 goto label7;
+
+        $i2 = $i2 & 128;
+
+        if $i2 != 0 goto label6;
+
+        return $i0;
+
+     label6:
+        $i1 = $i1 + 7;
+
+        goto label5;
+
+     label7:
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException truncatedMessage()>();
+
+        throw $r1;
+
+     label8:
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException malformedVarint()>();
+
+        throw $r1;
+    }
+
+    private void recomputeBufferSizeAfterLimit()
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSizeAfterLimit>;
+
+        $i1 = $i1 + $i0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize> = $i1;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired>;
+
+        $i2 = $i0 + $i1;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int currentLimit>;
+
+        if $i2 <= $i0 goto label1;
+
+        $i0 = $i2 - $i0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSizeAfterLimit> = $i0;
+
+        $i1 = $i1 - $i0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize> = $i1;
+
+        return;
+
+     label1:
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSizeAfterLimit> = 0;
+
+        return;
+    }
+
+    private void refillBuffer(int) throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r1;
+        boolean $z0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 := @parameter0: int;
+
+        $z0 = specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean tryRefillBuffer(int)>($i0);
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException truncatedMessage()>();
+
+        throw $r1;
+    }
+
+    private void skipRawBytesSlowPath(int) throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r1;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 := @parameter0: int;
+
+        if $i0 < 0 goto label4;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired>;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i3 = $i1 + $i2;
+
+        $i3 = $i3 + $i0;
+
+        $i4 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int currentLimit>;
+
+        if $i3 > $i4 goto label3;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i2 = $i1 - $i2;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i1;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void refillBuffer(int)>(1);
+
+     label1:
+        $i1 = $i0 - $i2;
+
+        $i3 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        if $i1 <= $i3 goto label2;
+
+        $i2 = $i2 + $i3;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i3;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void refillBuffer(int)>(1);
+
+        goto label1;
+
+     label2:
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i1;
+
+        return;
+
+     label3:
+        $i0 = $i4 - $i1;
+
+        $i0 = $i0 - $i2;
+
+        virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void skipRawBytes(int)>($i0);
+
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException truncatedMessage()>();
+
+        throw $r1;
+
+     label4:
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException negativeSize()>();
+
+        throw $r1;
+    }
+
+    private boolean tryRefillBuffer(int) throws java.io.IOException
+    {
+        byte[] $r3;
+        java.lang.IllegalStateException $r8;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r4;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream$RefillCallback $r1;
+        int $i0, $i1, $i2, $i3;
+        java.lang.StringBuilder $r5, $r7;
+        java.lang.String $r6;
+        java.io.InputStream $r2;
+        boolean $z0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 := @parameter0: int;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i2 = $i1 + $i0;
+
+        $i3 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        if $i2 <= $i3 goto label8;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired>;
+
+        $i1 = $i2 + $i1;
+
+        $i1 = $i1 + $i0;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int currentLimit>;
+
+        if $i1 <= $i2 goto label1;
+
+        return 0;
+
+     label1:
+        $r1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream$RefillCallback refillCallback>;
+
+        if $r1 == null goto label2;
+
+        interfaceinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream$RefillCallback: void onRefill()>();
+
+     label2:
+        $r2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: java.io.InputStream input>;
+
+        if $r2 == null goto label9;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        if $i1 <= 0 goto label4;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        if $i2 <= $i1 goto label3;
+
+        $r3 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $i2 = $i2 - $i1;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r3, $i1, $r3, 0, $i2);
+
+     label3:
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired>;
+
+        $i2 = $i2 + $i1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired> = $i2;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i1 = $i2 - $i1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize> = $i1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = 0;
+
+     label4:
+        $r2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: java.io.InputStream input>;
+
+        $r3 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i2 = lengthof $r3;
+
+        $i2 = $i2 - $i1;
+
+        $i1 = virtualinvoke $r2.<java.io.InputStream: int read(byte[],int,int)>($r3, $i1, $i2);
+
+        if $i1 == 0 goto label7;
+
+        if $i1 < -1 goto label7;
+
+        $r3 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $i2 = lengthof $r3;
+
+        if $i1 > $i2 goto label7;
+
+        if $i1 <= 0 goto label9;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i1 = $i2 + $i1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize> = $i1;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired>;
+
+        $i1 = $i1 + $i0;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int sizeLimit>;
+
+        $i1 = $i1 - $i2;
+
+        if $i1 > 0 goto label6;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void recomputeBufferSizeAfterLimit()>();
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        if $i1 < $i0 goto label5;
+
+        return 1;
+
+     label5:
+        $z0 = specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean tryRefillBuffer(int)>($i0);
+
+        return $z0;
+
+     label6:
+        $r4 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException sizeLimitExceeded()>();
+
+        throw $r4;
+
+     label7:
+        $r8 = new java.lang.IllegalStateException;
+
+        $r7 = new java.lang.StringBuilder;
+
+        $r5 = $r7;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(int)>(102);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("InputStream#read(byte[]) returned invalid result: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\nThe InputStream implementation is buggy.");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r6);
+
+        throw $r8;
+
+     label8:
+        $r8 = new java.lang.IllegalStateException;
+
+        $r7 = new java.lang.StringBuilder;
+
+        $r5 = $r7;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(int)>(77);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("refillBuffer() called when ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" bytes were already available in buffer");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r6);
+
+        throw $r8;
+
+     label9:
+        return 0;
+    }
+
+    public void checkLastTagWas(int) throws kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r1;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i1 := @parameter0: int;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int lastTag>;
+
+        if $i0 != $i1 goto label1;
+
+        return;
+
+     label1:
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException invalidEndTag()>();
+
+        throw $r1;
+    }
+
+    public int getBytesUntilLimit()
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int currentLimit>;
+
+        if $i1 != 2147483647 goto label1;
+
+        return -1;
+
+     label1:
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired>;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i0 = $i2 + $i0;
+
+        $i1 = $i1 - $i0;
+
+        return $i1;
+    }
+
+    public boolean isAtEnd() throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1;
+        boolean $z0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        if $i0 != $i1 goto label1;
+
+        $z0 = specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean tryRefillBuffer(int)>(1);
+
+        if $z0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public void popLimit(int)
+    {
+        int $i0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 := @parameter0: int;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int currentLimit> = $i0;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void recomputeBufferSizeAfterLimit()>();
+
+        return;
+    }
+
+    public int pushLimit(int) throws kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r1;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i1 := @parameter0: int;
+
+        if $i1 < 0 goto label2;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int totalBytesRetired>;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i0 = $i2 + $i0;
+
+        $i1 = $i1 + $i0;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int currentLimit>;
+
+        if $i1 > $i0 goto label1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int currentLimit> = $i1;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void recomputeBufferSizeAfterLimit()>();
+
+        return $i0;
+
+     label1:
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException truncatedMessage()>();
+
+        throw $r1;
+
+     label2:
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException negativeSize()>();
+
+        throw $r1;
+    }
+
+    public boolean readBool() throws java.io.IOException
+    {
+        long $l1;
+        byte $b0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $l1 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readRawVarint64()>();
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public kotlin.reflect.jvm.internal.impl.protobuf.ByteString readBytes() throws java.io.IOException
+    {
+        byte[] $r2;
+        kotlin.reflect.jvm.internal.impl.protobuf.BoundedByteString $r3;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        kotlin.reflect.jvm.internal.impl.protobuf.ByteString $r1;
+        kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString $r4;
+        int $i0, $i1, $i2;
+        boolean $z0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i1 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawVarint32()>();
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i2 = $i2 - $i0;
+
+        if $i1 > $i2 goto label3;
+
+        if $i1 <= 0 goto label3;
+
+        $z0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean bufferIsImmutable>;
+
+        if $z0 == 0 goto label1;
+
+        $z0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean enableAliasing>;
+
+        if $z0 == 0 goto label1;
+
+        $r3 = new kotlin.reflect.jvm.internal.impl.protobuf.BoundedByteString;
+
+        $r1 = $r3;
+
+        $r2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        specialinvoke $r3.<kotlin.reflect.jvm.internal.impl.protobuf.BoundedByteString: void <init>(byte[],int,int)>($r2, $i0, $i1);
+
+        goto label2;
+
+     label1:
+        $r2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.ByteString: kotlin.reflect.jvm.internal.impl.protobuf.ByteString copyFrom(byte[],int,int)>($r2, $i0, $i1);
+
+     label2:
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i1 = $i0 + $i1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i1;
+
+        return $r1;
+
+     label3:
+        if $i1 != 0 goto label4;
+
+        $r1 = <kotlin.reflect.jvm.internal.impl.protobuf.ByteString: kotlin.reflect.jvm.internal.impl.protobuf.ByteString EMPTY>;
+
+        return $r1;
+
+     label4:
+        $r4 = new kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString;
+
+        $r2 = specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] readRawBytesSlowPath(int)>($i1);
+
+        specialinvoke $r4.<kotlin.reflect.jvm.internal.impl.protobuf.LiteralByteString: void <init>(byte[])>($r2);
+
+        return $r4;
+    }
+
+    public double readDouble() throws java.io.IOException
+    {
+        long $l0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        double $d0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $l0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readRawLittleEndian64()>();
+
+        $d0 = staticinvoke <java.lang.Double: double longBitsToDouble(long)>($l0);
+
+        return $d0;
+    }
+
+    public int readEnum() throws java.io.IOException
+    {
+        int $i0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawVarint32()>();
+
+        return $i0;
+    }
+
+    public int readFixed32() throws java.io.IOException
+    {
+        int $i0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawLittleEndian32()>();
+
+        return $i0;
+    }
+
+    public long readFixed64() throws java.io.IOException
+    {
+        long $l0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $l0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readRawLittleEndian64()>();
+
+        return $l0;
+    }
+
+    public float readFloat() throws java.io.IOException
+    {
+        int $i0;
+        float $f0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawLittleEndian32()>();
+
+        $f0 = staticinvoke <java.lang.Float: float intBitsToFloat(int)>($i0);
+
+        return $f0;
+    }
+
+    public void readGroup(int, kotlin.reflect.jvm.internal.impl.protobuf.MessageLite$Builder, kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite) throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2;
+        kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite $r1;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r3;
+        kotlin.reflect.jvm.internal.impl.protobuf.MessageLite$Builder $r2;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i1 := @parameter0: int;
+
+        $r2 := @parameter1: kotlin.reflect.jvm.internal.impl.protobuf.MessageLite$Builder;
+
+        $r1 := @parameter2: kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth>;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionLimit>;
+
+        if $i2 >= $i0 goto label1;
+
+        $i0 = $i2 + 1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth> = $i0;
+
+        interfaceinvoke $r2.<kotlin.reflect.jvm.internal.impl.protobuf.MessageLite$Builder: kotlin.reflect.jvm.internal.impl.protobuf.MessageLite$Builder mergeFrom(kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream,kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite)>(r0, $r1);
+
+        $i1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.WireFormat: int makeTag(int,int)>($i1, 4);
+
+        virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void checkLastTagWas(int)>($i1);
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth>;
+
+        $i1 = $i1 + -1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth> = $i1;
+
+        return;
+
+     label1:
+        $r3 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException recursionLimitExceeded()>();
+
+        throw $r3;
+    }
+
+    public int readInt32() throws java.io.IOException
+    {
+        int $i0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawVarint32()>();
+
+        return $i0;
+    }
+
+    public long readInt64() throws java.io.IOException
+    {
+        long $l0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $l0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readRawVarint64()>();
+
+        return $l0;
+    }
+
+    public kotlin.reflect.jvm.internal.impl.protobuf.MessageLite readMessage(kotlin.reflect.jvm.internal.impl.protobuf.Parser, kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite) throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r5;
+        kotlin.reflect.jvm.internal.impl.protobuf.Parser $r1;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        kotlin.reflect.jvm.internal.impl.protobuf.MessageLite $r4;
+        int $i0, $i1, $i2;
+        kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $r1 := @parameter0: kotlin.reflect.jvm.internal.impl.protobuf.Parser;
+
+        $r2 := @parameter1: kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite;
+
+        $i1 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawVarint32()>();
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth>;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionLimit>;
+
+        if $i2 >= $i0 goto label1;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int pushLimit(int)>($i1);
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth>;
+
+        $i1 = $i1 + 1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth> = $i1;
+
+        $r3 = interfaceinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.Parser: java.lang.Object parsePartialFrom(kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream,kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite)>(r0, $r2);
+
+        $r4 = (kotlin.reflect.jvm.internal.impl.protobuf.MessageLite) $r3;
+
+        virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void checkLastTagWas(int)>(0);
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth>;
+
+        $i1 = $i1 + -1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth> = $i1;
+
+        virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void popLimit(int)>($i0);
+
+        return $r4;
+
+     label1:
+        $r5 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException recursionLimitExceeded()>();
+
+        throw $r5;
+    }
+
+    public void readMessage(kotlin.reflect.jvm.internal.impl.protobuf.MessageLite$Builder, kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite) throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2;
+        kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite $r1;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r3;
+        kotlin.reflect.jvm.internal.impl.protobuf.MessageLite$Builder $r2;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $r2 := @parameter0: kotlin.reflect.jvm.internal.impl.protobuf.MessageLite$Builder;
+
+        $r1 := @parameter1: kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite;
+
+        $i1 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawVarint32()>();
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth>;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionLimit>;
+
+        if $i2 >= $i0 goto label1;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int pushLimit(int)>($i1);
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth>;
+
+        $i1 = $i1 + 1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth> = $i1;
+
+        interfaceinvoke $r2.<kotlin.reflect.jvm.internal.impl.protobuf.MessageLite$Builder: kotlin.reflect.jvm.internal.impl.protobuf.MessageLite$Builder mergeFrom(kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream,kotlin.reflect.jvm.internal.impl.protobuf.ExtensionRegistryLite)>(r0, $r1);
+
+        virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void checkLastTagWas(int)>(0);
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth>;
+
+        $i1 = $i1 + -1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int recursionDepth> = $i1;
+
+        virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void popLimit(int)>($i0);
+
+        return;
+
+     label1:
+        $r3 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException recursionLimitExceeded()>();
+
+        throw $r3;
+    }
+
+    public byte readRawByte() throws java.io.IOException
+    {
+        byte[] $r1;
+        byte $b2;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        if $i0 != $i1 goto label1;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void refillBuffer(int)>(1);
+
+     label1:
+        $r1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i0 = $i1 + 1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i0;
+
+        $b2 = $r1[$i1];
+
+        return $b2;
+    }
+
+    public int readRawLittleEndian32() throws java.io.IOException
+    {
+        byte[] $r1;
+        short $s3, $s4;
+        byte $b2;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i5;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i1 = $i1 - $i0;
+
+        if $i1 >= 4 goto label1;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void refillBuffer(int)>(4);
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+     label1:
+        $r1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $i1 = $i0 + 4;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i1;
+
+        $b2 = $r1[$i0];
+
+        $s3 = (short) $b2;
+
+        $s3 = $s3 & 255;
+
+        $i1 = $i0 + 1;
+
+        $b2 = $r1[$i1];
+
+        $s4 = (short) $b2;
+
+        $s4 = $s4 & 255;
+
+        $i1 = (int) $s4;
+
+        $i1 = $i1 << 8;
+
+        $i5 = (int) $s3;
+
+        $i1 = $i5 | $i1;
+
+        $i5 = $i0 + 2;
+
+        $b2 = $r1[$i5];
+
+        $s3 = (short) $b2;
+
+        $s3 = $s3 & 255;
+
+        $i5 = (int) $s3;
+
+        $i5 = $i5 << 16;
+
+        $i1 = $i1 | $i5;
+
+        $i0 = $i0 + 3;
+
+        $b2 = $r1[$i0];
+
+        $s3 = (short) $b2;
+
+        $s3 = $s3 & 255;
+
+        $i0 = (int) $s3;
+
+        $i0 = $i0 << 24;
+
+        $i0 = $i0 | $i1;
+
+        return $i0;
+    }
+
+    public long readRawLittleEndian64() throws java.io.IOException
+    {
+        byte[] $r1;
+        byte $b2;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1;
+        long $l3, $l4;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i1 = $i1 - $i0;
+
+        if $i1 >= 8 goto label1;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void refillBuffer(int)>(8);
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+     label1:
+        $r1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $i1 = $i0 + 8;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i1;
+
+        $b2 = $r1[$i0];
+
+        $l3 = (long) $b2;
+
+        $l3 = $l3 & 255L;
+
+        $i1 = $i0 + 1;
+
+        $b2 = $r1[$i1];
+
+        $l4 = (long) $b2;
+
+        $l4 = $l4 & 255L;
+
+        $l4 = $l4 << 8;
+
+        $l3 = $l3 | $l4;
+
+        $i1 = $i0 + 2;
+
+        $b2 = $r1[$i1];
+
+        $l4 = (long) $b2;
+
+        $l4 = $l4 & 255L;
+
+        $l4 = $l4 << 16;
+
+        $l3 = $l3 | $l4;
+
+        $i1 = $i0 + 3;
+
+        $b2 = $r1[$i1];
+
+        $l4 = (long) $b2;
+
+        $l4 = $l4 & 255L;
+
+        $l4 = $l4 << 24;
+
+        $l3 = $l3 | $l4;
+
+        $i1 = $i0 + 4;
+
+        $b2 = $r1[$i1];
+
+        $l4 = (long) $b2;
+
+        $l4 = $l4 & 255L;
+
+        $l4 = $l4 << 32;
+
+        $l3 = $l3 | $l4;
+
+        $i1 = $i0 + 5;
+
+        $b2 = $r1[$i1];
+
+        $l4 = (long) $b2;
+
+        $l4 = $l4 & 255L;
+
+        $l4 = $l4 << 40;
+
+        $l3 = $l3 | $l4;
+
+        $i1 = $i0 + 6;
+
+        $b2 = $r1[$i1];
+
+        $l4 = (long) $b2;
+
+        $l4 = $l4 & 255L;
+
+        $l4 = $l4 << 48;
+
+        $l3 = $l3 | $l4;
+
+        $i0 = $i0 + 7;
+
+        $b2 = $r1[$i0];
+
+        $l4 = (long) $b2;
+
+        $l4 = $l4 & 255L;
+
+        $l4 = $l4 << 56;
+
+        $l3 = $l4 | $l3;
+
+        return $l3;
+    }
+
+    public int readRawVarint32() throws java.io.IOException
+    {
+        byte[] $r1;
+        long $l0, $l6;
+        byte $b4, $b5;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i1, $i2, $i3;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        if $i2 == $i1 goto label7;
+
+        $r1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $i3 = $i1 + 1;
+
+        $b4 = $r1[$i1];
+
+        $i1 = (int) $b4;
+
+        if $i1 < 0 goto label1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i3;
+
+        $i2 = (int) $b4;
+
+        return $i2;
+
+     label1:
+        $i2 = $i2 - $i3;
+
+        if $i2 < 9 goto label7;
+
+        $i2 = $i3 + 1;
+
+        $b5 = $r1[$i3];
+
+        $i3 = (int) $b5;
+
+        $i3 = $i3 << 7;
+
+        $i1 = (int) $b4;
+
+        $i1 = $i1 ^ $i3;
+
+        $l0 = (long) $i1;
+
+        $b4 = $l0 cmp 0L;
+
+        $i3 = (int) $b4;
+
+        if $i3 >= 0 goto label3;
+
+        $l6 = -128L;
+
+     label2:
+        $l0 = $l0 ^ $l6;
+
+        $i1 = (int) $l0;
+
+        goto label8;
+
+     label3:
+        $i3 = $i2 + 1;
+
+        $b4 = $r1[$i2];
+
+        $i2 = (int) $b4;
+
+        $i2 = $i2 << 14;
+
+        $i1 = $i1 ^ $i2;
+
+        $l0 = (long) $i1;
+
+        $b4 = $l0 cmp 0L;
+
+        $i2 = (int) $b4;
+
+        if $i2 < 0 goto label5;
+
+        $l0 = 16256L ^ $l0;
+
+        $i1 = (int) $l0;
+
+     label4:
+        $i2 = $i3;
+
+        goto label8;
+
+     label5:
+        $i2 = $i3 + 1;
+
+        $b4 = $r1[$i3];
+
+        $i3 = (int) $b4;
+
+        $i3 = $i3 << 21;
+
+        $i1 = $i1 ^ $i3;
+
+        $l0 = (long) $i1;
+
+        $b4 = $l0 cmp 0L;
+
+        $i3 = (int) $b4;
+
+        if $i3 >= 0 goto label6;
+
+        $l6 = -2080896L;
+
+        goto label2;
+
+     label6:
+        $i3 = $i2 + 1;
+
+        $b4 = $r1[$i2];
+
+        $i2 = (int) $b4;
+
+        $i2 = $i2 << 28;
+
+        $i2 = $i1 ^ $i2;
+
+        $l0 = (long) $i2;
+
+        $l0 = $l0 ^ 266354560L;
+
+        $i1 = (int) $l0;
+
+        $i2 = (int) $b4;
+
+        if $i2 >= 0 goto label4;
+
+        $i2 = $i3 + 1;
+
+        $b4 = $r1[$i3];
+
+        $i3 = (int) $b4;
+
+        if $i3 >= 0 goto label8;
+
+        $i3 = $i2 + 1;
+
+        $b4 = $r1[$i2];
+
+        $i2 = (int) $b4;
+
+        if $i2 >= 0 goto label4;
+
+        $i2 = $i3 + 1;
+
+        $b4 = $r1[$i3];
+
+        $i3 = (int) $b4;
+
+        if $i3 >= 0 goto label8;
+
+        $i3 = $i2 + 1;
+
+        $b4 = $r1[$i2];
+
+        $i2 = (int) $b4;
+
+        if $i2 >= 0 goto label4;
+
+        $i2 = $i3 + 1;
+
+        $b4 = $r1[$i3];
+
+        $i3 = (int) $b4;
+
+        if $i3 >= 0 goto label8;
+
+     label7:
+        $l0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readRawVarint64SlowPath()>();
+
+        $i2 = (int) $l0;
+
+        return $i2;
+
+     label8:
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i2;
+
+        return $i1;
+    }
+
+    public long readRawVarint64() throws java.io.IOException
+    {
+        byte[] $r1;
+        long $l0, $l6;
+        byte $b4, $b5;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i1, $i2, $i3;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        if $i2 == $i1 goto label11;
+
+        $r1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $i3 = $i1 + 1;
+
+        $b4 = $r1[$i1];
+
+        $i1 = (int) $b4;
+
+        if $i1 < 0 goto label01;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i3;
+
+        $l0 = (long) $b4;
+
+        return $l0;
+
+     label01:
+        $i2 = $i2 - $i3;
+
+        if $i2 < 9 goto label11;
+
+        $i2 = $i3 + 1;
+
+        $b5 = $r1[$i3];
+
+        $i3 = (int) $b5;
+
+        $i3 = $i3 << 7;
+
+        $i1 = (int) $b4;
+
+        $i3 = $i1 ^ $i3;
+
+        $l0 = (long) $i3;
+
+        $b4 = $l0 cmp 0L;
+
+        $i3 = (int) $b4;
+
+        if $i3 >= 0 goto label03;
+
+        $l6 = -128L;
+
+     label02:
+        $l0 = $l0 ^ $l6;
+
+        goto label13;
+
+     label03:
+        $i3 = $i2 + 1;
+
+        $b4 = $r1[$i2];
+
+        $i2 = (int) $b4;
+
+        $i2 = $i2 << 14;
+
+        $l6 = (long) $i2;
+
+        $l0 = $l0 ^ $l6;
+
+        $b4 = $l0 cmp 0L;
+
+        $i2 = (int) $b4;
+
+        if $i2 < 0 goto label05;
+
+        $l6 = 16256L;
+
+     label04:
+        $l0 = $l0 ^ $l6;
+
+        $i2 = $i3;
+
+        goto label13;
+
+     label05:
+        $i2 = $i3 + 1;
+
+        $b4 = $r1[$i3];
+
+        $i3 = (int) $b4;
+
+        $i3 = $i3 << 21;
+
+        $l6 = (long) $i3;
+
+        $l0 = $l0 ^ $l6;
+
+        $b4 = $l0 cmp 0L;
+
+        $i3 = (int) $b4;
+
+        if $i3 >= 0 goto label06;
+
+        $l6 = -2080896L;
+
+        goto label02;
+
+     label06:
+        $i3 = $i2 + 1;
+
+        $b4 = $r1[$i2];
+
+        $l6 = (long) $b4;
+
+        $l6 = $l6 << 28;
+
+        $l0 = $l0 ^ $l6;
+
+        $b4 = $l0 cmp 0L;
+
+        $i2 = (int) $b4;
+
+        if $i2 < 0 goto label07;
+
+        $l6 = 266354560L;
+
+        goto label04;
+
+     label07:
+        $i2 = $i3 + 1;
+
+        $b4 = $r1[$i3];
+
+        $l6 = (long) $b4;
+
+        $l6 = $l6 << 35;
+
+        $l0 = $l0 ^ $l6;
+
+        $b4 = $l0 cmp 0L;
+
+        $i3 = (int) $b4;
+
+        if $i3 >= 0 goto label08;
+
+        $l6 = -34093383808L;
+
+        goto label02;
+
+     label08:
+        $i3 = $i2 + 1;
+
+        $b4 = $r1[$i2];
+
+        $l6 = (long) $b4;
+
+        $l6 = $l6 << 42;
+
+        $l0 = $l0 ^ $l6;
+
+        $b4 = $l0 cmp 0L;
+
+        $i2 = (int) $b4;
+
+        if $i2 < 0 goto label09;
+
+        $l6 = 4363953127296L;
+
+        goto label04;
+
+     label09:
+        $i2 = $i3 + 1;
+
+        $b4 = $r1[$i3];
+
+        $l6 = (long) $b4;
+
+        $l6 = $l6 << 49;
+
+        $l0 = $l0 ^ $l6;
+
+        $b4 = $l0 cmp 0L;
+
+        $i3 = (int) $b4;
+
+        if $i3 >= 0 goto label10;
+
+        $l6 = -558586000294016L;
+
+        goto label02;
+
+     label10:
+        $i3 = $i2 + 1;
+
+        $b4 = $r1[$i2];
+
+        $l6 = (long) $b4;
+
+        $l6 = $l6 << 56;
+
+        $l0 = $l0 ^ $l6;
+
+        $l0 = $l0 ^ 71499008037633920L;
+
+        $b4 = $l0 cmp 0L;
+
+        $i2 = (int) $b4;
+
+        if $i2 >= 0 goto label12;
+
+        $i2 = $i3 + 1;
+
+        $b4 = $r1[$i3];
+
+        $l6 = (long) $b4;
+
+        $b4 = $l6 cmp 0L;
+
+        $i3 = (int) $b4;
+
+        if $i3 >= 0 goto label13;
+
+     label11:
+        $l0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readRawVarint64SlowPath()>();
+
+        return $l0;
+
+     label12:
+        $i2 = $i3;
+
+     label13:
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i2;
+
+        return $l0;
+    }
+
+    long readRawVarint64SlowPath() throws java.io.IOException
+    {
+        long $l0, $l4;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r1;
+        short $s5;
+        byte $b2, $b3;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i1;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $l0 = 0L;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= 64 goto label3;
+
+        $b2 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte readRawByte()>();
+
+        $b3 = $b2 & 127;
+
+        $l4 = (long) $b3;
+
+        $l4 = $l4 << $i1;
+
+        $l0 = $l0 | $l4;
+
+        $s5 = (short) $b2;
+
+        $s5 = $s5 & 128;
+
+        if $s5 != 0 goto label2;
+
+        return $l0;
+
+     label2:
+        $i1 = $i1 + 7;
+
+        goto label1;
+
+     label3:
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException malformedVarint()>();
+
+        throw $r1;
+    }
+
+    public int readSFixed32() throws java.io.IOException
+    {
+        int $i0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawLittleEndian32()>();
+
+        return $i0;
+    }
+
+    public long readSFixed64() throws java.io.IOException
+    {
+        long $l0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $l0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readRawLittleEndian64()>();
+
+        return $l0;
+    }
+
+    public int readSInt32() throws java.io.IOException
+    {
+        int $i0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawVarint32()>();
+
+        $i0 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int decodeZigZag32(int)>($i0);
+
+        return $i0;
+    }
+
+    public long readSInt64() throws java.io.IOException
+    {
+        long $l0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $l0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readRawVarint64()>();
+
+        $l0 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long decodeZigZag64(long)>($l0);
+
+        return $l0;
+    }
+
+    public java.lang.String readString() throws java.io.IOException
+    {
+        byte[] $r1;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2;
+        java.lang.String $r2;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawVarint32()>();
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i1 = $i1 - $i2;
+
+        if $i0 > $i1 goto label1;
+
+        if $i0 <= 0 goto label1;
+
+        $r2 = new java.lang.String;
+
+        $r1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r1, $i2, $i0, "UTF-8");
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i0 = $i2 + $i0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i0;
+
+        return $r2;
+
+     label1:
+        if $i0 != 0 goto label2;
+
+        return "";
+
+     label2:
+        $r2 = new java.lang.String;
+
+        $r1 = specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] readRawBytesSlowPath(int)>($i0);
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],java.lang.String)>($r1, "UTF-8");
+
+        return $r2;
+    }
+
+    public java.lang.String readStringRequireUtf8() throws java.io.IOException
+    {
+        byte[] $r1;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r3;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawVarint32()>();
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i2 = $i2 - $i1;
+
+        if $i0 > $i2 goto label1;
+
+        if $i0 <= 0 goto label1;
+
+        $r1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] buffer>;
+
+        $i2 = $i1 + $i0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i2;
+
+        goto label3;
+
+     label1:
+        if $i0 != 0 goto label2;
+
+        return "";
+
+     label2:
+        $r1 = specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: byte[] readRawBytesSlowPath(int)>($i0);
+
+        $i1 = 0;
+
+     label3:
+        $i2 = $i1 + $i0;
+
+        $z0 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.Utf8: boolean isValidUtf8(byte[],int,int)>($r1, $i1, $i2);
+
+        if $z0 == 0 goto label4;
+
+        $r2 = new java.lang.String;
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],int,int,java.lang.String)>($r1, $i1, $i0, "UTF-8");
+
+        return $r2;
+
+     label4:
+        $r3 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException invalidUtf8()>();
+
+        throw $r3;
+    }
+
+    public int readTag() throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r1;
+        boolean $z0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $z0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean isAtEnd()>();
+
+        if $z0 == 0 goto label1;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int lastTag> = 0;
+
+        return 0;
+
+     label1:
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawVarint32()>();
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int lastTag> = $i0;
+
+        $i0 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.WireFormat: int getTagFieldNumber(int)>($i0);
+
+        if $i0 == 0 goto label2;
+
+        $i0 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int lastTag>;
+
+        return $i0;
+
+     label2:
+        $r1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException invalidTag()>();
+
+        throw $r1;
+    }
+
+    public int readUInt32() throws java.io.IOException
+    {
+        int $i0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawVarint32()>();
+
+        return $i0;
+    }
+
+    public long readUInt64() throws java.io.IOException
+    {
+        long $l0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $l0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readRawVarint64()>();
+
+        return $l0;
+    }
+
+    public boolean skipField(int, kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream) throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        kotlin.reflect.jvm.internal.impl.protobuf.ByteString $r3;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream $r1;
+        int $i0, $i1;
+        long $l2;
+        kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException $r2;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream;
+
+        $i1 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.WireFormat: int getTagWireType(int)>($i0);
+
+        if $i1 == 0 goto label6;
+
+        if $i1 == 1 goto label5;
+
+        if $i1 == 2 goto label4;
+
+        if $i1 == 3 goto label3;
+
+        if $i1 == 4 goto label2;
+
+        if $i1 != 5 goto label1;
+
+        $i1 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readRawLittleEndian32()>();
+
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream: void writeRawVarint32(int)>($i0);
+
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream: void writeFixed32NoTag(int)>($i1);
+
+        return 1;
+
+     label1:
+        $r2 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException: kotlin.reflect.jvm.internal.impl.protobuf.InvalidProtocolBufferException invalidWireType()>();
+
+        throw $r2;
+
+     label2:
+        return 0;
+
+     label3:
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream: void writeRawVarint32(int)>($i0);
+
+        virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void skipMessage(kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream)>($r1);
+
+        $i0 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.WireFormat: int getTagFieldNumber(int)>($i0);
+
+        $i0 = staticinvoke <kotlin.reflect.jvm.internal.impl.protobuf.WireFormat: int makeTag(int,int)>($i0, 4);
+
+        virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void checkLastTagWas(int)>($i0);
+
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream: void writeRawVarint32(int)>($i0);
+
+        return 1;
+
+     label4:
+        $r3 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: kotlin.reflect.jvm.internal.impl.protobuf.ByteString readBytes()>();
+
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream: void writeRawVarint32(int)>($i0);
+
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream: void writeBytesNoTag(kotlin.reflect.jvm.internal.impl.protobuf.ByteString)>($r3);
+
+        return 1;
+
+     label5:
+        $l2 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readRawLittleEndian64()>();
+
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream: void writeRawVarint32(int)>($i0);
+
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream: void writeFixed64NoTag(long)>($l2);
+
+        return 1;
+
+     label6:
+        $l2 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: long readInt64()>();
+
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream: void writeRawVarint32(int)>($i0);
+
+        virtualinvoke $r1.<kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream: void writeUInt64NoTag(long)>($l2);
+
+        return 1;
+    }
+
+    public void skipMessage(kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream) throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream $r1;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $r1 := @parameter0: kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream;
+
+     label1:
+        $i0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int readTag()>();
+
+        if $i0 == 0 goto label2;
+
+        $z0 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: boolean skipField(int,kotlin.reflect.jvm.internal.impl.protobuf.CodedOutputStream)>($i0, $r1);
+
+        if $z0 != 0 goto label1;
+
+     label2:
+        return;
+    }
+
+    public void skipRawBytes(int) throws java.io.IOException
+    {
+        kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream r0;
+        int $i0, $i1, $i2;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream;
+
+        $i0 := @parameter0: int;
+
+        $i1 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferSize>;
+
+        $i2 = r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos>;
+
+        $i1 = $i1 - $i2;
+
+        if $i0 > $i1 goto label1;
+
+        if $i0 < 0 goto label1;
+
+        $i0 = $i2 + $i0;
+
+        r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: int bufferPos> = $i0;
+
+        return;
+
+     label1:
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.protobuf.CodedInputStream: void skipRawBytesSlowPath(int)>($i0);
+
+        return;
+    }
+}

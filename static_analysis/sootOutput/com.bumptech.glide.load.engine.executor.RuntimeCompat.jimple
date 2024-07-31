@@ -1,0 +1,115 @@
+final class com.bumptech.glide.load.engine.executor.RuntimeCompat extends java.lang.Object
+{
+    private static final java.lang.String CPU_LOCATION;
+    private static final java.lang.String CPU_NAME_REGEX;
+    private static final java.lang.String TAG;
+
+    private void <init>()
+    {
+        com.bumptech.glide.load.engine.executor.RuntimeCompat r0;
+
+        r0 := @this: com.bumptech.glide.load.engine.executor.RuntimeCompat;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static int availableProcessors()
+    {
+        int $i0;
+        java.lang.Runtime $r0;
+
+        $r0 = staticinvoke <java.lang.Runtime: java.lang.Runtime getRuntime()>();
+
+        $i0 = virtualinvoke $r0.<java.lang.Runtime: int availableProcessors()>();
+
+        return $i0;
+    }
+
+    private static int getCoreCountPre17()
+    {
+        java.lang.Throwable $r5, $r6;
+        android.os.StrictMode$ThreadPolicy $r1;
+        com.bumptech.glide.load.engine.executor.RuntimeCompat$1 $r0;
+        java.io.File $r2;
+        int $i0;
+        java.util.regex.Pattern $r3;
+        java.io.File[] $r4;
+        boolean $z0;
+
+        $r1 = staticinvoke <android.os.StrictMode: android.os.StrictMode$ThreadPolicy allowThreadDiskReads()>();
+
+     label01:
+        $r2 = new java.io.File;
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>("/sys/devices/system/cpu/");
+
+        $r3 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("cpu[0-9]+");
+
+        $r0 = new com.bumptech.glide.load.engine.executor.RuntimeCompat$1;
+
+        specialinvoke $r0.<com.bumptech.glide.load.engine.executor.RuntimeCompat$1: void <init>(java.util.regex.Pattern)>($r3);
+
+        $r4 = virtualinvoke $r2.<java.io.File: java.io.File[] listFiles(java.io.FilenameFilter)>($r0);
+
+     label02:
+        staticinvoke <android.os.StrictMode: void setThreadPolicy(android.os.StrictMode$ThreadPolicy)>($r1);
+
+        goto label08;
+
+     label03:
+        $r5 := @caughtexception;
+
+     label04:
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("GlideRuntimeCompat", 6);
+
+     label05:
+        if $z0 == 0 goto label07;
+
+     label06:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("GlideRuntimeCompat", "Failed to calculate accurate cpu count", $r5);
+
+     label07:
+        staticinvoke <android.os.StrictMode: void setThreadPolicy(android.os.StrictMode$ThreadPolicy)>($r1);
+
+        $r4 = null;
+
+     label08:
+        if $r4 == null goto label09;
+
+        $i0 = lengthof $r4;
+
+        goto label10;
+
+     label09:
+        $i0 = 0;
+
+     label10:
+        $i0 = staticinvoke <java.lang.Math: int max(int,int)>(1, $i0);
+
+        return $i0;
+
+     label11:
+        $r6 := @caughtexception;
+
+        staticinvoke <android.os.StrictMode: void setThreadPolicy(android.os.StrictMode$ThreadPolicy)>($r1);
+
+        throw $r6;
+
+        catch java.lang.Throwable from label01 to label02 with label03;
+        catch java.lang.Throwable from label04 to label05 with label11;
+        catch java.lang.Throwable from label06 to label07 with label11;
+    }
+
+    public static void <clinit>()
+    {
+        <com.bumptech.glide.load.engine.executor.RuntimeCompat: java.lang.String TAG> = "GlideRuntimeCompat";
+
+        <com.bumptech.glide.load.engine.executor.RuntimeCompat: java.lang.String CPU_NAME_REGEX> = "cpu[0-9]+";
+
+        <com.bumptech.glide.load.engine.executor.RuntimeCompat: java.lang.String CPU_LOCATION> = "/sys/devices/system/cpu/";
+
+        return;
+    }
+}

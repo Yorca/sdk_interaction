@@ -1,0 +1,103 @@
+public final class io.reactivex.internal.operators.maybe.MaybeMergeArray extends io.reactivex.Flowable
+{
+    final io.reactivex.MaybeSource[] sources;
+
+    public void <init>(io.reactivex.MaybeSource[])
+    {
+        io.reactivex.MaybeSource[] $r1;
+        io.reactivex.internal.operators.maybe.MaybeMergeArray r0;
+
+        r0 := @this: io.reactivex.internal.operators.maybe.MaybeMergeArray;
+
+        $r1 := @parameter0: io.reactivex.MaybeSource[];
+
+        specialinvoke r0.<io.reactivex.Flowable: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.maybe.MaybeMergeArray: io.reactivex.MaybeSource[] sources> = $r1;
+
+        return;
+    }
+
+    protected void subscribeActual(org.reactivestreams.Subscriber)
+    {
+        io.reactivex.internal.operators.maybe.MaybeMergeArray$MpscFillOnceSimpleQueue $r8;
+        io.reactivex.internal.operators.maybe.MaybeMergeArray$ClqSimpleQueue $r9;
+        io.reactivex.MaybeSource[] $r1;
+        io.reactivex.internal.operators.maybe.MaybeMergeArray$MergeMaybeObserver $r2, $r10;
+        io.reactivex.internal.util.AtomicThrowable $r6;
+        io.reactivex.internal.operators.maybe.MaybeMergeArray r0;
+        int $i0, $i1;
+        java.lang.Object $r7;
+        io.reactivex.MaybeSource $r3;
+        org.reactivestreams.Subscriber $r4;
+        io.reactivex.internal.operators.maybe.MaybeMergeArray$SimpleQueueWithConsumerIndex $r5;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.maybe.MaybeMergeArray;
+
+        $r4 := @parameter0: org.reactivestreams.Subscriber;
+
+        $r1 = r0.<io.reactivex.internal.operators.maybe.MaybeMergeArray: io.reactivex.MaybeSource[] sources>;
+
+        $i0 = lengthof $r1;
+
+        $i1 = staticinvoke <io.reactivex.internal.operators.maybe.MaybeMergeArray: int bufferSize()>();
+
+        if $i0 > $i1 goto label1;
+
+        $r8 = new io.reactivex.internal.operators.maybe.MaybeMergeArray$MpscFillOnceSimpleQueue;
+
+        $r5 = $r8;
+
+        specialinvoke $r8.<io.reactivex.internal.operators.maybe.MaybeMergeArray$MpscFillOnceSimpleQueue: void <init>(int)>($i0);
+
+        goto label2;
+
+     label1:
+        $r9 = new io.reactivex.internal.operators.maybe.MaybeMergeArray$ClqSimpleQueue;
+
+        $r5 = $r9;
+
+        specialinvoke $r9.<io.reactivex.internal.operators.maybe.MaybeMergeArray$ClqSimpleQueue: void <init>()>();
+
+     label2:
+        $r10 = new io.reactivex.internal.operators.maybe.MaybeMergeArray$MergeMaybeObserver;
+
+        $r2 = $r10;
+
+        specialinvoke $r10.<io.reactivex.internal.operators.maybe.MaybeMergeArray$MergeMaybeObserver: void <init>(org.reactivestreams.Subscriber,int,io.reactivex.internal.operators.maybe.MaybeMergeArray$SimpleQueueWithConsumerIndex)>($r4, $i0, $r5);
+
+        interfaceinvoke $r4.<org.reactivestreams.Subscriber: void onSubscribe(org.reactivestreams.Subscription)>($r2);
+
+        $r6 = $r2.<io.reactivex.internal.operators.maybe.MaybeMergeArray$MergeMaybeObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $i0 = lengthof $r1;
+
+        $i1 = 0;
+
+     label3:
+        if $i1 >= $i0 goto label5;
+
+        $r3 = $r1[$i1];
+
+        $z0 = virtualinvoke $r2.<io.reactivex.internal.operators.maybe.MaybeMergeArray$MergeMaybeObserver: boolean isCancelled()>();
+
+        if $z0 != 0 goto label5;
+
+        $r7 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Object get()>();
+
+        if $r7 == null goto label4;
+
+        return;
+
+     label4:
+        interfaceinvoke $r3.<io.reactivex.MaybeSource: void subscribe(io.reactivex.MaybeObserver)>($r2);
+
+        $i1 = $i1 + 1;
+
+        goto label3;
+
+     label5:
+        return;
+    }
+}

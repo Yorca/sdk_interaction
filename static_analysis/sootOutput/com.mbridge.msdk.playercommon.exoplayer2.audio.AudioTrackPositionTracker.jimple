@@ -1,0 +1,1076 @@
+final class com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker extends java.lang.Object
+{
+    private static final long FORCE_RESET_WORKAROUND_TIMEOUT_MS;
+    private static final long MAX_AUDIO_TIMESTAMP_OFFSET_US;
+    private static final long MAX_LATENCY_US;
+    private static final int MAX_PLAYHEAD_OFFSET_COUNT;
+    private static final int MIN_LATENCY_SAMPLE_INTERVAL_US;
+    private static final int MIN_PLAYHEAD_OFFSET_SAMPLE_INTERVAL_US;
+    private static final int PLAYSTATE_PAUSED;
+    private static final int PLAYSTATE_PLAYING;
+    private static final int PLAYSTATE_STOPPED;
+    private com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller;
+    private android.media.AudioTrack audioTrack;
+    private int bufferSize;
+    private long bufferSizeUs;
+    private long endPlaybackHeadPosition;
+    private long forceResetWorkaroundTimeMs;
+    private java.lang.reflect.Method getLatencyMethod;
+    private boolean hasData;
+    private boolean isOutputPcm;
+    private long lastLatencySampleTimeUs;
+    private long lastPlayheadSampleTimeUs;
+    private long lastRawPlaybackHeadPosition;
+    private long latencyUs;
+    private final com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener listener;
+    private boolean needsPassthroughWorkarounds;
+    private int nextPlayheadOffsetIndex;
+    private int outputPcmFrameSize;
+    private int outputSampleRate;
+    private long passthroughWorkaroundPauseOffset;
+    private int playheadOffsetCount;
+    private final long[] playheadOffsets;
+    private long rawPlaybackHeadWrapCount;
+    private long smoothedPlayheadOffsetUs;
+    private long stopPlaybackHeadPosition;
+    private long stopTimestampUs;
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener)
+    {
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long[] $r6;
+        int $i0;
+        java.lang.Object $r3;
+        java.lang.Class $r4;
+        java.lang.reflect.Method $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener) $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener listener> = $r2;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i0 < 18 goto label3;
+
+        $r4 = class "Landroid/media/AudioTrack;";
+
+     label1:
+        $r5 = virtualinvoke $r4.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("getLatency", null);
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: java.lang.reflect.Method getLatencyMethod> = $r5;
+
+     label3:
+        $r6 = newarray (long)[10];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long[] playheadOffsets> = $r6;
+
+        return;
+
+     label4:
+        $r1 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.NoSuchMethodException from label1 to label2 with label4;
+    }
+
+    private boolean forceHasPendingData()
+    {
+        byte $b0;
+        int $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l2;
+        android.media.AudioTrack $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean needsPassthroughWorkarounds>;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: android.media.AudioTrack audioTrack>;
+
+        $i1 = virtualinvoke $r1.<android.media.AudioTrack: int getPlayState()>();
+
+        if $i1 != 2 goto label1;
+
+        $l2 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long getPlaybackHeadPosition()>();
+
+        $b0 = $l2 cmp 0L;
+
+        if $b0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private long framesToDurationUs(long)
+    {
+        int $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l0, $l2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l0 := @parameter0: long;
+
+        $l0 = $l0 * 1000000L;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int outputSampleRate>;
+
+        $l2 = (long) $i1;
+
+        $l0 = $l0 / $l2;
+
+        return $l0;
+    }
+
+    private long getPlaybackHeadPosition()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l0, $l2, $l4;
+        android.media.AudioTrack $r1;
+        byte $b1;
+        int $i3, $i5;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long stopTimestampUs>;
+
+        $b1 = $l0 cmp -9223372036854775807L;
+
+        if $b1 == 0 goto label1;
+
+        $l0 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        $l0 = $l0 * 1000L;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long stopTimestampUs>;
+
+        $l0 = $l0 - $l2;
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int outputSampleRate>;
+
+        $l2 = (long) $i3;
+
+        $l0 = $l0 * $l2;
+
+        $l2 = $l0 / 1000000L;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long endPlaybackHeadPosition>;
+
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long stopPlaybackHeadPosition>;
+
+        $l2 = $l4 + $l2;
+
+        $l0 = staticinvoke <java.lang.Math: long min(long,long)>($l0, $l2);
+
+        return $l0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: android.media.AudioTrack audioTrack>;
+
+        $i3 = virtualinvoke $r1.<android.media.AudioTrack: int getPlayState()>();
+
+        if $i3 != 1 goto label2;
+
+        return 0L;
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: android.media.AudioTrack audioTrack>;
+
+        $i5 = virtualinvoke $r1.<android.media.AudioTrack: int getPlaybackHeadPosition()>();
+
+        $l0 = (long) $i5;
+
+        $l0 = $l0 & 4294967295L;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean needsPassthroughWorkarounds>;
+
+        if $z0 == 0 goto label4;
+
+        if $i3 != 2 goto label3;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label3;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastRawPlaybackHeadPosition>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long passthroughWorkaroundPauseOffset> = $l2;
+
+     label3:
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long passthroughWorkaroundPauseOffset>;
+
+        $l0 = $l0 + $l2;
+
+     label4:
+        $i5 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i5 > 28 goto label7;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label6;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastRawPlaybackHeadPosition>;
+
+        $b1 = $l2 cmp 0L;
+
+        $i5 = (int) $b1;
+
+        if $i5 <= 0 goto label6;
+
+        if $i3 != 3 goto label6;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long forceResetWorkaroundTimeMs>;
+
+        $b1 = $l0 cmp -9223372036854775807L;
+
+        if $b1 != 0 goto label5;
+
+        $l0 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long forceResetWorkaroundTimeMs> = $l0;
+
+     label5:
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastRawPlaybackHeadPosition>;
+
+        return $l0;
+
+     label6:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long forceResetWorkaroundTimeMs> = -9223372036854775807L;
+
+     label7:
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastRawPlaybackHeadPosition>;
+
+        $b1 = $l2 cmp $l0;
+
+        $i3 = (int) $b1;
+
+        if $i3 <= 0 goto label8;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long rawPlaybackHeadWrapCount>;
+
+        $l2 = $l2 + 1L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long rawPlaybackHeadWrapCount> = $l2;
+
+     label8:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastRawPlaybackHeadPosition> = $l0;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long rawPlaybackHeadWrapCount>;
+
+        $l2 = $l2 << 32;
+
+        $l0 = $l0 + $l2;
+
+        return $l0;
+    }
+
+    private long getPlaybackHeadPositionUs()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long getPlaybackHeadPosition()>();
+
+        $l0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long framesToDurationUs(long)>($l0);
+
+        return $l0;
+    }
+
+    private void maybePollAndCheckTimestamp(long, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l0, $l1, $l2, $l3, $l4;
+        byte $b5;
+        int $i6;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l1 := @parameter0: long;
+
+        $l0 := @parameter1: long;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: boolean maybePollTimestamp(long)>($l1);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        $l2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: long getTimestampSystemTimeUs()>();
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        $l3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: long getTimestampPositionFrames()>();
+
+        $l4 = $l2 - $l1;
+
+        $l4 = staticinvoke <java.lang.Math: long abs(long)>($l4);
+
+        $b5 = $l4 cmp 5000000L;
+
+        $i6 = (int) $b5;
+
+        if $i6 <= 0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener listener>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener: void onSystemTimeUsMismatch(long,long,long,long)>($l3, $l2, $l1, $l0);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: void rejectTimestamp()>();
+
+        return;
+
+     label2:
+        $l4 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long framesToDurationUs(long)>($l3);
+
+        $l4 = $l4 - $l0;
+
+        $l4 = staticinvoke <java.lang.Math: long abs(long)>($l4);
+
+        $b5 = $l4 cmp 5000000L;
+
+        $i6 = (int) $b5;
+
+        if $i6 <= 0 goto label3;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener listener>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener: void onPositionFramesMismatch(long,long,long,long)>($l3, $l2, $l1, $l0);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: void rejectTimestamp()>();
+
+        return;
+
+     label3:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: void acceptTimestamp()>();
+
+        return;
+    }
+
+    private void maybeSampleSyncParams()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l2, $l3, $l4, $l5, $l7;
+        long[] $r1;
+        byte $b1;
+        int $i0, $i6;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l3 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long getPlaybackHeadPositionUs()>();
+
+        $b1 = $l3 cmp 0L;
+
+        if $b1 != 0 goto label1;
+
+        return;
+
+     label1:
+        $l4 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l4 = $l4 / 1000L;
+
+        $l5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastPlayheadSampleTimeUs>;
+
+        $l5 = $l4 - $l5;
+
+        $b1 = $l5 cmp 30000L;
+
+        $i0 = (int) $b1;
+
+        if $i0 < 0 goto label4;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long[] playheadOffsets>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int nextPlayheadOffsetIndex>;
+
+        $l5 = $l3 - $l4;
+
+        $r1[$i0] = $l5;
+
+        $i0 = $i0 + 1;
+
+        $i0 = $i0 % 10;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int nextPlayheadOffsetIndex> = $i0;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int playheadOffsetCount>;
+
+        if $i0 >= 10 goto label2;
+
+        $i0 = $i0 + 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int playheadOffsetCount> = $i0;
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastPlayheadSampleTimeUs> = $l4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long smoothedPlayheadOffsetUs> = 0L;
+
+        $i6 = 0;
+
+     label3:
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int playheadOffsetCount>;
+
+        if $i6 >= $i0 goto label4;
+
+        $l5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long smoothedPlayheadOffsetUs>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long[] playheadOffsets>;
+
+        $l7 = $r1[$i6];
+
+        $l2 = (long) $i0;
+
+        $l2 = $l7 / $l2;
+
+        $l5 = $l5 + $l2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long smoothedPlayheadOffsetUs> = $l5;
+
+        $i6 = $i6 + 1;
+
+        goto label3;
+
+     label4:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean needsPassthroughWorkarounds>;
+
+        if $z0 == 0 goto label5;
+
+        return;
+
+     label5:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: void maybePollAndCheckTimestamp(long,long)>($l4, $l3);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: void maybeUpdateLatency(long)>($l4);
+
+        return;
+    }
+
+    private void maybeUpdateLatency(long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l0, $l2, $l4;
+        android.media.AudioTrack $r3;
+        java.lang.Integer $r5;
+        java.lang.Exception $r1;
+        byte $b1;
+        int $i3;
+        java.lang.Object $r4;
+        java.lang.reflect.Method $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l0 := @parameter0: long;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean isOutputPcm>;
+
+        if $z0 == 0 goto label12;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: java.lang.reflect.Method getLatencyMethod>;
+
+        if $r2 == null goto label12;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastLatencySampleTimeUs>;
+
+        $l2 = $l0 - $l2;
+
+        $b1 = $l2 cmp 500000L;
+
+        $i3 = (int) $b1;
+
+        if $i3 < 0 goto label12;
+
+     label01:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: android.media.AudioTrack audioTrack>;
+
+        $r4 = virtualinvoke $r2.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r3, null);
+
+        $r5 = (java.lang.Integer) $r4;
+
+        $i3 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+     label02:
+        $l2 = (long) $i3;
+
+        $l2 = $l2 * 1000L;
+
+     label03:
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long bufferSizeUs>;
+
+     label04:
+        $l2 = $l2 - $l4;
+
+     label05:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long latencyUs> = $l2;
+
+        $l2 = staticinvoke <java.lang.Math: long max(long,long)>($l2, 0L);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long latencyUs> = $l2;
+
+     label06:
+        $b1 = $l2 cmp 5000000L;
+
+        $i3 = (int) $b1;
+
+        if $i3 <= 0 goto label10;
+
+     label07:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener listener>;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener: void onInvalidLatency(long)>($l2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long latencyUs> = 0L;
+
+     label08:
+        goto label10;
+
+     label09:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: java.lang.reflect.Method getLatencyMethod> = null;
+
+     label10:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastLatencySampleTimeUs> = $l0;
+
+        return;
+
+     label11:
+        $r1 := @caughtexception;
+
+        goto label09;
+
+     label12:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch java.lang.Exception from label03 to label04 with label11;
+        catch java.lang.Exception from label05 to label06 with label11;
+        catch java.lang.Exception from label07 to label08 with label11;
+    }
+
+    private static boolean needsPassthroughWorkarounds(int)
+    {
+        int $i0, $i1;
+
+        $i0 := @parameter0: int;
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i1 >= 23 goto label2;
+
+        if $i0 == 5 goto label1;
+
+        if $i0 != 6 goto label2;
+
+     label1:
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    private void resetSyncParams()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long smoothedPlayheadOffsetUs> = 0L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int playheadOffsetCount> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int nextPlayheadOffsetIndex> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastPlayheadSampleTimeUs> = 0L;
+
+        return;
+    }
+
+    public final int getAvailableBufferSize(long)
+    {
+        int $i0, $i4;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l1, $l2, $l3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l2 := @parameter0: long;
+
+        $l1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long getPlaybackHeadPosition()>();
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int outputPcmFrameSize>;
+
+        $l3 = (long) $i0;
+
+        $l1 = $l1 * $l3;
+
+        $l2 = $l2 - $l1;
+
+        $i0 = (int) $l2;
+
+        $i4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int bufferSize>;
+
+        $i0 = $i4 - $i0;
+
+        return $i0;
+    }
+
+    public final long getCurrentPositionUs(boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l1, $l2, $l3;
+        android.media.AudioTrack $r1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: android.media.AudioTrack audioTrack>;
+
+        $i0 = virtualinvoke $r1.<android.media.AudioTrack: int getPlayState()>();
+
+        if $i0 != 3 goto label1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: void maybeSampleSyncParams()>();
+
+     label1:
+        $l1 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l1 = $l1 / 1000L;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        $z1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: boolean hasTimestamp()>();
+
+        if $z1 == 0 goto label3;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        $l2 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: long getTimestampPositionFrames()>();
+
+        $l2 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long framesToDurationUs(long)>($l2);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: boolean isTimestampAdvancing()>();
+
+        if $z0 != 0 goto label2;
+
+        return $l2;
+
+     label2:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        $l3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: long getTimestampSystemTimeUs()>();
+
+        $l1 = $l1 - $l3;
+
+        $l1 = $l2 + $l1;
+
+        return $l1;
+
+     label3:
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int playheadOffsetCount>;
+
+        if $i0 != 0 goto label4;
+
+        $l1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long getPlaybackHeadPositionUs()>();
+
+        goto label5;
+
+     label4:
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long smoothedPlayheadOffsetUs>;
+
+        $l1 = $l1 + $l2;
+
+     label5:
+        if $z0 != 0 goto label6;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long latencyUs>;
+
+        $l1 = $l1 - $l2;
+
+     label6:
+        return $l1;
+    }
+
+    public final void handleEndOfStream(long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l0, $l1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l0 := @parameter0: long;
+
+        $l1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long getPlaybackHeadPosition()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long stopPlaybackHeadPosition> = $l1;
+
+        $l1 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        $l1 = $l1 * 1000L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long stopTimestampUs> = $l1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long endPlaybackHeadPosition> = $l0;
+
+        return;
+    }
+
+    public final boolean hasPendingData(long)
+    {
+        byte $b0;
+        int $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l1, $l2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l1 := @parameter0: long;
+
+        $l2 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long getPlaybackHeadPosition()>();
+
+        $b0 = $l1 cmp $l2;
+
+        $i3 = (int) $b0;
+
+        if $i3 > 0 goto label2;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean forceHasPendingData()>();
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    public final boolean isPlaying()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        android.media.AudioTrack $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: android.media.AudioTrack audioTrack>;
+
+        $i0 = virtualinvoke $r1.<android.media.AudioTrack: int getPlayState()>();
+
+        if $i0 != 3 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public final boolean isStalled(long)
+    {
+        byte $b0;
+        int $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l1, $l2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l1 := @parameter0: long;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long forceResetWorkaroundTimeMs>;
+
+        $b0 = $l2 cmp -9223372036854775807L;
+
+        if $b0 == 0 goto label1;
+
+        $b0 = $l1 cmp 0L;
+
+        $i3 = (int) $b0;
+
+        if $i3 <= 0 goto label1;
+
+        $l1 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long forceResetWorkaroundTimeMs>;
+
+        $l1 = $l1 - $l2;
+
+        $b0 = $l1 cmp 200L;
+
+        $i3 = (int) $b0;
+
+        if $i3 < 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public final boolean mayHandleBuffer(long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l1, $l2;
+        android.media.AudioTrack $r1;
+        byte $b3;
+        int $i0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $l1 := @parameter0: long;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: android.media.AudioTrack audioTrack>;
+
+        $i0 = virtualinvoke $r1.<android.media.AudioTrack: int getPlayState()>();
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean needsPassthroughWorkarounds>;
+
+        if $z0 == 0 goto label2;
+
+        if $i0 != 2 goto label1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean hasData> = 0;
+
+        return 0;
+
+     label1:
+        if $i0 != 1 goto label2;
+
+        $l2 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long getPlaybackHeadPosition()>();
+
+        $b3 = $l2 cmp 0L;
+
+        if $b3 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean hasData>;
+
+        $z1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean hasPendingData(long)>($l1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean hasData> = $z1;
+
+        if $z0 == 0 goto label3;
+
+        if $z1 != 0 goto label3;
+
+        if $i0 == 1 goto label3;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener listener>;
+
+        if $r2 == null goto label3;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int bufferSize>;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long bufferSizeUs>;
+
+        $l1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.C: long usToMs(long)>($l1);
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker$Listener: void onUnderrun(int,long)>($i0, $l1);
+
+     label3:
+        return 1;
+    }
+
+    public final boolean pause()
+    {
+        byte $b0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: void resetSyncParams()>();
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long stopTimestampUs>;
+
+        $b0 = $l1 cmp -9223372036854775807L;
+
+        if $b0 != 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: void reset()>();
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public final void reset()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: void resetSyncParams()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: android.media.AudioTrack audioTrack> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller> = null;
+
+        return;
+    }
+
+    public final void setAudioTrack(android.media.AudioTrack, int, int, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        long $l4;
+        android.media.AudioTrack $r1;
+        int $i0, $i1, $i2, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $r1 := @parameter0: android.media.AudioTrack;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: android.media.AudioTrack audioTrack> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int outputPcmFrameSize> = $i1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int bufferSize> = $i2;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: void <init>(android.media.AudioTrack)>($r1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller> = $r2;
+
+        $i3 = virtualinvoke $r1.<android.media.AudioTrack: int getSampleRate()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int outputSampleRate> = $i3;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean needsPassthroughWorkarounds(int)>($i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean needsPassthroughWorkarounds> = $z0;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: boolean isEncodingPcm(int)>($i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean isOutputPcm> = $z0;
+
+        if $z0 == 0 goto label1;
+
+        $i0 = $i2 / $i1;
+
+        $l4 = (long) $i0;
+
+        $l4 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long framesToDurationUs(long)>($l4);
+
+        goto label2;
+
+     label1:
+        $l4 = -9223372036854775807L;
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long bufferSizeUs> = $l4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long lastRawPlaybackHeadPosition> = 0L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long rawPlaybackHeadWrapCount> = 0L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long passthroughWorkaroundPauseOffset> = 0L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: boolean hasData> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long stopTimestampUs> = -9223372036854775807L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long forceResetWorkaroundTimeMs> = -9223372036854775807L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long latencyUs> = 0L;
+
+        return;
+    }
+
+    public final void start()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker r0;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller audioTimestampPoller>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTimestampPoller: void reset()>();
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int PLAYSTATE_STOPPED> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int PLAYSTATE_PLAYING> = 3;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int PLAYSTATE_PAUSED> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int MIN_PLAYHEAD_OFFSET_SAMPLE_INTERVAL_US> = 30000;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int MIN_LATENCY_SAMPLE_INTERVAL_US> = 500000;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: int MAX_PLAYHEAD_OFFSET_COUNT> = 10;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long MAX_LATENCY_US> = 5000000L;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long MAX_AUDIO_TIMESTAMP_OFFSET_US> = 5000000L;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.audio.AudioTrackPositionTracker: long FORCE_RESET_WORKAROUND_TIMEOUT_MS> = 200L;
+
+        return;
+    }
+}

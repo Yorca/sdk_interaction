@@ -1,0 +1,1283 @@
+public class com.adobe.air.AndroidCamera extends java.lang.Object
+{
+    private static final int CAMERA_POSITION_UNKNOWN;
+    private static final java.lang.String LOG_TAG;
+    private static boolean sAreMultipleCamerasSupportedInitialized;
+    private static boolean sAreMultipleCamerasSupportedOnDevice;
+    private static java.lang.Class sCameraInfoClass;
+    private static java.lang.reflect.Method sMIDGetCameraInfo;
+    private static java.lang.reflect.Method sMIDGetNumberOfCameras;
+    private static java.lang.reflect.Method sMIDOpen;
+    private static java.lang.reflect.Method sMIDOpenWithCameraID;
+    private com.adobe.air.AndroidActivityWrapper$StateChangeCallback mActivityStateCB;
+    private byte[] mBuffer1;
+    private byte[] mBuffer2;
+    private byte[] mCallbackBuffer;
+    private boolean mCallbacksRegistered;
+    private android.hardware.Camera mCamera;
+    private int mCameraId;
+    private boolean mCapturing;
+    private long mClientId;
+    private boolean mInitialized;
+    private boolean mPreviewSurfaceValid;
+
+    static void <clinit>()
+    {
+        <com.adobe.air.AndroidCamera: boolean sAreMultipleCamerasSupportedOnDevice> = 0;
+
+        <com.adobe.air.AndroidCamera: boolean sAreMultipleCamerasSupportedInitialized> = 0;
+
+        <com.adobe.air.AndroidCamera: java.lang.String LOG_TAG> = "AndroidCamera";
+
+        <com.adobe.air.AndroidCamera: int CAMERA_POSITION_UNKNOWN> = -1;
+
+        return;
+    }
+
+    public void <init>(long)
+    {
+        com.adobe.air.AndroidCamera r0;
+        long $l0;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $l0 := @parameter0: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera> = null;
+
+        r0.<com.adobe.air.AndroidCamera: int mCameraId> = 0;
+
+        r0.<com.adobe.air.AndroidCamera: boolean mInitialized> = 0;
+
+        r0.<com.adobe.air.AndroidCamera: boolean mCallbacksRegistered> = 0;
+
+        r0.<com.adobe.air.AndroidCamera: boolean mPreviewSurfaceValid> = 1;
+
+        r0.<com.adobe.air.AndroidCamera: boolean mCapturing> = 0;
+
+        r0.<com.adobe.air.AndroidCamera: com.adobe.air.AndroidActivityWrapper$StateChangeCallback mActivityStateCB> = null;
+
+        r0.<com.adobe.air.AndroidCamera: byte[] mCallbackBuffer> = null;
+
+        r0.<com.adobe.air.AndroidCamera: byte[] mBuffer1> = null;
+
+        r0.<com.adobe.air.AndroidCamera: byte[] mBuffer2> = null;
+
+        r0.<com.adobe.air.AndroidCamera: long mClientId> = $l0;
+
+        staticinvoke <com.adobe.air.AndroidCamera: boolean areMultipleCamerasSupportedOnDevice()>();
+
+        return;
+    }
+
+    static long access$000(com.adobe.air.AndroidCamera)
+    {
+        com.adobe.air.AndroidCamera $r0;
+        long l0;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        l0 = $r0.<com.adobe.air.AndroidCamera: long mClientId>;
+
+        return l0;
+    }
+
+    static boolean access$100(com.adobe.air.AndroidCamera)
+    {
+        com.adobe.air.AndroidCamera $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        z0 = $r0.<com.adobe.air.AndroidCamera: boolean mCallbacksRegistered>;
+
+        return z0;
+    }
+
+    static void access$200(com.adobe.air.AndroidCamera, long, byte[])
+    {
+        com.adobe.air.AndroidCamera $r0;
+        byte[] $r1;
+        long $l0;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: byte[];
+
+        specialinvoke $r0.<com.adobe.air.AndroidCamera: void nativeOnFrameCaptured(long,byte[])>($l0, $r1);
+
+        return;
+    }
+
+    static byte[] access$300(com.adobe.air.AndroidCamera)
+    {
+        com.adobe.air.AndroidCamera $r0;
+        byte[] r1;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        r1 = $r0.<com.adobe.air.AndroidCamera: byte[] mCallbackBuffer>;
+
+        return r1;
+    }
+
+    static byte[] access$302(com.adobe.air.AndroidCamera, byte[])
+    {
+        com.adobe.air.AndroidCamera $r0;
+        byte[] $r1;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        $r1 := @parameter1: byte[];
+
+        $r0.<com.adobe.air.AndroidCamera: byte[] mCallbackBuffer> = $r1;
+
+        return $r1;
+    }
+
+    static byte[] access$400(com.adobe.air.AndroidCamera)
+    {
+        com.adobe.air.AndroidCamera $r0;
+        byte[] r1;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        r1 = $r0.<com.adobe.air.AndroidCamera: byte[] mBuffer1>;
+
+        return r1;
+    }
+
+    static byte[] access$500(com.adobe.air.AndroidCamera)
+    {
+        com.adobe.air.AndroidCamera $r0;
+        byte[] r1;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        r1 = $r0.<com.adobe.air.AndroidCamera: byte[] mBuffer2>;
+
+        return r1;
+    }
+
+    static android.hardware.Camera access$600(com.adobe.air.AndroidCamera)
+    {
+        com.adobe.air.AndroidCamera $r0;
+        android.hardware.Camera r1;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        r1 = $r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        return r1;
+    }
+
+    static boolean access$700(com.adobe.air.AndroidCamera)
+    {
+        com.adobe.air.AndroidCamera $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        z0 = $r0.<com.adobe.air.AndroidCamera: boolean mPreviewSurfaceValid>;
+
+        return z0;
+    }
+
+    static boolean access$702(com.adobe.air.AndroidCamera, boolean)
+    {
+        com.adobe.air.AndroidCamera $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.adobe.air.AndroidCamera: boolean mPreviewSurfaceValid> = $z0;
+
+        return $z0;
+    }
+
+    static void access$800(com.adobe.air.AndroidCamera, long)
+    {
+        com.adobe.air.AndroidCamera $r0;
+        long $l0;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        $l0 := @parameter1: long;
+
+        specialinvoke $r0.<com.adobe.air.AndroidCamera: void nativeOnCanOpenCamera(long)>($l0);
+
+        return;
+    }
+
+    static void access$900(com.adobe.air.AndroidCamera, long)
+    {
+        com.adobe.air.AndroidCamera $r0;
+        long $l0;
+
+        $r0 := @parameter0: com.adobe.air.AndroidCamera;
+
+        $l0 := @parameter1: long;
+
+        specialinvoke $r0.<com.adobe.air.AndroidCamera: void nativeOnShouldCloseCamera(long)>($l0);
+
+        return;
+    }
+
+    public static boolean areMultipleCamerasSupportedOnDevice()
+    {
+        java.lang.Throwable $r0;
+        java.lang.Class[] $r3;
+        java.lang.Exception $r1;
+        java.lang.Class $r2, $r4;
+        java.lang.reflect.Method $r5, $r6;
+        boolean $z0;
+
+        $z0 = <com.adobe.air.AndroidCamera: boolean sAreMultipleCamerasSupportedInitialized>;
+
+        if $z0 == 0 goto label01;
+
+        $z0 = <com.adobe.air.AndroidCamera: boolean sAreMultipleCamerasSupportedOnDevice>;
+
+        return $z0;
+
+     label01:
+        <com.adobe.air.AndroidCamera: boolean sAreMultipleCamerasSupportedInitialized> = 1;
+
+        $r2 = class "Landroid/hardware/Camera;";
+
+        $r3 = newarray (java.lang.Class)[1];
+
+        $r4 = <java.lang.Integer: java.lang.Class TYPE>;
+
+        $r3[0] = $r4;
+
+     label02:
+        $r5 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("open", $r3);
+
+     label03:
+        <com.adobe.air.AndroidCamera: java.lang.reflect.Method sMIDOpenWithCameraID> = $r5;
+
+        $r2 = class "Landroid/hardware/Camera;";
+
+     label04:
+        $r5 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Method getDeclaredMethod(java.lang.String,java.lang.Class[])>("getNumberOfCameras", null);
+
+     label05:
+        <com.adobe.air.AndroidCamera: java.lang.reflect.Method sMIDGetNumberOfCameras> = $r5;
+
+     label06:
+        $r2 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("android.hardware.Camera$CameraInfo");
+
+     label07:
+        <com.adobe.air.AndroidCamera: java.lang.Class sCameraInfoClass> = $r2;
+
+        $r2 = class "Landroid/hardware/Camera;";
+
+        $r3 = newarray (java.lang.Class)[2];
+
+        $r4 = <java.lang.Integer: java.lang.Class TYPE>;
+
+     label08:
+        $r3[0] = $r4;
+
+     label09:
+        $r4 = <com.adobe.air.AndroidCamera: java.lang.Class sCameraInfoClass>;
+
+     label10:
+        $r3[1] = $r4;
+
+        $r5 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("getCameraInfo", $r3);
+
+     label11:
+        <com.adobe.air.AndroidCamera: java.lang.reflect.Method sMIDGetCameraInfo> = $r5;
+
+        $r6 = <com.adobe.air.AndroidCamera: java.lang.reflect.Method sMIDOpenWithCameraID>;
+
+        if $r6 == null goto label12;
+
+        $r6 = <com.adobe.air.AndroidCamera: java.lang.reflect.Method sMIDGetNumberOfCameras>;
+
+        if $r6 == null goto label12;
+
+        if $r5 == null goto label12;
+
+        <com.adobe.air.AndroidCamera: boolean sAreMultipleCamerasSupportedOnDevice> = 1;
+
+     label12:
+        $z0 = <com.adobe.air.AndroidCamera: boolean sAreMultipleCamerasSupportedOnDevice>;
+
+        return $z0;
+
+     label13:
+        $r0 := @caughtexception;
+
+        return 0;
+
+     label14:
+        $r1 := @caughtexception;
+
+        return 0;
+
+        catch java.lang.NoSuchMethodException from label02 to label03 with label13;
+        catch java.lang.NoSuchMethodException from label04 to label05 with label13;
+        catch java.lang.Exception from label06 to label07 with label14;
+        catch java.lang.Exception from label08 to label09 with label14;
+        catch java.lang.Exception from label10 to label11 with label14;
+    }
+
+    public static int getNumberOfCameras()
+    {
+        int $i0;
+        java.lang.Object $r2;
+        java.lang.reflect.Method $r1;
+        java.lang.Integer $r3;
+        java.lang.Exception $r0;
+        boolean $z0;
+
+        $z0 = staticinvoke <com.adobe.air.AndroidCamera: boolean areMultipleCamerasSupportedOnDevice()>();
+
+        if $z0 == 0 goto label3;
+
+        $r1 = <com.adobe.air.AndroidCamera: java.lang.reflect.Method sMIDGetNumberOfCameras>;
+
+     label1:
+        $r2 = virtualinvoke $r1.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>(null, null);
+
+        $r3 = (java.lang.Integer) $r2;
+
+        $i0 = virtualinvoke $r3.<java.lang.Integer: int intValue()>();
+
+     label2:
+        return $i0;
+
+     label3:
+        return 1;
+
+     label4:
+        $r0 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.Exception from label1 to label2 with label4;
+    }
+
+    private native void nativeOnCanOpenCamera(long);
+
+    private native void nativeOnFrameCaptured(long, byte[]);
+
+    private native void nativeOnShouldCloseCamera(long);
+
+    public boolean autoFocus()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera$Parameters $r3;
+        java.lang.String $r4;
+        java.lang.Exception $r1;
+        android.hardware.Camera $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        if $r2 == null goto label6;
+
+        $z0 = r0.<com.adobe.air.AndroidCamera: boolean mCapturing>;
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r3 = virtualinvoke $r2.<android.hardware.Camera: android.hardware.Camera$Parameters getParameters()>();
+
+        $r4 = virtualinvoke $r3.<android.hardware.Camera$Parameters: java.lang.String getFocusMode()>();
+
+     label2:
+        if $r4 == "fixed" goto label6;
+
+        if $r4 == "infinity" goto label6;
+
+        if $r4 == "continuous-video" goto label6;
+
+     label3:
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        virtualinvoke $r2.<android.hardware.Camera: void autoFocus(android.hardware.Camera$AutoFocusCallback)>(null);
+
+     label4:
+        return 1;
+
+     label5:
+        $r1 := @caughtexception;
+
+     label6:
+        return 0;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public void close()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera $r1;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $r1 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke r0.<com.adobe.air.AndroidCamera: void stopCapture()>();
+
+        $r1 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        virtualinvoke $r1.<android.hardware.Camera: void release()>();
+
+        r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera> = null;
+
+     label1:
+        return;
+    }
+
+    public android.hardware.Camera getCamera()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera r1;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        r1 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        return r1;
+    }
+
+    public int getCameraPosition()
+    {
+        com.adobe.air.AndroidCamera r0;
+        java.lang.Object[] $r10;
+        java.lang.reflect.Field $r7;
+        java.lang.Integer $r11;
+        java.lang.Exception $r2, $r3, $r4, $r5;
+        int $i0;
+        java.lang.Class $r6;
+        java.lang.Object $r8;
+        java.lang.reflect.Method $r9;
+        android.hardware.Camera $r1;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $z0 = <com.adobe.air.AndroidCamera: boolean sAreMultipleCamerasSupportedOnDevice>;
+
+        if $z0 == 0 goto label17;
+
+        $r6 = <com.adobe.air.AndroidCamera: java.lang.Class sCameraInfoClass>;
+
+        $r7 = null;
+
+        if $r6 == null goto label03;
+
+     label01:
+        $r8 = virtualinvoke $r6.<java.lang.Class: java.lang.Object newInstance()>();
+
+     label02:
+        goto label04;
+
+     label03:
+        $r8 = null;
+
+     label04:
+        $r9 = <com.adobe.air.AndroidCamera: java.lang.reflect.Method sMIDGetCameraInfo>;
+
+     label05:
+        $r1 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+     label06:
+        $r10 = newarray (java.lang.Object)[2];
+
+     label07:
+        $i0 = r0.<com.adobe.air.AndroidCamera: int mCameraId>;
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r10[0] = $r11;
+
+        $r10[1] = $r8;
+
+        virtualinvoke $r9.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r1, $r10);
+
+     label08:
+        if $r8 == null goto label11;
+
+     label09:
+        $r6 = virtualinvoke $r8.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.Class: java.lang.reflect.Field getField(java.lang.String)>("facing");
+
+     label10:
+        goto label11;
+
+     label11:
+        $i0 = virtualinvoke $r7.<java.lang.reflect.Field: int getInt(java.lang.Object)>($r8);
+
+     label12:
+        return $i0;
+
+     label13:
+        $r2 := @caughtexception;
+
+        $i0 = -1;
+
+        return $i0;
+
+     label14:
+        $r3 := @caughtexception;
+
+        $i0 = -1;
+
+        return $i0;
+
+     label15:
+        $r4 := @caughtexception;
+
+        $i0 = -1;
+
+        return $i0;
+
+     label16:
+        $r5 := @caughtexception;
+
+        $i0 = -1;
+
+        return $i0;
+
+     label17:
+        $i0 = -1;
+
+        return $i0;
+
+        catch java.lang.Exception from label01 to label02 with label13;
+        catch java.lang.Exception from label05 to label06 with label14;
+        catch java.lang.Exception from label07 to label08 with label14;
+        catch java.lang.Exception from label09 to label10 with label15;
+        catch java.lang.Exception from label11 to label12 with label16;
+    }
+
+    public int getCaptureFormat()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera$Parameters $r3;
+        int $i0;
+        java.lang.Exception $r1;
+        android.hardware.Camera $r2;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+     label1:
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        $r3 = virtualinvoke $r2.<android.hardware.Camera: android.hardware.Camera$Parameters getParameters()>();
+
+        $i0 = virtualinvoke $r3.<android.hardware.Camera$Parameters: int getPreviewFormat()>();
+
+     label2:
+        return $i0;
+
+     label3:
+        return 0;
+
+     label4:
+        $r1 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.Exception from label1 to label2 with label4;
+    }
+
+    public int getCaptureHeight()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera$Parameters $r3;
+        int i0;
+        java.lang.Exception $r1;
+        android.hardware.Camera$Size $r4;
+        android.hardware.Camera $r2;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+     label1:
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        $r3 = virtualinvoke $r2.<android.hardware.Camera: android.hardware.Camera$Parameters getParameters()>();
+
+        $r4 = virtualinvoke $r3.<android.hardware.Camera$Parameters: android.hardware.Camera$Size getPreviewSize()>();
+
+        i0 = $r4.<android.hardware.Camera$Size: int height>;
+
+     label2:
+        return i0;
+
+     label3:
+        return 0;
+
+     label4:
+        $r1 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.Exception from label1 to label2 with label4;
+    }
+
+    public int getCaptureWidth()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera$Parameters $r3;
+        int i0;
+        java.lang.Exception $r1;
+        android.hardware.Camera$Size $r4;
+        android.hardware.Camera $r2;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+     label1:
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        $r3 = virtualinvoke $r2.<android.hardware.Camera: android.hardware.Camera$Parameters getParameters()>();
+
+        $r4 = virtualinvoke $r3.<android.hardware.Camera$Parameters: android.hardware.Camera$Size getPreviewSize()>();
+
+        i0 = $r4.<android.hardware.Camera$Size: int width>;
+
+     label2:
+        return i0;
+
+     label3:
+        return 0;
+
+     label4:
+        $r1 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.Exception from label1 to label2 with label4;
+    }
+
+    public int[] getSupportedFormats()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera$Parameters $r4;
+        java.util.Iterator $r6;
+        java.lang.Integer $r8;
+        java.lang.Exception $r1;
+        java.util.List $r5;
+        int[] $r2;
+        int $i0, $i1, $i2;
+        java.lang.Object $r7;
+        android.hardware.Camera $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $i1 = 0;
+
+        $r2 = newarray (int)[0];
+
+     label1:
+        $r3 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        $r4 = virtualinvoke $r3.<android.hardware.Camera: android.hardware.Camera$Parameters getParameters()>();
+
+        $r5 = virtualinvoke $r4.<android.hardware.Camera$Parameters: java.util.List getSupportedPreviewFormats()>();
+
+        $i0 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+        $r2 = newarray (int)[$i0];
+
+        $r6 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+     label3:
+        if $z0 == 0 goto label7;
+
+     label4:
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (java.lang.Integer) $r7;
+
+     label5:
+        $i2 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        $r2[$i1] = $i2;
+
+     label6:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label7:
+        return $r2;
+
+     label8:
+        $r1 := @caughtexception;
+
+        return $r2;
+
+        catch java.lang.Exception from label1 to label3 with label8;
+        catch java.lang.Exception from label4 to label5 with label8;
+        catch java.lang.Exception from label5 to label6 with label8;
+    }
+
+    public int[] getSupportedFps()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera$Parameters $r4;
+        java.util.Iterator $r6;
+        java.lang.Integer $r8;
+        java.lang.Exception $r1;
+        java.util.List $r5;
+        int[] $r2;
+        int $i0, $i1, $i2;
+        java.lang.Object $r7;
+        android.hardware.Camera $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $i1 = 0;
+
+        $r2 = newarray (int)[0];
+
+     label1:
+        $r3 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        $r4 = virtualinvoke $r3.<android.hardware.Camera: android.hardware.Camera$Parameters getParameters()>();
+
+        $r5 = virtualinvoke $r4.<android.hardware.Camera$Parameters: java.util.List getSupportedPreviewFrameRates()>();
+
+        $i0 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+        $r2 = newarray (int)[$i0];
+
+        $r6 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+     label3:
+        if $z0 == 0 goto label7;
+
+     label4:
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (java.lang.Integer) $r7;
+
+     label5:
+        $i2 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        $r2[$i1] = $i2;
+
+     label6:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label7:
+        return $r2;
+
+     label8:
+        $r1 := @caughtexception;
+
+        return $r2;
+
+        catch java.lang.Exception from label1 to label3 with label8;
+        catch java.lang.Exception from label4 to label5 with label8;
+        catch java.lang.Exception from label5 to label6 with label8;
+    }
+
+    public int[] getSupportedVideoSizes()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera$Parameters $r4;
+        java.util.Iterator $r6;
+        java.lang.Exception $r1;
+        android.hardware.Camera$Size $r8;
+        java.util.List $r5;
+        int[] $r2;
+        int $i0, $i1, $i2;
+        java.lang.Object $r7;
+        android.hardware.Camera $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $i2 = 0;
+
+        $r2 = newarray (int)[0];
+
+     label01:
+        $r3 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        $r4 = virtualinvoke $r3.<android.hardware.Camera: android.hardware.Camera$Parameters getParameters()>();
+
+        $r5 = virtualinvoke $r4.<android.hardware.Camera$Parameters: java.util.List getSupportedPreviewSizes()>();
+
+        $i0 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+     label02:
+        $i0 = $i0 * 2;
+
+     label03:
+        $r2 = newarray (int)[$i0];
+
+        $r6 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label04:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+     label05:
+        if $z0 == 0 goto label12;
+
+     label06:
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (android.hardware.Camera$Size) $r7;
+
+     label07:
+        $i0 = $i2 + 1;
+
+     label08:
+        $i1 = $r8.<android.hardware.Camera$Size: int width>;
+
+        $r2[$i2] = $i1;
+
+     label09:
+        $i2 = $i0 + 1;
+
+     label10:
+        $i1 = $r8.<android.hardware.Camera$Size: int height>;
+
+        $r2[$i0] = $i1;
+
+     label11:
+        goto label04;
+
+     label12:
+        return $r2;
+
+     label13:
+        $r1 := @caughtexception;
+
+        return $r2;
+
+        catch java.lang.Exception from label01 to label02 with label13;
+        catch java.lang.Exception from label03 to label05 with label13;
+        catch java.lang.Exception from label06 to label07 with label13;
+        catch java.lang.Exception from label08 to label09 with label13;
+        catch java.lang.Exception from label10 to label11 with label13;
+    }
+
+    public boolean open(int)
+    {
+        java.lang.Object[] $r1;
+        java.lang.Integer $r11;
+        int $i0;
+        com.adobe.air.AndroidCameraView $r6;
+        com.adobe.air.AndroidActivityWrapper $r5;
+        android.view.SurfaceHolder $r7, $r8;
+        java.lang.reflect.Method $r10;
+        com.adobe.air.AndroidCamera$PreviewSurfaceCallback $r13;
+        boolean $z0;
+        com.adobe.air.AndroidCamera r0;
+        android.view.Surface $r9;
+        java.lang.Exception $r2, $r3;
+        java.lang.Object $r12;
+        android.hardware.Camera $r4;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $i0 := @parameter0: int;
+
+        $r4 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        if $r4 == null goto label01;
+
+        return 1;
+
+     label01:
+        $r5 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r6 = virtualinvoke $r5.<com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidCameraView getCameraView()>();
+
+        $r7 = virtualinvoke $r6.<com.adobe.air.AndroidCameraView: android.view.SurfaceHolder getHolder()>();
+
+     label02:
+        $r8 = $r7;
+
+        if $r7 == null goto label13;
+
+     label03:
+        $r9 = interfaceinvoke $r7.<android.view.SurfaceHolder: android.view.Surface getSurface()>();
+
+     label04:
+        if $r9 == null goto label13;
+
+        $z0 = <com.adobe.air.AndroidCamera: boolean sAreMultipleCamerasSupportedOnDevice>;
+
+        if $z0 == 0 goto label07;
+
+        $r10 = <com.adobe.air.AndroidCamera: java.lang.reflect.Method sMIDOpenWithCameraID>;
+
+        $r1 = newarray (java.lang.Object)[1];
+
+     label05:
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r1[0] = $r11;
+
+        $r12 = virtualinvoke $r10.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>(null, $r1);
+
+        $r4 = (android.hardware.Camera) $r12;
+
+        r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera> = $r4;
+
+        r0.<com.adobe.air.AndroidCamera: int mCameraId> = $i0;
+
+     label06:
+        goto label08;
+
+     label07:
+        $r4 = staticinvoke <android.hardware.Camera: android.hardware.Camera open()>();
+
+        r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera> = $r4;
+
+        r0.<com.adobe.air.AndroidCamera: int mCameraId> = 0;
+
+     label08:
+        $r4 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        virtualinvoke $r4.<android.hardware.Camera: void setPreviewDisplay(android.view.SurfaceHolder)>($r7);
+
+     label09:
+        goto label13;
+
+     label10:
+        goto label12;
+
+     label11:
+        $r8 = null;
+
+     label12:
+        $r4 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        if $r4 == null goto label13;
+
+        virtualinvoke $r4.<android.hardware.Camera: void release()>();
+
+        r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera> = null;
+
+     label13:
+        $r4 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        if $r4 == null goto label14;
+
+        $r13 = new com.adobe.air.AndroidCamera$PreviewSurfaceCallback;
+
+        specialinvoke $r13.<com.adobe.air.AndroidCamera$PreviewSurfaceCallback: void <init>(com.adobe.air.AndroidCamera)>(r0);
+
+        interfaceinvoke $r8.<android.view.SurfaceHolder: void addCallback(android.view.SurfaceHolder$Callback)>($r13);
+
+        return 1;
+
+     label14:
+        return 0;
+
+     label15:
+        $r2 := @caughtexception;
+
+        goto label11;
+
+     label16:
+        $r3 := @caughtexception;
+
+        goto label10;
+
+        catch java.lang.Exception from label01 to label02 with label15;
+        catch java.lang.Exception from label03 to label04 with label16;
+        catch java.lang.Exception from label05 to label06 with label16;
+        catch java.lang.Exception from label07 to label09 with label16;
+    }
+
+    public void registerCallbacks(boolean)
+    {
+        com.adobe.air.AndroidCamera r0;
+        com.adobe.air.AndroidCamera$2 $r2;
+        com.adobe.air.AndroidActivityWrapper$StateChangeCallback $r1;
+        com.adobe.air.AndroidActivityWrapper $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $z0 := @parameter0: boolean;
+
+        r0.<com.adobe.air.AndroidCamera: boolean mCallbacksRegistered> = $z0;
+
+        if $z0 == 0 goto label2;
+
+        $r1 = r0.<com.adobe.air.AndroidCamera: com.adobe.air.AndroidActivityWrapper$StateChangeCallback mActivityStateCB>;
+
+        if $r1 != null goto label1;
+
+        $r2 = new com.adobe.air.AndroidCamera$2;
+
+        specialinvoke $r2.<com.adobe.air.AndroidCamera$2: void <init>(com.adobe.air.AndroidCamera)>(r0);
+
+        r0.<com.adobe.air.AndroidCamera: com.adobe.air.AndroidActivityWrapper$StateChangeCallback mActivityStateCB> = $r2;
+
+     label1:
+        $r3 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r1 = r0.<com.adobe.air.AndroidCamera: com.adobe.air.AndroidActivityWrapper$StateChangeCallback mActivityStateCB>;
+
+        virtualinvoke $r3.<com.adobe.air.AndroidActivityWrapper: void addActivityStateChangeListner(com.adobe.air.AndroidActivityWrapper$StateChangeCallback)>($r1);
+
+        return;
+
+     label2:
+        $r1 = r0.<com.adobe.air.AndroidCamera: com.adobe.air.AndroidActivityWrapper$StateChangeCallback mActivityStateCB>;
+
+        if $r1 == null goto label3;
+
+        $r3 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r1 = r0.<com.adobe.air.AndroidCamera: com.adobe.air.AndroidActivityWrapper$StateChangeCallback mActivityStateCB>;
+
+        virtualinvoke $r3.<com.adobe.air.AndroidActivityWrapper: void removeActivityStateChangeListner(com.adobe.air.AndroidActivityWrapper$StateChangeCallback)>($r1);
+
+     label3:
+        r0.<com.adobe.air.AndroidCamera: com.adobe.air.AndroidActivityWrapper$StateChangeCallback mActivityStateCB> = null;
+
+        return;
+    }
+
+    public boolean setContinuousFocusMode()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera$Parameters $r3;
+        java.util.List $r4;
+        java.lang.Exception $r1;
+        android.hardware.Camera $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        if $r2 != null goto label01;
+
+        return 0;
+
+     label01:
+        $r3 = virtualinvoke $r2.<android.hardware.Camera: android.hardware.Camera$Parameters getParameters()>();
+
+        $r4 = virtualinvoke $r3.<android.hardware.Camera$Parameters: java.util.List getSupportedFocusModes()>();
+
+        $z0 = interfaceinvoke $r4.<java.util.List: boolean contains(java.lang.Object)>("continuous-video");
+
+     label02:
+        if $z0 == 0 goto label05;
+
+     label03:
+        virtualinvoke $r3.<android.hardware.Camera$Parameters: void setFocusMode(java.lang.String)>("continuous-video");
+
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        virtualinvoke $r2.<android.hardware.Camera: void setParameters(android.hardware.Camera$Parameters)>($r3);
+
+     label04:
+        return 1;
+
+     label05:
+        $z0 = interfaceinvoke $r4.<java.util.List: boolean contains(java.lang.Object)>("edof");
+
+     label06:
+        if $z0 == 0 goto label09;
+
+     label07:
+        virtualinvoke $r3.<android.hardware.Camera$Parameters: void setFocusMode(java.lang.String)>("edof");
+
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        virtualinvoke $r2.<android.hardware.Camera: void setParameters(android.hardware.Camera$Parameters)>($r3);
+
+     label08:
+        goto label04;
+
+     label09:
+        return 0;
+
+     label10:
+        $r1 := @caughtexception;
+
+        return 0;
+
+        catch java.lang.Exception from label01 to label02 with label10;
+        catch java.lang.Exception from label03 to label04 with label10;
+        catch java.lang.Exception from label05 to label06 with label10;
+        catch java.lang.Exception from label07 to label08 with label10;
+    }
+
+    public boolean startCapture(int, int, int, int)
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera$Parameters $r3;
+        byte[] $r6, $r7;
+        java.lang.Exception $r1;
+        android.hardware.Camera$Size $r5;
+        com.adobe.air.AndroidCamera$1 $r4;
+        int $i0, $i1, $i2, $i3;
+        android.hardware.Camera $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $i1 := @parameter0: int;
+
+        $i2 := @parameter1: int;
+
+        $i3 := @parameter2: int;
+
+        $i0 := @parameter3: int;
+
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        $z0 = 0;
+
+        if $r2 != null goto label01;
+
+        return 0;
+
+     label01:
+        $r3 = virtualinvoke $r2.<android.hardware.Camera: android.hardware.Camera$Parameters getParameters()>();
+
+        virtualinvoke $r3.<android.hardware.Camera$Parameters: void setPreviewSize(int,int)>($i1, $i2);
+
+        virtualinvoke $r3.<android.hardware.Camera$Parameters: void setPreviewFrameRate(int)>($i3);
+
+        virtualinvoke $r3.<android.hardware.Camera$Parameters: void setPreviewFormat(int)>($i0);
+
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        virtualinvoke $r2.<android.hardware.Camera: void setParameters(android.hardware.Camera$Parameters)>($r3);
+
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+     label02:
+        $r4 = new com.adobe.air.AndroidCamera$1;
+
+     label03:
+        specialinvoke $r4.<com.adobe.air.AndroidCamera$1: void <init>(com.adobe.air.AndroidCamera)>(r0);
+
+        virtualinvoke $r2.<android.hardware.Camera: void setPreviewCallbackWithBuffer(android.hardware.Camera$PreviewCallback)>($r4);
+
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        virtualinvoke $r2.<android.hardware.Camera: void startPreview()>();
+
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        $r3 = virtualinvoke $r2.<android.hardware.Camera: android.hardware.Camera$Parameters getParameters()>();
+
+        $r5 = virtualinvoke $r3.<android.hardware.Camera$Parameters: android.hardware.Camera$Size getPreviewSize()>();
+
+        $i1 = $r5.<android.hardware.Camera$Size: int width>;
+
+        $r5 = virtualinvoke $r3.<android.hardware.Camera$Parameters: android.hardware.Camera$Size getPreviewSize()>();
+
+        $i2 = $r5.<android.hardware.Camera$Size: int height>;
+
+     label04:
+        $i1 = $i1 * $i2;
+
+     label05:
+        $i2 = virtualinvoke $r3.<android.hardware.Camera$Parameters: int getPreviewFormat()>();
+
+        $i2 = staticinvoke <android.graphics.ImageFormat: int getBitsPerPixel(int)>($i2);
+
+     label06:
+        $i1 = $i1 * $i2;
+
+     label07:
+        $r6 = newarray (byte)[$i1];
+
+        r0.<com.adobe.air.AndroidCamera: byte[] mBuffer1> = $r6;
+
+        $r7 = newarray (byte)[$i1];
+
+        r0.<com.adobe.air.AndroidCamera: byte[] mBuffer2> = $r7;
+
+        r0.<com.adobe.air.AndroidCamera: byte[] mCallbackBuffer> = $r6;
+
+        $r2 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        virtualinvoke $r2.<android.hardware.Camera: void addCallbackBuffer(byte[])>($r6);
+
+     label08:
+        $z0 = 1;
+
+     label09:
+        r0.<com.adobe.air.AndroidCamera: boolean mCapturing> = 1;
+
+     label10:
+        return 1;
+
+     label11:
+        $r1 := @caughtexception;
+
+        return $z0;
+
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch java.lang.Exception from label03 to label04 with label11;
+        catch java.lang.Exception from label05 to label06 with label11;
+        catch java.lang.Exception from label07 to label08 with label11;
+        catch java.lang.Exception from label09 to label10 with label11;
+    }
+
+    public void stopCapture()
+    {
+        com.adobe.air.AndroidCamera r0;
+        android.hardware.Camera $r1;
+
+        r0 := @this: com.adobe.air.AndroidCamera;
+
+        $r1 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r1.<android.hardware.Camera: void setPreviewCallback(android.hardware.Camera$PreviewCallback)>(null);
+
+        $r1 = r0.<com.adobe.air.AndroidCamera: android.hardware.Camera mCamera>;
+
+        virtualinvoke $r1.<android.hardware.Camera: void stopPreview()>();
+
+        r0.<com.adobe.air.AndroidCamera: byte[] mCallbackBuffer> = null;
+
+        r0.<com.adobe.air.AndroidCamera: byte[] mBuffer1> = null;
+
+        r0.<com.adobe.air.AndroidCamera: byte[] mBuffer2> = null;
+
+     label1:
+        r0.<com.adobe.air.AndroidCamera: boolean mCapturing> = 0;
+
+        return;
+    }
+}

@@ -1,0 +1,461 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader
+{
+    private static final int HEADER_SIZE;
+    private static final int STATE_FINDING_SYNC;
+    private static final int STATE_READING_HEADER;
+    private static final int STATE_READING_SAMPLE;
+    private int bytesRead;
+    private com.mbridge.msdk.playercommon.exoplayer2.Format format;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray headerScratchBits;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray headerScratchBytes;
+    private final java.lang.String language;
+    private boolean lastByteWas0B;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput output;
+    private long sampleDurationUs;
+    private int sampleSize;
+    private int state;
+    private long timeUs;
+    private java.lang.String trackFormatId;
+
+    public void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: void <init>(java.lang.String)>(null);
+
+        return;
+    }
+
+    public void <init>(java.lang.String)
+    {
+        byte[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r4;
+        java.lang.String $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader;
+
+        $r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray;
+
+        $r3 = newarray (byte)[128];
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void <init>(byte[])>($r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray headerScratchBits> = $r2;
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: byte[] data>;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void <init>(byte[])>($r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray headerScratchBytes> = $r4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int state> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: java.lang.String language> = $r1;
+
+        return;
+    }
+
+    private boolean continueRead(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, byte[], int)
+    {
+        byte[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader r0;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $r1 := @parameter1: byte[];
+
+        $i0 := @parameter2: int;
+
+        $i1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int bytesRead>;
+
+        $i2 = 128 - $i2;
+
+        $i1 = staticinvoke <java.lang.Math: int min(int,int)>($i1, $i2);
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int bytesRead>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r1, $i2, $i1);
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int bytesRead>;
+
+        $i1 = $i2 + $i1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int bytesRead> = $i1;
+
+        if $i1 != 128 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private void parseHeader()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util$SyncFrameInfo $r5;
+        long $l2, $l3;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r6;
+        java.lang.String $r1, $r2, $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r7;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray headerScratchBits>;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void setPosition(int)>(0);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray headerScratchBits>;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util: com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util$SyncFrameInfo parseAc3SyncframeInfo(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray)>($r4);
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        if $r6 == null goto label1;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util$SyncFrameInfo: int channelCount>;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $i1 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.Format: int channelCount>;
+
+        if $i0 != $i1 goto label1;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util$SyncFrameInfo: int sampleRate>;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $i1 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.Format: int sampleRate>;
+
+        if $i0 != $i1 goto label1;
+
+        $r1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util$SyncFrameInfo: java.lang.String mimeType>;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $r2 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String sampleMimeType>;
+
+        if $r1 == $r2 goto label2;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: java.lang.String trackFormatId>;
+
+        $r2 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util$SyncFrameInfo: java.lang.String mimeType>;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util$SyncFrameInfo: int channelCount>;
+
+        $i1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util$SyncFrameInfo: int sampleRate>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: java.lang.String language>;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format createAudioSampleFormat(java.lang.String,java.lang.String,java.lang.String,int,int,int,int,java.util.List,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,int,java.lang.String)>($r1, $r2, null, -1, -1, $i0, $i1, null, null, 0, $r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.Format format> = $r6;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput output>;
+
+        interfaceinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void format(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r6);
+
+     label2:
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util$SyncFrameInfo: int frameSize>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int sampleSize> = $i0;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util$SyncFrameInfo: int sampleCount>;
+
+        $l2 = (long) $i0;
+
+        $l2 = $l2 * 1000000L;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $i0 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.Format: int sampleRate>;
+
+        $l3 = (long) $i0;
+
+        $l2 = $l2 / $l3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: long sampleDurationUs> = $l2;
+
+        return;
+    }
+
+    private boolean skipToNextSync(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader r0;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+     label1:
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        $z0 = 0;
+
+        if $i0 <= 0 goto label6;
+
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: boolean lastByteWas0B>;
+
+        if $z1 != 0 goto label3;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        if $i0 != 11 goto label2;
+
+        $z0 = 1;
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: boolean lastByteWas0B> = $z0;
+
+        goto label1;
+
+     label3:
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        if $i0 != 119 goto label4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: boolean lastByteWas0B> = 0;
+
+        return 1;
+
+     label4:
+        if $i0 != 11 goto label5;
+
+        $z0 = 1;
+
+     label5:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: boolean lastByteWas0B> = $z0;
+
+        goto label1;
+
+     label6:
+        return 0;
+    }
+
+    public final void consume(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        byte[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1, $r3;
+        long $l3, $l4;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+     label1:
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i0 <= 0 goto label4;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int state>;
+
+        if $i0 == 0 goto label3;
+
+        if $i0 == 1 goto label2;
+
+        if $i0 != 2 goto label1;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int sampleSize>;
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int bytesRead>;
+
+        $i1 = $i1 - $i2;
+
+        $i0 = staticinvoke <java.lang.Math: int min(int,int)>($i0, $i1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput output>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void sampleData(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r1, $i0);
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int bytesRead>;
+
+        $i1 = $i1 + $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int bytesRead> = $i1;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int sampleSize>;
+
+        if $i1 != $i0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput output>;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: long timeUs>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void sampleMetadata(long,int,int,int,com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData)>($l3, 1, $i0, 0, null);
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: long timeUs>;
+
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: long sampleDurationUs>;
+
+        $l3 = $l3 + $l4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: long timeUs> = $l3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int state> = 0;
+
+        goto label1;
+
+     label2:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray headerScratchBytes>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: boolean continueRead(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,byte[],int)>($r1, $r4, 128);
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: void parseHeader()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray headerScratchBytes>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput output>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray headerScratchBytes>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void sampleData(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r3, 128);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int state> = 2;
+
+        goto label1;
+
+     label3:
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: boolean skipToNextSync(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int state> = 1;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray headerScratchBytes>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $r4[0] = 11;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray headerScratchBytes>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $r4[1] = 119;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int bytesRead> = 2;
+
+        goto label1;
+
+     label4:
+        return;
+    }
+
+    public final void createTracks(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput, com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput $r1;
+        int $i0;
+        java.lang.String $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator: void generateNewId()>();
+
+        $r3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator: java.lang.String getFormatId()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: java.lang.String trackFormatId> = $r3;
+
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.TsPayloadReader$TrackIdGenerator: int getTrackId()>();
+
+        $r4 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput track(int,int)>($i0, 1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput output> = $r4;
+
+        return;
+    }
+
+    public final void packetFinished()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader;
+
+        return;
+    }
+
+    public final void packetStarted(long, boolean)
+    {
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader;
+
+        $l0 := @parameter0: long;
+
+        $z0 := @parameter1: boolean;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: long timeUs> = $l0;
+
+        return;
+    }
+
+    public final void seek()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int state> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int bytesRead> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: boolean lastByteWas0B> = 0;
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int STATE_READING_SAMPLE> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int STATE_READING_HEADER> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int STATE_FINDING_SYNC> = 0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.Ac3Reader: int HEADER_SIZE> = 128;
+
+        return;
+    }
+}

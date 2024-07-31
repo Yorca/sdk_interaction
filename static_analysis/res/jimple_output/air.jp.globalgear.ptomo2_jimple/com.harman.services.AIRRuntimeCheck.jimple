@@ -1,0 +1,1081 @@
+public class com.harman.services.AIRRuntimeCheck extends java.lang.Object
+{
+    private static final java.lang.String LOG_TAG;
+    private static org.w3c.dom.Document _appDescriptor;
+    private static java.lang.Boolean _bShowingSplash;
+    private static boolean m_disableSensorAccess;
+    private static com.adobe.air.Entrypoints m_entryPoints;
+    private static boolean m_hasDoneSplash;
+    private static boolean m_preventBuildModelAccess;
+    private static int m_requestedJNIFontVersion;
+    private static int m_requestedSAFVersion;
+    private static boolean m_runInAsyncMode;
+
+    static void <clinit>()
+    {
+        java.lang.Boolean $r0;
+
+        <com.harman.services.AIRRuntimeCheck: boolean m_hasDoneSplash> = 0;
+
+        <com.harman.services.AIRRuntimeCheck: java.lang.String LOG_TAG> = "AIRRuntimeCheck";
+
+        $r0 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(0);
+
+        <com.harman.services.AIRRuntimeCheck: java.lang.Boolean _bShowingSplash> = $r0;
+
+        <com.harman.services.AIRRuntimeCheck: int m_requestedJNIFontVersion> = 31;
+
+        <com.harman.services.AIRRuntimeCheck: int m_requestedSAFVersion> = 30;
+
+        <com.harman.services.AIRRuntimeCheck: boolean m_preventBuildModelAccess> = 0;
+
+        <com.harman.services.AIRRuntimeCheck: boolean m_disableSensorAccess> = 0;
+
+        <com.harman.services.AIRRuntimeCheck: boolean m_runInAsyncMode> = 0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.harman.services.AIRRuntimeCheck r0;
+
+        r0 := @this: com.harman.services.AIRRuntimeCheck;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static void checkBuildModelAccess()
+    {
+        org.w3c.dom.NodeList $r2;
+        org.w3c.dom.Document $r1;
+        org.w3c.dom.Node $r3;
+        int $i0;
+        java.lang.String $r4;
+        java.lang.Exception $r0;
+        boolean $z0;
+
+        $z0 = staticinvoke <com.harman.services.AIRRuntimeCheck: boolean loadAppDescriptor()>();
+
+        if $z0 == 0 goto label10;
+
+        $r1 = <com.harman.services.AIRRuntimeCheck: org.w3c.dom.Document _appDescriptor>;
+
+     label01:
+        $r2 = interfaceinvoke $r1.<org.w3c.dom.Document: org.w3c.dom.NodeList getElementsByTagName(java.lang.String)>("preventDeviceModelAccess");
+
+        $i0 = interfaceinvoke $r2.<org.w3c.dom.NodeList: int getLength()>();
+
+     label02:
+        if $i0 <= 0 goto label10;
+
+        $z0 = 0;
+
+     label03:
+        $r3 = interfaceinvoke $r2.<org.w3c.dom.NodeList: org.w3c.dom.Node item(int)>(0);
+
+     label04:
+        if $r3 != null goto label05;
+
+        $r4 = null;
+
+        goto label06;
+
+     label05:
+        $r4 = interfaceinvoke $r3.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+     label06:
+        if $r4 != null goto label07;
+
+        goto label08;
+
+     label07:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>("true");
+
+     label08:
+        <com.harman.services.AIRRuntimeCheck: boolean m_preventBuildModelAccess> = $z0;
+
+        return;
+
+     label09:
+        $r0 := @caughtexception;
+
+     label10:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label09;
+        catch java.lang.Exception from label03 to label04 with label09;
+        catch java.lang.Exception from label05 to label06 with label09;
+        catch java.lang.Exception from label07 to label08 with label09;
+    }
+
+    private static void checkDisableSensorAccess()
+    {
+        org.w3c.dom.NodeList $r4;
+        java.io.File $r0;
+        java.lang.Exception $r2;
+        org.w3c.dom.Document $r3;
+        org.w3c.dom.Node $r5;
+        int $i0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r6;
+        com.adobe.air.AndroidActivityWrapper $r7;
+        boolean $z0;
+
+        $z0 = staticinvoke <com.harman.services.AIRRuntimeCheck: boolean loadAppDescriptor()>();
+
+        if $z0 == 0 goto label15;
+
+        $r3 = <com.harman.services.AIRRuntimeCheck: org.w3c.dom.Document _appDescriptor>;
+
+     label01:
+        $r4 = interfaceinvoke $r3.<org.w3c.dom.Document: org.w3c.dom.NodeList getElementsByTagName(java.lang.String)>("disableSensorAccess");
+
+        $i0 = interfaceinvoke $r4.<org.w3c.dom.NodeList: int getLength()>();
+
+     label02:
+        if $i0 <= 0 goto label09;
+
+     label03:
+        $r5 = interfaceinvoke $r4.<org.w3c.dom.NodeList: org.w3c.dom.Node item(int)>(0);
+
+     label04:
+        if $r5 != null goto label05;
+
+        $r6 = null;
+
+        goto label06;
+
+     label05:
+        $r6 = interfaceinvoke $r5.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+     label06:
+        if $r6 != null goto label07;
+
+        $z0 = 0;
+
+        goto label08;
+
+     label07:
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>("true");
+
+     label08:
+        <com.harman.services.AIRRuntimeCheck: boolean m_disableSensorAccess> = $z0;
+
+     label09:
+        $z0 = <com.harman.services.AIRRuntimeCheck: boolean m_disableSensorAccess>;
+
+        if $z0 == 0 goto label15;
+
+        $r3 = <com.harman.services.AIRRuntimeCheck: org.w3c.dom.Document _appDescriptor>;
+
+     label10:
+        $r4 = interfaceinvoke $r3.<org.w3c.dom.Document: org.w3c.dom.NodeList getElementsByTagName(java.lang.String)>("id");
+
+        $r5 = interfaceinvoke $r4.<org.w3c.dom.NodeList: org.w3c.dom.Node item(int)>(0);
+
+        $r7 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+     label11:
+        $r0 = new java.io.File;
+
+        $r1 = new java.lang.StringBuilder;
+
+     label12:
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r7.<com.adobe.air.AndroidActivityWrapper: java.lang.String GetAppDataDirectory()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/");
+
+        $r6 = interfaceinvoke $r5.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/Local Store/.allowSensorAccess");
+
+        $r6 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r0.<java.io.File: void <init>(java.lang.String)>($r6);
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean exists()>();
+
+     label13:
+        if $z0 == 0 goto label15;
+
+        <com.harman.services.AIRRuntimeCheck: boolean m_disableSensorAccess> = 0;
+
+        return;
+
+     label14:
+        $r2 := @caughtexception;
+
+     label15:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label14;
+        catch java.lang.Exception from label03 to label04 with label14;
+        catch java.lang.Exception from label05 to label06 with label14;
+        catch java.lang.Exception from label07 to label08 with label14;
+        catch java.lang.Exception from label10 to label11 with label14;
+        catch java.lang.Exception from label12 to label13 with label14;
+    }
+
+    private static void checkRequestedJNIFontVersion()
+    {
+        org.w3c.dom.NodeList $r2;
+        org.w3c.dom.Document $r1;
+        org.w3c.dom.Node $r3;
+        int $i0;
+        java.lang.String $r4;
+        java.lang.Exception $r0;
+        boolean $z0;
+
+        $z0 = staticinvoke <com.harman.services.AIRRuntimeCheck: boolean loadAppDescriptor()>();
+
+        if $z0 == 0 goto label10;
+
+        $r1 = <com.harman.services.AIRRuntimeCheck: org.w3c.dom.Document _appDescriptor>;
+
+     label01:
+        $r2 = interfaceinvoke $r1.<org.w3c.dom.Document: org.w3c.dom.NodeList getElementsByTagName(java.lang.String)>("newFontRenderingFromAPI");
+
+        $i0 = interfaceinvoke $r2.<org.w3c.dom.NodeList: int getLength()>();
+
+     label02:
+        if $i0 <= 0 goto label10;
+
+     label03:
+        $r3 = interfaceinvoke $r2.<org.w3c.dom.NodeList: org.w3c.dom.Node item(int)>(0);
+
+     label04:
+        if $r3 != null goto label05;
+
+        $r4 = null;
+
+        goto label06;
+
+     label05:
+        $r4 = interfaceinvoke $r3.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+     label06:
+        if $r4 == null goto label10;
+
+     label07:
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r4);
+
+     label08:
+        <com.harman.services.AIRRuntimeCheck: int m_requestedJNIFontVersion> = $i0;
+
+        return;
+
+     label09:
+        $r0 := @caughtexception;
+
+     label10:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label09;
+        catch java.lang.Exception from label03 to label04 with label09;
+        catch java.lang.Exception from label05 to label06 with label09;
+        catch java.lang.Exception from label07 to label08 with label09;
+    }
+
+    private static void checkRequestedSAFVersion()
+    {
+        org.w3c.dom.NodeList $r2;
+        org.w3c.dom.Document $r1;
+        org.w3c.dom.Node $r3;
+        int $i0;
+        java.lang.String $r4;
+        java.lang.Exception $r0;
+        boolean $z0;
+
+        $z0 = staticinvoke <com.harman.services.AIRRuntimeCheck: boolean loadAppDescriptor()>();
+
+        if $z0 == 0 goto label10;
+
+        $r1 = <com.harman.services.AIRRuntimeCheck: org.w3c.dom.Document _appDescriptor>;
+
+     label01:
+        $r2 = interfaceinvoke $r1.<org.w3c.dom.Document: org.w3c.dom.NodeList getElementsByTagName(java.lang.String)>("storageAccessFrameworkFromAPI");
+
+        $i0 = interfaceinvoke $r2.<org.w3c.dom.NodeList: int getLength()>();
+
+     label02:
+        if $i0 <= 0 goto label10;
+
+     label03:
+        $r3 = interfaceinvoke $r2.<org.w3c.dom.NodeList: org.w3c.dom.Node item(int)>(0);
+
+     label04:
+        if $r3 != null goto label05;
+
+        $r4 = null;
+
+        goto label06;
+
+     label05:
+        $r4 = interfaceinvoke $r3.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+     label06:
+        if $r4 == null goto label10;
+
+     label07:
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r4);
+
+     label08:
+        <com.harman.services.AIRRuntimeCheck: int m_requestedSAFVersion> = $i0;
+
+        return;
+
+     label09:
+        $r0 := @caughtexception;
+
+     label10:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label09;
+        catch java.lang.Exception from label03 to label04 with label09;
+        catch java.lang.Exception from label05 to label06 with label09;
+        catch java.lang.Exception from label07 to label08 with label09;
+    }
+
+    private static void checkRunInAsyncMode()
+    {
+        org.w3c.dom.NodeList $r2;
+        org.w3c.dom.Document $r1;
+        org.w3c.dom.Node $r3;
+        int $i0;
+        java.lang.String $r4;
+        java.lang.Exception $r0;
+        boolean $z0;
+
+        $z0 = staticinvoke <com.harman.services.AIRRuntimeCheck: boolean loadAppDescriptor()>();
+
+        if $z0 == 0 goto label10;
+
+        $r1 = <com.harman.services.AIRRuntimeCheck: org.w3c.dom.Document _appDescriptor>;
+
+     label01:
+        $r2 = interfaceinvoke $r1.<org.w3c.dom.Document: org.w3c.dom.NodeList getElementsByTagName(java.lang.String)>("runtimeInBackgroundThread");
+
+        $i0 = interfaceinvoke $r2.<org.w3c.dom.NodeList: int getLength()>();
+
+     label02:
+        if $i0 <= 0 goto label10;
+
+        $z0 = 0;
+
+     label03:
+        $r3 = interfaceinvoke $r2.<org.w3c.dom.NodeList: org.w3c.dom.Node item(int)>(0);
+
+     label04:
+        if $r3 != null goto label05;
+
+        $r4 = null;
+
+        goto label06;
+
+     label05:
+        $r4 = interfaceinvoke $r3.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+     label06:
+        if $r4 != null goto label07;
+
+        goto label08;
+
+     label07:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>("true");
+
+     label08:
+        <com.harman.services.AIRRuntimeCheck: boolean m_runInAsyncMode> = $z0;
+
+        return;
+
+     label09:
+        $r0 := @caughtexception;
+
+     label10:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label09;
+        catch java.lang.Exception from label03 to label04 with label09;
+        catch java.lang.Exception from label05 to label06 with label09;
+        catch java.lang.Exception from label07 to label08 with label09;
+    }
+
+    public static boolean doSplashScreen(com.adobe.air.Entrypoints, java.lang.String, java.lang.String)
+    {
+        android.content.Context $r6;
+        android.view.ViewParent $r14;
+        android.widget.ImageView $r13;
+        java.util.Scanner $r18;
+        android.content.res.AssetManager $r7;
+        int $i0;
+        android.view.View $r16;
+        java.lang.String $r3, $r4, $r11, $r12;
+        com.adobe.air.AndroidActivityWrapper $r5;
+        com.adobe.air.Entrypoints $r2;
+        boolean $z0, $z1, $z2, $z3;
+        java.util.Properties $r17;
+        java.lang.Exception $r0, $r1;
+        android.view.ViewGroup $r15;
+        java.io.InputStream $r8;
+
+        $r2 := @parameter0: com.adobe.air.Entrypoints;
+
+        $r3 := @parameter1: java.lang.String;
+
+        $r4 := @parameter2: java.lang.String;
+
+        $z0 = <com.harman.services.AIRRuntimeCheck: boolean m_hasDoneSplash>;
+
+        $z1 = 0;
+
+        if $z0 == 0 goto label01;
+
+        return 0;
+
+     label01:
+        $z0 = 1;
+
+        <com.harman.services.AIRRuntimeCheck: boolean m_hasDoneSplash> = 1;
+
+        <com.harman.services.AIRRuntimeCheck: com.adobe.air.Entrypoints m_entryPoints> = $r2;
+
+        $r5 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r6 = virtualinvoke $r5.<com.adobe.air.AndroidActivityWrapper: android.content.Context getDefaultContext()>();
+
+     label02:
+        $r7 = virtualinvoke $r6.<android.content.Context: android.content.res.AssetManager getAssets()>();
+
+        $r8 = virtualinvoke $r7.<android.content.res.AssetManager: java.io.InputStream open(java.lang.String)>("META-INF/AIR/license.txt");
+
+     label03:
+        $r17 = new java.util.Properties;
+
+     label04:
+        specialinvoke $r17.<java.util.Properties: void <init>()>();
+
+        virtualinvoke $r17.<java.util.Properties: void load(java.io.InputStream)>($r8);
+
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+        $r8 = virtualinvoke $r7.<android.content.res.AssetManager: java.io.InputStream open(java.lang.String)>("META-INF/AIR/application.xml");
+
+     label05:
+        $r18 = new java.util.Scanner;
+
+     label06:
+        specialinvoke $r18.<java.util.Scanner: void <init>(java.io.InputStream)>($r8);
+
+        $r11 = virtualinvoke $r18.<java.util.Scanner: java.lang.String findWithinHorizon(java.lang.String,int)>("<id>.*</id>", 0);
+
+     label07:
+        $r3 = $r11;
+
+     label08:
+        virtualinvoke $r18.<java.util.Scanner: void close()>();
+
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label09:
+        if $r11 == null goto label13;
+
+     label10:
+        $i0 = virtualinvoke $r11.<java.lang.String: int length()>();
+
+     label11:
+        $i0 = $i0 + -5;
+
+     label12:
+        $r3 = virtualinvoke $r11.<java.lang.String: java.lang.String substring(int,int)>(4, $i0);
+
+     label13:
+        $r11 = virtualinvoke $r17.<java.util.Properties: java.lang.String getProperty(java.lang.String)>("DevID");
+
+        $r12 = virtualinvoke $r17.<java.util.Properties: java.lang.String getProperty(java.lang.String)>("License");
+
+     label14:
+        if $r11 == null goto label26;
+
+        if $r12 == null goto label26;
+
+        if $r3 == null goto label17;
+
+     label15:
+        $z2 = virtualinvoke $r2.<com.adobe.air.Entrypoints: boolean checkSplashScreen(java.lang.String,java.lang.String,java.lang.String)>($r11, $r3, $r12);
+
+     label16:
+        goto label18;
+
+     label17:
+        $z2 = 1;
+
+     label18:
+        if $z2 == 0 goto label20;
+
+     label19:
+        $z2 = virtualinvoke $r2.<com.adobe.air.Entrypoints: boolean checkSplashScreen(java.lang.String,java.lang.String,java.lang.String)>($r11, $r4, $r12);
+
+     label20:
+        if $z2 == 0 goto label25;
+
+     label21:
+        $z3 = virtualinvoke $r4.<java.lang.String: boolean startsWith(java.lang.String)>("air.");
+
+     label22:
+        if $z3 == 0 goto label25;
+
+     label23:
+        $r3 = virtualinvoke $r4.<java.lang.String: java.lang.String substring(int)>(4);
+
+        $z2 = virtualinvoke $r2.<com.adobe.air.Entrypoints: boolean checkSplashScreen(java.lang.String,java.lang.String,java.lang.String)>($r11, $r3, $r12);
+
+     label24:
+        $z0 = $z2;
+
+        goto label26;
+
+     label25:
+        $z0 = $z2;
+
+        goto label26;
+
+     label26:
+        if $z0 == 0 goto label30;
+
+     label27:
+        staticinvoke <com.harman.services.AIRRuntimeCheck: void showSplash()>();
+
+     label28:
+        goto label30;
+
+     label29:
+        goto label31;
+
+     label30:
+        $z1 = $z0;
+
+     label31:
+        if $z1 != 0 goto label35;
+
+        $r13 = virtualinvoke $r5.<com.adobe.air.AndroidActivityWrapper: android.widget.ImageView getViewSplashScreenImageView()>();
+
+        if $r13 == null goto label32;
+
+        $r14 = virtualinvoke $r13.<android.widget.ImageView: android.view.ViewParent getParent()>();
+
+        if $r14 == null goto label32;
+
+        $r14 = virtualinvoke $r13.<android.widget.ImageView: android.view.ViewParent getParent()>();
+
+        $r15 = (android.view.ViewGroup) $r14;
+
+        virtualinvoke $r15.<android.view.ViewGroup: void removeView(android.view.View)>($r13);
+
+     label32:
+        $r16 = virtualinvoke $r5.<com.adobe.air.AndroidActivityWrapper: android.view.View getView()>();
+
+        virtualinvoke $r16.<android.view.View: boolean requestFocus()>();
+
+        return $z1;
+
+     label33:
+        $r0 := @caughtexception;
+
+        goto label26;
+
+     label34:
+        $r1 := @caughtexception;
+
+        goto label29;
+
+     label35:
+        return $z1;
+
+        catch java.lang.Exception from label02 to label03 with label33;
+        catch java.lang.Exception from label04 to label05 with label33;
+        catch java.lang.Exception from label06 to label07 with label33;
+        catch java.lang.Exception from label08 to label09 with label33;
+        catch java.lang.Exception from label10 to label11 with label33;
+        catch java.lang.Exception from label12 to label13 with label33;
+        catch java.lang.Exception from label13 to label14 with label33;
+        catch java.lang.Exception from label15 to label16 with label33;
+        catch java.lang.Exception from label19 to label20 with label33;
+        catch java.lang.Exception from label21 to label22 with label33;
+        catch java.lang.Exception from label23 to label24 with label33;
+        catch java.lang.Exception from label27 to label28 with label34;
+    }
+
+    public static java.lang.String getBuildModel()
+    {
+        java.lang.String r0;
+        boolean $z0;
+
+        $z0 = <com.harman.services.AIRRuntimeCheck: boolean m_preventBuildModelAccess>;
+
+        if $z0 == 0 goto label1;
+
+        return null;
+
+     label1:
+        r0 = <android.os.Build: java.lang.String MODEL>;
+
+        return r0;
+    }
+
+    private static boolean loadAppDescriptor()
+    {
+        android.content.Context $r2;
+        java.lang.Exception $r8;
+        org.w3c.dom.Element $r7;
+        android.content.res.AssetManager $r3;
+        org.w3c.dom.Document $r0;
+        javax.xml.parsers.DocumentBuilder $r6;
+        java.lang.StringBuilder $r9;
+        com.adobe.air.AndroidActivityWrapper $r1;
+        javax.xml.parsers.DocumentBuilderFactory $r5;
+        java.lang.String $r10;
+        java.io.InputStream $r4;
+
+        $r0 = <com.harman.services.AIRRuntimeCheck: org.w3c.dom.Document _appDescriptor>;
+
+        if $r0 == null goto label1;
+
+        return 1;
+
+     label1:
+        $r1 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r2 = virtualinvoke $r1.<com.adobe.air.AndroidActivityWrapper: android.content.Context getDefaultContext()>();
+
+     label2:
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.res.AssetManager getAssets()>();
+
+        $r4 = virtualinvoke $r3.<android.content.res.AssetManager: java.io.InputStream open(java.lang.String)>("META-INF/AIR/application.xml");
+
+        $r5 = staticinvoke <javax.xml.parsers.DocumentBuilderFactory: javax.xml.parsers.DocumentBuilderFactory newInstance()>();
+
+        $r6 = virtualinvoke $r5.<javax.xml.parsers.DocumentBuilderFactory: javax.xml.parsers.DocumentBuilder newDocumentBuilder()>();
+
+        $r0 = virtualinvoke $r6.<javax.xml.parsers.DocumentBuilder: org.w3c.dom.Document parse(java.io.InputStream)>($r4);
+
+        $r7 = interfaceinvoke $r0.<org.w3c.dom.Document: org.w3c.dom.Element getDocumentElement()>();
+
+        interfaceinvoke $r7.<org.w3c.dom.Element: void normalize()>();
+
+     label3:
+        <com.harman.services.AIRRuntimeCheck: org.w3c.dom.Document _appDescriptor> = $r0;
+
+     label4:
+        virtualinvoke $r4.<java.io.InputStream: void close()>();
+
+     label5:
+        goto label7;
+
+     label6:
+        $r8 := @caughtexception;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failure in opening app descriptor file for initial settings - ");
+
+        $r10 = virtualinvoke $r8.<java.lang.Exception: java.lang.String toString()>();
+
+        virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("AIR SDK", $r10);
+
+     label7:
+        $r0 = <com.harman.services.AIRRuntimeCheck: org.w3c.dom.Document _appDescriptor>;
+
+        if $r0 == null goto label8;
+
+        return 1;
+
+     label8:
+        return 0;
+
+        catch java.lang.Exception from label2 to label3 with label6;
+        catch java.lang.Exception from label4 to label5 with label6;
+    }
+
+    public static java.lang.String md5Sum(java.lang.String)
+    {
+        byte[] $r3;
+        java.security.MessageDigest $r2;
+        java.lang.String $r1;
+        java.util.UUID $r4;
+        java.lang.Exception $r0;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label1:
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("MD5");
+
+        $r3 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>("UTF-8");
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r3);
+
+        $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        $r4 = staticinvoke <java.util.UUID: java.util.UUID nameUUIDFromBytes(byte[])>($r3);
+
+        $r1 = virtualinvoke $r4.<java.util.UUID: java.lang.String toString()>();
+
+     label2:
+        return $r1;
+
+     label3:
+        return "";
+
+     label4:
+        $r0 := @caughtexception;
+
+        goto label3;
+
+        catch java.lang.Exception from label1 to label2 with label4;
+    }
+
+    public static void removeSplash()
+    {
+        java.lang.Boolean $r0;
+        com.harman.services.AIRRuntimeCheck$1 $r3;
+        com.adobe.air.AndroidActivityWrapper $r1;
+        android.app.Activity $r2;
+        boolean $z0;
+
+        $r0 = <com.harman.services.AIRRuntimeCheck: java.lang.Boolean _bShowingSplash>;
+
+        $z0 = virtualinvoke $r0.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("AIRRuntimeCheck", "AIR - removing splash screen");
+
+        $r0 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(0);
+
+        <com.harman.services.AIRRuntimeCheck: java.lang.Boolean _bShowingSplash> = $r0;
+
+        $r1 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r2 = virtualinvoke $r1.<com.adobe.air.AndroidActivityWrapper: android.app.Activity getActivity()>();
+
+        $r3 = new com.harman.services.AIRRuntimeCheck$1;
+
+        specialinvoke $r3.<com.harman.services.AIRRuntimeCheck$1: void <init>()>();
+
+        virtualinvoke $r2.<android.app.Activity: void runOnUiThread(java.lang.Runnable)>($r3);
+
+     label1:
+        return;
+    }
+
+    public static void runtimeStartupChecks()
+    {
+        staticinvoke <com.harman.services.AIRRuntimeCheck: void checkRequestedJNIFontVersion()>();
+
+        staticinvoke <com.harman.services.AIRRuntimeCheck: void checkRequestedSAFVersion()>();
+
+        staticinvoke <com.harman.services.AIRRuntimeCheck: void checkBuildModelAccess()>();
+
+        staticinvoke <com.harman.services.AIRRuntimeCheck: void checkDisableSensorAccess()>();
+
+        staticinvoke <com.harman.services.AIRRuntimeCheck: void checkRunInAsyncMode()>();
+
+        return;
+    }
+
+    public static boolean shouldDisableSensorAccess()
+    {
+        boolean z0;
+
+        z0 = <com.harman.services.AIRRuntimeCheck: boolean m_disableSensorAccess>;
+
+        return z0;
+    }
+
+    public static boolean shouldPreventBuildModelAccess()
+    {
+        boolean z0;
+
+        z0 = <com.harman.services.AIRRuntimeCheck: boolean m_preventBuildModelAccess>;
+
+        return z0;
+    }
+
+    public static boolean shouldRunInAsyncMode()
+    {
+        boolean z0;
+
+        z0 = <com.harman.services.AIRRuntimeCheck: boolean m_runInAsyncMode>;
+
+        return z0;
+    }
+
+    public static boolean shouldUseJNIFonts()
+    {
+        int $i0, $i1;
+
+        $i1 = <com.harman.services.AIRRuntimeCheck: int m_requestedJNIFontVersion>;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 > $i0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public static boolean shouldUseSAF()
+    {
+        int $i0, $i1;
+
+        $i1 = <com.harman.services.AIRRuntimeCheck: int m_requestedSAFVersion>;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 > $i0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public static void showBetaPopup()
+    {
+        staticinvoke <com.harman.services.AIRRuntimeCheck: void showPopup(java.lang.CharSequence)>("BETA RELEASE: not for distribution");
+
+        return;
+    }
+
+    public static void showExpiredPopup()
+    {
+        staticinvoke <com.harman.services.AIRRuntimeCheck: void showPopup(java.lang.CharSequence)>("BETA RELEASE HAS EXPIRED. Please update to a standard release");
+
+        return;
+    }
+
+    private static void showPopup(java.lang.CharSequence)
+    {
+        android.content.Context $r2;
+        java.lang.CharSequence $r0;
+        android.widget.Toast $r3;
+        com.adobe.air.AndroidActivityWrapper $r1;
+
+        $r0 := @parameter0: java.lang.CharSequence;
+
+        $r1 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r2 = virtualinvoke $r1.<com.adobe.air.AndroidActivityWrapper: android.content.Context getDefaultContext()>();
+
+        $r3 = staticinvoke <android.widget.Toast: android.widget.Toast makeText(android.content.Context,java.lang.CharSequence,int)>($r2, $r0, 1);
+
+        virtualinvoke $r3.<android.widget.Toast: void setGravity(int,int,int)>(16, 0, 0);
+
+        virtualinvoke $r3.<android.widget.Toast: void show()>();
+
+        return;
+    }
+
+    public static void showSplash()
+    {
+        android.widget.ImageView $r13;
+        android.graphics.drawable.Drawable $r9;
+        byte $b6;
+        int[] $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        android.view.View $r2;
+        java.lang.Boolean $r12;
+        com.adobe.air.AndroidActivityWrapper $r1;
+        com.adobe.air.AIRWindowSurfaceView $r3;
+        java.lang.String $r5, $r8;
+        boolean $z0;
+        android.widget.ImageView$ScaleType $r14;
+        android.graphics.drawable.BitmapDrawable $r10;
+        java.lang.Exception $r15;
+        android.app.Application $r4;
+        android.graphics.Bitmap $r11;
+        java.lang.StringBuilder $r17;
+        android.content.res.Resources $r6, $r7;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("AIRRuntimeCheck", "AIR - showing Splash Screen");
+
+     label01:
+        $r1 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r2 = virtualinvoke $r1.<com.adobe.air.AndroidActivityWrapper: android.view.View getView()>();
+
+        $r3 = (com.adobe.air.AIRWindowSurfaceView) $r2;
+
+        $i3 = virtualinvoke $r3.<com.adobe.air.AIRWindowSurfaceView: int getVisibleBoundWidth()>();
+
+        $i1 = virtualinvoke $r3.<com.adobe.air.AIRWindowSurfaceView: int getVisibleBoundHeight()>();
+
+        $r4 = virtualinvoke $r1.<com.adobe.air.AndroidActivityWrapper: android.app.Application getApplication()>();
+
+     label02:
+        if $i3 >= $i1 goto label03;
+
+        $r5 = "splash_portrait";
+
+        goto label04;
+
+     label03:
+        $r5 = "splash_landscape";
+
+     label04:
+        $r6 = virtualinvoke $r4.<android.app.Application: android.content.res.Resources getResources()>();
+
+        $r7 = virtualinvoke $r4.<android.app.Application: android.content.res.Resources getResources()>();
+
+        $r8 = virtualinvoke $r4.<android.app.Application: java.lang.String getPackageName()>();
+
+        $i4 = virtualinvoke $r7.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>($r5, "drawable", $r8);
+
+        $r9 = virtualinvoke $r6.<android.content.res.Resources: android.graphics.drawable.Drawable getDrawable(int)>($i4);
+
+        $r10 = (android.graphics.drawable.BitmapDrawable) $r9;
+
+        $r11 = virtualinvoke $r10.<android.graphics.drawable.BitmapDrawable: android.graphics.Bitmap getBitmap()>();
+
+        $i4 = virtualinvoke $r11.<android.graphics.Bitmap: int getWidth()>();
+
+        $i5 = virtualinvoke $r11.<android.graphics.Bitmap: int getHeight()>();
+
+     label05:
+        $i0 = $i4 * 30;
+
+        $i0 = $i0 / 100;
+
+        $i2 = $i4 * 50;
+
+        $i2 = $i2 / 100;
+
+        $i2 = $i2 - $i0;
+
+        if $i3 >= $i1 goto label06;
+
+        $b6 = 25;
+
+        goto label07;
+
+     label06:
+        $b6 = 40;
+
+     label07:
+        $i3 = $i5 * $b6;
+
+        $i1 = $i3 / 100;
+
+     label08:
+        $i3 = staticinvoke <android.graphics.Color: int rgb(int,int,int)>(0, 100, 153);
+
+        $r0 = newarray (int)[$i2];
+
+        virtualinvoke $r11.<android.graphics.Bitmap: void getPixels(int[],int,int,int,int,int,int)>($r0, 0, $i4, $i0, $i1, $i2, 1);
+
+     label09:
+        $i4 = 0;
+
+     label10:
+        if $i4 >= $i2 goto label14;
+
+     label11:
+        $i0 = $r0[$i4];
+
+     label12:
+        if $i0 != $i3 goto label13;
+
+        $z0 = 1;
+
+        goto label15;
+
+     label13:
+        $i4 = $i4 + 1;
+
+        goto label10;
+
+     label14:
+        $z0 = 0;
+
+     label15:
+        if $z0 == 0 goto label23;
+
+     label16:
+        $r12 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+     label17:
+        <com.harman.services.AIRRuntimeCheck: java.lang.Boolean _bShowingSplash> = $r12;
+
+     label18:
+        $r13 = virtualinvoke $r1.<com.adobe.air.AndroidActivityWrapper: android.widget.ImageView getViewSplashScreenImageView()>();
+
+     label19:
+        $r14 = <android.widget.ImageView$ScaleType: android.widget.ImageView$ScaleType FIT_CENTER>;
+
+     label20:
+        virtualinvoke $r13.<android.widget.ImageView: void setScaleType(android.widget.ImageView$ScaleType)>($r14);
+
+        virtualinvoke $r13.<android.widget.ImageView: void setImageBitmap(android.graphics.Bitmap)>($r11);
+
+        $r2 = virtualinvoke $r1.<com.adobe.air.AndroidActivityWrapper: android.view.View getView()>();
+
+     label21:
+        virtualinvoke $r2.<android.view.View: void setBackgroundColor(int)>(-1);
+
+     label22:
+        return;
+
+     label23:
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("AIR SDK", "Invalid splash screen image used - please check your SDK");
+
+        staticinvoke <com.harman.services.AIRRuntimeCheck: void showPopup(java.lang.CharSequence)>("WARNING: Unlicensed version of AIR SDK");
+
+        virtualinvoke $r1.<com.adobe.air.AndroidActivityWrapper: void finish()>();
+
+     label24:
+        <com.harman.services.AIRRuntimeCheck: boolean m_hasDoneSplash> = 0;
+
+        return;
+
+     label25:
+        $r15 := @caughtexception;
+
+        $r17 = new java.lang.StringBuilder;
+
+        specialinvoke $r17.<java.lang.StringBuilder: void <init>(java.lang.String)>("showSplash ERROR: ");
+
+        $r5 = virtualinvoke $r15.<java.lang.Exception: java.lang.String toString()>();
+
+        virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("AIRRuntimeCheck", $r5);
+
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label25;
+        catch java.lang.Exception from label04 to label05 with label25;
+        catch java.lang.Exception from label08 to label09 with label25;
+        catch java.lang.Exception from label11 to label12 with label25;
+        catch java.lang.Exception from label16 to label17 with label25;
+        catch java.lang.Exception from label18 to label19 with label25;
+        catch java.lang.Exception from label20 to label21 with label25;
+        catch java.lang.Exception from label21 to label22 with label25;
+        catch java.lang.Exception from label23 to label24 with label25;
+    }
+}

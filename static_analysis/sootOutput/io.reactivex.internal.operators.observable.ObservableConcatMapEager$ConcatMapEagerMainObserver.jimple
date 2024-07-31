@@ -1,0 +1,734 @@
+final class io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver extends java.util.concurrent.atomic.AtomicInteger implements io.reactivex.Observer, io.reactivex.disposables.Disposable, io.reactivex.internal.observers.InnerQueuedObserverSupport
+{
+    private static final long serialVersionUID;
+    int activeCount;
+    final io.reactivex.Observer actual;
+    volatile boolean cancelled;
+    io.reactivex.internal.observers.InnerQueuedObserver current;
+    io.reactivex.disposables.Disposable d;
+    volatile boolean done;
+    final io.reactivex.internal.util.AtomicThrowable error;
+    final io.reactivex.internal.util.ErrorMode errorMode;
+    final io.reactivex.functions.Function mapper;
+    final int maxConcurrency;
+    final java.util.ArrayDeque observers;
+    final int prefetch;
+    io.reactivex.internal.fuseable.SimpleQueue queue;
+    int sourceMode;
+
+    void <init>(io.reactivex.Observer, io.reactivex.functions.Function, int, int, io.reactivex.internal.util.ErrorMode)
+    {
+        io.reactivex.internal.util.ErrorMode $r2;
+        io.reactivex.internal.util.AtomicThrowable $r4;
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+        io.reactivex.functions.Function $r1;
+        int $i0, $i1;
+        io.reactivex.Observer $r3;
+        java.util.ArrayDeque $r5;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        $r3 := @parameter0: io.reactivex.Observer;
+
+        $r1 := @parameter1: io.reactivex.functions.Function;
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        $r2 := @parameter4: io.reactivex.internal.util.ErrorMode;
+
+        specialinvoke r0.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.Observer actual> = $r3;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.functions.Function mapper> = $r1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int maxConcurrency> = $i0;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int prefetch> = $i1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.ErrorMode errorMode> = $r2;
+
+        $r4 = new io.reactivex.internal.util.AtomicThrowable;
+
+        specialinvoke $r4.<io.reactivex.internal.util.AtomicThrowable: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error> = $r4;
+
+        $r5 = new java.util.ArrayDeque;
+
+        specialinvoke $r5.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: java.util.ArrayDeque observers> = $r5;
+
+        return;
+    }
+
+    public void dispose()
+    {
+        int $i0;
+        io.reactivex.internal.fuseable.SimpleQueue $r1;
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: boolean cancelled> = 1;
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int getAndIncrement()>();
+
+        if $i0 != 0 goto label1;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        interfaceinvoke $r1.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void disposeAll()>();
+
+     label1:
+        return;
+    }
+
+    void disposeAll()
+    {
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.observers.InnerQueuedObserver $r2;
+        java.util.ArrayDeque $r3;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.observers.InnerQueuedObserver current>;
+
+        if $r2 == null goto label1;
+
+        virtualinvoke $r2.<io.reactivex.internal.observers.InnerQueuedObserver: void dispose()>();
+
+     label1:
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: java.util.ArrayDeque observers>;
+
+        $r1 = virtualinvoke $r3.<java.util.ArrayDeque: java.lang.Object poll()>();
+
+        $r2 = (io.reactivex.internal.observers.InnerQueuedObserver) $r1;
+
+        if $r2 != null goto label2;
+
+        return;
+
+     label2:
+        virtualinvoke $r2.<io.reactivex.internal.observers.InnerQueuedObserver: void dispose()>();
+
+        goto label1;
+    }
+
+    public void drain()
+    {
+        java.lang.Throwable $r8, $r14;
+        io.reactivex.internal.observers.InnerQueuedObserver $r11;
+        io.reactivex.internal.util.AtomicThrowable $r6;
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+        int $i0, $i1, $i2;
+        io.reactivex.ObservableSource $r10;
+        boolean $z0, $z1;
+        io.reactivex.internal.util.ErrorMode $r4, $r5;
+        io.reactivex.disposables.Disposable $r12;
+        io.reactivex.functions.Function $r9;
+        io.reactivex.Observer $r1;
+        io.reactivex.internal.fuseable.SimpleQueue $r2, $r13;
+        java.lang.Object $r7;
+        java.util.ArrayDeque $r3;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int getAndIncrement()>();
+
+        if $i0 == 0 goto label01;
+
+        return;
+
+     label01:
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: java.util.ArrayDeque observers>;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.Observer actual>;
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.ErrorMode errorMode>;
+
+        $i0 = 1;
+
+     label02:
+        $i1 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int activeCount>;
+
+     label03:
+        $i2 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int maxConcurrency>;
+
+        if $i1 == $i2 goto label10;
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: boolean cancelled>;
+
+        if $z0 == 0 goto label04;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void disposeAll()>();
+
+        return;
+
+     label04:
+        $r5 = <io.reactivex.internal.util.ErrorMode: io.reactivex.internal.util.ErrorMode IMMEDIATE>;
+
+        if $r4 != $r5 goto label05;
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r7 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Object get()>();
+
+        $r8 = (java.lang.Throwable) $r7;
+
+        if $r8 == null goto label05;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void disposeAll()>();
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r8 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Throwable terminate()>();
+
+        interfaceinvoke $r1.<io.reactivex.Observer: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label05:
+        $r7 = interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: java.lang.Object poll()>();
+
+     label06:
+        if $r7 == null goto label10;
+
+     label07:
+        $r9 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.functions.Function mapper>;
+
+        $r7 = interfaceinvoke $r9.<io.reactivex.functions.Function: java.lang.Object apply(java.lang.Object)>($r7);
+
+        $r7 = staticinvoke <io.reactivex.internal.functions.ObjectHelper: java.lang.Object requireNonNull(java.lang.Object,java.lang.String)>($r7, "The mapper returned a null ObservableSource");
+
+        $r10 = (io.reactivex.ObservableSource) $r7;
+
+     label08:
+        $r11 = new io.reactivex.internal.observers.InnerQueuedObserver;
+
+        $i2 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int prefetch>;
+
+        specialinvoke $r11.<io.reactivex.internal.observers.InnerQueuedObserver: void <init>(io.reactivex.internal.observers.InnerQueuedObserverSupport,int)>(r0, $i2);
+
+        virtualinvoke $r3.<java.util.ArrayDeque: boolean offer(java.lang.Object)>($r11);
+
+        interfaceinvoke $r10.<io.reactivex.ObservableSource: void subscribe(io.reactivex.Observer)>($r11);
+
+        $i1 = $i1 + 1;
+
+        goto label03;
+
+     label09:
+        $r8 := @caughtexception;
+
+        staticinvoke <io.reactivex.exceptions.Exceptions: void throwIfFatal(java.lang.Throwable)>($r8);
+
+        $r12 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.disposables.Disposable d>;
+
+        interfaceinvoke $r12.<io.reactivex.disposables.Disposable: void dispose()>();
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void disposeAll()>();
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: boolean addThrowable(java.lang.Throwable)>($r8);
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r8 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Throwable terminate()>();
+
+        interfaceinvoke $r1.<io.reactivex.Observer: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label10:
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int activeCount> = $i1;
+
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: boolean cancelled>;
+
+        if $z0 == 0 goto label11;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void disposeAll()>();
+
+        return;
+
+     label11:
+        $r5 = <io.reactivex.internal.util.ErrorMode: io.reactivex.internal.util.ErrorMode IMMEDIATE>;
+
+        if $r4 != $r5 goto label12;
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r7 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Object get()>();
+
+        $r8 = (java.lang.Throwable) $r7;
+
+        if $r8 == null goto label12;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void disposeAll()>();
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r8 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Throwable terminate()>();
+
+        interfaceinvoke $r1.<io.reactivex.Observer: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label12:
+        $r11 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.observers.InnerQueuedObserver current>;
+
+        if $r11 != null goto label18;
+
+        $r5 = <io.reactivex.internal.util.ErrorMode: io.reactivex.internal.util.ErrorMode BOUNDARY>;
+
+        if $r4 != $r5 goto label13;
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r7 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Object get()>();
+
+        $r8 = (java.lang.Throwable) $r7;
+
+        if $r8 == null goto label13;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void disposeAll()>();
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r8 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Throwable terminate()>();
+
+        interfaceinvoke $r1.<io.reactivex.Observer: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label13:
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: boolean done>;
+
+        $r7 = virtualinvoke $r3.<java.util.ArrayDeque: java.lang.Object poll()>();
+
+        $r11 = (io.reactivex.internal.observers.InnerQueuedObserver) $r7;
+
+        if $r11 != null goto label14;
+
+        $z1 = 1;
+
+        goto label15;
+
+     label14:
+        $z1 = 0;
+
+     label15:
+        if $z0 == 0 goto label17;
+
+        if $z1 == 0 goto label17;
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r7 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Object get()>();
+
+        $r8 = (java.lang.Throwable) $r7;
+
+        if $r8 == null goto label16;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void disposeAll()>();
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r8 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Throwable terminate()>();
+
+        interfaceinvoke $r1.<io.reactivex.Observer: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label16:
+        interfaceinvoke $r1.<io.reactivex.Observer: void onComplete()>();
+
+        return;
+
+     label17:
+        if $z1 != 0 goto label18;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.observers.InnerQueuedObserver current> = $r11;
+
+     label18:
+        if $r11 == null goto label28;
+
+        $r13 = virtualinvoke $r11.<io.reactivex.internal.observers.InnerQueuedObserver: io.reactivex.internal.fuseable.SimpleQueue queue()>();
+
+     label19:
+        $z0 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: boolean cancelled>;
+
+        if $z0 == 0 goto label20;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void disposeAll()>();
+
+        return;
+
+     label20:
+        $z0 = virtualinvoke $r11.<io.reactivex.internal.observers.InnerQueuedObserver: boolean isDone()>();
+
+        $r5 = <io.reactivex.internal.util.ErrorMode: io.reactivex.internal.util.ErrorMode IMMEDIATE>;
+
+        if $r4 != $r5 goto label21;
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r7 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Object get()>();
+
+        $r8 = (java.lang.Throwable) $r7;
+
+        if $r8 == null goto label21;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void disposeAll()>();
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $r8 = virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: java.lang.Throwable terminate()>();
+
+        interfaceinvoke $r1.<io.reactivex.Observer: void onError(java.lang.Throwable)>($r8);
+
+        return;
+
+     label21:
+        $r7 = interfaceinvoke $r13.<io.reactivex.internal.fuseable.SimpleQueue: java.lang.Object poll()>();
+
+     label22:
+        if $r7 != null goto label23;
+
+        $z1 = 1;
+
+        goto label24;
+
+     label23:
+        $z1 = 0;
+
+     label24:
+        if $z0 == 0 goto label25;
+
+        if $z1 == 0 goto label26;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.observers.InnerQueuedObserver current> = null;
+
+        $i1 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int activeCount>;
+
+        $i1 = $i1 - 1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int activeCount> = $i1;
+
+        goto label02;
+
+     label25:
+        if $z1 != 0 goto label28;
+
+     label26:
+        interfaceinvoke $r1.<io.reactivex.Observer: void onNext(java.lang.Object)>($r7);
+
+        goto label19;
+
+     label27:
+        $r14 := @caughtexception;
+
+        staticinvoke <io.reactivex.exceptions.Exceptions: void throwIfFatal(java.lang.Throwable)>($r14);
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        virtualinvoke $r6.<io.reactivex.internal.util.AtomicThrowable: boolean addThrowable(java.lang.Throwable)>($r14);
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.observers.InnerQueuedObserver current> = null;
+
+        $i1 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int activeCount>;
+
+        $i1 = $i1 - 1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int activeCount> = $i1;
+
+        goto label02;
+
+     label28:
+        $i0 = neg $i0;
+
+        $i1 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int addAndGet(int)>($i0);
+
+        $i0 = $i1;
+
+        if $i1 != 0 goto label02;
+
+        return;
+
+        catch java.lang.Throwable from label05 to label06 with label09;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label21 to label22 with label27;
+    }
+
+    public void innerComplete(io.reactivex.internal.observers.InnerQueuedObserver)
+    {
+        io.reactivex.internal.observers.InnerQueuedObserver $r1;
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        $r1 := @parameter0: io.reactivex.internal.observers.InnerQueuedObserver;
+
+        virtualinvoke $r1.<io.reactivex.internal.observers.InnerQueuedObserver: void setDone()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void drain()>();
+
+        return;
+    }
+
+    public void innerError(io.reactivex.internal.observers.InnerQueuedObserver, java.lang.Throwable)
+    {
+        java.lang.Throwable $r2;
+        io.reactivex.internal.util.ErrorMode $r4, $r5;
+        io.reactivex.internal.observers.InnerQueuedObserver $r1;
+        io.reactivex.internal.util.AtomicThrowable $r3;
+        io.reactivex.disposables.Disposable $r6;
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        $r1 := @parameter0: io.reactivex.internal.observers.InnerQueuedObserver;
+
+        $r2 := @parameter1: java.lang.Throwable;
+
+        $r3 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $z0 = virtualinvoke $r3.<io.reactivex.internal.util.AtomicThrowable: boolean addThrowable(java.lang.Throwable)>($r2);
+
+        if $z0 == 0 goto label2;
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.ErrorMode errorMode>;
+
+        $r5 = <io.reactivex.internal.util.ErrorMode: io.reactivex.internal.util.ErrorMode IMMEDIATE>;
+
+        if $r4 != $r5 goto label1;
+
+        $r6 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.disposables.Disposable d>;
+
+        interfaceinvoke $r6.<io.reactivex.disposables.Disposable: void dispose()>();
+
+     label1:
+        virtualinvoke $r1.<io.reactivex.internal.observers.InnerQueuedObserver: void setDone()>();
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void drain()>();
+
+        return;
+
+     label2:
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r2);
+
+        return;
+    }
+
+    public void innerNext(io.reactivex.internal.observers.InnerQueuedObserver, java.lang.Object)
+    {
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        java.lang.Object $r1;
+        io.reactivex.internal.observers.InnerQueuedObserver $r3;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        $r3 := @parameter0: io.reactivex.internal.observers.InnerQueuedObserver;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        $r2 = virtualinvoke $r3.<io.reactivex.internal.observers.InnerQueuedObserver: io.reactivex.internal.fuseable.SimpleQueue queue()>();
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: boolean offer(java.lang.Object)>($r1);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void drain()>();
+
+        return;
+    }
+
+    public boolean isDisposed()
+    {
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+        boolean z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        z0 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: boolean cancelled>;
+
+        return z0;
+    }
+
+    public void onComplete()
+    {
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void drain()>();
+
+        return;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+        io.reactivex.internal.util.AtomicThrowable $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $z0 = virtualinvoke $r2.<io.reactivex.internal.util.AtomicThrowable: boolean addThrowable(java.lang.Throwable)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void drain()>();
+
+        return;
+
+     label1:
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r1);
+
+        return;
+    }
+
+    public void onNext(java.lang.Object)
+    {
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+        int $i0;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        java.lang.Object $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $i0 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int sourceMode>;
+
+        if $i0 != 0 goto label1;
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: boolean offer(java.lang.Object)>($r1);
+
+     label1:
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void drain()>();
+
+        return;
+    }
+
+    public void onSubscribe(io.reactivex.disposables.Disposable)
+    {
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r5;
+        io.reactivex.internal.fuseable.QueueDisposable $r3;
+        io.reactivex.disposables.Disposable $r1, $r2;
+        io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver r0;
+        int $i0;
+        io.reactivex.Observer $r4;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver;
+
+        $r1 := @parameter0: io.reactivex.disposables.Disposable;
+
+        $r2 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.disposables.Disposable d>;
+
+        $z0 = staticinvoke <io.reactivex.internal.disposables.DisposableHelper: boolean validate(io.reactivex.disposables.Disposable,io.reactivex.disposables.Disposable)>($r2, $r1);
+
+        if $z0 == 0 goto label3;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.disposables.Disposable d> = $r1;
+
+        $z0 = $r1 instanceof io.reactivex.internal.fuseable.QueueDisposable;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = (io.reactivex.internal.fuseable.QueueDisposable) $r1;
+
+        $i0 = interfaceinvoke $r3.<io.reactivex.internal.fuseable.QueueDisposable: int requestFusion(int)>(3);
+
+        if $i0 != 1 goto label1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int sourceMode> = $i0;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.fuseable.SimpleQueue queue> = $r3;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: boolean done> = 1;
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r4.<io.reactivex.Observer: void onSubscribe(io.reactivex.disposables.Disposable)>(r0);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: void drain()>();
+
+        return;
+
+     label1:
+        if $i0 != 2 goto label2;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int sourceMode> = $i0;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.fuseable.SimpleQueue queue> = $r3;
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r4.<io.reactivex.Observer: void onSubscribe(io.reactivex.disposables.Disposable)>(r0);
+
+        return;
+
+     label2:
+        $r5 = new io.reactivex.internal.queue.SpscLinkedArrayQueue;
+
+        $i0 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: int prefetch>;
+
+        specialinvoke $r5.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void <init>(int)>($i0);
+
+        r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.internal.fuseable.SimpleQueue queue> = $r5;
+
+        $r4 = r0.<io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: io.reactivex.Observer actual>;
+
+        interfaceinvoke $r4.<io.reactivex.Observer: void onSubscribe(io.reactivex.disposables.Disposable)>(r0);
+
+     label3:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <io.reactivex.internal.operators.observable.ObservableConcatMapEager$ConcatMapEagerMainObserver: long serialVersionUID> = 8080567949447303262L;
+
+        return;
+    }
+}

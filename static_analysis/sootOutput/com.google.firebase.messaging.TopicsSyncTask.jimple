@@ -1,0 +1,646 @@
+class com.google.firebase.messaging.TopicsSyncTask extends java.lang.Object implements java.lang.Runnable
+{
+    private static final java.lang.Object TOPIC_SYNC_TASK_LOCK;
+    private static java.lang.Boolean hasAccessNetworkStatePermission;
+    private static java.lang.Boolean hasWakeLockPermission;
+    private final android.content.Context context;
+    private final com.google.firebase.messaging.Metadata metadata;
+    private final long nextDelaySeconds;
+    private final android.os.PowerManager$WakeLock syncWakeLock;
+    private final com.google.firebase.messaging.TopicsSubscriber topicsSubscriber;
+
+    static void <clinit>()
+    {
+        java.lang.Object $r0;
+
+        $r0 = new java.lang.Object;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        <com.google.firebase.messaging.TopicsSyncTask: java.lang.Object TOPIC_SYNC_TASK_LOCK> = $r0;
+
+        return;
+    }
+
+    void <init>(com.google.firebase.messaging.TopicsSubscriber, android.content.Context, com.google.firebase.messaging.Metadata, long)
+    {
+        android.content.Context $r2;
+        com.google.firebase.messaging.TopicsSubscriber $r1;
+        long $l0;
+        android.os.PowerManager$WakeLock $r6;
+        com.google.firebase.messaging.Metadata $r3;
+        android.os.PowerManager $r5;
+        com.google.firebase.messaging.TopicsSyncTask r0;
+        java.lang.Object $r4;
+
+        r0 := @this: com.google.firebase.messaging.TopicsSyncTask;
+
+        $r1 := @parameter0: com.google.firebase.messaging.TopicsSubscriber;
+
+        $r2 := @parameter1: android.content.Context;
+
+        $r3 := @parameter2: com.google.firebase.messaging.Metadata;
+
+        $l0 := @parameter3: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.google.firebase.messaging.TopicsSyncTask: com.google.firebase.messaging.TopicsSubscriber topicsSubscriber> = $r1;
+
+        r0.<com.google.firebase.messaging.TopicsSyncTask: android.content.Context context> = $r2;
+
+        r0.<com.google.firebase.messaging.TopicsSyncTask: long nextDelaySeconds> = $l0;
+
+        r0.<com.google.firebase.messaging.TopicsSyncTask: com.google.firebase.messaging.Metadata metadata> = $r3;
+
+        $r4 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("power");
+
+        $r5 = (android.os.PowerManager) $r4;
+
+        $r6 = virtualinvoke $r5.<android.os.PowerManager: android.os.PowerManager$WakeLock newWakeLock(int,java.lang.String)>(1, "wake:com.google.firebase.messaging");
+
+        r0.<com.google.firebase.messaging.TopicsSyncTask: android.os.PowerManager$WakeLock syncWakeLock> = $r6;
+
+        return;
+    }
+
+    static boolean access$000(com.google.firebase.messaging.TopicsSyncTask)
+    {
+        com.google.firebase.messaging.TopicsSyncTask $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.firebase.messaging.TopicsSyncTask;
+
+        $z0 = specialinvoke $r0.<com.google.firebase.messaging.TopicsSyncTask: boolean isDeviceConnected()>();
+
+        return $z0;
+    }
+
+    static boolean access$100()
+    {
+        boolean $z0;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: boolean isLoggable()>();
+
+        return $z0;
+    }
+
+    static com.google.firebase.messaging.TopicsSubscriber access$200(com.google.firebase.messaging.TopicsSyncTask)
+    {
+        com.google.firebase.messaging.TopicsSyncTask $r0;
+        com.google.firebase.messaging.TopicsSubscriber r1;
+
+        $r0 := @parameter0: com.google.firebase.messaging.TopicsSyncTask;
+
+        r1 = $r0.<com.google.firebase.messaging.TopicsSyncTask: com.google.firebase.messaging.TopicsSubscriber topicsSubscriber>;
+
+        return r1;
+    }
+
+    static android.content.Context access$300(com.google.firebase.messaging.TopicsSyncTask)
+    {
+        android.content.Context r1;
+        com.google.firebase.messaging.TopicsSyncTask $r0;
+
+        $r0 := @parameter0: com.google.firebase.messaging.TopicsSyncTask;
+
+        r1 = $r0.<com.google.firebase.messaging.TopicsSyncTask: android.content.Context context>;
+
+        return r1;
+    }
+
+    private static java.lang.String createPermissionMissingLog(java.lang.String)
+    {
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("Missing Permission: ");
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". This permission should normally be included by the manifest merger, but may needed to be manually added to your manifest");
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    private static boolean hasAccessNetworkStatePermission(android.content.Context)
+    {
+        java.lang.Throwable $r3;
+        android.content.Context $r2;
+        java.lang.Boolean $r1;
+        java.lang.Object $r0;
+        boolean $z0;
+
+        $r2 := @parameter0: android.content.Context;
+
+        $r0 = <com.google.firebase.messaging.TopicsSyncTask: java.lang.Object TOPIC_SYNC_TASK_LOCK>;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = <com.google.firebase.messaging.TopicsSyncTask: java.lang.Boolean hasAccessNetworkStatePermission>;
+
+        if $r1 != null goto label2;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: boolean hasPermission(android.content.Context,java.lang.String,java.lang.Boolean)>($r2, "android.permission.ACCESS_NETWORK_STATE", $r1);
+
+        goto label3;
+
+     label2:
+        $z0 = virtualinvoke $r1.<java.lang.Boolean: boolean booleanValue()>();
+
+     label3:
+        $r1 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        <com.google.firebase.messaging.TopicsSyncTask: java.lang.Boolean hasAccessNetworkStatePermission> = $r1;
+
+        $z0 = virtualinvoke $r1.<java.lang.Boolean: boolean booleanValue()>();
+
+        exitmonitor $r0;
+
+     label4:
+        return $z0;
+
+     label5:
+        $r3 := @caughtexception;
+
+        exitmonitor $r0;
+
+     label6:
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    private static boolean hasPermission(android.content.Context, java.lang.String, java.lang.Boolean)
+    {
+        android.content.Context $r0;
+        int $i0;
+        java.lang.Boolean $r2;
+        java.lang.String $r1;
+        boolean $z0, $z1;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.Boolean;
+
+        if $r2 == null goto label1;
+
+        $z0 = virtualinvoke $r2.<java.lang.Boolean: boolean booleanValue()>();
+
+        return $z0;
+
+     label1:
+        $i0 = virtualinvoke $r0.<android.content.Context: int checkCallingOrSelfPermission(java.lang.String)>($r1);
+
+        if $i0 != 0 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        if $z0 != 0 goto label4;
+
+        $z1 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z1 == 0 goto label4;
+
+        $r1 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: java.lang.String createPermissionMissingLog(java.lang.String)>($r1);
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("FirebaseMessaging", $r1);
+
+     label4:
+        return $z0;
+    }
+
+    private static boolean hasWakeLockPermission(android.content.Context)
+    {
+        java.lang.Throwable $r3;
+        android.content.Context $r2;
+        java.lang.Boolean $r1;
+        java.lang.Object $r0;
+        boolean $z0;
+
+        $r2 := @parameter0: android.content.Context;
+
+        $r0 = <com.google.firebase.messaging.TopicsSyncTask: java.lang.Object TOPIC_SYNC_TASK_LOCK>;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = <com.google.firebase.messaging.TopicsSyncTask: java.lang.Boolean hasWakeLockPermission>;
+
+        if $r1 != null goto label2;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: boolean hasPermission(android.content.Context,java.lang.String,java.lang.Boolean)>($r2, "android.permission.WAKE_LOCK", $r1);
+
+        goto label3;
+
+     label2:
+        $z0 = virtualinvoke $r1.<java.lang.Boolean: boolean booleanValue()>();
+
+     label3:
+        $r1 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        <com.google.firebase.messaging.TopicsSyncTask: java.lang.Boolean hasWakeLockPermission> = $r1;
+
+        $z0 = virtualinvoke $r1.<java.lang.Boolean: boolean booleanValue()>();
+
+        exitmonitor $r0;
+
+     label4:
+        return $z0;
+
+     label5:
+        $r3 := @caughtexception;
+
+        exitmonitor $r0;
+
+     label6:
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    private boolean isDeviceConnected()
+    {
+        android.net.ConnectivityManager $r3;
+        java.lang.Throwable $r5;
+        android.content.Context $r1;
+        com.google.firebase.messaging.TopicsSyncTask r0;
+        android.net.NetworkInfo $r4;
+        java.lang.Object $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.TopicsSyncTask;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.content.Context context>;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r3 = (android.net.ConnectivityManager) $r2;
+
+        if $r3 == null goto label2;
+
+        $r4 = virtualinvoke $r3.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        goto label3;
+
+     label2:
+        $r4 = null;
+
+     label3:
+        if $r4 == null goto label5;
+
+        $z0 = virtualinvoke $r4.<android.net.NetworkInfo: boolean isConnected()>();
+
+     label4:
+        if $z0 == 0 goto label5;
+
+        $z0 = 1;
+
+        goto label6;
+
+     label5:
+        $z0 = 0;
+
+     label6:
+        exitmonitor r0;
+
+        return $z0;
+
+     label7:
+        $r5 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label4 with label7;
+    }
+
+    private static boolean isLoggable()
+    {
+        int $i0;
+        boolean $z0;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z0 != 0 goto label2;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 != 23 goto label1;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z0 != 0 goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    public void run()
+    {
+        java.lang.Throwable $r11, $r12;
+        android.content.Context $r6;
+        long $l0;
+        com.google.firebase.messaging.Metadata $r9;
+        com.google.firebase.messaging.TopicsSyncTask r0;
+        com.google.firebase.messaging.TopicsSyncTask$ConnectivityChangeReceiver $r10, $r15;
+        java.lang.String $r14;
+        boolean $z0;
+        com.google.firebase.messaging.TopicsSubscriber $r8;
+        java.io.IOException $r17;
+        java.lang.RuntimeException $r1, $r2, $r3, $r4, $r5;
+        android.os.PowerManager$WakeLock $r7;
+        java.lang.StringBuilder $r13, $r16;
+
+        r0 := @this: com.google.firebase.messaging.TopicsSyncTask;
+
+        $r6 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.content.Context context>;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: boolean hasWakeLockPermission(android.content.Context)>($r6);
+
+        if $z0 == 0 goto label01;
+
+        $r7 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+        $l0 = <com.google.firebase.messaging.Constants: long WAKE_LOCK_ACQUIRE_TIMEOUT_MILLIS>;
+
+        virtualinvoke $r7.<android.os.PowerManager$WakeLock: void acquire(long)>($l0);
+
+     label01:
+        $r8 = r0.<com.google.firebase.messaging.TopicsSyncTask: com.google.firebase.messaging.TopicsSubscriber topicsSubscriber>;
+
+     label02:
+        virtualinvoke $r8.<com.google.firebase.messaging.TopicsSubscriber: void setSyncScheduledOrRunning(boolean)>(1);
+
+     label03:
+        $r9 = r0.<com.google.firebase.messaging.TopicsSyncTask: com.google.firebase.messaging.Metadata metadata>;
+
+     label04:
+        $z0 = virtualinvoke $r9.<com.google.firebase.messaging.Metadata: boolean isGmscorePresent()>();
+
+     label05:
+        if $z0 != 0 goto label12;
+
+     label06:
+        $r8 = r0.<com.google.firebase.messaging.TopicsSyncTask: com.google.firebase.messaging.TopicsSubscriber topicsSubscriber>;
+
+     label07:
+        virtualinvoke $r8.<com.google.firebase.messaging.TopicsSubscriber: void setSyncScheduledOrRunning(boolean)>(0);
+
+     label08:
+        $r6 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.content.Context context>;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: boolean hasWakeLockPermission(android.content.Context)>($r6);
+
+        if $z0 == 0 goto label55;
+
+     label09:
+        $r7 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+        virtualinvoke $r7.<android.os.PowerManager$WakeLock: void release()>();
+
+     label10:
+        return;
+
+     label11:
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("FirebaseMessaging", "TopicsSyncTask\'s wakelock was already released due to timeout.");
+
+        return;
+
+     label12:
+        $r6 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.content.Context context>;
+
+     label13:
+        $z0 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: boolean hasAccessNetworkStatePermission(android.content.Context)>($r6);
+
+     label14:
+        if $z0 == 0 goto label24;
+
+     label15:
+        $z0 = specialinvoke r0.<com.google.firebase.messaging.TopicsSyncTask: boolean isDeviceConnected()>();
+
+     label16:
+        if $z0 != 0 goto label24;
+
+     label17:
+        $r15 = new com.google.firebase.messaging.TopicsSyncTask$ConnectivityChangeReceiver;
+
+     label18:
+        $r10 = $r15;
+
+     label19:
+        specialinvoke $r15.<com.google.firebase.messaging.TopicsSyncTask$ConnectivityChangeReceiver: void <init>(com.google.firebase.messaging.TopicsSyncTask,com.google.firebase.messaging.TopicsSyncTask)>(r0, r0);
+
+        virtualinvoke $r10.<com.google.firebase.messaging.TopicsSyncTask$ConnectivityChangeReceiver: void registerReceiver()>();
+
+     label20:
+        $r6 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.content.Context context>;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: boolean hasWakeLockPermission(android.content.Context)>($r6);
+
+        if $z0 == 0 goto label55;
+
+     label21:
+        $r7 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+        virtualinvoke $r7.<android.os.PowerManager$WakeLock: void release()>();
+
+     label22:
+        return;
+
+     label23:
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("FirebaseMessaging", "TopicsSyncTask\'s wakelock was already released due to timeout.");
+
+        return;
+
+     label24:
+        $r8 = r0.<com.google.firebase.messaging.TopicsSyncTask: com.google.firebase.messaging.TopicsSubscriber topicsSubscriber>;
+
+     label25:
+        $z0 = virtualinvoke $r8.<com.google.firebase.messaging.TopicsSubscriber: boolean syncTopics()>();
+
+     label26:
+        if $z0 == 0 goto label30;
+
+     label27:
+        $r8 = r0.<com.google.firebase.messaging.TopicsSyncTask: com.google.firebase.messaging.TopicsSubscriber topicsSubscriber>;
+
+     label28:
+        virtualinvoke $r8.<com.google.firebase.messaging.TopicsSubscriber: void setSyncScheduledOrRunning(boolean)>(0);
+
+     label29:
+        goto label32;
+
+     label30:
+        $r8 = r0.<com.google.firebase.messaging.TopicsSyncTask: com.google.firebase.messaging.TopicsSubscriber topicsSubscriber>;
+
+        $l0 = r0.<com.google.firebase.messaging.TopicsSyncTask: long nextDelaySeconds>;
+
+     label31:
+        virtualinvoke $r8.<com.google.firebase.messaging.TopicsSubscriber: void syncWithDelaySecondsInternal(long)>($l0);
+
+     label32:
+        $r6 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.content.Context context>;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: boolean hasWakeLockPermission(android.content.Context)>($r6);
+
+        if $z0 == 0 goto label55;
+
+     label33:
+        $r7 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+     label34:
+        goto label42;
+
+     label35:
+        $r11 := @caughtexception;
+
+        goto label45;
+
+     label36:
+        $r12 := @caughtexception;
+
+     label37:
+        $r16 = new java.lang.StringBuilder;
+
+     label38:
+        $r13 = $r16;
+
+     label39:
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failed to sync topics. Won\'t retry sync. ");
+
+        $r17 = (java.io.IOException) $r12;
+
+        $r14 = virtualinvoke $r17.<java.io.IOException: java.lang.String getMessage()>();
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r14);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", $r14);
+
+        $r8 = r0.<com.google.firebase.messaging.TopicsSyncTask: com.google.firebase.messaging.TopicsSubscriber topicsSubscriber>;
+
+        virtualinvoke $r8.<com.google.firebase.messaging.TopicsSubscriber: void setSyncScheduledOrRunning(boolean)>(0);
+
+     label40:
+        $r6 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.content.Context context>;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: boolean hasWakeLockPermission(android.content.Context)>($r6);
+
+        if $z0 == 0 goto label55;
+
+     label41:
+        $r7 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+     label42:
+        virtualinvoke $r7.<android.os.PowerManager$WakeLock: void release()>();
+
+     label43:
+        return;
+
+     label44:
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("FirebaseMessaging", "TopicsSyncTask\'s wakelock was already released due to timeout.");
+
+        return;
+
+     label45:
+        $r6 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.content.Context context>;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.TopicsSyncTask: boolean hasWakeLockPermission(android.content.Context)>($r6);
+
+        if $z0 == 0 goto label49;
+
+     label46:
+        $r7 = r0.<com.google.firebase.messaging.TopicsSyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+        virtualinvoke $r7.<android.os.PowerManager$WakeLock: void release()>();
+
+     label47:
+        goto label49;
+
+     label48:
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("FirebaseMessaging", "TopicsSyncTask\'s wakelock was already released due to timeout.");
+
+     label49:
+        throw $r11;
+
+     label50:
+        $r1 := @caughtexception;
+
+        goto label11;
+
+     label51:
+        $r2 := @caughtexception;
+
+        goto label23;
+
+     label52:
+        $r3 := @caughtexception;
+
+        goto label44;
+
+     label53:
+        $r4 := @caughtexception;
+
+        goto label44;
+
+     label54:
+        $r5 := @caughtexception;
+
+        goto label48;
+
+     label55:
+        return;
+
+        catch java.io.IOException from label02 to label03 with label36;
+        catch java.io.IOException from label04 to label05 with label36;
+        catch java.io.IOException from label07 to label08 with label36;
+        catch java.lang.Throwable from label01 to label05 with label35;
+        catch java.lang.Throwable from label06 to label08 with label35;
+        catch java.lang.RuntimeException from label09 to label10 with label50;
+        catch java.io.IOException from label13 to label14 with label36;
+        catch java.io.IOException from label15 to label16 with label36;
+        catch java.io.IOException from label19 to label20 with label36;
+        catch java.lang.Throwable from label12 to label14 with label35;
+        catch java.lang.Throwable from label15 to label16 with label35;
+        catch java.lang.Throwable from label17 to label18 with label35;
+        catch java.lang.Throwable from label19 to label20 with label35;
+        catch java.lang.RuntimeException from label21 to label22 with label51;
+        catch java.io.IOException from label25 to label26 with label36;
+        catch java.io.IOException from label28 to label29 with label36;
+        catch java.io.IOException from label31 to label32 with label36;
+        catch java.lang.Throwable from label24 to label26 with label35;
+        catch java.lang.Throwable from label27 to label29 with label35;
+        catch java.lang.Throwable from label30 to label32 with label35;
+        catch java.lang.RuntimeException from label33 to label34 with label52;
+        catch java.lang.Throwable from label37 to label38 with label35;
+        catch java.lang.Throwable from label39 to label40 with label35;
+        catch java.lang.RuntimeException from label41 to label43 with label53;
+        catch java.lang.RuntimeException from label46 to label47 with label54;
+    }
+}

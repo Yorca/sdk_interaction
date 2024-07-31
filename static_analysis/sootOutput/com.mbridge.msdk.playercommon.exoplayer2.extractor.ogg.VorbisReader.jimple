@@ -1,0 +1,473 @@
+final class com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader extends com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader
+{
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$CommentHeader commentHeader;
+    private int previousPacketBlockSize;
+    private boolean seenFirstAudioPacket;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader vorbisIdHeader;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup vorbisSetup;
+
+    void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: void <init>()>();
+
+        return;
+    }
+
+    static void appendNumberOfSamples(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, long)
+    {
+        byte[] $r1;
+        byte $b4;
+        int $i0, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        long $l1, $l2;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $l1 := @parameter1: long;
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        $i0 = $i0 + 4;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setLimit(int)>($i0);
+
+        $r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        $i0 = $i0 + -4;
+
+        $l2 = $l1 & 255L;
+
+        $i3 = (int) $l2;
+
+        $b4 = (byte) $i3;
+
+        $r1[$i0] = $b4;
+
+        $r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        $i0 = $i0 + -3;
+
+        $l2 = $l1 >>> 8;
+
+        $l2 = $l2 & 255L;
+
+        $i3 = (int) $l2;
+
+        $b4 = (byte) $i3;
+
+        $r1[$i0] = $b4;
+
+        $r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        $i0 = $i0 + -2;
+
+        $l2 = $l1 >>> 16;
+
+        $l2 = $l2 & 255L;
+
+        $i3 = (int) $l2;
+
+        $b4 = (byte) $i3;
+
+        $r1[$i0] = $b4;
+
+        $r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        $i3 = $i0 + -1;
+
+        $l1 = $l1 >>> 24;
+
+        $l1 = $l1 & 255L;
+
+        $i0 = (int) $l1;
+
+        $b4 = (byte) $i0;
+
+        $r1[$i3] = $b4;
+
+        return;
+    }
+
+    private static int decodeBlockSize(byte, com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup)
+    {
+        byte $b1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$Mode $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$Mode[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader $r3;
+        boolean $z0;
+
+        $b1 := @parameter0: byte;
+
+        $r0 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup;
+
+        $i0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup: int iLogModes>;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: int readBits(byte,int,int)>($b1, $i0, 1);
+
+        $r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$Mode[] modes>;
+
+        $r2 = $r1[$i0];
+
+        $z0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$Mode: boolean blockFlag>;
+
+        if $z0 != 0 goto label1;
+
+        $r3 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader idHeader>;
+
+        $i0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader: int blockSize0>;
+
+        return $i0;
+
+     label1:
+        $r3 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader idHeader>;
+
+        $i0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader: int blockSize1>;
+
+        return $i0;
+    }
+
+    static int readBits(byte, int, int)
+    {
+        byte $b0;
+        int $i1, $i2, $i3;
+
+        $b0 := @parameter0: byte;
+
+        $i1 := @parameter1: int;
+
+        $i2 := @parameter2: int;
+
+        $i3 = (int) $b0;
+
+        $i2 = $i3 >> 1;
+
+        $i1 = 8 - $i1;
+
+        $i1 = 255 >>> $i1;
+
+        $i1 = $i2 & $i1;
+
+        return $i1;
+    }
+
+    public static boolean verifyBitstreamType(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ParserException $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        boolean $z0;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+     label1:
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil: boolean verifyVorbisHeaderCapturePattern(int,com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,boolean)>(1, $r1, 1);
+
+     label2:
+        return $z0;
+
+     label3:
+        return 0;
+
+     label4:
+        $r0 := @caughtexception;
+
+        goto label3;
+
+        catch com.mbridge.msdk.playercommon.exoplayer2.ParserException from label1 to label2 with label4;
+    }
+
+    protected final void onSeekEnd(long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader r0;
+        byte $b0;
+        int $i2;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader;
+
+        $l1 := @parameter0: long;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: void onSeekEnd(long)>($l1);
+
+        $i2 = 0;
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 == 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: boolean seenFirstAudioPacket> = $z0;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader vorbisIdHeader>;
+
+        if $r1 == null goto label3;
+
+        $i2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader: int blockSize0>;
+
+     label3:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: int previousPacketBlockSize> = $i2;
+
+        return;
+    }
+
+    protected final long preparePayload(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        byte[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        long $l3;
+        byte $b2;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $r2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i1 = 0;
+
+        $b2 = $r2[0];
+
+        $b2 = $b2 & 1;
+
+        if $b2 != 1 goto label1;
+
+        return -1L;
+
+     label1:
+        $r2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $b2 = $r2[0];
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup vorbisSetup>;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: int decodeBlockSize(byte,com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup)>($b2, $r3);
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: boolean seenFirstAudioPacket>;
+
+        if $z0 == 0 goto label2;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: int previousPacketBlockSize>;
+
+        $i1 = $i1 + $i0;
+
+        $i1 = $i1 / 4;
+
+     label2:
+        $l3 = (long) $i1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: void appendNumberOfSamples(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,long)>($r1, $l3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: boolean seenFirstAudioPacket> = 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: int previousPacketBlockSize> = $i0;
+
+        return $l3;
+    }
+
+    protected final boolean readHeaders(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, long, com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData) throws java.io.IOException, java.lang.InterruptedException
+    {
+        byte[] $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r3;
+        long $l3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader $r5;
+        java.util.ArrayList $r2, $r8;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $l3 := @parameter1: long;
+
+        $r1 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup vorbisSetup>;
+
+        if $r4 == null goto label1;
+
+        return 0;
+
+     label1:
+        $r4 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup readSetupHeaders(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup vorbisSetup> = $r4;
+
+        if $r4 != null goto label2;
+
+        return 1;
+
+     label2:
+        $r8 = new java.util.ArrayList;
+
+        $r2 = $r8;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup vorbisSetup>;
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader idHeader>;
+
+        $r6 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader: byte[] data>;
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r6);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup vorbisSetup>;
+
+        $r6 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup: byte[] setupHeaderData>;
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r6);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup vorbisSetup>;
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader idHeader>;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader: int bitrateNominal>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup vorbisSetup>;
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader idHeader>;
+
+        $i1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader: int channels>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup vorbisSetup>;
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader idHeader>;
+
+        $l3 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader: long sampleRate>;
+
+        $i2 = (int) $l3;
+
+        $r7 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format createAudioSampleFormat(java.lang.String,java.lang.String,java.lang.String,int,int,int,int,java.util.List,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,int,java.lang.String)>(null, "audio/vorbis", null, $i0, -1, $i1, $i2, $r2, null, 0, null);
+
+        $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader$SetupData: com.mbridge.msdk.playercommon.exoplayer2.Format format> = $r7;
+
+        return 1;
+    }
+
+    final com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup readSetupHeaders(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray) throws java.io.IOException
+    {
+        byte[] $r2, $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$CommentHeader $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader $r4;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$Mode[] $r6;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader vorbisIdHeader>;
+
+        if $r4 != null goto label1;
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader readVorbisIdentificationHeader(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader vorbisIdHeader> = $r4;
+
+        return null;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$CommentHeader commentHeader>;
+
+        if $r1 != null goto label2;
+
+        $r1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$CommentHeader readVorbisCommentHeader(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$CommentHeader commentHeader> = $r1;
+
+        return null;
+
+     label2:
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        $r2 = newarray (byte)[$i0];
+
+        $r5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r5, 0, $r2, 0, $i0);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader vorbisIdHeader>;
+
+        $i0 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader: int channels>;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$Mode[] readVorbisModes(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r3, $i0);
+
+        $i0 = lengthof $r6;
+
+        $i0 = $i0 + -1;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil: int iLog(int)>($i0);
+
+        $r7 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader vorbisIdHeader>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$CommentHeader commentHeader>;
+
+        specialinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader,com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$CommentHeader,byte[],com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$Mode[],int)>($r4, $r1, $r2, $r6, $i0);
+
+        return $r7;
+    }
+
+    protected final void reset(boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader;
+
+        $z0 := @parameter0: boolean;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.StreamReader: void reset(boolean)>($z0);
+
+        if $z0 == 0 goto label1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader$VorbisSetup vorbisSetup> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$VorbisIdHeader vorbisIdHeader> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisUtil$CommentHeader commentHeader> = null;
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: int previousPacketBlockSize> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ogg.VorbisReader: boolean seenFirstAudioPacket> = 0;
+
+        return;
+    }
+}

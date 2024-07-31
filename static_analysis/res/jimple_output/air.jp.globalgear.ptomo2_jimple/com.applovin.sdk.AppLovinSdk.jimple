@@ -1,0 +1,913 @@
+public final class com.applovin.sdk.AppLovinSdk extends java.lang.Object
+{
+    private static final java.lang.String TAG;
+    public static final java.lang.String VERSION;
+    public static final int VERSION_CODE;
+    private static final java.util.Map sdkInstances;
+    private static final java.lang.Object sdkInstancesLock;
+    public final com.applovin.impl.sdk.o coreSdk;
+
+    static void <clinit>()
+    {
+        int $i0;
+        java.util.HashMap $r1;
+        java.lang.Object $r2;
+        java.lang.String $r0;
+
+        <com.applovin.sdk.AppLovinSdk: java.lang.String TAG> = "AppLovinSdk";
+
+        $r0 = staticinvoke <com.applovin.sdk.AppLovinSdk: java.lang.String getVersion()>();
+
+        <com.applovin.sdk.AppLovinSdk: java.lang.String VERSION> = $r0;
+
+        $i0 = staticinvoke <com.applovin.sdk.AppLovinSdk: int getVersionCode()>();
+
+        <com.applovin.sdk.AppLovinSdk: int VERSION_CODE> = $i0;
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>(int)>(1);
+
+        <com.applovin.sdk.AppLovinSdk: java.util.Map sdkInstances> = $r1;
+
+        $r2 = new java.lang.Object;
+
+        specialinvoke $r2.<java.lang.Object: void <init>()>();
+
+        <com.applovin.sdk.AppLovinSdk: java.lang.Object sdkInstancesLock> = $r2;
+
+        return;
+    }
+
+    private void <init>(com.applovin.impl.sdk.o)
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 := @parameter0: com.applovin.impl.sdk.o;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk> = $r1;
+
+        return;
+    }
+
+    public static com.applovin.sdk.AppLovinSdk getInstance(android.content.Context)
+    {
+        com.applovin.sdk.AppLovinSdk $r1;
+        android.content.Context $r2;
+        com.applovin.sdk.AppLovinSdk$a $r0;
+
+        $r2 := @parameter0: android.content.Context;
+
+        $r0 = new com.applovin.sdk.AppLovinSdk$a;
+
+        specialinvoke $r0.<com.applovin.sdk.AppLovinSdk$a: void <init>(android.content.Context)>($r2);
+
+        $r1 = staticinvoke <com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinSdk getInstance(com.applovin.sdk.AppLovinSdkSettings,android.content.Context)>($r0, $r2);
+
+        return $r1;
+    }
+
+    public static com.applovin.sdk.AppLovinSdk getInstance(com.applovin.sdk.AppLovinSdkSettings, android.content.Context)
+    {
+        android.content.Context $r1;
+        com.applovin.impl.sdk.utils.e $r2;
+        com.applovin.sdk.AppLovinSdkSettings $r0;
+        com.applovin.sdk.AppLovinSdk $r4;
+        java.lang.String $r3;
+        java.lang.IllegalArgumentException $r5;
+
+        $r0 := @parameter0: com.applovin.sdk.AppLovinSdkSettings;
+
+        $r1 := @parameter1: android.content.Context;
+
+        if $r1 == null goto label1;
+
+        $r2 = staticinvoke <com.applovin.impl.sdk.utils.e: com.applovin.impl.sdk.utils.e a(android.content.Context)>($r1);
+
+        $r3 = virtualinvoke $r2.<com.applovin.impl.sdk.utils.e: java.lang.String a(java.lang.String,java.lang.String)>("applovin.sdk.key", "");
+
+        $r4 = staticinvoke <com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinSdk getInstance(java.lang.String,com.applovin.sdk.AppLovinSdkSettings,android.content.Context)>($r3, $r0, $r1);
+
+        return $r4;
+
+     label1:
+        $r5 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("No context specified");
+
+        throw $r5;
+    }
+
+    public static com.applovin.sdk.AppLovinSdk getInstance(java.lang.String, com.applovin.sdk.AppLovinSdkSettings, android.content.Context)
+    {
+        java.lang.Throwable $r12;
+        android.content.Context $r4;
+        java.util.Iterator $r10;
+        java.util.Collection $r9;
+        com.applovin.sdk.AppLovinSdk $r6;
+        java.lang.IllegalArgumentException $r13;
+        com.applovin.sdk.AppLovinSdkSettings $r3;
+        java.util.Map $r1;
+        com.applovin.impl.sdk.o $r11;
+        java.lang.Object $r0, $r5;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r2, $r7;
+        boolean $z0;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: com.applovin.sdk.AppLovinSdkSettings;
+
+        $r4 := @parameter2: android.content.Context;
+
+        if $r3 == null goto label12;
+
+        if $r4 == null goto label11;
+
+        $r0 = <com.applovin.sdk.AppLovinSdk: java.lang.Object sdkInstancesLock>;
+
+        entermonitor $r0;
+
+     label01:
+        $r1 = <com.applovin.sdk.AppLovinSdk: java.util.Map sdkInstances>;
+
+        $z0 = interfaceinvoke $r1.<java.util.Map: boolean containsKey(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label02;
+
+        $r5 = interfaceinvoke $r1.<java.util.Map: java.lang.Object get(java.lang.Object)>($r2);
+
+        $r6 = (com.applovin.sdk.AppLovinSdk) $r5;
+
+        goto label06;
+
+     label02:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label05;
+
+        $r7 = <java.io.File: java.lang.String separator>;
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean contains(java.lang.CharSequence)>($r7);
+
+        if $z0 == 0 goto label05;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("\n**************************************************\nINVALID SDK KEY: ");
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n**************************************************\n");
+
+        $r7 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.applovin.impl.sdk.x: void j(java.lang.String,java.lang.String)>("AppLovinSdk", $r7);
+
+        $z0 = interfaceinvoke $r1.<java.util.Map: boolean isEmpty()>();
+
+        if $z0 != 0 goto label04;
+
+        $r9 = interfaceinvoke $r1.<java.util.Map: java.util.Collection values()>();
+
+        $r10 = interfaceinvoke $r9.<java.util.Collection: java.util.Iterator iterator()>();
+
+        $r5 = interfaceinvoke $r10.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (com.applovin.sdk.AppLovinSdk) $r5;
+
+        exitmonitor $r0;
+
+     label03:
+        return $r6;
+
+     label04:
+        $r7 = <java.io.File: java.lang.String separator>;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>($r7, "");
+
+     label05:
+        $r11 = new com.applovin.impl.sdk.o;
+
+        specialinvoke $r11.<com.applovin.impl.sdk.o: void <init>()>();
+
+        virtualinvoke $r11.<com.applovin.impl.sdk.o: void a(java.lang.String,com.applovin.sdk.AppLovinSdkSettings,android.content.Context)>($r2, $r3, $r4);
+
+        $r6 = new com.applovin.sdk.AppLovinSdk;
+
+        specialinvoke $r6.<com.applovin.sdk.AppLovinSdk: void <init>(com.applovin.impl.sdk.o)>($r11);
+
+        virtualinvoke $r11.<com.applovin.impl.sdk.o: void a(com.applovin.sdk.AppLovinSdk)>($r6);
+
+        virtualinvoke $r3.<com.applovin.sdk.AppLovinSdkSettings: void attachAppLovinSdk(com.applovin.impl.sdk.o)>($r11);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r2, $r6);
+
+     label06:
+        if $r6 == null goto label07;
+
+        $r11 = $r6.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r11.<com.applovin.impl.sdk.o: void i()>();
+
+     label07:
+        exitmonitor $r0;
+
+     label08:
+        return $r6;
+
+     label09:
+        $r12 := @caughtexception;
+
+        exitmonitor $r0;
+
+     label10:
+        throw $r12;
+
+     label11:
+        $r13 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r13.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("No context specified");
+
+        throw $r13;
+
+     label12:
+        $r13 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r13.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("No userSettings specified");
+
+        throw $r13;
+
+        catch java.lang.Throwable from label01 to label03 with label09;
+        catch java.lang.Throwable from label04 to label08 with label09;
+        catch java.lang.Throwable from label09 to label10 with label09;
+    }
+
+    private static java.lang.String getVersion()
+    {
+        return "11.10.1";
+    }
+
+    private static int getVersionCode()
+    {
+        return 11100199;
+    }
+
+    public static void initializeSdk(android.content.Context)
+    {
+        android.content.Context $r0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        staticinvoke <com.applovin.sdk.AppLovinSdk: void initializeSdk(android.content.Context,com.applovin.sdk.AppLovinSdk$SdkInitializationListener)>($r0, null);
+
+        return;
+    }
+
+    public static void initializeSdk(android.content.Context, com.applovin.sdk.AppLovinSdk$SdkInitializationListener)
+    {
+        android.content.Context $r1;
+        com.applovin.sdk.AppLovinSdk $r0;
+        com.applovin.sdk.AppLovinSdk$SdkInitializationListener $r2;
+        java.lang.IllegalArgumentException $r3;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: com.applovin.sdk.AppLovinSdk$SdkInitializationListener;
+
+        if $r1 == null goto label2;
+
+        $r0 = staticinvoke <com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinSdk getInstance(android.content.Context)>($r1);
+
+        if $r0 == null goto label1;
+
+        virtualinvoke $r0.<com.applovin.sdk.AppLovinSdk: void initializeSdk(com.applovin.sdk.AppLovinSdk$SdkInitializationListener)>($r2);
+
+        return;
+
+     label1:
+        staticinvoke <com.applovin.impl.sdk.x: void j(java.lang.String,java.lang.String)>("AppLovinSdk", "Unable to initialize AppLovin SDK: SDK object not created");
+
+        return;
+
+     label2:
+        $r3 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("No context specified");
+
+        throw $r3;
+    }
+
+    static void reinitializeAll(java.lang.Boolean, java.lang.Boolean, java.lang.Boolean)
+    {
+        java.lang.Throwable $r14;
+        java.util.Map $r4;
+        java.lang.Boolean $r0, $r1, $r3;
+        com.applovin.impl.sdk.o $r9;
+        java.lang.String $r12;
+        boolean $z0;
+        java.util.Iterator $r6;
+        com.applovin.sdk.AppLovinEventService $r13;
+        java.util.Collection $r5;
+        com.applovin.sdk.AppLovinSdk $r8;
+        com.applovin.impl.sdk.x $r10;
+        java.lang.Object $r2, $r7;
+        java.lang.StringBuilder $r11;
+
+        $r3 := @parameter0: java.lang.Boolean;
+
+        $r0 := @parameter1: java.lang.Boolean;
+
+        $r1 := @parameter2: java.lang.Boolean;
+
+        $r2 = <com.applovin.sdk.AppLovinSdk: java.lang.Object sdkInstancesLock>;
+
+        entermonitor $r2;
+
+     label01:
+        $r4 = <com.applovin.sdk.AppLovinSdk: java.util.Map sdkInstances>;
+
+        $r5 = interfaceinvoke $r4.<java.util.Map: java.util.Collection values()>();
+
+        $r6 = interfaceinvoke $r5.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label02:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label08;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (com.applovin.sdk.AppLovinSdk) $r7;
+
+        $r9 = $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r9.<com.applovin.impl.sdk.o: void b()>();
+
+        $r9 = $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r9.<com.applovin.impl.sdk.o: void k()>();
+
+        if $r3 == null goto label04;
+
+        $r9 = $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r9.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.x M()>();
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label03;
+
+        $r9 = $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r10 = virtualinvoke $r9.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.x M()>();
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Toggled \'huc\' to ");
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r10.<com.applovin.impl.sdk.x: void c(java.lang.String,java.lang.String)>("AppLovinSdk", $r12);
+
+     label03:
+        $r12 = virtualinvoke $r3.<java.lang.Boolean: java.lang.String toString()>();
+
+        $r4 = staticinvoke <com.applovin.impl.sdk.utils.CollectionUtils: java.util.Map map(java.lang.Object,java.lang.Object)>("value", $r12);
+
+        $r13 = virtualinvoke $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinEventService getEventService()>();
+
+        interfaceinvoke $r13.<com.applovin.sdk.AppLovinEventService: void trackEvent(java.lang.String,java.util.Map)>("huc", $r4);
+
+     label04:
+        if $r0 == null goto label06;
+
+        $r9 = $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r9.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.x M()>();
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label05;
+
+        $r9 = $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r10 = virtualinvoke $r9.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.x M()>();
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Toggled \'aru\' to ");
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r10.<com.applovin.impl.sdk.x: void c(java.lang.String,java.lang.String)>("AppLovinSdk", $r12);
+
+     label05:
+        $r12 = virtualinvoke $r0.<java.lang.Boolean: java.lang.String toString()>();
+
+        $r4 = staticinvoke <com.applovin.impl.sdk.utils.CollectionUtils: java.util.Map map(java.lang.Object,java.lang.Object)>("value", $r12);
+
+        $r13 = virtualinvoke $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinEventService getEventService()>();
+
+        interfaceinvoke $r13.<com.applovin.sdk.AppLovinEventService: void trackEvent(java.lang.String,java.util.Map)>("aru", $r4);
+
+     label06:
+        if $r1 == null goto label02;
+
+        $r9 = $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r9.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.x M()>();
+
+        $z0 = staticinvoke <com.applovin.impl.sdk.x: boolean a()>();
+
+        if $z0 == 0 goto label07;
+
+        $r9 = $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r10 = virtualinvoke $r9.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.x M()>();
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Toggled \'dns\' to ");
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r10.<com.applovin.impl.sdk.x: void c(java.lang.String,java.lang.String)>("AppLovinSdk", $r12);
+
+     label07:
+        $r12 = virtualinvoke $r1.<java.lang.Boolean: java.lang.String toString()>();
+
+        $r4 = staticinvoke <com.applovin.impl.sdk.utils.CollectionUtils: java.util.Map map(java.lang.Object,java.lang.Object)>("value", $r12);
+
+        $r13 = virtualinvoke $r8.<com.applovin.sdk.AppLovinSdk: com.applovin.sdk.AppLovinEventService getEventService()>();
+
+        interfaceinvoke $r13.<com.applovin.sdk.AppLovinEventService: void trackEvent(java.lang.String,java.util.Map)>("dns", $r4);
+
+        goto label02;
+
+     label08:
+        exitmonitor $r2;
+
+     label09:
+        return;
+
+     label10:
+        $r14 := @caughtexception;
+
+        exitmonitor $r2;
+
+     label11:
+        throw $r14;
+
+        catch java.lang.Throwable from label01 to label09 with label10;
+        catch java.lang.Throwable from label10 to label11 with label10;
+    }
+
+    public com.applovin.sdk.AppLovinAdService getAdService()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        com.applovin.impl.sdk.AppLovinAdServiceImpl $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.AppLovinAdServiceImpl F()>();
+
+        return $r1;
+    }
+
+    public java.util.List getAvailableMediatedNetworks()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.mediation.MaxMediatedNetworkInfoImpl $r2;
+        java.util.ArrayList $r1;
+        org.json.JSONObject $r5;
+        int $i0, $i1;
+        com.applovin.impl.sdk.o $r3;
+        org.json.JSONArray $r4;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r3 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r4 = staticinvoke <com.applovin.impl.mediation.d.c: org.json.JSONArray a(com.applovin.impl.sdk.o)>($r3);
+
+        $r1 = new java.util.ArrayList;
+
+        $i0 = virtualinvoke $r4.<org.json.JSONArray: int length()>();
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke $r4.<org.json.JSONArray: int length()>();
+
+        if $i0 >= $i1 goto label2;
+
+        $r5 = staticinvoke <com.applovin.impl.sdk.utils.JsonUtils: org.json.JSONObject getJSONObject(org.json.JSONArray,int,org.json.JSONObject)>($r4, $i0, null);
+
+        $r2 = new com.applovin.impl.mediation.MaxMediatedNetworkInfoImpl;
+
+        specialinvoke $r2.<com.applovin.impl.mediation.MaxMediatedNetworkInfoImpl: void <init>(org.json.JSONObject)>($r5);
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        return $r1;
+    }
+
+    public com.applovin.sdk.AppLovinCFService getCFService()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.sdk.AppLovinCFService $r1;
+        com.applovin.impl.sdk.o $r2;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: com.applovin.sdk.AppLovinCFService J()>();
+
+        return $r1;
+    }
+
+    public com.applovin.sdk.AppLovinSdkConfiguration getConfiguration()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        com.applovin.sdk.AppLovinSdkConfiguration $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: com.applovin.sdk.AppLovinSdkConfiguration az()>();
+
+        return $r1;
+    }
+
+    public com.applovin.sdk.AppLovinEventService getEventService()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        com.applovin.impl.sdk.EventServiceImpl $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.EventServiceImpl H()>();
+
+        return $r1;
+    }
+
+    public java.lang.String getMediationProvider()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        java.lang.String $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.String t()>();
+
+        return $r1;
+    }
+
+    public com.applovin.sdk.AppLovinPostbackService getPostbackService()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        com.applovin.impl.sdk.network.PostbackServiceImpl $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.network.PostbackServiceImpl al()>();
+
+        return $r1;
+    }
+
+    public java.lang.String getSdkKey()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        java.lang.String $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.String C()>();
+
+        return $r1;
+    }
+
+    public com.applovin.sdk.AppLovinSdkSettings getSettings()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        com.applovin.sdk.AppLovinSdkSettings $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: com.applovin.sdk.AppLovinSdkSettings D()>();
+
+        return $r1;
+    }
+
+    public com.applovin.sdk.AppLovinTargetingData getTargetingData()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        com.applovin.impl.sdk.AppLovinTargetingDataImpl $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.AppLovinTargetingDataImpl s()>();
+
+        return $r1;
+    }
+
+    public java.lang.String getUserIdentifier()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        java.lang.String $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: java.lang.String p()>();
+
+        return $r1;
+    }
+
+    public com.applovin.sdk.AppLovinUserSegment getUserSegment()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        com.applovin.sdk.AppLovinUserSegment $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: com.applovin.sdk.AppLovinUserSegment E()>();
+
+        return $r1;
+    }
+
+    public com.applovin.sdk.AppLovinUserService getUserService()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        com.applovin.impl.sdk.UserServiceImpl $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.UserServiceImpl I()>();
+
+        return $r1;
+    }
+
+    public com.applovin.sdk.AppLovinVariableService getVariableService()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        com.applovin.impl.sdk.VariableServiceImpl $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $r1 = virtualinvoke $r2.<com.applovin.impl.sdk.o: com.applovin.impl.sdk.VariableServiceImpl K()>();
+
+        return $r1;
+    }
+
+    public void initializeSdk()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        return;
+    }
+
+    public void initializeSdk(com.applovin.sdk.AppLovinSdk$SdkInitializationListener)
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        com.applovin.sdk.AppLovinSdk$SdkInitializationListener $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 := @parameter0: com.applovin.sdk.AppLovinSdk$SdkInitializationListener;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r2.<com.applovin.impl.sdk.o: void a(com.applovin.sdk.AppLovinSdk$SdkInitializationListener)>($r1);
+
+        return;
+    }
+
+    public boolean isEnabled()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r1;
+        boolean $z0;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $z0 = virtualinvoke $r1.<com.applovin.impl.sdk.o: boolean d()>();
+
+        return $z0;
+    }
+
+    public boolean isInitialized()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r1;
+        boolean $z0;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $z0 = virtualinvoke $r1.<com.applovin.impl.sdk.o: boolean d()>();
+
+        return $z0;
+    }
+
+    public void setMediationProvider(java.lang.String)
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        java.lang.String $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r2.<com.applovin.impl.sdk.o: void d(java.lang.String)>($r1);
+
+        return;
+    }
+
+    public void setPluginVersion(java.lang.String)
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        java.lang.String $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r2.<com.applovin.impl.sdk.o: void b(java.lang.String)>($r1);
+
+        return;
+    }
+
+    public void setUserIdentifier(java.lang.String)
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        java.lang.String $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r2.<com.applovin.impl.sdk.o: void c(java.lang.String)>($r1);
+
+        return;
+    }
+
+    public void showCreativeDebugger()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r1.<com.applovin.impl.sdk.o: void o()>();
+
+        return;
+    }
+
+    public void showMediationDebugger()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r1.<com.applovin.impl.sdk.o: void n()>();
+
+        return;
+    }
+
+    public void showMediationDebugger(java.util.Map)
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r2;
+        java.util.Map $r1;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 := @parameter0: java.util.Map;
+
+        $r2 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        virtualinvoke $r2.<com.applovin.impl.sdk.o: void a(java.util.Map)>($r1);
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        com.applovin.sdk.AppLovinSdk r0;
+        com.applovin.impl.sdk.o $r3;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.applovin.sdk.AppLovinSdk;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("AppLovinSdk{sdkKey=\'");
+
+        $r2 = virtualinvoke r0.<com.applovin.sdk.AppLovinSdk: java.lang.String getSdkKey()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\', isEnabled=");
+
+        $z0 = virtualinvoke r0.<com.applovin.sdk.AppLovinSdk: boolean isEnabled()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", isFirstSession=");
+
+        $r3 = r0.<com.applovin.sdk.AppLovinSdk: com.applovin.impl.sdk.o coreSdk>;
+
+        $z0 = virtualinvoke $r3.<com.applovin.impl.sdk.o: boolean ax()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(125);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+    }
+}

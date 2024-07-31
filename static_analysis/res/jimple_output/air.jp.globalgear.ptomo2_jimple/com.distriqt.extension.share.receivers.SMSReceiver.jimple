@@ -1,0 +1,122 @@
+public class com.distriqt.extension.share.receivers.SMSReceiver extends android.content.BroadcastReceiver
+{
+    public static final java.lang.String SMS_EXTRA_NAME;
+    public static final java.lang.String SMS_RECEIVED_ACTION;
+    public static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        <com.distriqt.extension.share.receivers.SMSReceiver: java.lang.String TAG> = "SMSReceiver";
+
+        <com.distriqt.extension.share.receivers.SMSReceiver: java.lang.String SMS_RECEIVED_ACTION> = "android.provider.Telephony.SMS_RECEIVED";
+
+        <com.distriqt.extension.share.receivers.SMSReceiver: java.lang.String SMS_EXTRA_NAME> = "pdus";
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.distriqt.extension.share.receivers.SMSReceiver r0;
+
+        r0 := @this: com.distriqt.extension.share.receivers.SMSReceiver;
+
+        specialinvoke r0.<android.content.BroadcastReceiver: void <init>()>();
+
+        return;
+    }
+
+    public void onReceive(android.content.Context, android.content.Intent)
+    {
+        android.telephony.SmsMessage $r11;
+        android.content.Context $r1;
+        byte[] $r10;
+        java.lang.Object[] $r4;
+        android.os.Bundle $r7;
+        android.content.Intent $r2;
+        java.lang.Integer $r8;
+        int $i0, $i1, $i2;
+        java.lang.String $r3, $r5, $r6, $r12;
+        boolean $z0;
+        com.distriqt.extension.share.receivers.SMSReceiver r0;
+        java.lang.Object $r9;
+
+        r0 := @this: com.distriqt.extension.share.receivers.SMSReceiver;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: android.content.Intent;
+
+        $r3 = <com.distriqt.extension.share.receivers.SMSReceiver: java.lang.String TAG>;
+
+        $i0 = 0;
+
+        $r4 = newarray (java.lang.Object)[0];
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "onReceive", $r4);
+
+        $r5 = "android.provider.Telephony.SMS_RECEIVED";
+
+        $r6 = virtualinvoke $r2.<android.content.Intent: java.lang.String getAction()>();
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label2;
+
+        $r7 = virtualinvoke $r2.<android.content.Intent: android.os.Bundle getExtras()>();
+
+        if $r7 == null goto label2;
+
+        $i1 = virtualinvoke $r7.<android.os.Bundle: int getInt(java.lang.String,int)>("slot", -1);
+
+        $i2 = virtualinvoke $r7.<android.os.Bundle: int getInt(java.lang.String,int)>("subscription", -1);
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r4[0] = $r8;
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        $r4[1] = $r8;
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r3, "onReceive: slot:%d subscriptionId:%d", $r4);
+
+        $r9 = virtualinvoke $r7.<android.os.Bundle: java.lang.Object get(java.lang.String)>("pdus");
+
+        $r4 = (java.lang.Object[]) $r9;
+
+     label1:
+        $i1 = lengthof $r4;
+
+        if $i0 >= $i1 goto label2;
+
+        $r9 = $r4[$i0];
+
+        $r10 = (byte[]) $r9;
+
+        $r11 = staticinvoke <android.telephony.SmsMessage: android.telephony.SmsMessage createFromPdu(byte[])>($r10);
+
+        virtualinvoke $r11.<android.telephony.SmsMessage: int getIndexOnIcc()>();
+
+        $r5 = virtualinvoke $r11.<android.telephony.SmsMessage: java.lang.String getMessageBody()>();
+
+        $r6 = virtualinvoke $r11.<android.telephony.SmsMessage: java.lang.String getOriginatingAddress()>();
+
+        $r12 = virtualinvoke $r11.<android.telephony.SmsMessage: java.lang.String getServiceCenterAddress()>();
+
+        $r3 = <com.distriqt.extension.share.events.SMSEvent: java.lang.String MESSAGE_SMS_RECEIVED>;
+
+        $r5 = staticinvoke <com.distriqt.extension.share.events.SMSEvent: java.lang.String formatSMSForEvent(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int)>("", $r6, $r5, $r12, null, $i2);
+
+        staticinvoke <com.distriqt.extension.share.ShareExtension: void dispatchEvent(java.lang.String,java.lang.String)>($r3, $r5);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+}

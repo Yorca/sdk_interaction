@@ -1,0 +1,165 @@
+class com.vungle.warren.persistence.Repository$26 extends java.lang.Object implements java.util.concurrent.Callable
+{
+    final com.vungle.warren.persistence.Repository this$0;
+    final long val$after;
+
+    void <init>(com.vungle.warren.persistence.Repository, long)
+    {
+        long $l0;
+        com.vungle.warren.persistence.Repository$26 r0;
+        com.vungle.warren.persistence.Repository $r1;
+
+        r0 := @this: com.vungle.warren.persistence.Repository$26;
+
+        $r1 := @parameter0: com.vungle.warren.persistence.Repository;
+
+        $l0 := @parameter1: long;
+
+        r0.<com.vungle.warren.persistence.Repository$26: com.vungle.warren.persistence.Repository this$0> = $r1;
+
+        r0.<com.vungle.warren.persistence.Repository$26: long val$after> = $l0;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public com.vungle.warren.vision.VisionAggregationInfo call()
+    {
+        java.lang.Throwable $r13;
+        com.vungle.warren.model.VisionDataDBAdapter $r9;
+        java.lang.String[] $r2;
+        long $l0;
+        com.vungle.warren.persistence.DatabaseHelper $r5;
+        com.vungle.warren.persistence.Repository$26 r0;
+        com.vungle.warren.persistence.Repository $r4;
+        java.util.Map $r7;
+        int $i1;
+        java.lang.String $r3;
+        com.vungle.warren.vision.VisionAggregationInfo $r12;
+        android.database.Cursor $r6;
+        boolean $z0;
+        com.vungle.warren.persistence.Query $r1;
+        java.lang.Exception $r14;
+        java.lang.Object $r8;
+        android.content.ContentValues $r10;
+        com.vungle.warren.model.VisionData $r11;
+
+        r0 := @this: com.vungle.warren.persistence.Repository$26;
+
+        $r1 = new com.vungle.warren.persistence.Query;
+
+        specialinvoke $r1.<com.vungle.warren.persistence.Query: void <init>(java.lang.String)>("vision_data");
+
+        $r1.<com.vungle.warren.persistence.Query: java.lang.String selection> = "timestamp >= ?";
+
+        $r1.<com.vungle.warren.persistence.Query: java.lang.String orderBy> = "_id DESC";
+
+        $r2 = newarray (java.lang.String)[1];
+
+        $l0 = r0.<com.vungle.warren.persistence.Repository$26: long val$after>;
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.String toString(long)>($l0);
+
+        $r2[0] = $r3;
+
+        $r1.<com.vungle.warren.persistence.Query: java.lang.String[] args> = $r2;
+
+        $r4 = r0.<com.vungle.warren.persistence.Repository$26: com.vungle.warren.persistence.Repository this$0>;
+
+        $r5 = $r4.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.DatabaseHelper dbHelper>;
+
+        $r6 = virtualinvoke $r5.<com.vungle.warren.persistence.DatabaseHelper: android.database.Cursor query(com.vungle.warren.persistence.Query)>($r1);
+
+        $r4 = r0.<com.vungle.warren.persistence.Repository$26: com.vungle.warren.persistence.Repository this$0>;
+
+        $r7 = staticinvoke <com.vungle.warren.persistence.Repository: java.util.Map access$500(com.vungle.warren.persistence.Repository)>($r4);
+
+        $r8 = interfaceinvoke $r7.<java.util.Map: java.lang.Object get(java.lang.Object)>(class "Lcom/vungle/warren/model/VisionData;");
+
+        $r9 = (com.vungle.warren.model.VisionDataDBAdapter) $r8;
+
+        if $r6 == null goto label14;
+
+        if $r9 == null goto label13;
+
+     label01:
+        $z0 = interfaceinvoke $r6.<android.database.Cursor: boolean moveToFirst()>();
+
+     label02:
+        if $z0 == 0 goto label13;
+
+     label03:
+        $r10 = new android.content.ContentValues;
+
+     label04:
+        specialinvoke $r10.<android.content.ContentValues: void <init>()>();
+
+        staticinvoke <android.database.DatabaseUtils: void cursorRowToContentValues(android.database.Cursor,android.content.ContentValues)>($r6, $r10);
+
+        $r11 = virtualinvoke $r9.<com.vungle.warren.model.VisionDataDBAdapter: com.vungle.warren.model.VisionData fromContentValues(android.content.ContentValues)>($r10);
+
+     label05:
+        $r12 = new com.vungle.warren.vision.VisionAggregationInfo;
+
+     label06:
+        $i1 = interfaceinvoke $r6.<android.database.Cursor: int getCount()>();
+
+        $r3 = $r11.<com.vungle.warren.model.VisionData: java.lang.String creative>;
+
+        specialinvoke $r12.<com.vungle.warren.vision.VisionAggregationInfo: void <init>(int,java.lang.String)>($i1, $r3);
+
+     label07:
+        interfaceinvoke $r6.<android.database.Cursor: void close()>();
+
+        return $r12;
+
+     label08:
+        $r13 := @caughtexception;
+
+        goto label12;
+
+     label09:
+        $r14 := @caughtexception;
+
+     label10:
+        $r3 = virtualinvoke $r14.<java.lang.Exception: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void critical(boolean,java.lang.String,java.lang.String,java.lang.String)>(1, "Repository", "getVisionAggregationInfo", $r3);
+
+     label11:
+        interfaceinvoke $r6.<android.database.Cursor: void close()>();
+
+        return null;
+
+     label12:
+        interfaceinvoke $r6.<android.database.Cursor: void close()>();
+
+        throw $r13;
+
+     label13:
+        interfaceinvoke $r6.<android.database.Cursor: void close()>();
+
+     label14:
+        return null;
+
+        catch java.lang.Exception from label01 to label02 with label09;
+        catch java.lang.Exception from label04 to label05 with label09;
+        catch java.lang.Exception from label06 to label07 with label09;
+        catch java.lang.Throwable from label01 to label02 with label08;
+        catch java.lang.Throwable from label03 to label07 with label08;
+        catch java.lang.Throwable from label10 to label11 with label08;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        com.vungle.warren.persistence.Repository$26 r0;
+        com.vungle.warren.vision.VisionAggregationInfo $r1;
+
+        r0 := @this: com.vungle.warren.persistence.Repository$26;
+
+        $r1 = virtualinvoke r0.<com.vungle.warren.persistence.Repository$26: com.vungle.warren.vision.VisionAggregationInfo call()>();
+
+        return $r1;
+    }
+}

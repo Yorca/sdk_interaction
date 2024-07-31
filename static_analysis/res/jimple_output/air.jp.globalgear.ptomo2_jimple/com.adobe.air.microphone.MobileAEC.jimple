@@ -1,0 +1,344 @@
+public class com.adobe.air.microphone.MobileAEC extends java.lang.Object
+{
+    public static final short AECM_ENABLE;
+    public static final short AECM_UNABLE;
+    private com.adobe.air.microphone.MobileAEC$AecmConfig mAecmConfig;
+    private long mAecmHandler;
+    private boolean mIsInit;
+    private com.adobe.air.microphone.MobileAEC$SamplingFrequency mSampFreq;
+
+    public void <init>(com.adobe.air.microphone.MobileAEC$SamplingFrequency) throws java.lang.Exception
+    {
+        com.adobe.air.microphone.MobileAEC$AecmConfig $r2;
+        byte $b1;
+        com.adobe.air.microphone.MobileAEC r0;
+        long $l0;
+        com.adobe.air.microphone.MobileAEC$SamplingFrequency $r1;
+        java.lang.Exception $r3;
+
+        r0 := @this: com.adobe.air.microphone.MobileAEC;
+
+        $r1 := @parameter0: com.adobe.air.microphone.MobileAEC$SamplingFrequency;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.air.microphone.MobileAEC: long mAecmHandler> = -1L;
+
+        r0.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC$AecmConfig mAecmConfig> = null;
+
+        r0.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC$SamplingFrequency mSampFreq> = null;
+
+        r0.<com.adobe.air.microphone.MobileAEC: boolean mIsInit> = 0;
+
+        virtualinvoke r0.<com.adobe.air.microphone.MobileAEC: void setSampFreq(com.adobe.air.microphone.MobileAEC$SamplingFrequency)>($r1);
+
+        $r2 = new com.adobe.air.microphone.MobileAEC$AecmConfig;
+
+        specialinvoke $r2.<com.adobe.air.microphone.MobileAEC$AecmConfig: void <init>(com.adobe.air.microphone.MobileAEC)>(r0);
+
+        r0.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC$AecmConfig mAecmConfig> = $r2;
+
+        $l0 = staticinvoke <com.adobe.air.microphone.MobileAEC: long nativeCreateAecmInstance()>();
+
+        r0.<com.adobe.air.microphone.MobileAEC: long mAecmHandler> = $l0;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r3 = new java.lang.Exception;
+
+        specialinvoke $r3.<java.lang.Exception: void <init>(java.lang.String)>("Could not create native AECM instance");
+
+        throw $r3;
+    }
+
+    private void mInitAecmInstance(int)
+    {
+        com.adobe.air.microphone.MobileAEC$AecmConfig $r1;
+        com.adobe.air.microphone.MobileAEC r0;
+        int $i0;
+        long $l1;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.microphone.MobileAEC;
+
+        $i0 := @parameter0: int;
+
+        $z0 = r0.<com.adobe.air.microphone.MobileAEC: boolean mIsInit>;
+
+        if $z0 != 0 goto label1;
+
+        $l1 = r0.<com.adobe.air.microphone.MobileAEC: long mAecmHandler>;
+
+        staticinvoke <com.adobe.air.microphone.MobileAEC: int nativeInitializeAecmInstance(long,int)>($l1, $i0);
+
+        $r1 = new com.adobe.air.microphone.MobileAEC$AecmConfig;
+
+        specialinvoke $r1.<com.adobe.air.microphone.MobileAEC$AecmConfig: void <init>(com.adobe.air.microphone.MobileAEC)>(r0);
+
+        r0.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC$AecmConfig mAecmConfig> = $r1;
+
+        $l1 = r0.<com.adobe.air.microphone.MobileAEC: long mAecmHandler>;
+
+        staticinvoke <com.adobe.air.microphone.MobileAEC: int nativeSetConfig(long,com.adobe.air.microphone.MobileAEC$AecmConfig)>($l1, $r1);
+
+        r0.<com.adobe.air.microphone.MobileAEC: boolean mIsInit> = 1;
+
+     label1:
+        return;
+    }
+
+    private static native int nativeAecmProcess(long, short[], short[], short[], short, short);
+
+    private static native int nativeBufferFarend(long, short[], int);
+
+    private static native long nativeCreateAecmInstance();
+
+    private static native int nativeFreeAecmInstance(long);
+
+    private static native int nativeInitializeAecmInstance(long, int);
+
+    private static native int nativeSetConfig(long, com.adobe.air.microphone.MobileAEC$AecmConfig);
+
+    public void close()
+    {
+        long $l0;
+        com.adobe.air.microphone.MobileAEC r0;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.microphone.MobileAEC;
+
+        $z0 = r0.<com.adobe.air.microphone.MobileAEC: boolean mIsInit>;
+
+        if $z0 == 0 goto label1;
+
+        $l0 = r0.<com.adobe.air.microphone.MobileAEC: long mAecmHandler>;
+
+        staticinvoke <com.adobe.air.microphone.MobileAEC: int nativeFreeAecmInstance(long)>($l0);
+
+        r0.<com.adobe.air.microphone.MobileAEC: long mAecmHandler> = -1L;
+
+        r0.<com.adobe.air.microphone.MobileAEC: boolean mIsInit> = 0;
+
+     label1:
+        return;
+    }
+
+    public void echoCancellation(short[], short[], short[], short, short) throws java.lang.Exception
+    {
+        com.adobe.air.microphone.MobileAEC r0;
+        long $l2;
+        java.lang.Exception $r4;
+        short $s0, $s1;
+        int $i3;
+        short[] $r1, $r2, $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.microphone.MobileAEC;
+
+        $r2 := @parameter0: short[];
+
+        $r3 := @parameter1: short[];
+
+        $r1 := @parameter2: short[];
+
+        $s0 := @parameter3: short;
+
+        $s1 := @parameter4: short;
+
+        $z0 = r0.<com.adobe.air.microphone.MobileAEC: boolean mIsInit>;
+
+        if $z0 == 0 goto label2;
+
+        $l2 = r0.<com.adobe.air.microphone.MobileAEC: long mAecmHandler>;
+
+        $i3 = staticinvoke <com.adobe.air.microphone.MobileAEC: int nativeAecmProcess(long,short[],short[],short[],short,short)>($l2, $r2, $r3, $r1, $s0, $s1);
+
+        if $i3 == -1 goto label1;
+
+        return;
+
+     label1:
+        $r4 = new java.lang.Exception;
+
+        specialinvoke $r4.<java.lang.Exception: void <init>(java.lang.String)>("echoCancellation() failed due to invalid arguments.");
+
+        throw $r4;
+
+     label2:
+        $r4 = new java.lang.Exception;
+
+        specialinvoke $r4.<java.lang.Exception: void <init>(java.lang.String)>("echoCancelling() called on an unprepared AECM instance.");
+
+        throw $r4;
+    }
+
+    public com.adobe.air.microphone.MobileAEC farendBuffer(short[], int) throws java.lang.Exception
+    {
+        com.adobe.air.microphone.MobileAEC r0;
+        int $i0;
+        long $l1;
+        short[] $r1;
+        java.lang.Exception $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.microphone.MobileAEC;
+
+        $r1 := @parameter0: short[];
+
+        $i0 := @parameter1: int;
+
+        $z0 = r0.<com.adobe.air.microphone.MobileAEC: boolean mIsInit>;
+
+        if $z0 == 0 goto label2;
+
+        $l1 = r0.<com.adobe.air.microphone.MobileAEC: long mAecmHandler>;
+
+        $i0 = staticinvoke <com.adobe.air.microphone.MobileAEC: int nativeBufferFarend(long,short[],int)>($l1, $r1, $i0);
+
+        if $i0 == -1 goto label1;
+
+        return r0;
+
+     label1:
+        $r2 = new java.lang.Exception;
+
+        specialinvoke $r2.<java.lang.Exception: void <init>(java.lang.String)>("setFarendBuffer() failed due to invalid arguments.");
+
+        throw $r2;
+
+     label2:
+        $r2 = new java.lang.Exception;
+
+        specialinvoke $r2.<java.lang.Exception: void <init>(java.lang.String)>("setFarendBuffer() called on an unprepared AECM instance.");
+
+        throw $r2;
+    }
+
+    protected void finalize() throws java.lang.Throwable
+    {
+        com.adobe.air.microphone.MobileAEC r0;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.microphone.MobileAEC;
+
+        specialinvoke r0.<java.lang.Object: void finalize()>();
+
+        $z0 = r0.<com.adobe.air.microphone.MobileAEC: boolean mIsInit>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<com.adobe.air.microphone.MobileAEC: void close()>();
+
+     label1:
+        return;
+    }
+
+    public com.adobe.air.microphone.MobileAEC prepare()
+    {
+        com.adobe.air.microphone.MobileAEC$AecmConfig $r1;
+        com.adobe.air.microphone.MobileAEC r0;
+        int $i0;
+        long $l1;
+        com.adobe.air.microphone.MobileAEC$SamplingFrequency $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.microphone.MobileAEC;
+
+        $z0 = r0.<com.adobe.air.microphone.MobileAEC: boolean mIsInit>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<com.adobe.air.microphone.MobileAEC: void close()>();
+
+        $l1 = staticinvoke <com.adobe.air.microphone.MobileAEC: long nativeCreateAecmInstance()>();
+
+        r0.<com.adobe.air.microphone.MobileAEC: long mAecmHandler> = $l1;
+
+     label1:
+        $r2 = r0.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC$SamplingFrequency mSampFreq>;
+
+        $l1 = virtualinvoke $r2.<com.adobe.air.microphone.MobileAEC$SamplingFrequency: long getFS()>();
+
+        $i0 = (int) $l1;
+
+        specialinvoke r0.<com.adobe.air.microphone.MobileAEC: void mInitAecmInstance(int)>($i0);
+
+        r0.<com.adobe.air.microphone.MobileAEC: boolean mIsInit> = 1;
+
+        $l1 = r0.<com.adobe.air.microphone.MobileAEC: long mAecmHandler>;
+
+        $r1 = r0.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC$AecmConfig mAecmConfig>;
+
+        staticinvoke <com.adobe.air.microphone.MobileAEC: int nativeSetConfig(long,com.adobe.air.microphone.MobileAEC$AecmConfig)>($l1, $r1);
+
+        return r0;
+    }
+
+    public com.adobe.air.microphone.MobileAEC setAecmMode(com.adobe.air.microphone.MobileAEC$AggressiveMode) throws java.lang.NullPointerException
+    {
+        short $s1;
+        com.adobe.air.microphone.MobileAEC$AecmConfig $r2;
+        com.adobe.air.microphone.MobileAEC r0;
+        int $i0;
+        com.adobe.air.microphone.MobileAEC$AggressiveMode $r1;
+        java.lang.NullPointerException $r3;
+
+        r0 := @this: com.adobe.air.microphone.MobileAEC;
+
+        $r1 := @parameter0: com.adobe.air.microphone.MobileAEC$AggressiveMode;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC$AecmConfig mAecmConfig>;
+
+        $i0 = virtualinvoke $r1.<com.adobe.air.microphone.MobileAEC$AggressiveMode: int getMode()>();
+
+        $s1 = (short) $i0;
+
+        staticinvoke <com.adobe.air.microphone.MobileAEC$AecmConfig: short access$002(com.adobe.air.microphone.MobileAEC$AecmConfig,short)>($r2, $s1);
+
+        return r0;
+
+     label1:
+        $r3 = new java.lang.NullPointerException;
+
+        specialinvoke $r3.<java.lang.NullPointerException: void <init>(java.lang.String)>("setAecMode() failed due to null argument.");
+
+        throw $r3;
+    }
+
+    public void setSampFreq(com.adobe.air.microphone.MobileAEC$SamplingFrequency)
+    {
+        com.adobe.air.microphone.MobileAEC$SamplingFrequency $r1;
+        com.adobe.air.microphone.MobileAEC r0;
+
+        r0 := @this: com.adobe.air.microphone.MobileAEC;
+
+        $r1 := @parameter0: com.adobe.air.microphone.MobileAEC$SamplingFrequency;
+
+        if $r1 != null goto label1;
+
+        $r1 = <com.adobe.air.microphone.MobileAEC$SamplingFrequency: com.adobe.air.microphone.MobileAEC$SamplingFrequency FS_16000Hz>;
+
+        r0.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC$SamplingFrequency mSampFreq> = $r1;
+
+        return;
+
+     label1:
+        r0.<com.adobe.air.microphone.MobileAEC: com.adobe.air.microphone.MobileAEC$SamplingFrequency mSampFreq> = $r1;
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.adobe.air.microphone.MobileAEC: short AECM_ENABLE> = 1;
+
+        return;
+    }
+}

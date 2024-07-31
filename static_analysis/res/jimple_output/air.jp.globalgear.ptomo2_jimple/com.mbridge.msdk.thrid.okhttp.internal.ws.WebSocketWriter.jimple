@@ -1,0 +1,542 @@
+final class com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter extends java.lang.Object
+{
+    boolean activeWriter;
+    final com.mbridge.msdk.thrid.okio.Buffer buffer;
+    final com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink frameSink;
+    final boolean isClient;
+    private final com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor maskCursor;
+    private final byte[] maskKey;
+    final java.util.Random random;
+    final com.mbridge.msdk.thrid.okio.BufferedSink sink;
+    final com.mbridge.msdk.thrid.okio.Buffer sinkBuffer;
+    boolean writerClosed;
+
+    void <init>(boolean, com.mbridge.msdk.thrid.okio.BufferedSink, java.util.Random)
+    {
+        byte[] $r6;
+        com.mbridge.msdk.thrid.okio.Buffer $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter r0;
+        java.util.Random $r3;
+        java.lang.NullPointerException $r7;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r2;
+        com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor $r5;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter;
+
+        $z0 := @parameter0: boolean;
+
+        $r2 := @parameter1: com.mbridge.msdk.thrid.okio.BufferedSink;
+
+        $r3 := @parameter2: java.util.Random;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new com.mbridge.msdk.thrid.okio.Buffer;
+
+        specialinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: void <init>()>();
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer buffer> = $r1;
+
+        $r4 = new com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink;
+
+        specialinvoke $r4.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink: void <init>(com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter)>(r0);
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink frameSink> = $r4;
+
+        if $r2 == null goto label5;
+
+        if $r3 == null goto label4;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: boolean isClient> = $z0;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.BufferedSink sink> = $r2;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.Buffer buffer()>();
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer> = $r1;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: java.util.Random random> = $r3;
+
+        $r5 = null;
+
+        if $z0 == 0 goto label1;
+
+        $r6 = newarray (byte)[4];
+
+        goto label2;
+
+     label1:
+        $r6 = null;
+
+     label2:
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: byte[] maskKey> = $r6;
+
+        if $z0 == 0 goto label3;
+
+        $r5 = new com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor;
+
+        specialinvoke $r5.<com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor: void <init>()>();
+
+     label3:
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor maskCursor> = $r5;
+
+        return;
+
+     label4:
+        $r7 = new java.lang.NullPointerException;
+
+        specialinvoke $r7.<java.lang.NullPointerException: void <init>(java.lang.String)>("random == null");
+
+        throw $r7;
+
+     label5:
+        $r7 = new java.lang.NullPointerException;
+
+        specialinvoke $r7.<java.lang.NullPointerException: void <init>(java.lang.String)>("sink == null");
+
+        throw $r7;
+    }
+
+    private void writeControlFrame(int, com.mbridge.msdk.thrid.okio.ByteString) throws java.io.IOException
+    {
+        byte[] $r4;
+        com.mbridge.msdk.thrid.okio.Buffer $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter r0;
+        long $l3;
+        java.util.Random $r3;
+        java.io.IOException $r8;
+        java.lang.IllegalArgumentException $r7;
+        byte $b0;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r6;
+        int $i1, $i2, $i4;
+        com.mbridge.msdk.thrid.okio.ByteString $r1;
+        com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor $r5;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter;
+
+        $i1 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.thrid.okio.ByteString;
+
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: boolean writerClosed>;
+
+        if $z0 != 0 goto label4;
+
+        $i2 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.ByteString: int size()>();
+
+        $l3 = (long) $i2;
+
+        $b0 = $l3 cmp 125L;
+
+        $i4 = (int) $b0;
+
+        if $i4 > 0 goto label3;
+
+        $i1 = $i1 | 128;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer writeByte(int)>($i1);
+
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: boolean isClient>;
+
+        if $z0 == 0 goto label1;
+
+        $i1 = $i2 | 128;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer writeByte(int)>($i1);
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: java.util.Random random>;
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: byte[] maskKey>;
+
+        virtualinvoke $r3.<java.util.Random: void nextBytes(byte[])>($r4);
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: byte[] maskKey>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer write(byte[])>($r4);
+
+        if $i2 <= 0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        $l3 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okio.Buffer: long size()>();
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer write(com.mbridge.msdk.thrid.okio.ByteString)>($r1);
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        $r5 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor maskCursor>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor readAndWriteUnsafe(com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor)>($r5);
+
+        $r5 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor maskCursor>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor: int seek(long)>($l3);
+
+        $r5 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor maskCursor>;
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: byte[] maskKey>;
+
+        staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketProtocol: void toggleMask(com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor,byte[])>($r5, $r4);
+
+        $r5 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor maskCursor>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor: void close()>();
+
+        goto label2;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer writeByte(int)>($i2);
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer write(com.mbridge.msdk.thrid.okio.ByteString)>($r1);
+
+     label2:
+        $r6 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.thrid.okio.BufferedSink: void flush()>();
+
+        return;
+
+     label3:
+        $r7 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r7.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Payload size must be less than or equal to 125");
+
+        throw $r7;
+
+     label4:
+        $r8 = new java.io.IOException;
+
+        specialinvoke $r8.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r8;
+    }
+
+    com.mbridge.msdk.thrid.okio.Sink newMessageSink(int, long)
+    {
+        java.lang.IllegalStateException $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter r0;
+        int $i0;
+        long $l1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter;
+
+        $i0 := @parameter0: int;
+
+        $l1 := @parameter1: long;
+
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: boolean activeWriter>;
+
+        if $z0 != 0 goto label1;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: boolean activeWriter> = 1;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink frameSink>;
+
+        $r1.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink: int formatOpcode> = $i0;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink frameSink>;
+
+        $r1.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink: long contentLength> = $l1;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink frameSink>;
+
+        $r1.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink: boolean isFirstFrame> = 1;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink frameSink>;
+
+        $r1.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink: boolean closed> = 0;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter$FrameSink frameSink>;
+
+        return $r1;
+
+     label1:
+        $r2 = new java.lang.IllegalStateException;
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Another message writer is active. Did you call close()?");
+
+        throw $r2;
+    }
+
+    void writeClose(int, com.mbridge.msdk.thrid.okio.ByteString) throws java.io.IOException
+    {
+        java.lang.Throwable $r4;
+        com.mbridge.msdk.thrid.okio.Buffer $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter r0;
+        int $i0;
+        com.mbridge.msdk.thrid.okio.ByteString $r1, $r2;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.thrid.okio.ByteString;
+
+        $r2 = <com.mbridge.msdk.thrid.okio.ByteString: com.mbridge.msdk.thrid.okio.ByteString EMPTY>;
+
+        if $i0 != 0 goto label1;
+
+        if $r1 == null goto label4;
+
+     label1:
+        if $i0 == 0 goto label2;
+
+        staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketProtocol: void validateCloseCode(int)>($i0);
+
+     label2:
+        $r3 = new com.mbridge.msdk.thrid.okio.Buffer;
+
+        specialinvoke $r3.<com.mbridge.msdk.thrid.okio.Buffer: void <init>()>();
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer writeShort(int)>($i0);
+
+        if $r1 == null goto label3;
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer write(com.mbridge.msdk.thrid.okio.ByteString)>($r1);
+
+     label3:
+        $r2 = virtualinvoke $r3.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.ByteString readByteString()>();
+
+     label4:
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: void writeControlFrame(int,com.mbridge.msdk.thrid.okio.ByteString)>(8, $r2);
+
+     label5:
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: boolean writerClosed> = 1;
+
+        return;
+
+     label6:
+        $r4 := @caughtexception;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: boolean writerClosed> = 1;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label4 to label5 with label6;
+    }
+
+    void writeMessageFrame(int, long, boolean, boolean) throws java.io.IOException
+    {
+        byte[] $r3;
+        com.mbridge.msdk.thrid.okio.Buffer $r1, $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter r0;
+        long $l0, $l2;
+        java.util.Random $r2;
+        short $s3;
+        byte $b4;
+        int $i1;
+        com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor $r5;
+        boolean $z0, $z1, $z2;
+        java.io.IOException $r7;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r6;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter;
+
+        $i1 := @parameter0: int;
+
+        $l2 := @parameter1: long;
+
+        $z1 := @parameter2: boolean;
+
+        $z0 := @parameter3: boolean;
+
+        $z2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: boolean writerClosed>;
+
+        if $z2 != 0 goto label10;
+
+        $s3 = 0;
+
+        if $z1 == 0 goto label01;
+
+        goto label02;
+
+     label01:
+        $i1 = 0;
+
+     label02:
+        if $z0 == 0 goto label03;
+
+        $i1 = $i1 | 128;
+
+     label03:
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer writeByte(int)>($i1);
+
+        $z1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: boolean isClient>;
+
+        if $z1 == 0 goto label04;
+
+        $s3 = 128;
+
+     label04:
+        $b4 = $l2 cmp 125L;
+
+        $i1 = (int) $b4;
+
+        if $i1 > 0 goto label05;
+
+        $i1 = (int) $l2;
+
+        $i1 = $i1 | $s3;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer writeByte(int)>($i1);
+
+        goto label07;
+
+     label05:
+        $b4 = $l2 cmp 65535L;
+
+        $i1 = (int) $b4;
+
+        if $i1 > 0 goto label06;
+
+        $s3 = $s3 | 126;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer writeByte(int)>($s3);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        $i1 = (int) $l2;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer writeShort(int)>($i1);
+
+        goto label07;
+
+     label06:
+        $s3 = $s3 | 127;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer writeByte(int)>($s3);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer writeLong(long)>($l2);
+
+     label07:
+        $z1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: boolean isClient>;
+
+        if $z1 == 0 goto label08;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: java.util.Random random>;
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: byte[] maskKey>;
+
+        virtualinvoke $r2.<java.util.Random: void nextBytes(byte[])>($r3);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: byte[] maskKey>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer write(byte[])>($r3);
+
+        $b4 = $l2 cmp 0L;
+
+        $i1 = (int) $b4;
+
+        if $i1 <= 0 goto label09;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        $l0 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: long size()>();
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer buffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: void write(com.mbridge.msdk.thrid.okio.Buffer,long)>($r4, $l2);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        $r5 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor maskCursor>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor readAndWriteUnsafe(com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor)>($r5);
+
+        $r5 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor maskCursor>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor: int seek(long)>($l0);
+
+        $r5 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor maskCursor>;
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: byte[] maskKey>;
+
+        staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketProtocol: void toggleMask(com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor,byte[])>($r5, $r3);
+
+        $r5 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor maskCursor>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.thrid.okio.Buffer$UnsafeCursor: void close()>();
+
+        goto label09;
+
+     label08:
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer sinkBuffer>;
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.Buffer buffer>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.thrid.okio.Buffer: void write(com.mbridge.msdk.thrid.okio.Buffer,long)>($r4, $l2);
+
+     label09:
+        $r6 = r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink emit()>();
+
+        return;
+
+     label10:
+        $r7 = new java.io.IOException;
+
+        specialinvoke $r7.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r7;
+    }
+
+    void writePing(com.mbridge.msdk.thrid.okio.ByteString) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okio.ByteString $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okio.ByteString;
+
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: void writeControlFrame(int,com.mbridge.msdk.thrid.okio.ByteString)>(9, $r1);
+
+        return;
+    }
+
+    void writePong(com.mbridge.msdk.thrid.okio.ByteString) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okio.ByteString $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okio.ByteString;
+
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.ws.WebSocketWriter: void writeControlFrame(int,com.mbridge.msdk.thrid.okio.ByteString)>(10, $r1);
+
+        return;
+    }
+}

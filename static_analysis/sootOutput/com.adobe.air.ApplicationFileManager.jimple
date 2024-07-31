@@ -1,0 +1,1640 @@
+public final class com.adobe.air.ApplicationFileManager extends java.lang.Object
+{
+    private static final java.lang.String APP_PREFIX;
+    private static final java.lang.String APP_XML_PATH;
+    private static final java.lang.String ASSET_STRING;
+    public static java.lang.String sAndroidPackageName;
+    public static java.lang.String sApkPath;
+    public static java.lang.String sAppDataPath;
+    public static java.lang.String sInitialContentName;
+    private final int BUFFER_SIZE;
+    private final int DEFAULT_SIZE;
+    private java.util.HashMap mFileInfoMap;
+
+    void <init>()
+    {
+        com.adobe.air.ApplicationFileManager r0;
+        int $i0;
+        java.util.HashMap $r2;
+        java.io.File $r1;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.air.ApplicationFileManager: int BUFFER_SIZE> = 8192;
+
+        $i0 = -1;
+
+        r0.<com.adobe.air.ApplicationFileManager: int DEFAULT_SIZE> = $i0;
+
+        $r2 = new java.util.HashMap;
+
+        specialinvoke $r2.<java.util.HashMap: void <init>()>();
+
+        r0.<com.adobe.air.ApplicationFileManager: java.util.HashMap mFileInfoMap> = $r2;
+
+        $r1 = specialinvoke r0.<com.adobe.air.ApplicationFileManager: java.io.File getApkPathFile()>();
+
+        virtualinvoke r0.<com.adobe.air.ApplicationFileManager: void procZipContents(java.io.File)>($r1);
+
+        return;
+    }
+
+    private static void RefreshAppCache(java.lang.String, java.lang.String)
+    {
+        java.lang.StringBuilder $r2;
+        java.lang.String $r0, $r3, $r4;
+        java.io.File $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r4 := @parameter1: java.lang.String;
+
+        $r1 = new java.io.File;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r3 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = new java.io.File;
+
+        specialinvoke $r1.<java.io.File: void <init>(java.lang.String)>($r0);
+
+        staticinvoke <com.adobe.air.ApplicationFileManager: boolean deleteDir(java.io.File)>($r1);
+
+        return;
+    }
+
+    public static void checkAndCreateAppDataDir()
+    {
+        java.lang.Throwable $r1;
+        java.lang.String $r2;
+        java.io.File $r0;
+        boolean $z0;
+
+        $r0 = new java.io.File;
+
+        $r2 = <com.adobe.air.ApplicationFileManager: java.lang.String sAppDataPath>;
+
+        specialinvoke $r0.<java.io.File: void <init>(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label4;
+
+     label1:
+        virtualinvoke $r0.<java.io.File: boolean mkdirs()>();
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+     label4:
+        return;
+
+        catch java.lang.SecurityException from label1 to label2 with label3;
+    }
+
+    private void closeInputStream(java.io.InputStream) throws java.lang.Exception
+    {
+        com.adobe.air.ApplicationFileManager r0;
+        java.io.InputStream $r1;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        virtualinvoke $r1.<java.io.InputStream: void close()>();
+
+        return;
+    }
+
+    private void closeOutputStream(java.io.OutputStream) throws java.lang.Exception
+    {
+        com.adobe.air.ApplicationFileManager r0;
+        java.io.OutputStream $r1;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r1 := @parameter0: java.io.OutputStream;
+
+        virtualinvoke $r1.<java.io.OutputStream: void flush()>();
+
+        virtualinvoke $r1.<java.io.OutputStream: void close()>();
+
+        return;
+    }
+
+    public static boolean deleteDir(java.io.File)
+    {
+        int $i0, $i1;
+        java.io.File[] $r1;
+        java.io.File $r0, $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label3;
+
+        $r1 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+        $i0 = lengthof $r1;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $r2 = $r1[$i1];
+
+        $z0 = staticinvoke <com.adobe.air.ApplicationFileManager: boolean deleteDir(java.io.File)>($r2);
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        $z0 = virtualinvoke $r0.<java.io.File: boolean delete()>();
+
+        if $z0 != 0 goto label4;
+
+        return 0;
+
+     label4:
+        return 1;
+    }
+
+    public static boolean deleteUnzippedContents(java.lang.String)
+    {
+        int $i0, $i1;
+        java.lang.String $r1;
+        java.io.File[] $r2;
+        java.io.File $r0, $r3;
+        boolean $z0;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0 = new java.io.File;
+
+        specialinvoke $r0.<java.io.File: void <init>(java.lang.String)>($r1);
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label2;
+
+        $r2 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+        $i0 = 0;
+
+     label1:
+        $i1 = lengthof $r2;
+
+        if $i0 >= $i1 goto label2;
+
+        $r3 = $r2[$i0];
+
+        $r1 = virtualinvoke $r3.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        staticinvoke <com.adobe.air.ApplicationFileManager: boolean deleteUnzippedContents(java.lang.String)>($r1);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        $z0 = virtualinvoke $r0.<java.io.File: boolean delete()>();
+
+        return $z0;
+    }
+
+    public static java.lang.String getAndroidApkPath()
+    {
+        java.lang.String r0;
+
+        r0 = <com.adobe.air.ApplicationFileManager: java.lang.String sApkPath>;
+
+        return r0;
+    }
+
+    public static java.lang.String getAndroidAppDataPath()
+    {
+        java.lang.String r0;
+
+        r0 = <com.adobe.air.ApplicationFileManager: java.lang.String sAppDataPath>;
+
+        return r0;
+    }
+
+    public static java.lang.String getAndroidUnzipContentPath()
+    {
+        java.lang.String r0;
+
+        r0 = <com.adobe.air.ApplicationFileManager: java.lang.String sAppDataPath>;
+
+        return r0;
+    }
+
+    private java.io.File getApkPathFile()
+    {
+        com.adobe.air.ApplicationFileManager r0;
+        java.lang.String $r2;
+        java.io.File $r1;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r2 = staticinvoke <com.adobe.air.ApplicationFileManager: java.lang.String getAndroidApkPath()>();
+
+        $r1 = new java.io.File;
+
+        specialinvoke $r1.<java.io.File: void <init>(java.lang.String)>($r2);
+
+        return $r1;
+    }
+
+    public static java.lang.String getAppRoot()
+    {
+        java.lang.StringBuilder $r0;
+        char $c0;
+        java.lang.String $r1;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = staticinvoke <com.adobe.air.ApplicationFileManager: java.lang.String getAndroidUnzipContentPath()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $c0 = <java.io.File: char separatorChar>;
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c0);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("assets");
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public static java.lang.String getAppXMLRoot()
+    {
+        java.lang.StringBuilder $r0;
+        char $c0;
+        java.lang.String $r1;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = staticinvoke <com.adobe.air.ApplicationFileManager: java.lang.String getAndroidUnzipContentPath()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $c0 = <java.io.File: char separatorChar>;
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c0);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("META-INF/AIR/application.xml");
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public static void processAndroidDataPath(java.lang.String)
+    {
+        java.lang.Throwable $r0, $r2, $r4;
+        android.os.Bundle $r15;
+        android.content.pm.PackageManager $r12;
+        java.lang.NullPointerException $r1, $r3, $r5;
+        android.content.pm.ActivityInfo $r14;
+        java.lang.String $r6, $r8, $r9, $r17;
+        com.adobe.air.AndroidActivityWrapper $r10;
+        boolean $z0;
+        android.content.ComponentName $r13;
+        java.util.UUID $r18;
+        java.io.File $r19;
+        java.lang.StringBuilder $r7;
+        java.lang.Object $r16;
+        android.app.Activity $r11;
+
+        $r6 := @parameter0: java.lang.String;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = "app";
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("app");
+
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = null;
+
+     label01:
+        $r10 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r11 = virtualinvoke $r10.<com.adobe.air.AndroidActivityWrapper: android.app.Activity getActivity()>();
+
+        $r12 = virtualinvoke $r11.<android.app.Activity: android.content.pm.PackageManager getPackageManager()>();
+
+        $r10 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r11 = virtualinvoke $r10.<com.adobe.air.AndroidActivityWrapper: android.app.Activity getActivity()>();
+
+        $r13 = virtualinvoke $r11.<android.app.Activity: android.content.ComponentName getComponentName()>();
+
+        $r14 = virtualinvoke $r12.<android.content.pm.PackageManager: android.content.pm.ActivityInfo getActivityInfo(android.content.ComponentName,int)>($r13, 128);
+
+     label02:
+        $r15 = $r14.<android.content.pm.ActivityInfo: android.os.Bundle metaData>;
+
+     label03:
+        if $r15 == null goto label14;
+
+     label04:
+        $r16 = virtualinvoke $r15.<android.os.Bundle: java.lang.Object get(java.lang.String)>("uniqueappversionid");
+
+     label05:
+        $r17 = (java.lang.String) $r16;
+
+     label06:
+        $z0 = staticinvoke <com.adobe.air.AndroidActivityWrapper: boolean IsGamePreviewMode()>();
+
+     label07:
+        if $z0 == 0 goto label10;
+
+     label08:
+        $r18 = staticinvoke <java.util.UUID: java.util.UUID randomUUID()>();
+
+        $r8 = virtualinvoke $r18.<java.util.UUID: java.lang.String toString()>();
+
+     label09:
+        goto label11;
+
+     label10:
+        $r8 = $r17;
+
+     label11:
+        staticinvoke <com.adobe.air.ApplicationFileManager: void RefreshAppCache(java.lang.String,java.lang.String)>($r9, $r8);
+
+        $r16 = virtualinvoke $r15.<android.os.Bundle: java.lang.Object get(java.lang.String)>("initialcontent");
+
+     label12:
+        $r6 = (java.lang.String) $r16;
+
+        goto label14;
+
+     label13:
+        $r8 = $r17;
+
+     label14:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r17 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r17);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r17 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.adobe.air.ApplicationFileManager: void setAndroidDataPath(java.lang.String)>($r17);
+
+        $r19 = new java.io.File;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r9 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r19.<java.io.File: void <init>(java.lang.String)>($r8);
+
+        virtualinvoke $r19.<java.io.File: boolean mkdirs()>();
+
+        staticinvoke <com.adobe.air.ApplicationFileManager: void setInitialContentName(java.lang.String)>($r6);
+
+        return;
+
+     label15:
+        $r0 := @caughtexception;
+
+        goto label14;
+
+     label16:
+        $r1 := @caughtexception;
+
+        goto label14;
+
+     label17:
+        $r2 := @caughtexception;
+
+        goto label13;
+
+     label18:
+        $r3 := @caughtexception;
+
+        goto label13;
+
+     label19:
+        $r4 := @caughtexception;
+
+        goto label14;
+
+     label20:
+        $r5 := @caughtexception;
+
+        goto label14;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label01 to label02 with label15;
+        catch android.content.pm.PackageManager$NameNotFoundException from label04 to label05 with label15;
+        catch java.lang.NullPointerException from label01 to label03 with label16;
+        catch java.lang.NullPointerException from label04 to label05 with label16;
+        catch android.content.pm.PackageManager$NameNotFoundException from label06 to label07 with label17;
+        catch android.content.pm.PackageManager$NameNotFoundException from label08 to label09 with label17;
+        catch java.lang.NullPointerException from label06 to label07 with label18;
+        catch java.lang.NullPointerException from label08 to label09 with label18;
+        catch android.content.pm.PackageManager$NameNotFoundException from label11 to label12 with label19;
+        catch java.lang.NullPointerException from label11 to label12 with label20;
+    }
+
+    public static void setAndroidAPKPath(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.adobe.air.ApplicationFileManager: java.lang.String sApkPath> = $r0;
+
+        return;
+    }
+
+    private static void setAndroidDataPath(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.adobe.air.ApplicationFileManager: java.lang.String sAppDataPath> = $r0;
+
+        return;
+    }
+
+    public static void setAndroidPackageName(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.adobe.air.ApplicationFileManager: java.lang.String sAndroidPackageName> = $r0;
+
+        return;
+    }
+
+    private static void setInitialContentName(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.adobe.air.ApplicationFileManager: java.lang.String sInitialContentName> = $r0;
+
+        return;
+    }
+
+    public boolean addToCache(java.lang.String)
+    {
+        com.adobe.air.ApplicationFileManager r0;
+        int $i0, $i1;
+        java.lang.String $r1, $r2;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = <com.adobe.air.ApplicationFileManager: java.lang.String sInitialContentName>;
+
+        if $r2 == null goto label1;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int indexOf(java.lang.String)>($r2);
+
+        $i1 = -1;
+
+        if $i0 == $i1 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public java.lang.String[] appDirectoryNameList(java.lang.String)
+    {
+        java.lang.Object[] $r11;
+        java.util.HashMap $r4;
+        java.lang.String[] $r10;
+        java.util.ArrayList $r7, $r13;
+        int $i0, $i1;
+        java.lang.String $r1, $r2, $r9;
+        boolean $z0;
+        com.adobe.air.ApplicationFileManager r0;
+        java.util.Iterator $r6;
+        java.util.Set $r5;
+        java.lang.StringBuilder $r3, $r12;
+        java.lang.Object $r8;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("");
+
+        $r2 = "assets";
+
+        if $z0 != 0 goto label1;
+
+        $r12 = new java.lang.StringBuilder;
+
+        $r3 = $r12;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>(java.lang.String)>("assets");
+
+        $r2 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label1:
+        $r4 = r0.<com.adobe.air.ApplicationFileManager: java.util.HashMap mFileInfoMap>;
+
+        $r5 = virtualinvoke $r4.<java.util.HashMap: java.util.Set keySet()>();
+
+        $r6 = interfaceinvoke $r5.<java.util.Set: java.util.Iterator iterator()>();
+
+        $r13 = new java.util.ArrayList;
+
+        $r7 = $r13;
+
+        specialinvoke $r13.<java.util.ArrayList: void <init>()>();
+
+     label2:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r8 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r1 = (java.lang.String) $r8;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label3;
+
+        goto label2;
+
+     label3:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>($r2);
+
+        if $z0 == 0 goto label2;
+
+        $r9 = <java.io.File: java.lang.String separator>;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        $i0 = $i0 + 1;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int indexOf(java.lang.String,int)>($r9, $i0);
+
+        $i1 = -1;
+
+        if $i1 == $i0 goto label4;
+
+        goto label2;
+
+     label4:
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        $i0 = $i0 + 1;
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        virtualinvoke $r7.<java.util.ArrayList: boolean add(java.lang.Object)>($r1);
+
+        goto label2;
+
+     label5:
+        $r10 = newarray (java.lang.String)[0];
+
+        $r11 = virtualinvoke $r7.<java.util.ArrayList: java.lang.Object[] toArray(java.lang.Object[])>($r10);
+
+        $r10 = (java.lang.String[]) $r11;
+
+        return $r10;
+    }
+
+    public boolean[] appDirectoryTypeList(java.lang.String)
+    {
+        java.util.HashMap $r4;
+        java.util.ArrayList $r7, $r14;
+        int $i0, $i1;
+        java.lang.Boolean $r11, $r15;
+        java.lang.String $r1, $r2, $r9;
+        boolean $z0;
+        com.adobe.air.ApplicationFileManager r0;
+        java.util.Iterator $r6;
+        boolean[] $r12;
+        java.util.Set $r5;
+        com.adobe.air.FileInfo $r10;
+        java.lang.StringBuilder $r3, $r13;
+        java.lang.Object $r8;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("");
+
+        $r2 = "assets";
+
+        if $z0 != 0 goto label1;
+
+        $r13 = new java.lang.StringBuilder;
+
+        $r3 = $r13;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>(java.lang.String)>("assets");
+
+        $r2 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label1:
+        $r4 = r0.<com.adobe.air.ApplicationFileManager: java.util.HashMap mFileInfoMap>;
+
+        $r5 = virtualinvoke $r4.<java.util.HashMap: java.util.Set keySet()>();
+
+        $r6 = interfaceinvoke $r5.<java.util.Set: java.util.Iterator iterator()>();
+
+        $r14 = new java.util.ArrayList;
+
+        $r7 = $r14;
+
+        specialinvoke $r14.<java.util.ArrayList: void <init>()>();
+
+     label2:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r8 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r1 = (java.lang.String) $r8;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label3;
+
+        goto label2;
+
+     label3:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>($r2);
+
+        if $z0 == 0 goto label2;
+
+        $r9 = <java.io.File: java.lang.String separator>;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        $i0 = $i0 + 1;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int indexOf(java.lang.String,int)>($r9, $i0);
+
+        $i1 = -1;
+
+        if $i1 == $i0 goto label4;
+
+        goto label2;
+
+     label4:
+        $r4 = r0.<com.adobe.air.ApplicationFileManager: java.util.HashMap mFileInfoMap>;
+
+        $r8 = virtualinvoke $r4.<java.util.HashMap: java.lang.Object get(java.lang.Object)>($r1);
+
+        $r10 = (com.adobe.air.FileInfo) $r8;
+
+        $r15 = new java.lang.Boolean;
+
+        $z0 = $r10.<com.adobe.air.FileInfo: boolean mIsFile>;
+
+        specialinvoke $r15.<java.lang.Boolean: void <init>(boolean)>($z0);
+
+        virtualinvoke $r7.<java.util.ArrayList: boolean add(java.lang.Object)>($r15);
+
+        goto label2;
+
+     label5:
+        $i0 = virtualinvoke $r7.<java.util.ArrayList: int size()>();
+
+        $r12 = newarray (boolean)[$i0];
+
+        $i1 = 0;
+
+     label6:
+        if $i1 >= $i0 goto label7;
+
+        $r8 = virtualinvoke $r7.<java.util.ArrayList: java.lang.Object get(int)>($i1);
+
+        $r11 = (java.lang.Boolean) $r8;
+
+        $z0 = virtualinvoke $r11.<java.lang.Boolean: boolean booleanValue()>();
+
+        $r12[$i1] = $z0;
+
+        $i1 = $i1 + 1;
+
+        goto label6;
+
+     label7:
+        return $r12;
+    }
+
+    public void copyFolder(java.lang.String)
+    {
+        byte[] $r15;
+        java.util.zip.ZipInputStream $r1, $r19;
+        java.io.BufferedInputStream $r7, $r18;
+        java.io.BufferedOutputStream $r13, $r22;
+        int $i1, $i2;
+        java.lang.String $r3, $r5, $r10, $r11;
+        java.util.zip.ZipEntry $r9;
+        boolean $z0;
+        com.adobe.air.ApplicationFileManager r0;
+        java.io.FileOutputStream $r14, $r21;
+        char $c0;
+        java.io.FileInputStream $r8, $r17;
+        java.lang.Exception $r2;
+        java.io.File $r6, $r12, $r20;
+        java.lang.StringBuilder $r4, $r16;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("");
+
+        if $z0 != 0 goto label01;
+
+        $r16 = new java.lang.StringBuilder;
+
+        $r4 = $r16;
+
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>(java.lang.String)>("assets");
+
+        $r5 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label02;
+
+     label01:
+        $r3 = "assets";
+
+     label02:
+        $r16 = new java.lang.StringBuilder;
+
+        $r4 = $r16;
+
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = staticinvoke <com.adobe.air.ApplicationFileManager: java.lang.String getAndroidUnzipContentPath()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $c0 = <java.io.File: char separatorChar>;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = specialinvoke r0.<com.adobe.air.ApplicationFileManager: java.io.File getApkPathFile()>();
+
+        $r19 = new java.util.zip.ZipInputStream;
+
+        $r1 = $r19;
+
+        $r18 = new java.io.BufferedInputStream;
+
+        $r7 = $r18;
+
+        $r17 = new java.io.FileInputStream;
+
+        $r8 = $r17;
+
+     label03:
+        specialinvoke $r17.<java.io.FileInputStream: void <init>(java.io.File)>($r6);
+
+        specialinvoke $r18.<java.io.BufferedInputStream: void <init>(java.io.InputStream,int)>($r8, 8192);
+
+        specialinvoke $r19.<java.util.zip.ZipInputStream: void <init>(java.io.InputStream)>($r7);
+
+     label04:
+        $r9 = virtualinvoke $r1.<java.util.zip.ZipInputStream: java.util.zip.ZipEntry getNextEntry()>();
+
+     label05:
+        if $r9 == null goto label22;
+
+     label06:
+        $r10 = virtualinvoke $r9.<java.util.zip.ZipEntry: java.lang.String getName()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.String: java.lang.String substring(int,int)>(0, 6);
+
+        $z0 = virtualinvoke $r11.<java.lang.String: boolean equals(java.lang.Object)>("assets");
+
+     label07:
+        if $z0 != 0 goto label08;
+
+        goto label04;
+
+     label08:
+        $z0 = virtualinvoke $r10.<java.lang.String: boolean startsWith(java.lang.String)>($r3);
+
+     label09:
+        if $z0 == 0 goto label04;
+
+        $r12 = new java.io.File;
+
+        $r6 = $r12;
+
+        $r16 = new java.lang.StringBuilder;
+
+        $r4 = $r16;
+
+     label10:
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r10 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r12.<java.io.File: void <init>(java.lang.String)>($r10);
+
+     label11:
+        $r20 = new java.io.File;
+
+        $r12 = $r20;
+
+     label12:
+        $r10 = virtualinvoke $r6.<java.io.File: java.lang.String getParent()>();
+
+        specialinvoke $r20.<java.io.File: void <init>(java.lang.String)>($r10);
+
+        virtualinvoke $r12.<java.io.File: boolean mkdirs()>();
+
+     label13:
+        $r22 = new java.io.BufferedOutputStream;
+
+        $r13 = $r22;
+
+        $r21 = new java.io.FileOutputStream;
+
+        $r14 = $r21;
+
+     label14:
+        specialinvoke $r21.<java.io.FileOutputStream: void <init>(java.io.File)>($r6);
+
+        specialinvoke $r22.<java.io.BufferedOutputStream: void <init>(java.io.OutputStream,int)>($r14, 8192);
+
+     label15:
+        $r15 = newarray (byte)[8192];
+
+     label16:
+        $i1 = virtualinvoke $r1.<java.util.zip.ZipInputStream: int read(byte[],int,int)>($r15, 0, 8192);
+
+     label17:
+        $i2 = -1;
+
+        if $i1 == $i2 goto label20;
+
+     label18:
+        virtualinvoke $r13.<java.io.BufferedOutputStream: void write(byte[],int,int)>($r15, 0, $i1);
+
+     label19:
+        goto label16;
+
+     label20:
+        specialinvoke r0.<com.adobe.air.ApplicationFileManager: void closeOutputStream(java.io.OutputStream)>($r13);
+
+     label21:
+        goto label04;
+
+     label22:
+        specialinvoke r0.<com.adobe.air.ApplicationFileManager: void closeInputStream(java.io.InputStream)>($r1);
+
+     label23:
+        return;
+
+     label24:
+        $r2 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label03 to label05 with label24;
+        catch java.lang.Exception from label06 to label07 with label24;
+        catch java.lang.Exception from label08 to label09 with label24;
+        catch java.lang.Exception from label10 to label11 with label24;
+        catch java.lang.Exception from label12 to label13 with label24;
+        catch java.lang.Exception from label14 to label15 with label24;
+        catch java.lang.Exception from label16 to label17 with label24;
+        catch java.lang.Exception from label18 to label19 with label24;
+        catch java.lang.Exception from label20 to label21 with label24;
+        catch java.lang.Exception from label22 to label23 with label24;
+    }
+
+    public void deleteFile(java.lang.String)
+    {
+        com.adobe.air.ApplicationFileManager r0;
+        java.lang.String $r1;
+        java.io.File $r2;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new java.io.File;
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r1);
+
+        virtualinvoke $r2.<java.io.File: boolean delete()>();
+
+        return;
+    }
+
+    public boolean fileExists(java.lang.String)
+    {
+        com.adobe.air.ApplicationFileManager r0;
+        java.lang.StringBuilder $r3;
+        java.util.HashMap $r4;
+        java.lang.String $r1, $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("");
+
+        $r2 = "assets";
+
+        if $z0 != 0 goto label1;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("assets");
+
+        $r2 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label1:
+        $r4 = r0.<com.adobe.air.ApplicationFileManager: java.util.HashMap mFileInfoMap>;
+
+        $z0 = virtualinvoke $r4.<java.util.HashMap: boolean containsKey(java.lang.Object)>($r2);
+
+        return $z0;
+    }
+
+    public long getLSize(java.lang.String)
+    {
+        com.adobe.air.ApplicationFileManager r0;
+        java.util.HashMap $r4;
+        long $l1;
+        com.adobe.air.FileInfo $r6;
+        byte $b0;
+        java.lang.StringBuilder $r2;
+        java.lang.Object $r5;
+        java.lang.String $r1, $r3;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("assets");
+
+        $r3 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = r0.<com.adobe.air.ApplicationFileManager: java.util.HashMap mFileInfoMap>;
+
+        $r5 = virtualinvoke $r4.<java.util.HashMap: java.lang.Object get(java.lang.Object)>($r1);
+
+        $r6 = (com.adobe.air.FileInfo) $r5;
+
+        if $r6 == null goto label1;
+
+        $l1 = $r6.<com.adobe.air.FileInfo: long mFileSize>;
+
+        $b0 = $l1 cmp -1L;
+
+        if $b0 == 0 goto label1;
+
+        $l1 = $r6.<com.adobe.air.FileInfo: long mFileSize>;
+
+        return $l1;
+
+     label1:
+        return 0L;
+    }
+
+    public boolean isDirectory(java.lang.String)
+    {
+        com.adobe.air.ApplicationFileManager r0;
+        java.util.HashMap $r4;
+        com.adobe.air.FileInfo $r6;
+        java.lang.StringBuilder $r3;
+        java.lang.Object $r5;
+        java.lang.String $r1, $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("");
+
+        $r2 = "assets";
+
+        if $z0 != 0 goto label1;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("assets");
+
+        $r2 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label1:
+        $r4 = r0.<com.adobe.air.ApplicationFileManager: java.util.HashMap mFileInfoMap>;
+
+        $r5 = virtualinvoke $r4.<java.util.HashMap: java.lang.Object get(java.lang.Object)>($r2);
+
+        $r6 = (com.adobe.air.FileInfo) $r5;
+
+        if $r6 == null goto label2;
+
+        $z0 = $r6.<com.adobe.air.FileInfo: boolean mIsDirectory>;
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    public void procZipContents(java.io.File)
+    {
+        com.adobe.air.ApplicationFileManager r0;
+        java.util.Enumeration $r4;
+        long $l0;
+        java.util.HashMap $r10;
+        java.lang.Exception $r2;
+        java.io.File $r3, $r11;
+        com.adobe.air.FileInfo $r9;
+        java.util.zip.ZipFile $r1;
+        java.lang.Object $r5;
+        java.lang.String $r7, $r8;
+        java.util.zip.ZipEntry $r6;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r3 := @parameter0: java.io.File;
+
+        $r1 = new java.util.zip.ZipFile;
+
+     label01:
+        specialinvoke $r1.<java.util.zip.ZipFile: void <init>(java.io.File)>($r3);
+
+        $r4 = virtualinvoke $r1.<java.util.zip.ZipFile: java.util.Enumeration entries()>();
+
+     label02:
+        $z0 = interfaceinvoke $r4.<java.util.Enumeration: boolean hasMoreElements()>();
+
+     label03:
+        if $z0 == 0 goto label19;
+
+     label04:
+        $r5 = interfaceinvoke $r4.<java.util.Enumeration: java.lang.Object nextElement()>();
+
+        $r6 = (java.util.zip.ZipEntry) $r5;
+
+        $r7 = virtualinvoke $r6.<java.util.zip.ZipEntry: java.lang.String getName()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.String: java.lang.String substring(int,int)>(0, 6);
+
+        $z0 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>("assets");
+
+     label05:
+        if $z0 != 0 goto label06;
+
+        goto label02;
+
+     label06:
+        $r9 = new com.adobe.air.FileInfo;
+
+     label07:
+        $l0 = virtualinvoke $r6.<java.util.zip.ZipEntry: long getSize()>();
+
+        specialinvoke $r9.<com.adobe.air.FileInfo: void <init>(long,boolean,boolean)>($l0, 1, 0);
+
+        $r10 = r0.<com.adobe.air.ApplicationFileManager: java.util.HashMap mFileInfoMap>;
+
+        virtualinvoke $r10.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r7, $r9);
+
+     label08:
+        $r3 = new java.io.File;
+
+     label09:
+        specialinvoke $r3.<java.io.File: void <init>(java.lang.String)>($r7);
+
+     label10:
+        $r7 = virtualinvoke $r3.<java.io.File: java.lang.String getParent()>();
+
+     label11:
+        if $r7 == null goto label02;
+
+     label12:
+        $r10 = r0.<com.adobe.air.ApplicationFileManager: java.util.HashMap mFileInfoMap>;
+
+        $r7 = virtualinvoke $r3.<java.io.File: java.lang.String getParent()>();
+
+        $r5 = virtualinvoke $r10.<java.util.HashMap: java.lang.Object get(java.lang.Object)>($r7);
+
+        $r9 = (com.adobe.air.FileInfo) $r5;
+
+     label13:
+        if $r9 == null goto label14;
+
+        goto label02;
+
+     label14:
+        $r9 = new com.adobe.air.FileInfo;
+
+     label15:
+        specialinvoke $r9.<com.adobe.air.FileInfo: void <init>(long,boolean,boolean)>(-1L, 0, 1);
+
+        $r10 = r0.<com.adobe.air.ApplicationFileManager: java.util.HashMap mFileInfoMap>;
+
+        $r7 = virtualinvoke $r3.<java.io.File: java.lang.String getParent()>();
+
+        virtualinvoke $r10.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r7, $r9);
+
+     label16:
+        $r11 = new java.io.File;
+
+     label17:
+        $r7 = virtualinvoke $r3.<java.io.File: java.lang.String getParent()>();
+
+        specialinvoke $r11.<java.io.File: void <init>(java.lang.String)>($r7);
+
+     label18:
+        $r3 = $r11;
+
+        goto label10;
+
+     label19:
+        virtualinvoke $r1.<java.util.zip.ZipFile: void close()>();
+
+     label20:
+        return;
+
+     label21:
+        $r2 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label01 to label03 with label21;
+        catch java.lang.Exception from label04 to label05 with label21;
+        catch java.lang.Exception from label07 to label08 with label21;
+        catch java.lang.Exception from label09 to label11 with label21;
+        catch java.lang.Exception from label12 to label13 with label21;
+        catch java.lang.Exception from label15 to label16 with label21;
+        catch java.lang.Exception from label17 to label18 with label21;
+        catch java.lang.Exception from label19 to label20 with label21;
+    }
+
+    public boolean readFileName(java.lang.String)
+    {
+        byte[] $r21;
+        java.util.Enumeration $r14;
+        java.util.zip.ZipFile $r1, $r13, $r24;
+        java.util.zip.ZipEntry $r16;
+        boolean $z0;
+        java.lang.Exception $r2, $r3, $r4, $r5, $r6;
+        java.lang.StringBuilder $r8, $r23;
+        java.lang.Throwable $r22;
+        java.io.BufferedOutputStream $r19, $r27;
+        int $i1, $i2;
+        java.lang.String $r7, $r9, $r11, $r17;
+        com.adobe.air.ApplicationFileManager r0;
+        java.io.FileOutputStream $r20, $r26;
+        char $c0;
+        java.io.File $r10, $r12, $r25;
+        java.lang.Object $r15;
+        java.io.InputStream $r18;
+
+        r0 := @this: com.adobe.air.ApplicationFileManager;
+
+        $r7 := @parameter0: java.lang.String;
+
+        $r23 = new java.lang.StringBuilder;
+
+        $r8 = $r23;
+
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>(java.lang.String)>("assets");
+
+        $r9 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r23 = new java.lang.StringBuilder;
+
+        $r8 = $r23;
+
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = staticinvoke <com.adobe.air.ApplicationFileManager: java.lang.String getAndroidUnzipContentPath()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $c0 = <java.io.File: char separatorChar>;
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c0);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r12 = new java.io.File;
+
+        $r10 = $r12;
+
+        $r23 = new java.lang.StringBuilder;
+
+        $r8 = $r23;
+
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r11 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r12.<java.io.File: void <init>(java.lang.String)>($r11);
+
+        $z0 = virtualinvoke $r10.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label01;
+
+        return 1;
+
+     label01:
+        $r12 = specialinvoke r0.<com.adobe.air.ApplicationFileManager: java.io.File getApkPathFile()>();
+
+        $r13 = null;
+
+     label02:
+        $r24 = new java.util.zip.ZipFile;
+
+     label03:
+        $r1 = $r24;
+
+     label04:
+        specialinvoke $r24.<java.util.zip.ZipFile: void <init>(java.io.File)>($r12);
+
+     label05:
+        $r14 = virtualinvoke $r1.<java.util.zip.ZipFile: java.util.Enumeration entries()>();
+
+     label06:
+        $z0 = interfaceinvoke $r14.<java.util.Enumeration: boolean hasMoreElements()>();
+
+     label07:
+        if $z0 == 0 goto label37;
+
+     label08:
+        $r15 = interfaceinvoke $r14.<java.util.Enumeration: java.lang.Object nextElement()>();
+
+        $r16 = (java.util.zip.ZipEntry) $r15;
+
+        $r11 = virtualinvoke $r16.<java.util.zip.ZipEntry: java.lang.String getName()>();
+
+        $r17 = virtualinvoke $r11.<java.lang.String: java.lang.String substring(int,int)>(0, 6);
+
+        $z0 = virtualinvoke $r17.<java.lang.String: boolean equals(java.lang.Object)>("assets");
+
+     label09:
+        if $z0 != 0 goto label10;
+
+        goto label06;
+
+     label10:
+        $z0 = virtualinvoke $r11.<java.lang.String: boolean equals(java.lang.Object)>($r7);
+
+     label11:
+        if $z0 == 0 goto label28;
+
+     label12:
+        $r18 = virtualinvoke $r1.<java.util.zip.ZipFile: java.io.InputStream getInputStream(java.util.zip.ZipEntry)>($r16);
+
+     label13:
+        $r25 = new java.io.File;
+
+     label14:
+        $r12 = $r25;
+
+     label15:
+        $r7 = virtualinvoke $r10.<java.io.File: java.lang.String getParent()>();
+
+        specialinvoke $r25.<java.io.File: void <init>(java.lang.String)>($r7);
+
+        virtualinvoke $r12.<java.io.File: boolean mkdirs()>();
+
+     label16:
+        $r27 = new java.io.BufferedOutputStream;
+
+     label17:
+        $r19 = $r27;
+
+     label18:
+        $r26 = new java.io.FileOutputStream;
+
+     label19:
+        $r20 = $r26;
+
+     label20:
+        specialinvoke $r26.<java.io.FileOutputStream: void <init>(java.io.File)>($r10);
+
+        specialinvoke $r27.<java.io.BufferedOutputStream: void <init>(java.io.OutputStream,int)>($r20, 8192);
+
+     label21:
+        $r21 = newarray (byte)[8192];
+
+     label22:
+        $i1 = virtualinvoke $r18.<java.io.InputStream: int read(byte[])>($r21);
+
+     label23:
+        $i2 = -1;
+
+        if $i1 == $i2 goto label26;
+
+     label24:
+        virtualinvoke $r19.<java.io.BufferedOutputStream: void write(byte[],int,int)>($r21, 0, $i1);
+
+     label25:
+        goto label22;
+
+     label26:
+        specialinvoke r0.<com.adobe.air.ApplicationFileManager: void closeInputStream(java.io.InputStream)>($r18);
+
+        specialinvoke r0.<com.adobe.air.ApplicationFileManager: void closeOutputStream(java.io.OutputStream)>($r19);
+
+     label27:
+        goto label37;
+
+     label28:
+        $r23 = new java.lang.StringBuilder;
+
+     label29:
+        $r8 = $r23;
+
+     label30:
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/");
+
+        $r17 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z0 = virtualinvoke $r11.<java.lang.String: boolean startsWith(java.lang.String)>($r17);
+
+     label31:
+        if $z0 == 0 goto label06;
+
+     label32:
+        $r12 = new java.io.File;
+
+     label33:
+        $r10 = $r12;
+
+     label34:
+        $r23 = new java.lang.StringBuilder;
+
+     label35:
+        $r8 = $r23;
+
+     label36:
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r12.<java.io.File: void <init>(java.lang.String)>($r7);
+
+        virtualinvoke $r10.<java.io.File: boolean mkdirs()>();
+
+     label37:
+        virtualinvoke $r1.<java.util.zip.ZipFile: void close()>();
+
+     label38:
+        return 1;
+
+     label39:
+        $r22 := @caughtexception;
+
+        $r13 = $r1;
+
+        goto label42;
+
+     label40:
+        $r13 = $r1;
+
+        goto label45;
+
+     label41:
+        $r22 := @caughtexception;
+
+     label42:
+        if $r13 == null goto label44;
+
+     label43:
+        virtualinvoke $r13.<java.util.zip.ZipFile: void close()>();
+
+     label44:
+        throw $r22;
+
+     label45:
+        if $r13 == null goto label53;
+
+     label46:
+        virtualinvoke $r13.<java.util.zip.ZipFile: void close()>();
+
+     label47:
+        return 1;
+
+     label48:
+        $r2 := @caughtexception;
+
+        goto label45;
+
+     label49:
+        $r3 := @caughtexception;
+
+        goto label40;
+
+     label50:
+        $r4 := @caughtexception;
+
+        return 1;
+
+     label51:
+        $r5 := @caughtexception;
+
+        goto label44;
+
+     label52:
+        $r6 := @caughtexception;
+
+     label53:
+        return 1;
+
+        catch java.lang.Exception from label04 to label05 with label48;
+        catch java.lang.Throwable from label02 to label03 with label41;
+        catch java.lang.Throwable from label04 to label05 with label41;
+        catch java.lang.Exception from label05 to label07 with label49;
+        catch java.lang.Exception from label08 to label09 with label49;
+        catch java.lang.Exception from label10 to label11 with label49;
+        catch java.lang.Exception from label12 to label13 with label49;
+        catch java.lang.Exception from label15 to label16 with label49;
+        catch java.lang.Exception from label20 to label21 with label49;
+        catch java.lang.Exception from label22 to label23 with label49;
+        catch java.lang.Exception from label24 to label25 with label49;
+        catch java.lang.Exception from label26 to label27 with label49;
+        catch java.lang.Exception from label30 to label31 with label49;
+        catch java.lang.Exception from label36 to label37 with label49;
+        catch java.lang.Throwable from label05 to label07 with label39;
+        catch java.lang.Throwable from label08 to label09 with label39;
+        catch java.lang.Throwable from label10 to label11 with label39;
+        catch java.lang.Throwable from label12 to label14 with label39;
+        catch java.lang.Throwable from label15 to label17 with label39;
+        catch java.lang.Throwable from label18 to label19 with label39;
+        catch java.lang.Throwable from label20 to label21 with label39;
+        catch java.lang.Throwable from label22 to label23 with label39;
+        catch java.lang.Throwable from label24 to label25 with label39;
+        catch java.lang.Throwable from label26 to label27 with label39;
+        catch java.lang.Throwable from label28 to label29 with label39;
+        catch java.lang.Throwable from label30 to label31 with label39;
+        catch java.lang.Throwable from label32 to label33 with label39;
+        catch java.lang.Throwable from label34 to label35 with label39;
+        catch java.lang.Throwable from label36 to label37 with label39;
+        catch java.lang.Exception from label37 to label38 with label50;
+        catch java.lang.Exception from label43 to label44 with label51;
+        catch java.lang.Exception from label46 to label47 with label52;
+    }
+
+    public static void <clinit>()
+    {
+        <com.adobe.air.ApplicationFileManager: java.lang.String ASSET_STRING> = "assets";
+
+        <com.adobe.air.ApplicationFileManager: java.lang.String APP_XML_PATH> = "META-INF/AIR/application.xml";
+
+        <com.adobe.air.ApplicationFileManager: java.lang.String APP_PREFIX> = "app";
+
+        return;
+    }
+}

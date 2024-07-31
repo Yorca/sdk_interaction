@@ -1,0 +1,295 @@
+final class kotlinx.coroutines.scheduling.LimitingDispatcher extends kotlinx.coroutines.ExecutorCoroutineDispatcher implements kotlinx.coroutines.scheduling.TaskContext, java.util.concurrent.Executor
+{
+    private static final java.util.concurrent.atomic.AtomicIntegerFieldUpdater inFlightTasks$FU;
+    private final kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher dispatcher;
+    private volatile int inFlightTasks;
+    private final java.lang.String name;
+    private final int parallelism;
+    private final java.util.concurrent.ConcurrentLinkedQueue queue;
+    private final int taskMode;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r0;
+
+        $r0 = staticinvoke <java.util.concurrent.atomic.AtomicIntegerFieldUpdater: java.util.concurrent.atomic.AtomicIntegerFieldUpdater newUpdater(java.lang.Class,java.lang.String)>(class "Lkotlinx/coroutines/scheduling/LimitingDispatcher;", "inFlightTasks");
+
+        <kotlinx.coroutines.scheduling.LimitingDispatcher: java.util.concurrent.atomic.AtomicIntegerFieldUpdater inFlightTasks$FU> = $r0;
+
+        return;
+    }
+
+    public void <init>(kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher, int, java.lang.String, int)
+    {
+        kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher $r2;
+        int $i0, $i1;
+        kotlinx.coroutines.scheduling.LimitingDispatcher r0;
+        java.lang.String $r1;
+        java.util.concurrent.ConcurrentLinkedQueue $r3;
+
+        r0 := @this: kotlinx.coroutines.scheduling.LimitingDispatcher;
+
+        $r2 := @parameter0: kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $i1 := @parameter3: int;
+
+        specialinvoke r0.<kotlinx.coroutines.ExecutorCoroutineDispatcher: void <init>()>();
+
+        r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher dispatcher> = $r2;
+
+        r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: int parallelism> = $i0;
+
+        r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: java.lang.String name> = $r1;
+
+        r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: int taskMode> = $i1;
+
+        $r3 = new java.util.concurrent.ConcurrentLinkedQueue;
+
+        specialinvoke $r3.<java.util.concurrent.ConcurrentLinkedQueue: void <init>()>();
+
+        r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: java.util.concurrent.ConcurrentLinkedQueue queue> = $r3;
+
+        r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: int inFlightTasks> = 0;
+
+        return;
+    }
+
+    private final void dispatch(java.lang.Runnable, boolean)
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r2;
+        kotlinx.coroutines.scheduling.LimitingDispatcher r0;
+        java.lang.Runnable $r1;
+        kotlinx.coroutines.scheduling.TaskContext $r4;
+        kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher $r3;
+        int $i0, $i1;
+        java.lang.Object $r6;
+        boolean $z0;
+        java.util.concurrent.ConcurrentLinkedQueue $r5;
+
+        r0 := @this: kotlinx.coroutines.scheduling.LimitingDispatcher;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        $z0 := @parameter1: boolean;
+
+     label1:
+        $r2 = <kotlinx.coroutines.scheduling.LimitingDispatcher: java.util.concurrent.atomic.AtomicIntegerFieldUpdater inFlightTasks$FU>;
+
+        $i1 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: int incrementAndGet(java.lang.Object)>(r0);
+
+        $i0 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: int parallelism>;
+
+        if $i1 > $i0 goto label2;
+
+        $r3 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher dispatcher>;
+
+        $r4 = (kotlinx.coroutines.scheduling.TaskContext) r0;
+
+        virtualinvoke $r3.<kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher: void dispatchWithContext$kotlinx_coroutines_core(java.lang.Runnable,kotlinx.coroutines.scheduling.TaskContext,boolean)>($r1, $r4, $z0);
+
+        return;
+
+     label2:
+        $r5 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: java.util.concurrent.ConcurrentLinkedQueue queue>;
+
+        virtualinvoke $r5.<java.util.concurrent.ConcurrentLinkedQueue: boolean add(java.lang.Object)>($r1);
+
+        $i0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: int decrementAndGet(java.lang.Object)>(r0);
+
+        $i1 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: int parallelism>;
+
+        if $i0 < $i1 goto label3;
+
+        return;
+
+     label3:
+        $r5 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: java.util.concurrent.ConcurrentLinkedQueue queue>;
+
+        $r6 = virtualinvoke $r5.<java.util.concurrent.ConcurrentLinkedQueue: java.lang.Object poll()>();
+
+        $r1 = (java.lang.Runnable) $r6;
+
+        if $r1 != null goto label1;
+
+        return;
+    }
+
+    public void afterTask()
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r6;
+        kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher $r1;
+        kotlinx.coroutines.scheduling.LimitingDispatcher r0;
+        java.lang.Object $r3;
+        java.lang.Runnable $r4;
+        kotlinx.coroutines.scheduling.TaskContext $r5;
+        java.util.concurrent.ConcurrentLinkedQueue $r2;
+
+        r0 := @this: kotlinx.coroutines.scheduling.LimitingDispatcher;
+
+        $r2 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: java.util.concurrent.ConcurrentLinkedQueue queue>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.ConcurrentLinkedQueue: java.lang.Object poll()>();
+
+        $r4 = (java.lang.Runnable) $r3;
+
+        if $r4 == null goto label1;
+
+        $r1 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher dispatcher>;
+
+        $r5 = (kotlinx.coroutines.scheduling.TaskContext) r0;
+
+        virtualinvoke $r1.<kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher: void dispatchWithContext$kotlinx_coroutines_core(java.lang.Runnable,kotlinx.coroutines.scheduling.TaskContext,boolean)>($r4, $r5, 1);
+
+        return;
+
+     label1:
+        $r6 = <kotlinx.coroutines.scheduling.LimitingDispatcher: java.util.concurrent.atomic.AtomicIntegerFieldUpdater inFlightTasks$FU>;
+
+        virtualinvoke $r6.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: int decrementAndGet(java.lang.Object)>(r0);
+
+        $r2 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: java.util.concurrent.ConcurrentLinkedQueue queue>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.ConcurrentLinkedQueue: java.lang.Object poll()>();
+
+        $r4 = (java.lang.Runnable) $r3;
+
+        if $r4 != null goto label2;
+
+        return;
+
+     label2:
+        specialinvoke r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: void dispatch(java.lang.Runnable,boolean)>($r4, 1);
+
+        return;
+    }
+
+    public void close()
+    {
+        kotlinx.coroutines.scheduling.LimitingDispatcher r0;
+        java.lang.IllegalStateException $r1;
+        java.lang.String $r2;
+
+        r0 := @this: kotlinx.coroutines.scheduling.LimitingDispatcher;
+
+        $r1 = new java.lang.IllegalStateException;
+
+        $r2 = "Close cannot be invoked on LimitingBlockingDispatcher";
+
+        $r2 = virtualinvoke $r2.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r2);
+
+        throw $r1;
+    }
+
+    public void dispatch(kotlin.coroutines.CoroutineContext, java.lang.Runnable)
+    {
+        kotlinx.coroutines.scheduling.LimitingDispatcher r0;
+        java.lang.Runnable $r1;
+        kotlin.coroutines.CoroutineContext $r2;
+
+        r0 := @this: kotlinx.coroutines.scheduling.LimitingDispatcher;
+
+        $r2 := @parameter0: kotlin.coroutines.CoroutineContext;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        specialinvoke r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: void dispatch(java.lang.Runnable,boolean)>($r1, 0);
+
+        return;
+    }
+
+    public void dispatchYield(kotlin.coroutines.CoroutineContext, java.lang.Runnable)
+    {
+        kotlinx.coroutines.scheduling.LimitingDispatcher r0;
+        java.lang.Runnable $r1;
+        kotlin.coroutines.CoroutineContext $r2;
+
+        r0 := @this: kotlinx.coroutines.scheduling.LimitingDispatcher;
+
+        $r2 := @parameter0: kotlin.coroutines.CoroutineContext;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        specialinvoke r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: void dispatch(java.lang.Runnable,boolean)>($r1, 1);
+
+        return;
+    }
+
+    public void execute(java.lang.Runnable)
+    {
+        kotlinx.coroutines.scheduling.LimitingDispatcher r0;
+        java.lang.Runnable $r1;
+
+        r0 := @this: kotlinx.coroutines.scheduling.LimitingDispatcher;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        specialinvoke r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: void dispatch(java.lang.Runnable,boolean)>($r1, 0);
+
+        return;
+    }
+
+    public java.util.concurrent.Executor getExecutor()
+    {
+        kotlinx.coroutines.scheduling.LimitingDispatcher r0;
+        java.util.concurrent.Executor $r1;
+
+        r0 := @this: kotlinx.coroutines.scheduling.LimitingDispatcher;
+
+        $r1 = (java.util.concurrent.Executor) r0;
+
+        return $r1;
+    }
+
+    public int getTaskMode()
+    {
+        int i0;
+        kotlinx.coroutines.scheduling.LimitingDispatcher r0;
+
+        r0 := @this: kotlinx.coroutines.scheduling.LimitingDispatcher;
+
+        i0 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: int taskMode>;
+
+        return i0;
+    }
+
+    public java.lang.String toString()
+    {
+        kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher $r3;
+        kotlinx.coroutines.scheduling.LimitingDispatcher r0;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r1;
+
+        r0 := @this: kotlinx.coroutines.scheduling.LimitingDispatcher;
+
+        $r1 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: java.lang.String name>;
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = specialinvoke r0.<kotlinx.coroutines.ExecutorCoroutineDispatcher: java.lang.String toString()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("[dispatcher = ");
+
+        $r3 = r0.<kotlinx.coroutines.scheduling.LimitingDispatcher: kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher dispatcher>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label1:
+        return $r1;
+    }
+}

@@ -1,0 +1,653 @@
+final class io.grpc.internal.ManagedChannelImpl$SubchannelImpl extends io.grpc.internal.AbstractSubchannel
+{
+    java.util.List addressGroups;
+    final io.grpc.LoadBalancer$CreateSubchannelArgs args;
+    io.grpc.SynchronizationContext$ScheduledHandle delayedShutdownTask;
+    final io.grpc.internal.ManagedChannelImpl$LbHelperImpl helper;
+    boolean shutdown;
+    boolean started;
+    io.grpc.internal.InternalSubchannel subchannel;
+    final io.grpc.InternalLogId subchannelLogId;
+    final io.grpc.internal.ChannelLoggerImpl subchannelLogger;
+    final io.grpc.internal.ChannelTracer subchannelTracer;
+    final io.grpc.internal.ManagedChannelImpl this$0;
+
+    void <init>(io.grpc.internal.ManagedChannelImpl, io.grpc.LoadBalancer$CreateSubchannelArgs, io.grpc.internal.ManagedChannelImpl$LbHelperImpl)
+    {
+        io.grpc.LoadBalancer$CreateSubchannelArgs $r2;
+        io.grpc.internal.TimeProvider $r10;
+        io.grpc.internal.ManagedChannelImpl$LbHelperImpl $r3;
+        io.grpc.internal.ManagedChannelImpl $r1;
+        long $l1;
+        io.grpc.internal.ChannelTracer $r9;
+        io.grpc.InternalLogId $r8;
+        java.util.List $r4;
+        io.grpc.internal.ChannelLoggerImpl $r12;
+        int $i0;
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        java.lang.Object $r7;
+        java.lang.StringBuilder $r11;
+        java.lang.String $r5;
+        io.grpc.LoadBalancer$CreateSubchannelArgs$Builder $r6;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $r1 := @parameter0: io.grpc.internal.ManagedChannelImpl;
+
+        $r2 := @parameter1: io.grpc.LoadBalancer$CreateSubchannelArgs;
+
+        $r3 := @parameter2: io.grpc.internal.ManagedChannelImpl$LbHelperImpl;
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0> = $r1;
+
+        specialinvoke r0.<io.grpc.internal.AbstractSubchannel: void <init>()>();
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "args");
+
+        $r4 = virtualinvoke $r2.<io.grpc.LoadBalancer$CreateSubchannelArgs: java.util.List getAddresses()>();
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: java.util.List addressGroups> = $r4;
+
+        $r5 = staticinvoke <io.grpc.internal.ManagedChannelImpl: java.lang.String access$8000(io.grpc.internal.ManagedChannelImpl)>($r1);
+
+        if $r5 == null goto label1;
+
+        $r4 = virtualinvoke $r2.<io.grpc.LoadBalancer$CreateSubchannelArgs: java.util.List getAddresses()>();
+
+        $r4 = specialinvoke r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: java.util.List stripOverrideAuthorityAttributes(java.util.List)>($r4);
+
+        $r6 = virtualinvoke $r2.<io.grpc.LoadBalancer$CreateSubchannelArgs: io.grpc.LoadBalancer$CreateSubchannelArgs$Builder toBuilder()>();
+
+        $r6 = virtualinvoke $r6.<io.grpc.LoadBalancer$CreateSubchannelArgs$Builder: io.grpc.LoadBalancer$CreateSubchannelArgs$Builder setAddresses(java.util.List)>($r4);
+
+        $r2 = virtualinvoke $r6.<io.grpc.LoadBalancer$CreateSubchannelArgs$Builder: io.grpc.LoadBalancer$CreateSubchannelArgs build()>();
+
+     label1:
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.LoadBalancer$CreateSubchannelArgs args> = $r2;
+
+        $r7 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r3, "helper");
+
+        $r3 = (io.grpc.internal.ManagedChannelImpl$LbHelperImpl) $r7;
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl$LbHelperImpl helper> = $r3;
+
+        $r5 = virtualinvoke $r1.<io.grpc.internal.ManagedChannelImpl: java.lang.String authority()>();
+
+        $r8 = staticinvoke <io.grpc.InternalLogId: io.grpc.InternalLogId allocate(java.lang.String,java.lang.String)>("Subchannel", $r5);
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.InternalLogId subchannelLogId> = $r8;
+
+        $r9 = new io.grpc.internal.ChannelTracer;
+
+        $i0 = staticinvoke <io.grpc.internal.ManagedChannelImpl: int access$5400(io.grpc.internal.ManagedChannelImpl)>($r1);
+
+        $r10 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.TimeProvider access$5300(io.grpc.internal.ManagedChannelImpl)>($r1);
+
+        $l1 = interfaceinvoke $r10.<io.grpc.internal.TimeProvider: long currentTimeNanos()>();
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("Subchannel for ");
+
+        $r4 = virtualinvoke $r2.<io.grpc.LoadBalancer$CreateSubchannelArgs: java.util.List getAddresses()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r5 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r9.<io.grpc.internal.ChannelTracer: void <init>(io.grpc.InternalLogId,int,long,java.lang.String)>($r8, $i0, $l1, $r5);
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ChannelTracer subchannelTracer> = $r9;
+
+        $r12 = new io.grpc.internal.ChannelLoggerImpl;
+
+        $r10 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.TimeProvider access$5300(io.grpc.internal.ManagedChannelImpl)>($r1);
+
+        specialinvoke $r12.<io.grpc.internal.ChannelLoggerImpl: void <init>(io.grpc.internal.ChannelTracer,io.grpc.internal.TimeProvider)>($r9, $r10);
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ChannelLoggerImpl subchannelLogger> = $r12;
+
+        return;
+    }
+
+    private java.util.List stripOverrideAuthorityAttributes(java.util.List)
+    {
+        java.util.Iterator $r5;
+        io.grpc.Attributes $r8;
+        io.grpc.Attributes$Key $r3;
+        io.grpc.Attributes$Builder $r9;
+        io.grpc.EquivalentAddressGroup $r2, $r7;
+        java.util.ArrayList $r1;
+        java.util.List $r4;
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        java.lang.Object $r6;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $r4 := @parameter0: java.util.List;
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        $r5 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (io.grpc.EquivalentAddressGroup) $r6;
+
+        $r2 = new io.grpc.EquivalentAddressGroup;
+
+        $r4 = virtualinvoke $r7.<io.grpc.EquivalentAddressGroup: java.util.List getAddresses()>();
+
+        $r8 = virtualinvoke $r7.<io.grpc.EquivalentAddressGroup: io.grpc.Attributes getAttributes()>();
+
+        $r9 = virtualinvoke $r8.<io.grpc.Attributes: io.grpc.Attributes$Builder toBuilder()>();
+
+        $r3 = <io.grpc.EquivalentAddressGroup: io.grpc.Attributes$Key ATTR_AUTHORITY_OVERRIDE>;
+
+        $r9 = virtualinvoke $r9.<io.grpc.Attributes$Builder: io.grpc.Attributes$Builder discard(io.grpc.Attributes$Key)>($r3);
+
+        $r8 = virtualinvoke $r9.<io.grpc.Attributes$Builder: io.grpc.Attributes build()>();
+
+        specialinvoke $r2.<io.grpc.EquivalentAddressGroup: void <init>(java.util.List,io.grpc.Attributes)>($r4, $r8);
+
+        interfaceinvoke $r1.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        goto label1;
+
+     label2:
+        $r4 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r1);
+
+        return $r4;
+    }
+
+    public io.grpc.Channel asChannel()
+    {
+        io.grpc.internal.CallTracer $r10;
+        java.util.concurrent.Executor $r6;
+        io.grpc.internal.ManagedChannelImpl $r4;
+        io.grpc.internal.CallTracer$Factory $r9;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        io.grpc.internal.InternalSubchannel $r1;
+        io.grpc.internal.ManagedChannelImpl$ExecutorHolder $r5;
+        io.grpc.internal.SubchannelChannel $r3;
+        java.util.concurrent.ScheduledExecutorService $r8;
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        io.grpc.internal.ClientTransportFactory $r7;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $z0 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean started>;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "not started");
+
+        $r3 = new io.grpc.internal.SubchannelChannel;
+
+        $r1 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.InternalSubchannel subchannel>;
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r5 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.ManagedChannelImpl$ExecutorHolder access$8100(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r6 = virtualinvoke $r5.<io.grpc.internal.ManagedChannelImpl$ExecutorHolder: java.util.concurrent.Executor getExecutor()>();
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.ClientTransportFactory access$2300(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r8 = interfaceinvoke $r7.<io.grpc.internal.ClientTransportFactory: java.util.concurrent.ScheduledExecutorService getScheduledExecutorService()>();
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r9 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.CallTracer$Factory access$5700(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r10 = interfaceinvoke $r9.<io.grpc.internal.CallTracer$Factory: io.grpc.internal.CallTracer create()>();
+
+        $r2 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicReference: void <init>(java.lang.Object)>(null);
+
+        specialinvoke $r3.<io.grpc.internal.SubchannelChannel: void <init>(io.grpc.internal.InternalSubchannel,java.util.concurrent.Executor,java.util.concurrent.ScheduledExecutorService,io.grpc.internal.CallTracer,java.util.concurrent.atomic.AtomicReference)>($r1, $r6, $r8, $r10, $r2);
+
+        return $r3;
+    }
+
+    public java.util.List getAllAddresses()
+    {
+        java.util.List r3;
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        io.grpc.internal.ManagedChannelImpl $r1;
+        io.grpc.SynchronizationContext $r2;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $r1 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r2 = $r1.<io.grpc.internal.ManagedChannelImpl: io.grpc.SynchronizationContext syncContext>;
+
+        virtualinvoke $r2.<io.grpc.SynchronizationContext: void throwIfNotInThisSynchronizationContext()>();
+
+        $z0 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean started>;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "not started");
+
+        r3 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: java.util.List addressGroups>;
+
+        return r3;
+    }
+
+    public io.grpc.Attributes getAttributes()
+    {
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        io.grpc.LoadBalancer$CreateSubchannelArgs $r2;
+        io.grpc.Attributes $r1;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $r2 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.LoadBalancer$CreateSubchannelArgs args>;
+
+        $r1 = virtualinvoke $r2.<io.grpc.LoadBalancer$CreateSubchannelArgs: io.grpc.Attributes getAttributes()>();
+
+        return $r1;
+    }
+
+    public io.grpc.ChannelLogger getChannelLogger()
+    {
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        io.grpc.internal.ChannelLoggerImpl r1;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        r1 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ChannelLoggerImpl subchannelLogger>;
+
+        return r1;
+    }
+
+    io.grpc.InternalInstrumented getInstrumentedInternalSubchannel()
+    {
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        io.grpc.internal.InternalSubchannel r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $z0 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean started>;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "not started");
+
+        r1 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.InternalSubchannel subchannel>;
+
+        return r1;
+    }
+
+    public java.lang.Object getInternalSubchannel()
+    {
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        io.grpc.internal.InternalSubchannel r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $z0 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean started>;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Subchannel is not started");
+
+        r1 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.InternalSubchannel subchannel>;
+
+        return r1;
+    }
+
+    public void requestConnection()
+    {
+        io.grpc.internal.InternalSubchannel $r3;
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        io.grpc.internal.ManagedChannelImpl $r1;
+        io.grpc.SynchronizationContext $r2;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $r1 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r2 = $r1.<io.grpc.internal.ManagedChannelImpl: io.grpc.SynchronizationContext syncContext>;
+
+        virtualinvoke $r2.<io.grpc.SynchronizationContext: void throwIfNotInThisSynchronizationContext()>();
+
+        $z0 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean started>;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "not started");
+
+        $r3 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.InternalSubchannel subchannel>;
+
+        virtualinvoke $r3.<io.grpc.internal.InternalSubchannel: io.grpc.internal.ClientTransport obtainActiveTransport()>();
+
+        return;
+    }
+
+    public void shutdown()
+    {
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl$1ShutdownSubchannel $r7;
+        io.grpc.internal.ManagedChannelImpl $r3;
+        java.util.concurrent.TimeUnit $r2;
+        io.grpc.internal.InternalSubchannel $r5;
+        io.grpc.SynchronizationContext$ScheduledHandle $r6;
+        java.util.concurrent.ScheduledExecutorService $r9;
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        io.grpc.internal.ClientTransportFactory $r8;
+        io.grpc.Status $r10;
+        io.grpc.SynchronizationContext $r4;
+        io.grpc.internal.LogExceptionRunnable $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $r3 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r4 = $r3.<io.grpc.internal.ManagedChannelImpl: io.grpc.SynchronizationContext syncContext>;
+
+        virtualinvoke $r4.<io.grpc.SynchronizationContext: void throwIfNotInThisSynchronizationContext()>();
+
+        $r5 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.InternalSubchannel subchannel>;
+
+        if $r5 != null goto label1;
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean shutdown> = 1;
+
+        return;
+
+     label1:
+        $z0 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean shutdown>;
+
+        if $z0 == 0 goto label3;
+
+        $r3 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $z0 = staticinvoke <io.grpc.internal.ManagedChannelImpl: boolean access$5100(io.grpc.internal.ManagedChannelImpl)>($r3);
+
+        if $z0 == 0 goto label2;
+
+        $r6 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.SynchronizationContext$ScheduledHandle delayedShutdownTask>;
+
+        if $r6 == null goto label6;
+
+        virtualinvoke $r6.<io.grpc.SynchronizationContext$ScheduledHandle: void cancel()>();
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.SynchronizationContext$ScheduledHandle delayedShutdownTask> = null;
+
+        goto label4;
+
+     label2:
+        return;
+
+     label3:
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean shutdown> = 1;
+
+     label4:
+        $r3 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $z0 = staticinvoke <io.grpc.internal.ManagedChannelImpl: boolean access$5100(io.grpc.internal.ManagedChannelImpl)>($r3);
+
+        if $z0 != 0 goto label5;
+
+        $r3 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r4 = $r3.<io.grpc.internal.ManagedChannelImpl: io.grpc.SynchronizationContext syncContext>;
+
+        $r1 = new io.grpc.internal.LogExceptionRunnable;
+
+        $r7 = new io.grpc.internal.ManagedChannelImpl$SubchannelImpl$1ShutdownSubchannel;
+
+        specialinvoke $r7.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl$1ShutdownSubchannel: void <init>(io.grpc.internal.ManagedChannelImpl$SubchannelImpl)>(r0);
+
+        specialinvoke $r1.<io.grpc.internal.LogExceptionRunnable: void <init>(java.lang.Runnable)>($r7);
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $r3 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r8 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.ClientTransportFactory access$2300(io.grpc.internal.ManagedChannelImpl)>($r3);
+
+        $r9 = interfaceinvoke $r8.<io.grpc.internal.ClientTransportFactory: java.util.concurrent.ScheduledExecutorService getScheduledExecutorService()>();
+
+        $r6 = virtualinvoke $r4.<io.grpc.SynchronizationContext: io.grpc.SynchronizationContext$ScheduledHandle schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit,java.util.concurrent.ScheduledExecutorService)>($r1, 5L, $r2, $r9);
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.SynchronizationContext$ScheduledHandle delayedShutdownTask> = $r6;
+
+        return;
+
+     label5:
+        $r5 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.InternalSubchannel subchannel>;
+
+        $r10 = <io.grpc.internal.ManagedChannelImpl: io.grpc.Status SHUTDOWN_STATUS>;
+
+        virtualinvoke $r5.<io.grpc.internal.InternalSubchannel: void shutdown(io.grpc.Status)>($r10);
+
+     label6:
+        return;
+    }
+
+    public void start(io.grpc.LoadBalancer$SubchannelStateListener)
+    {
+        io.grpc.internal.CallTracer $r17;
+        io.grpc.LoadBalancer$CreateSubchannelArgs $r6;
+        io.grpc.internal.TimeProvider $r23;
+        io.grpc.InternalChannelz$ChannelTrace$Event$Severity $r22;
+        com.google.common.base.Supplier $r14;
+        io.grpc.LoadBalancer$SubchannelStateListener $r1;
+        long $l0;
+        io.grpc.internal.ChannelTracer $r18;
+        io.grpc.InternalLogId $r19;
+        io.grpc.InternalChannelz$ChannelTrace$Event $r24;
+        io.grpc.internal.BackoffPolicy$Provider $r10;
+        io.grpc.internal.ChannelLoggerImpl $r20;
+        java.util.concurrent.ScheduledExecutorService $r13;
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        java.lang.String $r8, $r9;
+        boolean $z0;
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl$1ManagedInternalSubchannelCallback $r3;
+        io.grpc.InternalChannelz$ChannelTrace$Event$Builder $r21;
+        java.util.Set $r25;
+        io.grpc.internal.ManagedChannelImpl $r4;
+        io.grpc.internal.CallTracer$Factory $r16;
+        io.grpc.internal.InternalSubchannel $r5;
+        java.util.List $r7;
+        io.grpc.InternalChannelz $r15;
+        io.grpc.internal.ClientTransportFactory $r11, $r12;
+        io.grpc.SynchronizationContext $r2;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $r1 := @parameter0: io.grpc.LoadBalancer$SubchannelStateListener;
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r2 = $r4.<io.grpc.internal.ManagedChannelImpl: io.grpc.SynchronizationContext syncContext>;
+
+        virtualinvoke $r2.<io.grpc.SynchronizationContext: void throwIfNotInThisSynchronizationContext()>();
+
+        $z0 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean started>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "already started");
+
+        $z0 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean shutdown>;
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "already shutdown");
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $z0 = staticinvoke <io.grpc.internal.ManagedChannelImpl: boolean access$5100(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $z0 = $z0 ^ 1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Channel is being terminated");
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: boolean started> = 1;
+
+        $r5 = new io.grpc.internal.InternalSubchannel;
+
+        $r6 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.LoadBalancer$CreateSubchannelArgs args>;
+
+        $r7 = virtualinvoke $r6.<io.grpc.LoadBalancer$CreateSubchannelArgs: java.util.List getAddresses()>();
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r8 = virtualinvoke $r4.<io.grpc.internal.ManagedChannelImpl: java.lang.String authority()>();
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r9 = staticinvoke <io.grpc.internal.ManagedChannelImpl: java.lang.String access$6100(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r10 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.BackoffPolicy$Provider access$6200(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r11 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.ClientTransportFactory access$2300(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r12 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.ClientTransportFactory access$2300(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r13 = interfaceinvoke $r12.<io.grpc.internal.ClientTransportFactory: java.util.concurrent.ScheduledExecutorService getScheduledExecutorService()>();
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r14 = staticinvoke <io.grpc.internal.ManagedChannelImpl: com.google.common.base.Supplier access$6300(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r2 = $r4.<io.grpc.internal.ManagedChannelImpl: io.grpc.SynchronizationContext syncContext>;
+
+        $r3 = new io.grpc.internal.ManagedChannelImpl$SubchannelImpl$1ManagedInternalSubchannelCallback;
+
+        specialinvoke $r3.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl$1ManagedInternalSubchannelCallback: void <init>(io.grpc.internal.ManagedChannelImpl$SubchannelImpl,io.grpc.LoadBalancer$SubchannelStateListener)>(r0, $r1);
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r15 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.InternalChannelz access$5800(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r16 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.CallTracer$Factory access$5700(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r17 = interfaceinvoke $r16.<io.grpc.internal.CallTracer$Factory: io.grpc.internal.CallTracer create()>();
+
+        $r18 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ChannelTracer subchannelTracer>;
+
+        $r19 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.InternalLogId subchannelLogId>;
+
+        $r20 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ChannelLoggerImpl subchannelLogger>;
+
+        specialinvoke $r5.<io.grpc.internal.InternalSubchannel: void <init>(java.util.List,java.lang.String,java.lang.String,io.grpc.internal.BackoffPolicy$Provider,io.grpc.internal.ClientTransportFactory,java.util.concurrent.ScheduledExecutorService,com.google.common.base.Supplier,io.grpc.SynchronizationContext,io.grpc.internal.InternalSubchannel$Callback,io.grpc.InternalChannelz,io.grpc.internal.CallTracer,io.grpc.internal.ChannelTracer,io.grpc.InternalLogId,io.grpc.ChannelLogger)>($r7, $r8, $r9, $r10, $r11, $r13, $r14, $r2, $r3, $r15, $r17, $r18, $r19, $r20);
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r18 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.ChannelTracer access$400(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $r21 = new io.grpc.InternalChannelz$ChannelTrace$Event$Builder;
+
+        specialinvoke $r21.<io.grpc.InternalChannelz$ChannelTrace$Event$Builder: void <init>()>();
+
+        $r21 = virtualinvoke $r21.<io.grpc.InternalChannelz$ChannelTrace$Event$Builder: io.grpc.InternalChannelz$ChannelTrace$Event$Builder setDescription(java.lang.String)>("Child Subchannel started");
+
+        $r22 = <io.grpc.InternalChannelz$ChannelTrace$Event$Severity: io.grpc.InternalChannelz$ChannelTrace$Event$Severity CT_INFO>;
+
+        $r21 = virtualinvoke $r21.<io.grpc.InternalChannelz$ChannelTrace$Event$Builder: io.grpc.InternalChannelz$ChannelTrace$Event$Builder setSeverity(io.grpc.InternalChannelz$ChannelTrace$Event$Severity)>($r22);
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r23 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.internal.TimeProvider access$5300(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        $l0 = interfaceinvoke $r23.<io.grpc.internal.TimeProvider: long currentTimeNanos()>();
+
+        $r21 = virtualinvoke $r21.<io.grpc.InternalChannelz$ChannelTrace$Event$Builder: io.grpc.InternalChannelz$ChannelTrace$Event$Builder setTimestampNanos(long)>($l0);
+
+        $r21 = virtualinvoke $r21.<io.grpc.InternalChannelz$ChannelTrace$Event$Builder: io.grpc.InternalChannelz$ChannelTrace$Event$Builder setSubchannelRef(io.grpc.InternalWithLogId)>($r5);
+
+        $r24 = virtualinvoke $r21.<io.grpc.InternalChannelz$ChannelTrace$Event$Builder: io.grpc.InternalChannelz$ChannelTrace$Event build()>();
+
+        virtualinvoke $r18.<io.grpc.internal.ChannelTracer: void reportEvent(io.grpc.InternalChannelz$ChannelTrace$Event)>($r24);
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.InternalSubchannel subchannel> = $r5;
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r15 = staticinvoke <io.grpc.internal.ManagedChannelImpl: io.grpc.InternalChannelz access$5800(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        virtualinvoke $r15.<io.grpc.InternalChannelz: void addSubchannel(io.grpc.InternalInstrumented)>($r5);
+
+        $r4 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r25 = staticinvoke <io.grpc.internal.ManagedChannelImpl: java.util.Set access$700(io.grpc.internal.ManagedChannelImpl)>($r4);
+
+        interfaceinvoke $r25.<java.util.Set: boolean add(java.lang.Object)>($r5);
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        java.lang.String $r1;
+        io.grpc.InternalLogId $r2;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $r2 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.InternalLogId subchannelLogId>;
+
+        $r1 = virtualinvoke $r2.<io.grpc.InternalLogId: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public void updateAddresses(java.util.List)
+    {
+        java.util.List $r1;
+        io.grpc.internal.InternalSubchannel $r5;
+        io.grpc.internal.ManagedChannelImpl$SubchannelImpl r0;
+        io.grpc.internal.ManagedChannelImpl $r2;
+        java.lang.String $r4;
+        io.grpc.SynchronizationContext $r3;
+
+        r0 := @this: io.grpc.internal.ManagedChannelImpl$SubchannelImpl;
+
+        $r1 := @parameter0: java.util.List;
+
+        $r2 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r3 = $r2.<io.grpc.internal.ManagedChannelImpl: io.grpc.SynchronizationContext syncContext>;
+
+        virtualinvoke $r3.<io.grpc.SynchronizationContext: void throwIfNotInThisSynchronizationContext()>();
+
+        r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: java.util.List addressGroups> = $r1;
+
+        $r2 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.ManagedChannelImpl this$0>;
+
+        $r4 = staticinvoke <io.grpc.internal.ManagedChannelImpl: java.lang.String access$8000(io.grpc.internal.ManagedChannelImpl)>($r2);
+
+        if $r4 == null goto label1;
+
+        $r1 = specialinvoke r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: java.util.List stripOverrideAuthorityAttributes(java.util.List)>($r1);
+
+     label1:
+        $r5 = r0.<io.grpc.internal.ManagedChannelImpl$SubchannelImpl: io.grpc.internal.InternalSubchannel subchannel>;
+
+        virtualinvoke $r5.<io.grpc.internal.InternalSubchannel: void updateAddresses(java.util.List)>($r1);
+
+        return;
+    }
+}

@@ -1,0 +1,922 @@
+public class com.adobe.air.AIRFileDescriptorWrapper extends java.lang.Object
+{
+    private boolean m_debug;
+    private android.os.ParcelFileDescriptor m_fd;
+    private java.io.FileInputStream m_in;
+    private int m_lastError;
+    private java.lang.String m_mode;
+    private java.io.FileOutputStream m_out;
+    private long m_position;
+    private android.net.Uri m_uri;
+
+    public void <init>(android.os.ParcelFileDescriptor, java.lang.String, android.net.Uri)
+    {
+        java.lang.Throwable $r8;
+        android.os.ParcelFileDescriptor $r1;
+        android.net.Uri $r3;
+        long $l1;
+        int $i0;
+        java.lang.String $r2;
+        boolean $z0;
+        java.io.FileOutputStream $r4, $r9;
+        java.io.IOException $r12;
+        java.io.FileInputStream $r11;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+        java.io.FileDescriptor $r5;
+        java.lang.StringBuilder $r6, $r10;
+        java.nio.channels.FileChannel $r7;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        $r1 := @parameter0: android.os.ParcelFileDescriptor;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: android.net.Uri;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $z0 = staticinvoke <com.adobe.air.AIRFileUtils: boolean isDebugging()>();
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: boolean m_debug> = $z0;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: android.os.ParcelFileDescriptor m_fd> = $r1;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: java.lang.String m_mode> = $r2;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: android.net.Uri m_uri> = $r3;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 0;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int indexOf(int)>(119);
+
+        if $i0 < 0 goto label11;
+
+        $r9 = new java.io.FileOutputStream;
+
+        $r5 = virtualinvoke $r1.<android.os.ParcelFileDescriptor: java.io.FileDescriptor getFileDescriptor()>();
+
+        specialinvoke $r9.<java.io.FileOutputStream: void <init>(java.io.FileDescriptor)>($r5);
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out> = $r9;
+
+        $z0 = r0.<com.adobe.air.AIRFileDescriptorWrapper: boolean m_debug>;
+
+        if $z0 == 0 goto label01;
+
+        $r10 = new java.lang.StringBuilder;
+
+        $r6 = $r10;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("Creating file output stream, mode is ");
+
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.lang.String m_mode>;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("AdobeAIR", $r2);
+
+     label01:
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.lang.String m_mode>;
+
+     label02:
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>("wt");
+
+     label03:
+        if $z0 == 0 goto label05;
+
+        $r4 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out>;
+
+     label04:
+        $r7 = virtualinvoke $r4.<java.io.FileOutputStream: java.nio.channels.FileChannel getChannel()>();
+
+        virtualinvoke $r7.<java.nio.channels.FileChannel: java.nio.channels.FileChannel truncate(long)>(0L);
+
+     label05:
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.lang.String m_mode>;
+
+     label06:
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>("rw");
+
+     label07:
+        if $z0 == 0 goto label11;
+
+        $r4 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out>;
+
+     label08:
+        $r7 = virtualinvoke $r4.<java.io.FileOutputStream: java.nio.channels.FileChannel getChannel()>();
+
+        virtualinvoke $r7.<java.nio.channels.FileChannel: java.nio.channels.FileChannel position(long)>(0L);
+
+     label09:
+        goto label11;
+
+     label10:
+        $r8 := @caughtexception;
+
+        $r10 = new java.lang.StringBuilder;
+
+        $r6 = $r10;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("Error initialising file: ");
+
+        $r12 = (java.io.IOException) $r8;
+
+        $r2 = virtualinvoke $r12.<java.io.IOException: java.lang.String toString()>();
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("AdobeAIR", $r2);
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 2030;
+
+     label11:
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.lang.String m_mode>;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int indexOf(int)>(114);
+
+        if $i0 < 0 goto label12;
+
+        $r11 = new java.io.FileInputStream;
+
+        $r5 = virtualinvoke $r1.<android.os.ParcelFileDescriptor: java.io.FileDescriptor getFileDescriptor()>();
+
+        specialinvoke $r11.<java.io.FileInputStream: void <init>(java.io.FileDescriptor)>($r5);
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileInputStream m_in> = $r11;
+
+     label12:
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position> = 0L;
+
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.lang.String m_mode>;
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>("wa");
+
+        if $z0 == 0 goto label13;
+
+        $l1 = virtualinvoke $r1.<android.os.ParcelFileDescriptor: long getStatSize()>();
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position> = $l1;
+
+     label13:
+        return;
+
+        catch java.io.IOException from label02 to label03 with label10;
+        catch java.io.IOException from label04 to label05 with label10;
+        catch java.io.IOException from label06 to label07 with label10;
+        catch java.io.IOException from label08 to label09 with label10;
+    }
+
+    boolean Close()
+    {
+        java.lang.Throwable $r4;
+        android.os.ParcelFileDescriptor $r3;
+        java.io.FileOutputStream $r1;
+        java.io.IOException $r8;
+        java.io.FileInputStream $r2;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+        java.lang.StringBuilder $r5, $r7;
+        java.lang.String $r6;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 0;
+
+        $r1 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out>;
+
+        if $r1 == null goto label2;
+
+     label1:
+        virtualinvoke $r1.<java.io.FileOutputStream: void close()>();
+
+     label2:
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileInputStream m_in>;
+
+        if $r2 == null goto label4;
+
+     label3:
+        virtualinvoke $r2.<java.io.FileInputStream: void close()>();
+
+     label4:
+        $r3 = r0.<com.adobe.air.AIRFileDescriptorWrapper: android.os.ParcelFileDescriptor m_fd>;
+
+     label5:
+        virtualinvoke $r3.<android.os.ParcelFileDescriptor: void close()>();
+
+     label6:
+        return 1;
+
+     label7:
+        $r4 := @caughtexception;
+
+        $r7 = new java.lang.StringBuilder;
+
+        $r5 = $r7;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failure when closing a file handle - ");
+
+        $r8 = (java.io.IOException) $r4;
+
+        $r6 = virtualinvoke $r8.<java.io.IOException: java.lang.String toString()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("AdobeAIR", $r6);
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 3005;
+
+        return 0;
+
+        catch java.io.IOException from label1 to label2 with label7;
+        catch java.io.IOException from label3 to label4 with label7;
+        catch java.io.IOException from label5 to label6 with label7;
+    }
+
+    boolean Delete()
+    {
+        android.content.ContentResolver $r4;
+        android.net.Uri $r1;
+        int $i0;
+        com.adobe.air.AndroidActivityWrapper $r2;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+        android.app.Activity $r3;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        virtualinvoke r0.<com.adobe.air.AIRFileDescriptorWrapper: boolean Close()>();
+
+        $r2 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r3 = virtualinvoke $r2.<com.adobe.air.AndroidActivityWrapper: android.app.Activity getActivity()>();
+
+        $r4 = virtualinvoke $r3.<android.app.Activity: android.content.ContentResolver getContentResolver()>();
+
+        $r1 = r0.<com.adobe.air.AIRFileDescriptorWrapper: android.net.Uri m_uri>;
+
+        $i0 = virtualinvoke $r4.<android.content.ContentResolver: int delete(android.net.Uri,java.lang.String,java.lang.String[])>($r1, null, null);
+
+        if $i0 <= 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    boolean Flush()
+    {
+        int $i0;
+        java.io.FileOutputStream $r2;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+        java.lang.Exception $r1;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 0;
+
+     label1:
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out>;
+
+        virtualinvoke $r2.<java.io.FileOutputStream: void flush()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 2030;
+
+     label4:
+        $i0 = r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError>;
+
+        if $i0 != 0 goto label6;
+
+        return 1;
+
+     label5:
+        $r1 := @caughtexception;
+
+        goto label3;
+
+     label6:
+        return 0;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+    }
+
+    java.lang.String Gets(int)
+    {
+        long $l3;
+        char $c5;
+        java.io.FileInputStream $r2;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+        java.lang.Exception $r4;
+        int $i0, $i1, $i2, $i4;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r3;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        $i0 := @parameter0: int;
+
+        $i1 = 0;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 0;
+
+        $r1 = new java.lang.StringBuilder;
+
+     label01:
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileInputStream m_in>;
+
+        $i2 = virtualinvoke $r2.<java.io.FileInputStream: int available()>();
+
+     label02:
+        if $i2 >= $i0 goto label03;
+
+        $i0 = $i2;
+
+     label03:
+        if $i1 >= $i0 goto label15;
+
+     label04:
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileInputStream m_in>;
+
+        $i2 = virtualinvoke $r2.<java.io.FileInputStream: int read()>();
+
+     label05:
+        if $i2 < 0 goto label15;
+
+     label06:
+        $l3 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+     label07:
+        $l3 = $l3 + 1L;
+
+     label08:
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position> = $l3;
+
+     label09:
+        if $i2 < 128 goto label11;
+
+     label10:
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("AdobeAIR", "\'gets\' called on non-ascii input file");
+
+     label11:
+        $i4 = $i2 & 127;
+
+        $c5 = (char) $i4;
+
+     label12:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c5);
+
+     label13:
+        if $i2 != 13 goto label14;
+
+        goto label15;
+
+     label14:
+        $i1 = $i1 + 1;
+
+        goto label03;
+
+     label15:
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label16:
+        return $r3;
+
+     label17:
+        $r4 := @caughtexception;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failed to get string from file: ");
+
+        $r3 = virtualinvoke $r4.<java.lang.Exception: java.lang.String toString()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("AdobeAIR", $r3);
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 2030;
+
+        return null;
+
+        catch java.lang.Exception from label01 to label02 with label17;
+        catch java.lang.Exception from label04 to label05 with label17;
+        catch java.lang.Exception from label06 to label07 with label17;
+        catch java.lang.Exception from label08 to label09 with label17;
+        catch java.lang.Exception from label10 to label11 with label17;
+        catch java.lang.Exception from label12 to label13 with label17;
+        catch java.lang.Exception from label15 to label16 with label17;
+    }
+
+    int LastError()
+    {
+        int i0;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        i0 = r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError>;
+
+        return i0;
+    }
+
+    long Read(byte[])
+    {
+        byte[] $r1;
+        long $l2, $l3, $l4;
+        java.io.FileInputStream $r2;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+        java.lang.Exception $r3;
+        byte $b1;
+        int $i0;
+        java.lang.StringBuilder $r4, $r6;
+        java.lang.String $r5;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        $r1 := @parameter0: byte[];
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 0;
+
+        $i0 = lengthof $r1;
+
+        $l2 = (long) $i0;
+
+        $l3 = -1L;
+
+     label01:
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileInputStream m_in>;
+
+        $i0 = virtualinvoke $r2.<java.io.FileInputStream: int available()>();
+
+     label02:
+        $l4 = (long) $i0;
+
+        $b1 = $l4 cmp $l2;
+
+        $i0 = (int) $b1;
+
+        if $i0 >= 0 goto label03;
+
+        $l2 = $l4;
+
+     label03:
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileInputStream m_in>;
+
+     label04:
+        $i0 = (int) $l2;
+
+     label05:
+        $i0 = virtualinvoke $r2.<java.io.FileInputStream: int read(byte[],int,int)>($r1, 0, $i0);
+
+     label06:
+        $l3 = (long) $i0;
+
+     label07:
+        $l2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+     label08:
+        $l2 = $l2 + $l3;
+
+     label09:
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position> = $l2;
+
+     label10:
+        return $l3;
+
+     label11:
+        $r3 := @caughtexception;
+
+        $r6 = new java.lang.StringBuilder;
+
+        $r4 = $r6;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failure in reading file: ");
+
+        $r5 = virtualinvoke $r3.<java.lang.Exception: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("AdobeAIR", $r5);
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 2030;
+
+        return $l3;
+
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch java.lang.Exception from label03 to label04 with label11;
+        catch java.lang.Exception from label05 to label06 with label11;
+        catch java.lang.Exception from label07 to label08 with label11;
+        catch java.lang.Exception from label09 to label10 with label11;
+    }
+
+    long Seek(long, int)
+    {
+        java.lang.Throwable $r1, $r8;
+        android.os.ParcelFileDescriptor $r7;
+        long $l0, $l2, $l3;
+        byte $b4;
+        int $i1;
+        java.lang.String $r5;
+        boolean $z0;
+        java.io.FileOutputStream $r2;
+        java.io.IOException $r10;
+        java.io.FileInputStream $r6;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+        java.lang.StringBuilder $r4, $r9;
+        java.nio.channels.FileChannel $r3;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        $l0 := @parameter0: long;
+
+        $i1 := @parameter1: int;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 0;
+
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out>;
+
+        if $r2 == null goto label08;
+
+        $l2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+     label01:
+        $r3 = virtualinvoke $r2.<java.io.FileOutputStream: java.nio.channels.FileChannel getChannel()>();
+
+        $l3 = virtualinvoke $r3.<java.nio.channels.FileChannel: long position()>();
+
+     label02:
+        $b4 = $l2 cmp $l3;
+
+        if $b4 == 0 goto label08;
+
+        $z0 = r0.<com.adobe.air.AIRFileDescriptorWrapper: boolean m_debug>;
+
+        if $z0 == 0 goto label08;
+
+        $r9 = new java.lang.StringBuilder;
+
+        $r4 = $r9;
+
+     label03:
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("Warning: file position mismatch in output: expected ");
+
+     label04:
+        $l2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+     label05:
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l2);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", got ");
+
+     label06:
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out>;
+
+     label07:
+        $r3 = virtualinvoke $r2.<java.io.FileOutputStream: java.nio.channels.FileChannel getChannel()>();
+
+        $l2 = virtualinvoke $r3.<java.nio.channels.FileChannel: long position()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l2);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("AdobeAIR", $r5);
+
+     label08:
+        $r6 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileInputStream m_in>;
+
+        if $r6 == null goto label16;
+
+        $l2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+     label09:
+        $r3 = virtualinvoke $r6.<java.io.FileInputStream: java.nio.channels.FileChannel getChannel()>();
+
+        $l3 = virtualinvoke $r3.<java.nio.channels.FileChannel: long position()>();
+
+     label10:
+        $b4 = $l2 cmp $l3;
+
+        if $b4 == 0 goto label16;
+
+        $z0 = r0.<com.adobe.air.AIRFileDescriptorWrapper: boolean m_debug>;
+
+        if $z0 == 0 goto label16;
+
+        $r9 = new java.lang.StringBuilder;
+
+        $r4 = $r9;
+
+     label11:
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("Warning: file position mismatch in input: expected ");
+
+     label12:
+        $l2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+     label13:
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l2);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", got ");
+
+     label14:
+        $r6 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileInputStream m_in>;
+
+     label15:
+        $r3 = virtualinvoke $r6.<java.io.FileInputStream: java.nio.channels.FileChannel getChannel()>();
+
+        $l2 = virtualinvoke $r3.<java.nio.channels.FileChannel: long position()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l2);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("AdobeAIR", $r5);
+
+     label16:
+        if $i1 == 0 goto label21;
+
+        if $i1 == 1 goto label20;
+
+        if $i1 == 2 goto label17;
+
+        goto label22;
+
+     label17:
+        $r7 = r0.<com.adobe.air.AIRFileDescriptorWrapper: android.os.ParcelFileDescriptor m_fd>;
+
+     label18:
+        $l0 = virtualinvoke $r7.<android.os.ParcelFileDescriptor: long getStatSize()>();
+
+     label19:
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position> = $l0;
+
+        goto label22;
+
+     label20:
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position> = $l0;
+
+        goto label22;
+
+     label21:
+        $l2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+        $l0 = $l2 + $l0;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position> = $l0;
+
+     label22:
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out>;
+
+        if $r2 == null goto label26;
+
+     label23:
+        $r3 = virtualinvoke $r2.<java.io.FileOutputStream: java.nio.channels.FileChannel getChannel()>();
+
+     label24:
+        $l0 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+     label25:
+        virtualinvoke $r3.<java.nio.channels.FileChannel: java.nio.channels.FileChannel position(long)>($l0);
+
+     label26:
+        $r6 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileInputStream m_in>;
+
+        if $r6 == null goto label32;
+
+     label27:
+        $r3 = virtualinvoke $r6.<java.io.FileInputStream: java.nio.channels.FileChannel getChannel()>();
+
+     label28:
+        $l0 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+     label29:
+        virtualinvoke $r3.<java.nio.channels.FileChannel: java.nio.channels.FileChannel position(long)>($l0);
+
+     label30:
+        goto label32;
+
+     label31:
+        $r8 := @caughtexception;
+
+        $r9 = new java.lang.StringBuilder;
+
+        $r4 = $r9;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("Seek failed: ");
+
+        $r10 = (java.io.IOException) $r8;
+
+        $r5 = virtualinvoke $r10.<java.io.IOException: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("AdobeAIR", $r5);
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 2030;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position> = -1L;
+
+     label32:
+        $l0 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+        return $l0;
+
+     label33:
+        $r1 := @caughtexception;
+
+        goto label16;
+
+        catch java.io.IOException from label01 to label02 with label33;
+        catch java.io.IOException from label03 to label04 with label33;
+        catch java.io.IOException from label05 to label06 with label33;
+        catch java.io.IOException from label07 to label08 with label33;
+        catch java.io.IOException from label09 to label10 with label33;
+        catch java.io.IOException from label11 to label12 with label33;
+        catch java.io.IOException from label13 to label14 with label33;
+        catch java.io.IOException from label15 to label16 with label33;
+        catch java.io.IOException from label18 to label19 with label31;
+        catch java.io.IOException from label23 to label24 with label31;
+        catch java.io.IOException from label25 to label26 with label31;
+        catch java.io.IOException from label27 to label28 with label31;
+        catch java.io.IOException from label29 to label30 with label31;
+    }
+
+    long Size()
+    {
+        long $l0;
+        android.os.ParcelFileDescriptor $r1;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 0;
+
+        $r1 = r0.<com.adobe.air.AIRFileDescriptorWrapper: android.os.ParcelFileDescriptor m_fd>;
+
+        $l0 = virtualinvoke $r1.<android.os.ParcelFileDescriptor: long getStatSize()>();
+
+        return $l0;
+    }
+
+    boolean Truncate()
+    {
+        int $i0;
+        java.io.FileOutputStream $r3;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+        java.nio.channels.FileChannel $r1;
+        java.lang.Exception $r2;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 0;
+
+     label1:
+        $r3 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out>;
+
+        $r1 = virtualinvoke $r3.<java.io.FileOutputStream: java.nio.channels.FileChannel getChannel()>();
+
+        virtualinvoke $r1.<java.nio.channels.FileChannel: java.nio.channels.FileChannel truncate(long)>(0L);
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position> = 0L;
+
+     label2:
+        goto label4;
+
+     label3:
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 2030;
+
+     label4:
+        $i0 = r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError>;
+
+        if $i0 != 0 goto label6;
+
+        return 1;
+
+     label5:
+        $r2 := @caughtexception;
+
+        goto label3;
+
+     label6:
+        return 0;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+    }
+
+    boolean Write(byte[])
+    {
+        byte[] $r1;
+        android.os.ParcelFileDescriptor $r4;
+        java.io.FileOutputStream $r3;
+        long $l0, $l1;
+        com.adobe.air.AIRFileDescriptorWrapper r0;
+        java.lang.Exception $r6;
+        java.io.FileDescriptor $r5;
+        int $i2;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: com.adobe.air.AIRFileDescriptorWrapper;
+
+        $r1 := @parameter0: byte[];
+
+        $z0 = 0;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 0;
+
+        $r2 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.lang.String m_mode>;
+
+        $z1 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>("r");
+
+        if $z1 == 0 goto label01;
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 3008;
+
+        return 0;
+
+     label01:
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 0;
+
+        $r3 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out>;
+
+     label02:
+        if $r3 != null goto label04;
+
+        $r3 = new java.io.FileOutputStream;
+
+     label03:
+        $r4 = r0.<com.adobe.air.AIRFileDescriptorWrapper: android.os.ParcelFileDescriptor m_fd>;
+
+        $r5 = virtualinvoke $r4.<android.os.ParcelFileDescriptor: java.io.FileDescriptor getFileDescriptor()>();
+
+        specialinvoke $r3.<java.io.FileOutputStream: void <init>(java.io.FileDescriptor)>($r5);
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out> = $r3;
+
+     label04:
+        $r3 = r0.<com.adobe.air.AIRFileDescriptorWrapper: java.io.FileOutputStream m_out>;
+
+        virtualinvoke $r3.<java.io.FileOutputStream: void write(byte[])>($r1);
+
+     label05:
+        $z0 = 1;
+
+     label06:
+        $l1 = r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position>;
+
+        $i2 = lengthof $r1;
+
+     label07:
+        $l0 = (long) $i2;
+
+        $l0 = $l1 + $l0;
+
+     label08:
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: long m_position> = $l0;
+
+     label09:
+        return 1;
+
+     label10:
+        $r6 := @caughtexception;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failed in writing data to file: ");
+
+        $r2 = virtualinvoke $r6.<java.lang.Exception: java.lang.String toString()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("AdobeAIR", $r2);
+
+        r0.<com.adobe.air.AIRFileDescriptorWrapper: int m_lastError> = 2030;
+
+        return $z0;
+
+        catch java.lang.Exception from label01 to label02 with label10;
+        catch java.lang.Exception from label03 to label05 with label10;
+        catch java.lang.Exception from label06 to label07 with label10;
+        catch java.lang.Exception from label08 to label09 with label10;
+    }
+}

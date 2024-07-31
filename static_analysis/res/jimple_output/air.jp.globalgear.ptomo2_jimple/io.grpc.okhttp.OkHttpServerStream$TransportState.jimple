@@ -1,0 +1,649 @@
+class io.grpc.okhttp.OkHttpServerStream$TransportState extends io.grpc.internal.AbstractServerStream$TransportState implements io.grpc.okhttp.OutboundFlowController$Stream, io.grpc.okhttp.OkHttpServerTransport$StreamState
+{
+    private boolean cancelSent;
+    private final io.grpc.okhttp.ExceptionHandlingFrameWriter frameWriter;
+    private final int initialWindowSize;
+    private final java.lang.Object lock;
+    private final io.grpc.okhttp.OutboundFlowController outboundFlow;
+    private final io.grpc.okhttp.OutboundFlowController$StreamState outboundFlowState;
+    private int processedWindow;
+    private boolean receivedEndOfStream;
+    private final int streamId;
+    private final io.perfmark.Tag tag;
+    private final io.grpc.okhttp.OkHttpServerTransport transport;
+    private int window;
+
+    public void <init>(io.grpc.okhttp.OkHttpServerTransport, int, int, io.grpc.internal.StatsTraceContext, java.lang.Object, io.grpc.okhttp.ExceptionHandlingFrameWriter, io.grpc.okhttp.OutboundFlowController, int, io.grpc.internal.TransportTracer, java.lang.String)
+    {
+        io.grpc.internal.TransportTracer $r5;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+        io.grpc.okhttp.OkHttpServerTransport $r7;
+        io.grpc.okhttp.OutboundFlowController $r4;
+        io.perfmark.Tag $r9;
+        io.grpc.okhttp.ExceptionHandlingFrameWriter $r3;
+        int $i0, $i1, $i2;
+        io.grpc.okhttp.OutboundFlowController$StreamState $r10;
+        java.lang.Object $r2, $r8;
+        java.lang.String $r6;
+        io.grpc.internal.StatsTraceContext $r1;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r7 := @parameter0: io.grpc.okhttp.OkHttpServerTransport;
+
+        $i0 := @parameter1: int;
+
+        $i2 := @parameter2: int;
+
+        $r1 := @parameter3: io.grpc.internal.StatsTraceContext;
+
+        $r2 := @parameter4: java.lang.Object;
+
+        $r3 := @parameter5: io.grpc.okhttp.ExceptionHandlingFrameWriter;
+
+        $r4 := @parameter6: io.grpc.okhttp.OutboundFlowController;
+
+        $i1 := @parameter7: int;
+
+        $r5 := @parameter8: io.grpc.internal.TransportTracer;
+
+        $r6 := @parameter9: java.lang.String;
+
+        specialinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: void <init>(int,io.grpc.internal.StatsTraceContext,io.grpc.internal.TransportTracer)>($i2, $r1, $r5);
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: boolean cancelSent> = 0;
+
+        $r8 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r7, "transport");
+
+        $r7 = (io.grpc.okhttp.OkHttpServerTransport) $r8;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.OkHttpServerTransport transport> = $r7;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int streamId> = $i0;
+
+        $r2 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "lock");
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: java.lang.Object lock> = $r2;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.ExceptionHandlingFrameWriter frameWriter> = $r3;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.OutboundFlowController outboundFlow> = $r4;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int window> = $i1;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int processedWindow> = $i1;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int initialWindowSize> = $i1;
+
+        $r9 = staticinvoke <io.perfmark.PerfMark: io.perfmark.Tag createTag(java.lang.String)>($r6);
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.perfmark.Tag tag> = $r9;
+
+        $r10 = virtualinvoke $r4.<io.grpc.okhttp.OutboundFlowController: io.grpc.okhttp.OutboundFlowController$StreamState createState(io.grpc.okhttp.OutboundFlowController$Stream,int)>(r0, $i0);
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.OutboundFlowController$StreamState outboundFlowState> = $r10;
+
+        return;
+    }
+
+    static int access$000(io.grpc.okhttp.OkHttpServerStream$TransportState)
+    {
+        int i0;
+        io.grpc.okhttp.OkHttpServerStream$TransportState $r0;
+
+        $r0 := @parameter0: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        i0 = $r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int streamId>;
+
+        return i0;
+    }
+
+    static java.lang.Object access$200(io.grpc.okhttp.OkHttpServerStream$TransportState)
+    {
+        java.lang.Object r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState $r0;
+
+        $r0 := @parameter0: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        r1 = $r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: java.lang.Object lock>;
+
+        return r1;
+    }
+
+    static void access$300(io.grpc.okhttp.OkHttpServerStream$TransportState, java.util.List)
+    {
+        java.util.List $r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState $r0;
+
+        $r0 := @parameter0: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r1 := @parameter1: java.util.List;
+
+        specialinvoke $r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: void sendHeaders(java.util.List)>($r1);
+
+        return;
+    }
+
+    static void access$500(io.grpc.okhttp.OkHttpServerStream$TransportState, okio.Buffer, boolean)
+    {
+        okio.Buffer $r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r1 := @parameter1: okio.Buffer;
+
+        $z0 := @parameter2: boolean;
+
+        specialinvoke $r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: void sendBuffer(okio.Buffer,boolean)>($r1, $z0);
+
+        return;
+    }
+
+    static void access$700(io.grpc.okhttp.OkHttpServerStream$TransportState, java.util.List)
+    {
+        java.util.List $r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState $r0;
+
+        $r0 := @parameter0: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r1 := @parameter1: java.util.List;
+
+        specialinvoke $r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: void sendTrailers(java.util.List)>($r1);
+
+        return;
+    }
+
+    static void access$800(io.grpc.okhttp.OkHttpServerStream$TransportState, io.grpc.okhttp.internal.framed.ErrorCode, io.grpc.Status)
+    {
+        io.grpc.okhttp.OkHttpServerStream$TransportState $r0;
+        io.grpc.Status $r2;
+        io.grpc.okhttp.internal.framed.ErrorCode $r1;
+
+        $r0 := @parameter0: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r1 := @parameter1: io.grpc.okhttp.internal.framed.ErrorCode;
+
+        $r2 := @parameter2: io.grpc.Status;
+
+        specialinvoke $r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: void cancel(io.grpc.okhttp.internal.framed.ErrorCode,io.grpc.Status)>($r1, $r2);
+
+        return;
+    }
+
+    private void cancel(io.grpc.okhttp.internal.framed.ErrorCode, io.grpc.Status)
+    {
+        io.grpc.okhttp.ExceptionHandlingFrameWriter $r1;
+        io.grpc.okhttp.internal.framed.ErrorCode $r2;
+        int $i0;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+        io.grpc.Status $r3;
+        io.grpc.okhttp.OkHttpServerTransport $r4;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r2 := @parameter0: io.grpc.okhttp.internal.framed.ErrorCode;
+
+        $r3 := @parameter1: io.grpc.Status;
+
+        $z0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: boolean cancelSent>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: boolean cancelSent> = 1;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.ExceptionHandlingFrameWriter frameWriter>;
+
+        $i0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int streamId>;
+
+        virtualinvoke $r1.<io.grpc.okhttp.ExceptionHandlingFrameWriter: void rstStream(int,io.grpc.okhttp.internal.framed.ErrorCode)>($i0, $r2);
+
+        virtualinvoke r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: void transportReportStatus(io.grpc.Status)>($r3);
+
+        $r4 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.OkHttpServerTransport transport>;
+
+        $i0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int streamId>;
+
+        virtualinvoke $r4.<io.grpc.okhttp.OkHttpServerTransport: void streamClosed(int,boolean)>($i0, 1);
+
+        return;
+    }
+
+    private void sendBuffer(okio.Buffer, boolean)
+    {
+        io.grpc.okhttp.OutboundFlowController $r3;
+        okio.Buffer $r1;
+        io.grpc.okhttp.OutboundFlowController$StreamState $r2;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r1 := @parameter0: okio.Buffer;
+
+        $z0 := @parameter1: boolean;
+
+        $z1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: boolean cancelSent>;
+
+        if $z1 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.OutboundFlowController outboundFlow>;
+
+        $r2 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.OutboundFlowController$StreamState outboundFlowState>;
+
+        virtualinvoke $r3.<io.grpc.okhttp.OutboundFlowController: void data(boolean,io.grpc.okhttp.OutboundFlowController$StreamState,okio.Buffer,boolean)>(0, $r2, $r1, $z0);
+
+        return;
+    }
+
+    private void sendHeaders(java.util.List)
+    {
+        java.util.List $r2;
+        io.grpc.okhttp.ExceptionHandlingFrameWriter $r1;
+        int $i0;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r2 := @parameter0: java.util.List;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.ExceptionHandlingFrameWriter frameWriter>;
+
+        $i0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int streamId>;
+
+        virtualinvoke $r1.<io.grpc.okhttp.ExceptionHandlingFrameWriter: void synReply(boolean,int,java.util.List)>(0, $i0, $r2);
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.ExceptionHandlingFrameWriter frameWriter>;
+
+        virtualinvoke $r1.<io.grpc.okhttp.ExceptionHandlingFrameWriter: void flush()>();
+
+        return;
+    }
+
+    private void sendTrailers(java.util.List)
+    {
+        io.grpc.okhttp.OutboundFlowController $r2;
+        java.util.List $r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState$$ExternalSyntheticLambda0 $r4;
+        io.grpc.okhttp.OutboundFlowController$StreamState $r3;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r1 := @parameter0: java.util.List;
+
+        $r2 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.OutboundFlowController outboundFlow>;
+
+        $r3 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.OutboundFlowController$StreamState outboundFlowState>;
+
+        $r4 = new io.grpc.okhttp.OkHttpServerStream$TransportState$$ExternalSyntheticLambda0;
+
+        specialinvoke $r4.<io.grpc.okhttp.OkHttpServerStream$TransportState$$ExternalSyntheticLambda0: void <init>(io.grpc.okhttp.OkHttpServerStream$TransportState,java.util.List)>(r0, $r1);
+
+        virtualinvoke $r2.<io.grpc.okhttp.OutboundFlowController: void notifyWhenNoPendingData(io.grpc.okhttp.OutboundFlowController$StreamState,java.lang.Runnable)>($r3, $r4);
+
+        return;
+    }
+
+    private void sendTrailersAfterFlowControlled(java.util.List)
+    {
+        java.lang.Throwable $r6;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+        io.grpc.okhttp.OkHttpServerTransport $r5;
+        java.util.List $r2;
+        io.grpc.okhttp.ExceptionHandlingFrameWriter $r3;
+        io.grpc.okhttp.internal.framed.ErrorCode $r4;
+        int $i0;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r2 := @parameter0: java.util.List;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: java.lang.Object lock>;
+
+        entermonitor $r1;
+
+     label1:
+        $r3 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.ExceptionHandlingFrameWriter frameWriter>;
+
+        $i0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int streamId>;
+
+        virtualinvoke $r3.<io.grpc.okhttp.ExceptionHandlingFrameWriter: void synReply(boolean,int,java.util.List)>(1, $i0, $r2);
+
+        $z0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: boolean receivedEndOfStream>;
+
+        if $z0 != 0 goto label2;
+
+        $r3 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.ExceptionHandlingFrameWriter frameWriter>;
+
+        $i0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int streamId>;
+
+        $r4 = <io.grpc.okhttp.internal.framed.ErrorCode: io.grpc.okhttp.internal.framed.ErrorCode NO_ERROR>;
+
+        virtualinvoke $r3.<io.grpc.okhttp.ExceptionHandlingFrameWriter: void rstStream(int,io.grpc.okhttp.internal.framed.ErrorCode)>($i0, $r4);
+
+     label2:
+        $r5 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.OkHttpServerTransport transport>;
+
+        $i0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int streamId>;
+
+        virtualinvoke $r5.<io.grpc.okhttp.OkHttpServerTransport: void streamClosed(int,boolean)>($i0, 1);
+
+        virtualinvoke r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: void complete()>();
+
+        exitmonitor $r1;
+
+     label3:
+        return;
+
+     label4:
+        $r6 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label5:
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void bytesRead(int)
+    {
+        long $l4;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+        byte $b2;
+        io.grpc.okhttp.ExceptionHandlingFrameWriter $r1;
+        int $i0, $i1, $i3;
+        float $f0, $f1;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $i0 := @parameter0: int;
+
+        $i1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int processedWindow>;
+
+        $i0 = $i1 - $i0;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int processedWindow> = $i0;
+
+        $f0 = (float) $i0;
+
+        $i1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int initialWindowSize>;
+
+        $f1 = (float) $i1;
+
+        $f1 = $f1 * 0.5F;
+
+        $b2 = $f0 cmpg $f1;
+
+        $i3 = (int) $b2;
+
+        if $i3 > 0 goto label1;
+
+        $i1 = $i1 - $i0;
+
+        $i3 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int window>;
+
+        $i3 = $i3 + $i1;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int window> = $i3;
+
+        $i0 = $i0 + $i1;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int processedWindow> = $i0;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.ExceptionHandlingFrameWriter frameWriter>;
+
+        $i0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int streamId>;
+
+        $l4 = (long) $i1;
+
+        virtualinvoke $r1.<io.grpc.okhttp.ExceptionHandlingFrameWriter: void windowUpdate(int,long)>($i0, $l4);
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.ExceptionHandlingFrameWriter frameWriter>;
+
+        virtualinvoke $r1.<io.grpc.okhttp.ExceptionHandlingFrameWriter: void flush()>();
+
+     label1:
+        return;
+    }
+
+    public void deframeFailed(java.lang.Throwable)
+    {
+        java.lang.Throwable $r3;
+        io.grpc.okhttp.internal.framed.ErrorCode $r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+        io.grpc.Status $r2;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r3 := @parameter0: java.lang.Throwable;
+
+        $r1 = <io.grpc.okhttp.internal.framed.ErrorCode: io.grpc.okhttp.internal.framed.ErrorCode INTERNAL_ERROR>;
+
+        $r2 = staticinvoke <io.grpc.Status: io.grpc.Status fromThrowable(java.lang.Throwable)>($r3);
+
+        specialinvoke r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: void cancel(io.grpc.okhttp.internal.framed.ErrorCode,io.grpc.Status)>($r1, $r2);
+
+        return;
+    }
+
+    public io.grpc.okhttp.OutboundFlowController$StreamState getOutboundFlowState()
+    {
+        io.grpc.okhttp.OutboundFlowController$StreamState r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.grpc.okhttp.OutboundFlowController$StreamState outboundFlowState>;
+
+        return r1;
+    }
+
+    public boolean hasReceivedEndOfStream()
+    {
+        java.lang.Throwable $r2;
+        java.lang.Object $r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+        boolean z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: java.lang.Object lock>;
+
+        entermonitor $r1;
+
+     label1:
+        z0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: boolean receivedEndOfStream>;
+
+        exitmonitor $r1;
+
+     label2:
+        return z0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void inboundDataReceived(okio.Buffer, int, boolean)
+    {
+        java.lang.Throwable $r5;
+        okio.Buffer $r3;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+        io.grpc.okhttp.OkHttpReadableBuffer $r4;
+        io.perfmark.Tag $r2;
+        int $i0, $i1;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r3 := @parameter0: okio.Buffer;
+
+        $i0 := @parameter1: int;
+
+        $z0 := @parameter2: boolean;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: java.lang.Object lock>;
+
+        entermonitor $r1;
+
+     label1:
+        $r2 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void event(java.lang.String,io.perfmark.Tag)>("OkHttpServerTransport$FrameHandler.data", $r2);
+
+        if $z0 == 0 goto label2;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: boolean receivedEndOfStream> = 1;
+
+     label2:
+        $i1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int window>;
+
+        $i0 = $i1 - $i0;
+
+        r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int window> = $i0;
+
+        $r4 = new io.grpc.okhttp.OkHttpReadableBuffer;
+
+        specialinvoke $r4.<io.grpc.okhttp.OkHttpReadableBuffer: void <init>(okio.Buffer)>($r3);
+
+        specialinvoke r0.<io.grpc.internal.AbstractServerStream$TransportState: void inboundDataReceived(io.grpc.internal.ReadableBuffer,boolean)>($r4, $z0);
+
+        exitmonitor $r1;
+
+     label3:
+        return;
+
+     label4:
+        $r5 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label5:
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void inboundRstReceived(io.grpc.Status)
+    {
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+        io.grpc.Status $r1;
+        io.perfmark.Tag $r2;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r1 := @parameter0: io.grpc.Status;
+
+        $r2 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: io.perfmark.Tag tag>;
+
+        staticinvoke <io.perfmark.PerfMark: void event(java.lang.String,io.perfmark.Tag)>("OkHttpServerTransport$FrameHandler.rstStream", $r2);
+
+        virtualinvoke r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: void transportReportStatus(io.grpc.Status)>($r1);
+
+        return;
+    }
+
+    public int inboundWindowAvailable()
+    {
+        java.lang.Throwable $r2;
+        int i0;
+        java.lang.Object $r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: java.lang.Object lock>;
+
+        entermonitor $r1;
+
+     label1:
+        i0 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: int window>;
+
+        exitmonitor $r1;
+
+     label2:
+        return i0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    void lambda$sendTrailers$0$io-grpc-okhttp-OkHttpServerStream$TransportState(java.util.List)
+    {
+        java.util.List $r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r1 := @parameter0: java.util.List;
+
+        specialinvoke r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: void sendTrailersAfterFlowControlled(java.util.List)>($r1);
+
+        return;
+    }
+
+    public void runOnTransportThread(java.lang.Runnable)
+    {
+        java.lang.Throwable $r3;
+        java.lang.Object $r1;
+        io.grpc.okhttp.OkHttpServerStream$TransportState r0;
+        java.lang.Runnable $r2;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServerStream$TransportState;
+
+        $r2 := @parameter0: java.lang.Runnable;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServerStream$TransportState: java.lang.Object lock>;
+
+        entermonitor $r1;
+
+     label1:
+        interfaceinvoke $r2.<java.lang.Runnable: void run()>();
+
+        exitmonitor $r1;
+
+     label2:
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+}

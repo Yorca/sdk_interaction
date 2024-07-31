@@ -1,0 +1,494 @@
+public final class com.bumptech.glide.util.ByteBufferUtil extends java.lang.Object
+{
+    private static final java.util.concurrent.atomic.AtomicReference BUFFER_REF;
+    private static final int BUFFER_SIZE;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.atomic.AtomicReference $r0;
+
+        <com.bumptech.glide.util.ByteBufferUtil: int BUFFER_SIZE> = 16384;
+
+        $r0 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r0.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        <com.bumptech.glide.util.ByteBufferUtil: java.util.concurrent.atomic.AtomicReference BUFFER_REF> = $r0;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        com.bumptech.glide.util.ByteBufferUtil r0;
+
+        r0 := @this: com.bumptech.glide.util.ByteBufferUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.nio.ByteBuffer fromFile(java.io.File) throws java.io.IOException
+    {
+        java.lang.Throwable $r1, $r2, $r3, $r4, $r10;
+        java.io.RandomAccessFile $r7, $r12;
+        long $l0;
+        java.nio.channels.FileChannel$MapMode $r0;
+        byte $b1;
+        int $i2;
+        java.io.IOException $r13;
+        java.io.File $r5;
+        java.nio.channels.FileChannel $r6, $r8;
+        java.nio.MappedByteBuffer $r9;
+
+        $r5 := @parameter0: java.io.File;
+
+        $r6 = null;
+
+     label01:
+        $l0 = virtualinvoke $r5.<java.io.File: long length()>();
+
+     label02:
+        $b1 = $l0 cmp 2147483647L;
+
+        $i2 = (int) $b1;
+
+        if $i2 > 0 goto label16;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 == 0 goto label14;
+
+     label03:
+        $r12 = new java.io.RandomAccessFile;
+
+     label04:
+        $r7 = $r12;
+
+     label05:
+        specialinvoke $r12.<java.io.RandomAccessFile: void <init>(java.io.File,java.lang.String)>($r5, "r");
+
+     label06:
+        $r8 = virtualinvoke $r12.<java.io.RandomAccessFile: java.nio.channels.FileChannel getChannel()>();
+
+     label07:
+        $r6 = $r8;
+
+     label08:
+        $r0 = <java.nio.channels.FileChannel$MapMode: java.nio.channels.FileChannel$MapMode READ_ONLY>;
+
+        $r9 = virtualinvoke $r8.<java.nio.channels.FileChannel: java.nio.MappedByteBuffer map(java.nio.channels.FileChannel$MapMode,long,long)>($r0, 0L, $l0);
+
+        $r9 = virtualinvoke $r9.<java.nio.MappedByteBuffer: java.nio.MappedByteBuffer load()>();
+
+     label09:
+        if $r8 == null goto label11;
+
+     label10:
+        virtualinvoke $r8.<java.nio.channels.FileChannel: void close()>();
+
+     label11:
+        virtualinvoke $r12.<java.io.RandomAccessFile: void close()>();
+
+     label12:
+        return $r9;
+
+     label13:
+        $r10 := @caughtexception;
+
+        goto label19;
+
+     label14:
+        $r13 = new java.io.IOException;
+
+     label15:
+        specialinvoke $r13.<java.io.IOException: void <init>(java.lang.String)>("File unsuitable for memory mapping");
+
+        throw $r13;
+
+     label16:
+        $r13 = new java.io.IOException;
+
+     label17:
+        specialinvoke $r13.<java.io.IOException: void <init>(java.lang.String)>("File too large to map into memory");
+
+        throw $r13;
+
+     label18:
+        $r10 := @caughtexception;
+
+        $r7 = null;
+
+     label19:
+        if $r6 == null goto label22;
+
+     label20:
+        virtualinvoke $r6.<java.nio.channels.FileChannel: void close()>();
+
+     label21:
+        goto label22;
+
+     label22:
+        if $r7 == null goto label24;
+
+     label23:
+        virtualinvoke $r7.<java.io.RandomAccessFile: void close()>();
+
+     label24:
+        throw $r10;
+
+     label25:
+        $r1 := @caughtexception;
+
+        goto label11;
+
+     label26:
+        $r2 := @caughtexception;
+
+        return $r9;
+
+     label27:
+        $r3 := @caughtexception;
+
+        goto label22;
+
+     label28:
+        $r4 := @caughtexception;
+
+        goto label24;
+
+        catch java.lang.Throwable from label01 to label02 with label18;
+        catch java.lang.Throwable from label03 to label04 with label18;
+        catch java.lang.Throwable from label05 to label06 with label18;
+        catch java.lang.Throwable from label06 to label07 with label13;
+        catch java.lang.Throwable from label08 to label09 with label13;
+        catch java.io.IOException from label10 to label11 with label25;
+        catch java.io.IOException from label11 to label12 with label26;
+        catch java.lang.Throwable from label14 to label15 with label18;
+        catch java.lang.Throwable from label15 to label17 with label18;
+        catch java.lang.Throwable from label17 to label18 with label18;
+        catch java.io.IOException from label20 to label21 with label27;
+        catch java.io.IOException from label23 to label24 with label28;
+    }
+
+    public static java.nio.ByteBuffer fromStream(java.io.InputStream) throws java.io.IOException
+    {
+        byte[] $r4;
+        java.io.ByteArrayOutputStream $r1;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        java.nio.ByteBuffer $r5;
+        java.nio.Buffer $r6;
+        int $i0;
+        java.lang.Object $r3;
+        java.io.InputStream $r0;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r1 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r1.<java.io.ByteArrayOutputStream: void <init>(int)>(16384);
+
+        $r2 = <com.bumptech.glide.util.ByteBufferUtil: java.util.concurrent.atomic.AtomicReference BUFFER_REF>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicReference: java.lang.Object getAndSet(java.lang.Object)>(null);
+
+        $r4 = (byte[]) $r3;
+
+        if $r4 != null goto label1;
+
+        $r4 = newarray (byte)[16384];
+
+     label1:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r4);
+
+        if $i0 < 0 goto label2;
+
+        virtualinvoke $r1.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r4, 0, $i0);
+
+        goto label1;
+
+     label2:
+        $r2 = <com.bumptech.glide.util.ByteBufferUtil: java.util.concurrent.atomic.AtomicReference BUFFER_REF>;
+
+        virtualinvoke $r2.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>($r4);
+
+        $r4 = virtualinvoke $r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        $i0 = lengthof $r4;
+
+        $r5 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocateDirect(int)>($i0);
+
+        $r5 = virtualinvoke $r5.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte[])>($r4);
+
+        $r6 = virtualinvoke $r5.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        $r5 = (java.nio.ByteBuffer) $r6;
+
+        return $r5;
+    }
+
+    private static com.bumptech.glide.util.ByteBufferUtil$SafeArray getSafeArray(java.nio.ByteBuffer)
+    {
+        byte[] $r2;
+        com.bumptech.glide.util.ByteBufferUtil$SafeArray $r1;
+        int $i0, $i1;
+        java.nio.ByteBuffer $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.nio.ByteBuffer;
+
+        $z0 = virtualinvoke $r0.<java.nio.ByteBuffer: boolean isReadOnly()>();
+
+        if $z0 != 0 goto label1;
+
+        $z0 = virtualinvoke $r0.<java.nio.ByteBuffer: boolean hasArray()>();
+
+        if $z0 == 0 goto label1;
+
+        $r1 = new com.bumptech.glide.util.ByteBufferUtil$SafeArray;
+
+        $r2 = virtualinvoke $r0.<java.nio.ByteBuffer: byte[] array()>();
+
+        $i0 = virtualinvoke $r0.<java.nio.ByteBuffer: int arrayOffset()>();
+
+        $i1 = virtualinvoke $r0.<java.nio.ByteBuffer: int limit()>();
+
+        specialinvoke $r1.<com.bumptech.glide.util.ByteBufferUtil$SafeArray: void <init>(byte[],int,int)>($r2, $i0, $i1);
+
+        return $r1;
+
+     label1:
+        return null;
+    }
+
+    public static byte[] toBytes(java.nio.ByteBuffer)
+    {
+        byte[] $r2;
+        com.bumptech.glide.util.ByteBufferUtil$SafeArray $r1;
+        int $i0, $i1;
+        java.nio.ByteBuffer $r0;
+
+        $r0 := @parameter0: java.nio.ByteBuffer;
+
+        $r1 = staticinvoke <com.bumptech.glide.util.ByteBufferUtil: com.bumptech.glide.util.ByteBufferUtil$SafeArray getSafeArray(java.nio.ByteBuffer)>($r0);
+
+        if $r1 == null goto label1;
+
+        $i0 = $r1.<com.bumptech.glide.util.ByteBufferUtil$SafeArray: int offset>;
+
+        if $i0 != 0 goto label1;
+
+        $i0 = $r1.<com.bumptech.glide.util.ByteBufferUtil$SafeArray: int limit>;
+
+        $r2 = $r1.<com.bumptech.glide.util.ByteBufferUtil$SafeArray: byte[] data>;
+
+        $i1 = lengthof $r2;
+
+        if $i0 != $i1 goto label1;
+
+        $r2 = virtualinvoke $r0.<java.nio.ByteBuffer: byte[] array()>();
+
+        return $r2;
+
+     label1:
+        $r0 = virtualinvoke $r0.<java.nio.ByteBuffer: java.nio.ByteBuffer asReadOnlyBuffer()>();
+
+        $i0 = virtualinvoke $r0.<java.nio.ByteBuffer: int limit()>();
+
+        $r2 = newarray (byte)[$i0];
+
+        virtualinvoke $r0.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        virtualinvoke $r0.<java.nio.ByteBuffer: java.nio.ByteBuffer get(byte[])>($r2);
+
+        return $r2;
+    }
+
+    public static void toFile(java.nio.ByteBuffer, java.io.File) throws java.io.IOException
+    {
+        java.lang.Throwable $r2, $r3, $r4, $r5, $r9;
+        java.io.RandomAccessFile $r8;
+        java.io.File $r0;
+        java.nio.ByteBuffer $r6;
+        java.nio.channels.FileChannel $r1, $r7;
+
+        $r6 := @parameter0: java.nio.ByteBuffer;
+
+        $r0 := @parameter1: java.io.File;
+
+        virtualinvoke $r6.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        $r7 = null;
+
+     label01:
+        $r8 = new java.io.RandomAccessFile;
+
+        specialinvoke $r8.<java.io.RandomAccessFile: void <init>(java.io.File,java.lang.String)>($r0, "rw");
+
+     label02:
+        $r1 = virtualinvoke $r8.<java.io.RandomAccessFile: java.nio.channels.FileChannel getChannel()>();
+
+     label03:
+        $r7 = $r1;
+
+     label04:
+        virtualinvoke $r1.<java.nio.channels.FileChannel: int write(java.nio.ByteBuffer)>($r6);
+
+        virtualinvoke $r1.<java.nio.channels.FileChannel: void force(boolean)>(0);
+
+        virtualinvoke $r1.<java.nio.channels.FileChannel: void close()>();
+
+        virtualinvoke $r8.<java.io.RandomAccessFile: void close()>();
+
+     label05:
+        if $r1 == null goto label07;
+
+     label06:
+        virtualinvoke $r1.<java.nio.channels.FileChannel: void close()>();
+
+     label07:
+        virtualinvoke $r8.<java.io.RandomAccessFile: void close()>();
+
+     label08:
+        return;
+
+     label09:
+        $r9 := @caughtexception;
+
+        goto label11;
+
+     label10:
+        $r9 := @caughtexception;
+
+        $r8 = null;
+
+     label11:
+        if $r7 == null goto label14;
+
+     label12:
+        virtualinvoke $r7.<java.nio.channels.FileChannel: void close()>();
+
+     label13:
+        goto label14;
+
+     label14:
+        if $r8 == null goto label16;
+
+     label15:
+        virtualinvoke $r8.<java.io.RandomAccessFile: void close()>();
+
+     label16:
+        throw $r9;
+
+     label17:
+        $r2 := @caughtexception;
+
+        goto label07;
+
+     label18:
+        $r3 := @caughtexception;
+
+        return;
+
+     label19:
+        $r4 := @caughtexception;
+
+        goto label14;
+
+     label20:
+        $r5 := @caughtexception;
+
+        goto label16;
+
+        catch java.lang.Throwable from label01 to label02 with label10;
+        catch java.lang.Throwable from label02 to label03 with label09;
+        catch java.lang.Throwable from label04 to label05 with label09;
+        catch java.io.IOException from label06 to label07 with label17;
+        catch java.io.IOException from label07 to label08 with label18;
+        catch java.io.IOException from label12 to label13 with label19;
+        catch java.io.IOException from label15 to label16 with label20;
+    }
+
+    public static java.io.InputStream toStream(java.nio.ByteBuffer)
+    {
+        com.bumptech.glide.util.ByteBufferUtil$ByteBufferStream $r1;
+        java.nio.ByteBuffer $r0;
+
+        $r0 := @parameter0: java.nio.ByteBuffer;
+
+        $r1 = new com.bumptech.glide.util.ByteBufferUtil$ByteBufferStream;
+
+        specialinvoke $r1.<com.bumptech.glide.util.ByteBufferUtil$ByteBufferStream: void <init>(java.nio.ByteBuffer)>($r0);
+
+        return $r1;
+    }
+
+    public static void toStream(java.nio.ByteBuffer, java.io.OutputStream) throws java.io.IOException
+    {
+        java.io.OutputStream $r0;
+        byte[] $r3;
+        com.bumptech.glide.util.ByteBufferUtil$SafeArray $r2;
+        java.util.concurrent.atomic.AtomicReference $r4;
+        java.nio.ByteBuffer $r1;
+        int $i0, $i1, $i2;
+        java.lang.Object $r5;
+
+        $r1 := @parameter0: java.nio.ByteBuffer;
+
+        $r0 := @parameter1: java.io.OutputStream;
+
+        $r2 = staticinvoke <com.bumptech.glide.util.ByteBufferUtil: com.bumptech.glide.util.ByteBufferUtil$SafeArray getSafeArray(java.nio.ByteBuffer)>($r1);
+
+        if $r2 == null goto label1;
+
+        $r3 = $r2.<com.bumptech.glide.util.ByteBufferUtil$SafeArray: byte[] data>;
+
+        $i0 = $r2.<com.bumptech.glide.util.ByteBufferUtil$SafeArray: int offset>;
+
+        $i1 = $r2.<com.bumptech.glide.util.ByteBufferUtil$SafeArray: int offset>;
+
+        $i2 = $r2.<com.bumptech.glide.util.ByteBufferUtil$SafeArray: int limit>;
+
+        $i1 = $i1 + $i2;
+
+        virtualinvoke $r0.<java.io.OutputStream: void write(byte[],int,int)>($r3, $i0, $i1);
+
+        return;
+
+     label1:
+        $r4 = <com.bumptech.glide.util.ByteBufferUtil: java.util.concurrent.atomic.AtomicReference BUFFER_REF>;
+
+        $r5 = virtualinvoke $r4.<java.util.concurrent.atomic.AtomicReference: java.lang.Object getAndSet(java.lang.Object)>(null);
+
+        $r3 = (byte[]) $r5;
+
+        if $r3 != null goto label2;
+
+        $r3 = newarray (byte)[16384];
+
+     label2:
+        $i0 = virtualinvoke $r1.<java.nio.ByteBuffer: int remaining()>();
+
+        if $i0 <= 0 goto label3;
+
+        $i0 = virtualinvoke $r1.<java.nio.ByteBuffer: int remaining()>();
+
+        $i1 = lengthof $r3;
+
+        $i0 = staticinvoke <java.lang.Math: int min(int,int)>($i0, $i1);
+
+        virtualinvoke $r1.<java.nio.ByteBuffer: java.nio.ByteBuffer get(byte[],int,int)>($r3, 0, $i0);
+
+        virtualinvoke $r0.<java.io.OutputStream: void write(byte[],int,int)>($r3, 0, $i0);
+
+        goto label2;
+
+     label3:
+        $r4 = <com.bumptech.glide.util.ByteBufferUtil: java.util.concurrent.atomic.AtomicReference BUFFER_REF>;
+
+        virtualinvoke $r4.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>($r3);
+
+        return;
+    }
+}

@@ -1,0 +1,2192 @@
+public class com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource extends com.mbridge.msdk.playercommon.exoplayer2.source.CompositeMediaSource implements com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target
+{
+    private static final int MSG_ADD;
+    private static final int MSG_ADD_MULTIPLE;
+    private static final int MSG_CLEAR;
+    private static final int MSG_MOVE;
+    private static final int MSG_NOTIFY_LISTENER;
+    private static final int MSG_ON_COMPLETION;
+    private static final int MSG_REMOVE;
+    private final boolean isAtomic;
+    private boolean listenerNotificationScheduled;
+    private final java.util.Map mediaSourceByMediaPeriod;
+    private final java.util.List mediaSourceHolders;
+    private final java.util.List mediaSourcesPublic;
+    private final java.util.List pendingOnCompletionActions;
+    private int periodCount;
+    private com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder query;
+    private com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder;
+    private final com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window;
+    private int windowCount;
+
+    public void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder$DefaultShuffleOrder $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder$DefaultShuffleOrder;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder$DefaultShuffleOrder: void <init>(int)>(0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void <init>(boolean,com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder)>(0, $r1);
+
+        return;
+    }
+
+    public void <init>(boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder$DefaultShuffleOrder $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder$DefaultShuffleOrder;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder$DefaultShuffleOrder: void <init>(int)>(0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void <init>(boolean,com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder)>($z0, $r1);
+
+        return;
+    }
+
+    public void <init>(boolean, com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[] $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder;
+
+        $r2 = newarray (com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource)[0];
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void <init>(boolean,com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[])>($z0, $r1, $r2);
+
+        return;
+    }
+
+    public transient void <init>(boolean, com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[])
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r6;
+        java.util.IdentityHashMap $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window $r7;
+        java.util.ArrayList $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r2;
+        java.util.List $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[] $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $z0 := @parameter0: boolean;
+
+        $r3 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder;
+
+        $r1 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[];
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.CompositeMediaSource: void <init>()>();
+
+        $i0 = lengthof $r1;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r2 = $r1[$i1];
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $i0 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder: int getLength()>();
+
+        if $i0 <= 0 goto label3;
+
+        $r3 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder cloneAndClear()>();
+
+     label3:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder> = $r3;
+
+        $r4 = new java.util.IdentityHashMap;
+
+        specialinvoke $r4.<java.util.IdentityHashMap: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.Map mediaSourceByMediaPeriod> = $r4;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic> = $r5;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders> = $r5;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List pendingOnCompletionActions> = $r5;
+
+        $r6 = new com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder;
+
+        specialinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource)>(null);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder query> = $r6;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: boolean isAtomic> = $z0;
+
+        $r7 = new com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window;
+
+        specialinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window> = $r7;
+
+        $r8 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r1);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSources(java.util.Collection)>($r8);
+
+        return;
+    }
+
+    public transient void <init>(boolean, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[])
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder$DefaultShuffleOrder $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[];
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder$DefaultShuffleOrder;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder$DefaultShuffleOrder: void <init>(int)>(0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void <init>(boolean,com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[])>($z0, $r2, $r1);
+
+        return;
+    }
+
+    public transient void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[])
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[];
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void <init>(boolean,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource[])>(0, $r1);
+
+        return;
+    }
+
+    private void addMediaSourceInternal(int, com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r1, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r6;
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1, $i2, $i3;
+        java.lang.Object $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder;
+
+        if $i0 <= 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $i1 = $i0 + -1;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r3;
+
+        $i1 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstWindowIndexInChild>;
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline timeline>;
+
+        $i2 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline: int getWindowCount()>();
+
+        $i1 = $i1 + $i2;
+
+        $i2 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstPeriodIndexInChild>;
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline timeline>;
+
+        $i3 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline: int getPeriodCount()>();
+
+        $i2 = $i2 + $i3;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: void reset(int,int,int)>($i0, $i1, $i2);
+
+        goto label2;
+
+     label1:
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: void reset(int,int,int)>($i0, 0, 0);
+
+     label2:
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline timeline>;
+
+        $i1 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline: int getWindowCount()>();
+
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline timeline>;
+
+        $i2 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline: int getPeriodCount()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void correctOffsets(int,int,int,int)>($i0, 1, $i1, $i2);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        interfaceinvoke $r2.<java.util.List: void add(int,java.lang.Object)>($i0, $r1);
+
+        $r6 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource mediaSource>;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void prepareChildSource(java.lang.Object,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource)>($r1, $r6);
+
+        return;
+    }
+
+    private void addMediaSourcesInternal(int, java.util.Collection)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r4;
+        java.util.Iterator $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        java.util.Collection $r1;
+        int $i0;
+        java.lang.Object $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.util.Collection;
+
+        $r2 = interfaceinvoke $r1.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r3;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSourceInternal(int,com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder)>($i0, $r4);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void clearInternal()
+    {
+        int $i0;
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        $i0 = $i0 + -1;
+
+     label1:
+        if $i0 < 0 goto label2;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void removeMediaSourceInternal(int)>($i0);
+
+        $i0 = $i0 + -1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void correctOffsets(int, int, int, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r3;
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.Object $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i3 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $i4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int windowCount>;
+
+        $i4 = $i4 + $i1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int windowCount> = $i4;
+
+        $i4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int periodCount>;
+
+        $i4 = $i4 + $i2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int periodCount> = $i4;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $i4 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        if $i3 >= $i4 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i3);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r2;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int childIndex>;
+
+        $i4 = $i4 + $i0;
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int childIndex> = $i4;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i3);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r2;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstWindowIndexInChild>;
+
+        $i4 = $i4 + $i1;
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstWindowIndexInChild> = $i4;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i3);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r2;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstPeriodIndexInChild>;
+
+        $i4 = $i4 + $i2;
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstPeriodIndexInChild> = $i4;
+
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private int findMediaSourceHolderByPeriodIndex(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r1;
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1, $i2, $i3;
+        java.lang.Object $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i1 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder query>;
+
+        $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstPeriodIndexInChild> = $i1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder query>;
+
+        $i0 = staticinvoke <java.util.Collections: int binarySearch(java.util.List,java.lang.Object)>($r2, $r1);
+
+        $i2 = $i0;
+
+        if $i0 >= 0 goto label1;
+
+        $i1 = neg $i0;
+
+        $i1 = $i1 + -2;
+
+        return $i1;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        $i0 = $i0 + -1;
+
+        if $i2 >= $i0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $i0 = $i2 + 1;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r1 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r3;
+
+        $i3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstPeriodIndexInChild>;
+
+        if $i3 != $i1 goto label2;
+
+        $i2 = $i0;
+
+        goto label1;
+
+     label2:
+        return $i2;
+    }
+
+    private void moveMediaSourceInternal(int, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline $r4;
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        java.lang.Object $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $i2 = staticinvoke <java.lang.Math: int min(int,int)>($i0, $i1);
+
+        $i3 = $i2;
+
+        $i4 = staticinvoke <java.lang.Math: int max(int,int)>($i0, $i1);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i2);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r2;
+
+        $i5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstWindowIndexInChild>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i2);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r2;
+
+        $i2 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstPeriodIndexInChild>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object remove(int)>($i0);
+
+        interfaceinvoke $r1.<java.util.List: void add(int,java.lang.Object)>($i1, $r2);
+
+     label1:
+        if $i3 > $i4 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i3);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r2;
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstWindowIndexInChild> = $i5;
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstPeriodIndexInChild> = $i2;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline timeline>;
+
+        $i0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline: int getWindowCount()>();
+
+        $i5 = $i5 + $i0;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline timeline>;
+
+        $i0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline: int getPeriodCount()>();
+
+        $i2 = $i2 + $i0;
+
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void notifyListener()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$ConcatenatedTimeline $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder $r2;
+        java.util.ArrayList $r6;
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r5;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: boolean listenerNotificationScheduled> = 0;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List pendingOnCompletionActions>;
+
+        $z0 = interfaceinvoke $r1.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r3 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        goto label2;
+
+     label1:
+        $r6 = new java.util.ArrayList;
+
+        $r3 = $r6;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List pendingOnCompletionActions>;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>(java.util.Collection)>($r1);
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List pendingOnCompletionActions>;
+
+        interfaceinvoke $r1.<java.util.List: void clear()>();
+
+        $r7 = new com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$ConcatenatedTimeline;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int windowCount>;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int periodCount>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder>;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: boolean isAtomic>;
+
+        specialinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$ConcatenatedTimeline: void <init>(java.util.Collection,int,int,com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder,boolean)>($r1, $i0, $i1, $r2, $z0);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void refreshSourceInfo(com.mbridge.msdk.playercommon.exoplayer2.Timeline,java.lang.Object)>($r7, null);
+
+        $r1 = (java.util.List) $r3;
+
+        $z0 = interfaceinvoke $r1.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label3;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r5 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>(r0);
+
+        $r5 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(6);
+
+        $r5 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)>($r3);
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+     label3:
+        return;
+    }
+
+    private void removeMediaSourceInternal(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline $r4;
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1, $i2;
+        java.lang.Object $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object remove(int)>($i0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r2;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline timeline>;
+
+        $i1 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: int getWindowCount()>();
+
+        $i1 = neg $i1;
+
+        $i2 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: int getPeriodCount()>();
+
+        $i2 = neg $i2;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void correctOffsets(int,int,int,int)>($i0, -1, $i1, $i2);
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: boolean isRemoved> = 1;
+
+        $r1 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: java.util.List activeMediaPeriods>;
+
+        $z0 = interfaceinvoke $r1.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void releaseChildSource(java.lang.Object)>($r3);
+
+     label1:
+        return;
+    }
+
+    private void scheduleListenerNotification(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher $r1;
+        java.util.List $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: boolean listenerNotificationScheduled>;
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r3 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>(r0);
+
+        $r3 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(5);
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: boolean listenerNotificationScheduled> = 1;
+
+     label1:
+        if $r1 == null goto label2;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List pendingOnCompletionActions>;
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r1);
+
+     label2:
+        return;
+    }
+
+    private void updateMediaSourceInternal(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder, com.mbridge.msdk.playercommon.exoplayer2.Timeline)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline $r2, $r4;
+        long $l4, $l5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1, $i2, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod $r8;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window $r5;
+        java.lang.IllegalArgumentException $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline $r3;
+        java.util.List $r6;
+        java.lang.Object $r7;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.Timeline;
+
+        if $r1 == null goto label7;
+
+        $r3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline timeline>;
+
+        $r4 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline: com.mbridge.msdk.playercommon.exoplayer2.Timeline getTimeline()>();
+
+        if $r4 != $r2 goto label1;
+
+        return;
+
+     label1:
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: int getWindowCount()>();
+
+        $i1 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline: int getWindowCount()>();
+
+        $i0 = $i0 - $i1;
+
+        $i1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: int getPeriodCount()>();
+
+        $i2 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline: int getPeriodCount()>();
+
+        $i2 = $i1 - $i2;
+
+        $i1 = 0;
+
+        if $i0 != 0 goto label2;
+
+        if $i2 == 0 goto label3;
+
+     label2:
+        $i3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int childIndex>;
+
+        $i3 = $i3 + 1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void correctOffsets(int,int,int,int)>($i3, 0, $i0, $i2);
+
+     label3:
+        $r3 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline cloneWithNewTimeline(com.mbridge.msdk.playercommon.exoplayer2.Timeline)>($r2);
+
+        $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$DeferredTimeline timeline> = $r3;
+
+        $z0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: boolean isPrepared>;
+
+        if $z0 != 0 goto label6;
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: boolean isEmpty()>();
+
+        if $z0 != 0 goto label6;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.Timeline: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window getWindow(int,com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window)>(0, $r5);
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window>;
+
+        $l4 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window: long getPositionInFirstPeriodUs()>();
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window window>;
+
+        $l5 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.Timeline$Window: long getDefaultPositionUs()>();
+
+        $l4 = $l4 + $l5;
+
+     label4:
+        $r6 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: java.util.List activeMediaPeriods>;
+
+        $i0 = interfaceinvoke $r6.<java.util.List: int size()>();
+
+        if $i1 >= $i0 goto label5;
+
+        $r6 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: java.util.List activeMediaPeriods>;
+
+        $r7 = interfaceinvoke $r6.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $r8 = (com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod) $r7;
+
+        virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod: void setDefaultPreparePositionUs(long)>($l4);
+
+        virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod: void createPeriod()>();
+
+        $i1 = $i1 + 1;
+
+        goto label4;
+
+     label5:
+        $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: boolean isPrepared> = 1;
+
+     label6:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void scheduleListenerNotification(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher)>(null);
+
+        return;
+
+     label7:
+        $r9 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>()>();
+
+        throw $r9;
+    }
+
+    public final void addMediaSource(int, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource)
+    {
+        java.lang.Throwable $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource;
+
+        entermonitor r0;
+
+     label1:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSource(int,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource,java.lang.Runnable)>($i0, $r1, null);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void addMediaSource(int, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource, java.lang.Runnable)
+    {
+        java.lang.Throwable $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r2;
+        java.lang.Runnable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r3;
+        java.util.List $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r6;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $r3 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource;
+
+        $r1 := @parameter2: java.lang.Runnable;
+
+        entermonitor r0;
+
+     label1:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource)>($r3);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        interfaceinvoke $r4.<java.util.List: void add(int,java.lang.Object)>($i0, $r2);
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        if $r5 == null goto label2;
+
+        $r6 = interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>(r0);
+
+        $r6 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(0);
+
+        $r7 = new com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData;
+
+        specialinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: void <init>(int,java.lang.Object,java.lang.Runnable)>($i0, $r2, $r1);
+
+        $r6 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)>($r7);
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+        goto label3;
+
+     label2:
+        if $r1 == null goto label3;
+
+        interfaceinvoke $r1.<java.lang.Runnable: void run()>();
+
+     label3:
+        exitmonitor r0;
+
+        return;
+
+     label4:
+        $r8 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r8;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+
+    public final void addMediaSource(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource)
+    {
+        java.lang.Throwable $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r1;
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource;
+
+        entermonitor r0;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSource(int,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource,java.lang.Runnable)>($i0, $r1, null);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void addMediaSource(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource, java.lang.Runnable)
+    {
+        java.lang.Throwable $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r2;
+        java.util.List $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0;
+        java.lang.Runnable $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        entermonitor r0;
+
+     label1:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSource(int,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource,java.lang.Runnable)>($i0, $r2, $r1);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void addMediaSources(int, java.util.Collection)
+    {
+        java.lang.Throwable $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        java.util.Collection $r1;
+        int $i0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.util.Collection;
+
+        entermonitor r0;
+
+     label1:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSources(int,java.util.Collection,java.lang.Runnable)>($i0, $r1, null);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void addMediaSources(int, java.util.Collection, java.lang.Runnable)
+    {
+        java.lang.Throwable $r12;
+        java.lang.Runnable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData $r11;
+        java.util.ArrayList $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r10;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r2;
+        java.util.Iterator $r4;
+        java.util.Collection $r3;
+        java.util.List $r8;
+        java.lang.Object $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $r3 := @parameter1: java.util.Collection;
+
+        $r1 := @parameter2: java.lang.Runnable;
+
+        entermonitor r0;
+
+     label1:
+        $r4 = interfaceinvoke $r3.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource) $r5;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r6);
+
+        goto label2;
+
+     label3:
+        $r7 = new java.util.ArrayList;
+
+        $i1 = interfaceinvoke $r3.<java.util.Collection: int size()>();
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>(int)>($i1);
+
+        $r4 = interfaceinvoke $r3.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label4:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource) $r5;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource)>($r6);
+
+        interfaceinvoke $r7.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        goto label4;
+
+     label5:
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        interfaceinvoke $r8.<java.util.List: boolean addAll(int,java.util.Collection)>($i0, $r7);
+
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        if $r9 == null goto label6;
+
+        $z0 = interfaceinvoke $r3.<java.util.Collection: boolean isEmpty()>();
+
+        if $z0 != 0 goto label6;
+
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        $r10 = interfaceinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>(r0);
+
+        $r10 = virtualinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(1);
+
+        $r11 = new com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData;
+
+        specialinvoke $r11.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: void <init>(int,java.lang.Object,java.lang.Runnable)>($i0, $r7, $r1);
+
+        $r10 = virtualinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)>($r11);
+
+        virtualinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+        goto label7;
+
+     label6:
+        if $r1 == null goto label7;
+
+        interfaceinvoke $r1.<java.lang.Runnable: void run()>();
+
+     label7:
+        exitmonitor r0;
+
+        return;
+
+     label8:
+        $r12 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r12;
+
+        catch java.lang.Throwable from label1 to label7 with label8;
+    }
+
+    public final void addMediaSources(java.util.Collection)
+    {
+        java.lang.Throwable $r3;
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        java.util.Collection $r1;
+        int $i0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: java.util.Collection;
+
+        entermonitor r0;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSources(int,java.util.Collection,java.lang.Runnable)>($i0, $r1, null);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void addMediaSources(java.util.Collection, java.lang.Runnable)
+    {
+        java.lang.Throwable $r4;
+        java.util.List $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        java.util.Collection $r2;
+        int $i0;
+        java.lang.Runnable $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r2 := @parameter0: java.util.Collection;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        entermonitor r0;
+
+     label1:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSources(int,java.util.Collection,java.lang.Runnable)>($i0, $r2, $r1);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void clear()
+    {
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        entermonitor r0;
+
+     label1:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void clear(java.lang.Runnable)>(null);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void clear(java.lang.Runnable)
+    {
+        java.lang.Throwable $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r3;
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        java.lang.Runnable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        entermonitor r0;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        interfaceinvoke $r2.<java.util.List: void clear()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        if $r3 == null goto label4;
+
+        $r4 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>(r0);
+
+        $r4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(4);
+
+        if $r1 == null goto label2;
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher: void <init>(java.lang.Runnable)>($r1);
+
+        goto label3;
+
+     label2:
+        $r5 = null;
+
+     label3:
+        $r4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)>($r5);
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+        goto label5;
+
+     label4:
+        if $r1 == null goto label5;
+
+        interfaceinvoke $r1.<java.lang.Runnable: void run()>();
+
+     label5:
+        exitmonitor r0;
+
+        return;
+
+     label6:
+        $r6 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label5 with label6;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod createPeriod(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId, com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r7;
+        java.util.List $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        java.util.Map $r8;
+        int $i0, $i1;
+        java.lang.Object $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod $r6;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator;
+
+        $i0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: int periodIndex>;
+
+        $i0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int findMediaSourceHolderByPeriodIndex(int)>($i0);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r4;
+
+        $i0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: int periodIndex>;
+
+        $i1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstPeriodIndexInChild>;
+
+        $i0 = $i0 - $i1;
+
+        $r2 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId copyWithPeriodIndex(int)>($i0);
+
+        $r6 = new com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod;
+
+        $r7 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource mediaSource>;
+
+        specialinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId,com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator)>($r7, $r2, $r1);
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.Map mediaSourceByMediaPeriod>;
+
+        interfaceinvoke $r8.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r6, $r5);
+
+        $r3 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: java.util.List activeMediaPeriods>;
+
+        interfaceinvoke $r3.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        $z0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: boolean isPrepared>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod: void createPeriod()>();
+
+     label1:
+        return $r6;
+    }
+
+    protected com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId getMediaPeriodIdForChildMediaPeriodId(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r2;
+        long $l0, $l4;
+        java.util.List $r3;
+        byte $b1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId $r1, $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i2, $i3;
+        java.lang.Object $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId;
+
+        $i2 = 0;
+
+     label1:
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: java.util.List activeMediaPeriods>;
+
+        $i3 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i2 >= $i3 goto label3;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: java.util.List activeMediaPeriods>;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i2);
+
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod) $r4;
+
+        $r6 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId id>;
+
+        $l4 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: long windowSequenceNumber>;
+
+        $l0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: long windowSequenceNumber>;
+
+        $b1 = $l4 cmp $l0;
+
+        if $b1 != 0 goto label2;
+
+        $i2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: int periodIndex>;
+
+        $i3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstPeriodIndexInChild>;
+
+        $i2 = $i2 + $i3;
+
+        $r1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId copyWithPeriodIndex(int)>($i2);
+
+        return $r1;
+
+     label2:
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label3:
+        return null;
+    }
+
+    protected volatile com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId getMediaPeriodIdForChildMediaPeriodId(java.lang.Object, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        java.lang.Object $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r2 := @parameter0: java.lang.Object;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId;
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r2;
+
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId getMediaPeriodIdForChildMediaPeriodId(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource$MediaPeriodId)>($r3, $r1);
+
+        return $r1;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource getMediaSource(int)
+    {
+        java.lang.Throwable $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource r5;
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0;
+        java.lang.Object $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r2;
+
+        r5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource mediaSource>;
+
+     label2:
+        exitmonitor r0;
+
+        return r5;
+
+     label3:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final int getSize()
+    {
+        java.lang.Throwable $r2;
+        java.util.List $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+     label2:
+        exitmonitor r0;
+
+        return $i0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    protected int getWindowIndexForChildWindowIndex(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder;
+
+        $i0 := @parameter1: int;
+
+        $i1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: int firstWindowIndexInChild>;
+
+        $i0 = $i0 + $i1;
+
+        return $i0;
+    }
+
+    protected volatile int getWindowIndexForChildWindowIndex(java.lang.Object, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0;
+        java.lang.Object $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $i0 := @parameter1: int;
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r1;
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int getWindowIndexForChildWindowIndex(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder,int)>($r2, $i0);
+
+        return $i0;
+    }
+
+    public final void handleMessage(int, java.lang.Object) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        java.lang.IllegalStateException $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r9;
+        java.util.Collection $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData $r5;
+        java.lang.Integer $r7;
+        java.util.List $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1;
+        java.lang.Object $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        lookupswitch($i0)
+        {
+            case 0: goto label09;
+            case 1: goto label08;
+            case 2: goto label07;
+            case 3: goto label06;
+            case 4: goto label05;
+            case 5: goto label04;
+            case 6: goto label02;
+            default: goto label01;
+        };
+
+     label01:
+        $r2 = new java.lang.IllegalStateException;
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r2;
+
+     label02:
+        $r3 = (java.util.List) $r1;
+
+        $i0 = 0;
+
+     label03:
+        $i1 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i0 >= $i1 goto label10;
+
+        $r1 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher) $r1;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher: void dispatchEvent()>();
+
+        $i0 = $i0 + 1;
+
+        goto label03;
+
+     label04:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void notifyListener()>();
+
+        return;
+
+     label05:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void clearInternal()>();
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher) $r1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void scheduleListenerNotification(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher)>($r4);
+
+        return;
+
+     label06:
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData) $r1;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder>;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: int index>;
+
+        $r6 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder cloneAndRemove(int)>($i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder> = $r6;
+
+        $r1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: java.lang.Object customData>;
+
+        $r7 = (java.lang.Integer) $r1;
+
+        $i0 = virtualinvoke $r7.<java.lang.Integer: int intValue()>();
+
+        $r6 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder cloneAndInsert(int,int)>($i0, 1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder> = $r6;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: int index>;
+
+        $r1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: java.lang.Object customData>;
+
+        $r7 = (java.lang.Integer) $r1;
+
+        $i1 = virtualinvoke $r7.<java.lang.Integer: int intValue()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void moveMediaSourceInternal(int,int)>($i0, $i1);
+
+        $r4 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher actionOnCompletion>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void scheduleListenerNotification(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher)>($r4);
+
+        return;
+
+     label07:
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData) $r1;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder>;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: int index>;
+
+        $r6 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder cloneAndRemove(int)>($i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder> = $r6;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: int index>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void removeMediaSourceInternal(int)>($i0);
+
+        $r4 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher actionOnCompletion>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void scheduleListenerNotification(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher)>($r4);
+
+        return;
+
+     label08:
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData) $r1;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder>;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: int index>;
+
+        $r1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: java.lang.Object customData>;
+
+        $r8 = (java.util.Collection) $r1;
+
+        $i1 = interfaceinvoke $r8.<java.util.Collection: int size()>();
+
+        $r6 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder cloneAndInsert(int,int)>($i0, $i1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder> = $r6;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: int index>;
+
+        $r1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: java.lang.Object customData>;
+
+        $r8 = (java.util.Collection) $r1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSourcesInternal(int,java.util.Collection)>($i0, $r8);
+
+        $r4 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher actionOnCompletion>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void scheduleListenerNotification(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher)>($r4);
+
+        return;
+
+     label09:
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData) $r1;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder>;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: int index>;
+
+        $r6 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder cloneAndInsert(int,int)>($i0, 1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder> = $r6;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: int index>;
+
+        $r1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: java.lang.Object customData>;
+
+        $r9 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSourceInternal(int,com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder)>($i0, $r9);
+
+        $r4 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher actionOnCompletion>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void scheduleListenerNotification(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher)>($r4);
+
+     label10:
+        return;
+    }
+
+    public final void moveMediaSource(int, int)
+    {
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i1 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        entermonitor r0;
+
+     label1:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void moveMediaSource(int,int,java.lang.Runnable)>($i1, $i0, null);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void moveMediaSource(int, int, java.lang.Runnable)
+    {
+        java.lang.Throwable $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r4;
+        java.lang.Runnable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData $r6;
+        java.lang.Integer $r7;
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r1 := @parameter2: java.lang.Runnable;
+
+        entermonitor r0;
+
+        if $i0 != $i1 goto label1;
+
+        exitmonitor r0;
+
+        return;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object remove(int)>($i0);
+
+        interfaceinvoke $r2.<java.util.List: void add(int,java.lang.Object)>($i1, $r3);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        if $r4 == null goto label2;
+
+        $r5 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>(r0);
+
+        $r5 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(3);
+
+        $r6 = new com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        specialinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: void <init>(int,java.lang.Object,java.lang.Runnable)>($i0, $r7, $r1);
+
+        $r5 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)>($r6);
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+        goto label3;
+
+     label2:
+        if $r1 == null goto label3;
+
+        interfaceinvoke $r1.<java.lang.Runnable: void run()>();
+
+     label3:
+        exitmonitor r0;
+
+        return;
+
+     label4:
+        $r8 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r8;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+
+    protected final void onChildSourceInfoRefreshed(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource, com.mbridge.msdk.playercommon.exoplayer2.Timeline, java.lang.Object)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        java.lang.Object $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.Timeline;
+
+        $r4 := @parameter3: java.lang.Object;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void updateMediaSourceInternal(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder,com.mbridge.msdk.playercommon.exoplayer2.Timeline)>($r1, $r3);
+
+        return;
+    }
+
+    protected volatile void onChildSourceInfoRefreshed(java.lang.Object, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource, com.mbridge.msdk.playercommon.exoplayer2.Timeline, java.lang.Object)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.Timeline $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        java.lang.Object $r3, $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r4 := @parameter0: java.lang.Object;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource;
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.Timeline;
+
+        $r3 := @parameter3: java.lang.Object;
+
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r4;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void onChildSourceInfoRefreshed(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder,com.mbridge.msdk.playercommon.exoplayer2.source.MediaSource,com.mbridge.msdk.playercommon.exoplayer2.Timeline,java.lang.Object)>($r5, $r1, $r2, $r3);
+
+        return;
+    }
+
+    public final void prepareSourceInternal(com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer, boolean)
+    {
+        java.lang.Throwable $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r1;
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder $r3;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer;
+
+        $z0 := @parameter1: boolean;
+
+        entermonitor r0;
+
+     label1:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.CompositeMediaSource: void prepareSourceInternal(com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer,boolean)>($r1, $z0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player> = $r1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label2;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void notifyListener()>();
+
+        goto label3;
+
+     label2:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        $r3 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder cloneAndInsert(int,int)>(0, $i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder> = $r3;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void addMediaSourcesInternal(int,java.util.Collection)>(0, $r2);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void scheduleListenerNotification(com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$EventDispatcher)>(null);
+
+     label3:
+        exitmonitor r0;
+
+        return;
+
+     label4:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+
+    public final void releasePeriod(com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod $r1;
+        java.util.List $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        java.util.Map $r2;
+        java.lang.Object $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod $r5;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.Map mediaSourceByMediaPeriod>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.lang.Object remove(java.lang.Object)>($r1);
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder) $r3;
+
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod) $r1;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.DeferredMediaPeriod: void releasePeriod()>();
+
+        $r6 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: java.util.List activeMediaPeriods>;
+
+        interfaceinvoke $r6.<java.util.List: boolean remove(java.lang.Object)>($r1);
+
+        $r6 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: java.util.List activeMediaPeriods>;
+
+        $z0 = interfaceinvoke $r6.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $z0 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MediaSourceHolder: boolean isRemoved>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void releaseChildSource(java.lang.Object)>($r4);
+
+     label1:
+        return;
+    }
+
+    public final void releaseSourceInternal()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder $r1;
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.CompositeMediaSource: void releaseSourceInternal()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourceHolders>;
+
+        interfaceinvoke $r2.<java.util.List: void clear()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player> = null;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder>;
+
+        $r1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder cloneAndClear()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.source.ShuffleOrder shuffleOrder> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int windowCount> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int periodCount> = 0;
+
+        return;
+    }
+
+    public final void removeMediaSource(int)
+    {
+        int $i0;
+        java.lang.Throwable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        entermonitor r0;
+
+     label1:
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: void removeMediaSource(int,java.lang.Runnable)>($i0, null);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final void removeMediaSource(int, java.lang.Runnable)
+    {
+        java.lang.Throwable $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer $r3;
+        java.lang.Runnable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData $r5;
+        java.util.List $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource r0;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        entermonitor r0;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: java.util.List mediaSourcesPublic>;
+
+        interfaceinvoke $r2.<java.util.List: java.lang.Object remove(int)>($i0);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer player>;
+
+        if $r3 == null goto label2;
+
+        $r4 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.ExoPlayer: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage createMessage(com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage$Target)>(r0);
+
+        $r4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setType(int)>(2);
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource$MessageData: void <init>(int,java.lang.Object,java.lang.Runnable)>($i0, null, $r1);
+
+        $r4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage setPayload(java.lang.Object)>($r5);
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage: com.mbridge.msdk.playercommon.exoplayer2.PlayerMessage send()>();
+
+        goto label3;
+
+     label2:
+        if $r1 == null goto label3;
+
+        interfaceinvoke $r1.<java.lang.Runnable: void run()>();
+
+     label3:
+        exitmonitor r0;
+
+        return;
+
+     label4:
+        $r6 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int MSG_REMOVE> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int MSG_ON_COMPLETION> = 6;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int MSG_NOTIFY_LISTENER> = 5;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int MSG_MOVE> = 3;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int MSG_CLEAR> = 4;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int MSG_ADD_MULTIPLE> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.source.ConcatenatingMediaSource: int MSG_ADD> = 0;
+
+        return;
+    }
+}

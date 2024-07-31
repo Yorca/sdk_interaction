@@ -1,0 +1,314 @@
+final class io.grpc.internal.MessageDeframer$SizeEnforcingInputStream extends java.io.FilterInputStream
+{
+    private long count;
+    private long mark;
+    private long maxCount;
+    private final int maxMessageSize;
+    private final io.grpc.internal.StatsTraceContext statsTraceCtx;
+
+    void <init>(java.io.InputStream, int, io.grpc.internal.StatsTraceContext)
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream r0;
+        int $i0;
+        io.grpc.internal.StatsTraceContext $r2;
+        java.io.InputStream $r1;
+
+        r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        $i0 := @parameter1: int;
+
+        $r2 := @parameter2: io.grpc.internal.StatsTraceContext;
+
+        specialinvoke r0.<java.io.FilterInputStream: void <init>(java.io.InputStream)>($r1);
+
+        r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long mark> = -1L;
+
+        r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: int maxMessageSize> = $i0;
+
+        r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: io.grpc.internal.StatsTraceContext statsTraceCtx> = $r2;
+
+        return;
+    }
+
+    private void reportCount()
+    {
+        byte $b2;
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream r0;
+        int $i3;
+        long $l0, $l1;
+        io.grpc.internal.StatsTraceContext $r1;
+
+        r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $l1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $l0 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long maxCount>;
+
+        $b2 = $l1 cmp $l0;
+
+        $i3 = (int) $b2;
+
+        if $i3 <= 0 goto label1;
+
+        $r1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $l0 = $l1 - $l0;
+
+        virtualinvoke $r1.<io.grpc.internal.StatsTraceContext: void inboundUncompressedSize(long)>($l0);
+
+        $l0 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long maxCount> = $l0;
+
+     label1:
+        return;
+    }
+
+    private void verifySize()
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream r0;
+        long $l1, $l3;
+        io.grpc.StatusRuntimeException $r4;
+        byte $b0;
+        int $i2;
+        java.lang.StringBuilder $r2, $r5;
+        io.grpc.Status $r1;
+        java.lang.String $r3;
+
+        r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $l1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $i2 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: int maxMessageSize>;
+
+        $l3 = (long) $i2;
+
+        $b0 = $l1 cmp $l3;
+
+        $i2 = (int) $b0;
+
+        if $i2 > 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = <io.grpc.Status: io.grpc.Status RESOURCE_EXHAUSTED>;
+
+        $r5 = new java.lang.StringBuilder;
+
+        $r2 = $r5;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Decompressed gRPC message exceeds maximum size ");
+
+        $i2 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: int maxMessageSize>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r1 = virtualinvoke $r1.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>($r3);
+
+        $r4 = virtualinvoke $r1.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException()>();
+
+        throw $r4;
+    }
+
+    public void mark(int)
+    {
+        java.lang.Throwable $r2;
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream r0;
+        int $i0;
+        long $l1;
+        java.io.InputStream $r1;
+
+        r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $i0 := @parameter0: int;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        virtualinvoke $r1.<java.io.InputStream: void mark(int)>($i0);
+
+        $l1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long mark> = $l1;
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public int read() throws java.io.IOException
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream r0;
+        int $i0;
+        long $l1;
+        java.io.InputStream $r1;
+
+        r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $r1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        $i0 = virtualinvoke $r1.<java.io.InputStream: int read()>();
+
+        if $i0 == -1 goto label1;
+
+        $l1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $l1 = $l1 + 1L;
+
+        r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count> = $l1;
+
+     label1:
+        specialinvoke r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void verifySize()>();
+
+        specialinvoke r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void reportCount()>();
+
+        return $i0;
+    }
+
+    public int read(byte[], int, int) throws java.io.IOException
+    {
+        byte[] $r1;
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream r0;
+        int $i0, $i1;
+        long $l2, $l3;
+        java.io.InputStream $r2;
+
+        r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $r1 := @parameter0: byte[];
+
+        $i1 := @parameter1: int;
+
+        $i0 := @parameter2: int;
+
+        $r2 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        $i1 = virtualinvoke $r2.<java.io.InputStream: int read(byte[],int,int)>($r1, $i1, $i0);
+
+        if $i1 == -1 goto label1;
+
+        $l2 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $l3 = (long) $i1;
+
+        $l2 = $l2 + $l3;
+
+        r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count> = $l2;
+
+     label1:
+        specialinvoke r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void verifySize()>();
+
+        specialinvoke r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void reportCount()>();
+
+        return $i1;
+    }
+
+    public void reset() throws java.io.IOException
+    {
+        java.lang.Throwable $r3;
+        byte $b0;
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream r0;
+        long $l1;
+        java.io.IOException $r2;
+        boolean $z0;
+        java.io.InputStream $r1;
+
+        r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        $z0 = virtualinvoke $r1.<java.io.InputStream: boolean markSupported()>();
+
+        if $z0 == 0 goto label4;
+
+        $l1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long mark>;
+
+        $b0 = $l1 cmp -1L;
+
+        if $b0 == 0 goto label3;
+
+        $r1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        virtualinvoke $r1.<java.io.InputStream: void reset()>();
+
+        $l1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long mark>;
+
+        r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count> = $l1;
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 = new java.io.IOException;
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>("Mark not set");
+
+        throw $r2;
+
+     label4:
+        $r2 = new java.io.IOException;
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>("Mark not supported");
+
+        throw $r2;
+
+     label5:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label5 with label5;
+    }
+
+    public long skip(long) throws java.io.IOException
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream r0;
+        long $l0, $l1;
+        java.io.InputStream $r1;
+
+        r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $l0 := @parameter0: long;
+
+        $r1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        $l0 = virtualinvoke $r1.<java.io.InputStream: long skip(long)>($l0);
+
+        $l1 = r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $l1 = $l1 + $l0;
+
+        r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count> = $l1;
+
+        specialinvoke r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void verifySize()>();
+
+        specialinvoke r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void reportCount()>();
+
+        return $l0;
+    }
+}

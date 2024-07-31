@@ -1,0 +1,150 @@
+public final class io.grpc.util.MutableHandlerRegistry extends io.grpc.HandlerRegistry
+{
+    private final java.util.concurrent.ConcurrentMap services;
+
+    public void <init>()
+    {
+        java.util.concurrent.ConcurrentHashMap $r1;
+        io.grpc.util.MutableHandlerRegistry r0;
+
+        r0 := @this: io.grpc.util.MutableHandlerRegistry;
+
+        specialinvoke r0.<io.grpc.HandlerRegistry: void <init>()>();
+
+        $r1 = new java.util.concurrent.ConcurrentHashMap;
+
+        specialinvoke $r1.<java.util.concurrent.ConcurrentHashMap: void <init>()>();
+
+        r0.<io.grpc.util.MutableHandlerRegistry: java.util.concurrent.ConcurrentMap services> = $r1;
+
+        return;
+    }
+
+    public io.grpc.ServerServiceDefinition addService(io.grpc.BindableService)
+    {
+        io.grpc.util.MutableHandlerRegistry r0;
+        io.grpc.BindableService $r1;
+        io.grpc.ServerServiceDefinition $r2;
+
+        r0 := @this: io.grpc.util.MutableHandlerRegistry;
+
+        $r1 := @parameter0: io.grpc.BindableService;
+
+        $r2 = interfaceinvoke $r1.<io.grpc.BindableService: io.grpc.ServerServiceDefinition bindService()>();
+
+        $r2 = virtualinvoke r0.<io.grpc.util.MutableHandlerRegistry: io.grpc.ServerServiceDefinition addService(io.grpc.ServerServiceDefinition)>($r2);
+
+        return $r2;
+    }
+
+    public io.grpc.ServerServiceDefinition addService(io.grpc.ServerServiceDefinition)
+    {
+        io.grpc.util.MutableHandlerRegistry r0;
+        io.grpc.ServiceDescriptor $r3;
+        java.lang.Object $r5;
+        java.lang.String $r4;
+        io.grpc.ServerServiceDefinition $r2;
+        java.util.concurrent.ConcurrentMap $r1;
+
+        r0 := @this: io.grpc.util.MutableHandlerRegistry;
+
+        $r2 := @parameter0: io.grpc.ServerServiceDefinition;
+
+        $r1 = r0.<io.grpc.util.MutableHandlerRegistry: java.util.concurrent.ConcurrentMap services>;
+
+        $r3 = virtualinvoke $r2.<io.grpc.ServerServiceDefinition: io.grpc.ServiceDescriptor getServiceDescriptor()>();
+
+        $r4 = virtualinvoke $r3.<io.grpc.ServiceDescriptor: java.lang.String getName()>();
+
+        $r5 = interfaceinvoke $r1.<java.util.concurrent.ConcurrentMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r4, $r2);
+
+        $r2 = (io.grpc.ServerServiceDefinition) $r5;
+
+        return $r2;
+    }
+
+    public java.util.List getServices()
+    {
+        io.grpc.util.MutableHandlerRegistry r0;
+        java.util.List $r4;
+        java.util.Collection $r3;
+        java.util.ArrayList $r1;
+        java.util.concurrent.ConcurrentMap $r2;
+
+        r0 := @this: io.grpc.util.MutableHandlerRegistry;
+
+        $r1 = new java.util.ArrayList;
+
+        $r2 = r0.<io.grpc.util.MutableHandlerRegistry: java.util.concurrent.ConcurrentMap services>;
+
+        $r3 = interfaceinvoke $r2.<java.util.concurrent.ConcurrentMap: java.util.Collection values()>();
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>(java.util.Collection)>($r3);
+
+        $r4 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r1);
+
+        return $r4;
+    }
+
+    public io.grpc.ServerMethodDefinition lookupMethod(java.lang.String, java.lang.String)
+    {
+        io.grpc.util.MutableHandlerRegistry r0;
+        java.lang.Object $r4;
+        java.lang.String $r2, $r3;
+        io.grpc.ServerMethodDefinition $r6;
+        io.grpc.ServerServiceDefinition $r5;
+        java.util.concurrent.ConcurrentMap $r1;
+
+        r0 := @this: io.grpc.util.MutableHandlerRegistry;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: java.lang.String;
+
+        $r3 = staticinvoke <io.grpc.MethodDescriptor: java.lang.String extractFullServiceName(java.lang.String)>($r2);
+
+        if $r3 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = r0.<io.grpc.util.MutableHandlerRegistry: java.util.concurrent.ConcurrentMap services>;
+
+        $r4 = interfaceinvoke $r1.<java.util.concurrent.ConcurrentMap: java.lang.Object get(java.lang.Object)>($r3);
+
+        $r5 = (io.grpc.ServerServiceDefinition) $r4;
+
+        if $r5 != null goto label2;
+
+        return null;
+
+     label2:
+        $r6 = virtualinvoke $r5.<io.grpc.ServerServiceDefinition: io.grpc.ServerMethodDefinition getMethod(java.lang.String)>($r2);
+
+        return $r6;
+    }
+
+    public boolean removeService(io.grpc.ServerServiceDefinition)
+    {
+        io.grpc.util.MutableHandlerRegistry r0;
+        io.grpc.ServiceDescriptor $r3;
+        java.lang.String $r4;
+        io.grpc.ServerServiceDefinition $r2;
+        java.util.concurrent.ConcurrentMap $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.util.MutableHandlerRegistry;
+
+        $r2 := @parameter0: io.grpc.ServerServiceDefinition;
+
+        $r1 = r0.<io.grpc.util.MutableHandlerRegistry: java.util.concurrent.ConcurrentMap services>;
+
+        $r3 = virtualinvoke $r2.<io.grpc.ServerServiceDefinition: io.grpc.ServiceDescriptor getServiceDescriptor()>();
+
+        $r4 = virtualinvoke $r3.<io.grpc.ServiceDescriptor: java.lang.String getName()>();
+
+        $z0 = interfaceinvoke $r1.<java.util.concurrent.ConcurrentMap: boolean remove(java.lang.Object,java.lang.Object)>($r4, $r2);
+
+        return $z0;
+    }
+}

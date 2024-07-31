@@ -1,0 +1,143 @@
+final class com.google.android.gms.internal.gtm.zzsf extends java.lang.Object implements com.google.android.gms.internal.gtm.zzsg
+{
+    private java.net.HttpURLConnection zza;
+    private java.io.InputStream zzb;
+
+    void <init>()
+    {
+        com.google.android.gms.internal.gtm.zzsf r0;
+
+        r0 := @this: com.google.android.gms.internal.gtm.zzsf;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.google.android.gms.internal.gtm.zzsf: java.io.InputStream zzb> = null;
+
+        return;
+    }
+
+    public final java.io.InputStream zza(java.lang.String) throws java.io.IOException
+    {
+        java.net.HttpURLConnection $r4;
+        java.net.URL $r2;
+        java.io.IOException $r8;
+        java.io.FileNotFoundException $r9;
+        java.net.URLConnection $r3;
+        int $i0;
+        com.google.android.gms.internal.gtm.zzsf r0;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r1;
+        com.google.android.gms.internal.gtm.zzsi $r7;
+        java.io.InputStream $r5;
+
+        r0 := @this: com.google.android.gms.internal.gtm.zzsf;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new java.net.URL;
+
+        specialinvoke $r2.<java.net.URL: void <init>(java.lang.String)>($r1);
+
+        $r3 = virtualinvoke $r2.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r4 = (java.net.HttpURLConnection) $r3;
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setReadTimeout(int)>(20000);
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setConnectTimeout(int)>(20000);
+
+        r0.<com.google.android.gms.internal.gtm.zzsf: java.net.HttpURLConnection zza> = $r4;
+
+        $i0 = virtualinvoke $r4.<java.net.HttpURLConnection: int getResponseCode()>();
+
+        if $i0 != 200 goto label1;
+
+        $r5 = virtualinvoke $r4.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+        r0.<com.google.android.gms.internal.gtm.zzsf: java.io.InputStream zzb> = $r5;
+
+        return $r5;
+
+     label1:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Bad response: ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r1 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        if $i0 == 404 goto label3;
+
+        if $i0 != 503 goto label2;
+
+        $r7 = new com.google.android.gms.internal.gtm.zzsi;
+
+        specialinvoke $r7.<com.google.android.gms.internal.gtm.zzsi: void <init>(java.lang.String)>($r1);
+
+        throw $r7;
+
+     label2:
+        $r8 = new java.io.IOException;
+
+        specialinvoke $r8.<java.io.IOException: void <init>(java.lang.String)>($r1);
+
+        throw $r8;
+
+     label3:
+        $r9 = new java.io.FileNotFoundException;
+
+        specialinvoke $r9.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r1);
+
+        throw $r9;
+    }
+
+    public final void zzb()
+    {
+        java.net.HttpURLConnection $r1;
+        java.lang.Throwable $r4;
+        com.google.android.gms.internal.gtm.zzsf r0;
+        java.io.IOException $r6;
+        java.lang.String $r2, $r5;
+        java.io.InputStream $r3;
+
+        r0 := @this: com.google.android.gms.internal.gtm.zzsf;
+
+        $r1 = r0.<com.google.android.gms.internal.gtm.zzsf: java.net.HttpURLConnection zza>;
+
+        $r3 = r0.<com.google.android.gms.internal.gtm.zzsf: java.io.InputStream zzb>;
+
+        if $r3 == null goto label4;
+
+     label1:
+        virtualinvoke $r3.<java.io.InputStream: void close()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r6 = (java.io.IOException) $r4;
+
+        $r2 = virtualinvoke $r6.<java.io.IOException: java.lang.String getMessage()>();
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        $r2 = "HttpUrlConnectionNetworkClient: Error when closing http input stream: ";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String concat(java.lang.String)>($r5);
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("GoogleTagManager", $r2, $r4);
+
+     label4:
+        if $r1 == null goto label5;
+
+        virtualinvoke $r1.<java.net.HttpURLConnection: void disconnect()>();
+
+     label5:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+}

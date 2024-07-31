@@ -1,0 +1,159 @@
+public class com.distriqt.extension.notifications.badge.shortcutbadger.util.BroadcastHelper extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        com.distriqt.extension.notifications.badge.shortcutbadger.util.BroadcastHelper r0;
+
+        r0 := @this: com.distriqt.extension.notifications.badge.shortcutbadger.util.BroadcastHelper;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.util.List resolveBroadcast(android.content.Context, android.content.Intent)
+    {
+        android.content.Context $r1;
+        java.util.List $r3;
+        android.content.pm.PackageManager $r2;
+        android.content.Intent $r0;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r0 := @parameter1: android.content.Intent;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r3 = virtualinvoke $r2.<android.content.pm.PackageManager: java.util.List queryBroadcastReceivers(android.content.Intent,int)>($r0, 0);
+
+        if $r3 == null goto label1;
+
+        return $r3;
+
+     label1:
+        $r3 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        return $r3;
+    }
+
+    public static void sendDefaultIntentExplicitly(android.content.Context, android.content.Intent) throws com.distriqt.extension.notifications.badge.shortcutbadger.ShortcutBadgeException
+    {
+        android.content.Context $r0;
+        int $i0;
+        android.content.Intent $r1, $r3;
+        com.distriqt.extension.notifications.badge.shortcutbadger.ShortcutBadgeException $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: android.content.Intent;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        $z0 = 0;
+
+        if $i0 < 26 goto label3;
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(android.content.Intent)>($r1);
+
+        virtualinvoke $r3.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("com.distriqt.extension.notifications.badge.shortcutbadger.BADGE_COUNT_UPDATE");
+
+     label1:
+        staticinvoke <com.distriqt.extension.notifications.badge.shortcutbadger.util.BroadcastHelper: void sendIntentExplicitly(android.content.Context,android.content.Intent)>($r0, $r3);
+
+     label2:
+        $z0 = 1;
+
+        goto label3;
+
+     label3:
+        if $z0 == 0 goto label4;
+
+        return;
+
+     label4:
+        staticinvoke <com.distriqt.extension.notifications.badge.shortcutbadger.util.BroadcastHelper: void sendIntentExplicitly(android.content.Context,android.content.Intent)>($r0, $r1);
+
+        return;
+
+     label5:
+        $r2 := @caughtexception;
+
+        goto label3;
+
+        catch com.distriqt.extension.notifications.badge.shortcutbadger.ShortcutBadgeException from label1 to label2 with label5;
+    }
+
+    public static void sendIntentExplicitly(android.content.Context, android.content.Intent) throws com.distriqt.extension.notifications.badge.shortcutbadger.ShortcutBadgeException
+    {
+        android.content.Context $r1;
+        java.util.Iterator $r4;
+        android.content.Intent $r0, $r2;
+        android.content.pm.ResolveInfo $r6;
+        java.util.List $r3;
+        int $i0;
+        java.lang.Object $r5;
+        java.lang.StringBuilder $r9;
+        java.lang.String $r7;
+        com.distriqt.extension.notifications.badge.shortcutbadger.ShortcutBadgeException $r8;
+        boolean $z0;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: android.content.Intent;
+
+        $r3 = staticinvoke <com.distriqt.extension.notifications.badge.shortcutbadger.util.BroadcastHelper: java.util.List resolveBroadcast(android.content.Context,android.content.Intent)>($r1, $r2);
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i0 == 0 goto label3;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (android.content.pm.ResolveInfo) $r5;
+
+        $r0 = new android.content.Intent;
+
+        specialinvoke $r0.<android.content.Intent: void <init>(android.content.Intent)>($r2);
+
+        if $r6 == null goto label1;
+
+        $r7 = $r6.<android.content.pm.ResolveInfo: java.lang.String resolvePackageName>;
+
+        virtualinvoke $r0.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>($r7);
+
+        virtualinvoke $r1.<android.content.Context: void sendBroadcast(android.content.Intent)>($r0);
+
+        goto label1;
+
+     label2:
+        return;
+
+     label3:
+        $r8 = new com.distriqt.extension.notifications.badge.shortcutbadger.ShortcutBadgeException;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("unable to resolve intent: ");
+
+        $r7 = virtualinvoke $r2.<android.content.Intent: java.lang.String toString()>();
+
+        virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<com.distriqt.extension.notifications.badge.shortcutbadger.ShortcutBadgeException: void <init>(java.lang.String)>($r7);
+
+        throw $r8;
+    }
+}

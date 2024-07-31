@@ -1,0 +1,106 @@
+class io.grpc.internal.MigratingThreadDeframer$1RequestOp extends java.lang.Object implements io.grpc.internal.MigratingThreadDeframer$Op
+{
+    final io.grpc.internal.MigratingThreadDeframer this$0;
+    final int val$numMessages;
+
+    void <init>(io.grpc.internal.MigratingThreadDeframer, int)
+    {
+        int $i0;
+        io.grpc.internal.MigratingThreadDeframer$1RequestOp r0;
+        io.grpc.internal.MigratingThreadDeframer $r1;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer$1RequestOp;
+
+        $r1 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        $i0 := @parameter1: int;
+
+        r0.<io.grpc.internal.MigratingThreadDeframer$1RequestOp: io.grpc.internal.MigratingThreadDeframer this$0> = $r1;
+
+        r0.<io.grpc.internal.MigratingThreadDeframer$1RequestOp: int val$numMessages> = $i0;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run(boolean)
+    {
+        java.lang.Throwable $r6, $r8;
+        io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor $r3;
+        io.grpc.internal.MigratingThreadDeframer$1RequestOp$1 $r4;
+        io.grpc.internal.MessageDeframer $r5;
+        int $i0;
+        io.grpc.internal.ApplicationThreadDeframerListener $r7;
+        io.perfmark.Link $r1;
+        io.grpc.internal.MigratingThreadDeframer$1RequestOp r0;
+        boolean $z0;
+        io.grpc.internal.MigratingThreadDeframer $r2;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer$1RequestOp;
+
+        $z0 := @parameter0: boolean;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = staticinvoke <io.perfmark.PerfMark: io.perfmark.Link linkOut()>();
+
+        $r2 = r0.<io.grpc.internal.MigratingThreadDeframer$1RequestOp: io.grpc.internal.MigratingThreadDeframer this$0>;
+
+        $r3 = staticinvoke <io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor access$300(io.grpc.internal.MigratingThreadDeframer)>($r2);
+
+        $r4 = new io.grpc.internal.MigratingThreadDeframer$1RequestOp$1;
+
+        specialinvoke $r4.<io.grpc.internal.MigratingThreadDeframer$1RequestOp$1: void <init>(io.grpc.internal.MigratingThreadDeframer$1RequestOp,io.perfmark.Link)>(r0, $r1);
+
+        interfaceinvoke $r3.<io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor: void runOnTransportThread(java.lang.Runnable)>($r4);
+
+        return;
+
+     label1:
+        staticinvoke <io.perfmark.PerfMark: void startTask(java.lang.String)>("MigratingThreadDeframer.request");
+
+     label2:
+        $r2 = r0.<io.grpc.internal.MigratingThreadDeframer$1RequestOp: io.grpc.internal.MigratingThreadDeframer this$0>;
+
+        $r5 = staticinvoke <io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer access$400(io.grpc.internal.MigratingThreadDeframer)>($r2);
+
+        $i0 = r0.<io.grpc.internal.MigratingThreadDeframer$1RequestOp: int val$numMessages>;
+
+        virtualinvoke $r5.<io.grpc.internal.MessageDeframer: void request(int)>($i0);
+
+     label3:
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String)>("MigratingThreadDeframer.request");
+
+        return;
+
+     label4:
+        $r6 := @caughtexception;
+
+     label5:
+        $r2 = r0.<io.grpc.internal.MigratingThreadDeframer$1RequestOp: io.grpc.internal.MigratingThreadDeframer this$0>;
+
+        $r7 = staticinvoke <io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.ApplicationThreadDeframerListener access$500(io.grpc.internal.MigratingThreadDeframer)>($r2);
+
+        virtualinvoke $r7.<io.grpc.internal.ApplicationThreadDeframerListener: void deframeFailed(java.lang.Throwable)>($r6);
+
+        $r2 = r0.<io.grpc.internal.MigratingThreadDeframer$1RequestOp: io.grpc.internal.MigratingThreadDeframer this$0>;
+
+        $r5 = staticinvoke <io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer access$400(io.grpc.internal.MigratingThreadDeframer)>($r2);
+
+        virtualinvoke $r5.<io.grpc.internal.MessageDeframer: void close()>();
+
+     label6:
+        goto label3;
+
+     label7:
+        $r8 := @caughtexception;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String)>("MigratingThreadDeframer.request");
+
+        throw $r8;
+
+        catch java.lang.Throwable from label2 to label3 with label4;
+        catch java.lang.Throwable from label5 to label6 with label7;
+    }
+}

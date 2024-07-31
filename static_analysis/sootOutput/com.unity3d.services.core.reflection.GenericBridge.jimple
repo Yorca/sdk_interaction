@@ -1,0 +1,434 @@
+public abstract class com.unity3d.services.core.reflection.GenericBridge extends java.lang.Object
+{
+    private final java.lang.String _className;
+    private final java.util.Map _functionAndParameters;
+    private final java.util.Map _methodMap;
+    private boolean _methodMapBuilt;
+
+    public void <init>(java.util.Map)
+    {
+        java.util.Map $r2;
+        java.util.HashMap $r3;
+        java.lang.String $r1;
+        com.unity3d.services.core.reflection.GenericBridge r0;
+
+        r0 := @this: com.unity3d.services.core.reflection.GenericBridge;
+
+        $r2 := @parameter0: java.util.Map;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.unity3d.services.core.reflection.GenericBridge: boolean _methodMapBuilt> = 0;
+
+        $r1 = virtualinvoke r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.String getClassName()>();
+
+        r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.String _className> = $r1;
+
+        r0.<com.unity3d.services.core.reflection.GenericBridge: java.util.Map _functionAndParameters> = $r2;
+
+        $r3 = new java.util.HashMap;
+
+        specialinvoke $r3.<java.util.HashMap: void <init>()>();
+
+        r0.<com.unity3d.services.core.reflection.GenericBridge: java.util.Map _methodMap> = $r3;
+
+        specialinvoke r0.<com.unity3d.services.core.reflection.GenericBridge: void buildMethodMap()>();
+
+        return;
+    }
+
+    private void buildMethodMap()
+    {
+        java.util.Map$Entry $r6;
+        java.lang.Object[] $r11;
+        java.util.Iterator $r4;
+        java.util.Set $r3;
+        java.lang.Class[] $r7;
+        java.lang.Exception $r1;
+        java.util.Map $r2;
+        java.lang.Object $r5;
+        java.lang.Class $r8;
+        java.lang.String $r9;
+        java.lang.reflect.Method $r10;
+        com.unity3d.services.core.reflection.GenericBridge r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.unity3d.services.core.reflection.GenericBridge;
+
+        $r2 = virtualinvoke r0.<com.unity3d.services.core.reflection.GenericBridge: java.util.Map getFunctionMap()>();
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.util.Set entrySet()>();
+
+        $r4 = interfaceinvoke $r3.<java.util.Set: java.util.Iterator iterator()>();
+
+        $z0 = 1;
+
+     label1:
+        $z1 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label7;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (java.util.Map$Entry) $r5;
+
+        $r5 = interfaceinvoke $r6.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r7 = (java.lang.Class[]) $r5;
+
+     label2:
+        $r8 = virtualinvoke r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.Class classForName()>();
+
+        $r5 = interfaceinvoke $r6.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r9 = (java.lang.String) $r5;
+
+        $r10 = specialinvoke r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.reflect.Method getReflectiveMethod(java.lang.Class,java.lang.String,java.lang.Class[])>($r8, $r9, $r7);
+
+     label3:
+        if $r10 == null goto label1;
+
+     label4:
+        $r2 = r0.<com.unity3d.services.core.reflection.GenericBridge: java.util.Map _methodMap>;
+
+        $r5 = interfaceinvoke $r6.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r9 = (java.lang.String) $r5;
+
+        interfaceinvoke $r2.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r9, $r10);
+
+     label5:
+        goto label1;
+
+     label6:
+        $r11 = newarray (java.lang.Object)[3];
+
+        $r9 = r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.String _className>;
+
+        $r11[0] = $r9;
+
+        $r5 = interfaceinvoke $r6.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r11[1] = $r5;
+
+        $r11[2] = $r7;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String,java.lang.Object[])>("ERROR: Could not find %s class with method %s and parameters : %s", $r11);
+
+        $z0 = 0;
+
+        goto label1;
+
+     label7:
+        r0.<com.unity3d.services.core.reflection.GenericBridge: boolean _methodMapBuilt> = $z0;
+
+        return;
+
+     label8:
+        $r1 := @caughtexception;
+
+        goto label6;
+
+        catch java.lang.Exception from label2 to label3 with label8;
+        catch java.lang.Exception from label4 to label5 with label8;
+    }
+
+    private java.lang.reflect.Method getMethod(java.lang.String)
+    {
+        java.util.Map $r1;
+        java.lang.Object $r2;
+        java.lang.String $r3;
+        java.lang.reflect.Method $r4;
+        com.unity3d.services.core.reflection.GenericBridge r0;
+
+        r0 := @this: com.unity3d.services.core.reflection.GenericBridge;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r1 = r0.<com.unity3d.services.core.reflection.GenericBridge: java.util.Map _methodMap>;
+
+        $r2 = interfaceinvoke $r1.<java.util.Map: java.lang.Object get(java.lang.Object)>($r3);
+
+        $r4 = (java.lang.reflect.Method) $r2;
+
+        return $r4;
+    }
+
+    private transient java.lang.reflect.Method getReflectiveMethod(java.lang.Class, java.lang.String, java.lang.Class[])
+    {
+        java.lang.Object[] $r6;
+        java.lang.Class[] $r3;
+        com.unity3d.scar.adapter.common.GMAEvent $r10;
+        java.lang.Exception $r5;
+        com.unity3d.services.core.webview.WebViewEventCategory $r9;
+        java.lang.Class $r1;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r2;
+        com.unity3d.services.core.webview.WebViewApp $r8;
+        java.lang.reflect.Method $r4;
+        com.unity3d.services.core.reflection.GenericBridge r0;
+
+        r0 := @this: com.unity3d.services.core.reflection.GenericBridge;
+
+        $r1 := @parameter0: java.lang.Class;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.Class[];
+
+     label1:
+        $r4 = virtualinvoke $r1.<java.lang.Class: java.lang.reflect.Method getDeclaredMethod(java.lang.String,java.lang.Class[])>($r2, $r3);
+
+     label2:
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        $r6 = newarray (java.lang.Object)[2];
+
+        $r6[0] = $r2;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        $r2 = virtualinvoke $r5.<java.lang.Exception: java.lang.String getLocalizedMessage()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6[1] = $r2;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String,java.lang.Object[])>("ERROR: Could not find method %s in %s", $r6);
+
+        $r8 = staticinvoke <com.unity3d.services.core.webview.WebViewApp: com.unity3d.services.core.webview.WebViewApp getCurrentApp()>();
+
+        $r9 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory GMA>;
+
+        $r10 = <com.unity3d.scar.adapter.common.GMAEvent: com.unity3d.scar.adapter.common.GMAEvent METHOD_ERROR>;
+
+        $r6 = newarray (java.lang.Object)[0];
+
+        virtualinvoke $r8.<com.unity3d.services.core.webview.WebViewApp: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r9, $r10, $r6);
+
+        return null;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public transient java.lang.Object callNonVoidMethod(java.lang.String, java.lang.Object, java.lang.Object[])
+    {
+        java.lang.Object[] $r3;
+        java.lang.Object $r2;
+        java.lang.String $r1;
+        java.lang.reflect.Method $r4;
+        com.unity3d.services.core.reflection.GenericBridge r0;
+        java.lang.Exception $r5;
+
+        r0 := @this: com.unity3d.services.core.reflection.GenericBridge;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.Object;
+
+        $r3 := @parameter2: java.lang.Object[];
+
+        $r4 = specialinvoke r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.reflect.Method getMethod(java.lang.String)>($r1);
+
+        if $r4 != null goto label1;
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $r3[0] = $r1;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String,java.lang.Object[])>("ERROR: Could not find method %s", $r3);
+
+        return null;
+
+     label1:
+        $r2 = virtualinvoke $r4.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r2, $r3);
+
+     label2:
+        return $r2;
+
+     label3:
+        $r5 := @caughtexception;
+
+        $r3 = newarray (java.lang.Object)[2];
+
+        $r3[0] = $r1;
+
+        $r1 = virtualinvoke $r5.<java.lang.Exception: java.lang.String getLocalizedMessage()>();
+
+        $r3[1] = $r1;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String,java.lang.Object[])>("ERROR: Could not invoke method %s : %s", $r3);
+
+        return null;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public transient void callVoidMethod(java.lang.String, java.lang.Object, java.lang.Object[])
+    {
+        java.lang.Object[] $r3;
+        java.lang.Object $r2;
+        java.lang.String $r1;
+        java.lang.reflect.Method $r4;
+        com.unity3d.services.core.reflection.GenericBridge r0;
+        java.lang.Exception $r5;
+
+        r0 := @this: com.unity3d.services.core.reflection.GenericBridge;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.Object;
+
+        $r3 := @parameter2: java.lang.Object[];
+
+        $r4 = specialinvoke r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.reflect.Method getMethod(java.lang.String)>($r1);
+
+        if $r4 != null goto label1;
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $r3[0] = $r1;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String,java.lang.Object[])>("ERROR: Could not find method %s", $r3);
+
+        return;
+
+     label1:
+        virtualinvoke $r4.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r2, $r3);
+
+     label2:
+        return;
+
+     label3:
+        $r5 := @caughtexception;
+
+        $r3 = newarray (java.lang.Object)[2];
+
+        $r3[0] = $r1;
+
+        $r1 = virtualinvoke $r5.<java.lang.Exception: java.lang.String getLocalizedMessage()>();
+
+        $r3[1] = $r1;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String,java.lang.Object[])>("ERROR: Could not invoke method %s : %s", $r3);
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public java.lang.Class classForName()
+    {
+        java.lang.Object[] $r4;
+        java.lang.Class $r2;
+        java.lang.ClassNotFoundException $r3;
+        java.lang.String $r1;
+        com.unity3d.services.core.reflection.GenericBridge r0;
+
+        r0 := @this: com.unity3d.services.core.reflection.GenericBridge;
+
+        $r1 = r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.String _className>;
+
+     label1:
+        $r2 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>($r1);
+
+     label2:
+        return $r2;
+
+     label3:
+        $r3 := @caughtexception;
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r1 = r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.String _className>;
+
+        $r4[0] = $r1;
+
+        $r1 = virtualinvoke $r3.<java.lang.ClassNotFoundException: java.lang.String getLocalizedMessage()>();
+
+        $r4[1] = $r1;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String,java.lang.Object[])>("ERROR: Could not find Class %s %s", $r4);
+
+        return null;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label3;
+    }
+
+    public boolean exists()
+    {
+        java.lang.Object[] $r2;
+        java.util.Map $r4;
+        int $i0, $i1;
+        java.lang.Class $r1;
+        java.lang.String $r3;
+        com.unity3d.services.core.reflection.GenericBridge r0;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.core.reflection.GenericBridge;
+
+        $r1 = virtualinvoke r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.Class classForName()>();
+
+        if $r1 != null goto label1;
+
+        $r2 = newarray (java.lang.Object)[1];
+
+        $r3 = r0.<com.unity3d.services.core.reflection.GenericBridge: java.lang.String _className>;
+
+        $r2[0] = $r3;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String,java.lang.Object[])>("ERROR: Could not find class %s", $r2);
+
+        return 0;
+
+     label1:
+        $z0 = r0.<com.unity3d.services.core.reflection.GenericBridge: boolean _methodMapBuilt>;
+
+        if $z0 != 0 goto label2;
+
+        specialinvoke r0.<com.unity3d.services.core.reflection.GenericBridge: void buildMethodMap()>();
+
+     label2:
+        $r4 = r0.<com.unity3d.services.core.reflection.GenericBridge: java.util.Map _methodMap>;
+
+        $i0 = interfaceinvoke $r4.<java.util.Map: int size()>();
+
+        $r4 = virtualinvoke r0.<com.unity3d.services.core.reflection.GenericBridge: java.util.Map getFunctionMap()>();
+
+        $i1 = interfaceinvoke $r4.<java.util.Map: int size()>();
+
+        if $i0 != $i1 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    protected abstract java.lang.String getClassName();
+
+    public java.util.Map getFunctionMap()
+    {
+        com.unity3d.services.core.reflection.GenericBridge r0;
+        java.util.Map r1;
+
+        r0 := @this: com.unity3d.services.core.reflection.GenericBridge;
+
+        r1 = r0.<com.unity3d.services.core.reflection.GenericBridge: java.util.Map _functionAndParameters>;
+
+        return r1;
+    }
+}

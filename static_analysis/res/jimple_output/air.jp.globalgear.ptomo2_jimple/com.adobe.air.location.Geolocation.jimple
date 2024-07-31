@@ -1,0 +1,393 @@
+public class com.adobe.air.location.Geolocation extends java.lang.Object
+{
+    private com.adobe.air.location.AIRLocationListener mGPSListener;
+    private android.location.LocationManager mLocationManager;
+    private com.adobe.air.location.AIRLocationListener mNetworkListener;
+    protected boolean m_EventSourceExists;
+    protected double m_altitude;
+    private android.content.Context m_context;
+    protected android.text.format.Time m_currentTime;
+    protected double m_gpsAltitude;
+    protected float m_gpsHorizontalAaccuracy;
+    protected double m_gpsLatitude;
+    protected double m_gpsLongitude;
+    protected float m_gpsSpeed;
+    protected long m_gpsTimestamp;
+    protected float m_gpsVerticalAccuracy;
+    protected float m_horizontalAaccuracy;
+    protected boolean m_ignoreLastGPSValue;
+    protected boolean m_isGPSProviderEnabled;
+    protected boolean m_isNetworkProviderEnabled;
+    protected double m_latitude;
+    protected double m_longitude;
+    protected double m_networkAltitude;
+    protected float m_networkHorizontalAaccuracy;
+    protected double m_networkLatitude;
+    protected double m_networkLongitude;
+    protected float m_networkSpeed;
+    protected long m_networkTimestamp;
+    protected float m_networkVerticalAccuracy;
+    protected long m_objectPointer;
+    protected float m_speed;
+    protected long m_timestamp;
+    private long m_upateInterval;
+    protected float m_verticalAccuracy;
+
+    public void <init>(android.content.Context)
+    {
+        android.content.Context $r2;
+        android.text.format.Time $r6;
+        java.lang.Exception $r1;
+        com.adobe.air.location.Geolocation r0;
+        java.lang.Object $r4;
+        com.adobe.air.location.AIRLocationListener $r3;
+        android.location.LocationManager $r5;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        $r2 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+     label1:
+        r0.<com.adobe.air.location.Geolocation: android.content.Context m_context> = $r2;
+
+        r0.<com.adobe.air.location.Geolocation: boolean m_EventSourceExists> = 1;
+
+     label2:
+        $r3 = new com.adobe.air.location.AIRLocationListener;
+
+     label3:
+        specialinvoke $r3.<com.adobe.air.location.AIRLocationListener: void <init>(com.adobe.air.location.Geolocation)>(r0);
+
+        r0.<com.adobe.air.location.Geolocation: com.adobe.air.location.AIRLocationListener mGPSListener> = $r3;
+
+     label4:
+        $r3 = new com.adobe.air.location.AIRLocationListener;
+
+     label5:
+        specialinvoke $r3.<com.adobe.air.location.AIRLocationListener: void <init>(com.adobe.air.location.Geolocation)>(r0);
+
+        r0.<com.adobe.air.location.Geolocation: com.adobe.air.location.AIRLocationListener mNetworkListener> = $r3;
+
+        $r2 = r0.<com.adobe.air.location.Geolocation: android.content.Context m_context>;
+
+        $r4 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("location");
+
+        $r5 = (android.location.LocationManager) $r4;
+
+        r0.<com.adobe.air.location.Geolocation: android.location.LocationManager mLocationManager> = $r5;
+
+        $z0 = virtualinvoke $r5.<android.location.LocationManager: boolean isProviderEnabled(java.lang.String)>("gps");
+
+        r0.<com.adobe.air.location.Geolocation: boolean m_isGPSProviderEnabled> = $z0;
+
+        $r5 = r0.<com.adobe.air.location.Geolocation: android.location.LocationManager mLocationManager>;
+
+        $z0 = virtualinvoke $r5.<android.location.LocationManager: boolean isProviderEnabled(java.lang.String)>("network");
+
+        r0.<com.adobe.air.location.Geolocation: boolean m_isNetworkProviderEnabled> = $z0;
+
+     label6:
+        $r6 = new android.text.format.Time;
+
+     label7:
+        specialinvoke $r6.<android.text.format.Time: void <init>()>();
+
+        r0.<com.adobe.air.location.Geolocation: android.text.format.Time m_currentTime> = $r6;
+
+        virtualinvoke $r6.<android.text.format.Time: void setToNow()>();
+
+        r0.<com.adobe.air.location.Geolocation: boolean m_ignoreLastGPSValue> = 0;
+
+     label8:
+        return;
+
+     label9:
+        $r1 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label9;
+        catch java.lang.Exception from label3 to label4 with label9;
+        catch java.lang.Exception from label5 to label6 with label9;
+        catch java.lang.Exception from label7 to label8 with label9;
+    }
+
+    protected void addGPSListener()
+    {
+        android.content.Context $r3;
+        android.content.pm.PackageManager $r4;
+        long $l0;
+        com.adobe.air.location.Geolocation r0;
+        android.location.Location $r5;
+        android.location.LocationManager $r1;
+        com.adobe.air.location.AIRLocationListener $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        $r3 = r0.<com.adobe.air.location.Geolocation: android.content.Context m_context>;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $z0 = virtualinvoke $r4.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.location.gps");
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<com.adobe.air.location.Geolocation: android.location.LocationManager mLocationManager>;
+
+        $r5 = virtualinvoke $r1.<android.location.LocationManager: android.location.Location getLastKnownLocation(java.lang.String)>("gps");
+
+        $r2 = r0.<com.adobe.air.location.Geolocation: com.adobe.air.location.AIRLocationListener mGPSListener>;
+
+        virtualinvoke $r2.<com.adobe.air.location.AIRLocationListener: void onLocationChanged(android.location.Location)>($r5);
+
+        $r1 = r0.<com.adobe.air.location.Geolocation: android.location.LocationManager mLocationManager>;
+
+        $l0 = r0.<com.adobe.air.location.Geolocation: long m_upateInterval>;
+
+        $r2 = r0.<com.adobe.air.location.Geolocation: com.adobe.air.location.AIRLocationListener mGPSListener>;
+
+        virtualinvoke $r1.<android.location.LocationManager: void requestLocationUpdates(java.lang.String,long,float,android.location.LocationListener)>("gps", $l0, 0.0F, $r2);
+
+     label1:
+        return;
+    }
+
+    protected void addLocationListeners()
+    {
+        android.content.Context $r1;
+        com.adobe.air.location.Geolocation r0;
+        android.content.pm.PackageManager $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        $r1 = r0.<com.adobe.air.location.Geolocation: android.content.Context m_context>;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.location");
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<com.adobe.air.location.Geolocation: void addGPSListener()>();
+
+        virtualinvoke r0.<com.adobe.air.location.Geolocation: void addNetworkListener()>();
+
+     label1:
+        return;
+    }
+
+    protected void addNetworkListener()
+    {
+        android.content.Context $r2;
+        com.adobe.air.location.Geolocation r0;
+        android.content.pm.PackageManager $r3;
+        long $l0;
+        com.adobe.air.location.AIRLocationListener $r1;
+        android.location.LocationManager $r4;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        $r2 = r0.<com.adobe.air.location.Geolocation: android.content.Context m_context>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $z0 = virtualinvoke $r3.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.location.network");
+
+        if $z0 == 0 goto label1;
+
+        $r4 = r0.<com.adobe.air.location.Geolocation: android.location.LocationManager mLocationManager>;
+
+        $l0 = r0.<com.adobe.air.location.Geolocation: long m_upateInterval>;
+
+        $r1 = r0.<com.adobe.air.location.Geolocation: com.adobe.air.location.AIRLocationListener mNetworkListener>;
+
+        virtualinvoke $r4.<android.location.LocationManager: void requestLocationUpdates(java.lang.String,long,float,android.location.LocationListener)>("network", $l0, 0.0F, $r1);
+
+     label1:
+        return;
+    }
+
+    public boolean isGeolocationMuted()
+    {
+        com.adobe.air.location.Geolocation r0;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        $z0 = r0.<com.adobe.air.location.Geolocation: boolean m_isGPSProviderEnabled>;
+
+        if $z0 != 0 goto label2;
+
+        $z0 = r0.<com.adobe.air.location.Geolocation: boolean m_isNetworkProviderEnabled>;
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    protected void releaseAllResources()
+    {
+        com.adobe.air.location.Geolocation r0;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        r0.<com.adobe.air.location.Geolocation: boolean m_EventSourceExists> = 0;
+
+        virtualinvoke r0.<com.adobe.air.location.Geolocation: void removeLocationListeners()>();
+
+        return;
+    }
+
+    protected void removeGPSListener()
+    {
+        android.content.Context $r1;
+        com.adobe.air.location.Geolocation r0;
+        android.content.pm.PackageManager $r2;
+        android.location.LocationManager $r3;
+        com.adobe.air.location.AIRLocationListener $r4;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        $r1 = r0.<com.adobe.air.location.Geolocation: android.content.Context m_context>;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.location.gps");
+
+        if $z0 == 0 goto label1;
+
+        $r3 = r0.<com.adobe.air.location.Geolocation: android.location.LocationManager mLocationManager>;
+
+        $r4 = r0.<com.adobe.air.location.Geolocation: com.adobe.air.location.AIRLocationListener mGPSListener>;
+
+        virtualinvoke $r3.<android.location.LocationManager: void removeUpdates(android.location.LocationListener)>($r4);
+
+     label1:
+        return;
+    }
+
+    protected void removeLocationListeners()
+    {
+        android.content.Context $r1;
+        com.adobe.air.location.Geolocation r0;
+        android.content.pm.PackageManager $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        $r1 = r0.<com.adobe.air.location.Geolocation: android.content.Context m_context>;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.location");
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<com.adobe.air.location.Geolocation: void removeGPSListener()>();
+
+        virtualinvoke r0.<com.adobe.air.location.Geolocation: void removeNetworkListener()>();
+
+     label1:
+        return;
+    }
+
+    protected void removeNetworkListener()
+    {
+        android.content.Context $r1;
+        com.adobe.air.location.Geolocation r0;
+        android.content.pm.PackageManager $r2;
+        android.location.LocationManager $r3;
+        com.adobe.air.location.AIRLocationListener $r4;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        $r1 = r0.<com.adobe.air.location.Geolocation: android.content.Context m_context>;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.location.network");
+
+        if $z0 == 0 goto label1;
+
+        $r3 = r0.<com.adobe.air.location.Geolocation: android.location.LocationManager mLocationManager>;
+
+        $r4 = r0.<com.adobe.air.location.Geolocation: com.adobe.air.location.AIRLocationListener mNetworkListener>;
+
+        virtualinvoke $r3.<android.location.LocationManager: void removeUpdates(android.location.LocationListener)>($r4);
+
+     label1:
+        return;
+    }
+
+    public void setGeolocationEventSource(long)
+    {
+        long $l0;
+        com.adobe.air.location.Geolocation r0;
+        java.lang.Exception $r1;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        $l0 := @parameter0: long;
+
+     label1:
+        r0.<com.adobe.air.location.Geolocation: long m_objectPointer> = $l0;
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    protected native void setGeolocationStatus(boolean, long);
+
+    public void setUpdateTimeAndRegister(long, long)
+    {
+        com.adobe.air.location.Geolocation r0;
+        long $l0, $l1;
+        java.lang.Exception $r1;
+
+        r0 := @this: com.adobe.air.location.Geolocation;
+
+        $l0 := @parameter0: long;
+
+        $l1 := @parameter1: long;
+
+     label1:
+        r0.<com.adobe.air.location.Geolocation: long m_objectPointer> = $l1;
+
+        r0.<com.adobe.air.location.Geolocation: long m_upateInterval> = $l0;
+
+        virtualinvoke r0.<com.adobe.air.location.Geolocation: void addLocationListeners()>();
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    protected native void updateGeolocationCache(long);
+}

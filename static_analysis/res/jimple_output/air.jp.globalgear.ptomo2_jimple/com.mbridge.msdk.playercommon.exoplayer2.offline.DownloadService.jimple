@@ -1,0 +1,810 @@
+public abstract class com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService extends android.app.Service
+{
+    public static final java.lang.String ACTION_ADD;
+    public static final java.lang.String ACTION_INIT;
+    private static final java.lang.String ACTION_RESTART;
+    private static final java.lang.String ACTION_START_DOWNLOADS;
+    private static final java.lang.String ACTION_STOP_DOWNLOADS;
+    private static final boolean DEBUG;
+    public static final long DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL;
+    public static final java.lang.String KEY_DOWNLOAD_ACTION;
+    public static final java.lang.String KEY_FOREGROUND;
+    private static final java.lang.String TAG;
+    private static final java.util.HashMap requirementsHelpers;
+    private final java.lang.String channelId;
+    private final int channelName;
+    private com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager;
+    private com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$DownloadManagerListener downloadManagerListener;
+    private final com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater foregroundNotificationUpdater;
+    private int lastStartId;
+    private boolean startedInForeground;
+    private boolean taskRemoved;
+
+    static void <clinit>()
+    {
+        java.util.HashMap $r0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.lang.String TAG> = "DownloadService";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.lang.String KEY_FOREGROUND> = "foreground";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.lang.String KEY_DOWNLOAD_ACTION> = "download_action";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: long DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL> = 1000L;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: boolean DEBUG> = 0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.lang.String ACTION_STOP_DOWNLOADS> = "com.google.android.exoplayer.downloadService.action.STOP_DOWNLOADS";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.lang.String ACTION_START_DOWNLOADS> = "com.google.android.exoplayer.downloadService.action.START_DOWNLOADS";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.lang.String ACTION_RESTART> = "com.google.android.exoplayer.downloadService.action.RESTART";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.lang.String ACTION_INIT> = "com.google.android.exoplayer.downloadService.action.INIT";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.lang.String ACTION_ADD> = "com.google.android.exoplayer.downloadService.action.ADD";
+
+        $r0 = new java.util.HashMap;
+
+        specialinvoke $r0.<java.util.HashMap: void <init>()>();
+
+        <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.util.HashMap requirementsHelpers> = $r0;
+
+        return;
+    }
+
+    protected void <init>(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $i0 := @parameter0: int;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void <init>(int,long)>($i0, 1000L);
+
+        return;
+    }
+
+    protected void <init>(int, long)
+    {
+        int $i0;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $i0 := @parameter0: int;
+
+        $l1 := @parameter1: long;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void <init>(int,long,java.lang.String,int)>($i0, $l1, null, 0);
+
+        return;
+    }
+
+    protected void <init>(int, long, java.lang.String, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+        int $i0, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater $r2;
+        long $l1;
+        java.lang.String $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $i0 := @parameter0: int;
+
+        $l1 := @parameter1: long;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $i2 := @parameter3: int;
+
+        specialinvoke r0.<android.app.Service: void <init>()>();
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater: void <init>(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService,int,long)>(r0, $i0, $l1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater foregroundNotificationUpdater> = $r2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.lang.String channelId> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: int channelName> = $i2;
+
+        return;
+    }
+
+    static void access$200(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void maybeStartWatchingRequirements()>();
+
+        return;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater access$300(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater foregroundNotificationUpdater>;
+
+        return r1;
+    }
+
+    static void access$400(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void stop()>();
+
+        return;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager access$500(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager>;
+
+        return r1;
+    }
+
+    public static android.content.Intent buildAddActionIntent(android.content.Context, java.lang.Class, com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction, boolean)
+    {
+        android.content.Context $r1;
+        byte[] $r4;
+        android.content.Intent $r0;
+        java.lang.Class $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r3;
+        boolean $z0;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.Class;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction;
+
+        $z0 := @parameter3: boolean;
+
+        $r0 = new android.content.Intent;
+
+        specialinvoke $r0.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>($r1, $r2);
+
+        $r0 = virtualinvoke $r0.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("com.google.android.exoplayer.downloadService.action.ADD");
+
+        $r4 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction: byte[] toByteArray()>();
+
+        $r0 = virtualinvoke $r0.<android.content.Intent: android.content.Intent putExtra(java.lang.String,byte[])>("download_action", $r4);
+
+        $r0 = virtualinvoke $r0.<android.content.Intent: android.content.Intent putExtra(java.lang.String,boolean)>("foreground", $z0);
+
+        return $r0;
+    }
+
+    private void logd(java.lang.String)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+        java.lang.String $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $r1 := @parameter0: java.lang.String;
+
+        return;
+    }
+
+    private void maybeStartWatchingRequirements()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$RequirementsHelper $r2;
+        java.util.HashMap $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Scheduler $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements $r6;
+        int $i0;
+        java.lang.Class $r4;
+        java.lang.Object $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager>;
+
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int getDownloadCount()>();
+
+        if $i0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r4 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r1 = <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.util.HashMap requirementsHelpers>;
+
+        $r5 = virtualinvoke $r1.<java.util.HashMap: java.lang.Object get(java.lang.Object)>($r4);
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$RequirementsHelper) $r5;
+
+        if $r2 != null goto label2;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$RequirementsHelper;
+
+        $r6 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements getRequirements()>();
+
+        $r7 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Scheduler getScheduler()>();
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$RequirementsHelper: void <init>(android.content.Context,com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements,com.mbridge.msdk.playercommon.exoplayer2.scheduler.Scheduler,java.lang.Class,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$1)>(r0, $r6, $r7, $r4, null);
+
+        virtualinvoke $r1.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r4, $r2);
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$RequirementsHelper: void start()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void logd(java.lang.String)>("started watching requirements");
+
+     label2:
+        return;
+    }
+
+    private void maybeStopWatchingRequirements()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$RequirementsHelper $r5;
+        java.util.HashMap $r2;
+        java.lang.Class $r3;
+        java.lang.Object $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int getDownloadCount()>();
+
+        if $i0 <= 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.util.HashMap requirementsHelpers>;
+
+        $r3 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r4 = virtualinvoke $r2.<java.util.HashMap: java.lang.Object remove(java.lang.Object)>($r3);
+
+        $r5 = (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$RequirementsHelper) $r4;
+
+        if $r5 == null goto label2;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$RequirementsHelper: void stop()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void logd(java.lang.String)>("stopped watching requirements");
+
+     label2:
+        return;
+    }
+
+    public static void start(android.content.Context, java.lang.Class)
+    {
+        android.content.Context $r0;
+        android.content.Intent $r1;
+        java.lang.Class $r2;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.Class;
+
+        $r1 = new android.content.Intent;
+
+        specialinvoke $r1.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>($r0, $r2);
+
+        $r1 = virtualinvoke $r1.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("com.google.android.exoplayer.downloadService.action.INIT");
+
+        virtualinvoke $r0.<android.content.Context: android.content.ComponentName startService(android.content.Intent)>($r1);
+
+        return;
+    }
+
+    public static void startForeground(android.content.Context, java.lang.Class)
+    {
+        android.content.Context $r0;
+        java.lang.Class $r1;
+        android.content.Intent $r2;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.Class;
+
+        $r2 = new android.content.Intent;
+
+        specialinvoke $r2.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>($r0, $r1);
+
+        $r2 = virtualinvoke $r2.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("com.google.android.exoplayer.downloadService.action.INIT");
+
+        $r2 = virtualinvoke $r2.<android.content.Intent: android.content.Intent putExtra(java.lang.String,boolean)>("foreground", 1);
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: android.content.ComponentName startForegroundService(android.content.Context,android.content.Intent)>($r0, $r2);
+
+        return;
+    }
+
+    public static void startWithAction(android.content.Context, java.lang.Class, com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction, boolean)
+    {
+        android.content.Context $r0;
+        android.content.Intent $r2;
+        java.lang.Class $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r3 := @parameter1: java.lang.Class;
+
+        $r1 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction;
+
+        $z0 := @parameter3: boolean;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: android.content.Intent buildAddActionIntent(android.content.Context,java.lang.Class,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction,boolean)>($r0, $r3, $r1, $z0);
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: android.content.ComponentName startForegroundService(android.content.Context,android.content.Intent)>($r0, $r2);
+
+        return;
+
+     label1:
+        virtualinvoke $r0.<android.content.Context: android.content.ComponentName startService(android.content.Intent)>($r2);
+
+        return;
+    }
+
+    private void stop()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater foregroundNotificationUpdater>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater: void stopPeriodicUpdates()>();
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: boolean startedInForeground>;
+
+        if $z0 == 0 goto label1;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i0 < 26 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater foregroundNotificationUpdater>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater: void showNotificationIfNotAlready()>();
+
+     label1:
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i0 >= 28 goto label2;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: boolean taskRemoved>;
+
+        if $z0 == 0 goto label2;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void stopSelf()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void logd(java.lang.String)>("stopSelf()");
+
+        return;
+
+     label2:
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: int lastStartId>;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: boolean stopSelfResult(int)>($i0);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("stopSelf(");
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: int lastStartId>;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") result: ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void logd(java.lang.String)>($r3);
+
+        return;
+    }
+
+    protected abstract com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager getDownloadManager();
+
+    protected abstract android.app.Notification getForegroundNotification(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState[]);
+
+    protected com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements getRequirements()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: void <init>(int,boolean,boolean)>(1, 0, 0);
+
+        return $r1;
+    }
+
+    protected abstract com.mbridge.msdk.playercommon.exoplayer2.scheduler.Scheduler getScheduler();
+
+    public android.os.IBinder onBind(android.content.Intent)
+    {
+        android.content.Intent $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        return null;
+    }
+
+    public void onCreate()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$DownloadManagerListener $r3;
+        int $i0;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void logd(java.lang.String)>("onCreate");
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: java.lang.String channelId>;
+
+        if $r2 == null goto label1;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: int channelName>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.NotificationUtil: void createNotificationChannel(android.content.Context,java.lang.String,int,int)>(r0, $r2, $i0, 2);
+
+     label1:
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager getDownloadManager()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager> = $r1;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$DownloadManagerListener;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$DownloadManagerListener: void <init>(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService,com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$1)>(r0, null);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$DownloadManagerListener downloadManagerListener> = $r3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void addListener(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener)>($r3);
+
+        return;
+    }
+
+    public void onDestroy()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$DownloadManagerListener $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void logd(java.lang.String)>("onDestroy");
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater foregroundNotificationUpdater>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$ForegroundNotificationUpdater: void stopPeriodicUpdates()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService$DownloadManagerListener downloadManagerListener>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void removeListener(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$Listener)>($r1);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void maybeStopWatchingRequirements()>();
+
+        return;
+    }
+
+    public int onStartCommand(android.content.Intent, int, int)
+    {
+        java.lang.Throwable $r8;
+        byte[] $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager $r6;
+        android.content.Intent $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+        byte $b2;
+        int $i0, $i1;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r1, $r3, $r4;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $r2 := @parameter0: android.content.Intent;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: int lastStartId> = $i1;
+
+        $b2 = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: boolean taskRemoved> = 0;
+
+        $r1 = "com.google.android.exoplayer.downloadService.action.RESTART";
+
+        if $r2 == null goto label04;
+
+        $r3 = virtualinvoke $r2.<android.content.Intent: java.lang.String getAction()>();
+
+        $r4 = $r3;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: boolean startedInForeground>;
+
+        $z1 = virtualinvoke $r2.<android.content.Intent: boolean getBooleanExtra(java.lang.String,boolean)>("foreground", 0);
+
+        if $z1 != 0 goto label02;
+
+        $z1 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z1 == 0 goto label01;
+
+        goto label02;
+
+     label01:
+        $z1 = 0;
+
+        goto label03;
+
+     label02:
+        $z1 = 1;
+
+     label03:
+        $z0 = $z0 | $z1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: boolean startedInForeground> = $z0;
+
+        goto label05;
+
+     label04:
+        $r4 = null;
+
+     label05:
+        if $r4 != null goto label06;
+
+        $r4 = "com.google.android.exoplayer.downloadService.action.INIT";
+
+     label06:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("onStartCommand action: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" startId: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void logd(java.lang.String)>($r1);
+
+        virtualinvoke $r4.<java.lang.String: int hashCode()>();
+
+        $i0 = virtualinvoke $r4.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i0)
+        {
+            case -871181424: goto label16;
+            case -382886238: goto label14;
+            case -337334865: goto label12;
+            case 1015676687: goto label10;
+            case 1286088717: goto label08;
+            default: goto label07;
+        };
+
+     label07:
+        $b2 = -1;
+
+        goto label17;
+
+     label08:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("com.google.android.exoplayer.downloadService.action.STOP_DOWNLOADS");
+
+        if $z0 != 0 goto label09;
+
+        goto label07;
+
+     label09:
+        $b2 = 4;
+
+        goto label17;
+
+     label10:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("com.google.android.exoplayer.downloadService.action.INIT");
+
+        if $z0 != 0 goto label11;
+
+        goto label07;
+
+     label11:
+        $b2 = 3;
+
+        goto label17;
+
+     label12:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("com.google.android.exoplayer.downloadService.action.START_DOWNLOADS");
+
+        if $z0 != 0 goto label13;
+
+        goto label07;
+
+     label13:
+        $b2 = 2;
+
+        goto label17;
+
+     label14:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("com.google.android.exoplayer.downloadService.action.ADD");
+
+        if $z0 != 0 goto label15;
+
+        goto label07;
+
+     label15:
+        $b2 = 1;
+
+        goto label17;
+
+     label16:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("com.google.android.exoplayer.downloadService.action.RESTART");
+
+        if $z0 != 0 goto label17;
+
+        goto label07;
+
+     label17:
+        lookupswitch($b2)
+        {
+            case 0: goto label26;
+            case 1: goto label21;
+            case 2: goto label20;
+            case 3: goto label26;
+            case 4: goto label19;
+            default: goto label18;
+        };
+
+     label18:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Ignoring unrecognized action: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("DownloadService", $r4);
+
+        goto label26;
+
+     label19:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void stopDownloads()>();
+
+        goto label26;
+
+     label20:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: void startDownloads()>();
+
+        goto label26;
+
+     label21:
+        $r7 = virtualinvoke $r2.<android.content.Intent: byte[] getByteArrayExtra(java.lang.String)>("download_action");
+
+        if $r7 != null goto label22;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("DownloadService", "Ignoring ADD action with no action data");
+
+        goto label26;
+
+     label22:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager>;
+
+     label23:
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: int handleAction(byte[])>($r7);
+
+     label24:
+        goto label26;
+
+     label25:
+        $r8 := @caughtexception;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("DownloadService", "Failed to handle ADD action", $r8);
+
+     label26:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void maybeStartWatchingRequirements()>();
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager downloadManager>;
+
+        $z0 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager: boolean isIdle()>();
+
+        if $z0 == 0 goto label27;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void stop()>();
+
+     label27:
+        return 1;
+
+        catch java.io.IOException from label23 to label24 with label25;
+    }
+
+    public void onTaskRemoved(android.content.Intent)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+        java.lang.StringBuilder $r1;
+        android.content.Intent $r3;
+        java.lang.String $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $r3 := @parameter0: android.content.Intent;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("onTaskRemoved rootIntent: ");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: void logd(java.lang.String)>($r2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService: boolean taskRemoved> = 1;
+
+        return;
+    }
+
+    protected void onTaskStateChanged(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadService;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadManager$TaskState;
+
+        return;
+    }
+}

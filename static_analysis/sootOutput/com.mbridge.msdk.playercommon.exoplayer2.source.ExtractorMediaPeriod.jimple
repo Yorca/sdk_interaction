@@ -1,0 +1,2375 @@
+final class com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput, com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod, com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$UpstreamFormatChangedListener, com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Callback, com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$ReleaseCallback
+{
+    private static final long DEFAULT_LAST_SAMPLE_DURATION_US;
+    private int actualMinLoadableRetryCount;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator allocator;
+    private com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback callback;
+    private final long continueLoadingCheckIntervalBytes;
+    private final java.lang.String customCacheKey;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource dataSource;
+    private long durationUs;
+    private int enabledTrackCount;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher;
+    private int extractedSamplesCountAtStartOfLoad;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder extractorHolder;
+    private final android.os.Handler handler;
+    private boolean haveAudioVideoTracks;
+    private long lastSeekPositionUs;
+    private long length;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener listener;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable loadCondition;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader;
+    private boolean loadingFinished;
+    private final java.lang.Runnable maybeFinishPrepareRunnable;
+    private final int minLoadableRetryCount;
+    private boolean notifiedReadingStarted;
+    private boolean notifyDiscontinuity;
+    private final java.lang.Runnable onContinueLoadingRequestedRunnable;
+    private boolean pendingDeferredRetry;
+    private long pendingResetPositionUs;
+    private boolean prepared;
+    private boolean released;
+    private int[] sampleQueueTrackIds;
+    private com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues;
+    private boolean sampleQueuesBuilt;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap;
+    private boolean seenFirstTrackSelection;
+    private boolean[] trackEnabledStates;
+    private boolean[] trackFormatNotificationSent;
+    private boolean[] trackIsAudioVideoFlags;
+    private com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray tracks;
+    private final android.net.Uri uri;
+
+    public void <init>(android.net.Uri, com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource, com.mbridge.msdk.playercommon.exoplayer2.extractor.Extractor[], int, com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher, com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener, com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator, java.lang.String, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.Extractor[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable $r12;
+        android.net.Uri $r5;
+        long $l2;
+        int[] $r8;
+        android.os.Handler $r15;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r2;
+        java.lang.String $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$2 $r14;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$1 $r13;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r9;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r5 := @parameter0: android.net.Uri;
+
+        $r6 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource;
+
+        $r1 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.extractor.Extractor[];
+
+        $i1 := @parameter3: int;
+
+        $r2 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher;
+
+        $r7 := @parameter5: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener;
+
+        $r3 := @parameter6: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator;
+
+        $r4 := @parameter7: java.lang.String;
+
+        $i0 := @parameter8: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: android.net.Uri uri> = $r5;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource dataSource> = $r6;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int minLoadableRetryCount> = $i1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher> = $r2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener listener> = $r7;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator allocator> = $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: java.lang.String customCacheKey> = $r4;
+
+        $l2 = (long) $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long continueLoadingCheckIntervalBytes> = $l2;
+
+        $r10 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader;
+
+        specialinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: void <init>(java.lang.String)>("Loader:ExtractorMediaPeriod");
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader> = $r10;
+
+        $r11 = new com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder;
+
+        specialinvoke $r11.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.Extractor[],com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput)>($r1, r0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder extractorHolder> = $r11;
+
+        $r12 = new com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable;
+
+        specialinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable loadCondition> = $r12;
+
+        $r13 = new com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$1;
+
+        specialinvoke $r13.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$1: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod)>(r0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: java.lang.Runnable maybeFinishPrepareRunnable> = $r13;
+
+        $r14 = new com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$2;
+
+        specialinvoke $r14.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$2: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod)>(r0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: java.lang.Runnable onContinueLoadingRequestedRunnable> = $r14;
+
+        $r15 = new android.os.Handler;
+
+        specialinvoke $r15.<android.os.Handler: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: android.os.Handler handler> = $r15;
+
+        $r8 = newarray (int)[0];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int[] sampleQueueTrackIds> = $r8;
+
+        $r9 = newarray (com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue)[0];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues> = $r9;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long pendingResetPositionUs> = -9223372036854775807L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long length> = -1L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long durationUs> = -9223372036854775807L;
+
+        if $i1 != -1 goto label1;
+
+        $i1 = 3;
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int actualMinLoadableRetryCount> = $i1;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void mediaPeriodCreated()>();
+
+        return;
+    }
+
+    static void access$000(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void maybeFinishPrepare()>();
+
+        return;
+    }
+
+    static boolean access$100(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        z0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean released>;
+
+        return z0;
+    }
+
+    static java.lang.Runnable access$1000(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod $r0;
+        java.lang.Runnable r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: java.lang.Runnable onContinueLoadingRequestedRunnable>;
+
+        return r1;
+    }
+
+    static android.os.Handler access$1100(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod $r0;
+        android.os.Handler r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: android.os.Handler handler>;
+
+        return r1;
+    }
+
+    static com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback access$200(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback callback>;
+
+        return r1;
+    }
+
+    static java.lang.String access$800(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod $r0;
+        java.lang.String r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: java.lang.String customCacheKey>;
+
+        return r1;
+    }
+
+    static long access$900(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod $r0;
+        long l0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        l0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long continueLoadingCheckIntervalBytes>;
+
+        return l0;
+    }
+
+    private boolean configureRetry(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable, int)
+    {
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        byte $b2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap $r2;
+        int $i0, $i3;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable;
+
+        $i0 := @parameter1: int;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long length>;
+
+        $b2 = $l1 cmp -1L;
+
+        if $b2 != 0 goto label5;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap>;
+
+        if $r2 == null goto label1;
+
+        $l1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap: long getDurationUs()>();
+
+        $b2 = $l1 cmp -9223372036854775807L;
+
+        if $b2 != 0 goto label5;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean prepared>;
+
+        $i3 = 0;
+
+        if $z0 == 0 goto label2;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean suppressRead()>();
+
+        if $z0 != 0 goto label2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean pendingDeferredRetry> = 1;
+
+        return 0;
+
+     label2:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean prepared>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean notifyDiscontinuity> = $z0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long lastSeekPositionUs> = 0L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int extractedSamplesCountAtStartOfLoad> = 0;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i0 = lengthof $r3;
+
+     label3:
+        if $i3 >= $i0 goto label4;
+
+        $r4 = $r3[$i3];
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $i3 = $i3 + 1;
+
+        goto label3;
+
+     label4:
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: void setLoadPosition(long,long)>(0L, 0L);
+
+        return 1;
+
+     label5:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int extractedSamplesCountAtStartOfLoad> = $i0;
+
+        return 1;
+    }
+
+    private void copyLengthFromLoader(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        byte $b0;
+        long $l1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long length>;
+
+        $b0 = $l1 cmp -1L;
+
+        if $b0 != 0 goto label1;
+
+        $l1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: long access$700(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long length> = $l1;
+
+     label1:
+        return;
+    }
+
+    private int getExtractedSamplesCount()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        int $i0, $i1, $i2, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i0 = lengthof $r1;
+
+        $i2 = 0;
+
+        $i3 = 0;
+
+     label1:
+        if $i2 >= $i0 goto label2;
+
+        $r2 = $r1[$i2];
+
+        $i1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int getWriteIndex()>();
+
+        $i3 = $i3 + $i1;
+
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label2:
+        return $i3;
+    }
+
+    private long getLargestQueuedTimestampUs()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        int $i0, $i2;
+        long $l1, $l3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i0 = lengthof $r1;
+
+        $l1 = -9223372036854775808L;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 >= $i0 goto label2;
+
+        $r2 = $r1[$i2];
+
+        $l3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long getLargestQueuedTimestampUs()>();
+
+        $l1 = staticinvoke <java.lang.Math: long max(long,long)>($l1, $l3);
+
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label2:
+        return $l1;
+    }
+
+    private static boolean isLoadableExceptionFatal(java.io.IOException)
+    {
+        java.io.IOException $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.io.IOException;
+
+        $z0 = $r0 instanceof com.mbridge.msdk.playercommon.exoplayer2.source.UnrecognizedInputFormatException;
+
+        return $z0;
+    }
+
+    private boolean isPendingReset()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        long $l1;
+        byte $b0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long pendingResetPositionUs>;
+
+        $b0 = $l1 cmp -9223372036854775807L;
+
+        if $b0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private void maybeFinishPrepare()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r12;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable $r6;
+        long $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback $r11;
+        byte $b3;
+        int $i0, $i1;
+        java.lang.String $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r13;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener $r10;
+        boolean $z0, $z1;
+        boolean[] $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.Format[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup[] $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean released>;
+
+        if $z0 != 0 goto label9;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean prepared>;
+
+        if $z0 != 0 goto label9;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap>;
+
+        if $r2 == null goto label9;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean sampleQueuesBuilt>;
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label2:
+        if $i1 >= $i0 goto label4;
+
+        $r4 = $r3[$i1];
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.Format getUpstreamFormat()>();
+
+        if $r5 != null goto label3;
+
+        return;
+
+     label3:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label4:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable loadCondition>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable: boolean close()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i0 = lengthof $r3;
+
+        $r7 = newarray (com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup)[$i0];
+
+        $r8 = newarray (boolean)[$i0];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackIsAudioVideoFlags> = $r8;
+
+        $r8 = newarray (boolean)[$i0];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackEnabledStates> = $r8;
+
+        $r8 = newarray (boolean)[$i0];
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackFormatNotificationSent> = $r8;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap>;
+
+        $l2 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap: long getDurationUs()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long durationUs> = $l2;
+
+        $i1 = 0;
+
+     label5:
+        $z0 = 1;
+
+        if $i1 >= $i0 goto label7;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r4 = $r3[$i1];
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.Format getUpstreamFormat()>();
+
+        $r12 = new com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup;
+
+        $r1 = newarray (com.mbridge.msdk.playercommon.exoplayer2.Format)[1];
+
+        $r1[0] = $r5;
+
+        specialinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: void <init>(com.mbridge.msdk.playercommon.exoplayer2.Format[])>($r1);
+
+        $r7[$i1] = $r12;
+
+        $r9 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String sampleMimeType>;
+
+        $z1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.MimeTypes: boolean isVideo(java.lang.String)>($r9);
+
+        if $z1 != 0 goto label6;
+
+        $z1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.MimeTypes: boolean isAudio(java.lang.String)>($r9);
+
+        if $z1 != 0 goto label6;
+
+        $z0 = 0;
+
+     label6:
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackIsAudioVideoFlags>;
+
+        $r8[$i1] = $z0;
+
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean haveAudioVideoTracks>;
+
+        $z0 = $z0 | $z1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean haveAudioVideoTracks> = $z0;
+
+        $i1 = $i1 + 1;
+
+        goto label5;
+
+     label7:
+        $r13 = new com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        specialinvoke $r13.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup[])>($r7);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray tracks> = $r13;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int minLoadableRetryCount>;
+
+        if $i0 != -1 goto label8;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long length>;
+
+        $b3 = $l2 cmp -1L;
+
+        if $b3 != 0 goto label8;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap>;
+
+        $l2 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap: long getDurationUs()>();
+
+        $b3 = $l2 cmp -9223372036854775807L;
+
+        if $b3 != 0 goto label8;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int actualMinLoadableRetryCount> = 6;
+
+     label8:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean prepared> = 1;
+
+        $r10 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener listener>;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long durationUs>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap>;
+
+        $z0 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap: boolean isSeekable()>();
+
+        interfaceinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener: void onSourceInfoRefreshed(long,boolean)>($l2, $z0);
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback callback>;
+
+        interfaceinvoke $r11.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback: void onPrepared(com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod)>(r0);
+
+     label9:
+        return;
+    }
+
+    private void maybeNotifyTrackFormat(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r4;
+        boolean[] $r2;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        int $i0, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r5;
+        java.lang.String $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $i0 := @parameter0: int;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackFormatNotificationSent>;
+
+        $z0 = $r2[$i0];
+
+        if $z0 != 0 goto label1;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray tracks>;
+
+        $r4 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i0);
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>(0);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $r6 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String sampleMimeType>;
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.MimeTypes: int getTrackType(java.lang.String)>($r6);
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long lastSeekPositionUs>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void downstreamFormatChanged(int,com.mbridge.msdk.playercommon.exoplayer2.Format,int,java.lang.Object,long)>($i2, $r5, 0, null, $l1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackFormatNotificationSent>;
+
+        $r2[$i0] = 1;
+
+     label1:
+        return;
+    }
+
+    private void maybeStartDeferredRetry(int)
+    {
+        boolean[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback $r4;
+        int $i0, $i1;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $i0 := @parameter0: int;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean pendingDeferredRetry>;
+
+        if $z0 == 0 goto label4;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackIsAudioVideoFlags>;
+
+        $z0 = $r1[$i0];
+
+        if $z0 == 0 goto label4;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r3 = $r2[$i0];
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: boolean hasNextSample()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long pendingResetPositionUs> = 0L;
+
+        $i1 = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean pendingDeferredRetry> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean notifyDiscontinuity> = 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long lastSeekPositionUs> = 0L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int extractedSamplesCountAtStartOfLoad> = 0;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i0 = lengthof $r2;
+
+     label2:
+        if $i1 >= $i0 goto label3;
+
+        $r3 = $r2[$i1];
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label3:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback callback>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback: void onContinueLoadingRequested(com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader)>(r0);
+
+     label4:
+        return;
+    }
+
+    private boolean seekInsideBufferUs(long)
+    {
+        boolean[] $r3;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        int $i1, $i2, $i3, $i4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $l0 := @parameter0: long;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i2 = lengthof $r1;
+
+        $i3 = 0;
+
+     label1:
+        $z0 = 1;
+
+        if $i3 >= $i2 goto label5;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r2 = $r1[$i3];
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void rewind()>();
+
+        $i1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int advanceTo(long,boolean,boolean)>($l0, 1, 0);
+
+        $i4 = -1;
+
+        if $i1 == $i4 goto label2;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        if $z0 != 0 goto label4;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackIsAudioVideoFlags>;
+
+        $z0 = $r3[$i3];
+
+        if $z0 != 0 goto label6;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean haveAudioVideoTracks>;
+
+        if $z0 != 0 goto label4;
+
+        return 0;
+
+     label4:
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label5:
+        return 1;
+
+     label6:
+        return 0;
+    }
+
+    private void startLoading()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r11;
+        android.net.Uri $r4;
+        long $l0, $l2, $l4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekPoint $r8;
+        byte $b1;
+        int $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r10;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable $r3, $r12;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap$SeekPoints $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r12 = new com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable;
+
+        $r3 = $r12;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: android.net.Uri uri>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource dataSource>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder extractorHolder>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable loadCondition>;
+
+        specialinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod,android.net.Uri,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource,com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder,com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable)>(r0, $r4, $r1, $r5, $r2);
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean prepared>;
+
+        if $z0 == 0 goto label2;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean isPendingReset()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long durationUs>;
+
+        $b1 = $l0 cmp -9223372036854775807L;
+
+        if $b1 == 0 goto label1;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long pendingResetPositionUs>;
+
+        $b1 = $l2 cmp $l0;
+
+        $i3 = (int) $b1;
+
+        if $i3 < 0 goto label1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean loadingFinished> = 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long pendingResetPositionUs> = -9223372036854775807L;
+
+        return;
+
+     label1:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap>;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long pendingResetPositionUs>;
+
+        $r7 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap$SeekPoints getSeekPoints(long)>($l0);
+
+        $r8 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap$SeekPoints: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekPoint first>;
+
+        $l0 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekPoint: long position>;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long pendingResetPositionUs>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: void setLoadPosition(long,long)>($l0, $l2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long pendingResetPositionUs> = -9223372036854775807L;
+
+     label2:
+        $i3 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int getExtractedSamplesCount()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int extractedSamplesCountAtStartOfLoad> = $i3;
+
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int actualMinLoadableRetryCount>;
+
+        $l0 = virtualinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: long startLoading(com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable,com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Callback,int)>($r3, r0, $i3);
+
+        $r10 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $r11 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec access$400(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r3);
+
+        $l2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: long access$500(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r3);
+
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long durationUs>;
+
+        virtualinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void loadStarted(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int,int,com.mbridge.msdk.playercommon.exoplayer2.Format,int,java.lang.Object,long,long,long)>($r11, 1, -1, null, 0, null, $l2, $l4, $l0);
+
+        return;
+    }
+
+    private boolean suppressRead()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean notifyDiscontinuity>;
+
+        if $z0 != 0 goto label1;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean isPendingReset()>();
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        return 1;
+    }
+
+    public final boolean continueLoading(long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable $r1;
+        int $i1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $l0 := @parameter0: long;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean loadingFinished>;
+
+        if $z0 != 0 goto label2;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean pendingDeferredRetry>;
+
+        if $z0 != 0 goto label2;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean prepared>;
+
+        if $z0 == 0 goto label1;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int enabledTrackCount>;
+
+        if $i1 != 0 goto label1;
+
+        goto label2;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable loadCondition>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable: boolean open()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        $z1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: boolean isLoading()>();
+
+        if $z1 != 0 goto label3;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void startLoading()>();
+
+        return 1;
+
+     label2:
+        return 0;
+
+     label3:
+        return $z0;
+    }
+
+    public final void discardBuffer(long, boolean)
+    {
+        boolean[] $r3;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        int $i1, $i2;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $l0 := @parameter0: long;
+
+        $z0 := @parameter1: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i1 = lengthof $r1;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 >= $i1 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r2 = $r1[$i2];
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackEnabledStates>;
+
+        $z1 = $r3[$i2];
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardTo(long,boolean,boolean)>($l0, $z0, $z1);
+
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public final void endTracks()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        java.lang.Runnable $r1;
+        android.os.Handler $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean sampleQueuesBuilt> = 1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: android.os.Handler handler>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: java.lang.Runnable maybeFinishPrepareRunnable>;
+
+        virtualinvoke $r2.<android.os.Handler: boolean post(java.lang.Runnable)>($r1);
+
+        return;
+    }
+
+    public final long getAdjustedSeekPositionUs(long, com.mbridge.msdk.playercommon.exoplayer2.SeekParameters)
+    {
+        long $l0, $l1, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekPoint $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap$SeekPoints $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.SeekParameters $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $l2 := @parameter0: long;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.SeekParameters;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap>;
+
+        $z0 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap: boolean isSeekable()>();
+
+        if $z0 != 0 goto label1;
+
+        return 0L;
+
+     label1:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap>;
+
+        $r4 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap$SeekPoints getSeekPoints(long)>($l2);
+
+        $r2 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap$SeekPoints: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekPoint first>;
+
+        $l0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekPoint: long timeUs>;
+
+        $r2 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap$SeekPoints: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekPoint second>;
+
+        $l1 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekPoint: long timeUs>;
+
+        $l2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long resolveSeekPositionUs(long,com.mbridge.msdk.playercommon.exoplayer2.SeekParameters,long,long)>($l2, $r1, $l0, $l1);
+
+        return $l2;
+    }
+
+    public final long getBufferedPositionUs()
+    {
+        boolean[] $r2;
+        long $l1, $l3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        byte $b4;
+        int $i0, $i2;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean loadingFinished>;
+
+        if $z0 == 0 goto label1;
+
+        return -9223372036854775808L;
+
+     label1:
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean isPendingReset()>();
+
+        if $z0 == 0 goto label2;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long pendingResetPositionUs>;
+
+        return $l1;
+
+     label2:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean haveAudioVideoTracks>;
+
+        if $z0 == 0 goto label5;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i0 = lengthof $r1;
+
+        $l1 = 9223372036854775807L;
+
+        $i2 = 0;
+
+     label3:
+        if $i2 >= $i0 goto label6;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackIsAudioVideoFlags>;
+
+        $z0 = $r2[$i2];
+
+        if $z0 == 0 goto label4;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r3 = $r1[$i2];
+
+        $l3 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long getLargestQueuedTimestampUs()>();
+
+        $l1 = staticinvoke <java.lang.Math: long min(long,long)>($l1, $l3);
+
+     label4:
+        $i2 = $i2 + 1;
+
+        goto label3;
+
+     label5:
+        $l1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long getLargestQueuedTimestampUs()>();
+
+     label6:
+        $b4 = $l1 cmp -9223372036854775808L;
+
+        if $b4 != 0 goto label7;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long lastSeekPositionUs>;
+
+     label7:
+        return $l1;
+    }
+
+    public final long getNextLoadPositionUs()
+    {
+        int $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        long $l0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int enabledTrackCount>;
+
+        if $i1 != 0 goto label1;
+
+        return -9223372036854775808L;
+
+     label1:
+        $l0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long getBufferedPositionUs()>();
+
+        return $l0;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getTrackGroups()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray tracks>;
+
+        return r1;
+    }
+
+    final boolean isReady(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r2;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $i0 := @parameter0: int;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean suppressRead()>();
+
+        if $z0 != 0 goto label2;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean loadingFinished>;
+
+        if $z0 != 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r2 = $r1[$i0];
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: boolean hasNextSample()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    final void maybeThrowError() throws java.io.IOException
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int actualMinLoadableRetryCount>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: void maybeThrowError(int)>($i0);
+
+        return;
+    }
+
+    public final void maybeThrowPrepareError() throws java.io.IOException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void maybeThrowError()>();
+
+        return;
+    }
+
+    public final void onLoadCanceled(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable, long, long, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r3;
+        long $l0, $l1, $l2, $l3, $l4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback $r6;
+        int $i5, $i6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r2;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $z0 := @parameter3: boolean;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec access$400(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        $l3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: long access$500(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long durationUs>;
+
+        $l4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: long access$600(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void loadCanceled(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int,int,com.mbridge.msdk.playercommon.exoplayer2.Format,int,java.lang.Object,long,long,long,long,long)>($r3, 1, -1, null, 0, null, $l3, $l2, $l0, $l1, $l4);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void copyLengthFromLoader(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i5 = lengthof $r4;
+
+        $i6 = 0;
+
+     label1:
+        if $i6 >= $i5 goto label2;
+
+        $r5 = $r4[$i6];
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $i6 = $i6 + 1;
+
+        goto label1;
+
+     label2:
+        $i5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int enabledTrackCount>;
+
+        if $i5 <= 0 goto label3;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback callback>;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback: void onContinueLoadingRequested(com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader)>(r0);
+
+     label3:
+        return;
+    }
+
+    public final volatile void onLoadCanceled(com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable, long, long, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable $r1;
+        long $l0, $l1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $z0 := @parameter3: boolean;
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable) $r1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void onLoadCanceled(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable,long,long,boolean)>($r2, $l0, $l1, 0);
+
+        return;
+    }
+
+    public final void onLoadCompleted(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable, long, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r5;
+        long $l0, $l1, $l2, $l4, $l5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback $r6;
+        byte $b3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long durationUs>;
+
+        $b3 = $l2 cmp -9223372036854775807L;
+
+        if $b3 != 0 goto label3;
+
+        $l2 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long getLargestQueuedTimestampUs()>();
+
+        $b3 = $l2 cmp -9223372036854775808L;
+
+        if $b3 != 0 goto label1;
+
+        $l2 = 0L;
+
+        goto label2;
+
+     label1:
+        $l2 = $l2 + 10000L;
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long durationUs> = $l2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener listener>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap>;
+
+        $z0 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap: boolean isSeekable()>();
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$Listener: void onSourceInfoRefreshed(long,boolean)>($l2, $z0);
+
+     label3:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec access$400(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        $l4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: long access$500(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long durationUs>;
+
+        $l5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: long access$600(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void loadCompleted(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int,int,com.mbridge.msdk.playercommon.exoplayer2.Format,int,java.lang.Object,long,long,long,long,long)>($r5, 1, -1, null, 0, null, $l4, $l2, $l0, $l1, $l5);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void copyLengthFromLoader(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean loadingFinished> = 1;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback callback>;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback: void onContinueLoadingRequested(com.mbridge.msdk.playercommon.exoplayer2.source.SequenceableLoader)>(r0);
+
+        return;
+    }
+
+    public final volatile void onLoadCompleted(com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable, long, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable $r1;
+        long $l0, $l1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable) $r1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void onLoadCompleted(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable,long,long)>($r2, $l0, $l1);
+
+        return;
+    }
+
+    public final int onLoadError(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable, long, long, java.io.IOException)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r4;
+        long $l0, $l1, $l2, $l3, $l4;
+        java.io.IOException $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        int $i5, $i6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $r2 := @parameter3: java.io.IOException;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean isLoadableExceptionFatal(java.io.IOException)>($r2);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec access$400(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        $l3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: long access$500(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long durationUs>;
+
+        $l4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable: long access$600(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void loadError(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int,int,com.mbridge.msdk.playercommon.exoplayer2.Format,int,java.lang.Object,long,long,long,long,long,java.io.IOException,boolean)>($r4, 1, -1, null, 0, null, $l3, $l2, $l0, $l1, $l4, $r2, $z0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void copyLengthFromLoader(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        return 3;
+
+     label1:
+        $i5 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int getExtractedSamplesCount()>();
+
+        $i6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int extractedSamplesCountAtStartOfLoad>;
+
+        if $i5 <= $i6 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        $z1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean configureRetry(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable,int)>($r1, $i5);
+
+        if $z1 == 0 goto label5;
+
+        if $z0 == 0 goto label4;
+
+        return 1;
+
+     label4:
+        return 0;
+
+     label5:
+        return 2;
+    }
+
+    public final volatile int onLoadError(com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable, long, long, java.io.IOException)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable $r2;
+        int $i2;
+        long $l0, $l1;
+        java.io.IOException $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$Loadable;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $r1 := @parameter3: java.io.IOException;
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable) $r2;
+
+        $i2 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int onLoadError(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractingLoadable,long,long,java.io.IOException)>($r3, $l0, $l1, $r1);
+
+        return $i2;
+    }
+
+    public final void onLoaderReleased()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r1 = $r2[$i1];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder extractorHolder>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$ExtractorHolder: void release()>();
+
+        return;
+    }
+
+    public final void onUpstreamFormatChanged(com.mbridge.msdk.playercommon.exoplayer2.Format)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        android.os.Handler $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r2;
+        java.lang.Runnable $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: android.os.Handler handler>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: java.lang.Runnable maybeFinishPrepareRunnable>;
+
+        virtualinvoke $r3.<android.os.Handler: boolean post(java.lang.Runnable)>($r1);
+
+        return;
+    }
+
+    public final void prepare(com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable $r2;
+        long $l0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback;
+
+        $l0 := @parameter1: long;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback callback> = $r1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable loadCondition>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ConditionVariable: boolean open()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void startLoading()>();
+
+        return;
+    }
+
+    final int readData(int, com.mbridge.msdk.playercommon.exoplayer2.FormatHolder, com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer, boolean)
+    {
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.FormatHolder $r2;
+        int $i0, $i2, $i3;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $i0 := @parameter0: int;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.FormatHolder;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer;
+
+        $z0 := @parameter3: boolean;
+
+        $z1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean suppressRead()>();
+
+        if $z1 == 0 goto label1;
+
+        $i0 = -3;
+
+        return $i0;
+
+     label1:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r1 = $r4[$i0];
+
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean loadingFinished>;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long lastSeekPositionUs>;
+
+        $i2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int read(com.mbridge.msdk.playercommon.exoplayer2.FormatHolder,com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer,boolean,boolean,long)>($r2, $r3, $z0, $z1, $l1);
+
+        $i3 = -4;
+
+        if $i2 != $i3 goto label2;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void maybeNotifyTrackFormat(int)>($i0);
+
+        return $i2;
+
+     label2:
+        $i3 = -3;
+
+        if $i2 != $i3 goto label3;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void maybeStartDeferredRetry(int)>($i0);
+
+     label3:
+        return $i2;
+    }
+
+    public final long readDiscontinuity()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r1;
+        long l2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean notifiedReadingStarted>;
+
+        if $z0 != 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void readingStarted()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean notifiedReadingStarted> = 1;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean notifyDiscontinuity>;
+
+        if $z0 == 0 goto label3;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean loadingFinished>;
+
+        if $z0 != 0 goto label2;
+
+        $i1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int getExtractedSamplesCount()>();
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int extractedSamplesCountAtStartOfLoad>;
+
+        if $i1 <= $i0 goto label3;
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean notifyDiscontinuity> = 0;
+
+        l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long lastSeekPositionUs>;
+
+        return l2;
+
+     label3:
+        return -9223372036854775807L;
+    }
+
+    public final void reevaluateBuffer(long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        long $l0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $l0 := @parameter0: long;
+
+        return;
+    }
+
+    public final void release()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        android.os.Handler $r4;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r3;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean prepared>;
+
+        if $z0 == 0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r1 = $r2[$i1];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardToEnd()>();
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: void release(com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader$ReleaseCallback)>(r0);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: android.os.Handler handler>;
+
+        virtualinvoke $r4.<android.os.Handler: void removeCallbacksAndMessages(java.lang.Object)>(null);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaPeriod$Callback callback> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean released> = 1;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher eventDispatcher>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.MediaSourceEventListener$EventDispatcher: void mediaPeriodReleased()>();
+
+        return;
+    }
+
+    public final void seekMap(com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap $r2;
+        android.os.Handler $r3;
+        java.lang.Runnable $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap> = $r2;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: android.os.Handler handler>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: java.lang.Runnable maybeFinishPrepareRunnable>;
+
+        virtualinvoke $r3.<android.os.Handler: boolean post(java.lang.Runnable)>($r1);
+
+        return;
+    }
+
+    public final long seekToUs(long)
+    {
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap $r2;
+        int $i0, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r3;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $l1 := @parameter0: long;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap seekMap>;
+
+        $z0 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap: boolean isSeekable()>();
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        $l1 = 0L;
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long lastSeekPositionUs> = $l1;
+
+        $i2 = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean notifyDiscontinuity> = 0;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean isPendingReset()>();
+
+        if $z0 != 0 goto label3;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean seekInsideBufferUs(long)>($l1);
+
+        if $z0 == 0 goto label3;
+
+        return $l1;
+
+     label3:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean pendingDeferredRetry> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long pendingResetPositionUs> = $l1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean loadingFinished> = 0;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: boolean isLoading()>();
+
+        if $z0 == 0 goto label4;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: void cancelLoading()>();
+
+        return $l1;
+
+     label4:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i0 = lengthof $r4;
+
+     label5:
+        if $i2 >= $i0 goto label6;
+
+        $r1 = $r4[$i2];
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $i2 = $i2 + 1;
+
+        goto label5;
+
+     label6:
+        return $l1;
+    }
+
+    public final long selectTracks(com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[], boolean[], com.mbridge.msdk.playercommon.exoplayer2.source.SampleStream[], boolean[], long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleStream $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[] $r2;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r12;
+        byte $b6;
+        int $i1, $i2, $i3, $i4, $i5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$SampleStreamImpl $r7, $r14;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r9;
+        boolean $z0, $z1;
+        boolean[] $r1, $r3, $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleStream[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader $r13;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r11;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[];
+
+        $r3 := @parameter1: boolean[];
+
+        $r4 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.source.SampleStream[];
+
+        $r1 := @parameter3: boolean[];
+
+        $l0 := @parameter4: long;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean prepared>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int enabledTrackCount>;
+
+        $i2 = 0;
+
+        $i3 = 0;
+
+     label01:
+        $i4 = lengthof $r2;
+
+        if $i3 >= $i4 goto label04;
+
+        $r5 = $r4[$i3];
+
+        if $r5 == null goto label03;
+
+        $r6 = $r2[$i3];
+
+        if $r6 == null goto label02;
+
+        $z0 = $r3[$i3];
+
+        if $z0 != 0 goto label03;
+
+     label02:
+        $r7 = (com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$SampleStreamImpl) $r5;
+
+        $i4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$SampleStreamImpl: int access$300(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$SampleStreamImpl)>($r7);
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackEnabledStates>;
+
+        $z0 = $r8[$i4];
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $i5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int enabledTrackCount>;
+
+        $i5 = $i5 - 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int enabledTrackCount> = $i5;
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackEnabledStates>;
+
+        $r8[$i4] = 0;
+
+        $r4[$i3] = null;
+
+     label03:
+        $i3 = $i3 + 1;
+
+        goto label01;
+
+     label04:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean seenFirstTrackSelection>;
+
+        if $z0 == 0 goto label05;
+
+        if $i1 != 0 goto label07;
+
+        goto label06;
+
+     label05:
+        $b6 = $l0 cmp 0L;
+
+        if $b6 == 0 goto label07;
+
+     label06:
+        $z0 = 1;
+
+        goto label08;
+
+     label07:
+        $z0 = 0;
+
+     label08:
+        $i1 = 0;
+
+     label09:
+        $i3 = lengthof $r2;
+
+        if $i1 >= $i3 goto label16;
+
+        $r5 = $r4[$i1];
+
+        if $r5 != null goto label15;
+
+        $r6 = $r2[$i1];
+
+        if $r6 == null goto label15;
+
+        $i3 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection: int length()>();
+
+        if $i3 != 1 goto label10;
+
+        $z1 = 1;
+
+        goto label11;
+
+     label10:
+        $z1 = 0;
+
+     label11:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z1);
+
+        $i3 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection: int getIndexInTrackGroup(int)>(0);
+
+        if $i3 != 0 goto label12;
+
+        $z1 = 1;
+
+        goto label13;
+
+     label12:
+        $z1 = 0;
+
+     label13:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z1);
+
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray tracks>;
+
+        $r10 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup getTrackGroup()>();
+
+        $i3 = virtualinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int indexOf(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup)>($r10);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackEnabledStates>;
+
+        $z1 = $r3[$i3];
+
+        $z1 = $z1 ^ 1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z1);
+
+        $i4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int enabledTrackCount>;
+
+        $i4 = $i4 + 1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int enabledTrackCount> = $i4;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean[] trackEnabledStates>;
+
+        $r3[$i3] = 1;
+
+        $r14 = new com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$SampleStreamImpl;
+
+        specialinvoke $r14.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod$SampleStreamImpl: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod,int)>(r0, $i3);
+
+        $r4[$i1] = $r14;
+
+        $r1[$i1] = 1;
+
+        if $z0 != 0 goto label15;
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r12 = $r11[$i3];
+
+        virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void rewind()>();
+
+        $i3 = virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int advanceTo(long,boolean,boolean)>($l0, 1, 1);
+
+        $i4 = -1;
+
+        if $i3 != $i4 goto label14;
+
+        $i3 = virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int getReadIndex()>();
+
+        if $i3 == 0 goto label14;
+
+        $z0 = 1;
+
+        goto label15;
+
+     label14:
+        $z0 = 0;
+
+     label15:
+        $i1 = $i1 + 1;
+
+        goto label09;
+
+     label16:
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int enabledTrackCount>;
+
+        if $i1 != 0 goto label21;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean pendingDeferredRetry> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean notifyDiscontinuity> = 0;
+
+        $r13 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        $z0 = virtualinvoke $r13.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: boolean isLoading()>();
+
+        if $z0 == 0 goto label19;
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i1 = lengthof $r11;
+
+     label17:
+        if $i2 >= $i1 goto label18;
+
+        $r12 = $r11[$i2];
+
+        virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardToEnd()>();
+
+        $i2 = $i2 + 1;
+
+        goto label17;
+
+     label18:
+        $r13 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader loader>;
+
+        virtualinvoke $r13.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Loader: void cancelLoading()>();
+
+        goto label24;
+
+     label19:
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i1 = lengthof $r11;
+
+     label20:
+        if $i2 >= $i1 goto label24;
+
+        $r12 = $r11[$i2];
+
+        virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset()>();
+
+        $i2 = $i2 + 1;
+
+        goto label20;
+
+     label21:
+        if $z0 == 0 goto label24;
+
+        $l0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long seekToUs(long)>($l0);
+
+     label22:
+        $i1 = lengthof $r4;
+
+        if $i2 >= $i1 goto label24;
+
+        $r5 = $r4[$i2];
+
+        if $r5 == null goto label23;
+
+        $r1[$i2] = 1;
+
+     label23:
+        $i2 = $i2 + 1;
+
+        goto label22;
+
+     label24:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean seenFirstTrackSelection> = 1;
+
+        return $l0;
+    }
+
+    final int skipData(int, long)
+    {
+        long $l2, $l4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        byte $b1;
+        int $i0, $i3, $i5, $i6;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $i0 := @parameter0: int;
+
+        $l2 := @parameter1: long;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean suppressRead()>();
+
+        $i3 = 0;
+
+        if $z0 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r2 = $r1[$i0];
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: boolean loadingFinished>;
+
+        if $z0 == 0 goto label2;
+
+        $l4 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long getLargestQueuedTimestampUs()>();
+
+        $b1 = $l2 cmp $l4;
+
+        $i5 = (int) $b1;
+
+        if $i5 <= 0 goto label2;
+
+        $i3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int advanceToEnd()>();
+
+        goto label4;
+
+     label2:
+        $i5 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int advanceTo(long,boolean,boolean)>($l2, 1, 1);
+
+        $i6 = -1;
+
+        if $i5 != $i6 goto label3;
+
+        goto label4;
+
+     label3:
+        $i3 = $i5;
+
+     label4:
+        if $i3 <= 0 goto label5;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void maybeNotifyTrackFormat(int)>($i0);
+
+        return $i3;
+
+     label5:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: void maybeStartDeferredRetry(int)>($i0);
+
+        return $i3;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput track(int, int)
+    {
+        java.lang.Object[] $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod r0;
+        int[] $r2;
+        int $i0, $i1, $i2, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod;
+
+        $i1 := @parameter0: int;
+
+        $i2 := @parameter1: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $i2 = lengthof $r1;
+
+        $i0 = 0;
+
+     label1:
+        if $i0 >= $i2 goto label3;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int[] sampleQueueTrackIds>;
+
+        $i3 = $r2[$i0];
+
+        if $i3 != $i1 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r3 = $r1[$i0];
+
+        return $r3;
+
+     label2:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label3:
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator allocator>;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator)>($r4);
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void setUpstreamFormatChangeListener(com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$UpstreamFormatChangedListener)>(r0);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int[] sampleQueueTrackIds>;
+
+        $i0 = $i2 + 1;
+
+        $r2 = staticinvoke <java.util.Arrays: int[] copyOf(int[],int)>($r2, $i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: int[] sampleQueueTrackIds> = $r2;
+
+        $r2[$i2] = $i1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues>;
+
+        $r5 = staticinvoke <java.util.Arrays: java.lang.Object[] copyOf(java.lang.Object[],int)>($r1, $i0);
+
+        $r1 = (com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[]) $r5;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue[] sampleQueues> = $r1;
+
+        $r1[$i2] = $r3;
+
+        return $r3;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.source.ExtractorMediaPeriod: long DEFAULT_LAST_SAMPLE_DURATION_US> = 10000L;
+
+        return;
+    }
+}

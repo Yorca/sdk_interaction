@@ -1,0 +1,1754 @@
+public class com.google.firebase.inappmessaging.internal.InAppMessageStreamManager extends java.lang.Object
+{
+    public static final java.lang.String ON_FOREGROUND;
+    private final com.google.firebase.inappmessaging.internal.AbtIntegrationHelper abtIntegrationHelper;
+    private final com.google.firebase.inappmessaging.internal.AnalyticsEventsManager analyticsEventsManager;
+    private final com.google.firebase.inappmessaging.internal.ApiClient apiClient;
+    private final io.reactivex.flowables.ConnectableFlowable appForegroundEventFlowable;
+    private final com.google.firebase.inappmessaging.model.RateLimit appForegroundRateLimit;
+    private final java.util.concurrent.Executor blockingExecutor;
+    private final com.google.firebase.inappmessaging.internal.CampaignCacheClient campaignCacheClient;
+    private final com.google.firebase.inappmessaging.internal.time.Clock clock;
+    private final com.google.firebase.inappmessaging.internal.DataCollectionHelper dataCollectionHelper;
+    private final com.google.firebase.installations.FirebaseInstallationsApi firebaseInstallations;
+    private final com.google.firebase.inappmessaging.internal.ImpressionStorageClient impressionStorageClient;
+    private final io.reactivex.flowables.ConnectableFlowable programmaticTriggerEventFlowable;
+    private final com.google.firebase.inappmessaging.internal.RateLimiterClient rateLimiterClient;
+    private final com.google.firebase.inappmessaging.internal.Schedulers schedulers;
+    private final com.google.firebase.inappmessaging.internal.TestDeviceHelper testDeviceHelper;
+
+    public static boolean $r8$lambda$AiAaCQ3qsVI6xCnO-1y3DNtSS44(com.google.firebase.inappmessaging.internal.InstallationIdResult)
+    {
+        com.google.firebase.inappmessaging.internal.InstallationIdResult $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.firebase.inappmessaging.internal.InstallationIdResult;
+
+        $z0 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: boolean validIID(com.google.firebase.inappmessaging.internal.InstallationIdResult)>($r0);
+
+        return $z0;
+    }
+
+    public static int $r8$lambda$UaReWLEs1KuSRqPfwxIJAxu1eXQ(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent, com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)
+    {
+        int $i0;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r0, $r1;
+
+        $r1 := @parameter0: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r0 := @parameter1: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $i0 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: int compareByPriority(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent,com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)>($r1, $r0);
+
+        return $i0;
+    }
+
+    public void <init>(io.reactivex.flowables.ConnectableFlowable, io.reactivex.flowables.ConnectableFlowable, com.google.firebase.inappmessaging.internal.CampaignCacheClient, com.google.firebase.inappmessaging.internal.time.Clock, com.google.firebase.inappmessaging.internal.ApiClient, com.google.firebase.inappmessaging.internal.AnalyticsEventsManager, com.google.firebase.inappmessaging.internal.Schedulers, com.google.firebase.inappmessaging.internal.ImpressionStorageClient, com.google.firebase.inappmessaging.internal.RateLimiterClient, com.google.firebase.inappmessaging.model.RateLimit, com.google.firebase.inappmessaging.internal.TestDeviceHelper, com.google.firebase.installations.FirebaseInstallationsApi, com.google.firebase.inappmessaging.internal.DataCollectionHelper, com.google.firebase.inappmessaging.internal.AbtIntegrationHelper, java.util.concurrent.Executor)
+    {
+        com.google.firebase.inappmessaging.internal.AnalyticsEventsManager $r6;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.flowables.ConnectableFlowable $r1, $r2;
+        com.google.firebase.inappmessaging.internal.Schedulers $r7;
+        com.google.firebase.inappmessaging.internal.time.Clock $r4;
+        com.google.firebase.inappmessaging.internal.ApiClient $r5;
+        com.google.firebase.inappmessaging.internal.ImpressionStorageClient $r8;
+        com.google.firebase.inappmessaging.internal.AbtIntegrationHelper $r14;
+        com.google.firebase.inappmessaging.internal.RateLimiterClient $r9;
+        com.google.firebase.inappmessaging.internal.TestDeviceHelper $r11;
+        java.util.concurrent.Executor $r15;
+        com.google.firebase.inappmessaging.internal.CampaignCacheClient $r3;
+        com.google.firebase.inappmessaging.internal.DataCollectionHelper $r13;
+        com.google.firebase.installations.FirebaseInstallationsApi $r12;
+        com.google.firebase.inappmessaging.model.RateLimit $r10;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r1 := @parameter0: io.reactivex.flowables.ConnectableFlowable;
+
+        $r2 := @parameter1: io.reactivex.flowables.ConnectableFlowable;
+
+        $r3 := @parameter2: com.google.firebase.inappmessaging.internal.CampaignCacheClient;
+
+        $r4 := @parameter3: com.google.firebase.inappmessaging.internal.time.Clock;
+
+        $r5 := @parameter4: com.google.firebase.inappmessaging.internal.ApiClient;
+
+        $r6 := @parameter5: com.google.firebase.inappmessaging.internal.AnalyticsEventsManager;
+
+        $r7 := @parameter6: com.google.firebase.inappmessaging.internal.Schedulers;
+
+        $r8 := @parameter7: com.google.firebase.inappmessaging.internal.ImpressionStorageClient;
+
+        $r9 := @parameter8: com.google.firebase.inappmessaging.internal.RateLimiterClient;
+
+        $r10 := @parameter9: com.google.firebase.inappmessaging.model.RateLimit;
+
+        $r11 := @parameter10: com.google.firebase.inappmessaging.internal.TestDeviceHelper;
+
+        $r12 := @parameter11: com.google.firebase.installations.FirebaseInstallationsApi;
+
+        $r13 := @parameter12: com.google.firebase.inappmessaging.internal.DataCollectionHelper;
+
+        $r14 := @parameter13: com.google.firebase.inappmessaging.internal.AbtIntegrationHelper;
+
+        $r15 := @parameter14: java.util.concurrent.Executor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: io.reactivex.flowables.ConnectableFlowable appForegroundEventFlowable> = $r1;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: io.reactivex.flowables.ConnectableFlowable programmaticTriggerEventFlowable> = $r2;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.CampaignCacheClient campaignCacheClient> = $r3;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.time.Clock clock> = $r4;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.ApiClient apiClient> = $r5;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.AnalyticsEventsManager analyticsEventsManager> = $r6;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.Schedulers schedulers> = $r7;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.ImpressionStorageClient impressionStorageClient> = $r8;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.RateLimiterClient rateLimiterClient> = $r9;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.model.RateLimit appForegroundRateLimit> = $r10;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.TestDeviceHelper testDeviceHelper> = $r11;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.DataCollectionHelper dataCollectionHelper> = $r13;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.installations.FirebaseInstallationsApi firebaseInstallations> = $r12;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.AbtIntegrationHelper abtIntegrationHelper> = $r14;
+
+        r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: java.util.concurrent.Executor blockingExecutor> = $r15;
+
+        return;
+    }
+
+    static com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse cacheExpiringResponse()
+    {
+        com.google.protobuf.GeneratedMessageLite $r1;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse $r2;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse$Builder $r0;
+
+        $r0 = staticinvoke <com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse$Builder newBuilder()>();
+
+        $r0 = virtualinvoke $r0.<com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse$Builder: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse$Builder setExpirationEpochTimestampMillis(long)>(1L);
+
+        $r1 = virtualinvoke $r0.<com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse$Builder: com.google.protobuf.GeneratedMessageLite build()>();
+
+        $r2 = (com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse) $r1;
+
+        return $r2;
+    }
+
+    private static int compareByPriority(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent, com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)
+    {
+        com.google.firebase.inappmessaging.CommonTypesProto$Priority $r2;
+        int $i0, $i1;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r0, $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r1 := @parameter1: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $z0 = virtualinvoke $r0.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: boolean getIsTestCampaign()>();
+
+        if $z0 == 0 goto label1;
+
+        $z0 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: boolean getIsTestCampaign()>();
+
+        if $z0 != 0 goto label1;
+
+        return -1;
+
+     label1:
+        $z0 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: boolean getIsTestCampaign()>();
+
+        if $z0 == 0 goto label2;
+
+        $z0 = virtualinvoke $r0.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: boolean getIsTestCampaign()>();
+
+        if $z0 != 0 goto label2;
+
+        return 1;
+
+     label2:
+        $r2 = virtualinvoke $r0.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.firebase.inappmessaging.CommonTypesProto$Priority getPriority()>();
+
+        $i0 = virtualinvoke $r2.<com.google.firebase.inappmessaging.CommonTypesProto$Priority: int getValue()>();
+
+        $r2 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.firebase.inappmessaging.CommonTypesProto$Priority getPriority()>();
+
+        $i1 = virtualinvoke $r2.<com.google.firebase.inappmessaging.CommonTypesProto$Priority: int getValue()>();
+
+        $i0 = staticinvoke <java.lang.Integer: int compare(int,int)>($i0, $i1);
+
+        return $i0;
+    }
+
+    private static boolean containsTriggeringCondition(java.lang.String, com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)
+    {
+        com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition $r5;
+        java.lang.Object[] $r6;
+        java.util.Iterator $r3;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r1;
+        java.util.List $r2;
+        java.lang.Object $r4;
+        java.lang.String $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $z0 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: boolean isAppForegroundEvent(java.lang.String)>($r0);
+
+        if $z0 == 0 goto label1;
+
+        $z0 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: boolean getIsTestCampaign()>();
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        $r2 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: java.util.List getTriggeringConditionsList()>();
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition) $r4;
+
+        $z0 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: boolean hasFiamTrigger(com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition,java.lang.String)>($r5, $r0);
+
+        if $z0 != 0 goto label3;
+
+        $z0 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: boolean hasAnalyticsTrigger(com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition,java.lang.String)>($r5, $r0);
+
+        if $z0 == 0 goto label2;
+
+     label3:
+        $r6 = newarray (java.lang.Object)[1];
+
+        $r6[0] = $r0;
+
+        $r0 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("The event %s is contained in the list of triggers", $r6);
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logd(java.lang.String)>($r0);
+
+        return 1;
+
+     label4:
+        return 0;
+    }
+
+    private io.reactivex.Maybe getContentIfNotRateLimited(java.lang.String, com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda8 $r11;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda7 $r9;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda6 $r6;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.Maybe $r10;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r1;
+        io.reactivex.Single $r5, $r8;
+        com.google.firebase.inappmessaging.internal.RateLimiterClient $r3;
+        com.google.firebase.inappmessaging.model.RateLimit $r4;
+        java.lang.Boolean $r7;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $z0 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: boolean getIsTestCampaign()>();
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: boolean isAppForegroundEvent(java.lang.String)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        $r3 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.RateLimiterClient rateLimiterClient>;
+
+        $r4 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.model.RateLimit appForegroundRateLimit>;
+
+        $r5 = virtualinvoke $r3.<com.google.firebase.inappmessaging.internal.RateLimiterClient: io.reactivex.Single isRateLimited(com.google.firebase.inappmessaging.model.RateLimit)>($r4);
+
+        $r6 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda6;
+
+        specialinvoke $r6.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda6: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Single: io.reactivex.Single doOnSuccess(io.reactivex.functions.Consumer)>($r6);
+
+        $r7 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(0);
+
+        $r8 = staticinvoke <io.reactivex.Single: io.reactivex.Single just(java.lang.Object)>($r7);
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Single: io.reactivex.Single onErrorResumeNext(io.reactivex.Single)>($r8);
+
+        $r9 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda7;
+
+        specialinvoke $r9.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda7: void <init>()>();
+
+        $r10 = virtualinvoke $r5.<io.reactivex.Single: io.reactivex.Maybe filter(io.reactivex.functions.Predicate)>($r9);
+
+        $r11 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda8;
+
+        specialinvoke $r11.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda8: void <init>(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)>($r1);
+
+        $r10 = virtualinvoke $r10.<io.reactivex.Maybe: io.reactivex.Maybe map(io.reactivex.functions.Function)>($r11);
+
+        return $r10;
+
+     label1:
+        $r10 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe just(java.lang.Object)>($r1);
+
+        return $r10;
+    }
+
+    private io.reactivex.Maybe getTriggeredInAppMessageMaybe(java.lang.String, io.reactivex.functions.Function, io.reactivex.functions.Function, io.reactivex.functions.Function, com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse)
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda4 $r12;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda3 $r10;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda2 $r9;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda1 $r8;
+        io.reactivex.Maybe $r11;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse $r5;
+        java.util.List $r6;
+        io.reactivex.Flowable $r7;
+        io.reactivex.functions.Function $r1, $r3, $r4;
+        java.lang.String $r2;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: io.reactivex.functions.Function;
+
+        $r4 := @parameter2: io.reactivex.functions.Function;
+
+        $r1 := @parameter3: io.reactivex.functions.Function;
+
+        $r5 := @parameter4: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse;
+
+        $r6 = virtualinvoke $r5.<com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse: java.util.List getMessagesList()>();
+
+        $r7 = staticinvoke <io.reactivex.Flowable: io.reactivex.Flowable fromIterable(java.lang.Iterable)>($r6);
+
+        $r8 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda1;
+
+        specialinvoke $r8.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda1: void <init>(com.google.firebase.inappmessaging.internal.InAppMessageStreamManager)>(r0);
+
+        $r7 = virtualinvoke $r7.<io.reactivex.Flowable: io.reactivex.Flowable filter(io.reactivex.functions.Predicate)>($r8);
+
+        $r9 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda2;
+
+        specialinvoke $r9.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda2: void <init>(java.lang.String)>($r2);
+
+        $r7 = virtualinvoke $r7.<io.reactivex.Flowable: io.reactivex.Flowable filter(io.reactivex.functions.Predicate)>($r9);
+
+        $r7 = virtualinvoke $r7.<io.reactivex.Flowable: io.reactivex.Flowable flatMapMaybe(io.reactivex.functions.Function)>($r3);
+
+        $r7 = virtualinvoke $r7.<io.reactivex.Flowable: io.reactivex.Flowable flatMapMaybe(io.reactivex.functions.Function)>($r4);
+
+        $r7 = virtualinvoke $r7.<io.reactivex.Flowable: io.reactivex.Flowable flatMapMaybe(io.reactivex.functions.Function)>($r1);
+
+        $r10 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda3;
+
+        specialinvoke $r10.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda3: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<io.reactivex.Flowable: io.reactivex.Flowable sorted(java.util.Comparator)>($r10);
+
+        $r11 = virtualinvoke $r7.<io.reactivex.Flowable: io.reactivex.Maybe firstElement()>();
+
+        $r12 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda4;
+
+        specialinvoke $r12.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda4: void <init>(com.google.firebase.inappmessaging.internal.InAppMessageStreamManager,java.lang.String)>(r0, $r2);
+
+        $r11 = virtualinvoke $r11.<io.reactivex.Maybe: io.reactivex.Maybe flatMap(io.reactivex.functions.Function)>($r12);
+
+        return $r11;
+    }
+
+    private static boolean hasAnalyticsTrigger(com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition, java.lang.String)
+    {
+        com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition $r1;
+        com.google.firebase.inappmessaging.CommonTypesProto$Event $r2;
+        java.lang.String $r0, $r3;
+        boolean $z0;
+
+        $r1 := @parameter0: com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r2 = virtualinvoke $r1.<com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition: com.google.firebase.inappmessaging.CommonTypesProto$Event getEvent()>();
+
+        $r3 = virtualinvoke $r2.<com.google.firebase.inappmessaging.CommonTypesProto$Event: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r0);
+
+        return $z0;
+    }
+
+    private static boolean hasFiamTrigger(com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition, java.lang.String)
+    {
+        com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition $r1;
+        java.lang.String $r0, $r3;
+        com.google.firebase.inappmessaging.CommonTypesProto$Trigger $r2;
+        boolean $z0;
+
+        $r1 := @parameter0: com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r2 = virtualinvoke $r1.<com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition: com.google.firebase.inappmessaging.CommonTypesProto$Trigger getFiamTrigger()>();
+
+        $r3 = virtualinvoke $r2.<com.google.firebase.inappmessaging.CommonTypesProto$Trigger: java.lang.String toString()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r0);
+
+        return $z0;
+    }
+
+    private static boolean isActive(com.google.firebase.inappmessaging.internal.time.Clock, com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)
+    {
+        com.google.firebase.inappmessaging.internal.time.Clock $r0;
+        long $l0, $l1, $l2;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r1;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase $r2, $r3;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload $r4;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload $r5;
+        byte $b3;
+        int $i4;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.firebase.inappmessaging.internal.time.Clock;
+
+        $r1 := @parameter1: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r2 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase getPayloadCase()>();
+
+        $r3 = <com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase VANILLA_PAYLOAD>;
+
+        $z0 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload getVanillaPayload()>();
+
+        $l0 = virtualinvoke $r4.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload: long getCampaignStartTimeMillis()>();
+
+        $r4 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload getVanillaPayload()>();
+
+        $l1 = virtualinvoke $r4.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload: long getCampaignEndTimeMillis()>();
+
+        goto label2;
+
+     label1:
+        $r2 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase getPayloadCase()>();
+
+        $r3 = <com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase EXPERIMENTAL_PAYLOAD>;
+
+        $z0 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label3;
+
+        $r5 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload getExperimentalPayload()>();
+
+        $l0 = virtualinvoke $r5.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload: long getCampaignStartTimeMillis()>();
+
+        $r5 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload getExperimentalPayload()>();
+
+        $l1 = virtualinvoke $r5.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload: long getCampaignEndTimeMillis()>();
+
+     label2:
+        $l2 = interfaceinvoke $r0.<com.google.firebase.inappmessaging.internal.time.Clock: long now()>();
+
+        $b3 = $l2 cmp $l0;
+
+        $i4 = (int) $b3;
+
+        if $i4 <= 0 goto label3;
+
+        $b3 = $l2 cmp $l1;
+
+        $i4 = (int) $b3;
+
+        if $i4 >= 0 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    public static boolean isAppForegroundEvent(com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition)
+    {
+        com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition $r0;
+        java.lang.String $r2;
+        com.google.firebase.inappmessaging.CommonTypesProto$Trigger $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition;
+
+        $r1 = virtualinvoke $r0.<com.google.firebase.inappmessaging.CommonTypesProto$TriggeringCondition: com.google.firebase.inappmessaging.CommonTypesProto$Trigger getFiamTrigger()>();
+
+        $r2 = virtualinvoke $r1.<com.google.firebase.inappmessaging.CommonTypesProto$Trigger: java.lang.String toString()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>("ON_FOREGROUND");
+
+        return $z0;
+    }
+
+    public static boolean isAppForegroundEvent(java.lang.String)
+    {
+        java.lang.String $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean equals(java.lang.Object)>("ON_FOREGROUND");
+
+        return $z0;
+    }
+
+    static void lambda$createFirebaseInAppMessageStream$0(java.lang.String) throws java.lang.Exception
+    {
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("Event Triggered: ");
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logd(java.lang.String)>($r1);
+
+        return;
+    }
+
+    static void lambda$createFirebaseInAppMessageStream$1(com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse) throws java.lang.Exception
+    {
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse $r0;
+
+        $r0 := @parameter0: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse;
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logd(java.lang.String)>("Fetched from cache");
+
+        return;
+    }
+
+    static com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent lambda$createFirebaseInAppMessageStream$10(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent, java.lang.Boolean) throws java.lang.Exception
+    {
+        java.lang.Boolean $r1;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r0;
+
+        $r0 := @parameter0: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r1 := @parameter1: java.lang.Boolean;
+
+        return $r0;
+    }
+
+    static io.reactivex.Maybe lambda$createFirebaseInAppMessageStream$13(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent) throws java.lang.Exception
+    {
+        com.google.firebase.inappmessaging.MessagesProto$Content $r2;
+        int[] $r1;
+        int $i0;
+        io.reactivex.Maybe $r4;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r0;
+        com.google.firebase.inappmessaging.MessagesProto$Content$MessageDetailsCase $r3;
+
+        $r0 := @parameter0: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r1 = <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$1: int[] $SwitchMap$com$google$firebase$inappmessaging$MessagesProto$Content$MessageDetailsCase>;
+
+        $r2 = virtualinvoke $r0.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.firebase.inappmessaging.MessagesProto$Content getContent()>();
+
+        $r3 = virtualinvoke $r2.<com.google.firebase.inappmessaging.MessagesProto$Content: com.google.firebase.inappmessaging.MessagesProto$Content$MessageDetailsCase getMessageDetailsCase()>();
+
+        $i0 = virtualinvoke $r3.<com.google.firebase.inappmessaging.MessagesProto$Content$MessageDetailsCase: int ordinal()>();
+
+        $i0 = $r1[$i0];
+
+        if $i0 == 1 goto label1;
+
+        if $i0 == 2 goto label1;
+
+        if $i0 == 3 goto label1;
+
+        if $i0 == 4 goto label1;
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logd(java.lang.String)>("Filtering non-displayable message");
+
+        $r4 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe empty()>();
+
+        return $r4;
+
+     label1:
+        $r4 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe just(java.lang.Object)>($r0);
+
+        return $r4;
+    }
+
+    static void lambda$createFirebaseInAppMessageStream$15(java.lang.Throwable) throws java.lang.Exception
+    {
+        java.lang.Throwable $r1;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r2;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("Impressions store read fail: ");
+
+        $r2 = virtualinvoke $r1.<java.lang.Throwable: java.lang.String getMessage()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logw(java.lang.String)>($r2);
+
+        return;
+    }
+
+    static void lambda$createFirebaseInAppMessageStream$17(com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse) throws java.lang.Exception
+    {
+        java.util.List $r3;
+        java.lang.Object[] $r2;
+        java.util.Locale $r0;
+        int $i0;
+        java.lang.String $r5;
+        java.lang.Integer $r4;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse $r1;
+
+        $r1 := @parameter0: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse;
+
+        $r0 = <java.util.Locale: java.util.Locale US>;
+
+        $r2 = newarray (java.lang.Object)[1];
+
+        $r3 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse: java.util.List getMessagesList()>();
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r2[0] = $r4;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r0, "Successfully fetched %d messages from backend", $r2);
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logi(java.lang.String)>($r5);
+
+        return;
+    }
+
+    static void lambda$createFirebaseInAppMessageStream$19(java.lang.Throwable) throws java.lang.Exception
+    {
+        java.lang.Throwable $r1;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r2;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("Service fetch error: ");
+
+        $r2 = virtualinvoke $r1.<java.lang.Throwable: java.lang.String getMessage()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logw(java.lang.String)>($r2);
+
+        return;
+    }
+
+    static void lambda$createFirebaseInAppMessageStream$2(java.lang.Throwable) throws java.lang.Exception
+    {
+        java.lang.Throwable $r1;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r2;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("Cache read error: ");
+
+        $r2 = virtualinvoke $r1.<java.lang.Throwable: java.lang.String getMessage()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logw(java.lang.String)>($r2);
+
+        return;
+    }
+
+    static void lambda$createFirebaseInAppMessageStream$3() throws java.lang.Exception
+    {
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logd(java.lang.String)>("Wrote to cache");
+
+        return;
+    }
+
+    static void lambda$createFirebaseInAppMessageStream$4(java.lang.Throwable) throws java.lang.Exception
+    {
+        java.lang.Throwable $r1;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r2;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("Cache write error: ");
+
+        $r2 = virtualinvoke $r1.<java.lang.Throwable: java.lang.String getMessage()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logw(java.lang.String)>($r2);
+
+        return;
+    }
+
+    static io.reactivex.CompletableSource lambda$createFirebaseInAppMessageStream$5(java.lang.Throwable) throws java.lang.Exception
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.Completable $r0;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r0 = staticinvoke <io.reactivex.Completable: io.reactivex.Completable complete()>();
+
+        return $r0;
+    }
+
+    static void lambda$createFirebaseInAppMessageStream$7(java.lang.Throwable) throws java.lang.Exception
+    {
+        java.lang.Throwable $r1;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r2;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("Impression store read fail: ");
+
+        $r2 = virtualinvoke $r1.<java.lang.Throwable: java.lang.String getMessage()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logw(java.lang.String)>($r2);
+
+        return;
+    }
+
+    static void lambda$createFirebaseInAppMessageStream$8(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent, java.lang.Boolean) throws java.lang.Exception
+    {
+        java.lang.Boolean $r1;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r0;
+
+        $r0 := @parameter0: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r1 := @parameter1: java.lang.Boolean;
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: void logImpressionStatus(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent,java.lang.Boolean)>($r0, $r1);
+
+        return;
+    }
+
+    static boolean lambda$createFirebaseInAppMessageStream$9(java.lang.Boolean) throws java.lang.Exception
+    {
+        java.lang.Boolean $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.Boolean;
+
+        $z0 = virtualinvoke $r0.<java.lang.Boolean: boolean booleanValue()>();
+
+        $z0 = $z0 ^ 1;
+
+        return $z0;
+    }
+
+    static void lambda$getContentIfNotRateLimited$22(java.lang.Boolean) throws java.lang.Exception
+    {
+        java.lang.Boolean $r2;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1;
+
+        $r2 := @parameter0: java.lang.Boolean;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("App foreground rate limited ? : ");
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logi(java.lang.String)>($r1);
+
+        return;
+    }
+
+    static boolean lambda$getContentIfNotRateLimited$23(java.lang.Boolean) throws java.lang.Exception
+    {
+        java.lang.Boolean $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.Boolean;
+
+        $z0 = virtualinvoke $r0.<java.lang.Boolean: boolean booleanValue()>();
+
+        $z0 = $z0 ^ 1;
+
+        return $z0;
+    }
+
+    static com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent lambda$getContentIfNotRateLimited$24(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent, java.lang.Boolean) throws java.lang.Exception
+    {
+        java.lang.Boolean $r1;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r0;
+
+        $r0 := @parameter0: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r1 := @parameter1: java.lang.Boolean;
+
+        return $r0;
+    }
+
+    static boolean lambda$getTriggeredInAppMessageMaybe$26(java.lang.String, com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent) throws java.lang.Exception
+    {
+        java.lang.String $r1;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r0;
+        boolean $z0;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $z0 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: boolean containsTriggeringCondition(java.lang.String,com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)>($r1, $r0);
+
+        return $z0;
+    }
+
+    static void lambda$taskToMaybe$28(io.reactivex.MaybeEmitter, java.lang.Object)
+    {
+        java.lang.Object $r1;
+        io.reactivex.MaybeEmitter $r0;
+
+        $r0 := @parameter0: io.reactivex.MaybeEmitter;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        interfaceinvoke $r0.<io.reactivex.MaybeEmitter: void onSuccess(java.lang.Object)>($r1);
+
+        interfaceinvoke $r0.<io.reactivex.MaybeEmitter: void onComplete()>();
+
+        return;
+    }
+
+    static void lambda$taskToMaybe$29(io.reactivex.MaybeEmitter, java.lang.Exception)
+    {
+        io.reactivex.MaybeEmitter $r0;
+        java.lang.Exception $r1;
+
+        $r0 := @parameter0: io.reactivex.MaybeEmitter;
+
+        $r1 := @parameter1: java.lang.Exception;
+
+        interfaceinvoke $r0.<io.reactivex.MaybeEmitter: void onError(java.lang.Throwable)>($r1);
+
+        interfaceinvoke $r0.<io.reactivex.MaybeEmitter: void onComplete()>();
+
+        return;
+    }
+
+    static void lambda$taskToMaybe$30(com.google.android.gms.tasks.Task, java.util.concurrent.Executor, io.reactivex.MaybeEmitter) throws java.lang.Exception
+    {
+        io.reactivex.MaybeEmitter $r2;
+        java.util.concurrent.Executor $r1;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda10 $r4;
+        com.google.android.gms.tasks.Task $r0;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda9 $r3;
+
+        $r0 := @parameter0: com.google.android.gms.tasks.Task;
+
+        $r1 := @parameter1: java.util.concurrent.Executor;
+
+        $r2 := @parameter2: io.reactivex.MaybeEmitter;
+
+        $r3 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda9;
+
+        specialinvoke $r3.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda9: void <init>(io.reactivex.MaybeEmitter)>($r2);
+
+        virtualinvoke $r0.<com.google.android.gms.tasks.Task: com.google.android.gms.tasks.Task addOnSuccessListener(java.util.concurrent.Executor,com.google.android.gms.tasks.OnSuccessListener)>($r1, $r3);
+
+        $r4 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda10;
+
+        specialinvoke $r4.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda10: void <init>(io.reactivex.MaybeEmitter)>($r2);
+
+        virtualinvoke $r0.<com.google.android.gms.tasks.Task: com.google.android.gms.tasks.Task addOnFailureListener(java.util.concurrent.Executor,com.google.android.gms.tasks.OnFailureListener)>($r1, $r4);
+
+        return;
+    }
+
+    private static void logImpressionStatus(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent, java.lang.Boolean)
+    {
+        java.lang.Object[] $r4;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r2;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase $r1, $r3;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload $r5;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload $r7;
+        java.lang.Boolean $r0;
+        java.lang.String $r6;
+        boolean $z0;
+
+        $r2 := @parameter0: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r0 := @parameter1: java.lang.Boolean;
+
+        $r1 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase getPayloadCase()>();
+
+        $r3 = <com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase VANILLA_PAYLOAD>;
+
+        $z0 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload getVanillaPayload()>();
+
+        $r6 = virtualinvoke $r5.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload: java.lang.String getCampaignName()>();
+
+        $r4[0] = $r6;
+
+        $r4[1] = $r0;
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Already impressed campaign %s ? : %s", $r4);
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logi(java.lang.String)>($r6);
+
+        return;
+
+     label1:
+        $r3 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase getPayloadCase()>();
+
+        $r1 = <com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase EXPERIMENTAL_PAYLOAD>;
+
+        $z0 = virtualinvoke $r3.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label2;
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r7 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload getExperimentalPayload()>();
+
+        $r6 = virtualinvoke $r7.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload: java.lang.String getCampaignName()>();
+
+        $r4[0] = $r6;
+
+        $r4[1] = $r0;
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Already impressed experiment %s ? : %s", $r4);
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logi(java.lang.String)>($r6);
+
+     label2:
+        return;
+    }
+
+    private boolean shouldIgnoreCache(java.lang.String)
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        java.lang.String $r1;
+        com.google.firebase.inappmessaging.internal.TestDeviceHelper $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.TestDeviceHelper testDeviceHelper>;
+
+        $z0 = virtualinvoke $r2.<com.google.firebase.inappmessaging.internal.TestDeviceHelper: boolean isAppInstallFresh()>();
+
+        if $z0 == 0 goto label1;
+
+        $z0 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: boolean isAppForegroundEvent(java.lang.String)>($r1);
+
+        return $z0;
+
+     label1:
+        $r2 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.TestDeviceHelper testDeviceHelper>;
+
+        $z0 = virtualinvoke $r2.<com.google.firebase.inappmessaging.internal.TestDeviceHelper: boolean isDeviceInTestMode()>();
+
+        return $z0;
+    }
+
+    private static io.reactivex.Maybe taskToMaybe(com.google.android.gms.tasks.Task, java.util.concurrent.Executor)
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda5 $r1;
+        java.util.concurrent.Executor $r0;
+        io.reactivex.Maybe $r2;
+        com.google.android.gms.tasks.Task $r3;
+
+        $r3 := @parameter0: com.google.android.gms.tasks.Task;
+
+        $r0 := @parameter1: java.util.concurrent.Executor;
+
+        $r1 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda5;
+
+        specialinvoke $r1.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda5: void <init>(com.google.android.gms.tasks.Task,java.util.concurrent.Executor)>($r3, $r0);
+
+        $r2 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe create(io.reactivex.MaybeOnSubscribe)>($r1);
+
+        return $r2;
+    }
+
+    private io.reactivex.Maybe triggeredInAppMessage(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent, java.lang.String)
+    {
+        com.google.firebase.inappmessaging.model.InAppMessage $r13;
+        com.google.firebase.inappmessaging.model.MessageType $r14, $r15;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.Maybe $r16;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r2;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase $r3, $r4;
+        com.google.firebase.inappmessaging.internal.AbtIntegrationHelper $r9;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload $r8;
+        com.google.firebase.inappmessaging.MessagesProto$Content $r11;
+        java.util.Map $r12;
+        com.google.firebase.inappmessaging.ExperimentPayloadProto$ExperimentPayload $r10;
+        java.lang.String $r1, $r6, $r7;
+        boolean $z0;
+        com.google.firebase.inappmessaging.model.TriggeredInAppMessage $r17;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload $r5;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r2 := @parameter0: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r3 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase getPayloadCase()>();
+
+        $r4 = <com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase VANILLA_PAYLOAD>;
+
+        $z0 = virtualinvoke $r3.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label1;
+
+        $r5 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload getVanillaPayload()>();
+
+        $r6 = virtualinvoke $r5.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload: java.lang.String getCampaignId()>();
+
+        $r5 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload getVanillaPayload()>();
+
+        $r7 = virtualinvoke $r5.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$VanillaCampaignPayload: java.lang.String getCampaignName()>();
+
+        goto label2;
+
+     label1:
+        $r3 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase getPayloadCase()>();
+
+        $r4 = <com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase EXPERIMENTAL_PAYLOAD>;
+
+        $z0 = virtualinvoke $r3.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent$PayloadCase: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label4;
+
+        $r8 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload getExperimentalPayload()>();
+
+        $r6 = virtualinvoke $r8.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload: java.lang.String getCampaignId()>();
+
+        $r8 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload getExperimentalPayload()>();
+
+        $r7 = virtualinvoke $r8.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload: java.lang.String getCampaignName()>();
+
+        $z0 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: boolean getIsTestCampaign()>();
+
+        if $z0 != 0 goto label2;
+
+        $r9 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.AbtIntegrationHelper abtIntegrationHelper>;
+
+        $r8 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload getExperimentalPayload()>();
+
+        $r10 = virtualinvoke $r8.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ExperimentalCampaignPayload: com.google.firebase.inappmessaging.ExperimentPayloadProto$ExperimentPayload getExperimentPayload()>();
+
+        virtualinvoke $r9.<com.google.firebase.inappmessaging.internal.AbtIntegrationHelper: void setExperimentActive(com.google.firebase.inappmessaging.ExperimentPayloadProto$ExperimentPayload)>($r10);
+
+     label2:
+        $r11 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: com.google.firebase.inappmessaging.MessagesProto$Content getContent()>();
+
+        $z0 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: boolean getIsTestCampaign()>();
+
+        $r12 = virtualinvoke $r2.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: java.util.Map getDataBundleMap()>();
+
+        $r13 = staticinvoke <com.google.firebase.inappmessaging.model.ProtoMarshallerClient: com.google.firebase.inappmessaging.model.InAppMessage decode(com.google.firebase.inappmessaging.MessagesProto$Content,java.lang.String,java.lang.String,boolean,java.util.Map)>($r11, $r6, $r7, $z0, $r12);
+
+        $r14 = virtualinvoke $r13.<com.google.firebase.inappmessaging.model.InAppMessage: com.google.firebase.inappmessaging.model.MessageType getMessageType()>();
+
+        $r15 = <com.google.firebase.inappmessaging.model.MessageType: com.google.firebase.inappmessaging.model.MessageType UNSUPPORTED>;
+
+        $z0 = virtualinvoke $r14.<com.google.firebase.inappmessaging.model.MessageType: boolean equals(java.lang.Object)>($r15);
+
+        if $z0 == 0 goto label3;
+
+        $r16 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe empty()>();
+
+        return $r16;
+
+     label3:
+        $r17 = new com.google.firebase.inappmessaging.model.TriggeredInAppMessage;
+
+        specialinvoke $r17.<com.google.firebase.inappmessaging.model.TriggeredInAppMessage: void <init>(com.google.firebase.inappmessaging.model.InAppMessage,java.lang.String)>($r13, $r1);
+
+        $r16 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe just(java.lang.Object)>($r17);
+
+        return $r16;
+
+     label4:
+        $r16 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe empty()>();
+
+        return $r16;
+    }
+
+    private static boolean validIID(com.google.firebase.inappmessaging.internal.InstallationIdResult)
+    {
+        com.google.firebase.inappmessaging.internal.InstallationIdResult $r0;
+        java.lang.String $r1;
+        com.google.firebase.installations.InstallationTokenResult $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.firebase.inappmessaging.internal.InstallationIdResult;
+
+        $r1 = virtualinvoke $r0.<com.google.firebase.inappmessaging.internal.InstallationIdResult: java.lang.String installationId()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $r2 = virtualinvoke $r0.<com.google.firebase.inappmessaging.internal.InstallationIdResult: com.google.firebase.installations.InstallationTokenResult installationTokenResult()>();
+
+        $r1 = virtualinvoke $r2.<com.google.firebase.installations.InstallationTokenResult: java.lang.String getToken()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public io.reactivex.Flowable createFirebaseInAppMessageStream()
+    {
+        com.google.firebase.inappmessaging.internal.AnalyticsEventsManager $r3;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.flowables.ConnectableFlowable $r1, $r2, $r4;
+        com.google.firebase.inappmessaging.internal.Schedulers $r7;
+        io.reactivex.Scheduler $r8;
+        io.reactivex.Flowable $r5;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda24 $r9;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda23 $r6;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r2 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: io.reactivex.flowables.ConnectableFlowable appForegroundEventFlowable>;
+
+        $r3 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.AnalyticsEventsManager analyticsEventsManager>;
+
+        $r4 = virtualinvoke $r3.<com.google.firebase.inappmessaging.internal.AnalyticsEventsManager: io.reactivex.flowables.ConnectableFlowable getAnalyticsEventsFlowable()>();
+
+        $r1 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: io.reactivex.flowables.ConnectableFlowable programmaticTriggerEventFlowable>;
+
+        $r5 = staticinvoke <io.reactivex.Flowable: io.reactivex.Flowable merge(org.reactivestreams.Publisher,org.reactivestreams.Publisher,org.reactivestreams.Publisher)>($r2, $r4, $r1);
+
+        $r6 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda23;
+
+        specialinvoke $r6.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda23: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Flowable: io.reactivex.Flowable doOnNext(io.reactivex.functions.Consumer)>($r6);
+
+        $r7 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.Schedulers schedulers>;
+
+        $r8 = virtualinvoke $r7.<com.google.firebase.inappmessaging.internal.Schedulers: io.reactivex.Scheduler io()>();
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Flowable: io.reactivex.Flowable observeOn(io.reactivex.Scheduler)>($r8);
+
+        $r9 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda24;
+
+        specialinvoke $r9.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda24: void <init>(com.google.firebase.inappmessaging.internal.InAppMessageStreamManager)>(r0);
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Flowable: io.reactivex.Flowable concatMap(io.reactivex.functions.Function)>($r9);
+
+        $r7 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.Schedulers schedulers>;
+
+        $r8 = virtualinvoke $r7.<com.google.firebase.inappmessaging.internal.Schedulers: io.reactivex.Scheduler mainThread()>();
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Flowable: io.reactivex.Flowable observeOn(io.reactivex.Scheduler)>($r8);
+
+        return $r5;
+    }
+
+    io.reactivex.Maybe lambda$createFirebaseInAppMessageStream$11$com-google-firebase-inappmessaging-internal-InAppMessageStreamManager(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent) throws java.lang.Exception
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.Maybe $r2;
+        com.google.firebase.inappmessaging.internal.ImpressionStorageClient $r3;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r1;
+        io.reactivex.Single $r4, $r7;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda28 $r10;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda27 $r9;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda26 $r8;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda25 $r5;
+        java.lang.Boolean $r6;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r1 := @parameter0: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $z0 = virtualinvoke $r1.<com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent: boolean getIsTestCampaign()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe just(java.lang.Object)>($r1);
+
+        return $r2;
+
+     label1:
+        $r3 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.ImpressionStorageClient impressionStorageClient>;
+
+        $r4 = virtualinvoke $r3.<com.google.firebase.inappmessaging.internal.ImpressionStorageClient: io.reactivex.Single isImpressed(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)>($r1);
+
+        $r5 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda25;
+
+        specialinvoke $r5.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda25: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<io.reactivex.Single: io.reactivex.Single doOnError(io.reactivex.functions.Consumer)>($r5);
+
+        $r6 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(0);
+
+        $r7 = staticinvoke <io.reactivex.Single: io.reactivex.Single just(java.lang.Object)>($r6);
+
+        $r4 = virtualinvoke $r4.<io.reactivex.Single: io.reactivex.Single onErrorResumeNext(io.reactivex.Single)>($r7);
+
+        $r8 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda26;
+
+        specialinvoke $r8.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda26: void <init>(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)>($r1);
+
+        $r4 = virtualinvoke $r4.<io.reactivex.Single: io.reactivex.Single doOnSuccess(io.reactivex.functions.Consumer)>($r8);
+
+        $r9 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda27;
+
+        specialinvoke $r9.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda27: void <init>()>();
+
+        $r2 = virtualinvoke $r4.<io.reactivex.Single: io.reactivex.Maybe filter(io.reactivex.functions.Predicate)>($r9);
+
+        $r10 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda28;
+
+        specialinvoke $r10.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda28: void <init>(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)>($r1);
+
+        $r2 = virtualinvoke $r2.<io.reactivex.Maybe: io.reactivex.Maybe map(io.reactivex.functions.Function)>($r10);
+
+        return $r2;
+    }
+
+    io.reactivex.Maybe lambda$createFirebaseInAppMessageStream$12$com-google-firebase-inappmessaging-internal-InAppMessageStreamManager(java.lang.String, com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent) throws java.lang.Exception
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.Maybe $r2;
+        java.lang.String $r3;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r1;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r2 = specialinvoke r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: io.reactivex.Maybe getContentIfNotRateLimited(java.lang.String,com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)>($r3, $r1);
+
+        return $r2;
+    }
+
+    io.reactivex.Maybe lambda$createFirebaseInAppMessageStream$14$com-google-firebase-inappmessaging-internal-InAppMessageStreamManager(java.lang.String, io.reactivex.functions.Function, io.reactivex.functions.Function, io.reactivex.functions.Function, com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse) throws java.lang.Exception
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.functions.Function $r1, $r2, $r3;
+        io.reactivex.Maybe $r5;
+        java.lang.String $r6;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse $r4;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r6 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: io.reactivex.functions.Function;
+
+        $r2 := @parameter2: io.reactivex.functions.Function;
+
+        $r3 := @parameter3: io.reactivex.functions.Function;
+
+        $r4 := @parameter4: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse;
+
+        $r5 = specialinvoke r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: io.reactivex.Maybe getTriggeredInAppMessageMaybe(java.lang.String,io.reactivex.functions.Function,io.reactivex.functions.Function,io.reactivex.functions.Function,com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse)>($r6, $r1, $r2, $r3, $r4);
+
+        return $r5;
+    }
+
+    com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse lambda$createFirebaseInAppMessageStream$16$com-google-firebase-inappmessaging-internal-InAppMessageStreamManager(com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList, com.google.firebase.inappmessaging.internal.InstallationIdResult) throws java.lang.Exception
+    {
+        com.google.firebase.inappmessaging.internal.InstallationIdResult $r1;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList $r4;
+        com.google.firebase.inappmessaging.internal.ApiClient $r2;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse $r3;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r4 := @parameter0: com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList;
+
+        $r1 := @parameter1: com.google.firebase.inappmessaging.internal.InstallationIdResult;
+
+        $r2 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.ApiClient apiClient>;
+
+        $r3 = virtualinvoke $r2.<com.google.firebase.inappmessaging.internal.ApiClient: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse getFiams(com.google.firebase.inappmessaging.internal.InstallationIdResult,com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList)>($r1, $r4);
+
+        return $r3;
+    }
+
+    void lambda$createFirebaseInAppMessageStream$18$com-google-firebase-inappmessaging-internal-InAppMessageStreamManager(com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse) throws java.lang.Exception
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.Completable $r2;
+        com.google.firebase.inappmessaging.internal.ImpressionStorageClient $r1;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse $r3;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r3 := @parameter0: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse;
+
+        $r1 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.ImpressionStorageClient impressionStorageClient>;
+
+        $r2 = virtualinvoke $r1.<com.google.firebase.inappmessaging.internal.ImpressionStorageClient: io.reactivex.Completable clearImpressions(com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse)>($r3);
+
+        virtualinvoke $r2.<io.reactivex.Completable: io.reactivex.disposables.Disposable subscribe()>();
+
+        return;
+    }
+
+    io.reactivex.Maybe lambda$createFirebaseInAppMessageStream$20$com-google-firebase-inappmessaging-internal-InAppMessageStreamManager(io.reactivex.Maybe, com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList) throws java.lang.Exception
+    {
+        com.google.firebase.inappmessaging.internal.AnalyticsEventsManager $r10;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.Maybe $r1, $r7;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse $r4;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda19 $r11;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda18 $r9;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda17 $r8;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda16 $r6;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda15 $r5;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList $r2;
+        com.google.firebase.inappmessaging.internal.TestDeviceHelper $r12;
+        boolean $z0;
+        com.google.firebase.inappmessaging.internal.DataCollectionHelper $r3;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda21 $r14;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda20 $r13;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r1 := @parameter0: io.reactivex.Maybe;
+
+        $r2 := @parameter1: com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList;
+
+        $r3 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.DataCollectionHelper dataCollectionHelper>;
+
+        $z0 = virtualinvoke $r3.<com.google.firebase.inappmessaging.internal.DataCollectionHelper: boolean isAutomaticDataCollectionEnabled()>();
+
+        if $z0 != 0 goto label1;
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logi(java.lang.String)>("Automatic data collection is disabled, not attempting campaign fetch from service.");
+
+        $r4 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse cacheExpiringResponse()>();
+
+        $r1 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe just(java.lang.Object)>($r4);
+
+        return $r1;
+
+     label1:
+        $r5 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda15;
+
+        specialinvoke $r5.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda15: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<io.reactivex.Maybe: io.reactivex.Maybe filter(io.reactivex.functions.Predicate)>($r5);
+
+        $r6 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda16;
+
+        specialinvoke $r6.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda16: void <init>(com.google.firebase.inappmessaging.internal.InAppMessageStreamManager,com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList)>(r0, $r2);
+
+        $r1 = virtualinvoke $r1.<io.reactivex.Maybe: io.reactivex.Maybe map(io.reactivex.functions.Function)>($r6);
+
+        $r4 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse cacheExpiringResponse()>();
+
+        $r7 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe just(java.lang.Object)>($r4);
+
+        $r1 = virtualinvoke $r1.<io.reactivex.Maybe: io.reactivex.Maybe switchIfEmpty(io.reactivex.MaybeSource)>($r7);
+
+        $r8 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda17;
+
+        specialinvoke $r8.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda17: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<io.reactivex.Maybe: io.reactivex.Maybe doOnSuccess(io.reactivex.functions.Consumer)>($r8);
+
+        $r9 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda18;
+
+        specialinvoke $r9.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda18: void <init>(com.google.firebase.inappmessaging.internal.InAppMessageStreamManager)>(r0);
+
+        $r1 = virtualinvoke $r1.<io.reactivex.Maybe: io.reactivex.Maybe doOnSuccess(io.reactivex.functions.Consumer)>($r9);
+
+        $r10 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.AnalyticsEventsManager analyticsEventsManager>;
+
+        staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r10);
+
+        $r11 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda19;
+
+        specialinvoke $r11.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda19: void <init>(com.google.firebase.inappmessaging.internal.AnalyticsEventsManager)>($r10);
+
+        $r1 = virtualinvoke $r1.<io.reactivex.Maybe: io.reactivex.Maybe doOnSuccess(io.reactivex.functions.Consumer)>($r11);
+
+        $r12 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.TestDeviceHelper testDeviceHelper>;
+
+        staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r12);
+
+        $r13 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda20;
+
+        specialinvoke $r13.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda20: void <init>(com.google.firebase.inappmessaging.internal.TestDeviceHelper)>($r12);
+
+        $r1 = virtualinvoke $r1.<io.reactivex.Maybe: io.reactivex.Maybe doOnSuccess(io.reactivex.functions.Consumer)>($r13);
+
+        $r14 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda21;
+
+        specialinvoke $r14.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda21: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<io.reactivex.Maybe: io.reactivex.Maybe doOnError(io.reactivex.functions.Consumer)>($r14);
+
+        $r7 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe empty()>();
+
+        $r1 = virtualinvoke $r1.<io.reactivex.Maybe: io.reactivex.Maybe onErrorResumeNext(io.reactivex.MaybeSource)>($r7);
+
+        return $r1;
+    }
+
+    org.reactivestreams.Publisher lambda$createFirebaseInAppMessageStream$21$com-google-firebase-inappmessaging-internal-InAppMessageStreamManager(java.lang.String) throws java.lang.Exception
+    {
+        java.lang.Object[] $r24;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.Maybe $r5, $r8, $r15, $r19;
+        com.google.firebase.inappmessaging.internal.Schedulers $r21;
+        com.google.firebase.inappmessaging.internal.ImpressionStorageClient $r12;
+        com.google.android.gms.tasks.Task $r17;
+        io.reactivex.Scheduler $r22;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda35 $r23;
+        io.reactivex.Flowable $r27;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda34 $r20;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda11 $r7;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda33 $r13;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda32 $r2;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda31 $r1;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda30 $r11;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList $r14;
+        java.lang.Boolean $r26;
+        java.lang.String $r3;
+        com.google.firebase.inappmessaging.internal.TestDeviceHelper $r25;
+        boolean $z0;
+        java.util.concurrent.Executor $r18;
+        com.google.firebase.inappmessaging.internal.CampaignCacheClient $r4;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda0 $r6;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda29 $r10;
+        com.google.firebase.installations.FirebaseInstallationsApi $r16;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda22 $r9;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r4 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.CampaignCacheClient campaignCacheClient>;
+
+        $r5 = virtualinvoke $r4.<com.google.firebase.inappmessaging.internal.CampaignCacheClient: io.reactivex.Maybe get()>();
+
+        $r6 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda0;
+
+        specialinvoke $r6.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda0: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Maybe: io.reactivex.Maybe doOnSuccess(io.reactivex.functions.Consumer)>($r6);
+
+        $r7 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda11;
+
+        specialinvoke $r7.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda11: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Maybe: io.reactivex.Maybe doOnError(io.reactivex.functions.Consumer)>($r7);
+
+        $r8 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe empty()>();
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Maybe: io.reactivex.Maybe onErrorResumeNext(io.reactivex.MaybeSource)>($r8);
+
+        $r9 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda22;
+
+        specialinvoke $r9.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda22: void <init>(com.google.firebase.inappmessaging.internal.InAppMessageStreamManager)>(r0);
+
+        $r10 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda29;
+
+        specialinvoke $r10.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda29: void <init>(com.google.firebase.inappmessaging.internal.InAppMessageStreamManager)>(r0);
+
+        $r11 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda30;
+
+        specialinvoke $r11.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda30: void <init>(com.google.firebase.inappmessaging.internal.InAppMessageStreamManager,java.lang.String)>(r0, $r3);
+
+        $r1 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda31;
+
+        specialinvoke $r1.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda31: void <init>()>();
+
+        $r2 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda32;
+
+        specialinvoke $r2.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda32: void <init>(com.google.firebase.inappmessaging.internal.InAppMessageStreamManager,java.lang.String,io.reactivex.functions.Function,io.reactivex.functions.Function,io.reactivex.functions.Function)>(r0, $r3, $r10, $r11, $r1);
+
+        $r12 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.ImpressionStorageClient impressionStorageClient>;
+
+        $r8 = virtualinvoke $r12.<com.google.firebase.inappmessaging.internal.ImpressionStorageClient: io.reactivex.Maybe getAllImpressions()>();
+
+        $r13 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda33;
+
+        specialinvoke $r13.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda33: void <init>()>();
+
+        $r8 = virtualinvoke $r8.<io.reactivex.Maybe: io.reactivex.Maybe doOnError(io.reactivex.functions.Consumer)>($r13);
+
+        $r14 = staticinvoke <com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList: com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList getDefaultInstance()>();
+
+        $r8 = virtualinvoke $r8.<io.reactivex.Maybe: io.reactivex.Maybe defaultIfEmpty(java.lang.Object)>($r14);
+
+        $r14 = staticinvoke <com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList: com.google.internal.firebase.inappmessaging.v1.sdkserving.CampaignImpressionList getDefaultInstance()>();
+
+        $r15 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe just(java.lang.Object)>($r14);
+
+        $r8 = virtualinvoke $r8.<io.reactivex.Maybe: io.reactivex.Maybe onErrorResumeNext(io.reactivex.MaybeSource)>($r15);
+
+        $r16 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.installations.FirebaseInstallationsApi firebaseInstallations>;
+
+        $r17 = interfaceinvoke $r16.<com.google.firebase.installations.FirebaseInstallationsApi: com.google.android.gms.tasks.Task getId()>();
+
+        $r18 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: java.util.concurrent.Executor blockingExecutor>;
+
+        $r15 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: io.reactivex.Maybe taskToMaybe(com.google.android.gms.tasks.Task,java.util.concurrent.Executor)>($r17, $r18);
+
+        $r16 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.installations.FirebaseInstallationsApi firebaseInstallations>;
+
+        $r17 = interfaceinvoke $r16.<com.google.firebase.installations.FirebaseInstallationsApi: com.google.android.gms.tasks.Task getToken(boolean)>(0);
+
+        $r18 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: java.util.concurrent.Executor blockingExecutor>;
+
+        $r19 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: io.reactivex.Maybe taskToMaybe(com.google.android.gms.tasks.Task,java.util.concurrent.Executor)>($r17, $r18);
+
+        $r20 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda34;
+
+        specialinvoke $r20.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda34: void <init>()>();
+
+        $r15 = staticinvoke <io.reactivex.Maybe: io.reactivex.Maybe zip(io.reactivex.MaybeSource,io.reactivex.MaybeSource,io.reactivex.functions.BiFunction)>($r15, $r19, $r20);
+
+        $r21 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.Schedulers schedulers>;
+
+        $r22 = virtualinvoke $r21.<com.google.firebase.inappmessaging.internal.Schedulers: io.reactivex.Scheduler io()>();
+
+        $r15 = virtualinvoke $r15.<io.reactivex.Maybe: io.reactivex.Maybe observeOn(io.reactivex.Scheduler)>($r22);
+
+        $r23 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda35;
+
+        specialinvoke $r23.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda35: void <init>(com.google.firebase.inappmessaging.internal.InAppMessageStreamManager,io.reactivex.Maybe)>(r0, $r15);
+
+        $z0 = specialinvoke r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: boolean shouldIgnoreCache(java.lang.String)>($r3);
+
+        if $z0 == 0 goto label1;
+
+        $r24 = newarray (java.lang.Object)[2];
+
+        $r25 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.TestDeviceHelper testDeviceHelper>;
+
+        $z0 = virtualinvoke $r25.<com.google.firebase.inappmessaging.internal.TestDeviceHelper: boolean isDeviceInTestMode()>();
+
+        $r26 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r24[0] = $r26;
+
+        $r25 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.TestDeviceHelper testDeviceHelper>;
+
+        $z0 = virtualinvoke $r25.<com.google.firebase.inappmessaging.internal.TestDeviceHelper: boolean isAppInstallFresh()>();
+
+        $r26 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r24[1] = $r26;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Forcing fetch from service rather than cache. Test Device: %s | App Fresh Install: %s", $r24);
+
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logi(java.lang.String)>($r3);
+
+        $r5 = virtualinvoke $r8.<io.reactivex.Maybe: io.reactivex.Maybe flatMap(io.reactivex.functions.Function)>($r23);
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Maybe: io.reactivex.Maybe flatMap(io.reactivex.functions.Function)>($r2);
+
+        $r27 = virtualinvoke $r5.<io.reactivex.Maybe: io.reactivex.Flowable toFlowable()>();
+
+        return $r27;
+
+     label1:
+        staticinvoke <com.google.firebase.inappmessaging.internal.Logging: void logd(java.lang.String)>("Attempting to fetch campaigns using cache");
+
+        $r8 = virtualinvoke $r8.<io.reactivex.Maybe: io.reactivex.Maybe flatMap(io.reactivex.functions.Function)>($r23);
+
+        $r8 = virtualinvoke $r8.<io.reactivex.Maybe: io.reactivex.Maybe doOnSuccess(io.reactivex.functions.Consumer)>($r9);
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Maybe: io.reactivex.Maybe switchIfEmpty(io.reactivex.MaybeSource)>($r8);
+
+        $r5 = virtualinvoke $r5.<io.reactivex.Maybe: io.reactivex.Maybe flatMap(io.reactivex.functions.Function)>($r2);
+
+        $r27 = virtualinvoke $r5.<io.reactivex.Maybe: io.reactivex.Flowable toFlowable()>();
+
+        return $r27;
+    }
+
+    void lambda$createFirebaseInAppMessageStream$6$com-google-firebase-inappmessaging-internal-InAppMessageStreamManager(com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse) throws java.lang.Exception
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda14 $r6;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda13 $r5;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda12 $r4;
+        io.reactivex.Completable $r3;
+        com.google.firebase.inappmessaging.internal.CampaignCacheClient $r2;
+        com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse $r1;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r1 := @parameter0: com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse;
+
+        $r2 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.CampaignCacheClient campaignCacheClient>;
+
+        $r3 = virtualinvoke $r2.<com.google.firebase.inappmessaging.internal.CampaignCacheClient: io.reactivex.Completable put(com.google.internal.firebase.inappmessaging.v1.sdkserving.FetchEligibleCampaignsResponse)>($r1);
+
+        $r4 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda12;
+
+        specialinvoke $r4.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda12: void <init>()>();
+
+        $r3 = virtualinvoke $r3.<io.reactivex.Completable: io.reactivex.Completable doOnComplete(io.reactivex.functions.Action)>($r4);
+
+        $r5 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda13;
+
+        specialinvoke $r5.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda13: void <init>()>();
+
+        $r3 = virtualinvoke $r3.<io.reactivex.Completable: io.reactivex.Completable doOnError(io.reactivex.functions.Consumer)>($r5);
+
+        $r6 = new com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda14;
+
+        specialinvoke $r6.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager$$ExternalSyntheticLambda14: void <init>()>();
+
+        $r3 = virtualinvoke $r3.<io.reactivex.Completable: io.reactivex.Completable onErrorResumeNext(io.reactivex.functions.Function)>($r6);
+
+        virtualinvoke $r3.<io.reactivex.Completable: io.reactivex.disposables.Disposable subscribe()>();
+
+        return;
+    }
+
+    boolean lambda$getTriggeredInAppMessageMaybe$25$com-google-firebase-inappmessaging-internal-InAppMessageStreamManager(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent) throws java.lang.Exception
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        com.google.firebase.inappmessaging.internal.time.Clock $r3;
+        com.google.firebase.inappmessaging.internal.TestDeviceHelper $r2;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r1;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r1 := @parameter0: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r2 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.TestDeviceHelper testDeviceHelper>;
+
+        $z0 = virtualinvoke $r2.<com.google.firebase.inappmessaging.internal.TestDeviceHelper: boolean isDeviceInTestMode()>();
+
+        if $z0 != 0 goto label2;
+
+        $r3 = r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: com.google.firebase.inappmessaging.internal.time.Clock clock>;
+
+        $z0 = staticinvoke <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: boolean isActive(com.google.firebase.inappmessaging.internal.time.Clock,com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent)>($r3, $r1);
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    io.reactivex.MaybeSource lambda$getTriggeredInAppMessageMaybe$27$com-google-firebase-inappmessaging-internal-InAppMessageStreamManager(java.lang.String, com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent) throws java.lang.Exception
+    {
+        com.google.firebase.inappmessaging.internal.InAppMessageStreamManager r0;
+        io.reactivex.Maybe $r2;
+        java.lang.String $r3;
+        com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent $r1;
+
+        r0 := @this: com.google.firebase.inappmessaging.internal.InAppMessageStreamManager;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent;
+
+        $r2 = specialinvoke r0.<com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: io.reactivex.Maybe triggeredInAppMessage(com.google.internal.firebase.inappmessaging.v1.CampaignProto$ThickContent,java.lang.String)>($r1, $r3);
+
+        return $r2;
+    }
+
+    public static void <clinit>()
+    {
+        <com.google.firebase.inappmessaging.internal.InAppMessageStreamManager: java.lang.String ON_FOREGROUND> = "ON_FOREGROUND";
+
+        return;
+    }
+}

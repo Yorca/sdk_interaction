@@ -1,0 +1,1354 @@
+final class com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer extends java.lang.Object implements java.io.Closeable
+{
+    private static final java.util.logging.Logger logger;
+    private final boolean client;
+    private boolean closed;
+    private final com.mbridge.msdk.thrid.okio.Buffer hpackBuffer;
+    final com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer hpackWriter;
+    private int maxFrameSize;
+    private final com.mbridge.msdk.thrid.okio.BufferedSink sink;
+
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+
+        $r0 = class "Lcom/mbridge/msdk/thrid/okhttp/internal/http2/Http2;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: java.util.logging.Logger logger> = $r2;
+
+        return;
+    }
+
+    void <init>(com.mbridge.msdk.thrid.okio.BufferedSink, boolean)
+    {
+        com.mbridge.msdk.thrid.okio.Buffer $r2;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okio.BufferedSink;
+
+        $z0 := @parameter1: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink> = $r1;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean client> = $z0;
+
+        $r2 = new com.mbridge.msdk.thrid.okio.Buffer;
+
+        specialinvoke $r2.<com.mbridge.msdk.thrid.okio.Buffer: void <init>()>();
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.Buffer hpackBuffer> = $r2;
+
+        $r3 = new com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer;
+
+        specialinvoke $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer: void <init>(com.mbridge.msdk.thrid.okio.Buffer)>($r2);
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer hpackWriter> = $r3;
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: int maxFrameSize> = 16384;
+
+        return;
+    }
+
+    private void writeContinuationFrames(int, long) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okio.Buffer $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        long $l2, $l3;
+        byte $b4;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r1;
+        int $i0, $i1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $i0 := @parameter0: int;
+
+        $l3 := @parameter1: long;
+
+     label1:
+        $b4 = $l3 cmp 0L;
+
+        $i1 = (int) $b4;
+
+        if $i1 <= 0 goto label4;
+
+        $i1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: int maxFrameSize>;
+
+        $l2 = (long) $i1;
+
+        $l2 = staticinvoke <java.lang.Math: long min(long,long)>($l2, $l3);
+
+        $i1 = (int) $l2;
+
+        $l2 = (long) $i1;
+
+        $l3 = $l3 - $l2;
+
+        $b4 = $l3 cmp 0L;
+
+        if $b4 != 0 goto label2;
+
+        $b4 = 4;
+
+        goto label3;
+
+     label2:
+        $b4 = 0;
+
+     label3:
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void frameHeader(int,int,byte,byte)>($i0, $i1, 9, $b4);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.Buffer hpackBuffer>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.BufferedSink: void write(com.mbridge.msdk.thrid.okio.Buffer,long)>($r2, $l2);
+
+        goto label1;
+
+     label4:
+        return;
+    }
+
+    private static void writeMedium(com.mbridge.msdk.thrid.okio.BufferedSink, int) throws java.io.IOException
+    {
+        int $i0, $i1;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.thrid.okio.BufferedSink;
+
+        $i0 := @parameter1: int;
+
+        $i1 = $i0 >>> 16;
+
+        $i1 = $i1 & 255;
+
+        interfaceinvoke $r0.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeByte(int)>($i1);
+
+        $i1 = $i0 >>> 8;
+
+        $i1 = $i1 & 255;
+
+        interfaceinvoke $r0.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeByte(int)>($i1);
+
+        $i0 = $i0 & 255;
+
+        interfaceinvoke $r0.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeByte(int)>($i0);
+
+        return;
+    }
+
+    public void applyAndAckSettings(com.mbridge.msdk.thrid.okhttp.internal.http2.Settings) throws java.io.IOException
+    {
+        java.lang.Throwable $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Settings $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        java.io.IOException $r5;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r3;
+        int $i0;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.internal.http2.Settings;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label4;
+
+        $i0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: int maxFrameSize>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.Settings: int getMaxFrameSize(int)>($i0);
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: int maxFrameSize> = $i0;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.Settings: int getHeaderTableSize()>();
+
+        if $i0 == -1 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer hpackWriter>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.Settings: int getHeaderTableSize()>();
+
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer: void setHeaderTableSizeSetting(int)>($i0);
+
+     label2:
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void frameHeader(int,int,byte,byte)>(0, 0, 4, 1);
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.thrid.okio.BufferedSink: void flush()>();
+
+     label3:
+        exitmonitor r0;
+
+        return;
+
+     label4:
+        $r5 = new java.io.IOException;
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r5;
+
+     label5:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label5;
+        catch java.lang.Throwable from label4 to label5 with label5;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        java.lang.Throwable $r2;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        entermonitor r0;
+
+     label1:
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed> = 1;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.BufferedSink: void close()>();
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public void connectionPreface() throws java.io.IOException
+    {
+        java.lang.Throwable $r9;
+        byte[] $r7;
+        java.lang.Object[] $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        java.io.IOException $r8;
+        java.util.logging.Logger $r1;
+        java.util.logging.Level $r2;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r6;
+        java.lang.String $r5;
+        com.mbridge.msdk.thrid.okio.ByteString $r4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label6;
+
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean client>;
+
+     label2:
+        if $z0 != 0 goto label3;
+
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r1 = <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: java.util.logging.Logger logger>;
+
+        $r2 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        $z0 = virtualinvoke $r1.<java.util.logging.Logger: boolean isLoggable(java.util.logging.Level)>($r2);
+
+        if $z0 == 0 goto label4;
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $r4 = <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2: com.mbridge.msdk.thrid.okio.ByteString CONNECTION_PREFACE>;
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okio.ByteString: java.lang.String hex()>();
+
+        $r3[0] = $r5;
+
+        $r5 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.Util: java.lang.String format(java.lang.String,java.lang.Object[])>(">> CONNECTION %s", $r3);
+
+        virtualinvoke $r1.<java.util.logging.Logger: void fine(java.lang.String)>($r5);
+
+     label4:
+        $r6 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $r4 = <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2: com.mbridge.msdk.thrid.okio.ByteString CONNECTION_PREFACE>;
+
+        $r7 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okio.ByteString: byte[] toByteArray()>();
+
+        interfaceinvoke $r6.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink write(byte[])>($r7);
+
+        $r6 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.thrid.okio.BufferedSink: void flush()>();
+
+     label5:
+        exitmonitor r0;
+
+        return;
+
+     label6:
+        $r8 = new java.io.IOException;
+
+        specialinvoke $r8.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r8;
+
+     label7:
+        $r9 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r9;
+
+        catch java.lang.Throwable from label1 to label2 with label7;
+        catch java.lang.Throwable from label3 to label5 with label7;
+        catch java.lang.Throwable from label6 to label7 with label7;
+    }
+
+    public void data(boolean, int, com.mbridge.msdk.thrid.okio.Buffer, int) throws java.io.IOException
+    {
+        java.lang.Throwable $r3;
+        com.mbridge.msdk.thrid.okio.Buffer $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        java.io.IOException $r2;
+        byte $b2;
+        int $i0, $i1;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $z1 := @parameter0: boolean;
+
+        $i1 := @parameter1: int;
+
+        $r1 := @parameter2: com.mbridge.msdk.thrid.okio.Buffer;
+
+        $i0 := @parameter3: int;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label5;
+
+        if $z1 == 0 goto label2;
+
+        $b2 = (byte) 1;
+
+        goto label3;
+
+     label2:
+        $b2 = 0;
+
+     label3:
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void dataFrame(int,byte,com.mbridge.msdk.thrid.okio.Buffer,int)>($i1, $b2, $r1, $i0);
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r2 = new java.io.IOException;
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r2;
+
+     label6:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label4 with label6;
+        catch java.lang.Throwable from label5 to label6 with label6;
+    }
+
+    void dataFrame(int, byte, com.mbridge.msdk.thrid.okio.Buffer, int) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okio.Buffer $r1;
+        byte $b0;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        int $i1, $i2;
+        long $l3;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $i2 := @parameter0: int;
+
+        $b0 := @parameter1: byte;
+
+        $r1 := @parameter2: com.mbridge.msdk.thrid.okio.Buffer;
+
+        $i1 := @parameter3: int;
+
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void frameHeader(int,int,byte,byte)>($i2, $i1, 0, $b0);
+
+        if $i1 <= 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $l3 = (long) $i1;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.thrid.okio.BufferedSink: void write(com.mbridge.msdk.thrid.okio.Buffer,long)>($r1, $l3);
+
+     label1:
+        return;
+    }
+
+    public void flush() throws java.io.IOException
+    {
+        java.lang.Throwable $r3;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        java.io.IOException $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label3;
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.BufferedSink: void flush()>();
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 = new java.io.IOException;
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r2;
+
+     label4:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label4;
+        catch java.lang.Throwable from label3 to label4 with label4;
+    }
+
+    public void frameHeader(int, int, byte, byte) throws java.io.IOException
+    {
+        java.lang.Object[] $r5;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        java.util.logging.Logger $r1;
+        java.lang.IllegalArgumentException $r7;
+        java.lang.Integer $r6;
+        java.util.logging.Level $r2;
+        short $s5;
+        byte $b0, $b3;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r4;
+        int $i1, $i2, $i4;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $i1 := @parameter0: int;
+
+        $i2 := @parameter1: int;
+
+        $b3 := @parameter2: byte;
+
+        $b0 := @parameter3: byte;
+
+        $r1 = <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: java.util.logging.Logger logger>;
+
+        $r2 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        $z0 = virtualinvoke $r1.<java.util.logging.Logger: boolean isLoggable(java.util.logging.Level)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        $r3 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2: java.lang.String frameLog(boolean,int,int,byte,byte)>(0, $i1, $i2, $b3, $b0);
+
+        virtualinvoke $r1.<java.util.logging.Logger: void fine(java.lang.String)>($r3);
+
+     label1:
+        $i4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: int maxFrameSize>;
+
+        if $i2 > $i4 goto label3;
+
+        $i4 = -2147483648 & $i1;
+
+        if $i4 != 0 goto label2;
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void writeMedium(com.mbridge.msdk.thrid.okio.BufferedSink,int)>($r4, $i2);
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $s5 = (short) $b3;
+
+        $s5 = $s5 & 255;
+
+        $i2 = (int) $s5;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeByte(int)>($i2);
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $s5 = (short) $b0;
+
+        $s5 = $s5 & 255;
+
+        $i2 = (int) $s5;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeByte(int)>($i2);
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $i1 = $i1 & 2147483647;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeInt(int)>($i1);
+
+        return;
+
+     label2:
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r5[0] = $r6;
+
+        $r7 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2: java.lang.IllegalArgumentException illegalArgument(java.lang.String,java.lang.Object[])>("reserved bit set: %s", $r5);
+
+        throw $r7;
+
+     label3:
+        $r5 = newarray (java.lang.Object)[2];
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i4);
+
+        $r5[0] = $r6;
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        $r5[1] = $r6;
+
+        $r7 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2: java.lang.IllegalArgumentException illegalArgument(java.lang.String,java.lang.Object[])>("FRAME_SIZE_ERROR length > %d: %d", $r5);
+
+        throw $r7;
+    }
+
+    public void goAway(int, com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode, byte[]) throws java.io.IOException
+    {
+        java.lang.Throwable $r6;
+        byte[] $r1;
+        java.lang.Object[] $r5;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        java.io.IOException $r7;
+        java.lang.IllegalArgumentException $r2;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r4;
+        int $i0, $i1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $i0 := @parameter0: int;
+
+        $r3 := @parameter1: com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode;
+
+        $r1 := @parameter2: byte[];
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label5;
+
+        $i1 = $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode: int httpCode>;
+
+        if $i1 == -1 goto label4;
+
+        $i1 = lengthof $r1;
+
+        $i1 = $i1 + 8;
+
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void frameHeader(int,int,byte,byte)>(0, $i1, 7, 0);
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeInt(int)>($i0);
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $i0 = $r3.<com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode: int httpCode>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeInt(int)>($i0);
+
+        $i0 = lengthof $r1;
+
+        if $i0 <= 0 goto label2;
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink write(byte[])>($r1);
+
+     label2:
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.thrid.okio.BufferedSink: void flush()>();
+
+     label3:
+        exitmonitor r0;
+
+        return;
+
+     label4:
+        $r5 = newarray (java.lang.Object)[0];
+
+        $r2 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2: java.lang.IllegalArgumentException illegalArgument(java.lang.String,java.lang.Object[])>("errorCode.httpCode == -1", $r5);
+
+        throw $r2;
+
+     label5:
+        $r7 = new java.io.IOException;
+
+        specialinvoke $r7.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r7;
+
+     label6:
+        $r6 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label3 with label6;
+        catch java.lang.Throwable from label4 to label6 with label6;
+    }
+
+    public void headers(int, java.util.List) throws java.io.IOException
+    {
+        java.lang.Throwable $r3;
+        java.util.List $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        int $i0;
+        java.io.IOException $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.util.List;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label3;
+
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void headers(boolean,int,java.util.List)>(0, $i0, $r1);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 = new java.io.IOException;
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r2;
+
+     label4:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label4;
+        catch java.lang.Throwable from label3 to label4 with label4;
+    }
+
+    void headers(boolean, int, java.util.List) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okio.Buffer $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        long $l2, $l4;
+        java.io.IOException $r5;
+        java.util.List $r1;
+        byte $b0, $b5;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r4;
+        int $i1, $i3;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $z0 := @parameter0: boolean;
+
+        $i1 := @parameter1: int;
+
+        $r1 := @parameter2: java.util.List;
+
+        $z1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z1 != 0 goto label4;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer hpackWriter>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer: void writeHeaders(java.util.List)>($r1);
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.Buffer hpackBuffer>;
+
+        $l2 = virtualinvoke $r3.<com.mbridge.msdk.thrid.okio.Buffer: long size()>();
+
+        $i3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: int maxFrameSize>;
+
+        $l4 = (long) $i3;
+
+        $l4 = staticinvoke <java.lang.Math: long min(long,long)>($l4, $l2);
+
+        $i3 = (int) $l4;
+
+        $l4 = (long) $i3;
+
+        $b0 = $l2 cmp $l4;
+
+        if $b0 != 0 goto label1;
+
+        $b5 = 4;
+
+        goto label2;
+
+     label1:
+        $b5 = 0;
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        $b5 = $b5 | 1;
+
+     label3:
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void frameHeader(int,int,byte,byte)>($i1, $i3, 1, $b5);
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.Buffer hpackBuffer>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.thrid.okio.BufferedSink: void write(com.mbridge.msdk.thrid.okio.Buffer,long)>($r3, $l4);
+
+        $i3 = (int) $b0;
+
+        if $i3 <= 0 goto label5;
+
+        $l2 = $l2 - $l4;
+
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void writeContinuationFrames(int,long)>($i1, $l2);
+
+        return;
+
+     label4:
+        $r5 = new java.io.IOException;
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r5;
+
+     label5:
+        return;
+    }
+
+    public int maxDataLength()
+    {
+        int i0;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        i0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: int maxFrameSize>;
+
+        return i0;
+    }
+
+    public void ping(boolean, int, int) throws java.io.IOException
+    {
+        java.lang.Throwable $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        java.io.IOException $r2;
+        byte $b2;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r1;
+        int $i0, $i1;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $z0 := @parameter0: boolean;
+
+        $i1 := @parameter1: int;
+
+        $i0 := @parameter2: int;
+
+        entermonitor r0;
+
+     label1:
+        $z1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z1 != 0 goto label5;
+
+        if $z0 == 0 goto label2;
+
+        $b2 = 1;
+
+        goto label3;
+
+     label2:
+        $b2 = 0;
+
+     label3:
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void frameHeader(int,int,byte,byte)>(0, 8, 6, $b2);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeInt(int)>($i1);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeInt(int)>($i0);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.BufferedSink: void flush()>();
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r2 = new java.io.IOException;
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r2;
+
+     label6:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label4 with label6;
+        catch java.lang.Throwable from label5 to label6 with label6;
+    }
+
+    public void pushPromise(int, int, java.util.List) throws java.io.IOException
+    {
+        java.lang.Throwable $r5;
+        com.mbridge.msdk.thrid.okio.Buffer $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        long $l3, $l5;
+        java.io.IOException $r6;
+        java.util.List $r1;
+        byte $b0, $b6;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r4;
+        int $i1, $i2, $i4;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $i1 := @parameter0: int;
+
+        $i2 := @parameter1: int;
+
+        $r1 := @parameter2: java.util.List;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label5;
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer hpackWriter>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.internal.http2.Hpack$Writer: void writeHeaders(java.util.List)>($r1);
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.Buffer hpackBuffer>;
+
+        $l3 = virtualinvoke $r3.<com.mbridge.msdk.thrid.okio.Buffer: long size()>();
+
+        $i4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: int maxFrameSize>;
+
+        $i4 = $i4 - 4;
+
+        $l5 = (long) $i4;
+
+        $l5 = staticinvoke <java.lang.Math: long min(long,long)>($l5, $l3);
+
+        $i4 = (int) $l5;
+
+        $l5 = (long) $i4;
+
+        $b0 = $l3 cmp $l5;
+
+        if $b0 != 0 goto label2;
+
+        $b6 = 4;
+
+        goto label3;
+
+     label2:
+        $b6 = 0;
+
+     label3:
+        $i4 = $i4 + 4;
+
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void frameHeader(int,int,byte,byte)>(0, $i4, 5, $b6);
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $i2 = $i2 & 2147483647;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeInt(int)>($i2);
+
+        $r4 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $r3 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.Buffer hpackBuffer>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.thrid.okio.BufferedSink: void write(com.mbridge.msdk.thrid.okio.Buffer,long)>($r3, $l5);
+
+        $i2 = (int) $b0;
+
+        if $i2 <= 0 goto label4;
+
+        $l3 = $l3 - $l5;
+
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void writeContinuationFrames(int,long)>(0, $l3);
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r6 = new java.io.IOException;
+
+        specialinvoke $r6.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r6;
+
+     label6:
+        $r5 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label4 with label6;
+        catch java.lang.Throwable from label5 to label6 with label6;
+    }
+
+    public void rstStream(int, com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode) throws java.io.IOException
+    {
+        java.lang.Throwable $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        java.io.IOException $r5;
+        java.lang.IllegalArgumentException $r4;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r2;
+        int $i0, $i1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label4;
+
+        $i1 = $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode: int httpCode>;
+
+        if $i1 == -1 goto label3;
+
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void frameHeader(int,int,byte,byte)>($i0, 4, 3, 0);
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $i0 = $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.ErrorCode: int httpCode>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeInt(int)>($i0);
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.thrid.okio.BufferedSink: void flush()>();
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r4 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>()>();
+
+        throw $r4;
+
+     label4:
+        $r5 = new java.io.IOException;
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r5;
+
+     label5:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label5 with label5;
+    }
+
+    public void settings(com.mbridge.msdk.thrid.okhttp.internal.http2.Settings) throws java.io.IOException
+    {
+        java.lang.Throwable $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Settings $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        java.io.IOException $r3;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r2;
+        int $i0, $i1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.internal.http2.Settings;
+
+        entermonitor r0;
+
+     label01:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label09;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.Settings: int size()>();
+
+        $i1 = $i0 * 6;
+
+        $i0 = 0;
+
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void frameHeader(int,int,byte,byte)>(0, $i1, 4, 0);
+
+     label02:
+        if $i0 >= 10 goto label07;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.Settings: boolean isSet(int)>($i0);
+
+        if $z0 == 0 goto label06;
+
+        if $i0 != 4 goto label03;
+
+        $i1 = 3;
+
+        goto label05;
+
+     label03:
+        if $i0 != 7 goto label04;
+
+        $i1 = 4;
+
+        goto label05;
+
+     label04:
+        $i1 = $i0;
+
+     label05:
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeShort(int)>($i1);
+
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $i1 = virtualinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.http2.Settings: int get(int)>($i0);
+
+        interfaceinvoke $r2.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeInt(int)>($i1);
+
+     label06:
+        $i0 = $i0 + 1;
+
+        goto label02;
+
+     label07:
+        $r2 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.thrid.okio.BufferedSink: void flush()>();
+
+     label08:
+        exitmonitor r0;
+
+        return;
+
+     label09:
+        $r3 = new java.io.IOException;
+
+        specialinvoke $r3.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r3;
+
+     label10:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label01 to label08 with label10;
+        catch java.lang.Throwable from label09 to label10 with label10;
+    }
+
+    public void synReply(boolean, int, java.util.List) throws java.io.IOException
+    {
+        java.lang.Throwable $r3;
+        java.util.List $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        int $i0;
+        java.io.IOException $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $z1 := @parameter0: boolean;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: java.util.List;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label3;
+
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void headers(boolean,int,java.util.List)>($z1, $i0, $r1);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 = new java.io.IOException;
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r2;
+
+     label4:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label4;
+        catch java.lang.Throwable from label3 to label4 with label4;
+    }
+
+    public void synStream(boolean, int, int, java.util.List) throws java.io.IOException
+    {
+        java.lang.Throwable $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        java.io.IOException $r2;
+        java.util.List $r1;
+        int $i0, $i1;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $z0 := @parameter0: boolean;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 := @parameter3: java.util.List;
+
+        entermonitor r0;
+
+     label1:
+        $z1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z1 != 0 goto label3;
+
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void headers(boolean,int,java.util.List)>($z0, $i0, $r1);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 = new java.io.IOException;
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r2;
+
+     label4:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label4;
+        catch java.lang.Throwable from label3 to label4 with label4;
+    }
+
+    public void windowUpdate(int, long) throws java.io.IOException
+    {
+        java.lang.Throwable $r5;
+        java.lang.Object[] $r2;
+        com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer r0;
+        long $l1;
+        java.io.IOException $r6;
+        java.lang.IllegalArgumentException $r4;
+        byte $b2;
+        com.mbridge.msdk.thrid.okio.BufferedSink $r1;
+        java.lang.Long $r3;
+        int $i0, $i3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer;
+
+        $i0 := @parameter0: int;
+
+        $l1 := @parameter1: long;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: boolean closed>;
+
+        if $z0 != 0 goto label4;
+
+        $b2 = $l1 cmp 0L;
+
+        if $b2 == 0 goto label3;
+
+        $b2 = $l1 cmp 2147483647L;
+
+        $i3 = (int) $b2;
+
+        if $i3 > 0 goto label3;
+
+        virtualinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: void frameHeader(int,int,byte,byte)>($i0, 4, 8, 0);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        $i0 = (int) $l1;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.BufferedSink: com.mbridge.msdk.thrid.okio.BufferedSink writeInt(int)>($i0);
+
+        $r1 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http2.Http2Writer: com.mbridge.msdk.thrid.okio.BufferedSink sink>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.thrid.okio.BufferedSink: void flush()>();
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 = newarray (java.lang.Object)[1];
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        $r2[0] = $r3;
+
+        $r4 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http2.Http2: java.lang.IllegalArgumentException illegalArgument(java.lang.String,java.lang.Object[])>("windowSizeIncrement == 0 || windowSizeIncrement > 0x7fffffffL: %s", $r2);
+
+        throw $r4;
+
+     label4:
+        $r6 = new java.io.IOException;
+
+        specialinvoke $r6.<java.io.IOException: void <init>(java.lang.String)>("closed");
+
+        throw $r6;
+
+     label5:
+        $r5 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label5 with label5;
+    }
+}

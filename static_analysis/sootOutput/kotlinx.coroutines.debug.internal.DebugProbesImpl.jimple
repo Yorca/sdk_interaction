@@ -1,0 +1,3481 @@
+public final class kotlinx.coroutines.debug.internal.DebugProbesImpl extends java.lang.Object
+{
+    private static final java.lang.String ARTIFICIAL_FRAME_MESSAGE;
+    public static final kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE;
+    private static final kotlinx.coroutines.debug.internal.ConcurrentWeakMap callerInfoCache;
+    private static final kotlinx.coroutines.debug.internal.ConcurrentWeakMap capturedCoroutinesMap;
+    private static final java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock;
+    private static final java.text.SimpleDateFormat dateFormat;
+    private static final kotlinx.coroutines.debug.internal.DebugProbesImpl$SequenceNumberRefVolatile debugProbesImpl$SequenceNumberRefVolatile;
+    private static final kotlin.jvm.functions.Function1 dynamicAttach;
+    private static boolean enableCreationStackTraces;
+    private static volatile int installations;
+    private static boolean sanitizeStackTraces;
+    private static final java.util.concurrent.atomic.AtomicLongFieldUpdater sequenceNumber$FU;
+    private static java.lang.Thread weakRefCleanerThread;
+
+    static void <clinit>()
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl $r0;
+        kotlinx.coroutines.debug.internal.ConcurrentWeakMap $r2;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$SequenceNumberRefVolatile $r3;
+        java.text.SimpleDateFormat $r1;
+        kotlin.jvm.functions.Function1 $r5;
+        java.util.concurrent.atomic.AtomicLongFieldUpdater $r6;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r4;
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.lang.String ARTIFICIAL_FRAME_MESSAGE> = "Coroutine creation stacktrace";
+
+        $r0 = new kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        specialinvoke $r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void <init>()>();
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE> = $r0;
+
+        $r1 = new java.text.SimpleDateFormat;
+
+        specialinvoke $r1.<java.text.SimpleDateFormat: void <init>(java.lang.String)>("yyyy/MM/dd HH:mm:ss");
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.text.SimpleDateFormat dateFormat> = $r1;
+
+        $r2 = new kotlinx.coroutines.debug.internal.ConcurrentWeakMap;
+
+        specialinvoke $r2.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: void <init>(boolean,int,kotlin.jvm.internal.DefaultConstructorMarker)>(0, 1, null);
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap capturedCoroutinesMap> = $r2;
+
+        $r3 = new kotlinx.coroutines.debug.internal.DebugProbesImpl$SequenceNumberRefVolatile;
+
+        specialinvoke $r3.<kotlinx.coroutines.debug.internal.DebugProbesImpl$SequenceNumberRefVolatile: void <init>(long)>(0L);
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl$SequenceNumberRefVolatile debugProbesImpl$SequenceNumberRefVolatile> = $r3;
+
+        $r4 = new java.util.concurrent.locks.ReentrantReadWriteLock;
+
+        specialinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock: void <init>()>();
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock> = $r4;
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean sanitizeStackTraces> = 1;
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean enableCreationStackTraces> = 1;
+
+        $r5 = specialinvoke $r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlin.jvm.functions.Function1 getDynamicAttach()>();
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlin.jvm.functions.Function1 dynamicAttach> = $r5;
+
+        $r2 = new kotlinx.coroutines.debug.internal.ConcurrentWeakMap;
+
+        specialinvoke $r2.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: void <init>(boolean)>(1);
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap callerInfoCache> = $r2;
+
+        $r6 = staticinvoke <java.util.concurrent.atomic.AtomicLongFieldUpdater: java.util.concurrent.atomic.AtomicLongFieldUpdater newUpdater(java.lang.Class,java.lang.String)>(class "Lkotlinx/coroutines/debug/internal/DebugProbesImpl$SequenceNumberRefVolatile;", "sequenceNumber");
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.atomic.AtomicLongFieldUpdater sequenceNumber$FU> = $r6;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static final kotlinx.coroutines.debug.internal.ConcurrentWeakMap access$getCallerInfoCache$p()
+    {
+        kotlinx.coroutines.debug.internal.ConcurrentWeakMap r0;
+
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap callerInfoCache>;
+
+        return r0;
+    }
+
+    public static final boolean access$isFinished(kotlinx.coroutines.debug.internal.DebugProbesImpl, kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl $r1;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r0;
+        boolean $z0;
+
+        $r1 := @parameter0: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r0 := @parameter1: kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner;
+
+        $z0 = specialinvoke $r1.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isFinished(kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner)>($r0);
+
+        return $z0;
+    }
+
+    public static final void access$probeCoroutineCompleted(kotlinx.coroutines.debug.internal.DebugProbesImpl, kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl $r0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r1;
+
+        $r0 := @parameter0: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter1: kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner;
+
+        specialinvoke $r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void probeCoroutineCompleted(kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner)>($r1);
+
+        return;
+    }
+
+    private final void build(kotlinx.coroutines.Job, java.util.Map, java.lang.StringBuilder, java.lang.String)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.util.Iterator $r13;
+        kotlinx.coroutines.Job $r4;
+        kotlin.sequences.Sequence $r12;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl $r7;
+        java.util.List $r9;
+        java.util.Map $r1;
+        java.lang.StringBuilder $r2, $r3;
+        java.lang.Object $r6;
+        java.lang.StackTraceElement $r10;
+        java.lang.String $r5, $r8, $r11;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r4 := @parameter0: kotlinx.coroutines.Job;
+
+        $r1 := @parameter1: java.util.Map;
+
+        $r2 := @parameter2: java.lang.StringBuilder;
+
+        $r5 := @parameter3: java.lang.String;
+
+        $r6 = interfaceinvoke $r1.<java.util.Map: java.lang.Object get(java.lang.Object)>($r4);
+
+        $r7 = (kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl) $r6;
+
+        if $r7 != null goto label1;
+
+        $z0 = $r4 instanceof kotlinx.coroutines.internal.ScopeCoroutine;
+
+        if $z0 != 0 goto label2;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r8 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.lang.String getDebugString(kotlinx.coroutines.Job)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(10);
+
+        $r8 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(9);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label2;
+
+     label1:
+        $r9 = virtualinvoke $r7.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: java.util.List lastObservedStackTrace()>();
+
+        $r6 = staticinvoke <kotlin.collections.CollectionsKt: java.lang.Object firstOrNull(java.util.List)>($r9);
+
+        $r10 = (java.lang.StackTraceElement) $r6;
+
+        $r8 = virtualinvoke $r7.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: java.lang.String getState()>();
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r11 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.lang.String getDebugString(kotlinx.coroutines.Job)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", continuation is ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" at line ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r10);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(10);
+
+        $r8 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(9);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label2:
+        $r12 = interfaceinvoke $r4.<kotlinx.coroutines.Job: kotlin.sequences.Sequence getChildren()>();
+
+        $r13 = interfaceinvoke $r12.<kotlin.sequences.Sequence: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r13.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r6 = interfaceinvoke $r13.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (kotlinx.coroutines.Job) $r6;
+
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void build(kotlinx.coroutines.Job,java.util.Map,java.lang.StringBuilder,java.lang.String)>($r4, $r1, $r2, $r5);
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    private final kotlin.coroutines.Continuation createOwner(kotlin.coroutines.Continuation, kotlinx.coroutines.debug.internal.StackTraceFrame)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlin.coroutines.Continuation $r2;
+        kotlin.coroutines.jvm.internal.CoroutineStackFrame $r8;
+        kotlinx.coroutines.debug.internal.ConcurrentWeakMap $r9;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl $r4;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$SequenceNumberRefVolatile $r1;
+        kotlinx.coroutines.debug.internal.StackTraceFrame $r3;
+        java.util.concurrent.atomic.AtomicLongFieldUpdater $r6;
+        long $l0;
+        kotlin.coroutines.CoroutineContext $r5;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r7;
+        java.util.Map $r10;
+        java.lang.Boolean $r11;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r2 := @parameter0: kotlin.coroutines.Continuation;
+
+        $r3 := @parameter1: kotlinx.coroutines.debug.internal.StackTraceFrame;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+        if $z0 != 0 goto label1;
+
+        return $r2;
+
+     label1:
+        $r4 = new kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl;
+
+        $r5 = interfaceinvoke $r2.<kotlin.coroutines.Continuation: kotlin.coroutines.CoroutineContext getContext()>();
+
+        $r6 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.atomic.AtomicLongFieldUpdater sequenceNumber$FU>;
+
+        $r1 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl$SequenceNumberRefVolatile debugProbesImpl$SequenceNumberRefVolatile>;
+
+        $l0 = virtualinvoke $r6.<java.util.concurrent.atomic.AtomicLongFieldUpdater: long incrementAndGet(java.lang.Object)>($r1);
+
+        specialinvoke $r4.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: void <init>(kotlin.coroutines.CoroutineContext,kotlinx.coroutines.debug.internal.StackTraceFrame,long)>($r5, $r3, $l0);
+
+        $r7 = new kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner;
+
+        $r8 = (kotlin.coroutines.jvm.internal.CoroutineStackFrame) $r3;
+
+        specialinvoke $r7.<kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner: void <init>(kotlin.coroutines.Continuation,kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl,kotlin.coroutines.jvm.internal.CoroutineStackFrame)>($r2, $r4, $r8);
+
+        $r9 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap capturedCoroutinesMap>;
+
+        $r10 = (java.util.Map) $r9;
+
+        $r11 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+        interfaceinvoke $r10.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r7, $r11);
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+        if $z0 != 0 goto label2;
+
+        virtualinvoke $r9.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: void clear()>();
+
+     label2:
+        $r2 = (kotlin.coroutines.Continuation) $r7;
+
+        return $r2;
+    }
+
+    private final java.util.List dumpCoroutinesInfoImpl(kotlin.jvm.functions.Function2)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$1$3 $r10;
+        java.lang.Throwable $r15;
+        java.lang.IllegalStateException $r14;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r2;
+        java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock $r4;
+        java.lang.Iterable $r6;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$lambda-12$$inlined$sortedBy$1 $r8;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r3;
+        int $i0, $i1, $i2;
+        java.lang.String $r13;
+        boolean $z0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlin.sequences.Sequence $r7;
+        java.util.Set $r5;
+        kotlin.jvm.functions.Function1 $r11;
+        kotlin.jvm.functions.Function2 $r1;
+        java.util.List $r12;
+        java.util.Comparator $r9;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: kotlin.jvm.functions.Function2;
+
+        $r2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readLock()>();
+
+        $i0 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: int getWriteHoldCount()>();
+
+        $i1 = 0;
+
+        if $i0 != 0 goto label01;
+
+        $i0 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: int getReadHoldCount()>();
+
+        goto label02;
+
+     label01:
+        $i0 = 0;
+
+     label02:
+        $i2 = 0;
+
+     label03:
+        if $i2 >= $i0 goto label04;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        $i2 = $i2 + 1;
+
+        goto label03;
+
+     label04:
+        $r4 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeLock()>();
+
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void lock()>();
+
+     label05:
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+     label06:
+        if $z0 == 0 goto label11;
+
+     label07:
+        $r5 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.Set getCapturedCoroutines()>();
+
+        $r6 = (java.lang.Iterable) $r5;
+
+        $r7 = staticinvoke <kotlin.collections.CollectionsKt: kotlin.sequences.Sequence asSequence(java.lang.Iterable)>($r6);
+
+        $r8 = new kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$lambda-12$$inlined$sortedBy$1;
+
+        specialinvoke $r8.<kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$lambda-12$$inlined$sortedBy$1: void <init>()>();
+
+        $r9 = (java.util.Comparator) $r8;
+
+        $r7 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence sortedWith(kotlin.sequences.Sequence,java.util.Comparator)>($r7, $r9);
+
+        $r10 = new kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$1$3;
+
+        specialinvoke $r10.<kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$1$3: void <init>(kotlin.jvm.functions.Function2)>($r1);
+
+        $r11 = (kotlin.jvm.functions.Function1) $r10;
+
+        $r7 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence mapNotNull(kotlin.sequences.Sequence,kotlin.jvm.functions.Function1)>($r7, $r11);
+
+        $r12 = staticinvoke <kotlin.sequences.SequencesKt: java.util.List toList(kotlin.sequences.Sequence)>($r7);
+
+     label08:
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyStart(int)>(1);
+
+     label09:
+        if $i1 >= $i0 goto label10;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label09;
+
+     label10:
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyEnd(int)>(1);
+
+        return $r12;
+
+     label11:
+        $r13 = "Debug probes are not installed";
+
+     label12:
+        $r14 = new java.lang.IllegalStateException;
+
+        $r13 = virtualinvoke $r13.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r14.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r13);
+
+        throw $r14;
+
+     label13:
+        $r15 := @caughtexception;
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyStart(int)>(1);
+
+     label14:
+        if $i1 >= $i0 goto label15;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label14;
+
+     label15:
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyEnd(int)>(1);
+
+        throw $r15;
+
+        catch java.lang.Throwable from label05 to label06 with label13;
+        catch java.lang.Throwable from label07 to label08 with label13;
+        catch java.lang.Throwable from label12 to label13 with label13;
+    }
+
+    private final void dumpCoroutinesSynchronized(java.io.PrintStream)
+    {
+        java.lang.IllegalStateException $r26;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl $r19;
+        java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock $r4;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r18;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesSynchronized$1$2 $r12;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r3;
+        java.lang.Long $r7;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesSynchronized$lambda-19$$inlined$sortedBy$1 $r14;
+        java.lang.Thread $r21;
+        boolean $z0;
+        kotlin.sequences.Sequence $r11;
+        java.util.Set $r9;
+        kotlin.jvm.functions.Function1 $r13;
+        java.util.List $r20, $r22;
+        kotlin.Unit $r25;
+        java.lang.StringBuilder $r5;
+        java.lang.Throwable $r27;
+        kotlin.coroutines.Continuation $r23;
+        java.text.SimpleDateFormat $r6;
+        long $l3;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r2;
+        java.lang.Iterable $r10;
+        int $i0, $i1, $i2;
+        java.lang.StackTraceElement $r24;
+        java.lang.String $r8;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.io.PrintStream $r1;
+        java.util.Iterator $r16;
+        java.lang.Object $r17;
+        java.util.Comparator $r15;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: java.io.PrintStream;
+
+        $r2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readLock()>();
+
+        $i0 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: int getWriteHoldCount()>();
+
+        $i1 = 0;
+
+        if $i0 != 0 goto label01;
+
+        $i0 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: int getReadHoldCount()>();
+
+        goto label02;
+
+     label01:
+        $i0 = 0;
+
+     label02:
+        $i2 = 0;
+
+     label03:
+        if $i2 >= $i0 goto label04;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        $i2 = $i2 + 1;
+
+        goto label03;
+
+     label04:
+        $r4 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeLock()>();
+
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void lock()>();
+
+     label05:
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+     label06:
+        if $z0 == 0 goto label24;
+
+     label07:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Coroutines dump ");
+
+        $r6 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.text.SimpleDateFormat dateFormat>;
+
+        $l3 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r7 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l3);
+
+        $r8 = virtualinvoke $r6.<java.text.SimpleDateFormat: java.lang.String format(java.lang.Object)>($r7);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<java.io.PrintStream: void print(java.lang.String)>($r8);
+
+        $r9 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.Set getCapturedCoroutines()>();
+
+        $r10 = (java.lang.Iterable) $r9;
+
+        $r11 = staticinvoke <kotlin.collections.CollectionsKt: kotlin.sequences.Sequence asSequence(java.lang.Iterable)>($r10);
+
+        $r12 = <kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesSynchronized$1$2: kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesSynchronized$1$2 INSTANCE>;
+
+        $r13 = (kotlin.jvm.functions.Function1) $r12;
+
+        $r11 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence filter(kotlin.sequences.Sequence,kotlin.jvm.functions.Function1)>($r11, $r13);
+
+        $r14 = new kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesSynchronized$lambda-19$$inlined$sortedBy$1;
+
+        specialinvoke $r14.<kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesSynchronized$lambda-19$$inlined$sortedBy$1: void <init>()>();
+
+        $r15 = (java.util.Comparator) $r14;
+
+        $r11 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence sortedWith(kotlin.sequences.Sequence,java.util.Comparator)>($r11, $r15);
+
+        $r16 = interfaceinvoke $r11.<kotlin.sequences.Sequence: java.util.Iterator iterator()>();
+
+     label08:
+        $z0 = interfaceinvoke $r16.<java.util.Iterator: boolean hasNext()>();
+
+     label09:
+        if $z0 == 0 goto label21;
+
+     label10:
+        $r17 = interfaceinvoke $r16.<java.util.Iterator: java.lang.Object next()>();
+
+        $r18 = (kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner) $r17;
+
+        $r19 = $r18.<kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner: kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl info>;
+
+        $r20 = virtualinvoke $r19.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: java.util.List lastObservedStackTrace()>();
+
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $r8 = virtualinvoke $r19.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: java.lang.String getState()>();
+
+        $r21 = $r19.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: java.lang.Thread lastObservedThread>;
+
+        $r22 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.List enhanceStackTraceWithThreadDumpImpl(java.lang.String,java.lang.Thread,java.util.List)>($r8, $r21, $r20);
+
+        $r8 = virtualinvoke $r19.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: java.lang.String getState()>();
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r8, "RUNNING");
+
+     label11:
+        if $z0 == 0 goto label14;
+
+        if $r22 != $r20 goto label14;
+
+     label12:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r19.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: java.lang.String getState()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" (Last suspension stacktrace, not an actual stacktrace)");
+
+        $r8 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label13:
+        goto label15;
+
+     label14:
+        $r8 = virtualinvoke $r19.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: java.lang.String getState()>();
+
+     label15:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n\nCoroutine ");
+
+        $r23 = $r18.<kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner: kotlin.coroutines.Continuation delegate>;
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r23);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", state: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<java.io.PrintStream: void print(java.lang.String)>($r8);
+
+        $z0 = interfaceinvoke $r20.<java.util.List: boolean isEmpty()>();
+
+     label16:
+        if $z0 == 0 goto label19;
+
+     label17:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n\tat ");
+
+        $r24 = staticinvoke <kotlinx.coroutines.internal.StackTraceRecoveryKt: java.lang.StackTraceElement artificialFrame(java.lang.String)>("Coroutine creation stacktrace");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r24);
+
+        $r8 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<java.io.PrintStream: void print(java.lang.String)>($r8);
+
+        $r20 = virtualinvoke $r19.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: java.util.List getCreationStackTrace()>();
+
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void printStackTrace(java.io.PrintStream,java.util.List)>($r1, $r20);
+
+     label18:
+        goto label08;
+
+     label19:
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void printStackTrace(java.io.PrintStream,java.util.List)>($r1, $r22);
+
+     label20:
+        goto label08;
+
+     label21:
+        $r25 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label22:
+        if $i1 >= $i0 goto label23;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label22;
+
+     label23:
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return;
+
+     label24:
+        $r8 = "Debug probes are not installed";
+
+     label25:
+        $r26 = new java.lang.IllegalStateException;
+
+        $r8 = virtualinvoke $r8.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r26.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r8);
+
+        throw $r26;
+
+     label26:
+        $r27 := @caughtexception;
+
+     label27:
+        if $i1 >= $i0 goto label28;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label27;
+
+     label28:
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        throw $r27;
+
+        catch java.lang.Throwable from label05 to label06 with label26;
+        catch java.lang.Throwable from label07 to label09 with label26;
+        catch java.lang.Throwable from label10 to label11 with label26;
+        catch java.lang.Throwable from label12 to label13 with label26;
+        catch java.lang.Throwable from label14 to label15 with label26;
+        catch java.lang.Throwable from label15 to label16 with label26;
+        catch java.lang.Throwable from label17 to label18 with label26;
+        catch java.lang.Throwable from label19 to label20 with label26;
+        catch java.lang.Throwable from label21 to label22 with label26;
+        catch java.lang.Throwable from label25 to label26 with label26;
+    }
+
+    private final java.util.List enhanceStackTraceWithThreadDumpImpl(java.lang.String, java.lang.Thread, java.util.List)
+    {
+        java.lang.Throwable $r7;
+        kotlin.Result$Companion $r4;
+        kotlin.Pair $r9;
+        java.util.ArrayList $r11, $r13;
+        java.lang.Thread $r3;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.StackTraceElement $r8;
+        java.lang.String $r2;
+        java.lang.Number $r10;
+        boolean $z0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.util.Collection $r12;
+        java.util.List $r1;
+        java.lang.StackTraceElement[] $r5;
+        java.lang.Object $r6;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 := @parameter1: java.lang.Thread;
+
+        $r1 := @parameter2: java.util.List;
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r2, "RUNNING");
+
+        if $z0 == 0 goto label18;
+
+        if $r3 != null goto label01;
+
+        return $r1;
+
+     label01:
+        $r4 = <kotlin.Result: kotlin.Result$Companion Companion>;
+
+        $r5 = virtualinvoke $r3.<java.lang.Thread: java.lang.StackTraceElement[] getStackTrace()>();
+
+        $r6 = staticinvoke <kotlin.Result: java.lang.Object constructor-impl(java.lang.Object)>($r5);
+
+     label02:
+        goto label04;
+
+     label03:
+        $r7 := @caughtexception;
+
+        $r4 = <kotlin.Result: kotlin.Result$Companion Companion>;
+
+        $r6 = staticinvoke <kotlin.ResultKt: java.lang.Object createFailure(java.lang.Throwable)>($r7);
+
+        $r6 = staticinvoke <kotlin.Result: java.lang.Object constructor-impl(java.lang.Object)>($r6);
+
+     label04:
+        $z0 = staticinvoke <kotlin.Result: boolean isFailure-impl(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label05;
+
+        $r6 = null;
+
+     label05:
+        $r5 = (java.lang.StackTraceElement[]) $r6;
+
+        if $r5 != null goto label06;
+
+        return $r1;
+
+     label06:
+        $i0 = lengthof $r5;
+
+        $i1 = 0;
+
+        $i2 = 0;
+
+     label07:
+        if $i2 >= $i0 goto label11;
+
+        $r8 = $r5[$i2];
+
+        $r2 = virtualinvoke $r8.<java.lang.StackTraceElement: java.lang.String getClassName()>();
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r2, "kotlin.coroutines.jvm.internal.BaseContinuationImpl");
+
+        if $z0 == 0 goto label08;
+
+        $r2 = virtualinvoke $r8.<java.lang.StackTraceElement: java.lang.String getMethodName()>();
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r2, "resumeWith");
+
+        if $z0 == 0 goto label08;
+
+        $r2 = virtualinvoke $r8.<java.lang.StackTraceElement: java.lang.String getFileName()>();
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r2, "ContinuationImpl.kt");
+
+        if $z0 == 0 goto label08;
+
+        $z0 = 1;
+
+        goto label09;
+
+     label08:
+        $z0 = 0;
+
+     label09:
+        if $z0 == 0 goto label10;
+
+        goto label12;
+
+     label10:
+        $i2 = $i2 + 1;
+
+        goto label07;
+
+     label11:
+        $i2 = -1;
+
+     label12:
+        $r9 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlin.Pair findContinuationStartIndex(int,java.lang.StackTraceElement[],java.util.List)>($i2, $r5, $r1);
+
+        $r6 = virtualinvoke $r9.<kotlin.Pair: java.lang.Object component1()>();
+
+        $r10 = (java.lang.Number) $r6;
+
+        $i0 = virtualinvoke $r10.<java.lang.Number: int intValue()>();
+
+        $r6 = virtualinvoke $r9.<kotlin.Pair: java.lang.Object component2()>();
+
+        $r10 = (java.lang.Number) $r6;
+
+        $i3 = virtualinvoke $r10.<java.lang.Number: int intValue()>();
+
+        $i4 = -1;
+
+        if $i0 != $i4 goto label13;
+
+        return $r1;
+
+     label13:
+        $i4 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        $i4 = $i4 + $i2;
+
+        $i4 = $i4 - $i0;
+
+        $i4 = $i4 - 1;
+
+        $i4 = $i4 - $i3;
+
+        $r13 = new java.util.ArrayList;
+
+        $r11 = $r13;
+
+        specialinvoke $r13.<java.util.ArrayList: void <init>(int)>($i4);
+
+        $i2 = $i2 - $i3;
+
+     label14:
+        if $i1 >= $i2 goto label15;
+
+        $r12 = (java.util.Collection) $r11;
+
+        $r8 = $r5[$i1];
+
+        interfaceinvoke $r12.<java.util.Collection: boolean add(java.lang.Object)>($r8);
+
+        $i1 = $i1 + 1;
+
+        goto label14;
+
+     label15:
+        $i1 = $i0 + 1;
+
+        $i2 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+     label16:
+        if $i1 >= $i2 goto label17;
+
+        $r12 = (java.util.Collection) $r11;
+
+        $r6 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i1);
+
+        interfaceinvoke $r12.<java.util.Collection: boolean add(java.lang.Object)>($r6);
+
+        $i1 = $i1 + 1;
+
+        goto label16;
+
+     label17:
+        $r1 = (java.util.List) $r11;
+
+     label18:
+        return $r1;
+
+        catch java.lang.Throwable from label01 to label02 with label03;
+    }
+
+    private final kotlin.Pair findContinuationStartIndex(int, java.lang.StackTraceElement[], java.util.List)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlin.Pair $r5;
+        java.lang.Integer $r3, $r4;
+        java.util.List $r1;
+        java.lang.StackTraceElement[] $r2;
+        int $i0, $i1, $i2, $i3;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $i0 := @parameter0: int;
+
+        $r2 := @parameter1: java.lang.StackTraceElement[];
+
+        $r1 := @parameter2: java.util.List;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= 3 goto label3;
+
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $i2 = -1;
+
+        $i2 = $i0 + $i2;
+
+        $i2 = $i2 - $i1;
+
+        $i2 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: int findIndexOfFrame(int,java.lang.StackTraceElement[],java.util.List)>($i2, $r2, $r1);
+
+        $i3 = -1;
+
+        if $i2 == $i3 goto label2;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r5 = staticinvoke <kotlin.TuplesKt: kotlin.Pair 'to'(java.lang.Object,java.lang.Object)>($r3, $r4);
+
+        return $r5;
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        $i0 = -1;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(0);
+
+        $r5 = staticinvoke <kotlin.TuplesKt: kotlin.Pair 'to'(java.lang.Object,java.lang.Object)>($r3, $r4);
+
+        return $r5;
+    }
+
+    private final int findIndexOfFrame(int, java.lang.StackTraceElement[], java.util.List)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.util.Iterator $r5;
+        java.util.List $r2;
+        java.lang.StackTraceElement[] $r1;
+        int $i0;
+        java.lang.Object $r3;
+        java.lang.StackTraceElement $r4, $r6;
+        java.lang.String $r7, $r8;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.StackTraceElement[];
+
+        $r2 := @parameter2: java.util.List;
+
+        $r3 = staticinvoke <kotlin.collections.ArraysKt: java.lang.Object getOrNull(java.lang.Object[],int)>($r1, $i0);
+
+        $r4 = (java.lang.StackTraceElement) $r3;
+
+        if $r4 != null goto label1;
+
+        $i0 = -1;
+
+        return $i0;
+
+     label1:
+        $r5 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+        $i0 = 0;
+
+     label2:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r3 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (java.lang.StackTraceElement) $r3;
+
+        $r7 = virtualinvoke $r6.<java.lang.StackTraceElement: java.lang.String getFileName()>();
+
+        $r8 = virtualinvoke $r4.<java.lang.StackTraceElement: java.lang.String getFileName()>();
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r7, $r8);
+
+        if $z0 == 0 goto label3;
+
+        $r7 = virtualinvoke $r6.<java.lang.StackTraceElement: java.lang.String getClassName()>();
+
+        $r8 = virtualinvoke $r4.<java.lang.StackTraceElement: java.lang.String getClassName()>();
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r7, $r8);
+
+        if $z0 == 0 goto label3;
+
+        $r7 = virtualinvoke $r6.<java.lang.StackTraceElement: java.lang.String getMethodName()>();
+
+        $r8 = virtualinvoke $r4.<java.lang.StackTraceElement: java.lang.String getMethodName()>();
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r7, $r8);
+
+        if $z0 == 0 goto label3;
+
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        if $z0 == 0 goto label5;
+
+        return $i0;
+
+     label5:
+        $i0 = $i0 + 1;
+
+        goto label2;
+
+     label6:
+        $i0 = -1;
+
+        return $i0;
+    }
+
+    private final java.util.Set getCapturedCoroutines()
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.util.Set $r1;
+        kotlinx.coroutines.debug.internal.ConcurrentWeakMap $r2;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap capturedCoroutinesMap>;
+
+        $r1 = virtualinvoke $r2.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: java.util.Set keySet()>();
+
+        return $r1;
+    }
+
+    private final java.lang.String getDebugString(kotlinx.coroutines.Job)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlinx.coroutines.Job $r1;
+        kotlinx.coroutines.JobSupport $r2;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: kotlinx.coroutines.Job;
+
+        $z0 = $r1 instanceof kotlinx.coroutines.JobSupport;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = (kotlinx.coroutines.JobSupport) $r1;
+
+        $r3 = virtualinvoke $r2.<kotlinx.coroutines.JobSupport: java.lang.String toDebugString()>();
+
+        return $r3;
+
+     label1:
+        $r3 = virtualinvoke $r1.<java.lang.Object: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+    private static void getDebugString$annotations(kotlinx.coroutines.Job)
+    {
+        kotlinx.coroutines.Job $r0;
+
+        $r0 := @parameter0: kotlinx.coroutines.Job;
+
+        return;
+    }
+
+    private final kotlin.jvm.functions.Function1 getDynamicAttach()
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.lang.Throwable $r9;
+        java.lang.Object[] $r5;
+        kotlin.Result$Companion $r1;
+        kotlin.jvm.functions.Function1 $r7;
+        java.lang.reflect.Constructor $r4;
+        java.lang.NullPointerException $r8;
+        java.lang.reflect.Constructor[] $r3;
+        java.lang.Class $r2;
+        java.lang.Object $r6;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+     label1:
+        $r1 = <kotlin.Result: kotlin.Result$Companion Companion>;
+
+        $r2 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("kotlinx.coroutines.debug.internal.ByteBuddyDynamicAttach");
+
+        $r3 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Constructor[] getConstructors()>();
+
+        $r4 = $r3[0];
+
+        $r5 = newarray (java.lang.Object)[0];
+
+        $r6 = virtualinvoke $r4.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r5);
+
+     label2:
+        if $r6 == null goto label5;
+
+     label3:
+        $r6 = staticinvoke <kotlin.jvm.internal.TypeIntrinsics: java.lang.Object beforeCheckcastToFunctionOfArity(java.lang.Object,int)>($r6, 1);
+
+        $r7 = (kotlin.jvm.functions.Function1) $r6;
+
+        $r6 = staticinvoke <kotlin.Result: java.lang.Object constructor-impl(java.lang.Object)>($r7);
+
+     label4:
+        goto label7;
+
+     label5:
+        $r8 = new java.lang.NullPointerException;
+
+        specialinvoke $r8.<java.lang.NullPointerException: void <init>(java.lang.String)>("null cannot be cast to non-null type kotlin.Function1<kotlin.Boolean, kotlin.Unit>");
+
+        throw $r8;
+
+     label6:
+        $r9 := @caughtexception;
+
+        $r1 = <kotlin.Result: kotlin.Result$Companion Companion>;
+
+        $r6 = staticinvoke <kotlin.ResultKt: java.lang.Object createFailure(java.lang.Throwable)>($r9);
+
+        $r6 = staticinvoke <kotlin.Result: java.lang.Object constructor-impl(java.lang.Object)>($r6);
+
+     label7:
+        $z0 = staticinvoke <kotlin.Result: boolean isFailure-impl(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label8;
+
+        $r6 = null;
+
+     label8:
+        $r7 = (kotlin.jvm.functions.Function1) $r6;
+
+        return $r7;
+
+        catch java.lang.Throwable from label1 to label2 with label6;
+        catch java.lang.Throwable from label3 to label4 with label6;
+        catch java.lang.Throwable from label5 to label6 with label6;
+    }
+
+    private final boolean isFinished(kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlinx.coroutines.Job$Key $r4;
+        kotlinx.coroutines.debug.internal.ConcurrentWeakMap $r8;
+        kotlinx.coroutines.Job $r7;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl $r2;
+        kotlin.coroutines.CoroutineContext$Element $r6;
+        kotlin.coroutines.CoroutineContext $r3;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r1;
+        kotlin.coroutines.CoroutineContext$Key $r5;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner;
+
+        $r2 = $r1.<kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner: kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl info>;
+
+        $r3 = virtualinvoke $r2.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: kotlin.coroutines.CoroutineContext getContext()>();
+
+        if $r3 == null goto label3;
+
+        $r4 = <kotlinx.coroutines.Job: kotlinx.coroutines.Job$Key Key>;
+
+        $r5 = (kotlin.coroutines.CoroutineContext$Key) $r4;
+
+        $r6 = interfaceinvoke $r3.<kotlin.coroutines.CoroutineContext: kotlin.coroutines.CoroutineContext$Element get(kotlin.coroutines.CoroutineContext$Key)>($r5);
+
+        $r7 = (kotlinx.coroutines.Job) $r6;
+
+        if $r7 != null goto label1;
+
+        return 0;
+
+     label1:
+        $z0 = interfaceinvoke $r7.<kotlinx.coroutines.Job: boolean isCompleted()>();
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        $r8 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap capturedCoroutinesMap>;
+
+        virtualinvoke $r8.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: java.lang.Object remove(java.lang.Object)>($r1);
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    private final boolean isInternalMethod(java.lang.StackTraceElement)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.lang.StackTraceElement $r1;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: java.lang.StackTraceElement;
+
+        $r2 = virtualinvoke $r1.<java.lang.StackTraceElement: java.lang.String getClassName()>();
+
+        $z0 = staticinvoke <kotlin.text.StringsKt: boolean startsWith$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object)>($r2, "kotlinx.coroutines", 0, 2, null);
+
+        return $z0;
+    }
+
+    private final kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner owner(kotlin.coroutines.Continuation)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r1;
+        kotlin.coroutines.Continuation $r2;
+        kotlin.coroutines.jvm.internal.CoroutineStackFrame $r3;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r2 := @parameter0: kotlin.coroutines.Continuation;
+
+        $z0 = $r2 instanceof kotlin.coroutines.jvm.internal.CoroutineStackFrame;
+
+        if $z0 == 0 goto label1;
+
+        $r3 = (kotlin.coroutines.jvm.internal.CoroutineStackFrame) $r2;
+
+        goto label2;
+
+     label1:
+        $r3 = null;
+
+     label2:
+        if $r3 == null goto label3;
+
+        $r1 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner owner(kotlin.coroutines.jvm.internal.CoroutineStackFrame)>($r3);
+
+        return $r1;
+
+     label3:
+        return null;
+    }
+
+    private final kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner owner(kotlin.coroutines.jvm.internal.CoroutineStackFrame)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r3;
+        kotlin.coroutines.jvm.internal.CoroutineStackFrame $r1, $r2;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r2 := @parameter0: kotlin.coroutines.jvm.internal.CoroutineStackFrame;
+
+     label1:
+        $z0 = $r2 instanceof kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = (kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner) $r2;
+
+        return $r3;
+
+     label2:
+        $r1 = interfaceinvoke $r2.<kotlin.coroutines.jvm.internal.CoroutineStackFrame: kotlin.coroutines.jvm.internal.CoroutineStackFrame getCallerFrame()>();
+
+        $r2 = $r1;
+
+        if $r1 == null goto label3;
+
+        goto label1;
+
+     label3:
+        return null;
+    }
+
+    private final void printStackTrace(java.io.PrintStream, java.util.List)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.io.PrintStream $r1;
+        java.util.Iterator $r5;
+        java.lang.Iterable $r4;
+        java.util.List $r3;
+        java.lang.StringBuilder $r2;
+        java.lang.Object $r6;
+        java.lang.StackTraceElement $r7;
+        java.lang.String $r8;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: java.io.PrintStream;
+
+        $r3 := @parameter1: java.util.List;
+
+        $r4 = (java.lang.Iterable) $r3;
+
+        $r5 = interfaceinvoke $r4.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (java.lang.StackTraceElement) $r6;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("\n\tat ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r7);
+
+        $r8 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<java.io.PrintStream: void print(java.lang.String)>($r8);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private final void probeCoroutineCompleted(kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r1;
+        kotlinx.coroutines.debug.internal.ConcurrentWeakMap $r2;
+        kotlin.coroutines.jvm.internal.CoroutineStackFrame $r4;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl $r3;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner;
+
+        $r2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap capturedCoroutinesMap>;
+
+        virtualinvoke $r2.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: java.lang.Object remove(java.lang.Object)>($r1);
+
+        $r3 = $r1.<kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner: kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl info>;
+
+        $r4 = virtualinvoke $r3.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: kotlin.coroutines.jvm.internal.CoroutineStackFrame getLastObservedFrame$kotlinx_coroutines_core()>();
+
+        if $r4 == null goto label2;
+
+        $r4 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlin.coroutines.jvm.internal.CoroutineStackFrame realCaller(kotlin.coroutines.jvm.internal.CoroutineStackFrame)>($r4);
+
+        if $r4 != null goto label1;
+
+        return;
+
+     label1:
+        $r2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap callerInfoCache>;
+
+        virtualinvoke $r2.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: java.lang.Object remove(java.lang.Object)>($r4);
+
+     label2:
+        return;
+    }
+
+    private final kotlin.coroutines.jvm.internal.CoroutineStackFrame realCaller(kotlin.coroutines.jvm.internal.CoroutineStackFrame)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlin.coroutines.jvm.internal.CoroutineStackFrame $r1, $r2;
+        java.lang.StackTraceElement $r3;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: kotlin.coroutines.jvm.internal.CoroutineStackFrame;
+
+     label1:
+        $r2 = interfaceinvoke $r1.<kotlin.coroutines.jvm.internal.CoroutineStackFrame: kotlin.coroutines.jvm.internal.CoroutineStackFrame getCallerFrame()>();
+
+        $r1 = $r2;
+
+        if $r2 != null goto label2;
+
+        return null;
+
+     label2:
+        $r3 = interfaceinvoke $r2.<kotlin.coroutines.jvm.internal.CoroutineStackFrame: java.lang.StackTraceElement getStackTraceElement()>();
+
+        if $r3 == null goto label1;
+
+        return $r2;
+    }
+
+    private final java.util.List sanitizeStackTrace(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        java.util.ArrayList $r5, $r8;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        java.lang.StackTraceElement $r3;
+        java.lang.String $r4;
+        boolean $z0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.util.Collection $r7;
+        java.util.List $r6;
+        java.lang.StackTraceElement[] $r2;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = virtualinvoke $r1.<java.lang.Throwable: java.lang.StackTraceElement[] getStackTrace()>();
+
+        $i0 = lengthof $r2;
+
+        $i1 = lengthof $r2;
+
+        $i2 = -1;
+
+        $i3 = -1;
+
+        $i1 = $i1 + $i3;
+
+        if $i1 < 0 goto label04;
+
+     label01:
+        $i3 = -1;
+
+        $i3 = $i1 + $i3;
+
+        $r3 = $r2[$i1];
+
+        $r4 = virtualinvoke $r3.<java.lang.StackTraceElement: java.lang.String getClassName()>();
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r4, "kotlin.coroutines.jvm.internal.DebugProbesKt");
+
+        if $z0 == 0 goto label02;
+
+        $i2 = $i1;
+
+        goto label04;
+
+     label02:
+        if $i3 >= 0 goto label03;
+
+        goto label04;
+
+     label03:
+        $i1 = $i3;
+
+        goto label01;
+
+     label04:
+        $z0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean sanitizeStackTraces>;
+
+        if $z0 != 0 goto label09;
+
+        $i0 = $i0 - $i2;
+
+        $r8 = new java.util.ArrayList;
+
+        $r5 = $r8;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $i1 = 0;
+
+     label05:
+        if $i1 >= $i0 goto label08;
+
+        if $i1 != 0 goto label06;
+
+        $r3 = staticinvoke <kotlinx.coroutines.internal.StackTraceRecoveryKt: java.lang.StackTraceElement artificialFrame(java.lang.String)>("Coroutine creation stacktrace");
+
+        goto label07;
+
+     label06:
+        $i3 = $i1 + $i2;
+
+        $r3 = $r2[$i3];
+
+     label07:
+        virtualinvoke $r5.<java.util.ArrayList: boolean add(java.lang.Object)>($r3);
+
+        $i1 = $i1 + 1;
+
+        goto label05;
+
+     label08:
+        $r6 = (java.util.List) $r5;
+
+        return $r6;
+
+     label09:
+        $r8 = new java.util.ArrayList;
+
+        $r5 = $r8;
+
+        $i1 = $i0 - $i2;
+
+        $i1 = $i1 + 1;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>(int)>($i1);
+
+        $r7 = (java.util.Collection) $r5;
+
+        $r3 = staticinvoke <kotlinx.coroutines.internal.StackTraceRecoveryKt: java.lang.StackTraceElement artificialFrame(java.lang.String)>("Coroutine creation stacktrace");
+
+        interfaceinvoke $r7.<java.util.Collection: boolean add(java.lang.Object)>($r3);
+
+     label10:
+        $i2 = $i2 + 1;
+
+     label11:
+        if $i2 >= $i0 goto label18;
+
+        $r3 = $r2[$i2];
+
+        $z0 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInternalMethod(java.lang.StackTraceElement)>($r3);
+
+        if $z0 == 0 goto label17;
+
+        $r3 = $r2[$i2];
+
+        interfaceinvoke $r7.<java.util.Collection: boolean add(java.lang.Object)>($r3);
+
+        $i1 = $i2 + 1;
+
+     label12:
+        if $i1 >= $i0 goto label13;
+
+        $r3 = $r2[$i1];
+
+        $z0 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInternalMethod(java.lang.StackTraceElement)>($r3);
+
+        if $z0 == 0 goto label13;
+
+        $i1 = $i1 + 1;
+
+        goto label12;
+
+     label13:
+        $i3 = -1;
+
+        $i3 = $i1 + $i3;
+
+        $i4 = $i3;
+
+     label14:
+        if $i4 <= $i2 goto label15;
+
+        $r3 = $r2[$i4];
+
+        $r4 = virtualinvoke $r3.<java.lang.StackTraceElement: java.lang.String getFileName()>();
+
+        if $r4 != null goto label15;
+
+        $i5 = -1;
+
+        $i4 = $i4 + $i5;
+
+        goto label14;
+
+     label15:
+        if $i4 <= $i2 goto label16;
+
+        if $i4 >= $i3 goto label16;
+
+        $r3 = $r2[$i4];
+
+        interfaceinvoke $r7.<java.util.Collection: boolean add(java.lang.Object)>($r3);
+
+     label16:
+        $r3 = $r2[$i3];
+
+        interfaceinvoke $r7.<java.util.Collection: boolean add(java.lang.Object)>($r3);
+
+        $i2 = $i1;
+
+        goto label11;
+
+     label17:
+        $r3 = $r2[$i2];
+
+        interfaceinvoke $r7.<java.util.Collection: boolean add(java.lang.Object)>($r3);
+
+        goto label10;
+
+     label18:
+        $r6 = (java.util.List) $r5;
+
+        return $r6;
+    }
+
+    private final void startWeakRefCleanerThread()
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.lang.Thread $r1;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$startWeakRefCleanerThread$1 $r2;
+        kotlin.jvm.functions.Function0 $r3;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl$startWeakRefCleanerThread$1: kotlinx.coroutines.debug.internal.DebugProbesImpl$startWeakRefCleanerThread$1 INSTANCE>;
+
+        $r3 = (kotlin.jvm.functions.Function0) $r2;
+
+        $r1 = staticinvoke <kotlin.concurrent.ThreadsKt: java.lang.Thread thread$default(boolean,boolean,java.lang.ClassLoader,java.lang.String,int,kotlin.jvm.functions.Function0,int,java.lang.Object)>(0, 1, null, "Coroutines Debugger Cleaner", 0, $r3, 21, null);
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.lang.Thread weakRefCleanerThread> = $r1;
+
+        return;
+    }
+
+    private final void stopWeakRefCleanerThread()
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.lang.Thread $r1;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.lang.Thread weakRefCleanerThread>;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.lang.Thread weakRefCleanerThread> = null;
+
+        virtualinvoke $r1.<java.lang.Thread: void interrupt()>();
+
+        virtualinvoke $r1.<java.lang.Thread: void join()>();
+
+        return;
+    }
+
+    private final kotlinx.coroutines.debug.internal.StackTraceFrame toStackTraceFrame(java.util.List)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlin.coroutines.jvm.internal.CoroutineStackFrame $r7;
+        java.util.ListIterator $r4;
+        kotlinx.coroutines.debug.internal.StackTraceFrame $r1, $r3;
+        java.util.List $r2;
+        int $i0;
+        java.lang.Object $r5;
+        java.lang.StackTraceElement $r6;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r2 := @parameter0: java.util.List;
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean isEmpty()>();
+
+        $r3 = null;
+
+        if $z0 != 0 goto label2;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        $r4 = interfaceinvoke $r2.<java.util.List: java.util.ListIterator listIterator(int)>($i0);
+
+     label1:
+        $z0 = interfaceinvoke $r4.<java.util.ListIterator: boolean hasPrevious()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke $r4.<java.util.ListIterator: java.lang.Object previous()>();
+
+        $r6 = (java.lang.StackTraceElement) $r5;
+
+        $r1 = new kotlinx.coroutines.debug.internal.StackTraceFrame;
+
+        $r7 = (kotlin.coroutines.jvm.internal.CoroutineStackFrame) $r3;
+
+        specialinvoke $r1.<kotlinx.coroutines.debug.internal.StackTraceFrame: void <init>(kotlin.coroutines.jvm.internal.CoroutineStackFrame,java.lang.StackTraceElement)>($r7, $r6);
+
+        $r3 = $r1;
+
+        goto label1;
+
+     label2:
+        return null;
+
+     label3:
+        return $r3;
+    }
+
+    private final java.lang.String toStringWithQuotes(java.lang.Object)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.lang.StringBuilder $r1;
+        java.lang.Object $r3;
+        java.lang.String $r2;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r3 := @parameter0: java.lang.Object;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("\"");
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(34);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    private final void updateRunningState(kotlin.coroutines.jvm.internal.CoroutineStackFrame, java.lang.String)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.lang.Throwable $r13;
+        kotlin.coroutines.Continuation $r10;
+        kotlin.coroutines.jvm.internal.CoroutineStackFrame $r2, $r9;
+        kotlinx.coroutines.debug.internal.ConcurrentWeakMap $r5;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl $r7;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r3;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r8;
+        kotlin.Unit $r12;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r4;
+        java.util.Map $r11;
+        java.lang.Object $r6;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r2 := @parameter0: kotlin.coroutines.jvm.internal.CoroutineStackFrame;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r3 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readLock()>();
+
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+     label01:
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+     label02:
+        if $z0 != 0 goto label03;
+
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        return;
+
+     label03:
+        $r5 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap callerInfoCache>;
+
+        $r6 = virtualinvoke $r5.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: java.lang.Object remove(java.lang.Object)>($r2);
+
+        $r7 = (kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl) $r6;
+
+     label04:
+        if $r7 == null goto label05;
+
+        goto label16;
+
+     label05:
+        $r8 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner owner(kotlin.coroutines.jvm.internal.CoroutineStackFrame)>($r2);
+
+     label06:
+        if $r8 == null goto label20;
+
+     label07:
+        $r7 = $r8.<kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner: kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl info>;
+
+     label08:
+        if $r7 != null goto label09;
+
+        goto label20;
+
+     label09:
+        $r9 = virtualinvoke $r7.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: kotlin.coroutines.jvm.internal.CoroutineStackFrame getLastObservedFrame$kotlinx_coroutines_core()>();
+
+     label10:
+        if $r9 == null goto label13;
+
+     label11:
+        $r9 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlin.coroutines.jvm.internal.CoroutineStackFrame realCaller(kotlin.coroutines.jvm.internal.CoroutineStackFrame)>($r9);
+
+     label12:
+        goto label14;
+
+     label13:
+        $r9 = null;
+
+     label14:
+        if $r9 == null goto label16;
+
+     label15:
+        virtualinvoke $r5.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: java.lang.Object remove(java.lang.Object)>($r9);
+
+     label16:
+        $r10 = (kotlin.coroutines.Continuation) $r2;
+
+        virtualinvoke $r7.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: void updateState$kotlinx_coroutines_core(java.lang.String,kotlin.coroutines.Continuation)>($r1, $r10);
+
+        $r2 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlin.coroutines.jvm.internal.CoroutineStackFrame realCaller(kotlin.coroutines.jvm.internal.CoroutineStackFrame)>($r2);
+
+     label17:
+        if $r2 != null goto label18;
+
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        return;
+
+     label18:
+        $r11 = (java.util.Map) $r5;
+
+        interfaceinvoke $r11.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r2, $r7);
+
+        $r12 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label19:
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        return;
+
+     label20:
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        return;
+
+     label21:
+        $r13 := @caughtexception;
+
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        throw $r13;
+
+        catch java.lang.Throwable from label01 to label02 with label21;
+        catch java.lang.Throwable from label03 to label04 with label21;
+        catch java.lang.Throwable from label05 to label06 with label21;
+        catch java.lang.Throwable from label07 to label08 with label21;
+        catch java.lang.Throwable from label09 to label10 with label21;
+        catch java.lang.Throwable from label11 to label12 with label21;
+        catch java.lang.Throwable from label15 to label17 with label21;
+        catch java.lang.Throwable from label18 to label19 with label21;
+    }
+
+    private final void updateState(kotlin.coroutines.Continuation, java.lang.String)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r5;
+        kotlin.coroutines.Continuation $r2;
+        kotlin.coroutines.jvm.internal.CoroutineStackFrame $r4;
+        java.lang.String $r1;
+        boolean $z0;
+        kotlin.KotlinVersion $r3;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r2 := @parameter0: kotlin.coroutines.Continuation;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r1, "RUNNING");
+
+        if $z0 == 0 goto label5;
+
+        $r3 = <kotlin.KotlinVersion: kotlin.KotlinVersion CURRENT>;
+
+        $z0 = virtualinvoke $r3.<kotlin.KotlinVersion: boolean isAtLeast(int,int,int)>(1, 3, 30);
+
+        if $z0 == 0 goto label5;
+
+        $z0 = $r2 instanceof kotlin.coroutines.jvm.internal.CoroutineStackFrame;
+
+        if $z0 == 0 goto label2;
+
+        $r4 = (kotlin.coroutines.jvm.internal.CoroutineStackFrame) $r2;
+
+        goto label3;
+
+     label2:
+        $r4 = null;
+
+     label3:
+        if $r4 != null goto label4;
+
+        return;
+
+     label4:
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void updateRunningState(kotlin.coroutines.jvm.internal.CoroutineStackFrame,java.lang.String)>($r4, $r1);
+
+        return;
+
+     label5:
+        $r5 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner owner(kotlin.coroutines.Continuation)>($r2);
+
+        if $r5 != null goto label6;
+
+        return;
+
+     label6:
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void updateState(kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner,kotlin.coroutines.Continuation,java.lang.String)>($r5, $r2, $r1);
+
+        return;
+    }
+
+    private final void updateState(kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner, kotlin.coroutines.Continuation, java.lang.String)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.lang.Throwable $r8;
+        kotlin.coroutines.Continuation $r1;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl $r6;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r4;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r3;
+        kotlin.Unit $r7;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r5;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r3 := @parameter0: kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner;
+
+        $r1 := @parameter1: kotlin.coroutines.Continuation;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r4 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock>;
+
+        $r5 = virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readLock()>();
+
+        virtualinvoke $r5.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+     label1:
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+     label2:
+        if $z0 != 0 goto label3;
+
+        virtualinvoke $r5.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        return;
+
+     label3:
+        $r6 = $r3.<kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner: kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl info>;
+
+        virtualinvoke $r6.<kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl: void updateState$kotlinx_coroutines_core(java.lang.String,kotlin.coroutines.Continuation)>($r2, $r1);
+
+        $r7 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label4:
+        virtualinvoke $r5.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        return;
+
+     label5:
+        $r8 := @caughtexception;
+
+        virtualinvoke $r5.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        throw $r8;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    public final void dumpCoroutines(java.io.PrintStream)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.io.PrintStream $r1;
+        java.lang.Throwable $r3;
+        kotlin.Unit $r2;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: java.io.PrintStream;
+
+        entermonitor $r1;
+
+     label1:
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void dumpCoroutinesSynchronized(java.io.PrintStream)>($r1);
+
+        $r2 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label2:
+        exitmonitor $r1;
+
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor $r1;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final java.util.List dumpCoroutinesInfo()
+    {
+        java.lang.Throwable $r14;
+        java.lang.IllegalStateException $r13;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r1;
+        java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock $r3;
+        java.lang.Iterable $r5;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$lambda-12$$inlined$sortedBy$1 $r7;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r2;
+        int $i0, $i1, $i2;
+        java.lang.String $r12;
+        boolean $z0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlin.sequences.Sequence $r6;
+        java.util.Set $r4;
+        kotlin.jvm.functions.Function1 $r10;
+        java.util.List $r11;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfo$$inlined$dumpCoroutinesInfoImpl$1 $r9;
+        java.util.Comparator $r8;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readLock()>();
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: int getWriteHoldCount()>();
+
+        $i1 = 0;
+
+        if $i0 != 0 goto label01;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: int getReadHoldCount()>();
+
+        goto label02;
+
+     label01:
+        $i0 = 0;
+
+     label02:
+        $i2 = 0;
+
+     label03:
+        if $i2 >= $i0 goto label04;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        $i2 = $i2 + 1;
+
+        goto label03;
+
+     label04:
+        $r3 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeLock()>();
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void lock()>();
+
+     label05:
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+     label06:
+        if $z0 == 0 goto label10;
+
+     label07:
+        $r4 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.Set getCapturedCoroutines()>();
+
+        $r5 = (java.lang.Iterable) $r4;
+
+        $r6 = staticinvoke <kotlin.collections.CollectionsKt: kotlin.sequences.Sequence asSequence(java.lang.Iterable)>($r5);
+
+        $r7 = new kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$lambda-12$$inlined$sortedBy$1;
+
+        specialinvoke $r7.<kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$lambda-12$$inlined$sortedBy$1: void <init>()>();
+
+        $r8 = (java.util.Comparator) $r7;
+
+        $r6 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence sortedWith(kotlin.sequences.Sequence,java.util.Comparator)>($r6, $r8);
+
+        $r9 = new kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfo$$inlined$dumpCoroutinesInfoImpl$1;
+
+        specialinvoke $r9.<kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfo$$inlined$dumpCoroutinesInfoImpl$1: void <init>()>();
+
+        $r10 = (kotlin.jvm.functions.Function1) $r9;
+
+        $r6 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence mapNotNull(kotlin.sequences.Sequence,kotlin.jvm.functions.Function1)>($r6, $r10);
+
+        $r11 = staticinvoke <kotlin.sequences.SequencesKt: java.util.List toList(kotlin.sequences.Sequence)>($r6);
+
+     label08:
+        if $i1 >= $i0 goto label09;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label08;
+
+     label09:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return $r11;
+
+     label10:
+        $r12 = "Debug probes are not installed";
+
+     label11:
+        $r13 = new java.lang.IllegalStateException;
+
+        $r12 = virtualinvoke $r12.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r13.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r12);
+
+        throw $r13;
+
+     label12:
+        $r14 := @caughtexception;
+
+     label13:
+        if $i1 >= $i0 goto label14;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label13;
+
+     label14:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        throw $r14;
+
+        catch java.lang.Throwable from label05 to label06 with label12;
+        catch java.lang.Throwable from label07 to label08 with label12;
+        catch java.lang.Throwable from label11 to label12 with label12;
+    }
+
+    public final java.lang.Object[] dumpCoroutinesInfoAsJsonAndReferences()
+    {
+        kotlin.coroutines.jvm.internal.CoroutineStackFrame $r21;
+        kotlinx.coroutines.CoroutineName $r12;
+        java.lang.NullPointerException $r30;
+        java.lang.Long $r13;
+        java.lang.Thread $r22;
+        boolean $z0;
+        kotlinx.coroutines.CoroutineId$Key $r19;
+        kotlinx.coroutines.CoroutineName$Key $r9;
+        java.util.Collection $r25;
+        kotlin.coroutines.jvm.internal.CoroutineStackFrame[] $r28;
+        kotlinx.coroutines.CoroutineDispatcher $r16;
+        java.util.List $r1;
+        java.lang.StringBuilder $r18;
+        kotlinx.coroutines.CoroutineDispatcher$Key $r15;
+        java.lang.Object[] $r23, $r27;
+        kotlin.coroutines.CoroutineContext$Element $r11;
+        long $l1;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfo[] $r29;
+        java.lang.Iterable $r24;
+        java.util.ArrayList $r2, $r3, $r4;
+        int $i0;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfo $r7;
+        java.lang.String $r14, $r17;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.util.Iterator $r5;
+        java.lang.Thread[] $r26;
+        kotlinx.coroutines.CoroutineId $r20;
+        kotlin.coroutines.CoroutineContext $r8;
+        kotlin.coroutines.CoroutineContext$Key $r10;
+        java.lang.Object $r6;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.List dumpCoroutinesInfo()>();
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $r5 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label01:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label07;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (kotlinx.coroutines.debug.internal.DebugCoroutineInfo) $r6;
+
+        $r8 = virtualinvoke $r7.<kotlinx.coroutines.debug.internal.DebugCoroutineInfo: kotlin.coroutines.CoroutineContext getContext()>();
+
+        $r9 = <kotlinx.coroutines.CoroutineName: kotlinx.coroutines.CoroutineName$Key Key>;
+
+        $r10 = (kotlin.coroutines.CoroutineContext$Key) $r9;
+
+        $r11 = interfaceinvoke $r8.<kotlin.coroutines.CoroutineContext: kotlin.coroutines.CoroutineContext$Element get(kotlin.coroutines.CoroutineContext$Key)>($r10);
+
+        $r12 = (kotlinx.coroutines.CoroutineName) $r11;
+
+        $r13 = null;
+
+        if $r12 == null goto label02;
+
+        $r14 = virtualinvoke $r12.<kotlinx.coroutines.CoroutineName: java.lang.String getName()>();
+
+        if $r14 == null goto label02;
+
+        $r14 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.lang.String toStringWithQuotes(java.lang.Object)>($r14);
+
+        goto label03;
+
+     label02:
+        $r14 = null;
+
+     label03:
+        $r15 = <kotlinx.coroutines.CoroutineDispatcher: kotlinx.coroutines.CoroutineDispatcher$Key Key>;
+
+        $r10 = (kotlin.coroutines.CoroutineContext$Key) $r15;
+
+        $r11 = interfaceinvoke $r8.<kotlin.coroutines.CoroutineContext: kotlin.coroutines.CoroutineContext$Element get(kotlin.coroutines.CoroutineContext$Key)>($r10);
+
+        $r16 = (kotlinx.coroutines.CoroutineDispatcher) $r11;
+
+        if $r16 == null goto label04;
+
+        $r17 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.lang.String toStringWithQuotes(java.lang.Object)>($r16);
+
+        goto label05;
+
+     label04:
+        $r17 = null;
+
+     label05:
+        $r18 = new java.lang.StringBuilder;
+
+        specialinvoke $r18.<java.lang.StringBuilder: void <init>(java.lang.String)>("\n                {\n                    \"name\": ");
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r14);
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",\n                    \"id\": ");
+
+        $r19 = <kotlinx.coroutines.CoroutineId: kotlinx.coroutines.CoroutineId$Key Key>;
+
+        $r10 = (kotlin.coroutines.CoroutineContext$Key) $r19;
+
+        $r11 = interfaceinvoke $r8.<kotlin.coroutines.CoroutineContext: kotlin.coroutines.CoroutineContext$Element get(kotlin.coroutines.CoroutineContext$Key)>($r10);
+
+        $r20 = (kotlinx.coroutines.CoroutineId) $r11;
+
+        if $r20 == null goto label06;
+
+        $l1 = virtualinvoke $r20.<kotlinx.coroutines.CoroutineId: long getId()>();
+
+        $r13 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+     label06:
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r13);
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",\n                    \"dispatcher\": ");
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r17);
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",\n                    \"sequenceNumber\": ");
+
+        $l1 = virtualinvoke $r7.<kotlinx.coroutines.debug.internal.DebugCoroutineInfo: long getSequenceNumber()>();
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",\n                    \"state\": \"");
+
+        $r14 = virtualinvoke $r7.<kotlinx.coroutines.debug.internal.DebugCoroutineInfo: java.lang.String getState()>();
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r14);
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\"\n                } \n                ");
+
+        $r14 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r14 = staticinvoke <kotlin.text.StringsKt: java.lang.String trimIndent(java.lang.String)>($r14);
+
+        virtualinvoke $r4.<java.util.ArrayList: boolean add(java.lang.Object)>($r14);
+
+        $r21 = virtualinvoke $r7.<kotlinx.coroutines.debug.internal.DebugCoroutineInfo: kotlin.coroutines.jvm.internal.CoroutineStackFrame getLastObservedFrame()>();
+
+        virtualinvoke $r3.<java.util.ArrayList: boolean add(java.lang.Object)>($r21);
+
+        $r22 = virtualinvoke $r7.<kotlinx.coroutines.debug.internal.DebugCoroutineInfo: java.lang.Thread getLastObservedThread()>();
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r22);
+
+        goto label01;
+
+     label07:
+        $r23 = newarray (java.lang.Object)[4];
+
+        $r18 = new java.lang.StringBuilder;
+
+        specialinvoke $r18.<java.lang.StringBuilder: void <init>(java.lang.String)>("[");
+
+        $r24 = (java.lang.Iterable) $r4;
+
+        $r14 = staticinvoke <kotlin.collections.CollectionsKt: java.lang.String joinToString$default(java.lang.Iterable,java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,int,java.lang.CharSequence,kotlin.jvm.functions.Function1,int,java.lang.Object)>($r24, null, null, null, 0, null, null, 63, null);
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r14);
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r14 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r23[0] = $r14;
+
+        $r25 = (java.util.Collection) $r2;
+
+        $r26 = newarray (java.lang.Thread)[0];
+
+        $r27 = interfaceinvoke $r25.<java.util.Collection: java.lang.Object[] toArray(java.lang.Object[])>($r26);
+
+        if $r27 == null goto label10;
+
+        $r23[1] = $r27;
+
+        $r25 = (java.util.Collection) $r3;
+
+        $r28 = newarray (kotlin.coroutines.jvm.internal.CoroutineStackFrame)[0];
+
+        $r27 = interfaceinvoke $r25.<java.util.Collection: java.lang.Object[] toArray(java.lang.Object[])>($r28);
+
+        if $r27 == null goto label09;
+
+        $r23[2] = $r27;
+
+        $r25 = (java.util.Collection) $r1;
+
+        $r29 = newarray (kotlinx.coroutines.debug.internal.DebugCoroutineInfo)[0];
+
+        $r27 = interfaceinvoke $r25.<java.util.Collection: java.lang.Object[] toArray(java.lang.Object[])>($r29);
+
+        if $r27 == null goto label08;
+
+        $r23[3] = $r27;
+
+        return $r23;
+
+     label08:
+        $r30 = new java.lang.NullPointerException;
+
+        specialinvoke $r30.<java.lang.NullPointerException: void <init>(java.lang.String)>("null cannot be cast to non-null type kotlin.Array<T of kotlin.collections.ArraysKt__ArraysJVMKt.toTypedArray>");
+
+        throw $r30;
+
+     label09:
+        $r30 = new java.lang.NullPointerException;
+
+        specialinvoke $r30.<java.lang.NullPointerException: void <init>(java.lang.String)>("null cannot be cast to non-null type kotlin.Array<T of kotlin.collections.ArraysKt__ArraysJVMKt.toTypedArray>");
+
+        throw $r30;
+
+     label10:
+        $r30 = new java.lang.NullPointerException;
+
+        specialinvoke $r30.<java.lang.NullPointerException: void <init>(java.lang.String)>("null cannot be cast to non-null type kotlin.Array<T of kotlin.collections.ArraysKt__ArraysJVMKt.toTypedArray>");
+
+        throw $r30;
+    }
+
+    public final java.util.List dumpDebuggerInfo()
+    {
+        java.lang.Throwable $r14;
+        java.lang.IllegalStateException $r13;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r1;
+        java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock $r3;
+        java.lang.Iterable $r5;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$lambda-12$$inlined$sortedBy$1 $r7;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpDebuggerInfo$$inlined$dumpCoroutinesInfoImpl$1 $r9;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r2;
+        int $i0, $i1, $i2;
+        java.lang.String $r12;
+        boolean $z0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlin.sequences.Sequence $r6;
+        java.util.Set $r4;
+        kotlin.jvm.functions.Function1 $r10;
+        java.util.List $r11;
+        java.util.Comparator $r8;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readLock()>();
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: int getWriteHoldCount()>();
+
+        $i1 = 0;
+
+        if $i0 != 0 goto label01;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: int getReadHoldCount()>();
+
+        goto label02;
+
+     label01:
+        $i0 = 0;
+
+     label02:
+        $i2 = 0;
+
+     label03:
+        if $i2 >= $i0 goto label04;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        $i2 = $i2 + 1;
+
+        goto label03;
+
+     label04:
+        $r3 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeLock()>();
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void lock()>();
+
+     label05:
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+     label06:
+        if $z0 == 0 goto label10;
+
+     label07:
+        $r4 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.Set getCapturedCoroutines()>();
+
+        $r5 = (java.lang.Iterable) $r4;
+
+        $r6 = staticinvoke <kotlin.collections.CollectionsKt: kotlin.sequences.Sequence asSequence(java.lang.Iterable)>($r5);
+
+        $r7 = new kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$lambda-12$$inlined$sortedBy$1;
+
+        specialinvoke $r7.<kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpCoroutinesInfoImpl$lambda-12$$inlined$sortedBy$1: void <init>()>();
+
+        $r8 = (java.util.Comparator) $r7;
+
+        $r6 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence sortedWith(kotlin.sequences.Sequence,java.util.Comparator)>($r6, $r8);
+
+        $r9 = new kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpDebuggerInfo$$inlined$dumpCoroutinesInfoImpl$1;
+
+        specialinvoke $r9.<kotlinx.coroutines.debug.internal.DebugProbesImpl$dumpDebuggerInfo$$inlined$dumpCoroutinesInfoImpl$1: void <init>()>();
+
+        $r10 = (kotlin.jvm.functions.Function1) $r9;
+
+        $r6 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence mapNotNull(kotlin.sequences.Sequence,kotlin.jvm.functions.Function1)>($r6, $r10);
+
+        $r11 = staticinvoke <kotlin.sequences.SequencesKt: java.util.List toList(kotlin.sequences.Sequence)>($r6);
+
+     label08:
+        if $i1 >= $i0 goto label09;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label08;
+
+     label09:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return $r11;
+
+     label10:
+        $r12 = "Debug probes are not installed";
+
+     label11:
+        $r13 = new java.lang.IllegalStateException;
+
+        $r12 = virtualinvoke $r12.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r13.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r12);
+
+        throw $r13;
+
+     label12:
+        $r14 := @caughtexception;
+
+     label13:
+        if $i1 >= $i0 goto label14;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label13;
+
+     label14:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        throw $r14;
+
+        catch java.lang.Throwable from label05 to label06 with label12;
+        catch java.lang.Throwable from label07 to label08 with label12;
+        catch java.lang.Throwable from label11 to label12 with label12;
+    }
+
+    public final java.util.List enhanceStackTraceWithThreadDump(kotlinx.coroutines.debug.internal.DebugCoroutineInfo, java.util.List)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.util.List $r1;
+        java.lang.Thread $r4;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfo $r2;
+        java.lang.String $r3;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r2 := @parameter0: kotlinx.coroutines.debug.internal.DebugCoroutineInfo;
+
+        $r1 := @parameter1: java.util.List;
+
+        $r3 = virtualinvoke $r2.<kotlinx.coroutines.debug.internal.DebugCoroutineInfo: java.lang.String getState()>();
+
+        $r4 = virtualinvoke $r2.<kotlinx.coroutines.debug.internal.DebugCoroutineInfo: java.lang.Thread getLastObservedThread()>();
+
+        $r1 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.List enhanceStackTraceWithThreadDumpImpl(java.lang.String,java.lang.Thread,java.util.List)>($r3, $r4, $r1);
+
+        return $r1;
+    }
+
+    public final java.lang.String enhanceStackTraceWithThreadDumpAsJson(kotlinx.coroutines.debug.internal.DebugCoroutineInfo)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.util.Iterator $r5;
+        java.lang.Iterable $r10;
+        java.util.ArrayList $r3;
+        java.util.List $r2, $r4;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfo $r1;
+        int $i0;
+        java.lang.Object $r6;
+        java.lang.StackTraceElement $r7;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r9;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: kotlinx.coroutines.debug.internal.DebugCoroutineInfo;
+
+        $r2 = virtualinvoke $r1.<kotlinx.coroutines.debug.internal.DebugCoroutineInfo: java.util.List lastObservedStackTrace()>();
+
+        $r2 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.List enhanceStackTraceWithThreadDump(kotlinx.coroutines.debug.internal.DebugCoroutineInfo,java.util.List)>($r1, $r2);
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        $r4 = (java.util.List) $r3;
+
+        $r5 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (java.lang.StackTraceElement) $r6;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("\n                {\n                    \"declaringClass\": \"");
+
+        $r9 = virtualinvoke $r7.<java.lang.StackTraceElement: java.lang.String getClassName()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\",\n                    \"methodName\": \"");
+
+        $r9 = virtualinvoke $r7.<java.lang.StackTraceElement: java.lang.String getMethodName()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\",\n                    \"fileName\": ");
+
+        $r9 = virtualinvoke $r7.<java.lang.StackTraceElement: java.lang.String getFileName()>();
+
+        if $r9 == null goto label2;
+
+        $r9 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.lang.String toStringWithQuotes(java.lang.Object)>($r9);
+
+        goto label3;
+
+     label2:
+        $r9 = null;
+
+     label3:
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",\n                    \"lineNumber\": ");
+
+        $i0 = virtualinvoke $r7.<java.lang.StackTraceElement: int getLineNumber()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n                }\n                ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r9 = staticinvoke <kotlin.text.StringsKt: java.lang.String trimIndent(java.lang.String)>($r9);
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r9);
+
+        goto label1;
+
+     label4:
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("[");
+
+        $r10 = (java.lang.Iterable) $r4;
+
+        $r9 = staticinvoke <kotlin.collections.CollectionsKt: java.lang.String joinToString$default(java.lang.Iterable,java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,int,java.lang.CharSequence,kotlin.jvm.functions.Function1,int,java.lang.Object)>($r10, null, null, null, 0, null, null, 63, null);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r9;
+    }
+
+    public final boolean getEnableCreationStackTraces()
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        boolean z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        z0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean enableCreationStackTraces>;
+
+        return z0;
+    }
+
+    public final boolean getSanitizeStackTraces()
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        boolean z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        z0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean sanitizeStackTraces>;
+
+        return z0;
+    }
+
+    public final java.lang.String hierarchyToString(kotlinx.coroutines.Job)
+    {
+        java.lang.Throwable $r25;
+        java.lang.IllegalStateException $r24;
+        kotlin.coroutines.Continuation $r12;
+        kotlinx.coroutines.Job$Key $r14;
+        kotlinx.coroutines.Job $r1, $r20;
+        kotlin.coroutines.CoroutineContext$Element $r16;
+        kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl $r21;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r2;
+        java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock $r4;
+        java.lang.Iterable $r6;
+        java.util.ArrayList $r7;
+        java.util.LinkedHashMap $r18;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r11;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r3;
+        java.util.Map $r19;
+        int $i0, $i1, $i2;
+        java.lang.String $r23;
+        boolean $z0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.util.Iterator $r9;
+        java.util.Collection $r8;
+        java.util.Set $r5;
+        kotlin.coroutines.CoroutineContext $r13;
+        java.util.List $r17;
+        kotlin.coroutines.CoroutineContext$Key $r15;
+        java.lang.Object $r10;
+        java.lang.StringBuilder $r22;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: kotlinx.coroutines.Job;
+
+        $r2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readLock()>();
+
+        $i0 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: int getWriteHoldCount()>();
+
+        $i1 = 0;
+
+        if $i0 != 0 goto label01;
+
+        $i0 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: int getReadHoldCount()>();
+
+        goto label02;
+
+     label01:
+        $i0 = 0;
+
+     label02:
+        $i2 = 0;
+
+     label03:
+        if $i2 >= $i0 goto label04;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        $i2 = $i2 + 1;
+
+        goto label03;
+
+     label04:
+        $r4 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeLock()>();
+
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void lock()>();
+
+     label05:
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+     label06:
+        if $z0 == 0 goto label24;
+
+     label07:
+        $r5 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.Set getCapturedCoroutines()>();
+
+        $r6 = (java.lang.Iterable) $r5;
+
+        $r7 = new java.util.ArrayList;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>()>();
+
+        $r8 = (java.util.Collection) $r7;
+
+        $r9 = interfaceinvoke $r6.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label08:
+        $z0 = interfaceinvoke $r9.<java.util.Iterator: boolean hasNext()>();
+
+     label09:
+        if $z0 == 0 goto label16;
+
+     label10:
+        $r10 = interfaceinvoke $r9.<java.util.Iterator: java.lang.Object next()>();
+
+        $r11 = (kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner) $r10;
+
+        $r12 = $r11.<kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner: kotlin.coroutines.Continuation delegate>;
+
+        $r13 = interfaceinvoke $r12.<kotlin.coroutines.Continuation: kotlin.coroutines.CoroutineContext getContext()>();
+
+        $r14 = <kotlinx.coroutines.Job: kotlinx.coroutines.Job$Key Key>;
+
+        $r15 = (kotlin.coroutines.CoroutineContext$Key) $r14;
+
+        $r16 = interfaceinvoke $r13.<kotlin.coroutines.CoroutineContext: kotlin.coroutines.CoroutineContext$Element get(kotlin.coroutines.CoroutineContext$Key)>($r15);
+
+     label11:
+        if $r16 == null goto label12;
+
+        $z0 = 1;
+
+        goto label13;
+
+     label12:
+        $z0 = 0;
+
+     label13:
+        if $z0 == 0 goto label08;
+
+     label14:
+        interfaceinvoke $r8.<java.util.Collection: boolean add(java.lang.Object)>($r10);
+
+     label15:
+        goto label08;
+
+     label16:
+        $r17 = (java.util.List) $r8;
+
+        $r6 = (java.lang.Iterable) $r17;
+
+        $i2 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r6, 10);
+
+        $i2 = staticinvoke <kotlin.collections.MapsKt: int mapCapacity(int)>($i2);
+
+        $i2 = staticinvoke <kotlin.ranges.RangesKt: int coerceAtLeast(int,int)>($i2, 16);
+
+        $r18 = new java.util.LinkedHashMap;
+
+        specialinvoke $r18.<java.util.LinkedHashMap: void <init>(int)>($i2);
+
+        $r19 = (java.util.Map) $r18;
+
+        $r9 = interfaceinvoke $r6.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label17:
+        $z0 = interfaceinvoke $r9.<java.util.Iterator: boolean hasNext()>();
+
+     label18:
+        if $z0 == 0 goto label21;
+
+     label19:
+        $r10 = interfaceinvoke $r9.<java.util.Iterator: java.lang.Object next()>();
+
+        $r11 = (kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner) $r10;
+
+        $r12 = $r11.<kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner: kotlin.coroutines.Continuation delegate>;
+
+        $r13 = interfaceinvoke $r12.<kotlin.coroutines.Continuation: kotlin.coroutines.CoroutineContext getContext()>();
+
+        $r20 = staticinvoke <kotlinx.coroutines.JobKt: kotlinx.coroutines.Job getJob(kotlin.coroutines.CoroutineContext)>($r13);
+
+        $r11 = (kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner) $r10;
+
+        $r21 = $r11.<kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner: kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl info>;
+
+        interfaceinvoke $r19.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r20, $r21);
+
+     label20:
+        goto label17;
+
+     label21:
+        $r22 = new java.lang.StringBuilder;
+
+        specialinvoke $r22.<java.lang.StringBuilder: void <init>()>();
+
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void build(kotlinx.coroutines.Job,java.util.Map,java.lang.StringBuilder,java.lang.String)>($r1, $r19, $r22, "");
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r23, "StringBuilder().apply(builderAction).toString()");
+
+     label22:
+        if $i1 >= $i0 goto label23;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label22;
+
+     label23:
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return $r23;
+
+     label24:
+        $r23 = "Debug probes are not installed";
+
+     label25:
+        $r24 = new java.lang.IllegalStateException;
+
+        $r23 = virtualinvoke $r23.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r24.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r23);
+
+        throw $r24;
+
+     label26:
+        $r25 := @caughtexception;
+
+     label27:
+        if $i1 >= $i0 goto label28;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label27;
+
+     label28:
+        virtualinvoke $r4.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        throw $r25;
+
+        catch java.lang.Throwable from label05 to label06 with label26;
+        catch java.lang.Throwable from label07 to label09 with label26;
+        catch java.lang.Throwable from label10 to label11 with label26;
+        catch java.lang.Throwable from label14 to label15 with label26;
+        catch java.lang.Throwable from label16 to label18 with label26;
+        catch java.lang.Throwable from label19 to label20 with label26;
+        catch java.lang.Throwable from label21 to label22 with label26;
+        catch java.lang.Throwable from label25 to label26 with label26;
+    }
+
+    public final void install()
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.lang.Throwable $r8;
+        kotlin.jvm.functions.Function1 $r5;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r1;
+        java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock $r3;
+        kotlin.Unit $r7;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r2;
+        kotlinx.coroutines.debug.internal.AgentInstallationType $r4;
+        int $i0, $i1, $i2;
+        java.lang.Boolean $r6;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readLock()>();
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: int getWriteHoldCount()>();
+
+        $i1 = 0;
+
+        if $i0 != 0 goto label01;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: int getReadHoldCount()>();
+
+        goto label02;
+
+     label01:
+        $i0 = 0;
+
+     label02:
+        $i2 = 0;
+
+     label03:
+        if $i2 >= $i0 goto label04;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        $i2 = $i2 + 1;
+
+        goto label03;
+
+     label04:
+        $r3 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeLock()>();
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void lock()>();
+
+     label05:
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $i2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: int installations>;
+
+     label06:
+        $i2 = $i2 + 1;
+
+     label07:
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: int installations> = $i2;
+
+        $i2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: int installations>;
+
+     label08:
+        if $i2 <= 1 goto label11;
+
+     label09:
+        if $i1 >= $i0 goto label10;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label09;
+
+     label10:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return;
+
+     label11:
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void startWeakRefCleanerThread()>();
+
+        $r4 = <kotlinx.coroutines.debug.internal.AgentInstallationType: kotlinx.coroutines.debug.internal.AgentInstallationType INSTANCE>;
+
+        $z0 = virtualinvoke $r4.<kotlinx.coroutines.debug.internal.AgentInstallationType: boolean isInstalledStatically$kotlinx_coroutines_core()>();
+
+     label12:
+        if $z0 == 0 goto label15;
+
+     label13:
+        if $i1 >= $i0 goto label14;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label13;
+
+     label14:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return;
+
+     label15:
+        $r5 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlin.jvm.functions.Function1 dynamicAttach>;
+
+     label16:
+        if $r5 == null goto label18;
+
+     label17:
+        $r6 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+        interfaceinvoke $r5.<kotlin.jvm.functions.Function1: java.lang.Object invoke(java.lang.Object)>($r6);
+
+     label18:
+        $r7 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label19:
+        if $i1 >= $i0 goto label20;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label19;
+
+     label20:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return;
+
+     label21:
+        $r8 := @caughtexception;
+
+     label22:
+        if $i1 >= $i0 goto label23;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label22;
+
+     label23:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        throw $r8;
+
+        catch java.lang.Throwable from label05 to label06 with label21;
+        catch java.lang.Throwable from label07 to label08 with label21;
+        catch java.lang.Throwable from label11 to label12 with label21;
+        catch java.lang.Throwable from label15 to label16 with label21;
+        catch java.lang.Throwable from label17 to label19 with label21;
+    }
+
+    public final boolean isInstalled$kotlinx_coroutines_core()
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        int $i0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $i0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: int installations>;
+
+        if $i0 <= 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public final kotlin.coroutines.Continuation probeCoroutineCreated$kotlinx_coroutines_core(kotlin.coroutines.Continuation)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        java.lang.Throwable $r4;
+        kotlin.coroutines.Continuation $r1;
+        kotlinx.coroutines.debug.internal.StackTraceFrame $r6;
+        java.lang.Exception $r3;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner $r2;
+        java.util.List $r5;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: kotlin.coroutines.Continuation;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+        if $z0 != 0 goto label1;
+
+        return $r1;
+
+     label1:
+        $r2 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner owner(kotlin.coroutines.Continuation)>($r1);
+
+        if $r2 == null goto label2;
+
+        return $r1;
+
+     label2:
+        $z0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean enableCreationStackTraces>;
+
+        if $z0 == 0 goto label3;
+
+        $r3 = new java.lang.Exception;
+
+        specialinvoke $r3.<java.lang.Exception: void <init>()>();
+
+        $r4 = (java.lang.Throwable) $r3;
+
+        $r5 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.List sanitizeStackTrace(java.lang.Throwable)>($r4);
+
+        $r6 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.StackTraceFrame toStackTraceFrame(java.util.List)>($r5);
+
+        goto label4;
+
+     label3:
+        $r6 = null;
+
+     label4:
+        $r1 = specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlin.coroutines.Continuation createOwner(kotlin.coroutines.Continuation,kotlinx.coroutines.debug.internal.StackTraceFrame)>($r1, $r6);
+
+        return $r1;
+    }
+
+    public final void probeCoroutineResumed$kotlinx_coroutines_core(kotlin.coroutines.Continuation)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlin.coroutines.Continuation $r1;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: kotlin.coroutines.Continuation;
+
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void updateState(kotlin.coroutines.Continuation,java.lang.String)>($r1, "RUNNING");
+
+        return;
+    }
+
+    public final void probeCoroutineSuspended$kotlinx_coroutines_core(kotlin.coroutines.Continuation)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlin.coroutines.Continuation $r1;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 := @parameter0: kotlin.coroutines.Continuation;
+
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void updateState(kotlin.coroutines.Continuation,java.lang.String)>($r1, "SUSPENDED");
+
+        return;
+    }
+
+    public final void setEnableCreationStackTraces(boolean)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $z0 := @parameter0: boolean;
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean enableCreationStackTraces> = $z0;
+
+        return;
+    }
+
+    public final void setSanitizeStackTraces(boolean)
+    {
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $z0 := @parameter0: boolean;
+
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean sanitizeStackTraces> = $z0;
+
+        return;
+    }
+
+    public final void uninstall()
+    {
+        java.lang.Throwable $r11;
+        java.lang.IllegalStateException $r10, $r12;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r1;
+        java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock $r3;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r2;
+        int $i0, $i1, $i2, $i3;
+        java.lang.Boolean $r7;
+        java.lang.String $r9;
+        boolean $z0;
+        kotlinx.coroutines.debug.internal.DebugProbesImpl r0;
+        kotlinx.coroutines.debug.internal.ConcurrentWeakMap $r4;
+        kotlin.jvm.functions.Function1 $r6;
+        kotlin.Unit $r8;
+        kotlinx.coroutines.debug.internal.AgentInstallationType $r5;
+
+        r0 := @this: kotlinx.coroutines.debug.internal.DebugProbesImpl;
+
+        $r1 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: java.util.concurrent.locks.ReentrantReadWriteLock coroutineStateLock>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readLock()>();
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: int getWriteHoldCount()>();
+
+        $i1 = 0;
+
+        if $i0 != 0 goto label01;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: int getReadHoldCount()>();
+
+        goto label02;
+
+     label01:
+        $i0 = 0;
+
+     label02:
+        $i2 = 0;
+
+     label03:
+        if $i2 >= $i0 goto label04;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        $i2 = $i2 + 1;
+
+        goto label03;
+
+     label04:
+        $r3 = virtualinvoke $r1.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeLock()>();
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void lock()>();
+
+     label05:
+        r0 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.DebugProbesImpl INSTANCE>;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: boolean isInstalled$kotlinx_coroutines_core()>();
+
+     label06:
+        if $z0 == 0 goto label23;
+
+     label07:
+        $i2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: int installations>;
+
+     label08:
+        $i3 = -1;
+
+        $i2 = $i2 + $i3;
+
+     label09:
+        <kotlinx.coroutines.debug.internal.DebugProbesImpl: int installations> = $i2;
+
+        $i2 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: int installations>;
+
+     label10:
+        if $i2 == 0 goto label13;
+
+     label11:
+        if $i1 >= $i0 goto label12;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label11;
+
+     label12:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return;
+
+     label13:
+        specialinvoke r0.<kotlinx.coroutines.debug.internal.DebugProbesImpl: void stopWeakRefCleanerThread()>();
+
+        $r4 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap capturedCoroutinesMap>;
+
+        virtualinvoke $r4.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: void clear()>();
+
+        $r4 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlinx.coroutines.debug.internal.ConcurrentWeakMap callerInfoCache>;
+
+        virtualinvoke $r4.<kotlinx.coroutines.debug.internal.ConcurrentWeakMap: void clear()>();
+
+        $r5 = <kotlinx.coroutines.debug.internal.AgentInstallationType: kotlinx.coroutines.debug.internal.AgentInstallationType INSTANCE>;
+
+        $z0 = virtualinvoke $r5.<kotlinx.coroutines.debug.internal.AgentInstallationType: boolean isInstalledStatically$kotlinx_coroutines_core()>();
+
+     label14:
+        if $z0 == 0 goto label17;
+
+     label15:
+        if $i1 >= $i0 goto label16;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label15;
+
+     label16:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return;
+
+     label17:
+        $r6 = <kotlinx.coroutines.debug.internal.DebugProbesImpl: kotlin.jvm.functions.Function1 dynamicAttach>;
+
+     label18:
+        if $r6 == null goto label20;
+
+     label19:
+        $r7 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(0);
+
+        interfaceinvoke $r6.<kotlin.jvm.functions.Function1: java.lang.Object invoke(java.lang.Object)>($r7);
+
+     label20:
+        $r8 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label21:
+        if $i1 >= $i0 goto label22;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label21;
+
+     label22:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return;
+
+     label23:
+        $r9 = "Agent was not installed";
+
+     label24:
+        $r12 = new java.lang.IllegalStateException;
+
+     label25:
+        $r10 = $r12;
+
+     label26:
+        $r9 = virtualinvoke $r9.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r12.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r9);
+
+        throw $r10;
+
+     label27:
+        $r11 := @caughtexception;
+
+     label28:
+        if $i1 >= $i0 goto label29;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+        $i1 = $i1 + 1;
+
+        goto label28;
+
+     label29:
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        throw $r11;
+
+        catch java.lang.Throwable from label05 to label06 with label27;
+        catch java.lang.Throwable from label07 to label08 with label27;
+        catch java.lang.Throwable from label09 to label10 with label27;
+        catch java.lang.Throwable from label13 to label14 with label27;
+        catch java.lang.Throwable from label17 to label18 with label27;
+        catch java.lang.Throwable from label19 to label21 with label27;
+        catch java.lang.Throwable from label24 to label25 with label27;
+        catch java.lang.Throwable from label26 to label27 with label27;
+    }
+}

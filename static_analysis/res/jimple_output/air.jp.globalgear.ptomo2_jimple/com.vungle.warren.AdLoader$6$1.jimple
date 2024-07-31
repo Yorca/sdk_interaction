@@ -1,0 +1,210 @@
+class com.vungle.warren.AdLoader$6$1 extends java.lang.Object implements java.lang.Runnable
+{
+    final com.vungle.warren.AdLoader$6 this$1;
+    final com.vungle.warren.downloader.AssetDownloadListener$DownloadError val$downloadError;
+    final com.vungle.warren.downloader.DownloadRequest val$downloadRequest;
+
+    void <init>(com.vungle.warren.AdLoader$6, com.vungle.warren.downloader.DownloadRequest, com.vungle.warren.downloader.AssetDownloadListener$DownloadError)
+    {
+        com.vungle.warren.AdLoader$6 $r1;
+        com.vungle.warren.downloader.AssetDownloadListener$DownloadError $r3;
+        com.vungle.warren.downloader.DownloadRequest $r2;
+        com.vungle.warren.AdLoader$6$1 r0;
+
+        r0 := @this: com.vungle.warren.AdLoader$6$1;
+
+        $r1 := @parameter0: com.vungle.warren.AdLoader$6;
+
+        $r2 := @parameter1: com.vungle.warren.downloader.DownloadRequest;
+
+        $r3 := @parameter2: com.vungle.warren.downloader.AssetDownloadListener$DownloadError;
+
+        r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1> = $r1;
+
+        r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.downloader.DownloadRequest val$downloadRequest> = $r2;
+
+        r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.downloader.AssetDownloadListener$DownloadError val$downloadError> = $r3;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        com.vungle.warren.AdLoader $r6;
+        com.vungle.warren.model.Advertisement $r14;
+        long $l0;
+        com.vungle.warren.AdLoader$6$1 r0;
+        com.vungle.warren.persistence.DatabaseHelper$DBException $r1;
+        com.vungle.warren.AdLoader$6 $r5;
+        byte $b1;
+        com.vungle.warren.downloader.DownloadRequest $r3;
+        com.vungle.warren.persistence.Repository $r7;
+        int $i2;
+        java.lang.String $r2;
+        com.vungle.warren.error.VungleException $r15;
+        boolean $z0;
+        com.vungle.warren.downloader.AssetDownloadListener$DownloadError $r11, $r16;
+        java.io.IOException $r17;
+        java.lang.RuntimeException $r18;
+        java.util.concurrent.atomic.AtomicLong $r12;
+        java.util.List $r10;
+        com.vungle.warren.AdLoader$Operation $r13;
+        java.lang.Object $r9;
+        com.vungle.warren.model.AdAsset $r4;
+        com.vungle.warren.persistence.FutureResult $r8;
+
+        r0 := @this: com.vungle.warren.AdLoader$6$1;
+
+        $r2 = staticinvoke <com.vungle.warren.AdLoader: java.lang.String access$900()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, "Download Failed");
+
+        $r3 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.downloader.DownloadRequest val$downloadRequest>;
+
+        if $r3 == null goto label07;
+
+        $r2 = $r3.<com.vungle.warren.downloader.DownloadRequest: java.lang.String cookieString>;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 == 0 goto label01;
+
+        $r4 = null;
+
+        goto label02;
+
+     label01:
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r6 = $r5.<com.vungle.warren.AdLoader$6: com.vungle.warren.AdLoader this$0>;
+
+        $r7 = staticinvoke <com.vungle.warren.AdLoader: com.vungle.warren.persistence.Repository access$800(com.vungle.warren.AdLoader)>($r6);
+
+        $r8 = virtualinvoke $r7.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>($r2, class "Lcom/vungle/warren/model/AdAsset;");
+
+        $r9 = virtualinvoke $r8.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r4 = (com.vungle.warren.model.AdAsset) $r9;
+
+     label02:
+        if $r4 == null goto label06;
+
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r10 = $r5.<com.vungle.warren.AdLoader$6: java.util.List errors>;
+
+        $r11 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.downloader.AssetDownloadListener$DownloadError val$downloadError>;
+
+        interfaceinvoke $r10.<java.util.List: boolean add(java.lang.Object)>($r11);
+
+        $r4.<com.vungle.warren.model.AdAsset: int status> = 2;
+
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r6 = $r5.<com.vungle.warren.AdLoader$6: com.vungle.warren.AdLoader this$0>;
+
+     label03:
+        $r7 = staticinvoke <com.vungle.warren.AdLoader: com.vungle.warren.persistence.Repository access$800(com.vungle.warren.AdLoader)>($r6);
+
+        virtualinvoke $r7.<com.vungle.warren.persistence.Repository: void save(java.lang.Object)>($r4);
+
+     label04:
+        goto label08;
+
+     label05:
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r10 = $r5.<com.vungle.warren.AdLoader$6: java.util.List errors>;
+
+        $r16 = new com.vungle.warren.downloader.AssetDownloadListener$DownloadError;
+
+        $r15 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r15.<com.vungle.warren.error.VungleException: void <init>(int)>(26);
+
+        specialinvoke $r16.<com.vungle.warren.downloader.AssetDownloadListener$DownloadError: void <init>(int,java.lang.Throwable,int)>(-1, $r15, 4);
+
+        interfaceinvoke $r10.<java.util.List: boolean add(java.lang.Object)>($r16);
+
+        goto label08;
+
+     label06:
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r10 = $r5.<com.vungle.warren.AdLoader$6: java.util.List errors>;
+
+        $r16 = new com.vungle.warren.downloader.AssetDownloadListener$DownloadError;
+
+        $r17 = new java.io.IOException;
+
+        specialinvoke $r17.<java.io.IOException: void <init>(java.lang.String)>("Downloaded file not found!");
+
+        specialinvoke $r16.<com.vungle.warren.downloader.AssetDownloadListener$DownloadError: void <init>(int,java.lang.Throwable,int)>(-1, $r17, 1);
+
+        interfaceinvoke $r10.<java.util.List: boolean add(java.lang.Object)>($r16);
+
+        goto label08;
+
+     label07:
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r10 = $r5.<com.vungle.warren.AdLoader$6: java.util.List errors>;
+
+        $r16 = new com.vungle.warren.downloader.AssetDownloadListener$DownloadError;
+
+        $r18 = new java.lang.RuntimeException;
+
+        specialinvoke $r18.<java.lang.RuntimeException: void <init>(java.lang.String)>("error in request");
+
+        specialinvoke $r16.<com.vungle.warren.downloader.AssetDownloadListener$DownloadError: void <init>(int,java.lang.Throwable,int)>(-1, $r18, 4);
+
+        interfaceinvoke $r10.<java.util.List: boolean add(java.lang.Object)>($r16);
+
+     label08:
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r12 = $r5.<com.vungle.warren.AdLoader$6: java.util.concurrent.atomic.AtomicLong downloadCount>;
+
+        $l0 = virtualinvoke $r12.<java.util.concurrent.atomic.AtomicLong: long decrementAndGet()>();
+
+        $b1 = $l0 cmp 0L;
+
+        $i2 = (int) $b1;
+
+        if $i2 > 0 goto label10;
+
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r6 = $r5.<com.vungle.warren.AdLoader$6: com.vungle.warren.AdLoader this$0>;
+
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r13 = $r5.<com.vungle.warren.AdLoader$6: com.vungle.warren.AdLoader$Operation val$op>;
+
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r14 = $r5.<com.vungle.warren.AdLoader$6: com.vungle.warren.model.Advertisement val$advertisement>;
+
+        $r2 = virtualinvoke $r14.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        $r5 = r0.<com.vungle.warren.AdLoader$6$1: com.vungle.warren.AdLoader$6 this$1>;
+
+        $r10 = $r5.<com.vungle.warren.AdLoader$6: java.util.List errors>;
+
+        staticinvoke <com.vungle.warren.AdLoader: void access$1500(com.vungle.warren.AdLoader,com.vungle.warren.AdLoader$Operation,java.lang.String,java.util.List,boolean)>($r6, $r13, $r2, $r10, 1);
+
+        return;
+
+     label09:
+        $r1 := @caughtexception;
+
+        goto label05;
+
+     label10:
+        return;
+
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label03 to label04 with label09;
+    }
+}

@@ -1,0 +1,492 @@
+final class io.grpc.internal.MigratingThreadDeframer extends java.lang.Object implements io.grpc.internal.ThreadOptimizedDeframer
+{
+    private final io.grpc.internal.ApplicationThreadDeframerListener appListener;
+    private final io.grpc.internal.MessageDeframer deframer;
+    private boolean deframerOnTransportThread;
+    private final java.lang.Object lock;
+    private final io.grpc.internal.MigratingThreadDeframer$DeframeMessageProducer messageProducer;
+    private boolean messageProducerEnqueued;
+    private final io.grpc.internal.MigratingThreadDeframer$MigratingDeframerListener migratingListener;
+    private final java.util.Queue opQueue;
+    private final io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor transportExecutor;
+    private final io.grpc.internal.MessageDeframer$Listener transportListener;
+
+    public void <init>(io.grpc.internal.MessageDeframer$Listener, io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor, io.grpc.internal.MessageDeframer)
+    {
+        io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor $r3, $r8;
+        io.grpc.internal.MessageDeframer $r1;
+        io.grpc.internal.MessageDeframer$Listener $r2;
+        io.grpc.internal.MigratingThreadDeframer$DeframeMessageProducer $r4;
+        io.grpc.internal.SquelchLateMessagesAvailableDeframerListener $r7;
+        io.grpc.internal.ApplicationThreadDeframerListener $r9;
+        io.grpc.internal.MigratingThreadDeframer$MigratingDeframerListener $r10;
+        java.lang.Object $r5;
+        java.util.ArrayDeque $r6;
+        io.grpc.internal.MigratingThreadDeframer r0;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $r2 := @parameter0: io.grpc.internal.MessageDeframer$Listener;
+
+        $r3 := @parameter1: io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor;
+
+        $r1 := @parameter2: io.grpc.internal.MessageDeframer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new io.grpc.internal.MigratingThreadDeframer$DeframeMessageProducer;
+
+        specialinvoke $r4.<io.grpc.internal.MigratingThreadDeframer$DeframeMessageProducer: void <init>(io.grpc.internal.MigratingThreadDeframer)>(r0);
+
+        r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MigratingThreadDeframer$DeframeMessageProducer messageProducer> = $r4;
+
+        $r5 = new java.lang.Object;
+
+        specialinvoke $r5.<java.lang.Object: void <init>()>();
+
+        r0.<io.grpc.internal.MigratingThreadDeframer: java.lang.Object lock> = $r5;
+
+        $r6 = new java.util.ArrayDeque;
+
+        specialinvoke $r6.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<io.grpc.internal.MigratingThreadDeframer: java.util.Queue opQueue> = $r6;
+
+        $r7 = new io.grpc.internal.SquelchLateMessagesAvailableDeframerListener;
+
+        $r5 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "listener");
+
+        $r2 = (io.grpc.internal.MessageDeframer$Listener) $r5;
+
+        specialinvoke $r7.<io.grpc.internal.SquelchLateMessagesAvailableDeframerListener: void <init>(io.grpc.internal.MessageDeframer$Listener)>($r2);
+
+        r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer$Listener transportListener> = $r7;
+
+        $r5 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r3, "transportExecutor");
+
+        $r8 = (io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor) $r5;
+
+        r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor transportExecutor> = $r8;
+
+        $r9 = new io.grpc.internal.ApplicationThreadDeframerListener;
+
+        specialinvoke $r9.<io.grpc.internal.ApplicationThreadDeframerListener: void <init>(io.grpc.internal.MessageDeframer$Listener,io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor)>($r7, $r3);
+
+        r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.ApplicationThreadDeframerListener appListener> = $r9;
+
+        $r10 = new io.grpc.internal.MigratingThreadDeframer$MigratingDeframerListener;
+
+        specialinvoke $r10.<io.grpc.internal.MigratingThreadDeframer$MigratingDeframerListener: void <init>(io.grpc.internal.MessageDeframer$Listener)>($r9);
+
+        r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MigratingThreadDeframer$MigratingDeframerListener migratingListener> = $r10;
+
+        virtualinvoke $r1.<io.grpc.internal.MessageDeframer: void setListener(io.grpc.internal.MessageDeframer$Listener)>($r10);
+
+        r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer deframer> = $r1;
+
+        return;
+    }
+
+    static io.grpc.internal.MigratingThreadDeframer$DeframeMessageProducer access$000(io.grpc.internal.MigratingThreadDeframer)
+    {
+        io.grpc.internal.MigratingThreadDeframer$DeframeMessageProducer r1;
+        io.grpc.internal.MigratingThreadDeframer $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        r1 = $r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MigratingThreadDeframer$DeframeMessageProducer messageProducer>;
+
+        return r1;
+    }
+
+    static io.grpc.internal.MessageDeframer$Listener access$100(io.grpc.internal.MigratingThreadDeframer)
+    {
+        io.grpc.internal.MessageDeframer$Listener r1;
+        io.grpc.internal.MigratingThreadDeframer $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        r1 = $r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer$Listener transportListener>;
+
+        return r1;
+    }
+
+    static boolean access$1002(io.grpc.internal.MigratingThreadDeframer, boolean)
+    {
+        io.grpc.internal.MigratingThreadDeframer $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<io.grpc.internal.MigratingThreadDeframer: boolean messageProducerEnqueued> = $z0;
+
+        return $z0;
+    }
+
+    static void access$200(io.grpc.internal.MigratingThreadDeframer, int)
+    {
+        int $i0;
+        io.grpc.internal.MigratingThreadDeframer $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        $i0 := @parameter1: int;
+
+        specialinvoke $r0.<io.grpc.internal.MigratingThreadDeframer: void requestFromTransportThread(int)>($i0);
+
+        return;
+    }
+
+    static io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor access$300(io.grpc.internal.MigratingThreadDeframer)
+    {
+        io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor r1;
+        io.grpc.internal.MigratingThreadDeframer $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        r1 = $r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor transportExecutor>;
+
+        return r1;
+    }
+
+    static io.grpc.internal.MessageDeframer access$400(io.grpc.internal.MigratingThreadDeframer)
+    {
+        io.grpc.internal.MessageDeframer r1;
+        io.grpc.internal.MigratingThreadDeframer $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        r1 = $r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer deframer>;
+
+        return r1;
+    }
+
+    static io.grpc.internal.ApplicationThreadDeframerListener access$500(io.grpc.internal.MigratingThreadDeframer)
+    {
+        io.grpc.internal.ApplicationThreadDeframerListener r1;
+        io.grpc.internal.MigratingThreadDeframer $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        r1 = $r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.ApplicationThreadDeframerListener appListener>;
+
+        return r1;
+    }
+
+    static java.lang.Object access$600(io.grpc.internal.MigratingThreadDeframer)
+    {
+        java.lang.Object r1;
+        io.grpc.internal.MigratingThreadDeframer $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        r1 = $r0.<io.grpc.internal.MigratingThreadDeframer: java.lang.Object lock>;
+
+        return r1;
+    }
+
+    static io.grpc.internal.MigratingThreadDeframer$MigratingDeframerListener access$700(io.grpc.internal.MigratingThreadDeframer)
+    {
+        io.grpc.internal.MigratingThreadDeframer$MigratingDeframerListener r1;
+        io.grpc.internal.MigratingThreadDeframer $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        r1 = $r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MigratingThreadDeframer$MigratingDeframerListener migratingListener>;
+
+        return r1;
+    }
+
+    static boolean access$802(io.grpc.internal.MigratingThreadDeframer, boolean)
+    {
+        io.grpc.internal.MigratingThreadDeframer $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<io.grpc.internal.MigratingThreadDeframer: boolean deframerOnTransportThread> = $z0;
+
+        return $z0;
+    }
+
+    static java.util.Queue access$900(io.grpc.internal.MigratingThreadDeframer)
+    {
+        java.util.Queue r1;
+        io.grpc.internal.MigratingThreadDeframer $r0;
+
+        $r0 := @parameter0: io.grpc.internal.MigratingThreadDeframer;
+
+        r1 = $r0.<io.grpc.internal.MigratingThreadDeframer: java.util.Queue opQueue>;
+
+        return r1;
+    }
+
+    private void requestFromTransportThread(int)
+    {
+        int $i0;
+        io.grpc.internal.MigratingThreadDeframer$1RequestAgainOp $r1;
+        io.grpc.internal.MigratingThreadDeframer r0;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $i0 := @parameter0: int;
+
+        $r1 = new io.grpc.internal.MigratingThreadDeframer$1RequestAgainOp;
+
+        specialinvoke $r1.<io.grpc.internal.MigratingThreadDeframer$1RequestAgainOp: void <init>(io.grpc.internal.MigratingThreadDeframer,int)>(r0, $i0);
+
+        specialinvoke r0.<io.grpc.internal.MigratingThreadDeframer: boolean runWhereAppropriate(io.grpc.internal.MigratingThreadDeframer$Op)>($r1);
+
+        return;
+    }
+
+    private boolean runWhereAppropriate(io.grpc.internal.MigratingThreadDeframer$Op)
+    {
+        io.grpc.internal.MigratingThreadDeframer$Op $r1;
+        io.grpc.internal.MigratingThreadDeframer r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $r1 := @parameter0: io.grpc.internal.MigratingThreadDeframer$Op;
+
+        $z0 = specialinvoke r0.<io.grpc.internal.MigratingThreadDeframer: boolean runWhereAppropriate(io.grpc.internal.MigratingThreadDeframer$Op,boolean)>($r1, 1);
+
+        return $z0;
+    }
+
+    private boolean runWhereAppropriate(io.grpc.internal.MigratingThreadDeframer$Op, boolean)
+    {
+        java.lang.Throwable $r7, $r10;
+        io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor $r8;
+        io.grpc.internal.MessageDeframer$Listener $r5;
+        io.grpc.internal.MigratingThreadDeframer$DeframeMessageProducer $r6;
+        io.grpc.internal.MigratingThreadDeframer$Op $r3;
+        io.perfmark.Link $r2;
+        java.lang.Object $r4;
+        java.util.Queue $r1;
+        io.grpc.internal.MigratingThreadDeframer$1 $r9;
+        io.grpc.internal.MigratingThreadDeframer r0;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $r3 := @parameter0: io.grpc.internal.MigratingThreadDeframer$Op;
+
+        $z2 := @parameter1: boolean;
+
+        $r4 = r0.<io.grpc.internal.MigratingThreadDeframer: java.lang.Object lock>;
+
+        entermonitor $r4;
+
+     label01:
+        $z0 = r0.<io.grpc.internal.MigratingThreadDeframer: boolean deframerOnTransportThread>;
+
+        $z1 = r0.<io.grpc.internal.MigratingThreadDeframer: boolean messageProducerEnqueued>;
+
+        if $z0 != 0 goto label02;
+
+        $r1 = r0.<io.grpc.internal.MigratingThreadDeframer: java.util.Queue opQueue>;
+
+        interfaceinvoke $r1.<java.util.Queue: boolean offer(java.lang.Object)>($r3);
+
+        r0.<io.grpc.internal.MigratingThreadDeframer: boolean messageProducerEnqueued> = 1;
+
+     label02:
+        exitmonitor $r4;
+
+     label03:
+        if $z0 == 0 goto label04;
+
+        interfaceinvoke $r3.<io.grpc.internal.MigratingThreadDeframer$Op: void run(boolean)>(1);
+
+        return 1;
+
+     label04:
+        if $z1 != 0 goto label09;
+
+        if $z2 == 0 goto label08;
+
+        staticinvoke <io.perfmark.PerfMark: void startTask(java.lang.String)>("MigratingThreadDeframer.messageAvailable");
+
+     label05:
+        $r5 = r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer$Listener transportListener>;
+
+        $r6 = r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MigratingThreadDeframer$DeframeMessageProducer messageProducer>;
+
+        interfaceinvoke $r5.<io.grpc.internal.MessageDeframer$Listener: void messagesAvailable(io.grpc.internal.StreamListener$MessageProducer)>($r6);
+
+     label06:
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String)>("MigratingThreadDeframer.messageAvailable");
+
+        goto label09;
+
+     label07:
+        $r7 := @caughtexception;
+
+        staticinvoke <io.perfmark.PerfMark: void stopTask(java.lang.String)>("MigratingThreadDeframer.messageAvailable");
+
+        throw $r7;
+
+     label08:
+        $r2 = staticinvoke <io.perfmark.PerfMark: io.perfmark.Link linkOut()>();
+
+        $r8 = r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor transportExecutor>;
+
+        $r9 = new io.grpc.internal.MigratingThreadDeframer$1;
+
+        specialinvoke $r9.<io.grpc.internal.MigratingThreadDeframer$1: void <init>(io.grpc.internal.MigratingThreadDeframer,io.perfmark.Link)>(r0, $r2);
+
+        interfaceinvoke $r8.<io.grpc.internal.ApplicationThreadDeframerListener$TransportExecutor: void runOnTransportThread(java.lang.Runnable)>($r9);
+
+     label09:
+        return 0;
+
+     label10:
+        $r10 := @caughtexception;
+
+     label11:
+        exitmonitor $r4;
+
+     label12:
+        throw $r10;
+
+        catch java.lang.Throwable from label01 to label03 with label10;
+        catch java.lang.Throwable from label05 to label06 with label07;
+        catch java.lang.Throwable from label11 to label12 with label10;
+    }
+
+    public void close()
+    {
+        io.grpc.internal.MigratingThreadDeframer$1CloseOp $r1;
+        io.grpc.internal.MessageDeframer $r2;
+        io.grpc.internal.MigratingThreadDeframer r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $r1 = new io.grpc.internal.MigratingThreadDeframer$1CloseOp;
+
+        specialinvoke $r1.<io.grpc.internal.MigratingThreadDeframer$1CloseOp: void <init>(io.grpc.internal.MigratingThreadDeframer)>(r0);
+
+        $z0 = specialinvoke r0.<io.grpc.internal.MigratingThreadDeframer: boolean runWhereAppropriate(io.grpc.internal.MigratingThreadDeframer$Op)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer deframer>;
+
+        virtualinvoke $r2.<io.grpc.internal.MessageDeframer: void stopDelivery()>();
+
+     label1:
+        return;
+    }
+
+    public void closeWhenComplete()
+    {
+        io.grpc.internal.MigratingThreadDeframer$1CloseWhenCompleteOp $r1;
+        io.grpc.internal.MigratingThreadDeframer r0;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $r1 = new io.grpc.internal.MigratingThreadDeframer$1CloseWhenCompleteOp;
+
+        specialinvoke $r1.<io.grpc.internal.MigratingThreadDeframer$1CloseWhenCompleteOp: void <init>(io.grpc.internal.MigratingThreadDeframer)>(r0);
+
+        specialinvoke r0.<io.grpc.internal.MigratingThreadDeframer: boolean runWhereAppropriate(io.grpc.internal.MigratingThreadDeframer$Op)>($r1);
+
+        return;
+    }
+
+    public void deframe(io.grpc.internal.ReadableBuffer)
+    {
+        io.grpc.internal.ReadableBuffer $r1;
+        io.grpc.internal.MigratingThreadDeframer r0;
+        io.grpc.internal.MigratingThreadDeframer$1DeframeOp $r2;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $r1 := @parameter0: io.grpc.internal.ReadableBuffer;
+
+        $r2 = new io.grpc.internal.MigratingThreadDeframer$1DeframeOp;
+
+        specialinvoke $r2.<io.grpc.internal.MigratingThreadDeframer$1DeframeOp: void <init>(io.grpc.internal.MigratingThreadDeframer,io.grpc.internal.ReadableBuffer)>(r0, $r1);
+
+        specialinvoke r0.<io.grpc.internal.MigratingThreadDeframer: boolean runWhereAppropriate(io.grpc.internal.MigratingThreadDeframer$Op)>($r2);
+
+        return;
+    }
+
+    public void request(int)
+    {
+        int $i0;
+        io.grpc.internal.MigratingThreadDeframer r0;
+        io.grpc.internal.MigratingThreadDeframer$1RequestOp $r1;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $i0 := @parameter0: int;
+
+        $r1 = new io.grpc.internal.MigratingThreadDeframer$1RequestOp;
+
+        specialinvoke $r1.<io.grpc.internal.MigratingThreadDeframer$1RequestOp: void <init>(io.grpc.internal.MigratingThreadDeframer,int)>(r0, $i0);
+
+        specialinvoke r0.<io.grpc.internal.MigratingThreadDeframer: boolean runWhereAppropriate(io.grpc.internal.MigratingThreadDeframer$Op,boolean)>($r1, 0);
+
+        return;
+    }
+
+    public void setDecompressor(io.grpc.Decompressor)
+    {
+        io.grpc.internal.MessageDeframer $r2;
+        io.grpc.Decompressor $r1;
+        io.grpc.internal.MigratingThreadDeframer r0;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $r1 := @parameter0: io.grpc.Decompressor;
+
+        $r2 = r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer deframer>;
+
+        virtualinvoke $r2.<io.grpc.internal.MessageDeframer: void setDecompressor(io.grpc.Decompressor)>($r1);
+
+        return;
+    }
+
+    public void setFullStreamDecompressor(io.grpc.internal.GzipInflatingBuffer)
+    {
+        io.grpc.internal.MessageDeframer $r2;
+        io.grpc.internal.GzipInflatingBuffer $r1;
+        io.grpc.internal.MigratingThreadDeframer r0;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $r1 := @parameter0: io.grpc.internal.GzipInflatingBuffer;
+
+        $r2 = r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer deframer>;
+
+        virtualinvoke $r2.<io.grpc.internal.MessageDeframer: void setFullStreamDecompressor(io.grpc.internal.GzipInflatingBuffer)>($r1);
+
+        return;
+    }
+
+    public void setMaxInboundMessageSize(int)
+    {
+        int $i0;
+        io.grpc.internal.MessageDeframer $r1;
+        io.grpc.internal.MigratingThreadDeframer r0;
+
+        r0 := @this: io.grpc.internal.MigratingThreadDeframer;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<io.grpc.internal.MigratingThreadDeframer: io.grpc.internal.MessageDeframer deframer>;
+
+        virtualinvoke $r1.<io.grpc.internal.MessageDeframer: void setMaxInboundMessageSize(int)>($i0);
+
+        return;
+    }
+}

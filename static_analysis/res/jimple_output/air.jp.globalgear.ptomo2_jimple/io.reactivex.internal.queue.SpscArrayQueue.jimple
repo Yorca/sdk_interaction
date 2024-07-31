@@ -1,0 +1,353 @@
+public final class io.reactivex.internal.queue.SpscArrayQueue extends java.util.concurrent.atomic.AtomicReferenceArray implements io.reactivex.internal.fuseable.SimplePlainQueue
+{
+    private static final java.lang.Integer MAX_LOOK_AHEAD_STEP;
+    private static final long serialVersionUID;
+    final java.util.concurrent.atomic.AtomicLong consumerIndex;
+    final int lookAheadStep;
+    final int mask;
+    final java.util.concurrent.atomic.AtomicLong producerIndex;
+    long producerLookAhead;
+
+    static void <clinit>()
+    {
+        java.lang.Integer $r0;
+
+        <io.reactivex.internal.queue.SpscArrayQueue: long serialVersionUID> = -1296597691183856449L;
+
+        $r0 = staticinvoke <java.lang.Integer: java.lang.Integer getInteger(java.lang.String,int)>("jctools.spsc.max.lookahead.step", 4096);
+
+        <io.reactivex.internal.queue.SpscArrayQueue: java.lang.Integer MAX_LOOK_AHEAD_STEP> = $r0;
+
+        return;
+    }
+
+    public void <init>(int)
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        java.util.concurrent.atomic.AtomicLong $r2;
+        int $i0, $i1;
+        java.lang.Integer $r1;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $i0 := @parameter0: int;
+
+        $i1 = staticinvoke <io.reactivex.internal.util.Pow2: int roundToPowerOfTwo(int)>($i0);
+
+        specialinvoke r0.<java.util.concurrent.atomic.AtomicReferenceArray: void <init>(int)>($i1);
+
+        $i1 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: int length()>();
+
+        $i1 = $i1 + -1;
+
+        r0.<io.reactivex.internal.queue.SpscArrayQueue: int mask> = $i1;
+
+        $r2 = new java.util.concurrent.atomic.AtomicLong;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicLong: void <init>()>();
+
+        r0.<io.reactivex.internal.queue.SpscArrayQueue: java.util.concurrent.atomic.AtomicLong producerIndex> = $r2;
+
+        $r2 = new java.util.concurrent.atomic.AtomicLong;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicLong: void <init>()>();
+
+        r0.<io.reactivex.internal.queue.SpscArrayQueue: java.util.concurrent.atomic.AtomicLong consumerIndex> = $r2;
+
+        $i0 = $i0 / 4;
+
+        $r1 = <io.reactivex.internal.queue.SpscArrayQueue: java.lang.Integer MAX_LOOK_AHEAD_STEP>;
+
+        $i1 = virtualinvoke $r1.<java.lang.Integer: int intValue()>();
+
+        $i0 = staticinvoke <java.lang.Math: int min(int,int)>($i0, $i1);
+
+        r0.<io.reactivex.internal.queue.SpscArrayQueue: int lookAheadStep> = $i0;
+
+        return;
+    }
+
+    int calcElementOffset(long)
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        int $i0, $i2;
+        long $l1;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $l1 := @parameter0: long;
+
+        $i0 = (int) $l1;
+
+        $i2 = r0.<io.reactivex.internal.queue.SpscArrayQueue: int mask>;
+
+        $i0 = $i2 & $i0;
+
+        return $i0;
+    }
+
+    int calcElementOffset(long, int)
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        int $i0, $i1;
+        long $l2;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $l2 := @parameter0: long;
+
+        $i1 := @parameter1: int;
+
+        $i0 = (int) $l2;
+
+        $i1 = $i0 & $i1;
+
+        return $i1;
+    }
+
+    public void clear()
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+     label1:
+        $r1 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: java.lang.Object poll()>();
+
+        if $r1 != null goto label1;
+
+        $z0 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public boolean isEmpty()
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        java.util.concurrent.atomic.AtomicLong $r1;
+        byte $b0;
+        long $l1, $l2;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $r1 = r0.<io.reactivex.internal.queue.SpscArrayQueue: java.util.concurrent.atomic.AtomicLong producerIndex>;
+
+        $l1 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $r1 = r0.<io.reactivex.internal.queue.SpscArrayQueue: java.util.concurrent.atomic.AtomicLong consumerIndex>;
+
+        $l2 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $b0 = $l1 cmp $l2;
+
+        if $b0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    java.lang.Object lvElement(int)
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        int $i0;
+        java.lang.Object $r1;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: java.lang.Object get(int)>($i0);
+
+        return $r1;
+    }
+
+    public boolean offer(java.lang.Object)
+    {
+        long $l2, $l4;
+        java.lang.NullPointerException $r4;
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        java.util.concurrent.atomic.AtomicLong $r2;
+        byte $b0;
+        int $i1, $i3, $i5;
+        java.lang.Object $r1, $r3;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        if $r1 == null goto label3;
+
+        $i1 = r0.<io.reactivex.internal.queue.SpscArrayQueue: int mask>;
+
+        $r2 = r0.<io.reactivex.internal.queue.SpscArrayQueue: java.util.concurrent.atomic.AtomicLong producerIndex>;
+
+        $l2 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $i3 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: int calcElementOffset(long,int)>($l2, $i1);
+
+        $l4 = r0.<io.reactivex.internal.queue.SpscArrayQueue: long producerLookAhead>;
+
+        $b0 = $l2 cmp $l4;
+
+        $i5 = (int) $b0;
+
+        if $i5 < 0 goto label2;
+
+        $i5 = r0.<io.reactivex.internal.queue.SpscArrayQueue: int lookAheadStep>;
+
+        $l4 = (long) $i5;
+
+        $l4 = $l4 + $l2;
+
+        $i1 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: int calcElementOffset(long,int)>($l4, $i1);
+
+        $r3 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: java.lang.Object lvElement(int)>($i1);
+
+        if $r3 != null goto label1;
+
+        r0.<io.reactivex.internal.queue.SpscArrayQueue: long producerLookAhead> = $l4;
+
+        goto label2;
+
+     label1:
+        $r3 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: java.lang.Object lvElement(int)>($i3);
+
+        if $r3 == null goto label2;
+
+        return 0;
+
+     label2:
+        virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: void soElement(int,java.lang.Object)>($i3, $r1);
+
+        $l2 = $l2 + 1L;
+
+        virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: void soProducerIndex(long)>($l2);
+
+        return 1;
+
+     label3:
+        $r4 = new java.lang.NullPointerException;
+
+        specialinvoke $r4.<java.lang.NullPointerException: void <init>(java.lang.String)>("Null is not a valid element");
+
+        throw $r4;
+    }
+
+    public boolean offer(java.lang.Object, java.lang.Object)
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        java.lang.Object $r1, $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $r2 := @parameter0: java.lang.Object;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        $z0 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: boolean offer(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        $z0 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: boolean offer(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public java.lang.Object poll()
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        java.util.concurrent.atomic.AtomicLong $r1;
+        int $i1;
+        long $l0;
+        java.lang.Object $r2;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $r1 = r0.<io.reactivex.internal.queue.SpscArrayQueue: java.util.concurrent.atomic.AtomicLong consumerIndex>;
+
+        $l0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $i1 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: int calcElementOffset(long)>($l0);
+
+        $r2 = virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: java.lang.Object lvElement(int)>($i1);
+
+        if $r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $l0 = $l0 + 1L;
+
+        virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: void soConsumerIndex(long)>($l0);
+
+        virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: void soElement(int,java.lang.Object)>($i1, null);
+
+        return $r2;
+    }
+
+    void soConsumerIndex(long)
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        java.util.concurrent.atomic.AtomicLong $r1;
+        long $l0;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $l0 := @parameter0: long;
+
+        $r1 = r0.<io.reactivex.internal.queue.SpscArrayQueue: java.util.concurrent.atomic.AtomicLong consumerIndex>;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicLong: void lazySet(long)>($l0);
+
+        return;
+    }
+
+    void soElement(int, java.lang.Object)
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        int $i0;
+        java.lang.Object $r1;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        virtualinvoke r0.<io.reactivex.internal.queue.SpscArrayQueue: void lazySet(int,java.lang.Object)>($i0, $r1);
+
+        return;
+    }
+
+    void soProducerIndex(long)
+    {
+        io.reactivex.internal.queue.SpscArrayQueue r0;
+        java.util.concurrent.atomic.AtomicLong $r1;
+        long $l0;
+
+        r0 := @this: io.reactivex.internal.queue.SpscArrayQueue;
+
+        $l0 := @parameter0: long;
+
+        $r1 = r0.<io.reactivex.internal.queue.SpscArrayQueue: java.util.concurrent.atomic.AtomicLong producerIndex>;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicLong: void lazySet(long)>($l0);
+
+        return;
+    }
+}

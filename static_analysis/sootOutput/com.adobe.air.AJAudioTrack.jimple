@@ -1,0 +1,191 @@
+public class com.adobe.air.AJAudioTrack extends android.media.AudioTrack
+{
+    private static int sStreamType;
+    private byte[] mBuf;
+
+    static void <clinit>()
+    {
+        <com.adobe.air.AJAudioTrack: int sStreamType> = 3;
+
+        return;
+    }
+
+    public void <init>(int, int, int, int)
+    {
+        byte[] $r1;
+        com.adobe.air.AJAudioTrack r0;
+        int $i0, $i1, $i2, $i3, $i4;
+
+        r0 := @this: com.adobe.air.AJAudioTrack;
+
+        $i4 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $i3 = <com.adobe.air.AJAudioTrack: int sStreamType>;
+
+        specialinvoke r0.<android.media.AudioTrack: void <init>(int,int,int,int,int,int)>($i3, $i4, $i1, $i0, $i2, 1);
+
+        $r1 = newarray (byte)[$i2];
+
+        r0.<com.adobe.air.AJAudioTrack: byte[] mBuf> = $r1;
+
+        return;
+    }
+
+    public static com.adobe.air.AJAudioTrack CreateTrack(int, int, int, int)
+    {
+        com.adobe.air.AJAudioTrack $r1;
+        java.lang.Exception $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        boolean $z0;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $i2 := @parameter2: int;
+
+        $i3 := @parameter3: int;
+
+        $z0 = <com.adobe.air.microphone.AIRMicrophone: boolean m_isEnhanced>;
+
+        if $z0 != 1 goto label1;
+
+        <com.adobe.air.AJAudioTrack: int sStreamType> = 0;
+
+     label1:
+        $i4 = staticinvoke <com.adobe.air.AJAudioTrack: int ToAndroidChannelCount(int)>($i2);
+
+        $i5 = staticinvoke <com.adobe.air.AJAudioTrack: int ToAndroidFormat(int)>($i1);
+
+        $i4 = staticinvoke <android.media.AudioTrack: int getMinBufferSize(int,int,int)>($i0, $i4, $i5);
+
+     label2:
+        if $i3 >= $i4 goto label3;
+
+        $i3 = $i4;
+
+     label3:
+        $r1 = new com.adobe.air.AJAudioTrack;
+
+     label4:
+        $i1 = staticinvoke <com.adobe.air.AJAudioTrack: int ToAndroidFormat(int)>($i1);
+
+        $i2 = staticinvoke <com.adobe.air.AJAudioTrack: int ToAndroidChannelCount(int)>($i2);
+
+        specialinvoke $r1.<com.adobe.air.AJAudioTrack: void <init>(int,int,int,int)>($i0, $i1, $i2, $i3);
+
+        $i0 = virtualinvoke $r1.<com.adobe.air.AJAudioTrack: int getState()>();
+
+     label5:
+        if $i0 == 1 goto label8;
+
+     label6:
+        virtualinvoke $r1.<com.adobe.air.AJAudioTrack: void release()>();
+
+     label7:
+        return null;
+
+     label8:
+        return $r1;
+
+     label9:
+        $r0 := @caughtexception;
+
+        return null;
+
+        catch java.lang.Exception from label1 to label2 with label9;
+        catch java.lang.Exception from label4 to label5 with label9;
+        catch java.lang.Exception from label6 to label7 with label9;
+    }
+
+    public static void SetStreamType(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        <com.adobe.air.AJAudioTrack: int sStreamType> = $i0;
+
+        return;
+    }
+
+    public static int ToAndroidChannelCount(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        if $i0 != 1 goto label1;
+
+        return 4;
+
+     label1:
+        return 12;
+    }
+
+    public static int ToAndroidFormat(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        if $i0 != 1 goto label1;
+
+        return 3;
+
+     label1:
+        return 2;
+    }
+
+    public byte[] GetBuffer()
+    {
+        byte[] r1;
+        com.adobe.air.AJAudioTrack r0;
+
+        r0 := @this: com.adobe.air.AJAudioTrack;
+
+        r1 = r0.<com.adobe.air.AJAudioTrack: byte[] mBuf>;
+
+        return r1;
+    }
+
+    public boolean playing()
+    {
+        int $i0;
+        com.adobe.air.AJAudioTrack r0;
+
+        r0 := @this: com.adobe.air.AJAudioTrack;
+
+        $i0 = virtualinvoke r0.<com.adobe.air.AJAudioTrack: int getPlayState()>();
+
+        if $i0 != 3 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public boolean stopped()
+    {
+        int $i0;
+        com.adobe.air.AJAudioTrack r0;
+
+        r0 := @this: com.adobe.air.AJAudioTrack;
+
+        $i0 = virtualinvoke r0.<com.adobe.air.AJAudioTrack: int getPlayState()>();
+
+        if $i0 != 1 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+}

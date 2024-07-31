@@ -1,0 +1,130 @@
+public abstract class io.reactivex.internal.subscribers.BlockingBaseSubscriber extends java.util.concurrent.CountDownLatch implements io.reactivex.FlowableSubscriber
+{
+    volatile boolean cancelled;
+    java.lang.Throwable error;
+    org.reactivestreams.Subscription s;
+    java.lang.Object value;
+
+    public void <init>()
+    {
+        io.reactivex.internal.subscribers.BlockingBaseSubscriber r0;
+
+        r0 := @this: io.reactivex.internal.subscribers.BlockingBaseSubscriber;
+
+        specialinvoke r0.<java.util.concurrent.CountDownLatch: void <init>(int)>(1);
+
+        return;
+    }
+
+    public final java.lang.Object blockingGet()
+    {
+        java.lang.Throwable $r2;
+        long $l1;
+        java.lang.RuntimeException $r4;
+        io.reactivex.internal.subscribers.BlockingBaseSubscriber r0;
+        byte $b0;
+        io.reactivex.internal.subscriptions.SubscriptionHelper $r3;
+        org.reactivestreams.Subscription $r1;
+        java.lang.Object r5;
+
+        r0 := @this: io.reactivex.internal.subscribers.BlockingBaseSubscriber;
+
+        $l1 = virtualinvoke r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: long getCount()>();
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 == 0 goto label5;
+
+     label1:
+        staticinvoke <io.reactivex.internal.util.BlockingHelper: void verifyNonBlocking()>();
+
+        virtualinvoke r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: void await()>();
+
+     label2:
+        goto label5;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r1 = r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: org.reactivestreams.Subscription s>;
+
+        $r3 = <io.reactivex.internal.subscriptions.SubscriptionHelper: io.reactivex.internal.subscriptions.SubscriptionHelper CANCELLED>;
+
+        r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: org.reactivestreams.Subscription s> = $r3;
+
+        if $r1 == null goto label4;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void cancel()>();
+
+     label4:
+        $r4 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.RuntimeException wrapOrThrow(java.lang.Throwable)>($r2);
+
+        throw $r4;
+
+     label5:
+        $r2 = r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: java.lang.Throwable error>;
+
+        if $r2 != null goto label6;
+
+        r5 = r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: java.lang.Object value>;
+
+        return r5;
+
+     label6:
+        $r4 = staticinvoke <io.reactivex.internal.util.ExceptionHelper: java.lang.RuntimeException wrapOrThrow(java.lang.Throwable)>($r2);
+
+        throw $r4;
+
+        catch java.lang.InterruptedException from label1 to label2 with label3;
+    }
+
+    public final void onComplete()
+    {
+        io.reactivex.internal.subscribers.BlockingBaseSubscriber r0;
+
+        r0 := @this: io.reactivex.internal.subscribers.BlockingBaseSubscriber;
+
+        virtualinvoke r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: void countDown()>();
+
+        return;
+    }
+
+    public final void onSubscribe(org.reactivestreams.Subscription)
+    {
+        io.reactivex.internal.subscribers.BlockingBaseSubscriber r0;
+        io.reactivex.internal.subscriptions.SubscriptionHelper $r3;
+        org.reactivestreams.Subscription $r1, $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.subscribers.BlockingBaseSubscriber;
+
+        $r1 := @parameter0: org.reactivestreams.Subscription;
+
+        $r2 = r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: org.reactivestreams.Subscription s>;
+
+        $z0 = staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean validate(org.reactivestreams.Subscription,org.reactivestreams.Subscription)>($r2, $r1);
+
+        if $z0 == 0 goto label1;
+
+        r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: org.reactivestreams.Subscription s> = $r1;
+
+        $z0 = r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: boolean cancelled>;
+
+        if $z0 != 0 goto label1;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void request(long)>(9223372036854775807L);
+
+        $z0 = r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: boolean cancelled>;
+
+        if $z0 == 0 goto label1;
+
+        $r3 = <io.reactivex.internal.subscriptions.SubscriptionHelper: io.reactivex.internal.subscriptions.SubscriptionHelper CANCELLED>;
+
+        r0.<io.reactivex.internal.subscribers.BlockingBaseSubscriber: org.reactivestreams.Subscription s> = $r3;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void cancel()>();
+
+     label1:
+        return;
+    }
+}

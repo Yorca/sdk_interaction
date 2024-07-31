@@ -1,0 +1,504 @@
+final class io.reactivex.processors.SerializedProcessor extends io.reactivex.processors.FlowableProcessor
+{
+    final io.reactivex.processors.FlowableProcessor actual;
+    volatile boolean done;
+    boolean emitting;
+    io.reactivex.internal.util.AppendOnlyLinkedArrayList queue;
+
+    void <init>(io.reactivex.processors.FlowableProcessor)
+    {
+        io.reactivex.processors.FlowableProcessor $r1;
+        io.reactivex.processors.SerializedProcessor r0;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+        $r1 := @parameter0: io.reactivex.processors.FlowableProcessor;
+
+        specialinvoke r0.<io.reactivex.processors.FlowableProcessor: void <init>()>();
+
+        r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual> = $r1;
+
+        return;
+    }
+
+    void emitLoop()
+    {
+        java.lang.Throwable $r3;
+        io.reactivex.processors.SerializedProcessor r0;
+        io.reactivex.internal.util.AppendOnlyLinkedArrayList $r1;
+        io.reactivex.processors.FlowableProcessor $r2;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+     label1:
+        entermonitor r0;
+
+     label2:
+        $r1 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue>;
+
+        if $r1 != null goto label4;
+
+        r0.<io.reactivex.processors.SerializedProcessor: boolean emitting> = 0;
+
+        exitmonitor r0;
+
+     label3:
+        return;
+
+     label4:
+        r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue> = null;
+
+        exitmonitor r0;
+
+     label5:
+        $r2 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual>;
+
+        virtualinvoke $r1.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: boolean accept(org.reactivestreams.Subscriber)>($r2);
+
+        goto label1;
+
+     label6:
+        $r3 := @caughtexception;
+
+     label7:
+        exitmonitor r0;
+
+     label8:
+        throw $r3;
+
+        catch java.lang.Throwable from label2 to label3 with label6;
+        catch java.lang.Throwable from label4 to label5 with label6;
+        catch java.lang.Throwable from label7 to label8 with label6;
+    }
+
+    public java.lang.Throwable getThrowable()
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.processors.FlowableProcessor $r2;
+        io.reactivex.processors.SerializedProcessor r0;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+        $r2 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual>;
+
+        $r1 = virtualinvoke $r2.<io.reactivex.processors.FlowableProcessor: java.lang.Throwable getThrowable()>();
+
+        return $r1;
+    }
+
+    public boolean hasComplete()
+    {
+        io.reactivex.processors.FlowableProcessor $r1;
+        io.reactivex.processors.SerializedProcessor r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+        $r1 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual>;
+
+        $z0 = virtualinvoke $r1.<io.reactivex.processors.FlowableProcessor: boolean hasComplete()>();
+
+        return $z0;
+    }
+
+    public boolean hasSubscribers()
+    {
+        io.reactivex.processors.FlowableProcessor $r1;
+        io.reactivex.processors.SerializedProcessor r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+        $r1 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual>;
+
+        $z0 = virtualinvoke $r1.<io.reactivex.processors.FlowableProcessor: boolean hasSubscribers()>();
+
+        return $z0;
+    }
+
+    public boolean hasThrowable()
+    {
+        io.reactivex.processors.FlowableProcessor $r1;
+        io.reactivex.processors.SerializedProcessor r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+        $r1 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual>;
+
+        $z0 = virtualinvoke $r1.<io.reactivex.processors.FlowableProcessor: boolean hasThrowable()>();
+
+        return $z0;
+    }
+
+    public void onComplete()
+    {
+        java.lang.Throwable $r4;
+        io.reactivex.processors.SerializedProcessor r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.util.AppendOnlyLinkedArrayList $r2;
+        io.reactivex.processors.FlowableProcessor $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean done>;
+
+        if $z0 == 0 goto label01;
+
+        return;
+
+     label01:
+        entermonitor r0;
+
+     label02:
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean done>;
+
+        if $z0 == 0 goto label04;
+
+        exitmonitor r0;
+
+     label03:
+        return;
+
+     label04:
+        r0.<io.reactivex.processors.SerializedProcessor: boolean done> = 1;
+
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean emitting>;
+
+        if $z0 == 0 goto label07;
+
+        $r2 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue>;
+
+        if $r2 != null goto label05;
+
+        $r2 = new io.reactivex.internal.util.AppendOnlyLinkedArrayList;
+
+        specialinvoke $r2.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void <init>(int)>(4);
+
+        r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue> = $r2;
+
+     label05:
+        $r1 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object complete()>();
+
+        virtualinvoke $r2.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void add(java.lang.Object)>($r1);
+
+        exitmonitor r0;
+
+     label06:
+        return;
+
+     label07:
+        r0.<io.reactivex.processors.SerializedProcessor: boolean emitting> = 1;
+
+        exitmonitor r0;
+
+     label08:
+        $r3 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual>;
+
+        virtualinvoke $r3.<io.reactivex.processors.FlowableProcessor: void onComplete()>();
+
+        return;
+
+     label09:
+        $r4 := @caughtexception;
+
+     label10:
+        exitmonitor r0;
+
+     label11:
+        throw $r4;
+
+        catch java.lang.Throwable from label02 to label03 with label09;
+        catch java.lang.Throwable from label04 to label06 with label09;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label10 to label11 with label09;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r2, $r5;
+        io.reactivex.processors.SerializedProcessor r0;
+        io.reactivex.processors.FlowableProcessor $r4;
+        java.lang.Object $r1;
+        io.reactivex.internal.util.AppendOnlyLinkedArrayList $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+        $r2 := @parameter0: java.lang.Throwable;
+
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean done>;
+
+        if $z0 == 0 goto label01;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r2);
+
+        return;
+
+     label01:
+        entermonitor r0;
+
+     label02:
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean done>;
+
+        $z1 = 1;
+
+        if $z0 != 0 goto label06;
+
+        r0.<io.reactivex.processors.SerializedProcessor: boolean done> = 1;
+
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean emitting>;
+
+        if $z0 == 0 goto label05;
+
+        $r3 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue>;
+
+        if $r3 != null goto label03;
+
+        $r3 = new io.reactivex.internal.util.AppendOnlyLinkedArrayList;
+
+        specialinvoke $r3.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void <init>(int)>(4);
+
+        r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue> = $r3;
+
+     label03:
+        $r1 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object error(java.lang.Throwable)>($r2);
+
+        virtualinvoke $r3.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void setFirst(java.lang.Object)>($r1);
+
+        exitmonitor r0;
+
+     label04:
+        return;
+
+     label05:
+        r0.<io.reactivex.processors.SerializedProcessor: boolean emitting> = 1;
+
+        $z1 = 0;
+
+     label06:
+        exitmonitor r0;
+
+     label07:
+        if $z1 == 0 goto label08;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r2);
+
+        return;
+
+     label08:
+        $r4 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual>;
+
+        virtualinvoke $r4.<io.reactivex.processors.FlowableProcessor: void onError(java.lang.Throwable)>($r2);
+
+        return;
+
+     label09:
+        $r5 := @caughtexception;
+
+     label10:
+        exitmonitor r0;
+
+     label11:
+        throw $r5;
+
+        catch java.lang.Throwable from label02 to label04 with label09;
+        catch java.lang.Throwable from label05 to label07 with label09;
+        catch java.lang.Throwable from label10 to label11 with label09;
+    }
+
+    public void onNext(java.lang.Object)
+    {
+        java.lang.Throwable $r4;
+        io.reactivex.processors.SerializedProcessor r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.util.AppendOnlyLinkedArrayList $r2;
+        io.reactivex.processors.FlowableProcessor $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean done>;
+
+        if $z0 == 0 goto label01;
+
+        return;
+
+     label01:
+        entermonitor r0;
+
+     label02:
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean done>;
+
+        if $z0 == 0 goto label04;
+
+        exitmonitor r0;
+
+     label03:
+        return;
+
+     label04:
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean emitting>;
+
+        if $z0 == 0 goto label07;
+
+        $r2 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue>;
+
+        if $r2 != null goto label05;
+
+        $r2 = new io.reactivex.internal.util.AppendOnlyLinkedArrayList;
+
+        specialinvoke $r2.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void <init>(int)>(4);
+
+        r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue> = $r2;
+
+     label05:
+        $r1 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object next(java.lang.Object)>($r1);
+
+        virtualinvoke $r2.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void add(java.lang.Object)>($r1);
+
+        exitmonitor r0;
+
+     label06:
+        return;
+
+     label07:
+        r0.<io.reactivex.processors.SerializedProcessor: boolean emitting> = 1;
+
+        exitmonitor r0;
+
+     label08:
+        $r3 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual>;
+
+        virtualinvoke $r3.<io.reactivex.processors.FlowableProcessor: void onNext(java.lang.Object)>($r1);
+
+        virtualinvoke r0.<io.reactivex.processors.SerializedProcessor: void emitLoop()>();
+
+        return;
+
+     label09:
+        $r4 := @caughtexception;
+
+     label10:
+        exitmonitor r0;
+
+     label11:
+        throw $r4;
+
+        catch java.lang.Throwable from label02 to label03 with label09;
+        catch java.lang.Throwable from label04 to label06 with label09;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label10 to label11 with label09;
+    }
+
+    public void onSubscribe(org.reactivestreams.Subscription)
+    {
+        java.lang.Throwable $r4;
+        io.reactivex.processors.SerializedProcessor r0;
+        io.reactivex.processors.FlowableProcessor $r5;
+        org.reactivestreams.Subscription $r2;
+        java.lang.Object $r1;
+        io.reactivex.internal.util.AppendOnlyLinkedArrayList $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+        $r2 := @parameter0: org.reactivestreams.Subscription;
+
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean done>;
+
+        $z1 = 1;
+
+        if $z0 != 0 goto label09;
+
+        entermonitor r0;
+
+     label01:
+        $z0 = r0.<io.reactivex.processors.SerializedProcessor: boolean done>;
+
+        if $z0 != 0 goto label05;
+
+        $z1 = r0.<io.reactivex.processors.SerializedProcessor: boolean emitting>;
+
+        if $z1 == 0 goto label04;
+
+        $r3 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue>;
+
+        if $r3 != null goto label02;
+
+        $r3 = new io.reactivex.internal.util.AppendOnlyLinkedArrayList;
+
+        specialinvoke $r3.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void <init>(int)>(4);
+
+        r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.internal.util.AppendOnlyLinkedArrayList queue> = $r3;
+
+     label02:
+        $r1 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object subscription(org.reactivestreams.Subscription)>($r2);
+
+        virtualinvoke $r3.<io.reactivex.internal.util.AppendOnlyLinkedArrayList: void add(java.lang.Object)>($r1);
+
+        exitmonitor r0;
+
+     label03:
+        return;
+
+     label04:
+        r0.<io.reactivex.processors.SerializedProcessor: boolean emitting> = 1;
+
+        $z1 = 0;
+
+     label05:
+        exitmonitor r0;
+
+     label06:
+        goto label09;
+
+     label07:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+     label08:
+        throw $r4;
+
+     label09:
+        if $z1 == 0 goto label10;
+
+        interfaceinvoke $r2.<org.reactivestreams.Subscription: void cancel()>();
+
+        return;
+
+     label10:
+        $r5 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual>;
+
+        virtualinvoke $r5.<io.reactivex.processors.FlowableProcessor: void onSubscribe(org.reactivestreams.Subscription)>($r2);
+
+        virtualinvoke r0.<io.reactivex.processors.SerializedProcessor: void emitLoop()>();
+
+        return;
+
+        catch java.lang.Throwable from label01 to label03 with label07;
+        catch java.lang.Throwable from label04 to label06 with label07;
+        catch java.lang.Throwable from label07 to label08 with label07;
+    }
+
+    protected void subscribeActual(org.reactivestreams.Subscriber)
+    {
+        io.reactivex.processors.FlowableProcessor $r2;
+        io.reactivex.processors.SerializedProcessor r0;
+        org.reactivestreams.Subscriber $r1;
+
+        r0 := @this: io.reactivex.processors.SerializedProcessor;
+
+        $r1 := @parameter0: org.reactivestreams.Subscriber;
+
+        $r2 = r0.<io.reactivex.processors.SerializedProcessor: io.reactivex.processors.FlowableProcessor actual>;
+
+        virtualinvoke $r2.<io.reactivex.processors.FlowableProcessor: void subscribe(org.reactivestreams.Subscriber)>($r1);
+
+        return;
+    }
+}

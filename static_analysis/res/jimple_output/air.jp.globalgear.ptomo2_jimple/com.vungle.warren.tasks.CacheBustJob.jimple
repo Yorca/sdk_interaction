@@ -1,0 +1,1003 @@
+public class com.vungle.warren.tasks.CacheBustJob extends java.lang.Object implements com.vungle.warren.tasks.Job
+{
+    private static final java.lang.String[] EMPTY_STRING_ARRAY;
+    public static final java.lang.String TAG;
+    private final com.vungle.warren.AdLoader adLoader;
+    private final com.vungle.warren.VungleApiClient client;
+    private final com.vungle.warren.persistence.Repository repository;
+
+    static void <clinit>()
+    {
+        java.lang.String[] $r0;
+
+        <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG> = "com.vungle.warren.tasks.CacheBustJob";
+
+        $r0 = newarray (java.lang.String)[0];
+
+        <com.vungle.warren.tasks.CacheBustJob: java.lang.String[] EMPTY_STRING_ARRAY> = $r0;
+
+        return;
+    }
+
+    public void <init>(com.vungle.warren.VungleApiClient, com.vungle.warren.persistence.Repository, com.vungle.warren.AdLoader)
+    {
+        com.vungle.warren.AdLoader $r3;
+        com.vungle.warren.persistence.Repository $r2;
+        com.vungle.warren.tasks.CacheBustJob r0;
+        com.vungle.warren.VungleApiClient $r1;
+
+        r0 := @this: com.vungle.warren.tasks.CacheBustJob;
+
+        $r1 := @parameter0: com.vungle.warren.VungleApiClient;
+
+        $r2 := @parameter1: com.vungle.warren.persistence.Repository;
+
+        $r3 := @parameter2: com.vungle.warren.AdLoader;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.VungleApiClient client> = $r1;
+
+        r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository> = $r2;
+
+        r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.AdLoader adLoader> = $r3;
+
+        return;
+    }
+
+    private void bustAd(com.vungle.warren.model.Advertisement, com.vungle.warren.model.CacheBust)
+    {
+        com.vungle.warren.AdLoader $r6;
+        com.vungle.warren.model.Advertisement $r1;
+        com.vungle.warren.model.Placement $r10;
+        com.vungle.warren.tasks.CacheBustJob r0;
+        long $l1;
+        com.vungle.warren.persistence.DatabaseHelper$DBException $r16;
+        com.vungle.warren.persistence.Repository $r7;
+        int $i0;
+        com.vungle.warren.AdConfig $r11;
+        java.lang.String $r3, $r5;
+        com.vungle.warren.LoadAdCallback[] $r15;
+        com.vungle.warren.AdConfig$AdSize $r12;
+        boolean $z0;
+        com.vungle.warren.model.CacheBust $r2;
+        com.vungle.warren.AdRequest $r14;
+        com.vungle.warren.AdLoader$Operation $r13;
+        java.lang.StringBuilder $r4;
+        java.lang.Object $r9;
+        com.vungle.warren.persistence.FutureResult $r8;
+
+        r0 := @this: com.vungle.warren.tasks.CacheBustJob;
+
+        $r1 := @parameter0: com.vungle.warren.model.Advertisement;
+
+        $r2 := @parameter1: com.vungle.warren.model.CacheBust;
+
+        $r3 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        $r4 = new java.lang.StringBuilder;
+
+     label01:
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("bustAd: deleting ");
+
+        $r5 = virtualinvoke $r1.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r3, $r5);
+
+     label02:
+        $r6 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.AdLoader adLoader>;
+
+     label03:
+        $r3 = virtualinvoke $r1.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        virtualinvoke $r6.<com.vungle.warren.AdLoader: void dropCache(java.lang.String)>($r3);
+
+     label04:
+        $r7 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+     label05:
+        $r3 = virtualinvoke $r1.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        virtualinvoke $r7.<com.vungle.warren.persistence.Repository: void deleteAdvertisement(java.lang.String)>($r3);
+
+     label06:
+        $r7 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+     label07:
+        $r3 = virtualinvoke $r7.<com.vungle.warren.persistence.Repository: java.lang.String getPlacementIdByAd(com.vungle.warren.model.Advertisement)>($r1);
+
+        $r8 = virtualinvoke $r7.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>($r3, class "Lcom/vungle/warren/model/Placement;");
+
+        $r9 = virtualinvoke $r8.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+     label08:
+        $r10 = (com.vungle.warren.model.Placement) $r9;
+
+        if $r10 == null goto label18;
+
+        $r11 = new com.vungle.warren.AdConfig;
+
+     label09:
+        specialinvoke $r11.<com.vungle.warren.AdConfig: void <init>()>();
+
+        $r12 = virtualinvoke $r10.<com.vungle.warren.model.Placement: com.vungle.warren.AdConfig$AdSize getAdSize()>();
+
+        virtualinvoke $r11.<com.vungle.warren.AdConfig: void setAdSize(com.vungle.warren.AdConfig$AdSize)>($r12);
+
+        $z0 = virtualinvoke $r10.<com.vungle.warren.model.Placement: boolean isMultipleHBPEnabled()>();
+
+     label10:
+        if $z0 == 0 goto label13;
+
+        $r6 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.AdLoader adLoader>;
+
+     label11:
+        $r12 = virtualinvoke $r10.<com.vungle.warren.model.Placement: com.vungle.warren.AdConfig$AdSize getAdSize()>();
+
+        virtualinvoke $r6.<com.vungle.warren.AdLoader: void loadEndlessIfNeeded(com.vungle.warren.model.Placement,com.vungle.warren.AdConfig$AdSize,long,boolean)>($r10, $r12, 0L, 0);
+
+     label12:
+        goto label18;
+
+     label13:
+        $z0 = virtualinvoke $r10.<com.vungle.warren.model.Placement: boolean isAutoCached()>();
+
+     label14:
+        if $z0 == 0 goto label18;
+
+        $r6 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.AdLoader adLoader>;
+
+        $r13 = new com.vungle.warren.AdLoader$Operation;
+
+        $r14 = new com.vungle.warren.AdRequest;
+
+     label15:
+        $r3 = virtualinvoke $r10.<com.vungle.warren.model.Placement: java.lang.String getId()>();
+
+        specialinvoke $r14.<com.vungle.warren.AdRequest: void <init>(java.lang.String,boolean)>($r3, 0);
+
+        $r12 = virtualinvoke $r10.<com.vungle.warren.model.Placement: com.vungle.warren.AdConfig$AdSize getAdSize()>();
+
+        $i0 = virtualinvoke $r10.<com.vungle.warren.model.Placement: int getAutoCachePriority()>();
+
+     label16:
+        $r15 = newarray (com.vungle.warren.LoadAdCallback)[0];
+
+     label17:
+        specialinvoke $r13.<com.vungle.warren.AdLoader$Operation: void <init>(com.vungle.warren.AdRequest,com.vungle.warren.AdConfig$AdSize,long,long,int,int,int,boolean,int,com.vungle.warren.LoadAdCallback[])>($r14, $r12, 0L, 2000L, 5, 1, 0, 0, $i0, $r15);
+
+        virtualinvoke $r6.<com.vungle.warren.AdLoader: void load(com.vungle.warren.AdLoader$Operation)>($r13);
+
+     label18:
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        virtualinvoke $r2.<com.vungle.warren.model.CacheBust: void setTimestampProcessed(long)>($l1);
+
+     label19:
+        $r7 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+     label20:
+        virtualinvoke $r7.<com.vungle.warren.persistence.Repository: void save(java.lang.Object)>($r2);
+
+     label21:
+        return;
+
+     label22:
+        $r16 := @caughtexception;
+
+        $r3 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("bustAd: cannot drop cache or delete advertisement for ");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r3, $r5, $r16);
+
+        return;
+
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label01 to label02 with label22;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label03 to label04 with label22;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label05 to label06 with label22;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label07 to label08 with label22;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label09 to label10 with label22;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label11 to label12 with label22;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label13 to label14 with label22;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label15 to label16 with label22;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label17 to label19 with label22;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label20 to label21 with label22;
+    }
+
+    public static com.vungle.warren.tasks.JobInfo makeJobInfo()
+    {
+        com.vungle.warren.tasks.JobInfo $r0;
+        java.lang.String $r1;
+
+        $r0 = new com.vungle.warren.tasks.JobInfo;
+
+        $r1 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        specialinvoke $r0.<com.vungle.warren.tasks.JobInfo: void <init>(java.lang.String)>($r1);
+
+        $r0 = virtualinvoke $r0.<com.vungle.warren.tasks.JobInfo: com.vungle.warren.tasks.JobInfo setPriority(int)>(0);
+
+        $r0 = virtualinvoke $r0.<com.vungle.warren.tasks.JobInfo: com.vungle.warren.tasks.JobInfo setUpdateCurrent(boolean)>(1);
+
+        return $r0;
+    }
+
+    private void parseAndSaveCacheBust(com.google.gson.JsonObject, java.lang.String, int, java.lang.String, java.util.List, com.google.gson.Gson)
+    {
+        com.google.gson.JsonObject $r5;
+        com.vungle.warren.tasks.CacheBustJob r0;
+        long $l1;
+        com.vungle.warren.persistence.DatabaseHelper$DBException $r4;
+        com.google.gson.JsonElement $r10;
+        com.vungle.warren.persistence.Repository $r12;
+        com.google.gson.Gson $r3;
+        int $i0;
+        java.lang.String $r1, $r6;
+        boolean $z0;
+        java.util.Iterator $r8;
+        com.vungle.warren.model.CacheBust $r11;
+        java.util.List $r2;
+        com.google.gson.JsonArray $r7;
+        java.lang.Object $r9;
+        java.lang.StringBuilder $r13;
+
+        r0 := @this: com.vungle.warren.tasks.CacheBustJob;
+
+        $r5 := @parameter0: com.google.gson.JsonObject;
+
+        $r6 := @parameter1: java.lang.String;
+
+        $i0 := @parameter2: int;
+
+        $r1 := @parameter3: java.lang.String;
+
+        $r2 := @parameter4: java.util.List;
+
+        $r3 := @parameter5: com.google.gson.Gson;
+
+        $z0 = virtualinvoke $r5.<com.google.gson.JsonObject: boolean has(java.lang.String)>($r6);
+
+        if $z0 == 0 goto label5;
+
+        $r7 = virtualinvoke $r5.<com.google.gson.JsonObject: com.google.gson.JsonArray getAsJsonArray(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r7.<com.google.gson.JsonArray: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label7;
+
+        $r9 = interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (com.google.gson.JsonElement) $r9;
+
+        $r9 = virtualinvoke $r3.<com.google.gson.Gson: java.lang.Object fromJson(com.google.gson.JsonElement,java.lang.Class)>($r10, class "Lcom/vungle/warren/model/CacheBust;");
+
+        $r11 = (com.vungle.warren.model.CacheBust) $r9;
+
+        $l1 = virtualinvoke $r11.<com.vungle.warren.model.CacheBust: long getTimeWindowEnd()>();
+
+        $l1 = $l1 * 1000L;
+
+        virtualinvoke $r11.<com.vungle.warren.model.CacheBust: void setTimeWindowEnd(long)>($l1);
+
+        virtualinvoke $r11.<com.vungle.warren.model.CacheBust: void setIdType(int)>($i0);
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r11);
+
+        $r12 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+     label2:
+        virtualinvoke $r12.<com.vungle.warren.persistence.Repository: void save(java.lang.Object)>($r11);
+
+     label3:
+        goto label1;
+
+     label4:
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r11);
+
+        $r6 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("CacheBustJob#onRunJob", $r6);
+
+        goto label1;
+
+     label5:
+        return;
+
+     label6:
+        $r4 := @caughtexception;
+
+        goto label4;
+
+     label7:
+        return;
+
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label2 to label3 with label6;
+    }
+
+    private void processBust(java.lang.Iterable)
+    {
+        java.lang.Object[] $r16;
+        com.vungle.warren.model.Advertisement $r11;
+        com.vungle.warren.tasks.CacheBustJob r0;
+        long $l2, $l3;
+        java.lang.String[] $r15;
+        java.lang.Iterable $r1;
+        com.vungle.warren.persistence.DatabaseHelper$DBException $r14;
+        byte $b0;
+        com.vungle.warren.persistence.Repository $r5;
+        int $i1;
+        java.lang.String $r6, $r13;
+        java.util.LinkedList $r8, $r9, $r17;
+        boolean $z0;
+        java.util.Iterator $r2, $r10;
+        com.vungle.warren.model.CacheBust $r4;
+        java.util.List $r7;
+        java.lang.Object $r3;
+        java.lang.StringBuilder $r18;
+
+        r0 := @this: com.vungle.warren.tasks.CacheBustJob;
+
+        $r1 := @parameter0: java.lang.Iterable;
+
+        $r2 = interfaceinvoke $r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label01:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label11;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (com.vungle.warren.model.CacheBust) $r3;
+
+        $i1 = virtualinvoke $r4.<com.vungle.warren.model.CacheBust: int getIdType()>();
+
+        if $i1 != 1 goto label02;
+
+        $r5 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+        $r6 = virtualinvoke $r4.<com.vungle.warren.model.CacheBust: java.lang.String getId()>();
+
+        $r7 = virtualinvoke $r5.<com.vungle.warren.persistence.Repository: java.util.List getAdsByCampaign(java.lang.String)>($r6);
+
+        goto label03;
+
+     label02:
+        $r5 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+        $r6 = virtualinvoke $r4.<com.vungle.warren.model.CacheBust: java.lang.String getId()>();
+
+        $r7 = virtualinvoke $r5.<com.vungle.warren.persistence.Repository: java.util.List getAdsByCreative(java.lang.String)>($r6);
+
+     label03:
+        $r9 = new java.util.LinkedList;
+
+        $r8 = $r9;
+
+        specialinvoke $r9.<java.util.LinkedList: void <init>()>();
+
+        $r17 = new java.util.LinkedList;
+
+        specialinvoke $r17.<java.util.LinkedList: void <init>()>();
+
+        $r10 = interfaceinvoke $r7.<java.util.List: java.util.Iterator iterator()>();
+
+     label04:
+        $z0 = interfaceinvoke $r10.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label05;
+
+        $r3 = interfaceinvoke $r10.<java.util.Iterator: java.lang.Object next()>();
+
+        $r11 = (com.vungle.warren.model.Advertisement) $r3;
+
+        $l2 = virtualinvoke $r11.<com.vungle.warren.model.Advertisement: long getServerRequestTimestamp()>();
+
+        $l3 = virtualinvoke $r4.<com.vungle.warren.model.CacheBust: long getTimeWindowEnd()>();
+
+        $b0 = $l2 cmp $l3;
+
+        $i1 = (int) $b0;
+
+        if $i1 >= 0 goto label04;
+
+        $z0 = specialinvoke r0.<com.vungle.warren.tasks.CacheBustJob: boolean shouldAdBeBusted(com.vungle.warren.model.Advertisement)>($r11);
+
+        if $z0 == 0 goto label04;
+
+        $r6 = virtualinvoke $r11.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        interfaceinvoke $r8.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        interfaceinvoke $r17.<java.util.List: boolean add(java.lang.Object)>($r11);
+
+        goto label04;
+
+     label05:
+        $z0 = interfaceinvoke $r8.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label09;
+
+        $r6 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        $r18 = new java.lang.StringBuilder;
+
+        specialinvoke $r18.<java.lang.StringBuilder: void <init>(java.lang.String)>("processBust: bust has no relevant ads, deleting ");
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r13 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r6, $r13);
+
+        $r5 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+     label06:
+        virtualinvoke $r5.<com.vungle.warren.persistence.Repository: void delete(java.lang.Object)>($r4);
+
+     label07:
+        goto label01;
+
+     label08:
+        $r14 := @caughtexception;
+
+        $r18 = new java.lang.StringBuilder;
+
+        specialinvoke $r18.<java.lang.StringBuilder: void <init>(java.lang.String)>("Cannot delete obsolete bust ");
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" because of ");
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r14);
+
+        $r6 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("CacheBustJob#processBust", $r6);
+
+        goto label01;
+
+     label09:
+        $r15 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String[] EMPTY_STRING_ARRAY>;
+
+        $r16 = interfaceinvoke $r8.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r15);
+
+        $r15 = (java.lang.String[]) $r16;
+
+        virtualinvoke $r4.<com.vungle.warren.model.CacheBust: void setEventIds(java.lang.String[])>($r15);
+
+        $r10 = interfaceinvoke $r17.<java.util.List: java.util.Iterator iterator()>();
+
+     label10:
+        $z0 = interfaceinvoke $r10.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label01;
+
+        $r3 = interfaceinvoke $r10.<java.util.Iterator: java.lang.Object next()>();
+
+        $r11 = (com.vungle.warren.model.Advertisement) $r3;
+
+        specialinvoke r0.<com.vungle.warren.tasks.CacheBustJob: void bustAd(com.vungle.warren.model.Advertisement,com.vungle.warren.model.CacheBust)>($r11, $r4);
+
+        goto label10;
+
+     label11:
+        return;
+
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label06 to label07 with label08;
+    }
+
+    private void sendAnalytics()
+    {
+        java.lang.Throwable $r15;
+        com.vungle.warren.tasks.CacheBustJob r0;
+        com.vungle.warren.VungleApiClient $r10;
+        long $l2;
+        com.vungle.warren.persistence.DatabaseHelper$DBException $r1;
+        byte $b0;
+        com.vungle.warren.network.Call $r11;
+        com.vungle.warren.persistence.Repository $r2;
+        int $i1;
+        java.lang.String $r9, $r14;
+        java.util.LinkedList $r6;
+        boolean $z0;
+        java.util.Iterator $r7;
+        com.vungle.warren.network.Response $r12;
+        com.vungle.warren.model.CacheBust $r8;
+        java.util.List $r5;
+        java.lang.Object $r4;
+        java.lang.StringBuilder $r13;
+        com.vungle.warren.persistence.FutureResult $r3;
+
+        r0 := @this: com.vungle.warren.tasks.CacheBustJob;
+
+        $r2 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+        $r3 = virtualinvoke $r2.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult loadAll(java.lang.Class)>(class "Lcom/vungle/warren/model/CacheBust;");
+
+        $r4 = virtualinvoke $r3.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r5 = (java.util.List) $r4;
+
+        if $r5 == null goto label21;
+
+        $i1 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+        if $i1 != 0 goto label01;
+
+        goto label21;
+
+     label01:
+        $r6 = new java.util.LinkedList;
+
+        specialinvoke $r6.<java.util.LinkedList: void <init>()>();
+
+        $r7 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label02:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label03;
+
+        $r4 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (com.vungle.warren.model.CacheBust) $r4;
+
+        $l2 = virtualinvoke $r8.<com.vungle.warren.model.CacheBust: long getTimestampProcessed()>();
+
+        $b0 = $l2 cmp 0L;
+
+        if $b0 == 0 goto label02;
+
+        interfaceinvoke $r6.<java.util.Collection: boolean add(java.lang.Object)>($r8);
+
+        goto label02;
+
+     label03:
+        $z0 = interfaceinvoke $r6.<java.util.Collection: boolean isEmpty()>();
+
+        if $z0 == 0 goto label04;
+
+        $r9 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r9, "sendAnalytics: no cachebusts to send analytics");
+
+        return;
+
+     label04:
+        $r10 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.VungleApiClient client>;
+
+     label05:
+        $r11 = virtualinvoke $r10.<com.vungle.warren.VungleApiClient: com.vungle.warren.network.Call sendAnalytics(java.util.Collection)>($r6);
+
+        $r12 = interfaceinvoke $r11.<com.vungle.warren.network.Call: com.vungle.warren.network.Response execute()>();
+
+        $z0 = virtualinvoke $r12.<com.vungle.warren.network.Response: boolean isSuccessful()>();
+
+     label06:
+        if $z0 == 0 goto label17;
+
+     label07:
+        $r7 = interfaceinvoke $r6.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label08:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+     label09:
+        if $z0 == 0 goto label23;
+
+     label10:
+        $r4 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+     label11:
+        $r8 = (com.vungle.warren.model.CacheBust) $r4;
+
+        $r2 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+     label12:
+        virtualinvoke $r2.<com.vungle.warren.persistence.Repository: void delete(java.lang.Object)>($r8);
+
+     label13:
+        goto label08;
+
+     label14:
+        $r13 = new java.lang.StringBuilder;
+
+     label15:
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("CacheBustManager");
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("#sendAnalytics");
+
+        $r9 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>($r9, "can\'t delete bust \" + cacheBust");
+
+     label16:
+        goto label08;
+
+     label17:
+        $r9 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        $r13 = new java.lang.StringBuilder;
+
+     label18:
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("sendAnalytics: not successful, aborting, response is ");
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r12);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r9, $r14);
+
+     label19:
+        return;
+
+     label20:
+        $r15 := @caughtexception;
+
+        $r9 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r9, "sendAnalytics: can\'t execute API call", $r15);
+
+        return;
+
+     label21:
+        $r9 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r9, "sendAnalytics: no cachebusts in repository");
+
+        return;
+
+     label22:
+        $r1 := @caughtexception;
+
+        goto label14;
+
+     label23:
+        return;
+
+        catch java.io.IOException from label05 to label06 with label20;
+        catch java.io.IOException from label07 to label09 with label20;
+        catch java.io.IOException from label10 to label11 with label20;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label12 to label13 with label22;
+        catch java.io.IOException from label12 to label13 with label20;
+        catch java.io.IOException from label15 to label16 with label20;
+        catch java.io.IOException from label18 to label19 with label20;
+    }
+
+    private boolean shouldAdBeBusted(com.vungle.warren.model.Advertisement)
+    {
+        int $i0;
+        com.vungle.warren.model.Advertisement $r1;
+        com.vungle.warren.tasks.CacheBustJob r0;
+
+        r0 := @this: com.vungle.warren.tasks.CacheBustJob;
+
+        $r1 := @parameter0: com.vungle.warren.model.Advertisement;
+
+        $i0 = virtualinvoke $r1.<com.vungle.warren.model.Advertisement: int getState()>();
+
+        if $i0 == 2 goto label1;
+
+        $i0 = virtualinvoke $r1.<com.vungle.warren.model.Advertisement: int getState()>();
+
+        if $i0 == 3 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public int onRunJob(android.os.Bundle, com.vungle.warren.tasks.JobRunner)
+    {
+        java.lang.Throwable $r19;
+        com.google.gson.JsonObject $r16;
+        android.os.Bundle $r1;
+        com.vungle.warren.tasks.CacheBustJob r0;
+        com.vungle.warren.VungleApiClient $r7;
+        long $l0;
+        java.util.ArrayList $r20;
+        com.google.gson.JsonElement $r17;
+        com.vungle.warren.persistence.DatabaseHelper$DBException $r18;
+        com.vungle.warren.network.Call $r13;
+        byte $b1;
+        com.vungle.warren.persistence.Repository $r8;
+        java.lang.Long $r12;
+        com.google.gson.Gson $r21;
+        int $i2;
+        java.lang.String $r3;
+        boolean $z0;
+        com.vungle.warren.network.Response $r14;
+        java.util.List $r15;
+        com.vungle.warren.tasks.JobRunner $r2;
+        java.lang.Object $r10;
+        com.vungle.warren.model.Cookie $r4, $r11;
+        com.vungle.warren.persistence.FutureResult $r9;
+
+        r0 := @this: com.vungle.warren.tasks.CacheBustJob;
+
+        $r1 := @parameter0: android.os.Bundle;
+
+        $r2 := @parameter1: com.vungle.warren.tasks.JobRunner;
+
+        $r3 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r3, "CacheBustJob started");
+
+        $r7 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.VungleApiClient client>;
+
+        if $r7 == null goto label38;
+
+        $r8 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+        if $r8 != null goto label01;
+
+        goto label38;
+
+     label01:
+        $r9 = virtualinvoke $r8.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>("cacheBustSettings", class "Lcom/vungle/warren/model/Cookie;");
+
+        $r10 = virtualinvoke $r9.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+     label02:
+        $r11 = (com.vungle.warren.model.Cookie) $r10;
+
+        if $r11 != null goto label04;
+
+        $r4 = new com.vungle.warren.model.Cookie;
+
+        $r11 = $r4;
+
+     label03:
+        specialinvoke $r4.<com.vungle.warren.model.Cookie: void <init>(java.lang.String)>("cacheBustSettings");
+
+     label04:
+        $r4 = $r11;
+
+     label05:
+        $r12 = virtualinvoke $r11.<com.vungle.warren.model.Cookie: java.lang.Long getLong(java.lang.String)>("last_cache_bust");
+
+        $l0 = virtualinvoke $r12.<java.lang.Long: long longValue()>();
+
+     label06:
+        $r7 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.VungleApiClient client>;
+
+     label07:
+        $r13 = virtualinvoke $r7.<com.vungle.warren.VungleApiClient: com.vungle.warren.network.Call cacheBust(long)>($l0);
+
+        $r14 = interfaceinvoke $r13.<com.vungle.warren.network.Call: com.vungle.warren.network.Response execute()>();
+
+     label08:
+        $r20 = new java.util.ArrayList;
+
+     label09:
+        specialinvoke $r20.<java.util.ArrayList: void <init>()>();
+
+     label10:
+        $r8 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+     label11:
+        $r15 = virtualinvoke $r8.<com.vungle.warren.persistence.Repository: java.util.List getUnProcessedBusts()>();
+
+     label12:
+        if $r15 == null goto label16;
+
+     label13:
+        $z0 = interfaceinvoke $r15.<java.util.List: boolean isEmpty()>();
+
+     label14:
+        if $z0 != 0 goto label16;
+
+     label15:
+        interfaceinvoke $r20.<java.util.List: boolean addAll(java.util.Collection)>($r15);
+
+     label16:
+        $r21 = new com.google.gson.Gson;
+
+     label17:
+        specialinvoke $r21.<com.google.gson.Gson: void <init>()>();
+
+        $z0 = virtualinvoke $r14.<com.vungle.warren.network.Response: boolean isSuccessful()>();
+
+     label18:
+        if $z0 == 0 goto label34;
+
+     label19:
+        $r10 = virtualinvoke $r14.<com.vungle.warren.network.Response: java.lang.Object body()>();
+
+     label20:
+        $r16 = (com.google.gson.JsonObject) $r10;
+
+        if $r16 == null goto label32;
+
+     label21:
+        $z0 = virtualinvoke $r16.<com.google.gson.JsonObject: boolean has(java.lang.String)>("cache_bust");
+
+     label22:
+        if $z0 != 0 goto label23;
+
+        goto label32;
+
+     label23:
+        $r16 = virtualinvoke $r16.<com.google.gson.JsonObject: com.google.gson.JsonObject getAsJsonObject(java.lang.String)>("cache_bust");
+
+        $z0 = virtualinvoke $r16.<com.google.gson.JsonObject: boolean has(java.lang.String)>("last_updated");
+
+     label24:
+        if $z0 == 0 goto label30;
+
+     label25:
+        $r17 = virtualinvoke $r16.<com.google.gson.JsonObject: com.google.gson.JsonElement get(java.lang.String)>("last_updated");
+
+        $l0 = virtualinvoke $r17.<com.google.gson.JsonElement: long getAsLong()>();
+
+     label26:
+        $b1 = $l0 cmp 0L;
+
+        $i2 = (int) $b1;
+
+        if $i2 <= 0 goto label30;
+
+     label27:
+        $r17 = virtualinvoke $r16.<com.google.gson.JsonObject: com.google.gson.JsonElement get(java.lang.String)>("last_updated");
+
+        $l0 = virtualinvoke $r17.<com.google.gson.JsonElement: long getAsLong()>();
+
+        $r12 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        virtualinvoke $r4.<com.vungle.warren.model.Cookie: void putValue(java.lang.String,java.lang.Object)>("last_cache_bust", $r12);
+
+     label28:
+        $r8 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+     label29:
+        virtualinvoke $r8.<com.vungle.warren.persistence.Repository: void save(java.lang.Object)>($r4);
+
+     label30:
+        specialinvoke r0.<com.vungle.warren.tasks.CacheBustJob: void parseAndSaveCacheBust(com.google.gson.JsonObject,java.lang.String,int,java.lang.String,java.util.List,com.google.gson.Gson)>($r16, "campaign_ids", 1, "cannot save campaignBust=", $r20, $r21);
+
+        specialinvoke r0.<com.vungle.warren.tasks.CacheBustJob: void parseAndSaveCacheBust(com.google.gson.JsonObject,java.lang.String,int,java.lang.String,java.util.List,com.google.gson.Gson)>($r16, "creative_ids", 2, "cannot save creativeBust=", $r20, $r21);
+
+     label31:
+        goto label34;
+
+     label32:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r3, "CacheBustJob finished - no jsonObject or cache_bust in it");
+
+     label33:
+        return 1;
+
+     label34:
+        specialinvoke r0.<com.vungle.warren.tasks.CacheBustJob: void processBust(java.lang.Iterable)>($r20);
+
+        virtualinvoke r0.<com.vungle.warren.tasks.CacheBustJob: void updateTimerData(android.os.Bundle,com.vungle.warren.model.Cookie)>($r1, $r4);
+
+     label35:
+        specialinvoke r0.<com.vungle.warren.tasks.CacheBustJob: void sendAnalytics()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r3, "CacheBustJob finished");
+
+        return 2;
+
+     label36:
+        $r18 := @caughtexception;
+
+        $r3 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r3, "CacheBustJob failed - DBException", $r18);
+
+        return 2;
+
+     label37:
+        $r19 := @caughtexception;
+
+        $r3 = <com.vungle.warren.tasks.CacheBustJob: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r3, "CacheBustJob failed - IOException", $r19);
+
+        return 2;
+
+     label38:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r3, "CacheBustJob finished - no client or repository");
+
+        return 1;
+
+        catch java.io.IOException from label01 to label02 with label37;
+        catch java.io.IOException from label03 to label04 with label37;
+        catch java.io.IOException from label05 to label06 with label37;
+        catch java.io.IOException from label07 to label08 with label37;
+        catch java.io.IOException from label09 to label10 with label37;
+        catch java.io.IOException from label11 to label12 with label37;
+        catch java.io.IOException from label13 to label14 with label37;
+        catch java.io.IOException from label15 to label16 with label37;
+        catch java.io.IOException from label17 to label18 with label37;
+        catch java.io.IOException from label19 to label20 with label37;
+        catch java.io.IOException from label21 to label22 with label37;
+        catch java.io.IOException from label23 to label24 with label37;
+        catch java.io.IOException from label25 to label26 with label37;
+        catch java.io.IOException from label27 to label28 with label37;
+        catch java.io.IOException from label29 to label31 with label37;
+        catch java.io.IOException from label32 to label33 with label37;
+        catch java.io.IOException from label34 to label35 with label37;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label01 to label02 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label03 to label04 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label05 to label06 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label07 to label08 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label09 to label10 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label11 to label12 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label13 to label14 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label15 to label16 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label17 to label18 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label19 to label20 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label21 to label22 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label23 to label24 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label25 to label26 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label27 to label28 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label29 to label31 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label32 to label33 with label36;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label34 to label35 with label36;
+    }
+
+    protected void updateTimerData(android.os.Bundle, com.vungle.warren.model.Cookie) throws com.vungle.warren.persistence.DatabaseHelper$DBException
+    {
+        android.os.Bundle $r2;
+        com.vungle.warren.tasks.CacheBustJob r0;
+        long $l0, $l2;
+        byte $b1;
+        java.lang.Long $r3;
+        com.vungle.warren.persistence.Repository $r4;
+        com.vungle.warren.model.Cookie $r1;
+
+        r0 := @this: com.vungle.warren.tasks.CacheBustJob;
+
+        $r2 := @parameter0: android.os.Bundle;
+
+        $r1 := @parameter1: com.vungle.warren.model.Cookie;
+
+        $l0 = virtualinvoke $r2.<android.os.Bundle: long getLong(java.lang.String)>("cache_bust_interval");
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 == 0 goto label1;
+
+        $l2 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        $l0 = $l2 + $l0;
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        virtualinvoke $r1.<com.vungle.warren.model.Cookie: void putValue(java.lang.String,java.lang.Object)>("next_cache_bust", $r3);
+
+     label1:
+        $r4 = r0.<com.vungle.warren.tasks.CacheBustJob: com.vungle.warren.persistence.Repository repository>;
+
+        virtualinvoke $r4.<com.vungle.warren.persistence.Repository: void save(java.lang.Object)>($r1);
+
+        return;
+    }
+}

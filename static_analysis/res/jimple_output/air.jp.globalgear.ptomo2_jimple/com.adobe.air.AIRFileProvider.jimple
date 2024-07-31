@@ -1,0 +1,699 @@
+public class com.adobe.air.AIRFileProvider extends android.content.ContentProvider
+{
+    private android.content.Context mContext;
+    private boolean mIsDebugging;
+
+    public void <init>()
+    {
+        com.adobe.air.AIRFileProvider r0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        specialinvoke r0.<android.content.ContentProvider: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(android.content.Context)
+    {
+        android.content.Context $r2;
+        java.lang.String $r3;
+        java.lang.Exception $r1;
+        com.adobe.air.AIRFileProvider r0;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r2 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<android.content.ContentProvider: void <init>()>();
+
+        r0.<com.adobe.air.AIRFileProvider: android.content.Context mContext> = $r2;
+
+     label1:
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageName()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean contains(java.lang.CharSequence)>("harman");
+
+        r0.<com.adobe.air.AIRFileProvider: boolean mIsDebugging> = $z0;
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    private void debug(java.lang.String)
+    {
+        java.lang.String $r1;
+        com.adobe.air.AIRFileProvider r0;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = r0.<com.adobe.air.AIRFileProvider: boolean mIsDebugging>;
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("AdobeAIR", $r1);
+
+     label1:
+        return;
+    }
+
+    private java.lang.String getPathFromURI(android.net.Uri)
+    {
+        android.content.Context $r2;
+        android.net.Uri $r1;
+        java.lang.Exception $r7;
+        com.adobe.air.AIRFileProvider r0;
+        int $i0;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r3, $r4, $r6;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void initContext()>();
+
+        $r2 = r0.<com.adobe.air.AIRFileProvider: android.content.Context mContext>;
+
+        $r3 = null;
+
+        if $r2 != null goto label01;
+
+        return null;
+
+     label01:
+        $r4 = virtualinvoke $r1.<android.net.Uri: java.lang.String toString()>();
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("content://");
+
+        $r2 = r0.<com.adobe.air.AIRFileProvider: android.content.Context mContext>;
+
+        $r6 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".air_file_provider");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean startsWith(java.lang.String)>($r6);
+
+        if $z0 == 0 goto label14;
+
+     label02:
+        $i0 = virtualinvoke $r6.<java.lang.String: int length()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.String: java.lang.String substring(int)>($i0);
+
+     label03:
+        $r6 = $r4;
+
+     label04:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean startsWith(java.lang.String)>("/content/");
+
+     label05:
+        if $z0 == 0 goto label08;
+
+        $r5 = new java.lang.StringBuilder;
+
+     label06:
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("content://");
+
+        $r3 = virtualinvoke $r4.<java.lang.String: java.lang.String substring(int)>(9);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label07:
+        $r6 = $r3;
+
+     label08:
+        $r3 = $r6;
+
+        $r5 = new java.lang.StringBuilder;
+
+     label09:
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("File is from our provider, filename: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r4 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r4);
+
+     label10:
+        return $r6;
+
+     label11:
+        $r7 := @caughtexception;
+
+        $r3 = $r4;
+
+        goto label13;
+
+     label12:
+        $r7 := @caughtexception;
+
+     label13:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Could not determine filename: ");
+
+        $r4 = virtualinvoke $r7.<java.lang.Exception: java.lang.String toString()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r4);
+
+        return $r3;
+
+     label14:
+        return null;
+
+        catch java.lang.Exception from label02 to label03 with label12;
+        catch java.lang.Exception from label04 to label05 with label11;
+        catch java.lang.Exception from label06 to label07 with label11;
+        catch java.lang.Exception from label09 to label10 with label12;
+    }
+
+    private void initContext()
+    {
+        android.content.Context $r2;
+        com.adobe.air.AndroidActivityWrapper $r3;
+        java.lang.String $r4;
+        java.lang.Exception $r1;
+        com.adobe.air.AIRFileProvider r0;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r2 = r0.<com.adobe.air.AIRFileProvider: android.content.Context mContext>;
+
+        if $r2 != null goto label4;
+
+     label1:
+        $r3 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+        $r2 = virtualinvoke $r3.<com.adobe.air.AndroidActivityWrapper: android.content.Context getApplicationContext()>();
+
+        r0.<com.adobe.air.AIRFileProvider: android.content.Context mContext> = $r2;
+
+        $r4 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageName()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean contains(java.lang.CharSequence)>("harman");
+
+        r0.<com.adobe.air.AIRFileProvider: boolean mIsDebugging> = $z0;
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+     label4:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public void attachInfo(android.content.Context, android.content.pm.ProviderInfo)
+    {
+        android.content.Context $r1;
+        android.content.pm.ProviderInfo $r2;
+        com.adobe.air.AIRFileProvider r0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: android.content.pm.ProviderInfo;
+
+        specialinvoke r0.<android.content.ContentProvider: void attachInfo(android.content.Context,android.content.pm.ProviderInfo)>($r1, $r2);
+
+        return;
+    }
+
+    public int delete(android.net.Uri, java.lang.String, java.lang.String[])
+    {
+        java.lang.UnsupportedOperationException $r5;
+        android.net.Uri $r1;
+        java.lang.String[] $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r2;
+        com.adobe.air.AIRFileProvider r0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String[];
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("AIR file provider delete for ");
+
+        $r2 = virtualinvoke $r1.<android.net.Uri: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r2);
+
+        $r5 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r5.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>("AdobeAIR: function not supported");
+
+        throw $r5;
+    }
+
+    public java.lang.String getType(android.net.Uri)
+    {
+        android.net.Uri $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+        android.webkit.MimeTypeMap $r4;
+        com.adobe.air.AIRFileProvider r0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("AIR file provider getType for ");
+
+        $r3 = virtualinvoke $r1.<android.net.Uri: java.lang.String toString()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r1.<android.net.Uri: java.lang.String toString()>();
+
+        $r3 = staticinvoke <android.webkit.MimeTypeMap: java.lang.String getFileExtensionFromUrl(java.lang.String)>($r3);
+
+        $r4 = staticinvoke <android.webkit.MimeTypeMap: android.webkit.MimeTypeMap getSingleton()>();
+
+        $r3 = virtualinvoke $r4.<android.webkit.MimeTypeMap: java.lang.String getMimeTypeFromExtension(java.lang.String)>($r3);
+
+        return $r3;
+    }
+
+    public android.net.Uri getURIforPath(java.lang.String)
+    {
+        android.content.Context $r2;
+        android.net.Uri $r6;
+        com.adobe.air.AIRFileProvider r0;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r1, $r4;
+        android.net.Uri$Builder $r5;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void initContext()>();
+
+        $r2 = r0.<com.adobe.air.AIRFileProvider: android.content.Context mContext>;
+
+        if $r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("AIR file provider getting URI for path: ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r4);
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>("content://");
+
+        if $z0 == 0 goto label2;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("content");
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int)>(9);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label2:
+        $r5 = new android.net.Uri$Builder;
+
+        specialinvoke $r5.<android.net.Uri$Builder: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<android.net.Uri$Builder: android.net.Uri$Builder scheme(java.lang.String)>("content");
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = r0.<com.adobe.air.AIRFileProvider: android.content.Context mContext>;
+
+        $r4 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".air_file_provider");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = virtualinvoke $r5.<android.net.Uri$Builder: android.net.Uri$Builder authority(java.lang.String)>($r4);
+
+        $r5 = virtualinvoke $r5.<android.net.Uri$Builder: android.net.Uri$Builder encodedPath(java.lang.String)>($r1);
+
+        $r6 = virtualinvoke $r5.<android.net.Uri$Builder: android.net.Uri build()>();
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Returning: ");
+
+        $r1 = virtualinvoke $r6.<android.net.Uri: java.lang.String toString()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r1);
+
+        return $r6;
+    }
+
+    public android.net.Uri insert(android.net.Uri, android.content.ContentValues)
+    {
+        java.lang.UnsupportedOperationException $r5;
+        android.net.Uri $r1;
+        java.lang.StringBuilder $r3;
+        android.content.ContentValues $r2;
+        java.lang.String $r4;
+        com.adobe.air.AIRFileProvider r0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        $r2 := @parameter1: android.content.ContentValues;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("AIR file provider insert for ");
+
+        $r4 = virtualinvoke $r1.<android.net.Uri: java.lang.String toString()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r4);
+
+        $r5 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r5.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>("AdobeAIR: function not supported");
+
+        throw $r5;
+    }
+
+    public boolean onCreate()
+    {
+        com.adobe.air.AIRFileProvider r0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        return 1;
+    }
+
+    public android.os.ParcelFileDescriptor openFile(android.net.Uri, java.lang.String) throws java.io.FileNotFoundException
+    {
+        java.lang.Throwable $r10;
+        android.content.Context $r5;
+        android.os.ParcelFileDescriptor $r7;
+        android.net.Uri $r1;
+        java.lang.Exception $r9;
+        java.io.File $r12;
+        java.io.FileNotFoundException $r13;
+        com.adobe.air.AIRFileProvider r0;
+        android.content.ContentResolver $r6;
+        int $i0;
+        java.lang.StringBuilder $r11;
+        java.lang.String $r2, $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        $r2 := @parameter1: java.lang.String;
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void initContext()>();
+
+        $r3 = virtualinvoke $r1.<android.net.Uri: java.lang.String toString()>();
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("File provider request to open file (");
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") for ");
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r3);
+
+        $r3 = specialinvoke r0.<com.adobe.air.AIRFileProvider: java.lang.String getPathFromURI(android.net.Uri)>($r1);
+
+        if $r3 == null goto label13;
+
+     label01:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean startsWith(java.lang.String)>("content://");
+
+     label02:
+        if $z0 == 0 goto label06;
+
+     label03:
+        $r5 = r0.<com.adobe.air.AIRFileProvider: android.content.Context mContext>;
+
+     label04:
+        $r6 = virtualinvoke $r5.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r1 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r3);
+
+        $r7 = virtualinvoke $r6.<android.content.ContentResolver: android.os.ParcelFileDescriptor openFileDescriptor(android.net.Uri,java.lang.String)>($r1, $r2);
+
+     label05:
+        return $r7;
+
+     label06:
+        $r12 = new java.io.File;
+
+     label07:
+        specialinvoke $r12.<java.io.File: void <init>(java.lang.String)>($r3);
+
+        $i0 = staticinvoke <android.os.ParcelFileDescriptor: int parseMode(java.lang.String)>($r2);
+
+     label08:
+        $r11 = new java.lang.StringBuilder;
+
+     label09:
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("Opening ");
+
+        $r2 = virtualinvoke $r12.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" using mode ");
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r2);
+
+        $r7 = staticinvoke <android.os.ParcelFileDescriptor: android.os.ParcelFileDescriptor open(java.io.File,int)>($r12, $i0);
+
+     label10:
+        return $r7;
+
+     label11:
+        $r9 := @caughtexception;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("Failure when attempting to open file [");
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] - ");
+
+        $r2 = virtualinvoke $r9.<java.lang.Exception: java.lang.String toString()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("AdobeAIR", $r2);
+
+        goto label13;
+
+     label12:
+        $r10 := @caughtexception;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("Cannot open file [");
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] - ");
+
+        $r13 = (java.io.FileNotFoundException) $r10;
+
+        $r2 = virtualinvoke $r13.<java.io.FileNotFoundException: java.lang.String toString()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("AdobeAIR", $r2);
+
+        throw $r10;
+
+     label13:
+        return null;
+
+        catch java.io.FileNotFoundException from label01 to label02 with label12;
+        catch java.io.FileNotFoundException from label04 to label05 with label12;
+        catch java.io.FileNotFoundException from label07 to label08 with label12;
+        catch java.io.FileNotFoundException from label09 to label10 with label12;
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch java.lang.Exception from label03 to label05 with label11;
+        catch java.lang.Exception from label07 to label08 with label11;
+        catch java.lang.Exception from label09 to label10 with label11;
+    }
+
+    public android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String)
+    {
+        android.content.Context $r8;
+        android.net.Uri $r5;
+        java.lang.String[] $r1, $r3;
+        com.adobe.air.AIRFileProvider r0;
+        android.content.ContentResolver $r9;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r2, $r4, $r7;
+        android.database.Cursor $r10;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r5 := @parameter0: android.net.Uri;
+
+        $r1 := @parameter1: java.lang.String[];
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.lang.String[];
+
+        $r4 := @parameter4: java.lang.String;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("AIR file provider query for ");
+
+        $r7 = virtualinvoke $r5.<android.net.Uri: java.lang.String toString()>();
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r7);
+
+        $r7 = specialinvoke r0.<com.adobe.air.AIRFileProvider: java.lang.String getPathFromURI(android.net.Uri)>($r5);
+
+        if $r7 != null goto label1;
+
+        goto label2;
+
+     label1:
+        $r5 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r7);
+
+     label2:
+        $r8 = r0.<com.adobe.air.AIRFileProvider: android.content.Context mContext>;
+
+        $r9 = virtualinvoke $r8.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r10 = virtualinvoke $r9.<android.content.ContentResolver: android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String)>($r5, $r1, $r2, $r3, $r4);
+
+        return $r10;
+    }
+
+    public int update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[])
+    {
+        java.lang.UnsupportedOperationException $r6;
+        android.net.Uri $r2;
+        java.lang.String[] $r1;
+        java.lang.StringBuilder $r5;
+        android.content.ContentValues $r3;
+        java.lang.String $r4;
+        com.adobe.air.AIRFileProvider r0;
+
+        r0 := @this: com.adobe.air.AIRFileProvider;
+
+        $r2 := @parameter0: android.net.Uri;
+
+        $r3 := @parameter1: android.content.ContentValues;
+
+        $r4 := @parameter2: java.lang.String;
+
+        $r1 := @parameter3: java.lang.String[];
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("AIR file provider update for ");
+
+        $r4 = virtualinvoke $r2.<android.net.Uri: java.lang.String toString()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<com.adobe.air.AIRFileProvider: void debug(java.lang.String)>($r4);
+
+        $r6 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r6.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>("AdobeAIR: function not supported");
+
+        throw $r6;
+    }
+}

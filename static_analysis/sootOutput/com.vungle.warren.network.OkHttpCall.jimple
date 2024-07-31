@@ -1,0 +1,245 @@
+final class com.vungle.warren.network.OkHttpCall extends java.lang.Object implements com.vungle.warren.network.Call
+{
+    private static final java.lang.String TAG;
+    private final com.vungle.warren.network.converters.Converter converter;
+    private okhttp3.Call rawCall;
+
+    static void <clinit>()
+    {
+        <com.vungle.warren.network.OkHttpCall: java.lang.String TAG> = "OkHttpCall";
+
+        return;
+    }
+
+    void <init>(okhttp3.Call, com.vungle.warren.network.converters.Converter)
+    {
+        com.vungle.warren.network.OkHttpCall r0;
+        okhttp3.Call $r1;
+        com.vungle.warren.network.converters.Converter $r2;
+
+        r0 := @this: com.vungle.warren.network.OkHttpCall;
+
+        $r1 := @parameter0: okhttp3.Call;
+
+        $r2 := @parameter1: com.vungle.warren.network.converters.Converter;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.vungle.warren.network.OkHttpCall: okhttp3.Call rawCall> = $r1;
+
+        r0.<com.vungle.warren.network.OkHttpCall: com.vungle.warren.network.converters.Converter converter> = $r2;
+
+        return;
+    }
+
+    static com.vungle.warren.network.converters.Converter access$000(com.vungle.warren.network.OkHttpCall)
+    {
+        com.vungle.warren.network.OkHttpCall $r0;
+        com.vungle.warren.network.converters.Converter r1;
+
+        $r0 := @parameter0: com.vungle.warren.network.OkHttpCall;
+
+        r1 = $r0.<com.vungle.warren.network.OkHttpCall: com.vungle.warren.network.converters.Converter converter>;
+
+        return r1;
+    }
+
+    static com.vungle.warren.network.Response access$100(com.vungle.warren.network.OkHttpCall, okhttp3.Response, com.vungle.warren.network.converters.Converter) throws java.io.IOException
+    {
+        com.vungle.warren.network.converters.Converter $r1;
+        com.vungle.warren.network.Response $r2;
+        okhttp3.Response $r0;
+        com.vungle.warren.network.OkHttpCall $r3;
+
+        $r3 := @parameter0: com.vungle.warren.network.OkHttpCall;
+
+        $r0 := @parameter1: okhttp3.Response;
+
+        $r1 := @parameter2: com.vungle.warren.network.converters.Converter;
+
+        $r2 = specialinvoke $r3.<com.vungle.warren.network.OkHttpCall: com.vungle.warren.network.Response parseResponse(okhttp3.Response,com.vungle.warren.network.converters.Converter)>($r0, $r1);
+
+        return $r2;
+    }
+
+    static java.lang.String access$200()
+    {
+        java.lang.String r0;
+
+        r0 = <com.vungle.warren.network.OkHttpCall: java.lang.String TAG>;
+
+        return r0;
+    }
+
+    private com.vungle.warren.network.Response parseResponse(okhttp3.Response, com.vungle.warren.network.converters.Converter) throws java.io.IOException
+    {
+        java.lang.Throwable $r14;
+        long $l0;
+        com.vungle.warren.network.OkHttpCall$ExceptionCatchingResponseBody $r7;
+        com.vungle.warren.network.converters.Converter $r2;
+        okhttp3.Response$Builder $r4;
+        int $i1;
+        okhttp3.Response $r1;
+        okhttp3.ResponseBody $r3, $r13;
+        okhttp3.MediaType $r6;
+        okio.Buffer $r11;
+        com.vungle.warren.network.Response $r9;
+        com.vungle.warren.network.OkHttpCall r0;
+        java.lang.RuntimeException $r10;
+        okio.BufferedSource $r12;
+        java.lang.Object $r8;
+        com.vungle.warren.network.OkHttpCall$NoContentResponseBody $r5;
+
+        r0 := @this: com.vungle.warren.network.OkHttpCall;
+
+        $r1 := @parameter0: okhttp3.Response;
+
+        $r2 := @parameter1: com.vungle.warren.network.converters.Converter;
+
+        $r3 = virtualinvoke $r1.<okhttp3.Response: okhttp3.ResponseBody body()>();
+
+        $r4 = virtualinvoke $r1.<okhttp3.Response: okhttp3.Response$Builder newBuilder()>();
+
+        $r5 = new com.vungle.warren.network.OkHttpCall$NoContentResponseBody;
+
+        $r6 = virtualinvoke $r3.<okhttp3.ResponseBody: okhttp3.MediaType contentType()>();
+
+        $l0 = virtualinvoke $r3.<okhttp3.ResponseBody: long contentLength()>();
+
+        specialinvoke $r5.<com.vungle.warren.network.OkHttpCall$NoContentResponseBody: void <init>(okhttp3.MediaType,long)>($r6, $l0);
+
+        $r4 = virtualinvoke $r4.<okhttp3.Response$Builder: okhttp3.Response$Builder body(okhttp3.ResponseBody)>($r5);
+
+        $r1 = virtualinvoke $r4.<okhttp3.Response$Builder: okhttp3.Response build()>();
+
+        $i1 = virtualinvoke $r1.<okhttp3.Response: int code()>();
+
+        if $i1 < 200 goto label5;
+
+        if $i1 >= 300 goto label5;
+
+        if $i1 == 204 goto label4;
+
+        if $i1 == 205 goto label4;
+
+        $r7 = new com.vungle.warren.network.OkHttpCall$ExceptionCatchingResponseBody;
+
+        specialinvoke $r7.<com.vungle.warren.network.OkHttpCall$ExceptionCatchingResponseBody: void <init>(okhttp3.ResponseBody)>($r3);
+
+     label1:
+        $r8 = interfaceinvoke $r2.<com.vungle.warren.network.converters.Converter: java.lang.Object convert(java.lang.Object)>($r7);
+
+        $r9 = staticinvoke <com.vungle.warren.network.Response: com.vungle.warren.network.Response success(java.lang.Object,okhttp3.Response)>($r8, $r1);
+
+     label2:
+        return $r9;
+
+     label3:
+        $r10 := @caughtexception;
+
+        virtualinvoke $r7.<com.vungle.warren.network.OkHttpCall$ExceptionCatchingResponseBody: void throwIfCaught()>();
+
+        throw $r10;
+
+     label4:
+        virtualinvoke $r3.<okhttp3.ResponseBody: void close()>();
+
+        $r9 = staticinvoke <com.vungle.warren.network.Response: com.vungle.warren.network.Response success(java.lang.Object,okhttp3.Response)>(null, $r1);
+
+        return $r9;
+
+     label5:
+        $r11 = new okio.Buffer;
+
+        specialinvoke $r11.<okio.Buffer: void <init>()>();
+
+        $r12 = virtualinvoke $r3.<okhttp3.ResponseBody: okio.BufferedSource source()>();
+
+        interfaceinvoke $r12.<okio.BufferedSource: long readAll(okio.Sink)>($r11);
+
+        $r6 = virtualinvoke $r3.<okhttp3.ResponseBody: okhttp3.MediaType contentType()>();
+
+        $l0 = virtualinvoke $r3.<okhttp3.ResponseBody: long contentLength()>();
+
+        $r13 = staticinvoke <okhttp3.ResponseBody: okhttp3.ResponseBody create(okhttp3.MediaType,long,okio.BufferedSource)>($r6, $l0, $r11);
+
+        $r9 = staticinvoke <com.vungle.warren.network.Response: com.vungle.warren.network.Response error(okhttp3.ResponseBody,okhttp3.Response)>($r13, $r1);
+
+     label6:
+        virtualinvoke $r3.<okhttp3.ResponseBody: void close()>();
+
+        return $r9;
+
+     label7:
+        $r14 := @caughtexception;
+
+        virtualinvoke $r3.<okhttp3.ResponseBody: void close()>();
+
+        throw $r14;
+
+        catch java.lang.RuntimeException from label1 to label2 with label3;
+        catch java.lang.Throwable from label5 to label6 with label7;
+    }
+
+    public void enqueue(com.vungle.warren.network.Callback)
+    {
+        com.vungle.warren.network.Callback $r1;
+        com.vungle.warren.network.OkHttpCall$1 $r3;
+        com.vungle.warren.network.OkHttpCall r0;
+        okhttp3.Call $r2;
+
+        r0 := @this: com.vungle.warren.network.OkHttpCall;
+
+        $r1 := @parameter0: com.vungle.warren.network.Callback;
+
+        $r2 = r0.<com.vungle.warren.network.OkHttpCall: okhttp3.Call rawCall>;
+
+        $r3 = new com.vungle.warren.network.OkHttpCall$1;
+
+        specialinvoke $r3.<com.vungle.warren.network.OkHttpCall$1: void <init>(com.vungle.warren.network.OkHttpCall,com.vungle.warren.network.Callback)>(r0, $r1);
+
+        interfaceinvoke $r2.<okhttp3.Call: void enqueue(okhttp3.Callback)>($r3);
+
+        return;
+    }
+
+    public com.vungle.warren.network.Response execute() throws java.io.IOException
+    {
+        java.lang.Throwable $r5;
+        com.vungle.warren.network.converters.Converter $r1;
+        com.vungle.warren.network.Response $r4;
+        com.vungle.warren.network.OkHttpCall r0;
+        okhttp3.Response $r3;
+        okhttp3.Call $r2;
+
+        r0 := @this: com.vungle.warren.network.OkHttpCall;
+
+        entermonitor r0;
+
+     label1:
+        $r2 = r0.<com.vungle.warren.network.OkHttpCall: okhttp3.Call rawCall>;
+
+        exitmonitor r0;
+
+     label2:
+        $r3 = interfaceinvoke $r2.<okhttp3.Call: okhttp3.Response execute()>();
+
+        $r1 = r0.<com.vungle.warren.network.OkHttpCall: com.vungle.warren.network.converters.Converter converter>;
+
+        $r4 = specialinvoke r0.<com.vungle.warren.network.OkHttpCall: com.vungle.warren.network.Response parseResponse(okhttp3.Response,com.vungle.warren.network.converters.Converter)>($r3, $r1);
+
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+     label4:
+        exitmonitor r0;
+
+     label5:
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label4 to label5 with label3;
+    }
+}

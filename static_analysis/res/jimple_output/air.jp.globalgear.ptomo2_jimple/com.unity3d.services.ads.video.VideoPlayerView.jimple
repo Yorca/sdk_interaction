@@ -1,0 +1,746 @@
+public class com.unity3d.services.ads.video.VideoPlayerView extends android.widget.VideoView
+{
+    private android.media.AudioManager _audioManager;
+    private final com.unity3d.services.core.webview.bridge.IEventSender _eventSender;
+    private boolean _infoListenerEnabled;
+    private android.media.MediaPlayer _mediaPlayer;
+    private java.util.Timer _prepareTimer;
+    private int _progressEventInterval;
+    private java.util.Timer _videoTimer;
+    private java.lang.String _videoUrl;
+    private java.lang.Float _volume;
+
+    public void <init>(android.content.Context)
+    {
+        android.content.Context $r1;
+        com.unity3d.services.core.webview.bridge.IEventSender $r2;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        com.unity3d.services.core.webview.bridge.SharedInstances $r3;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r3 = <com.unity3d.services.core.webview.bridge.SharedInstances: com.unity3d.services.core.webview.bridge.SharedInstances INSTANCE>;
+
+        $r2 = virtualinvoke $r3.<com.unity3d.services.core.webview.bridge.SharedInstances: com.unity3d.services.core.webview.bridge.IEventSender getWebViewEventSender()>();
+
+        specialinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void <init>(android.content.Context,com.unity3d.services.core.webview.bridge.IEventSender)>($r1, $r2);
+
+        return;
+    }
+
+    public void <init>(android.content.Context, com.unity3d.services.core.webview.bridge.IEventSender)
+    {
+        com.unity3d.services.core.webview.bridge.IEventSender $r1;
+        android.content.Context $r2;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $r2 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.unity3d.services.core.webview.bridge.IEventSender;
+
+        specialinvoke r0.<android.widget.VideoView: void <init>(android.content.Context)>($r2);
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: int _progressEventInterval> = 500;
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: android.media.MediaPlayer _mediaPlayer> = null;
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.Float _volume> = null;
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: boolean _infoListenerEnabled> = 1;
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: android.media.AudioManager _audioManager> = null;
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: com.unity3d.services.core.webview.bridge.IEventSender _eventSender> = $r1;
+
+        return;
+    }
+
+    static com.unity3d.services.core.webview.bridge.IEventSender access$000(com.unity3d.services.ads.video.VideoPlayerView)
+    {
+        com.unity3d.services.core.webview.bridge.IEventSender r1;
+        com.unity3d.services.ads.video.VideoPlayerView $r0;
+
+        $r0 := @parameter0: com.unity3d.services.ads.video.VideoPlayerView;
+
+        r1 = $r0.<com.unity3d.services.ads.video.VideoPlayerView: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        return r1;
+    }
+
+    static java.lang.String access$100(com.unity3d.services.ads.video.VideoPlayerView)
+    {
+        com.unity3d.services.ads.video.VideoPlayerView $r0;
+        java.lang.String r1;
+
+        $r0 := @parameter0: com.unity3d.services.ads.video.VideoPlayerView;
+
+        r1 = $r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        return r1;
+    }
+
+    static android.media.MediaPlayer access$202(com.unity3d.services.ads.video.VideoPlayerView, android.media.MediaPlayer)
+    {
+        android.media.MediaPlayer $r1;
+        com.unity3d.services.ads.video.VideoPlayerView $r0;
+
+        $r0 := @parameter0: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $r1 := @parameter1: android.media.MediaPlayer;
+
+        $r0.<com.unity3d.services.ads.video.VideoPlayerView: android.media.MediaPlayer _mediaPlayer> = $r1;
+
+        return $r1;
+    }
+
+    private void startPrepareTimer(long)
+    {
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        long $l0;
+        java.util.Timer $r1;
+        com.unity3d.services.ads.video.VideoPlayerView$2 $r2;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $l0 := @parameter0: long;
+
+        $r1 = new java.util.Timer;
+
+        specialinvoke $r1.<java.util.Timer: void <init>()>();
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: java.util.Timer _prepareTimer> = $r1;
+
+        $r2 = new com.unity3d.services.ads.video.VideoPlayerView$2;
+
+        specialinvoke $r2.<com.unity3d.services.ads.video.VideoPlayerView$2: void <init>(com.unity3d.services.ads.video.VideoPlayerView)>(r0);
+
+        virtualinvoke $r1.<java.util.Timer: void schedule(java.util.TimerTask,long)>($r2, $l0);
+
+        return;
+    }
+
+    private void startVideoProgressTimer()
+    {
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        int $i2;
+        java.util.Timer $r1;
+        long $l0, $l1;
+        com.unity3d.services.ads.video.VideoPlayerView$1 $r2;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $r1 = new java.util.Timer;
+
+        specialinvoke $r1.<java.util.Timer: void <init>()>();
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: java.util.Timer _videoTimer> = $r1;
+
+        $r2 = new com.unity3d.services.ads.video.VideoPlayerView$1;
+
+        specialinvoke $r2.<com.unity3d.services.ads.video.VideoPlayerView$1: void <init>(com.unity3d.services.ads.video.VideoPlayerView)>(r0);
+
+        $i2 = r0.<com.unity3d.services.ads.video.VideoPlayerView: int _progressEventInterval>;
+
+        $l0 = (long) $i2;
+
+        $l1 = (long) $i2;
+
+        virtualinvoke $r1.<java.util.Timer: void scheduleAtFixedRate(java.util.TimerTask,long,long)>($r2, $l0, $l1);
+
+        return;
+    }
+
+    public int getProgressEventInterval()
+    {
+        int i0;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        i0 = r0.<com.unity3d.services.ads.video.VideoPlayerView: int _progressEventInterval>;
+
+        return i0;
+    }
+
+    public int[] getVideoViewRectangle()
+    {
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        int[] $r1, $r2;
+        int $i0;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $r1 = newarray (int)[2];
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void getLocationInWindow(int[])>($r1);
+
+        $r2 = newarray (int)[4];
+
+        $i0 = $r1[0];
+
+        $r2[0] = $i0;
+
+        $i0 = $r1[1];
+
+        $r2[1] = $i0;
+
+        $i0 = virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: int getMeasuredWidth()>();
+
+        $r2[2] = $i0;
+
+        $i0 = virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: int getMeasuredHeight()>();
+
+        $r2[3] = $i0;
+
+        return $r2;
+    }
+
+    public float getVolume()
+    {
+        float $f0;
+        java.lang.Float $r1;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.Float _volume>;
+
+        $f0 = virtualinvoke $r1.<java.lang.Float: float floatValue()>();
+
+        return $f0;
+    }
+
+    public void pause()
+    {
+        com.unity3d.services.core.webview.bridge.IEventSender $r3;
+        java.lang.Object[] $r6;
+        com.unity3d.services.ads.video.VideoPlayerEvent $r5;
+        java.lang.Exception $r7;
+        android.media.AudioManager $r2;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        com.unity3d.services.core.webview.WebViewEventCategory $r4;
+        int $i0;
+        java.lang.String $r1;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+     label1:
+        specialinvoke r0.<android.widget.VideoView: void pause()>();
+
+     label2:
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 >= 26 goto label7;
+
+     label3:
+        $r2 = r0.<com.unity3d.services.ads.video.VideoPlayerView: android.media.AudioManager _audioManager>;
+
+     label4:
+        if $r2 == null goto label8;
+
+     label5:
+        virtualinvoke $r2.<android.media.AudioManager: int abandonAudioFocus(android.media.AudioManager$OnAudioFocusChangeListener)>(null);
+
+     label6:
+        goto label8;
+
+     label7:
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void setAudioFocusRequest(int)>(0);
+
+     label8:
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void stopVideoProgressTimer()>();
+
+        $r3 = r0.<com.unity3d.services.ads.video.VideoPlayerView: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r4 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory VIDEOPLAYER>;
+
+        $r5 = <com.unity3d.services.ads.video.VideoPlayerEvent: com.unity3d.services.ads.video.VideoPlayerEvent PAUSE>;
+
+        $r6 = newarray (java.lang.Object)[1];
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        $r6[0] = $r1;
+
+        interfaceinvoke $r3.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r4, $r5, $r6);
+
+        return;
+
+     label9:
+        $r7 := @caughtexception;
+
+        $r3 = r0.<com.unity3d.services.ads.video.VideoPlayerView: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r4 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory VIDEOPLAYER>;
+
+        $r5 = <com.unity3d.services.ads.video.VideoPlayerEvent: com.unity3d.services.ads.video.VideoPlayerEvent PAUSE_ERROR>;
+
+        $r6 = newarray (java.lang.Object)[1];
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        $r6[0] = $r1;
+
+        interfaceinvoke $r3.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r4, $r5, $r6);
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error pausing video", $r7);
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label9;
+        catch java.lang.Exception from label3 to label4 with label9;
+        catch java.lang.Exception from label5 to label6 with label9;
+        catch java.lang.Exception from label7 to label8 with label9;
+    }
+
+    public void play()
+    {
+        java.lang.Throwable $r2;
+        com.unity3d.services.core.webview.bridge.IEventSender $r4;
+        java.lang.Object[] $r7;
+        com.unity3d.services.ads.video.VideoPlayerView$5 $r3;
+        com.unity3d.services.ads.video.VideoPlayerEvent $r6;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        com.unity3d.services.core.webview.WebViewEventCategory $r5;
+        java.lang.Boolean $r1;
+        java.lang.String $r8;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void entered()>();
+
+        $r3 = new com.unity3d.services.ads.video.VideoPlayerView$5;
+
+        specialinvoke $r3.<com.unity3d.services.ads.video.VideoPlayerView$5: void <init>(com.unity3d.services.ads.video.VideoPlayerView)>(r0);
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void setOnCompletionListener(android.media.MediaPlayer$OnCompletionListener)>($r3);
+
+     label1:
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void start()>();
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void stopVideoProgressTimer()>();
+
+        specialinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void startVideoProgressTimer()>();
+
+     label2:
+        $r4 = r0.<com.unity3d.services.ads.video.VideoPlayerView: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r5 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory VIDEOPLAYER>;
+
+        $r6 = <com.unity3d.services.ads.video.VideoPlayerEvent: com.unity3d.services.ads.video.VideoPlayerEvent PLAY>;
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r8 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        $r7[0] = $r8;
+
+     label3:
+        interfaceinvoke $r4.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r5, $r6, $r7);
+
+     label4:
+        return;
+
+     label5:
+        $r4 = r0.<com.unity3d.services.ads.video.VideoPlayerView: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r5 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory VIDEOPLAYER>;
+
+        $r6 = <com.unity3d.services.ads.video.VideoPlayerEvent: com.unity3d.services.ads.video.VideoPlayerEvent ILLEGAL_STATE>;
+
+        $r7 = newarray (java.lang.Object)[2];
+
+        $r8 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        $r7[0] = $r8;
+
+        $r1 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(0);
+
+        $r7[1] = $r1;
+
+        interfaceinvoke $r4.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r5, $r6, $r7);
+
+        return;
+
+     label6:
+        $r2 := @caughtexception;
+
+        goto label5;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label6;
+        catch java.lang.IllegalStateException from label3 to label4 with label6;
+    }
+
+    public boolean prepare(java.lang.String, float, int)
+    {
+        android.content.Context $r4;
+        java.lang.Object[] $r11;
+        com.unity3d.services.ads.video.VideoPlayerView$3 $r2;
+        com.unity3d.services.ads.video.VideoPlayerView$4 $r3;
+        long $l1;
+        com.unity3d.services.ads.video.VideoPlayerEvent $r10;
+        android.media.AudioManager $r6;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        com.unity3d.services.core.webview.WebViewEventCategory $r9;
+        int $i0;
+        java.lang.String $r1;
+        boolean $z0;
+        com.unity3d.services.core.webview.bridge.IEventSender $r8;
+        java.lang.Exception $r7;
+        float $f0;
+        java.lang.Object $r5;
+        java.lang.StringBuilder $r12;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $f0 := @parameter1: float;
+
+        $i0 := @parameter2: int;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void entered()>();
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl> = $r1;
+
+        $r2 = new com.unity3d.services.ads.video.VideoPlayerView$3;
+
+        specialinvoke $r2.<com.unity3d.services.ads.video.VideoPlayerView$3: void <init>(com.unity3d.services.ads.video.VideoPlayerView,float)>(r0, $f0);
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void setOnPreparedListener(android.media.MediaPlayer$OnPreparedListener)>($r2);
+
+        $r3 = new com.unity3d.services.ads.video.VideoPlayerView$4;
+
+        specialinvoke $r3.<com.unity3d.services.ads.video.VideoPlayerView$4: void <init>(com.unity3d.services.ads.video.VideoPlayerView)>(r0);
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void setOnErrorListener(android.media.MediaPlayer$OnErrorListener)>($r3);
+
+        $z0 = r0.<com.unity3d.services.ads.video.VideoPlayerView: boolean _infoListenerEnabled>;
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void setInfoListenerEnabled(boolean)>($z0);
+
+        if $i0 <= 0 goto label1;
+
+        $l1 = (long) $i0;
+
+        specialinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void startPrepareTimer(long)>($l1);
+
+     label1:
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 >= 26 goto label6;
+
+     label2:
+        $r4 = virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: android.content.Context getContext()>();
+
+        $r5 = virtualinvoke $r4.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("audio");
+
+        $r6 = (android.media.AudioManager) $r5;
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: android.media.AudioManager _audioManager> = $r6;
+
+     label3:
+        if $r6 == null goto label7;
+
+     label4:
+        virtualinvoke $r6.<android.media.AudioManager: int requestAudioFocus(android.media.AudioManager$OnAudioFocusChangeListener,int,int)>(null, 3, 2);
+
+     label5:
+        goto label7;
+
+     label6:
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void setAudioFocusRequest(int)>(2);
+
+     label7:
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void setVideoPath(java.lang.String)>($r1);
+
+     label8:
+        return 1;
+
+     label9:
+        $r7 := @caughtexception;
+
+        $r8 = r0.<com.unity3d.services.ads.video.VideoPlayerView: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r9 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory VIDEOPLAYER>;
+
+        $r10 = <com.unity3d.services.ads.video.VideoPlayerEvent: com.unity3d.services.ads.video.VideoPlayerEvent PREPARE_ERROR>;
+
+        $r11 = newarray (java.lang.Object)[1];
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        $r11[0] = $r1;
+
+        interfaceinvoke $r8.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r9, $r10, $r11);
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>(java.lang.String)>("Error preparing video: ");
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>($r1, $r7);
+
+        return 0;
+
+        catch java.lang.Exception from label2 to label3 with label9;
+        catch java.lang.Exception from label4 to label5 with label9;
+        catch java.lang.Exception from label6 to label8 with label9;
+    }
+
+    public void seekTo(int)
+    {
+        com.unity3d.services.core.webview.bridge.IEventSender $r2;
+        java.lang.Object[] $r5;
+        com.unity3d.services.ads.video.VideoPlayerEvent $r4;
+        java.lang.Exception $r6;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        com.unity3d.services.core.webview.WebViewEventCategory $r3;
+        int $i0;
+        java.lang.String $r1;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $i0 := @parameter0: int;
+
+     label1:
+        specialinvoke r0.<android.widget.VideoView: void seekTo(int)>($i0);
+
+     label2:
+        $r2 = r0.<com.unity3d.services.ads.video.VideoPlayerView: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r3 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory VIDEOPLAYER>;
+
+        $r4 = <com.unity3d.services.ads.video.VideoPlayerEvent: com.unity3d.services.ads.video.VideoPlayerEvent SEEKTO>;
+
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        $r5[0] = $r1;
+
+        interfaceinvoke $r2.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r3, $r4, $r5);
+
+        return;
+
+     label3:
+        $r6 := @caughtexception;
+
+        $r2 = r0.<com.unity3d.services.ads.video.VideoPlayerView: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r3 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory VIDEOPLAYER>;
+
+        $r4 = <com.unity3d.services.ads.video.VideoPlayerEvent: com.unity3d.services.ads.video.VideoPlayerEvent SEEKTO_ERROR>;
+
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        $r5[0] = $r1;
+
+        interfaceinvoke $r2.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r3, $r4, $r5);
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Error seeking video", $r6);
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public void setInfoListenerEnabled(boolean)
+    {
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        com.unity3d.services.ads.video.VideoPlayerView$6 $r1;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $z0 := @parameter0: boolean;
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: boolean _infoListenerEnabled> = $z0;
+
+        $z0 = r0.<com.unity3d.services.ads.video.VideoPlayerView: boolean _infoListenerEnabled>;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = new com.unity3d.services.ads.video.VideoPlayerView$6;
+
+        specialinvoke $r1.<com.unity3d.services.ads.video.VideoPlayerView$6: void <init>(com.unity3d.services.ads.video.VideoPlayerView)>(r0);
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void setOnInfoListener(android.media.MediaPlayer$OnInfoListener)>($r1);
+
+        return;
+
+     label1:
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void setOnInfoListener(android.media.MediaPlayer$OnInfoListener)>(null);
+
+        return;
+    }
+
+    public void setProgressEventInterval(int)
+    {
+        int $i0;
+        java.util.Timer $r1;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $i0 := @parameter0: int;
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: int _progressEventInterval> = $i0;
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.util.Timer _videoTimer>;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void stopVideoProgressTimer()>();
+
+        specialinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void startVideoProgressTimer()>();
+
+     label1:
+        return;
+    }
+
+    public void setVolume(java.lang.Float)
+    {
+        java.lang.Float $r1;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        float $f0, $f1;
+        android.media.MediaPlayer $r2;
+        java.lang.Exception $r3;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $r1 := @parameter0: java.lang.Float;
+
+     label1:
+        $r2 = r0.<com.unity3d.services.ads.video.VideoPlayerView: android.media.MediaPlayer _mediaPlayer>;
+
+        $f0 = virtualinvoke $r1.<java.lang.Float: float floatValue()>();
+
+        $f1 = virtualinvoke $r1.<java.lang.Float: float floatValue()>();
+
+        virtualinvoke $r2.<android.media.MediaPlayer: void setVolume(float,float)>($f0, $f1);
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.Float _volume> = $r1;
+
+     label2:
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("MediaPlayer generic error", $r3);
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public void stop()
+    {
+        com.unity3d.services.core.webview.bridge.IEventSender $r4;
+        java.lang.Object[] $r6;
+        com.unity3d.services.ads.video.VideoPlayerEvent $r1;
+        android.media.AudioManager $r3;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+        com.unity3d.services.core.webview.WebViewEventCategory $r5;
+        int $i0;
+        java.lang.String $r2;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void stopPlayback()>();
+
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void stopVideoProgressTimer()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 >= 26 goto label1;
+
+        $r3 = r0.<com.unity3d.services.ads.video.VideoPlayerView: android.media.AudioManager _audioManager>;
+
+        if $r3 == null goto label2;
+
+        virtualinvoke $r3.<android.media.AudioManager: int abandonAudioFocus(android.media.AudioManager$OnAudioFocusChangeListener)>(null);
+
+        goto label2;
+
+     label1:
+        virtualinvoke r0.<com.unity3d.services.ads.video.VideoPlayerView: void setAudioFocusRequest(int)>(0);
+
+     label2:
+        $r4 = r0.<com.unity3d.services.ads.video.VideoPlayerView: com.unity3d.services.core.webview.bridge.IEventSender _eventSender>;
+
+        $r5 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory VIDEOPLAYER>;
+
+        $r1 = <com.unity3d.services.ads.video.VideoPlayerEvent: com.unity3d.services.ads.video.VideoPlayerEvent STOP>;
+
+        $r6 = newarray (java.lang.Object)[1];
+
+        $r2 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.lang.String _videoUrl>;
+
+        $r6[0] = $r2;
+
+        interfaceinvoke $r4.<com.unity3d.services.core.webview.bridge.IEventSender: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r5, $r1, $r6);
+
+        return;
+    }
+
+    public void stopPrepareTimer()
+    {
+        java.util.Timer $r1;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.util.Timer _prepareTimer>;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r1.<java.util.Timer: void cancel()>();
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.util.Timer _prepareTimer>;
+
+        virtualinvoke $r1.<java.util.Timer: int purge()>();
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: java.util.Timer _prepareTimer> = null;
+
+     label1:
+        return;
+    }
+
+    public void stopVideoProgressTimer()
+    {
+        java.util.Timer $r1;
+        com.unity3d.services.ads.video.VideoPlayerView r0;
+
+        r0 := @this: com.unity3d.services.ads.video.VideoPlayerView;
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.util.Timer _videoTimer>;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r1.<java.util.Timer: void cancel()>();
+
+        $r1 = r0.<com.unity3d.services.ads.video.VideoPlayerView: java.util.Timer _videoTimer>;
+
+        virtualinvoke $r1.<java.util.Timer: int purge()>();
+
+        r0.<com.unity3d.services.ads.video.VideoPlayerView: java.util.Timer _videoTimer> = null;
+
+     label1:
+        return;
+    }
+}

@@ -1,0 +1,181 @@
+class com.squareup.picasso.AssetRequestHandler extends com.squareup.picasso.RequestHandler
+{
+    protected static final java.lang.String ANDROID_ASSET;
+    private static final int ASSET_PREFIX_LENGTH;
+    private android.content.res.AssetManager assetManager;
+    private final android.content.Context context;
+    private final java.lang.Object lock;
+
+    static void <clinit>()
+    {
+        <com.squareup.picasso.AssetRequestHandler: int ASSET_PREFIX_LENGTH> = 22;
+
+        <com.squareup.picasso.AssetRequestHandler: java.lang.String ANDROID_ASSET> = "android_asset";
+
+        return;
+    }
+
+    void <init>(android.content.Context)
+    {
+        android.content.Context $r1;
+        com.squareup.picasso.AssetRequestHandler r0;
+        java.lang.Object $r2;
+
+        r0 := @this: com.squareup.picasso.AssetRequestHandler;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<com.squareup.picasso.RequestHandler: void <init>()>();
+
+        $r2 = new java.lang.Object;
+
+        specialinvoke $r2.<java.lang.Object: void <init>()>();
+
+        r0.<com.squareup.picasso.AssetRequestHandler: java.lang.Object lock> = $r2;
+
+        r0.<com.squareup.picasso.AssetRequestHandler: android.content.Context context> = $r1;
+
+        return;
+    }
+
+    static java.lang.String getFilePath(com.squareup.picasso.Request)
+    {
+        com.squareup.picasso.Request $r0;
+        int $i0;
+        android.net.Uri $r1;
+        java.lang.String $r2;
+
+        $r0 := @parameter0: com.squareup.picasso.Request;
+
+        $r1 = $r0.<com.squareup.picasso.Request: android.net.Uri uri>;
+
+        $r2 = virtualinvoke $r1.<android.net.Uri: java.lang.String toString()>();
+
+        $i0 = <com.squareup.picasso.AssetRequestHandler: int ASSET_PREFIX_LENGTH>;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        return $r2;
+    }
+
+    public boolean canHandleRequest(com.squareup.picasso.Request)
+    {
+        com.squareup.picasso.Request $r1;
+        com.squareup.picasso.AssetRequestHandler r0;
+        android.net.Uri $r2;
+        java.util.List $r5;
+        java.lang.Object $r6;
+        java.lang.String $r3, $r4;
+        boolean $z0;
+
+        r0 := @this: com.squareup.picasso.AssetRequestHandler;
+
+        $r1 := @parameter0: com.squareup.picasso.Request;
+
+        $r2 = $r1.<com.squareup.picasso.Request: android.net.Uri uri>;
+
+        $r3 = "file";
+
+        $r4 = virtualinvoke $r2.<android.net.Uri: java.lang.String getScheme()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label1;
+
+        $r5 = virtualinvoke $r2.<android.net.Uri: java.util.List getPathSegments()>();
+
+        $z0 = interfaceinvoke $r5.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $r5 = virtualinvoke $r2.<android.net.Uri: java.util.List getPathSegments()>();
+
+        $r6 = interfaceinvoke $r5.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r3 = "android_asset";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public com.squareup.picasso.RequestHandler$Result load(com.squareup.picasso.Request, int) throws java.io.IOException
+    {
+        com.squareup.picasso.Request $r1;
+        java.lang.Throwable $r5;
+        android.content.Context $r4;
+        com.squareup.picasso.AssetRequestHandler r0;
+        okio.Source $r8;
+        com.squareup.picasso.RequestHandler$Result $r9;
+        android.content.res.AssetManager $r2;
+        int $i0;
+        java.lang.Object $r3;
+        java.lang.String $r6;
+        com.squareup.picasso.Picasso$LoadedFrom $r10;
+        java.io.InputStream $r7;
+
+        r0 := @this: com.squareup.picasso.AssetRequestHandler;
+
+        $r1 := @parameter0: com.squareup.picasso.Request;
+
+        $i0 := @parameter1: int;
+
+        $r2 = r0.<com.squareup.picasso.AssetRequestHandler: android.content.res.AssetManager assetManager>;
+
+        if $r2 != null goto label6;
+
+        $r3 = r0.<com.squareup.picasso.AssetRequestHandler: java.lang.Object lock>;
+
+        entermonitor $r3;
+
+     label1:
+        $r2 = r0.<com.squareup.picasso.AssetRequestHandler: android.content.res.AssetManager assetManager>;
+
+        if $r2 != null goto label2;
+
+        $r4 = r0.<com.squareup.picasso.AssetRequestHandler: android.content.Context context>;
+
+        $r2 = virtualinvoke $r4.<android.content.Context: android.content.res.AssetManager getAssets()>();
+
+        r0.<com.squareup.picasso.AssetRequestHandler: android.content.res.AssetManager assetManager> = $r2;
+
+     label2:
+        exitmonitor $r3;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r5 := @caughtexception;
+
+        exitmonitor $r3;
+
+     label5:
+        throw $r5;
+
+     label6:
+        $r2 = r0.<com.squareup.picasso.AssetRequestHandler: android.content.res.AssetManager assetManager>;
+
+        $r6 = staticinvoke <com.squareup.picasso.AssetRequestHandler: java.lang.String getFilePath(com.squareup.picasso.Request)>($r1);
+
+        $r7 = virtualinvoke $r2.<android.content.res.AssetManager: java.io.InputStream open(java.lang.String)>($r6);
+
+        $r8 = staticinvoke <okio.Okio: okio.Source source(java.io.InputStream)>($r7);
+
+        $r9 = new com.squareup.picasso.RequestHandler$Result;
+
+        $r10 = <com.squareup.picasso.Picasso$LoadedFrom: com.squareup.picasso.Picasso$LoadedFrom DISK>;
+
+        specialinvoke $r9.<com.squareup.picasso.RequestHandler$Result: void <init>(okio.Source,com.squareup.picasso.Picasso$LoadedFrom)>($r8, $r10);
+
+        return $r9;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+}

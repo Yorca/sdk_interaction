@@ -1,0 +1,1021 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.extractor.Extractor
+{
+    public static final com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorsFactory FACTORY;
+    public static final int FLAG_DISABLE_ID3_METADATA;
+    public static final int FLAG_ENABLE_CONSTANT_BITRATE_SEEKING;
+    private static final int MAX_SNIFF_BYTES;
+    private static final int MAX_SYNC_BYTES;
+    private static final int MPEG_AUDIO_HEADER_MASK;
+    private static final int SCRATCH_LENGTH;
+    private static final int SEEK_HEADER_INFO;
+    private static final int SEEK_HEADER_UNSET;
+    private static final int SEEK_HEADER_VBRI;
+    private static final int SEEK_HEADER_XING;
+    private long basisTimeUs;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput extractorOutput;
+    private final int flags;
+    private final long forcedFirstSampleTimestampUs;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder gaplessInfoHolder;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.Id3Peeker id3Peeker;
+    private com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata metadata;
+    private int sampleBytesRemaining;
+    private long samplesRead;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker seeker;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader;
+    private int synchronizedHeaderData;
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput trackOutput;
+
+    static void <clinit>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$1 $r0;
+        int $i0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SCRATCH_LENGTH> = 10;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int MPEG_AUDIO_HEADER_MASK> = -128000;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int MAX_SYNC_BYTES> = 131072;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int MAX_SNIFF_BYTES> = 16384;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int FLAG_ENABLE_CONSTANT_BITRATE_SEEKING> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int FLAG_DISABLE_ID3_METADATA> = 2;
+
+        $r0 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$1;
+
+        specialinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$1: void <init>()>();
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorsFactory FACTORY> = $r0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("Xing");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SEEK_HEADER_XING> = $i0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("Info");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SEEK_HEADER_INFO> = $i0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("VBRI");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SEEK_HEADER_VBRI> = $i0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: void <init>(int)>(0);
+
+        return;
+    }
+
+    public void <init>(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        $i0 := @parameter0: int;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: void <init>(int,long)>($i0, -9223372036854775807L);
+
+        return;
+    }
+
+    public void <init>(int, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.Id3Peeker $r4;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        $i0 := @parameter0: int;
+
+        $l1 := @parameter1: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int flags> = $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long forcedFirstSampleTimestampUs> = -9223372036854775807L;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void <init>(int)>(10);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch> = $r1;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader> = $r2;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder gaplessInfoHolder> = $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long basisTimeUs> = -9223372036854775807L;
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.Id3Peeker;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.Id3Peeker: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.Id3Peeker id3Peeker> = $r4;
+
+        return;
+    }
+
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker getConstantBitrateSeeker(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput) throws java.io.IOException, java.lang.InterruptedException
+    {
+        byte[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.ConstantBitrateSeeker $r5;
+        long $l1, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader $r2;
+        int $i0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, 4);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $i0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: boolean populateHeader(int,com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader)>($i0, $r2);
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.ConstantBitrateSeeker;
+
+        $l1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getLength()>();
+
+        $l2 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getPosition()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.ConstantBitrateSeeker: void <init>(long,long,com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader)>($l1, $l2, $r2);
+
+        return $r5;
+    }
+
+    private static int getSeekFrameHeader(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int)
+    {
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i1 := @parameter1: int;
+
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        $i0 = $i1 + 4;
+
+        if $i2 < $i0 goto label1;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i1);
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SEEK_HEADER_XING>;
+
+        if $i1 == $i0 goto label3;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SEEK_HEADER_INFO>;
+
+        if $i1 != $i0 goto label1;
+
+        return $i1;
+
+     label1:
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int limit()>();
+
+        if $i1 < 40 goto label2;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(36);
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SEEK_HEADER_VBRI>;
+
+        if $i1 != $i0 goto label2;
+
+        return $i0;
+
+     label2:
+        return 0;
+
+     label3:
+        return $i1;
+    }
+
+    private static boolean headersMatch(int, long)
+    {
+        byte $b1;
+        int $i2;
+        long $l0, $l3;
+
+        $i2 := @parameter0: int;
+
+        $l0 := @parameter1: long;
+
+        $i2 = $i2 & -128000;
+
+        $l3 = (long) $i2;
+
+        $l0 = $l0 & -128000L;
+
+        $b1 = $l3 cmp $l0;
+
+        if $b1 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker maybeReadSeekFrame(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput) throws java.io.IOException, java.lang.InterruptedException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker $r8;
+        byte[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.VbriSeeker $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.XingSeeker $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        long $l3, $l4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader $r3;
+        byte $b1;
+        int $i0, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder $r7;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int frameSize>;
+
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void <init>(int)>($i0);
+
+        $r4 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int frameSize>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, $i0);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int version>;
+
+        $i0 = $i0 & 1;
+
+        if $i0 == 0 goto label1;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int channels>;
+
+        if $i0 == 1 goto label2;
+
+        $b1 = 36;
+
+        goto label4;
+
+     label1:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int channels>;
+
+        if $i0 == 1 goto label3;
+
+     label2:
+        $b1 = 21;
+
+        goto label4;
+
+     label3:
+        $b1 = 13;
+
+     label4:
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int getSeekFrameHeader(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r1, $b1);
+
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SEEK_HEADER_XING>;
+
+        if $i0 == $i2 goto label6;
+
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SEEK_HEADER_INFO>;
+
+        if $i0 == $i2 goto label6;
+
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SEEK_HEADER_VBRI>;
+
+        if $i0 != $i2 goto label5;
+
+        $l3 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getLength()>();
+
+        $l4 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getPosition()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.VbriSeeker: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.VbriSeeker create(long,long,com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader,com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($l3, $l4, $r3, $r1);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int frameSize>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void skipFully(int)>($i0);
+
+        return $r5;
+
+     label5:
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        return null;
+
+     label6:
+        $l3 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getLength()>();
+
+        $l4 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getPosition()>();
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.XingSeeker: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.XingSeeker create(long,long,com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader,com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($l3, $l4, $r3, $r1);
+
+        if $r6 == null goto label7;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder gaplessInfoHolder>;
+
+        $z0 = virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder: boolean hasGaplessInfo()>();
+
+        if $z0 != 0 goto label7;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $i2 = $b1 + 141;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void advancePeekPosition(int)>($i2);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $r4 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, 3);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder gaplessInfoHolder>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $i2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedInt24()>();
+
+        virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder: boolean setFromXingHeaderValue(int)>($i2);
+
+     label7:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i2 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int frameSize>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void skipFully(int)>($i2);
+
+        if $r6 == null goto label8;
+
+        $z0 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker: boolean isSeekable()>();
+
+        if $z0 != 0 goto label8;
+
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int SEEK_HEADER_INFO>;
+
+        if $i0 != $i2 goto label8;
+
+        $r8 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker getConstantBitrateSeeker(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput)>($r2);
+
+        return $r8;
+
+     label8:
+        return $r6;
+    }
+
+    private int readSample(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput) throws java.io.IOException, java.lang.InterruptedException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker $r5;
+        byte[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+        long $l0, $l4, $l5;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader $r4;
+        byte $b3;
+        int $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r6;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int sampleBytesRemaining>;
+
+        if $i1 != 0 goto label4;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $z0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: boolean peekFully(byte[],int,int,boolean)>($r3, 0, 4, 1);
+
+        if $z0 != 0 goto label1;
+
+        return -1;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $i1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int synchronizedHeaderData>;
+
+        $l0 = (long) $i2;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: boolean headersMatch(int,long)>($i1, $l0);
+
+        if $z0 == 0 goto label3;
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int getFrameSize(int)>($i1);
+
+        if $i2 == -1 goto label3;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: boolean populateHeader(int,com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader)>($i1, $r4);
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long basisTimeUs>;
+
+        $b3 = $l0 cmp -9223372036854775807L;
+
+        if $b3 != 0 goto label2;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker seeker>;
+
+        $l0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getPosition()>();
+
+        $l0 = interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker: long getTimeUs(long)>($l0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long basisTimeUs> = $l0;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long forcedFirstSampleTimestampUs>;
+
+        $b3 = $l0 cmp -9223372036854775807L;
+
+        if $b3 == 0 goto label2;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker seeker>;
+
+        $l4 = interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker: long getTimeUs(long)>(0L);
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long basisTimeUs>;
+
+        $l5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long forcedFirstSampleTimestampUs>;
+
+        $l4 = $l5 - $l4;
+
+        $l0 = $l0 + $l4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long basisTimeUs> = $l0;
+
+     label2:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i1 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int frameSize>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int sampleBytesRemaining> = $i1;
+
+        goto label4;
+
+     label3:
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void skipFully(int)>(1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int synchronizedHeaderData> = 0;
+
+        return 0;
+
+     label4:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput trackOutput>;
+
+        $i1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int sampleBytesRemaining>;
+
+        $i1 = interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: int sampleData(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput,int,boolean)>($r1, $i1, 1);
+
+        if $i1 != -1 goto label5;
+
+        return -1;
+
+     label5:
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int sampleBytesRemaining>;
+
+        $i1 = $i2 - $i1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int sampleBytesRemaining> = $i1;
+
+        if $i1 <= 0 goto label6;
+
+        return 0;
+
+     label6:
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long basisTimeUs>;
+
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long samplesRead>;
+
+        $l4 = $l4 * 1000000L;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i1 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int sampleRate>;
+
+        $l5 = (long) $i1;
+
+        $l4 = $l4 / $l5;
+
+        $l0 = $l0 + $l4;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput trackOutput>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i1 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int frameSize>;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void sampleMetadata(long,int,int,int,com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData)>($l0, 1, $i1, 0, null);
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long samplesRead>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i1 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int samplesPerFrame>;
+
+        $l4 = (long) $i1;
+
+        $l0 = $l0 + $l4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long samplesRead> = $l0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int sampleBytesRemaining> = 0;
+
+        return 0;
+    }
+
+    private boolean synchronize(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput, boolean) throws java.io.IOException, java.lang.InterruptedException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ParserException $r9;
+        byte[] $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader $r8;
+        byte $b2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.Id3Peeker $r3;
+        int $i0, $i3, $i4, $i5, $i6, $i7, $i8;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder $r5;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $z0 := @parameter1: boolean;
+
+        if $z0 == 0 goto label01;
+
+        $i0 = 16384;
+
+        goto label02;
+
+     label01:
+        $i0 = 131072;
+
+     label02:
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $l1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getPosition()>();
+
+        $b2 = $l1 cmp 0L;
+
+        if $b2 != 0 goto label09;
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int flags>;
+
+        $i3 = $i3 & 2;
+
+        if $i3 == 0 goto label03;
+
+        $z1 = 1;
+
+        goto label04;
+
+     label03:
+        $z1 = 0;
+
+     label04:
+        if $z1 == 0 goto label05;
+
+        $r2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder: com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate GAPLESS_INFO_ID3_FRAME_PREDICATE>;
+
+        goto label06;
+
+     label05:
+        $r2 = null;
+
+     label06:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.Id3Peeker id3Peeker>;
+
+        $r4 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.Id3Peeker: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata peekId3Data(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput,com.mbridge.msdk.playercommon.exoplayer2.metadata.id3.Id3Decoder$FramePredicate)>($r1, $r2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata metadata> = $r4;
+
+        if $r4 == null goto label07;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder gaplessInfoHolder>;
+
+        virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder: boolean setFromMetadata(com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata)>($r4);
+
+     label07:
+        $l1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: long getPeekPosition()>();
+
+        $i3 = (int) $l1;
+
+        if $z0 != 0 goto label08;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void skipFully(int)>($i3);
+
+     label08:
+        $i4 = 0;
+
+        goto label10;
+
+     label09:
+        $i4 = 0;
+
+        $i3 = 0;
+
+     label10:
+        $i5 = 0;
+
+        $i6 = 0;
+
+     label11:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $r7 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        if $i4 <= 0 goto label12;
+
+        $z1 = 1;
+
+        goto label13;
+
+     label12:
+        $z1 = 0;
+
+     label13:
+        $z1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: boolean peekFully(byte[],int,int,boolean)>($r7, 0, 4, $z1);
+
+        if $z1 == 0 goto label22;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $i7 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        if $i5 == 0 goto label14;
+
+        $l1 = (long) $i5;
+
+        $z1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: boolean headersMatch(int,long)>($i7, $l1);
+
+        if $z1 == 0 goto label15;
+
+     label14:
+        $i8 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int getFrameSize(int)>($i7);
+
+        if $i8 != -1 goto label20;
+
+     label15:
+        $i5 = $i6 + 1;
+
+        if $i6 != $i0 goto label17;
+
+        if $z0 == 0 goto label16;
+
+        return 0;
+
+     label16:
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.ParserException;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.ParserException: void <init>(java.lang.String)>("Searched too many bytes.");
+
+        throw $r9;
+
+     label17:
+        if $z0 == 0 goto label18;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $i6 = $i3 + $i5;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void advancePeekPosition(int)>($i6);
+
+        goto label19;
+
+     label18:
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void skipFully(int)>(1);
+
+     label19:
+        $i6 = $i5;
+
+        $i4 = 0;
+
+        $i5 = 0;
+
+        goto label11;
+
+     label20:
+        $i4 = $i4 + 1;
+
+        if $i4 != 1 goto label21;
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: boolean populateHeader(int,com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader)>($i7, $r8);
+
+        $i5 = $i7;
+
+        goto label25;
+
+     label21:
+        if $i4 != 4 goto label25;
+
+     label22:
+        if $z0 == 0 goto label23;
+
+        $i0 = $i3 + $i6;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void skipFully(int)>($i0);
+
+        goto label24;
+
+     label23:
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void resetPeekPosition()>();
+
+     label24:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int synchronizedHeaderData> = $i5;
+
+        return 1;
+
+     label25:
+        $i8 = $i8 + -4;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: void advancePeekPosition(int)>($i8);
+
+        goto label11;
+    }
+
+    public final void init(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput extractorOutput> = $r2;
+
+        $r1 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput track(int,int)>(0, 1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput trackOutput> = $r1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput extractorOutput>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput: void endTracks()>();
+
+        return;
+    }
+
+    public final int read(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput, com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder) throws java.io.IOException, java.lang.InterruptedException
+    {
+        java.lang.Throwable $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader $r7;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.String $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput $r6;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder $r9;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.PositionHolder;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int synchronizedHeaderData>;
+
+        if $i0 != 0 goto label04;
+
+     label01:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: boolean synchronize(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput,boolean)>($r1, 0);
+
+     label02:
+        goto label04;
+
+     label03:
+        return -1;
+
+     label04:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker seeker>;
+
+        if $r4 != null goto label09;
+
+        $r4 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker maybeReadSeekFrame(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput)>($r1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker seeker> = $r4;
+
+        if $r4 == null goto label05;
+
+        $z0 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker: boolean isSeekable()>();
+
+        if $z0 != 0 goto label06;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int flags>;
+
+        $i0 = $i0 & 1;
+
+        if $i0 == 0 goto label06;
+
+     label05:
+        $r4 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker getConstantBitrateSeeker(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput)>($r1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker seeker> = $r4;
+
+     label06:
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput extractorOutput>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor$Seeker seeker>;
+
+        interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorOutput: void seekMap(com.mbridge.msdk.playercommon.exoplayer2.extractor.SeekMap)>($r4);
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput trackOutput>;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $r8 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: java.lang.String mimeType>;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i0 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int channels>;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader synchronizedHeader>;
+
+        $i1 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.MpegAudioHeader: int sampleRate>;
+
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder gaplessInfoHolder>;
+
+        $i2 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder: int encoderDelay>;
+
+        $r9 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder gaplessInfoHolder>;
+
+        $i3 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder: int encoderPadding>;
+
+        $i4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int flags>;
+
+        $i4 = $i4 & 2;
+
+        if $i4 == 0 goto label07;
+
+        $r10 = null;
+
+        goto label08;
+
+     label07:
+        $r10 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata metadata>;
+
+     label08:
+        $r11 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format createAudioSampleFormat(java.lang.String,java.lang.String,java.lang.String,int,int,int,int,int,int,int,java.util.List,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,int,java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata)>(null, $r8, null, -1, 4096, $i0, $i1, -1, $i2, $i3, null, null, 0, null, $r10);
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput: void format(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r11);
+
+     label09:
+        $i0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int readSample(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput)>($r1);
+
+        return $i0;
+
+     label10:
+        $r3 := @caughtexception;
+
+        goto label03;
+
+        catch java.io.EOFException from label01 to label02 with label10;
+    }
+
+    public final void release()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        return;
+    }
+
+    public final void seek(long, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+        long $l0, $l1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        $l1 := @parameter0: long;
+
+        $l0 := @parameter1: long;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int synchronizedHeaderData> = 0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long basisTimeUs> = -9223372036854775807L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: long samplesRead> = 0L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: int sampleBytesRemaining> = 0;
+
+        return;
+    }
+
+    public final boolean sniff(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput) throws java.io.IOException, java.lang.InterruptedException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor r0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp3.Mp3Extractor: boolean synchronize(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput,boolean)>($r1, 1);
+
+        return $z0;
+    }
+}

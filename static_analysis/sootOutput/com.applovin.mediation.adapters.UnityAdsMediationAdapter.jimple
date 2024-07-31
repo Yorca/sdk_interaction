@@ -1,0 +1,965 @@
+public class com.applovin.mediation.adapters.UnityAdsMediationAdapter extends com.applovin.mediation.adapters.MediationAdapterBase implements com.applovin.mediation.adapter.MaxSignalProvider, com.applovin.mediation.adapter.MaxInterstitialAdapter, com.applovin.mediation.adapter.MaxRewardedAdapter, com.applovin.mediation.adapter.MaxAdViewAdapter
+{
+    private static com.applovin.mediation.adapter.MaxAdapter$InitializationStatus initializationStatus;
+    private static final java.util.concurrent.atomic.AtomicBoolean initialized;
+    private com.unity3d.services.banners.BannerView bannerView;
+    private java.lang.String biddingAdId;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.atomic.AtomicBoolean $r0;
+
+        $r0 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r0.<java.util.concurrent.atomic.AtomicBoolean: void <init>()>();
+
+        <com.applovin.mediation.adapters.UnityAdsMediationAdapter: java.util.concurrent.atomic.AtomicBoolean initialized> = $r0;
+
+        return;
+    }
+
+    public void <init>(com.applovin.sdk.AppLovinSdk)
+    {
+        com.applovin.sdk.AppLovinSdk $r1;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r1 := @parameter0: com.applovin.sdk.AppLovinSdk;
+
+        specialinvoke r0.<com.applovin.mediation.adapters.MediationAdapterBase: void <init>(com.applovin.sdk.AppLovinSdk)>($r1);
+
+        return;
+    }
+
+    static com.applovin.mediation.adapter.MaxAdapter$InitializationStatus access$002(com.applovin.mediation.adapter.MaxAdapter$InitializationStatus)
+    {
+        com.applovin.mediation.adapter.MaxAdapter$InitializationStatus $r0;
+
+        $r0 := @parameter0: com.applovin.mediation.adapter.MaxAdapter$InitializationStatus;
+
+        <com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.applovin.mediation.adapter.MaxAdapter$InitializationStatus initializationStatus> = $r0;
+
+        return $r0;
+    }
+
+    static com.applovin.mediation.adapter.MaxAdapterError access$100(com.unity3d.ads.UnityAds$UnityAdsLoadError, java.lang.String)
+    {
+        java.lang.String $r0;
+        com.unity3d.ads.UnityAds$UnityAdsLoadError $r2;
+        com.applovin.mediation.adapter.MaxAdapterError $r1;
+
+        $r2 := @parameter0: com.unity3d.ads.UnityAds$UnityAdsLoadError;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r1 = staticinvoke <com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.applovin.mediation.adapter.MaxAdapterError toMaxError(com.unity3d.ads.UnityAds$UnityAdsLoadError,java.lang.String)>($r2, $r0);
+
+        return $r1;
+    }
+
+    static com.applovin.mediation.adapter.MaxAdapterError access$200(com.unity3d.services.banners.BannerErrorInfo)
+    {
+        com.unity3d.services.banners.BannerErrorInfo $r1;
+        com.applovin.mediation.adapter.MaxAdapterError $r0;
+
+        $r1 := @parameter0: com.unity3d.services.banners.BannerErrorInfo;
+
+        $r0 = staticinvoke <com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.applovin.mediation.adapter.MaxAdapterError toMaxError(com.unity3d.services.banners.BannerErrorInfo)>($r1);
+
+        return $r0;
+    }
+
+    private com.unity3d.ads.UnityAdsLoadOptions createAdLoadOptions(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters)
+    {
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r2;
+        com.unity3d.ads.UnityAdsLoadOptions $r1;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r2 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r1 = new com.unity3d.ads.UnityAdsLoadOptions;
+
+        specialinvoke $r1.<com.unity3d.ads.UnityAdsLoadOptions: void <init>()>();
+
+        $r3 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getBidResponse()>();
+
+        $z0 = staticinvoke <com.applovin.sdk.AppLovinSdkUtils: boolean isValidString(java.lang.String)>($r3);
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke $r1.<com.unity3d.ads.UnityAdsLoadOptions: void setAdMarkup(java.lang.String)>($r3);
+
+     label1:
+        $r3 = r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: java.lang.String biddingAdId>;
+
+        $z0 = staticinvoke <com.applovin.sdk.AppLovinSdkUtils: boolean isValidString(java.lang.String)>($r3);
+
+        if $z0 == 0 goto label2;
+
+        $r3 = r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: java.lang.String biddingAdId>;
+
+        virtualinvoke $r1.<com.unity3d.ads.UnityAdsLoadOptions: void setObjectId(java.lang.String)>($r3);
+
+     label2:
+        return $r1;
+    }
+
+    private com.unity3d.ads.UnityAdsShowOptions createAdShowOptions()
+    {
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        java.lang.String $r2;
+        com.unity3d.ads.UnityAdsShowOptions $r1;
+        boolean $z0;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r1 = new com.unity3d.ads.UnityAdsShowOptions;
+
+        specialinvoke $r1.<com.unity3d.ads.UnityAdsShowOptions: void <init>()>();
+
+        $r2 = r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: java.lang.String biddingAdId>;
+
+        $z0 = staticinvoke <com.applovin.sdk.AppLovinSdkUtils: boolean isValidString(java.lang.String)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: java.lang.String biddingAdId>;
+
+        virtualinvoke $r1.<com.unity3d.ads.UnityAdsShowOptions: void setObjectId(java.lang.String)>($r2);
+
+     label1:
+        return $r1;
+    }
+
+    private android.content.Context getContext(android.app.Activity)
+    {
+        android.content.Context $r2;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        android.app.Activity $r1;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r1 := @parameter0: android.app.Activity;
+
+        if $r1 == null goto label1;
+
+        $r2 = virtualinvoke $r1.<android.app.Activity: android.content.Context getApplicationContext()>();
+
+        return $r2;
+
+     label1:
+        $r2 = virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: android.content.Context getApplicationContext()>();
+
+        return $r2;
+    }
+
+    private static com.applovin.mediation.adapter.MaxAdapterError toMaxError(com.unity3d.ads.UnityAds$UnityAdsLoadError, java.lang.String)
+    {
+        com.applovin.mediation.adapter.MaxAdapterError $r2, $r4;
+        int[] $r3;
+        com.unity3d.ads.UnityAds$UnityAdsLoadError $r1;
+        int $i0, $i1;
+        java.lang.String $r0, $r5;
+
+        $r1 := @parameter0: com.unity3d.ads.UnityAds$UnityAdsLoadError;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError UNSPECIFIED>;
+
+        $r3 = <com.applovin.mediation.adapters.UnityAdsMediationAdapter$8: int[] $SwitchMap$com$unity3d$ads$UnityAds$UnityAdsLoadError>;
+
+        $i0 = virtualinvoke $r1.<com.unity3d.ads.UnityAds$UnityAdsLoadError: int ordinal()>();
+
+        $i0 = $r3[$i0];
+
+        if $i0 == 1 goto label4;
+
+        if $i0 == 2 goto label3;
+
+        if $i0 == 3 goto label2;
+
+        if $i0 == 4 goto label1;
+
+        if $i0 != 5 goto label5;
+
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError TIMEOUT>;
+
+        goto label5;
+
+     label1:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError NO_FILL>;
+
+        goto label5;
+
+     label2:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError INVALID_CONFIGURATION>;
+
+        goto label5;
+
+     label3:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError INTERNAL_ERROR>;
+
+        goto label5;
+
+     label4:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError NOT_INITIALIZED>;
+
+     label5:
+        $r4 = new com.applovin.mediation.adapter.MaxAdapterError;
+
+        $i0 = virtualinvoke $r2.<com.applovin.mediation.adapter.MaxAdapterError: int getErrorCode()>();
+
+        $r5 = virtualinvoke $r2.<com.applovin.mediation.adapter.MaxAdapterError: java.lang.String getErrorMessage()>();
+
+        $i1 = virtualinvoke $r1.<com.unity3d.ads.UnityAds$UnityAdsLoadError: int ordinal()>();
+
+        specialinvoke $r4.<com.applovin.mediation.adapter.MaxAdapterError: void <init>(int,java.lang.String,int,java.lang.String)>($i0, $r5, $i1, $r0);
+
+        return $r4;
+    }
+
+    private static com.applovin.mediation.adapter.MaxAdapterError toMaxError(com.unity3d.ads.UnityAds$UnityAdsShowError, java.lang.String)
+    {
+        com.applovin.mediation.adapter.MaxAdapterError $r2, $r4;
+        int[] $r3;
+        int $i0, $i1;
+        java.lang.String $r0, $r5;
+        com.unity3d.ads.UnityAds$UnityAdsShowError $r1;
+
+        $r1 := @parameter0: com.unity3d.ads.UnityAds$UnityAdsShowError;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError UNSPECIFIED>;
+
+        $r3 = <com.applovin.mediation.adapters.UnityAdsMediationAdapter$8: int[] $SwitchMap$com$unity3d$ads$UnityAds$UnityAdsShowError>;
+
+        $i0 = virtualinvoke $r1.<com.unity3d.ads.UnityAds$UnityAdsShowError: int ordinal()>();
+
+        $i0 = $r3[$i0];
+
+        lookupswitch($i0)
+        {
+            case 1: goto label8;
+            case 2: goto label7;
+            case 3: goto label6;
+            case 4: goto label5;
+            case 5: goto label4;
+            case 6: goto label3;
+            case 7: goto label2;
+            default: goto label1;
+        };
+
+     label1:
+        goto label9;
+
+     label2:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError INTERNAL_ERROR>;
+
+        goto label9;
+
+     label3:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError INVALID_LOAD_STATE>;
+
+        goto label9;
+
+     label4:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError NO_CONNECTION>;
+
+        goto label9;
+
+     label5:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError INVALID_CONFIGURATION>;
+
+        goto label9;
+
+     label6:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError WEBVIEW_ERROR>;
+
+        goto label9;
+
+     label7:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError AD_NOT_READY>;
+
+        goto label9;
+
+     label8:
+        $r2 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError NOT_INITIALIZED>;
+
+     label9:
+        $r4 = new com.applovin.mediation.adapter.MaxAdapterError;
+
+        $i0 = virtualinvoke $r2.<com.applovin.mediation.adapter.MaxAdapterError: int getErrorCode()>();
+
+        $r5 = virtualinvoke $r2.<com.applovin.mediation.adapter.MaxAdapterError: java.lang.String getErrorMessage()>();
+
+        $i1 = virtualinvoke $r1.<com.unity3d.ads.UnityAds$UnityAdsShowError: int ordinal()>();
+
+        specialinvoke $r4.<com.applovin.mediation.adapter.MaxAdapterError: void <init>(int,java.lang.String,int,java.lang.String)>($i0, $r5, $i1, $r0);
+
+        return $r4;
+    }
+
+    private static com.applovin.mediation.adapter.MaxAdapterError toMaxError(com.unity3d.services.banners.BannerErrorInfo)
+    {
+        com.applovin.mediation.adapter.MaxAdapterError $r3, $r4;
+        com.unity3d.services.banners.BannerErrorCode $r1, $r2;
+        int $i0, $i1;
+        java.lang.String $r5, $r6;
+        com.unity3d.services.banners.BannerErrorInfo $r0;
+
+        $r0 := @parameter0: com.unity3d.services.banners.BannerErrorInfo;
+
+        $r1 = $r0.<com.unity3d.services.banners.BannerErrorInfo: com.unity3d.services.banners.BannerErrorCode errorCode>;
+
+        $r2 = <com.unity3d.services.banners.BannerErrorCode: com.unity3d.services.banners.BannerErrorCode NO_FILL>;
+
+        if $r1 != $r2 goto label1;
+
+        $r3 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError NO_FILL>;
+
+        goto label4;
+
+     label1:
+        $r1 = $r0.<com.unity3d.services.banners.BannerErrorInfo: com.unity3d.services.banners.BannerErrorCode errorCode>;
+
+        $r2 = <com.unity3d.services.banners.BannerErrorCode: com.unity3d.services.banners.BannerErrorCode NATIVE_ERROR>;
+
+        if $r1 != $r2 goto label2;
+
+        $r3 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError INTERNAL_ERROR>;
+
+        goto label4;
+
+     label2:
+        $r1 = $r0.<com.unity3d.services.banners.BannerErrorInfo: com.unity3d.services.banners.BannerErrorCode errorCode>;
+
+        $r2 = <com.unity3d.services.banners.BannerErrorCode: com.unity3d.services.banners.BannerErrorCode WEBVIEW_ERROR>;
+
+        if $r1 != $r2 goto label3;
+
+        $r3 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError WEBVIEW_ERROR>;
+
+        goto label4;
+
+     label3:
+        $r3 = <com.applovin.mediation.adapter.MaxAdapterError: com.applovin.mediation.adapter.MaxAdapterError UNSPECIFIED>;
+
+     label4:
+        $r4 = new com.applovin.mediation.adapter.MaxAdapterError;
+
+        $i0 = virtualinvoke $r3.<com.applovin.mediation.adapter.MaxAdapterError: int getErrorCode()>();
+
+        $r5 = virtualinvoke $r3.<com.applovin.mediation.adapter.MaxAdapterError: java.lang.String getErrorMessage()>();
+
+        $r1 = $r0.<com.unity3d.services.banners.BannerErrorInfo: com.unity3d.services.banners.BannerErrorCode errorCode>;
+
+        $i1 = virtualinvoke $r1.<com.unity3d.services.banners.BannerErrorCode: int ordinal()>();
+
+        $r6 = $r0.<com.unity3d.services.banners.BannerErrorInfo: java.lang.String errorMessage>;
+
+        specialinvoke $r4.<com.applovin.mediation.adapter.MaxAdapterError: void <init>(int,java.lang.String,int,java.lang.String)>($i0, $r5, $i1, $r6);
+
+        return $r4;
+    }
+
+    private com.unity3d.services.banners.UnityBannerSize toUnityBannerSize(com.applovin.mediation.MaxAdFormat)
+    {
+        com.applovin.mediation.MaxAdFormat $r2, $r3;
+        com.unity3d.services.banners.UnityBannerSize $r4;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r1;
+        java.lang.IllegalArgumentException $r5;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r2 := @parameter0: com.applovin.mediation.MaxAdFormat;
+
+        $r3 = <com.applovin.mediation.MaxAdFormat: com.applovin.mediation.MaxAdFormat BANNER>;
+
+        if $r2 != $r3 goto label1;
+
+        $r4 = new com.unity3d.services.banners.UnityBannerSize;
+
+        specialinvoke $r4.<com.unity3d.services.banners.UnityBannerSize: void <init>(int,int)>(320, 50);
+
+        return $r4;
+
+     label1:
+        $r3 = <com.applovin.mediation.MaxAdFormat: com.applovin.mediation.MaxAdFormat LEADER>;
+
+        if $r2 != $r3 goto label2;
+
+        $r4 = new com.unity3d.services.banners.UnityBannerSize;
+
+        specialinvoke $r4.<com.unity3d.services.banners.UnityBannerSize: void <init>(int,int)>(728, 90);
+
+        return $r4;
+
+     label2:
+        $r5 = new java.lang.IllegalArgumentException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unsupported ad format: ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r1 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r1);
+
+        throw $r5;
+    }
+
+    private void updatePrivacyConsent(com.applovin.mediation.adapter.parameters.MaxAdapterParameters, android.content.Context)
+    {
+        android.content.Context $r3;
+        com.unity3d.ads.metadata.MetaData $r1;
+        java.lang.Boolean $r4;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        com.applovin.mediation.adapter.parameters.MaxAdapterParameters $r2;
+        boolean $z0;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r2 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterParameters;
+
+        $r3 := @parameter1: android.content.Context;
+
+        $r1 = new com.unity3d.ads.metadata.MetaData;
+
+        specialinvoke $r1.<com.unity3d.ads.metadata.MetaData: void <init>(android.content.Context)>($r3);
+
+        $r4 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterParameters: java.lang.Boolean hasUserConsent()>();
+
+        if $r4 == null goto label1;
+
+        virtualinvoke $r1.<com.unity3d.ads.metadata.MetaData: boolean set(java.lang.String,java.lang.Object)>("gdpr.consent", $r4);
+
+        virtualinvoke $r1.<com.unity3d.ads.metadata.MetaData: void commit()>();
+
+     label1:
+        $r4 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterParameters: java.lang.Boolean isDoNotSell()>();
+
+        if $r4 == null goto label2;
+
+        $z0 = virtualinvoke $r4.<java.lang.Boolean: boolean booleanValue()>();
+
+        $z0 = $z0 ^ 1;
+
+        $r4 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        virtualinvoke $r1.<com.unity3d.ads.metadata.MetaData: boolean set(java.lang.String,java.lang.Object)>("privacy.consent", $r4);
+
+        virtualinvoke $r1.<com.unity3d.ads.metadata.MetaData: void commit()>();
+
+     label2:
+        virtualinvoke $r1.<com.unity3d.ads.metadata.MetaData: boolean set(java.lang.String,java.lang.Object)>("privacy.mode", "mixed");
+
+        virtualinvoke $r1.<com.unity3d.ads.metadata.MetaData: void commit()>();
+
+        $r4 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterParameters: java.lang.Boolean isAgeRestrictedUser()>();
+
+        if $r4 == null goto label3;
+
+        virtualinvoke $r1.<com.unity3d.ads.metadata.MetaData: boolean set(java.lang.String,java.lang.Object)>("user.nonbehavioral", $r4);
+
+        virtualinvoke $r1.<com.unity3d.ads.metadata.MetaData: void commit()>();
+
+     label3:
+        return;
+    }
+
+    public void collectSignal(com.applovin.mediation.adapter.parameters.MaxAdapterSignalCollectionParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxSignalCollectionListener)
+    {
+        android.content.Context $r2;
+        com.applovin.mediation.adapter.listeners.MaxSignalCollectionListener $r1;
+        com.applovin.mediation.adapter.parameters.MaxAdapterSignalCollectionParameters $r3;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter$2 $r5;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        android.app.Activity $r4;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r3 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterSignalCollectionParameters;
+
+        $r4 := @parameter1: android.app.Activity;
+
+        $r1 := @parameter2: com.applovin.mediation.adapter.listeners.MaxSignalCollectionListener;
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void log(java.lang.String)>("Collecting signal...");
+
+        $r2 = virtualinvoke $r4.<android.app.Activity: android.content.Context getApplicationContext()>();
+
+        specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void updatePrivacyConsent(com.applovin.mediation.adapter.parameters.MaxAdapterParameters,android.content.Context)>($r3, $r2);
+
+        $r5 = new com.applovin.mediation.adapters.UnityAdsMediationAdapter$2;
+
+        specialinvoke $r5.<com.applovin.mediation.adapters.UnityAdsMediationAdapter$2: void <init>(com.applovin.mediation.adapters.UnityAdsMediationAdapter,com.applovin.mediation.adapter.listeners.MaxSignalCollectionListener)>(r0, $r1);
+
+        staticinvoke <com.unity3d.ads.UnityAds: void getToken(com.unity3d.ads.IUnityAdsTokenListener)>($r5);
+
+        return;
+    }
+
+    public java.lang.String getAdapterVersion()
+    {
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        return "4.7.1.0";
+    }
+
+    public java.lang.String getSdkVersion()
+    {
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        java.lang.String $r1;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r1 = staticinvoke <com.unity3d.ads.UnityAds: java.lang.String getVersion()>();
+
+        return $r1;
+    }
+
+    public void initialize(com.applovin.mediation.adapter.parameters.MaxAdapterInitializationParameters, android.app.Activity, com.applovin.mediation.adapter.MaxAdapter$OnCompletionListener)
+    {
+        android.content.Context $r4;
+        android.os.Bundle $r6;
+        com.applovin.mediation.adapter.parameters.MaxAdapterInitializationParameters $r2;
+        java.util.concurrent.atomic.AtomicBoolean $r5;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        com.unity3d.ads.metadata.MediationMetaData $r11;
+        com.applovin.mediation.adapter.MaxAdapter$InitializationStatus $r10;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter$1 $r12;
+        com.applovin.mediation.adapter.MaxAdapter$OnCompletionListener $r1;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r7, $r9;
+        android.app.Activity $r3;
+        boolean $z0;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r2 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterInitializationParameters;
+
+        $r3 := @parameter1: android.app.Activity;
+
+        $r1 := @parameter2: com.applovin.mediation.adapter.MaxAdapter$OnCompletionListener;
+
+        $r4 = specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: android.content.Context getContext(android.app.Activity)>($r3);
+
+        specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void updatePrivacyConsent(com.applovin.mediation.adapter.parameters.MaxAdapterParameters,android.content.Context)>($r2, $r4);
+
+        $r5 = <com.applovin.mediation.adapters.UnityAdsMediationAdapter: java.util.concurrent.atomic.AtomicBoolean initialized>;
+
+        $z0 = virtualinvoke $r5.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(0, 1);
+
+        if $z0 == 0 goto label1;
+
+        $r6 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterInitializationParameters: android.os.Bundle getServerParameters()>();
+
+        $r7 = virtualinvoke $r6.<android.os.Bundle: java.lang.String getString(java.lang.String,java.lang.String)>("game_id", null);
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("Initializing UnityAds SDK with game id: ");
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void log(java.lang.String)>($r9);
+
+        $r10 = <com.applovin.mediation.adapter.MaxAdapter$InitializationStatus: com.applovin.mediation.adapter.MaxAdapter$InitializationStatus INITIALIZING>;
+
+        <com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.applovin.mediation.adapter.MaxAdapter$InitializationStatus initializationStatus> = $r10;
+
+        $r11 = new com.unity3d.ads.metadata.MediationMetaData;
+
+        specialinvoke $r11.<com.unity3d.ads.metadata.MediationMetaData: void <init>(android.content.Context)>($r4);
+
+        virtualinvoke $r11.<com.unity3d.ads.metadata.MediationMetaData: void setName(java.lang.String)>("MAX");
+
+        $r9 = <com.applovin.sdk.AppLovinSdk: java.lang.String VERSION>;
+
+        virtualinvoke $r11.<com.unity3d.ads.metadata.MediationMetaData: void setVersion(java.lang.String)>($r9);
+
+        virtualinvoke $r11.<com.unity3d.ads.metadata.MediationMetaData: boolean set(java.lang.String,java.lang.Object)>("adapter_version", "4.7.1.0");
+
+        virtualinvoke $r11.<com.unity3d.ads.metadata.MediationMetaData: void commit()>();
+
+        $z0 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterInitializationParameters: boolean isTesting()>();
+
+        staticinvoke <com.unity3d.ads.UnityAds: void setDebugMode(boolean)>($z0);
+
+        $z0 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterInitializationParameters: boolean isTesting()>();
+
+        $r12 = new com.applovin.mediation.adapters.UnityAdsMediationAdapter$1;
+
+        specialinvoke $r12.<com.applovin.mediation.adapters.UnityAdsMediationAdapter$1: void <init>(com.applovin.mediation.adapters.UnityAdsMediationAdapter,com.applovin.mediation.adapter.MaxAdapter$OnCompletionListener)>(r0, $r1);
+
+        staticinvoke <com.unity3d.ads.UnityAds: void initialize(android.content.Context,java.lang.String,boolean,com.unity3d.ads.IUnityAdsInitializationListener)>($r4, $r7, $z0, $r12);
+
+        return;
+
+     label1:
+        virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void log(java.lang.String)>("UnityAds SDK already initialized");
+
+        $r10 = <com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.applovin.mediation.adapter.MaxAdapter$InitializationStatus initializationStatus>;
+
+        interfaceinvoke $r1.<com.applovin.mediation.adapter.MaxAdapter$OnCompletionListener: void onCompletion(com.applovin.mediation.adapter.MaxAdapter$InitializationStatus,java.lang.String)>($r10, null);
+
+        return;
+    }
+
+    public void loadAdViewAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, com.applovin.mediation.MaxAdFormat, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener)
+    {
+        android.content.Context $r8;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r2;
+        com.applovin.mediation.MaxAdFormat $r3;
+        com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener $r1;
+        com.unity3d.services.banners.UnityBannerSize $r10;
+        com.applovin.mediation.adapter.MaxAdapterError $r12;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        com.unity3d.services.banners.BannerView $r9, $r13;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter$7 $r14;
+        java.lang.StringBuilder $r6, $r11;
+        java.lang.String $r5, $r7;
+        android.app.Activity $r4;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r2 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r3 := @parameter1: com.applovin.mediation.MaxAdFormat;
+
+        $r4 := @parameter2: android.app.Activity;
+
+        $r1 := @parameter3: com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener;
+
+        $r5 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        $r11 = new java.lang.StringBuilder;
+
+        $r6 = $r11;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("Loading banner ad for placement \"");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\"...");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void log(java.lang.String)>($r7);
+
+        if $r4 != null goto label1;
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void log(java.lang.String)>("Banner ad load failed: Activity is null");
+
+        $r12 = new com.applovin.mediation.adapter.MaxAdapterError;
+
+        specialinvoke $r12.<com.applovin.mediation.adapter.MaxAdapterError: void <init>(int,java.lang.String)>(-5601, "Missing Activity");
+
+        interfaceinvoke $r1.<com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener: void onAdViewAdLoadFailed(com.applovin.mediation.adapter.MaxAdapterError)>($r12);
+
+        return;
+
+     label1:
+        $r8 = virtualinvoke $r4.<android.app.Activity: android.content.Context getApplicationContext()>();
+
+        specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void updatePrivacyConsent(com.applovin.mediation.adapter.parameters.MaxAdapterParameters,android.content.Context)>($r2, $r8);
+
+        $r13 = new com.unity3d.services.banners.BannerView;
+
+        $r9 = $r13;
+
+        $r10 = specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.unity3d.services.banners.UnityBannerSize toUnityBannerSize(com.applovin.mediation.MaxAdFormat)>($r3);
+
+        specialinvoke $r13.<com.unity3d.services.banners.BannerView: void <init>(android.app.Activity,java.lang.String,com.unity3d.services.banners.UnityBannerSize)>($r4, $r5, $r10);
+
+        r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.unity3d.services.banners.BannerView bannerView> = $r9;
+
+        $r14 = new com.applovin.mediation.adapters.UnityAdsMediationAdapter$7;
+
+        specialinvoke $r14.<com.applovin.mediation.adapters.UnityAdsMediationAdapter$7: void <init>(com.applovin.mediation.adapters.UnityAdsMediationAdapter,com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener)>(r0, $r1);
+
+        virtualinvoke $r9.<com.unity3d.services.banners.BannerView: void setListener(com.unity3d.services.banners.BannerView$IListener)>($r14);
+
+        $r9 = r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.unity3d.services.banners.BannerView bannerView>;
+
+        virtualinvoke $r9.<com.unity3d.services.banners.BannerView: void load()>();
+
+        return;
+    }
+
+    public void loadInterstitialAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener)
+    {
+        com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener $r1;
+        android.content.Context $r7;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r2;
+        com.unity3d.ads.UnityAdsLoadOptions $r9;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        java.util.UUID $r8;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter$3 $r10;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r4, $r6;
+        android.app.Activity $r3;
+        boolean $z0;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r2 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r3 := @parameter1: android.app.Activity;
+
+        $r1 := @parameter2: com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener;
+
+        $r4 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Loading ");
+
+        $r6 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getBidResponse()>();
+
+        $z0 = staticinvoke <com.applovin.sdk.AppLovinSdkUtils: boolean isValidString(java.lang.String)>($r6);
+
+        if $z0 == 0 goto label1;
+
+        $r6 = "bidding ";
+
+        goto label2;
+
+     label1:
+        $r6 = "";
+
+     label2:
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("interstitial ad for placement \"");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\"...");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void log(java.lang.String)>($r6);
+
+        $r7 = virtualinvoke $r3.<android.app.Activity: android.content.Context getApplicationContext()>();
+
+        specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void updatePrivacyConsent(com.applovin.mediation.adapter.parameters.MaxAdapterParameters,android.content.Context)>($r2, $r7);
+
+        $r8 = staticinvoke <java.util.UUID: java.util.UUID randomUUID()>();
+
+        $r6 = virtualinvoke $r8.<java.util.UUID: java.lang.String toString()>();
+
+        r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: java.lang.String biddingAdId> = $r6;
+
+        $r9 = specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.unity3d.ads.UnityAdsLoadOptions createAdLoadOptions(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters)>($r2);
+
+        $r10 = new com.applovin.mediation.adapters.UnityAdsMediationAdapter$3;
+
+        specialinvoke $r10.<com.applovin.mediation.adapters.UnityAdsMediationAdapter$3: void <init>(com.applovin.mediation.adapters.UnityAdsMediationAdapter,com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener)>(r0, $r1);
+
+        staticinvoke <com.unity3d.ads.UnityAds: void load(java.lang.String,com.unity3d.ads.UnityAdsLoadOptions,com.unity3d.ads.IUnityAdsLoadListener)>($r4, $r9, $r10);
+
+        return;
+    }
+
+    public void loadRewardedAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener)
+    {
+        android.content.Context $r7;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r2;
+        com.unity3d.ads.UnityAdsLoadOptions $r9;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        java.util.UUID $r8;
+        com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener $r1;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter$5 $r10;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r4, $r6;
+        android.app.Activity $r3;
+        boolean $z0;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r2 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r3 := @parameter1: android.app.Activity;
+
+        $r1 := @parameter2: com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener;
+
+        $r4 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Loading ");
+
+        $r6 = interfaceinvoke $r2.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getBidResponse()>();
+
+        $z0 = staticinvoke <com.applovin.sdk.AppLovinSdkUtils: boolean isValidString(java.lang.String)>($r6);
+
+        if $z0 == 0 goto label1;
+
+        $r6 = "bidding ";
+
+        goto label2;
+
+     label1:
+        $r6 = "";
+
+     label2:
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("rewarded ad for placement \"");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\"...");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void log(java.lang.String)>($r6);
+
+        $r7 = virtualinvoke $r3.<android.app.Activity: android.content.Context getApplicationContext()>();
+
+        specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void updatePrivacyConsent(com.applovin.mediation.adapter.parameters.MaxAdapterParameters,android.content.Context)>($r2, $r7);
+
+        $r8 = staticinvoke <java.util.UUID: java.util.UUID randomUUID()>();
+
+        $r6 = virtualinvoke $r8.<java.util.UUID: java.lang.String toString()>();
+
+        r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: java.lang.String biddingAdId> = $r6;
+
+        $r9 = specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.unity3d.ads.UnityAdsLoadOptions createAdLoadOptions(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters)>($r2);
+
+        $r10 = new com.applovin.mediation.adapters.UnityAdsMediationAdapter$5;
+
+        specialinvoke $r10.<com.applovin.mediation.adapters.UnityAdsMediationAdapter$5: void <init>(com.applovin.mediation.adapters.UnityAdsMediationAdapter,com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener)>(r0, $r1);
+
+        staticinvoke <com.unity3d.ads.UnityAds: void load(java.lang.String,com.unity3d.ads.UnityAdsLoadOptions,com.unity3d.ads.IUnityAdsLoadListener)>($r4, $r9, $r10);
+
+        return;
+    }
+
+    public void onDestroy()
+    {
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        com.unity3d.services.banners.BannerView $r1;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r1 = r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.unity3d.services.banners.BannerView bannerView>;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r1.<com.unity3d.services.banners.BannerView: void destroy()>();
+
+        r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.unity3d.services.banners.BannerView bannerView> = null;
+
+     label1:
+        return;
+    }
+
+    public void showInterstitialAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener)
+    {
+        com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener $r2;
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r3;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        com.unity3d.ads.UnityAdsShowOptions $r7;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter$4 $r8;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r4, $r6;
+        android.app.Activity $r1;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r3 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r1 := @parameter1: android.app.Activity;
+
+        $r2 := @parameter2: com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener;
+
+        $r4 = interfaceinvoke $r3.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Showing interstitial ad for placement \"");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\"...");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void log(java.lang.String)>($r6);
+
+        $r7 = specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.unity3d.ads.UnityAdsShowOptions createAdShowOptions()>();
+
+        $r8 = new com.applovin.mediation.adapters.UnityAdsMediationAdapter$4;
+
+        specialinvoke $r8.<com.applovin.mediation.adapters.UnityAdsMediationAdapter$4: void <init>(com.applovin.mediation.adapters.UnityAdsMediationAdapter,com.applovin.mediation.adapter.listeners.MaxInterstitialAdapterListener)>(r0, $r2);
+
+        staticinvoke <com.unity3d.ads.UnityAds: void show(android.app.Activity,java.lang.String,com.unity3d.ads.UnityAdsShowOptions,com.unity3d.ads.IUnityAdsShowListener)>($r1, $r4, $r7, $r8);
+
+        return;
+    }
+
+    public void showRewardedAd(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters, android.app.Activity, com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener)
+    {
+        com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters $r3;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter r0;
+        com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener $r2;
+        com.unity3d.ads.UnityAdsShowOptions $r7;
+        com.applovin.mediation.adapters.UnityAdsMediationAdapter$6 $r8;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r4, $r6;
+        android.app.Activity $r1;
+
+        r0 := @this: com.applovin.mediation.adapters.UnityAdsMediationAdapter;
+
+        $r3 := @parameter0: com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters;
+
+        $r1 := @parameter1: android.app.Activity;
+
+        $r2 := @parameter2: com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener;
+
+        $r4 = interfaceinvoke $r3.<com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters: java.lang.String getThirdPartyAdPlacementId()>();
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Showing rewarded ad for placement \"");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\"...");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void log(java.lang.String)>($r6);
+
+        virtualinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: void configureReward(com.applovin.mediation.adapter.parameters.MaxAdapterResponseParameters)>($r3);
+
+        $r7 = specialinvoke r0.<com.applovin.mediation.adapters.UnityAdsMediationAdapter: com.unity3d.ads.UnityAdsShowOptions createAdShowOptions()>();
+
+        $r8 = new com.applovin.mediation.adapters.UnityAdsMediationAdapter$6;
+
+        specialinvoke $r8.<com.applovin.mediation.adapters.UnityAdsMediationAdapter$6: void <init>(com.applovin.mediation.adapters.UnityAdsMediationAdapter,com.applovin.mediation.adapter.listeners.MaxRewardedAdapterListener)>(r0, $r2);
+
+        staticinvoke <com.unity3d.ads.UnityAds: void show(android.app.Activity,java.lang.String,com.unity3d.ads.UnityAdsShowOptions,com.unity3d.ads.IUnityAdsShowListener)>($r1, $r4, $r7, $r8);
+
+        return;
+    }
+}

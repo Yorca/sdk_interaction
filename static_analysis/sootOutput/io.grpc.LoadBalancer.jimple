@@ -1,0 +1,157 @@
+public abstract class io.grpc.LoadBalancer extends java.lang.Object
+{
+    public static final io.grpc.Attributes$Key ATTR_HEALTH_CHECKING_CONFIG;
+    private int recursionCount;
+
+    static void <clinit>()
+    {
+        io.grpc.Attributes$Key $r0;
+
+        $r0 = staticinvoke <io.grpc.Attributes$Key: io.grpc.Attributes$Key create(java.lang.String)>("internal:health-checking-config");
+
+        <io.grpc.LoadBalancer: io.grpc.Attributes$Key ATTR_HEALTH_CHECKING_CONFIG> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        io.grpc.LoadBalancer r0;
+
+        r0 := @this: io.grpc.LoadBalancer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public boolean acceptResolvedAddresses(io.grpc.LoadBalancer$ResolvedAddresses)
+    {
+        io.grpc.Attributes $r5;
+        io.grpc.LoadBalancer r0;
+        io.grpc.LoadBalancer$ResolvedAddresses $r1;
+        java.util.List $r2;
+        int $i0, $i1;
+        java.lang.StringBuilder $r4;
+        io.grpc.Status $r3;
+        java.lang.String $r6;
+        boolean $z0;
+
+        r0 := @this: io.grpc.LoadBalancer;
+
+        $r1 := @parameter0: io.grpc.LoadBalancer$ResolvedAddresses;
+
+        $r2 = virtualinvoke $r1.<io.grpc.LoadBalancer$ResolvedAddresses: java.util.List getAddresses()>();
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $z0 = virtualinvoke r0.<io.grpc.LoadBalancer: boolean canHandleEmptyAddressListFromNameResolution()>();
+
+        if $z0 != 0 goto label1;
+
+        $r3 = <io.grpc.Status: io.grpc.Status UNAVAILABLE>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("NameResolver returned no usable address. addrs=");
+
+        $r2 = virtualinvoke $r1.<io.grpc.LoadBalancer$ResolvedAddresses: java.util.List getAddresses()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", attrs=");
+
+        $r5 = virtualinvoke $r1.<io.grpc.LoadBalancer$ResolvedAddresses: io.grpc.Attributes getAttributes()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r5);
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = virtualinvoke $r3.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>($r6);
+
+        virtualinvoke r0.<io.grpc.LoadBalancer: void handleNameResolutionError(io.grpc.Status)>($r3);
+
+        return 0;
+
+     label1:
+        $i0 = r0.<io.grpc.LoadBalancer: int recursionCount>;
+
+        $i1 = $i0 + 1;
+
+        r0.<io.grpc.LoadBalancer: int recursionCount> = $i1;
+
+        if $i0 != 0 goto label2;
+
+        virtualinvoke r0.<io.grpc.LoadBalancer: void handleResolvedAddresses(io.grpc.LoadBalancer$ResolvedAddresses)>($r1);
+
+     label2:
+        r0.<io.grpc.LoadBalancer: int recursionCount> = 0;
+
+        return 1;
+    }
+
+    public boolean canHandleEmptyAddressListFromNameResolution()
+    {
+        io.grpc.LoadBalancer r0;
+
+        r0 := @this: io.grpc.LoadBalancer;
+
+        return 0;
+    }
+
+    public abstract void handleNameResolutionError(io.grpc.Status);
+
+    public void handleResolvedAddresses(io.grpc.LoadBalancer$ResolvedAddresses)
+    {
+        io.grpc.LoadBalancer$ResolvedAddresses $r1;
+        int $i0, $i1;
+        io.grpc.LoadBalancer r0;
+
+        r0 := @this: io.grpc.LoadBalancer;
+
+        $r1 := @parameter0: io.grpc.LoadBalancer$ResolvedAddresses;
+
+        $i0 = r0.<io.grpc.LoadBalancer: int recursionCount>;
+
+        $i1 = $i0 + 1;
+
+        r0.<io.grpc.LoadBalancer: int recursionCount> = $i1;
+
+        if $i0 != 0 goto label1;
+
+        virtualinvoke r0.<io.grpc.LoadBalancer: boolean acceptResolvedAddresses(io.grpc.LoadBalancer$ResolvedAddresses)>($r1);
+
+     label1:
+        r0.<io.grpc.LoadBalancer: int recursionCount> = 0;
+
+        return;
+    }
+
+    public void handleSubchannelState(io.grpc.LoadBalancer$Subchannel, io.grpc.ConnectivityStateInfo)
+    {
+        io.grpc.ConnectivityStateInfo $r2;
+        io.grpc.LoadBalancer r0;
+        io.grpc.LoadBalancer$Subchannel $r1;
+
+        r0 := @this: io.grpc.LoadBalancer;
+
+        $r1 := @parameter0: io.grpc.LoadBalancer$Subchannel;
+
+        $r2 := @parameter1: io.grpc.ConnectivityStateInfo;
+
+        return;
+    }
+
+    public void requestConnection()
+    {
+        io.grpc.LoadBalancer r0;
+
+        r0 := @this: io.grpc.LoadBalancer;
+
+        return;
+    }
+
+    public abstract void shutdown();
+}

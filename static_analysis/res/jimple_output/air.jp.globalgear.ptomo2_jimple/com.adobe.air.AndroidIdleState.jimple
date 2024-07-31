@@ -1,0 +1,319 @@
+public class com.adobe.air.AndroidIdleState extends java.lang.Object
+{
+    public static final int IDLE_STATE_NORMAL;
+    private static final java.lang.String IDLE_STATE_TAG;
+    public static final int IDLE_STATE_WAKEUP;
+    private static com.adobe.air.AndroidIdleState mIdleStateManager;
+    private int mCurrentIdleState;
+    private boolean mIsWakeUpLockHeld;
+    private android.app.KeyguardManager$KeyguardLock mKeyGuardLock;
+    private android.os.PowerManager$WakeLock mScreenBrightLock;
+    private android.content.BroadcastReceiver sReceiver;
+    private boolean sScreenOn;
+
+    static void <clinit>()
+    {
+        <com.adobe.air.AndroidIdleState: int IDLE_STATE_WAKEUP> = 1;
+
+        <com.adobe.air.AndroidIdleState: java.lang.String IDLE_STATE_TAG> = "AndroidIdleState";
+
+        <com.adobe.air.AndroidIdleState: int IDLE_STATE_NORMAL> = 0;
+
+        return;
+    }
+
+    private void <init>(android.content.Context)
+    {
+        android.content.Context $r1;
+        android.content.IntentFilter $r4;
+        com.adobe.air.AndroidIdleState r0;
+        com.adobe.air.AndroidIdleState$1 $r3;
+        android.content.BroadcastReceiver $r5;
+        java.lang.Exception $r2;
+
+        r0 := @this: com.adobe.air.AndroidIdleState;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.air.AndroidIdleState: android.os.PowerManager$WakeLock mScreenBrightLock> = null;
+
+        r0.<com.adobe.air.AndroidIdleState: android.app.KeyguardManager$KeyguardLock mKeyGuardLock> = null;
+
+        r0.<com.adobe.air.AndroidIdleState: boolean mIsWakeUpLockHeld> = 0;
+
+        r0.<com.adobe.air.AndroidIdleState: int mCurrentIdleState> = 0;
+
+        r0.<com.adobe.air.AndroidIdleState: android.content.BroadcastReceiver sReceiver> = null;
+
+        r0.<com.adobe.air.AndroidIdleState: boolean sScreenOn> = 1;
+
+        $r3 = new com.adobe.air.AndroidIdleState$1;
+
+     label1:
+        specialinvoke $r3.<com.adobe.air.AndroidIdleState$1: void <init>(com.adobe.air.AndroidIdleState)>(r0);
+
+        r0.<com.adobe.air.AndroidIdleState: android.content.BroadcastReceiver sReceiver> = $r3;
+
+     label2:
+        $r4 = new android.content.IntentFilter;
+
+     label3:
+        specialinvoke $r4.<android.content.IntentFilter: void <init>(java.lang.String)>("android.intent.action.SCREEN_ON");
+
+        virtualinvoke $r4.<android.content.IntentFilter: void addAction(java.lang.String)>("android.intent.action.SCREEN_OFF");
+
+        $r5 = r0.<com.adobe.air.AndroidIdleState: android.content.BroadcastReceiver sReceiver>;
+
+        virtualinvoke $r1.<android.content.Context: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>($r5, $r4);
+
+     label4:
+        return;
+
+     label5:
+        $r2 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public static com.adobe.air.AndroidIdleState GetIdleStateManager(android.content.Context)
+    {
+        android.content.Context $r0;
+        com.adobe.air.AndroidIdleState $r1;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = <com.adobe.air.AndroidIdleState: com.adobe.air.AndroidIdleState mIdleStateManager>;
+
+        if $r1 != null goto label1;
+
+        $r1 = new com.adobe.air.AndroidIdleState;
+
+        specialinvoke $r1.<com.adobe.air.AndroidIdleState: void <init>(android.content.Context)>($r0);
+
+        <com.adobe.air.AndroidIdleState: com.adobe.air.AndroidIdleState mIdleStateManager> = $r1;
+
+     label1:
+        $r1 = <com.adobe.air.AndroidIdleState: com.adobe.air.AndroidIdleState mIdleStateManager>;
+
+        return $r1;
+    }
+
+    static boolean access$000(com.adobe.air.AndroidIdleState)
+    {
+        com.adobe.air.AndroidIdleState $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.adobe.air.AndroidIdleState;
+
+        z0 = $r0.<com.adobe.air.AndroidIdleState: boolean sScreenOn>;
+
+        return z0;
+    }
+
+    static boolean access$002(com.adobe.air.AndroidIdleState, boolean)
+    {
+        com.adobe.air.AndroidIdleState $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.adobe.air.AndroidIdleState;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.adobe.air.AndroidIdleState: boolean sScreenOn> = $z0;
+
+        return $z0;
+    }
+
+    public void ChangeIdleState(android.content.Context, int)
+    {
+        android.app.KeyguardManager $r8;
+        android.content.Context $r4;
+        com.adobe.air.AndroidIdleState r0;
+        java.lang.Exception $r1, $r2, $r3;
+        android.os.PowerManager$WakeLock $r5;
+        android.os.PowerManager $r7;
+        android.app.KeyguardManager$KeyguardLock $r9;
+        int $i0;
+        java.lang.Object $r6;
+
+        r0 := @this: com.adobe.air.AndroidIdleState;
+
+        $r4 := @parameter0: android.content.Context;
+
+        $i0 := @parameter1: int;
+
+        if $i0 != 0 goto label03;
+
+     label01:
+        virtualinvoke r0.<com.adobe.air.AndroidIdleState: void releaseLock()>();
+
+        r0.<com.adobe.air.AndroidIdleState: int mCurrentIdleState> = 0;
+
+     label02:
+        return;
+
+     label03:
+        $r5 = r0.<com.adobe.air.AndroidIdleState: android.os.PowerManager$WakeLock mScreenBrightLock>;
+
+     label04:
+        if $r5 != null goto label09;
+
+     label05:
+        $r6 = virtualinvoke $r4.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("power");
+
+        $r7 = (android.os.PowerManager) $r6;
+
+        $r5 = virtualinvoke $r7.<android.os.PowerManager: android.os.PowerManager$WakeLock newWakeLock(int,java.lang.String)>(268435466, "DoNotDimScreen");
+
+        r0.<com.adobe.air.AndroidIdleState: android.os.PowerManager$WakeLock mScreenBrightLock> = $r5;
+
+        $r6 = virtualinvoke $r4.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("keyguard");
+
+        $r8 = (android.app.KeyguardManager) $r6;
+
+        $r9 = virtualinvoke $r8.<android.app.KeyguardManager: android.app.KeyguardManager$KeyguardLock newKeyguardLock(java.lang.String)>("DoNotLockKeys");
+
+        r0.<com.adobe.air.AndroidIdleState: android.app.KeyguardManager$KeyguardLock mKeyGuardLock> = $r9;
+
+     label06:
+        goto label09;
+
+     label07:
+        r0.<com.adobe.air.AndroidIdleState: android.os.PowerManager$WakeLock mScreenBrightLock> = null;
+
+        r0.<com.adobe.air.AndroidIdleState: android.app.KeyguardManager$KeyguardLock mKeyGuardLock> = null;
+
+     label08:
+        return;
+
+     label09:
+        r0.<com.adobe.air.AndroidIdleState: int mCurrentIdleState> = 1;
+
+        virtualinvoke r0.<com.adobe.air.AndroidIdleState: void acquireLock()>();
+
+     label10:
+        return;
+
+     label11:
+        $r1 := @caughtexception;
+
+        return;
+
+     label12:
+        $r2 := @caughtexception;
+
+        goto label07;
+
+     label13:
+        $r3 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch java.lang.Exception from label03 to label04 with label11;
+        catch java.lang.Exception from label05 to label06 with label12;
+        catch java.lang.Exception from label07 to label08 with label13;
+        catch java.lang.Exception from label09 to label10 with label13;
+    }
+
+    public void acquireLock()
+    {
+        android.app.KeyguardManager$KeyguardLock $r3;
+        int $i0;
+        com.adobe.air.AndroidIdleState r0;
+        java.lang.Exception $r1;
+        android.os.PowerManager$WakeLock $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AndroidIdleState;
+
+     label1:
+        $i0 = r0.<com.adobe.air.AndroidIdleState: int mCurrentIdleState>;
+
+     label2:
+        if $i0 != 1 goto label8;
+
+     label3:
+        $z0 = r0.<com.adobe.air.AndroidIdleState: boolean mIsWakeUpLockHeld>;
+
+     label4:
+        if $z0 != 0 goto label8;
+
+     label5:
+        $r2 = r0.<com.adobe.air.AndroidIdleState: android.os.PowerManager$WakeLock mScreenBrightLock>;
+
+        virtualinvoke $r2.<android.os.PowerManager$WakeLock: void acquire()>();
+
+        $r3 = r0.<com.adobe.air.AndroidIdleState: android.app.KeyguardManager$KeyguardLock mKeyGuardLock>;
+
+        virtualinvoke $r3.<android.app.KeyguardManager$KeyguardLock: void disableKeyguard()>();
+
+        r0.<com.adobe.air.AndroidIdleState: boolean mIsWakeUpLockHeld> = 1;
+
+     label6:
+        return;
+
+     label7:
+        $r1 := @caughtexception;
+
+     label8:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    public void releaseLock()
+    {
+        android.app.KeyguardManager$KeyguardLock $r3;
+        int $i0;
+        com.adobe.air.AndroidIdleState r0;
+        java.lang.Exception $r1;
+        android.os.PowerManager$WakeLock $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.AndroidIdleState;
+
+     label1:
+        $i0 = r0.<com.adobe.air.AndroidIdleState: int mCurrentIdleState>;
+
+     label2:
+        if $i0 != 1 goto label8;
+
+     label3:
+        $z0 = r0.<com.adobe.air.AndroidIdleState: boolean mIsWakeUpLockHeld>;
+
+     label4:
+        if $z0 == 0 goto label8;
+
+     label5:
+        $r2 = r0.<com.adobe.air.AndroidIdleState: android.os.PowerManager$WakeLock mScreenBrightLock>;
+
+        virtualinvoke $r2.<android.os.PowerManager$WakeLock: void release()>();
+
+        $r3 = r0.<com.adobe.air.AndroidIdleState: android.app.KeyguardManager$KeyguardLock mKeyGuardLock>;
+
+        virtualinvoke $r3.<android.app.KeyguardManager$KeyguardLock: void reenableKeyguard()>();
+
+        r0.<com.adobe.air.AndroidIdleState: boolean mIsWakeUpLockHeld> = 0;
+
+     label6:
+        return;
+
+     label7:
+        $r1 := @caughtexception;
+
+     label8:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+}

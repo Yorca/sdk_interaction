@@ -1,0 +1,622 @@
+final class io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber extends java.util.concurrent.atomic.AtomicInteger implements io.reactivex.FlowableSubscriber, org.reactivestreams.Subscription, java.lang.Runnable
+{
+    private static final long serialVersionUID;
+    final org.reactivestreams.Subscriber actual;
+    final int bufferSize;
+    volatile boolean cancelled;
+    volatile boolean done;
+    java.lang.Throwable error;
+    final java.util.concurrent.atomic.AtomicBoolean firstRequest;
+    long index;
+    final java.util.concurrent.atomic.AtomicBoolean once;
+    long produced;
+    final io.reactivex.internal.queue.SpscLinkedArrayQueue queue;
+    final java.util.concurrent.atomic.AtomicLong requested;
+    org.reactivestreams.Subscription s;
+    final long size;
+    final long skip;
+    final java.util.ArrayDeque windows;
+    final java.util.concurrent.atomic.AtomicInteger wip;
+
+    void <init>(org.reactivestreams.Subscriber, long, long, int)
+    {
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r2;
+        java.util.concurrent.atomic.AtomicBoolean $r4;
+        long $l0, $l1;
+        io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber r0;
+        java.util.concurrent.atomic.AtomicLong $r5;
+        java.util.concurrent.atomic.AtomicInteger $r6;
+        int $i2;
+        java.util.ArrayDeque $r3;
+        org.reactivestreams.Subscriber $r1;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber;
+
+        $r1 := @parameter0: org.reactivestreams.Subscriber;
+
+        $l0 := @parameter1: long;
+
+        $l1 := @parameter2: long;
+
+        $i2 := @parameter3: int;
+
+        specialinvoke r0.<java.util.concurrent.atomic.AtomicInteger: void <init>(int)>(1);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: org.reactivestreams.Subscriber actual> = $r1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long size> = $l0;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long skip> = $l1;
+
+        $r2 = new io.reactivex.internal.queue.SpscLinkedArrayQueue;
+
+        specialinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void <init>(int)>($i2);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: io.reactivex.internal.queue.SpscLinkedArrayQueue queue> = $r2;
+
+        $r3 = new java.util.ArrayDeque;
+
+        specialinvoke $r3.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.ArrayDeque windows> = $r3;
+
+        $r4 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r4.<java.util.concurrent.atomic.AtomicBoolean: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicBoolean once> = $r4;
+
+        $r4 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r4.<java.util.concurrent.atomic.AtomicBoolean: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicBoolean firstRequest> = $r4;
+
+        $r5 = new java.util.concurrent.atomic.AtomicLong;
+
+        specialinvoke $r5.<java.util.concurrent.atomic.AtomicLong: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicLong requested> = $r5;
+
+        $r6 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r6.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicInteger wip> = $r6;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: int bufferSize> = $i2;
+
+        return;
+    }
+
+    public void cancel()
+    {
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean cancelled> = 1;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicBoolean once>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(0, 1);
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: void run()>();
+
+     label1:
+        return;
+    }
+
+    boolean checkTerminated(boolean, boolean, org.reactivestreams.Subscriber, io.reactivex.internal.queue.SpscLinkedArrayQueue)
+    {
+        java.lang.Throwable $r3;
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r2;
+        org.reactivestreams.Subscriber $r1;
+        io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber r0;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber;
+
+        $z2 := @parameter0: boolean;
+
+        $z0 := @parameter1: boolean;
+
+        $r1 := @parameter2: org.reactivestreams.Subscriber;
+
+        $r2 := @parameter3: io.reactivex.internal.queue.SpscLinkedArrayQueue;
+
+        $z1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean cancelled>;
+
+        if $z1 == 0 goto label1;
+
+        virtualinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void clear()>();
+
+        return 1;
+
+     label1:
+        if $z2 == 0 goto label3;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.lang.Throwable error>;
+
+        if $r3 == null goto label2;
+
+        virtualinvoke $r2.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void clear()>();
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r3);
+
+        return 1;
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onComplete()>();
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    void drain()
+    {
+        io.reactivex.processors.UnicastProcessor $r6;
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r1;
+        long $l0, $l2;
+        io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber r0;
+        java.util.concurrent.atomic.AtomicLong $r4;
+        byte $b3;
+        java.util.concurrent.atomic.AtomicInteger $r2;
+        int $i1, $i4;
+        java.lang.Object $r5;
+        org.reactivestreams.Subscriber $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicInteger wip>;
+
+        $i1 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicInteger: int getAndIncrement()>();
+
+        if $i1 == 0 goto label01;
+
+        return;
+
+     label01:
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: org.reactivestreams.Subscriber actual>;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: io.reactivex.internal.queue.SpscLinkedArrayQueue queue>;
+
+        $i1 = 1;
+
+     label02:
+        $r4 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicLong requested>;
+
+        $l0 = virtualinvoke $r4.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $l2 = 0L;
+
+     label03:
+        $b3 = $l2 cmp $l0;
+
+        if $b3 == 0 goto label08;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean done>;
+
+        $r5 = virtualinvoke $r1.<io.reactivex.internal.queue.SpscLinkedArrayQueue: java.lang.Object poll()>();
+
+        $r6 = (io.reactivex.processors.UnicastProcessor) $r5;
+
+        if $r6 != null goto label04;
+
+        $z1 = 1;
+
+        goto label05;
+
+     label04:
+        $z1 = 0;
+
+     label05:
+        $z0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean checkTerminated(boolean,boolean,org.reactivestreams.Subscriber,io.reactivex.internal.queue.SpscLinkedArrayQueue)>($z0, $z1, $r3, $r1);
+
+        if $z0 == 0 goto label06;
+
+        return;
+
+     label06:
+        if $z1 == 0 goto label07;
+
+        goto label08;
+
+     label07:
+        interfaceinvoke $r3.<org.reactivestreams.Subscriber: void onNext(java.lang.Object)>($r6);
+
+        $l2 = $l2 + 1L;
+
+        goto label03;
+
+     label08:
+        if $b3 != 0 goto label09;
+
+        $z1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean done>;
+
+        $z0 = virtualinvoke $r1.<io.reactivex.internal.queue.SpscLinkedArrayQueue: boolean isEmpty()>();
+
+        $z1 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean checkTerminated(boolean,boolean,org.reactivestreams.Subscriber,io.reactivex.internal.queue.SpscLinkedArrayQueue)>($z1, $z0, $r3, $r1);
+
+        if $z1 == 0 goto label09;
+
+        return;
+
+     label09:
+        $b3 = $l2 cmp 0L;
+
+        if $b3 == 0 goto label10;
+
+        $b3 = $l0 cmp 9223372036854775807L;
+
+        if $b3 == 0 goto label10;
+
+        $r4 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicLong requested>;
+
+        $l0 = neg $l2;
+
+        virtualinvoke $r4.<java.util.concurrent.atomic.AtomicLong: long addAndGet(long)>($l0);
+
+     label10:
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicInteger wip>;
+
+        $i1 = neg $i1;
+
+        $i4 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicInteger: int addAndGet(int)>($i1);
+
+        $i1 = $i4;
+
+        if $i4 != 0 goto label02;
+
+        return;
+    }
+
+    public void onComplete()
+    {
+        java.util.Iterator $r2;
+        org.reactivestreams.Processor $r4;
+        java.lang.Object $r3;
+        java.util.ArrayDeque $r1;
+        io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.ArrayDeque windows>;
+
+        $r2 = virtualinvoke $r1.<java.util.ArrayDeque: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (org.reactivestreams.Processor) $r3;
+
+        interfaceinvoke $r4.<org.reactivestreams.Processor: void onComplete()>();
+
+        goto label2;
+
+     label3:
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.ArrayDeque windows>;
+
+        virtualinvoke $r1.<java.util.ArrayDeque: void clear()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: void drain()>();
+
+        return;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        java.util.Iterator $r3;
+        org.reactivestreams.Processor $r5;
+        java.lang.Object $r4;
+        java.util.ArrayDeque $r2;
+        io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r1);
+
+        return;
+
+     label1:
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.ArrayDeque windows>;
+
+        $r3 = virtualinvoke $r2.<java.util.ArrayDeque: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (org.reactivestreams.Processor) $r4;
+
+        interfaceinvoke $r5.<org.reactivestreams.Processor: void onError(java.lang.Throwable)>($r1);
+
+        goto label2;
+
+     label3:
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.ArrayDeque windows>;
+
+        virtualinvoke $r2.<java.util.ArrayDeque: void clear()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.lang.Throwable error> = $r1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: void drain()>();
+
+        return;
+    }
+
+    public void onNext(java.lang.Object)
+    {
+        io.reactivex.processors.UnicastProcessor $r2;
+        java.util.Iterator $r5;
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r4;
+        org.reactivestreams.Processor $r7;
+        long $l0, $l3, $l4;
+        io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber r0;
+        byte $b1;
+        int $i2;
+        java.lang.Object $r1, $r6;
+        java.util.ArrayDeque $r3;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $l0 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long index>;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label2;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: boolean cancelled>;
+
+        if $z0 != 0 goto label2;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: int getAndIncrement()>();
+
+        $i2 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: int bufferSize>;
+
+        $r2 = staticinvoke <io.reactivex.processors.UnicastProcessor: io.reactivex.processors.UnicastProcessor create(int,java.lang.Runnable)>($i2, r0);
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.ArrayDeque windows>;
+
+        virtualinvoke $r3.<java.util.ArrayDeque: boolean offer(java.lang.Object)>($r2);
+
+        $r4 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: io.reactivex.internal.queue.SpscLinkedArrayQueue queue>;
+
+        virtualinvoke $r4.<io.reactivex.internal.queue.SpscLinkedArrayQueue: boolean offer(java.lang.Object)>($r2);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: void drain()>();
+
+     label2:
+        $l0 = $l0 + 1L;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.ArrayDeque windows>;
+
+        $r5 = virtualinvoke $r3.<java.util.ArrayDeque: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (org.reactivestreams.Processor) $r6;
+
+        interfaceinvoke $r7.<org.reactivestreams.Processor: void onNext(java.lang.Object)>($r1);
+
+        goto label3;
+
+     label4:
+        $l3 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long produced>;
+
+        $l3 = $l3 + 1L;
+
+        $l4 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long size>;
+
+        $b1 = $l3 cmp $l4;
+
+        if $b1 != 0 goto label5;
+
+        $l4 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long skip>;
+
+        $l3 = $l3 - $l4;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long produced> = $l3;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.ArrayDeque windows>;
+
+        $r1 = virtualinvoke $r3.<java.util.ArrayDeque: java.lang.Object poll()>();
+
+        $r7 = (org.reactivestreams.Processor) $r1;
+
+        if $r7 == null goto label6;
+
+        interfaceinvoke $r7.<org.reactivestreams.Processor: void onComplete()>();
+
+        goto label6;
+
+     label5:
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long produced> = $l3;
+
+     label6:
+        $l3 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long skip>;
+
+        $b1 = $l0 cmp $l3;
+
+        if $b1 != 0 goto label7;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long index> = 0L;
+
+        return;
+
+     label7:
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long index> = $l0;
+
+        return;
+    }
+
+    public void onSubscribe(org.reactivestreams.Subscription)
+    {
+        org.reactivestreams.Subscription $r1, $r2;
+        org.reactivestreams.Subscriber $r3;
+        io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber;
+
+        $r1 := @parameter0: org.reactivestreams.Subscription;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: org.reactivestreams.Subscription s>;
+
+        $z0 = staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean validate(org.reactivestreams.Subscription,org.reactivestreams.Subscription)>($r2, $r1);
+
+        if $z0 == 0 goto label1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: org.reactivestreams.Subscription s> = $r1;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: org.reactivestreams.Subscriber actual>;
+
+        interfaceinvoke $r3.<org.reactivestreams.Subscriber: void onSubscribe(org.reactivestreams.Subscription)>(r0);
+
+     label1:
+        return;
+    }
+
+    public void request(long)
+    {
+        java.util.concurrent.atomic.AtomicLong $r1;
+        org.reactivestreams.Subscription $r3;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+        long $l0, $l1;
+        io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber;
+
+        $l0 := @parameter0: long;
+
+        $z0 = staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean validate(long)>($l0);
+
+        if $z0 == 0 goto label3;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicLong requested>;
+
+        staticinvoke <io.reactivex.internal.util.BackpressureHelper: long add(java.util.concurrent.atomic.AtomicLong,long)>($r1, $l0);
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicBoolean firstRequest>;
+
+        $z0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: java.util.concurrent.atomic.AtomicBoolean firstRequest>;
+
+        $z0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(0, 1);
+
+        if $z0 == 0 goto label1;
+
+        $l1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long skip>;
+
+        $l0 = $l0 - 1L;
+
+        $l0 = staticinvoke <io.reactivex.internal.util.BackpressureHelper: long multiplyCap(long,long)>($l1, $l0);
+
+        $l1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long size>;
+
+        $l0 = staticinvoke <io.reactivex.internal.util.BackpressureHelper: long addCap(long,long)>($l1, $l0);
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: org.reactivestreams.Subscription s>;
+
+        interfaceinvoke $r3.<org.reactivestreams.Subscription: void request(long)>($l0);
+
+        goto label2;
+
+     label1:
+        $l1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long skip>;
+
+        $l0 = staticinvoke <io.reactivex.internal.util.BackpressureHelper: long multiplyCap(long,long)>($l1, $l0);
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: org.reactivestreams.Subscription s>;
+
+        interfaceinvoke $r3.<org.reactivestreams.Subscription: void request(long)>($l0);
+
+     label2:
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: void drain()>();
+
+     label3:
+        return;
+    }
+
+    public void run()
+    {
+        int $i0;
+        io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber r0;
+        org.reactivestreams.Subscription $r1;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber;
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: int decrementAndGet()>();
+
+        if $i0 != 0 goto label1;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: org.reactivestreams.Subscription s>;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void cancel()>();
+
+     label1:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <io.reactivex.internal.operators.flowable.FlowableWindow$WindowOverlapSubscriber: long serialVersionUID> = 2428527070996323976L;
+
+        return;
+    }
+}

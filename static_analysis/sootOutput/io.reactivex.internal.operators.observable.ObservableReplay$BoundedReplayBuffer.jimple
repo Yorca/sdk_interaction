@@ -1,0 +1,489 @@
+abstract class io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer extends java.util.concurrent.atomic.AtomicReference implements io.reactivex.internal.operators.observable.ObservableReplay$ReplayBuffer
+{
+    private static final long serialVersionUID;
+    int size;
+    io.reactivex.internal.operators.observable.ObservableReplay$Node tail;
+
+    void <init>()
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        specialinvoke r0.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        $r1 = new io.reactivex.internal.operators.observable.ObservableReplay$Node;
+
+        specialinvoke $r1.<io.reactivex.internal.operators.observable.ObservableReplay$Node: void <init>(java.lang.Object)>(null);
+
+        r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: io.reactivex.internal.operators.observable.ObservableReplay$Node tail> = $r1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void set(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    final void addLast(io.reactivex.internal.operators.observable.ObservableReplay$Node)
+    {
+        int $i0;
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r1, $r2;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r2 := @parameter0: io.reactivex.internal.operators.observable.ObservableReplay$Node;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: io.reactivex.internal.operators.observable.ObservableReplay$Node tail>;
+
+        virtualinvoke $r1.<io.reactivex.internal.operators.observable.ObservableReplay$Node: void set(java.lang.Object)>($r2);
+
+        r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: io.reactivex.internal.operators.observable.ObservableReplay$Node tail> = $r2;
+
+        $i0 = r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: int size>;
+
+        $i0 = $i0 + 1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: int size> = $i0;
+
+        return;
+    }
+
+    final void collect(java.util.Collection)
+    {
+        java.util.Collection $r1;
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r3;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r1 := @parameter0: java.util.Collection;
+
+        $r2 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: io.reactivex.internal.operators.observable.ObservableReplay$Node getHead()>();
+
+     label1:
+        $r3 = virtualinvoke $r2.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object get()>();
+
+        $r2 = (io.reactivex.internal.operators.observable.ObservableReplay$Node) $r3;
+
+        if $r2 == null goto label3;
+
+        $r3 = $r2.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object value>;
+
+        $r3 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object leaveTransform(java.lang.Object)>($r3);
+
+        $z0 = staticinvoke <io.reactivex.internal.util.NotificationLite: boolean isComplete(java.lang.Object)>($r3);
+
+        if $z0 != 0 goto label3;
+
+        $z0 = staticinvoke <io.reactivex.internal.util.NotificationLite: boolean isError(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label2;
+
+        return;
+
+     label2:
+        $r3 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object getValue(java.lang.Object)>($r3);
+
+        interfaceinvoke $r1.<java.util.Collection: boolean add(java.lang.Object)>($r3);
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    public final void complete()
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r2;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r2 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object complete()>();
+
+        $r2 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object enterTransform(java.lang.Object)>($r2);
+
+        $r1 = new io.reactivex.internal.operators.observable.ObservableReplay$Node;
+
+        specialinvoke $r1.<io.reactivex.internal.operators.observable.ObservableReplay$Node: void <init>(java.lang.Object)>($r2);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void addLast(io.reactivex.internal.operators.observable.ObservableReplay$Node)>($r1);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void truncateFinal()>();
+
+        return;
+    }
+
+    java.lang.Object enterTransform(java.lang.Object)
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        return $r1;
+    }
+
+    public final void error(java.lang.Throwable)
+    {
+        java.lang.Throwable $r2;
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r3;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r2 := @parameter0: java.lang.Throwable;
+
+        $r3 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object error(java.lang.Throwable)>($r2);
+
+        $r3 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object enterTransform(java.lang.Object)>($r3);
+
+        $r1 = new io.reactivex.internal.operators.observable.ObservableReplay$Node;
+
+        specialinvoke $r1.<io.reactivex.internal.operators.observable.ObservableReplay$Node: void <init>(java.lang.Object)>($r3);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void addLast(io.reactivex.internal.operators.observable.ObservableReplay$Node)>($r1);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void truncateFinal()>();
+
+        return;
+    }
+
+    io.reactivex.internal.operators.observable.ObservableReplay$Node getHead()
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r2;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r1 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object get()>();
+
+        $r2 = (io.reactivex.internal.operators.observable.ObservableReplay$Node) $r1;
+
+        return $r2;
+    }
+
+    boolean hasCompleted()
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r2;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r1;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: io.reactivex.internal.operators.observable.ObservableReplay$Node tail>;
+
+        $r2 = $r1.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object value>;
+
+        if $r2 == null goto label1;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: io.reactivex.internal.operators.observable.ObservableReplay$Node tail>;
+
+        $r2 = $r1.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object value>;
+
+        $r2 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object leaveTransform(java.lang.Object)>($r2);
+
+        $z0 = staticinvoke <io.reactivex.internal.util.NotificationLite: boolean isComplete(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    boolean hasError()
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r2;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r1;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: io.reactivex.internal.operators.observable.ObservableReplay$Node tail>;
+
+        $r2 = $r1.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object value>;
+
+        if $r2 == null goto label1;
+
+        $r1 = r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: io.reactivex.internal.operators.observable.ObservableReplay$Node tail>;
+
+        $r2 = $r1.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object value>;
+
+        $r2 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object leaveTransform(java.lang.Object)>($r2);
+
+        $z0 = staticinvoke <io.reactivex.internal.util.NotificationLite: boolean isError(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    java.lang.Object leaveTransform(java.lang.Object)
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        return $r1;
+    }
+
+    public final void next(java.lang.Object)
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r2;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r2 := @parameter0: java.lang.Object;
+
+        $r2 = staticinvoke <io.reactivex.internal.util.NotificationLite: java.lang.Object next(java.lang.Object)>($r2);
+
+        $r2 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object enterTransform(java.lang.Object)>($r2);
+
+        $r1 = new io.reactivex.internal.operators.observable.ObservableReplay$Node;
+
+        specialinvoke $r1.<io.reactivex.internal.operators.observable.ObservableReplay$Node: void <init>(java.lang.Object)>($r2);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void addLast(io.reactivex.internal.operators.observable.ObservableReplay$Node)>($r1);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void truncate()>();
+
+        return;
+    }
+
+    final void removeFirst()
+    {
+        int $i0;
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r2;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r1 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object get()>();
+
+        $r2 = (io.reactivex.internal.operators.observable.ObservableReplay$Node) $r1;
+
+        $r1 = virtualinvoke $r2.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object get()>();
+
+        $r2 = (io.reactivex.internal.operators.observable.ObservableReplay$Node) $r1;
+
+        $i0 = r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: int size>;
+
+        $i0 = $i0 + -1;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: int size> = $i0;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void setFirst(io.reactivex.internal.operators.observable.ObservableReplay$Node)>($r2);
+
+        return;
+    }
+
+    final void removeSome(int)
+    {
+        int $i0, $i1, $i2;
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r2;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object get()>();
+
+        $r2 = (io.reactivex.internal.operators.observable.ObservableReplay$Node) $r1;
+
+     label1:
+        if $i0 <= 0 goto label2;
+
+        $r1 = virtualinvoke $r2.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object get()>();
+
+        $r2 = (io.reactivex.internal.operators.observable.ObservableReplay$Node) $r1;
+
+        $i1 = -1;
+
+        $i0 = $i0 + $i1;
+
+        $i1 = r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: int size>;
+
+        $i2 = -1;
+
+        $i1 = $i1 + $i2;
+
+        r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: int size> = $i1;
+
+        goto label1;
+
+     label2:
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void setFirst(io.reactivex.internal.operators.observable.ObservableReplay$Node)>($r2);
+
+        return;
+    }
+
+    public final void replay(io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable)
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable $r1;
+        io.reactivex.Observer $r2;
+        int $i0, $i1;
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r3;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r4, $r5;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r1 := @parameter0: io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable;
+
+        $i0 = virtualinvoke $r1.<io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable: int getAndIncrement()>();
+
+        if $i0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $i0 = 1;
+
+     label2:
+        $r3 = virtualinvoke $r1.<io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable: java.lang.Object index()>();
+
+        $r4 = (io.reactivex.internal.operators.observable.ObservableReplay$Node) $r3;
+
+        if $r4 != null goto label3;
+
+        $r5 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: io.reactivex.internal.operators.observable.ObservableReplay$Node getHead()>();
+
+        $r4 = $r5;
+
+        $r1.<io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable: java.lang.Object index> = $r5;
+
+     label3:
+        $z0 = virtualinvoke $r1.<io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable: boolean isDisposed()>();
+
+        if $z0 == 0 goto label4;
+
+        return;
+
+     label4:
+        $r3 = virtualinvoke $r4.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object get()>();
+
+        $r5 = (io.reactivex.internal.operators.observable.ObservableReplay$Node) $r3;
+
+        if $r5 == null goto label6;
+
+        $r3 = $r5.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object value>;
+
+        $r3 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object leaveTransform(java.lang.Object)>($r3);
+
+        $r2 = $r1.<io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable: io.reactivex.Observer child>;
+
+        $z0 = staticinvoke <io.reactivex.internal.util.NotificationLite: boolean accept(java.lang.Object,io.reactivex.Observer)>($r3, $r2);
+
+        if $z0 == 0 goto label5;
+
+        $r1.<io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable: java.lang.Object index> = null;
+
+        return;
+
+     label5:
+        $r4 = $r5;
+
+        goto label3;
+
+     label6:
+        $r1.<io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable: java.lang.Object index> = $r4;
+
+        $i0 = neg $i0;
+
+        $i1 = virtualinvoke $r1.<io.reactivex.internal.operators.observable.ObservableReplay$InnerDisposable: int addAndGet(int)>($i0);
+
+        $i0 = $i1;
+
+        if $i1 != 0 goto label2;
+
+        return;
+    }
+
+    final void setFirst(io.reactivex.internal.operators.observable.ObservableReplay$Node)
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r1;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r1 := @parameter0: io.reactivex.internal.operators.observable.ObservableReplay$Node;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void set(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    final void trimHead()
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.operators.observable.ObservableReplay$Node $r2, $r3;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        $r1 = virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: java.lang.Object get()>();
+
+        $r2 = (io.reactivex.internal.operators.observable.ObservableReplay$Node) $r1;
+
+        $r1 = $r2.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object value>;
+
+        if $r1 == null goto label1;
+
+        $r3 = new io.reactivex.internal.operators.observable.ObservableReplay$Node;
+
+        specialinvoke $r3.<io.reactivex.internal.operators.observable.ObservableReplay$Node: void <init>(java.lang.Object)>(null);
+
+        $r1 = virtualinvoke $r2.<io.reactivex.internal.operators.observable.ObservableReplay$Node: java.lang.Object get()>();
+
+        virtualinvoke $r3.<io.reactivex.internal.operators.observable.ObservableReplay$Node: void lazySet(java.lang.Object)>($r1);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void set(java.lang.Object)>($r3);
+
+     label1:
+        return;
+    }
+
+    abstract void truncate();
+
+    void truncateFinal()
+    {
+        io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer r0;
+
+        r0 := @this: io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: void trimHead()>();
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <io.reactivex.internal.operators.observable.ObservableReplay$BoundedReplayBuffer: long serialVersionUID> = 2346567790059478686L;
+
+        return;
+    }
+}

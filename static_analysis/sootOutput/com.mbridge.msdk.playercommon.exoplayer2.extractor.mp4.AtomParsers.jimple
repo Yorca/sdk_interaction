@@ -1,0 +1,3534 @@
+final class com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers extends java.lang.Object
+{
+    private static final int MAX_GAPLESS_TRIM_SIZE_SAMPLES;
+    private static final java.lang.String TAG;
+    private static final int TYPE_clcp;
+    private static final int TYPE_meta;
+    private static final int TYPE_sbtl;
+    private static final int TYPE_soun;
+    private static final int TYPE_subt;
+    private static final int TYPE_text;
+    private static final int TYPE_vide;
+
+    static void <clinit>()
+    {
+        int $i0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: java.lang.String TAG> = "AtomParsers";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int MAX_GAPLESS_TRIM_SIZE_SAMPLES> = 3;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("vide");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_vide> = $i0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("soun");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_soun> = $i0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("text");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_text> = $i0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("sbtl");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_sbtl> = $i0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("subt");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_subt> = $i0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("clcp");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_clcp> = $i0;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getIntegerCodeForString(java.lang.String)>("meta");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_meta> = $i0;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static boolean canApplyEditWithGaplessInfo(long[], long, long, long)
+    {
+        long $l0, $l1, $l2, $l6;
+        long[] $r0;
+        byte $b7;
+        int $i3, $i4, $i5;
+
+        $r0 := @parameter0: long[];
+
+        $l0 := @parameter1: long;
+
+        $l2 := @parameter2: long;
+
+        $l1 := @parameter3: long;
+
+        $i3 = lengthof $r0;
+
+        $i4 = $i3 - 1;
+
+        $i3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int constrainValue(int,int,int)>(3, 0, $i4);
+
+        $i5 = lengthof $r0;
+
+        $i5 = $i5 - 3;
+
+        $i4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int constrainValue(int,int,int)>($i5, 0, $i4);
+
+        $l6 = $r0[0];
+
+        $b7 = $l6 cmp $l2;
+
+        $i5 = (int) $b7;
+
+        if $i5 > 0 goto label1;
+
+        $l6 = $r0[$i3];
+
+        $b7 = $l2 cmp $l6;
+
+        $i3 = (int) $b7;
+
+        if $i3 >= 0 goto label1;
+
+        $l2 = $r0[$i4];
+
+        $b7 = $l2 cmp $l1;
+
+        $i3 = (int) $b7;
+
+        if $i3 >= 0 goto label1;
+
+        $b7 = $l1 cmp $l0;
+
+        $i3 = (int) $b7;
+
+        if $i3 > 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private static int findEsdsPosition(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+     label1:
+        $i3 = $i2 - $i0;
+
+        if $i3 >= $i1 goto label5;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        if $i3 <= 0 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, "childAtomSize should be positive");
+
+        $i4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i5 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_esds>;
+
+        if $i4 != $i5 goto label4;
+
+        return $i2;
+
+     label4:
+        $i2 = $i2 + $i3;
+
+        goto label1;
+
+     label5:
+        return -1;
+    }
+
+    private static void parseAudioSampleEntry(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int, int, int, java.lang.String, boolean, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData, com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData, int) throws com.mbridge.msdk.playercommon.exoplayer2.ParserException
+    {
+        byte[] $r13;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox[] $r11;
+        java.lang.Integer $r8;
+        byte $b12;
+        boolean $z0, $z1;
+        java.util.List $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData $r2, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox $r9;
+        android.util.Pair $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        long $l7;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i8, $i9, $i10, $i11;
+        java.lang.String $r1, $r10, $r12, $r14, $r16;
+        double $d0;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r15;
+        java.lang.Object $r7;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $i3 := @parameter4: int;
+
+        $r1 := @parameter5: java.lang.String;
+
+        $z0 := @parameter6: boolean;
+
+        $r2 := @parameter7: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData;
+
+        $r3 := @parameter8: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData;
+
+        $i4 := @parameter9: int;
+
+        $i5 = $i1;
+
+        $r4 = $r2;
+
+        $i6 = $i1 + 8;
+
+        $i6 = $i6 + 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i6);
+
+        if $z0 == 0 goto label01;
+
+        $i6 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedShort()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(6);
+
+        goto label02;
+
+     label01:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(8);
+
+        $i6 = 0;
+
+     label02:
+        if $i6 == 0 goto label04;
+
+        if $i6 == 1 goto label04;
+
+        if $i6 != 2 goto label03;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(16);
+
+        $d0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: double readDouble()>();
+
+        $l7 = staticinvoke <java.lang.Math: long round(double)>($d0);
+
+        $i6 = (int) $l7;
+
+        $i9 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(20);
+
+        goto label06;
+
+     label03:
+        return;
+
+     label04:
+        $i8 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedShort()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(6);
+
+        $i9 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedFixedPoint1616()>();
+
+        if $i6 != 1 goto label05;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(16);
+
+     label05:
+        $i6 = $i9;
+
+        $i9 = $i8;
+
+     label06:
+        $i8 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_enca>;
+
+        $r5 = null;
+
+        $i11 = $i0;
+
+        if $i0 != $i10 goto label10;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: android.util.Pair parseSampleEntryEncryptionData(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int)>($r0, $i1, $i2);
+
+        if $r6 == null goto label09;
+
+        $r7 = $r6.<android.util.Pair: java.lang.Object first>;
+
+        $r8 = (java.lang.Integer) $r7;
+
+        $i11 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        if $r2 != null goto label07;
+
+        $r4 = null;
+
+        goto label08;
+
+     label07:
+        $r7 = $r6.<android.util.Pair: java.lang.Object second>;
+
+        $r9 = (com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox) $r7;
+
+        $r10 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox: java.lang.String schemeType>;
+
+        $r4 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData copyWithSchemeType(java.lang.String)>($r10);
+
+     label08:
+        $r11 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox[] trackEncryptionBoxes>;
+
+        $r7 = $r6.<android.util.Pair: java.lang.Object second>;
+
+        $r9 = (com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox) $r7;
+
+        $r11[$i4] = $r9;
+
+     label09:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i8);
+
+     label10:
+        $r2 = $r4;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_ac_3>;
+
+        $r12 = "audio/raw";
+
+        if $i11 != $i0 goto label11;
+
+        $r10 = "audio/ac3";
+
+        goto label21;
+
+     label11:
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_ec_3>;
+
+        if $i11 != $i0 goto label12;
+
+        $r10 = "audio/eac3";
+
+        goto label21;
+
+     label12:
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_dtsc>;
+
+        if $i11 != $i0 goto label13;
+
+        $r10 = "audio/vnd.dts";
+
+        goto label21;
+
+     label13:
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_dtsh>;
+
+        if $i11 == $i0 goto label20;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_dtsl>;
+
+        if $i11 == $i0 goto label20;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_dtse>;
+
+        if $i11 != $i0 goto label14;
+
+        $r10 = "audio/vnd.dts.hd;profile=lbr";
+
+        goto label21;
+
+     label14:
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_samr>;
+
+        if $i11 != $i0 goto label15;
+
+        $r10 = "audio/3gpp";
+
+        goto label21;
+
+     label15:
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_sawb>;
+
+        if $i11 != $i0 goto label16;
+
+        $r10 = "audio/amr-wb";
+
+        goto label21;
+
+     label16:
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_lpcm>;
+
+        if $i11 == $i0 goto label19;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_sowt>;
+
+        if $i11 == $i0 goto label19;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE__mp3>;
+
+        if $i11 != $i0 goto label17;
+
+        $r10 = "audio/mpeg";
+
+        goto label21;
+
+     label17:
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_alac>;
+
+        if $i11 != $i0 goto label18;
+
+        $r10 = "audio/alac";
+
+        goto label21;
+
+     label18:
+        $r10 = null;
+
+        goto label21;
+
+     label19:
+        $r10 = "audio/raw";
+
+        goto label21;
+
+     label20:
+        $r10 = "audio/vnd.dts.hd";
+
+     label21:
+        $i0 = $i9;
+
+        $i4 = $i6;
+
+        $i6 = $i8;
+
+        $r13 = null;
+
+     label22:
+        $i5 = $i6 - $i5;
+
+        if $i5 >= $i2 goto label35;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i6);
+
+        $i5 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        if $i5 <= 0 goto label23;
+
+        $z1 = 1;
+
+        goto label24;
+
+     label23:
+        $z1 = 0;
+
+     label24:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z1, "childAtomSize should be positive");
+
+        $i8 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i9 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_esds>;
+
+        if $i8 == $i9 goto label31;
+
+        if $z0 == 0 goto label25;
+
+        $i9 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_wave>;
+
+        if $i8 == $i9 goto label31;
+
+     label25:
+        $i9 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_dac3>;
+
+        if $i8 != $i9 goto label27;
+
+        $i8 = $i6 + 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i8);
+
+        $r14 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i3);
+
+        $r15 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util: com.mbridge.msdk.playercommon.exoplayer2.Format parseAc3AnnexFFormat(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,java.lang.String,java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData)>($r0, $r14, $r1, $r2);
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.Format format> = $r15;
+
+     label26:
+        $i9 = $i5;
+
+        $i11 = $i6;
+
+        $r14 = $r10;
+
+        $r4 = $r2;
+
+        goto label30;
+
+     label27:
+        $i9 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_dec3>;
+
+        if $i8 != $i9 goto label28;
+
+        $i8 = $i6 + 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i8);
+
+        $r14 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i3);
+
+        $r15 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.audio.Ac3Util: com.mbridge.msdk.playercommon.exoplayer2.Format parseEAc3AnnexFFormat(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,java.lang.String,java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData)>($r0, $r14, $r1, $r2);
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.Format format> = $r15;
+
+        goto label26;
+
+     label28:
+        $i9 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_ddts>;
+
+        if $i8 != $i9 goto label29;
+
+        $r16 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i3);
+
+        $i11 = $i6;
+
+        $r14 = $r10;
+
+        $r4 = $r2;
+
+        $r15 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format createAudioSampleFormat(java.lang.String,java.lang.String,java.lang.String,int,int,int,int,java.util.List,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,int,java.lang.String)>($r16, $r10, null, -1, -1, $i0, $i4, null, $r2, 0, $r1);
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.Format format> = $r15;
+
+        $i9 = $i5;
+
+        goto label30;
+
+     label29:
+        $i11 = $i6;
+
+        $r14 = $r10;
+
+        $r4 = $r2;
+
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_alac>;
+
+        $i9 = $i5;
+
+        if $i8 != $i10 goto label30;
+
+        $r13 = newarray (byte)[$i5];
+
+        $i11 = $i6;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i6);
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r13, 0, $i5);
+
+     label30:
+        $r10 = $r14;
+
+        goto label34;
+
+     label31:
+        $i9 = $i5;
+
+        $i11 = $i6;
+
+        $r14 = $r10;
+
+        $r4 = $r2;
+
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_esds>;
+
+        if $i8 != $i10 goto label32;
+
+        $i5 = $i6;
+
+        goto label33;
+
+     label32:
+        $i5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int findEsdsPosition(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int)>($r0, $i6, $i5);
+
+     label33:
+        if $i5 == -1 goto label30;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: android.util.Pair parseEsdsFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r0, $i5);
+
+        $r7 = $r6.<android.util.Pair: java.lang.Object first>;
+
+        $r10 = (java.lang.String) $r7;
+
+        $r7 = $r6.<android.util.Pair: java.lang.Object second>;
+
+        $r13 = (byte[]) $r7;
+
+        $r14 = "audio/mp4a-latm";
+
+        $z1 = virtualinvoke $r14.<java.lang.String: boolean equals(java.lang.Object)>($r10);
+
+        if $z1 == 0 goto label34;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.CodecSpecificDataUtil: android.util.Pair parseAacAudioSpecificConfig(byte[])>($r13);
+
+        $r7 = $r6.<android.util.Pair: java.lang.Object first>;
+
+        $r8 = (java.lang.Integer) $r7;
+
+        $i4 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        $r7 = $r6.<android.util.Pair: java.lang.Object second>;
+
+        $r8 = (java.lang.Integer) $r7;
+
+        $i0 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+     label34:
+        $i6 = $i11 + $i9;
+
+        $i5 = $i1;
+
+        $r2 = $r4;
+
+        goto label22;
+
+     label35:
+        $r15 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        if $r15 != null goto label39;
+
+        $r14 = $r10;
+
+        if $r10 == null goto label39;
+
+        $z0 = virtualinvoke $r12.<java.lang.String: boolean equals(java.lang.Object)>($r10);
+
+        if $z0 == 0 goto label36;
+
+        $b12 = 2;
+
+        goto label37;
+
+     label36:
+        $b12 = -1;
+
+     label37:
+        $r10 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i3);
+
+        if $r13 == null goto label38;
+
+        $r5 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>($r13);
+
+     label38:
+        $r15 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format createAudioSampleFormat(java.lang.String,java.lang.String,java.lang.String,int,int,int,int,int,java.util.List,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,int,java.lang.String)>($r10, $r14, null, -1, -1, $i0, $i4, $b12, $r5, $r2, 0, $r1);
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.Format format> = $r15;
+
+     label39:
+        return;
+    }
+
+    static android.util.Pair parseCommonEncryptionSinfFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int)
+    {
+        android.util.Pair $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        java.lang.Integer $r2;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+        java.lang.String $r1, $r3;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox $r4;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 = $i0 + 8;
+
+        $z0 = 0;
+
+        $r1 = null;
+
+        $r2 = null;
+
+        $i3 = -1;
+
+        $i4 = 0;
+
+     label01:
+        $i5 = $i2 - $i0;
+
+        if $i5 >= $i1 goto label05;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        $i5 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i6 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_frma>;
+
+        if $i6 != $i7 goto label02;
+
+        $i6 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i6);
+
+        goto label04;
+
+     label02:
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_schm>;
+
+        if $i6 != $i7 goto label03;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(4);
+
+        $r1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: java.lang.String readString(int)>(4);
+
+        goto label04;
+
+     label03:
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_schi>;
+
+        if $i6 != $i7 goto label04;
+
+        $i3 = $i2;
+
+        $i4 = $i5;
+
+     label04:
+        $i2 = $i2 + $i5;
+
+        goto label01;
+
+     label05:
+        $r3 = "cenc";
+
+        $z1 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z1 != 0 goto label06;
+
+        $r3 = "cbc1";
+
+        $z1 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z1 != 0 goto label06;
+
+        $r3 = "cens";
+
+        $z1 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z1 != 0 goto label06;
+
+        $r3 = "cbcs";
+
+        $z1 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z1 != 0 goto label06;
+
+        return null;
+
+     label06:
+        if $r2 == null goto label07;
+
+        $z1 = 1;
+
+        goto label08;
+
+     label07:
+        $z1 = 0;
+
+     label08:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z1, "frma atom is mandatory");
+
+        if $i3 == -1 goto label09;
+
+        $z1 = 1;
+
+        goto label10;
+
+     label09:
+        $z1 = 0;
+
+     label10:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z1, "schi atom is mandatory");
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox parseSchiFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int,java.lang.String)>($r0, $i3, $i4, $r1);
+
+        if $r4 == null goto label11;
+
+        $z0 = 1;
+
+     label11:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, "tenc atom is mandatory");
+
+        $r5 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r2, $r4);
+
+        return $r5;
+    }
+
+    private static android.util.Pair parseEdts(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom $r3;
+        android.util.Pair $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r4;
+        long $l3;
+        java.lang.IllegalArgumentException $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom $r2;
+        short $s5;
+        long[] $r0, $r1;
+        int $i0, $i1, $i2, $i4;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom;
+
+        if $r2 == null goto label8;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_elst>;
+
+        $r3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i0);
+
+        if $r3 == null goto label8;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(8);
+
+        $i0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int parseFullAtomVersion(int)>($i0);
+
+        $i1 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $r0 = newarray (long)[$i1];
+
+        $r1 = newarray (long)[$i1];
+
+        $i2 = 0;
+
+     label1:
+        if $i2 >= $i1 goto label7;
+
+        if $i0 != 1 goto label2;
+
+        $l3 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: long readUnsignedLongToLong()>();
+
+        goto label3;
+
+     label2:
+        $l3 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: long readUnsignedInt()>();
+
+     label3:
+        $r0[$i2] = $l3;
+
+        if $i0 != 1 goto label4;
+
+        $l3 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: long readLong()>();
+
+        goto label5;
+
+     label4:
+        $i4 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $l3 = (long) $i4;
+
+     label5:
+        $r1[$i2] = $l3;
+
+        $s5 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: short readShort()>();
+
+        if $s5 != 1 goto label6;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(2);
+
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label6:
+        $r5 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Unsupported media rate.");
+
+        throw $r5;
+
+     label7:
+        $r6 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r0, $r1);
+
+        return $r6;
+
+     label8:
+        $r6 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>(null, null);
+
+        return $r6;
+    }
+
+    private static android.util.Pair parseEsdsFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int)
+    {
+        byte[] $r3;
+        android.util.Pair $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        int $i0, $i1;
+        java.lang.String $r1, $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i0 = $i0 + 8;
+
+        $i0 = $i0 + 4;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i0);
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(1);
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int parseExpandableClassSize(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r0);
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(2);
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i1 = $i0 & 128;
+
+        if $i1 == 0 goto label1;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(2);
+
+     label1:
+        $i1 = $i0 & 64;
+
+        if $i1 == 0 goto label2;
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedShort()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($i1);
+
+     label2:
+        $i0 = $i0 & 32;
+
+        if $i0 == 0 goto label3;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(2);
+
+     label3:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(1);
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int parseExpandableClassSize(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r0);
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.MimeTypes: java.lang.String getMimeTypeFromMp4ObjectType(int)>($i0);
+
+        $r2 = "audio/mpeg";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label4;
+
+        $r2 = "audio/vnd.dts";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label4;
+
+        $r2 = "audio/vnd.dts.hd";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label4;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(12);
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(1);
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int parseExpandableClassSize(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r0);
+
+        $r3 = newarray (byte)[$i0];
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r3, 0, $i0);
+
+        $r4 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r1, $r3);
+
+        return $r4;
+
+     label4:
+        $r4 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r1, null);
+
+        return $r4;
+    }
+
+    private static int parseExpandableClassSize(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i1 = $i0;
+
+        $i0 = $i0 & 127;
+
+     label1:
+        $i1 = $i1 & 128;
+
+        if $i1 != 128 goto label2;
+
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i1 = $i2;
+
+        $i0 = $i0 << 7;
+
+        $i2 = $i2 & 127;
+
+        $i0 = $i0 | $i2;
+
+        goto label1;
+
+     label2:
+        return $i0;
+    }
+
+    private static int parseHdlr(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(16);
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_soun>;
+
+        if $i0 != $i1 goto label1;
+
+        return 1;
+
+     label1:
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_vide>;
+
+        if $i0 != $i1 goto label2;
+
+        return 2;
+
+     label2:
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_text>;
+
+        if $i0 == $i1 goto label4;
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_sbtl>;
+
+        if $i0 == $i1 goto label4;
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_subt>;
+
+        if $i0 == $i1 goto label4;
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_clcp>;
+
+        if $i0 == $i1 goto label4;
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int TYPE_meta>;
+
+        if $i0 != $i1 goto label3;
+
+        return 4;
+
+     label3:
+        return -1;
+
+     label4:
+        return 3;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata parseIlst(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata$Entry $r2;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata $r3;
+        java.util.ArrayList $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(8);
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+     label1:
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        if $i1 >= $i0 goto label2;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.MetadataUtil: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata$Entry parseIlstElement(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r0);
+
+        if $r2 == null goto label1;
+
+        virtualinvoke $r1.<java.util.ArrayList: boolean add(java.lang.Object)>($r2);
+
+        goto label1;
+
+     label2:
+        $z0 = virtualinvoke $r1.<java.util.ArrayList: boolean isEmpty()>();
+
+        if $z0 == 0 goto label3;
+
+        return null;
+
+     label3:
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata: void <init>(java.util.List)>($r1);
+
+        return $r3;
+    }
+
+    private static android.util.Pair parseMdhd(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        android.util.Pair $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        long $l3;
+        char $c5;
+        byte $b0, $b2;
+        java.lang.Long $r3;
+        int $i1, $i4;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $b0 = 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(8);
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int parseFullAtomVersion(int)>($i1);
+
+        if $i1 != 0 goto label1;
+
+        $b2 = 8;
+
+        goto label2;
+
+     label1:
+        $b2 = 16;
+
+     label2:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($b2);
+
+        $l3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: long readUnsignedInt()>();
+
+        if $i1 != 0 goto label3;
+
+        $b0 = 4;
+
+     label3:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($b0);
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedShort()>();
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("");
+
+        $i4 = $i1 >> 10;
+
+        $i4 = $i4 & 31;
+
+        $i4 = $i4 + 96;
+
+        $c5 = (char) $i4;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c5);
+
+        $i4 = $i1 >> 5;
+
+        $i4 = $i4 & 31;
+
+        $i4 = $i4 + 96;
+
+        $c5 = (char) $i4;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c5);
+
+        $i1 = $i1 & 31;
+
+        $i1 = $i1 + 96;
+
+        $c5 = (char) $i1;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c5);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l3);
+
+        $r4 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r3, $r2);
+
+        return $r4;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata parseMetaAtom(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int)
+    {
+        int $i0, $i1, $i2, $i3, $i4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata $r1;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(12);
+
+     label1:
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        if $i2 >= $i0 goto label3;
+
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_ilst>;
+
+        if $i4 != $i1 goto label2;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i3);
+
+        $i0 = $i3 + $i2;
+
+        $r1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata parseIlst(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r0, $i0);
+
+        return $r1;
+
+     label2:
+        $i2 = $i2 + -8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($i2);
+
+        goto label1;
+
+     label3:
+        return null;
+    }
+
+    private static long parseMvhd(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        byte $b0;
+        int $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        long $l2;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $b0 = 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(8);
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int parseFullAtomVersion(int)>($i1);
+
+        if $i1 == 0 goto label1;
+
+        $b0 = 16;
+
+     label1:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($b0);
+
+        $l2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: long readUnsignedInt()>();
+
+        return $l2;
+    }
+
+    private static float parsePaspFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int)
+    {
+        int $i0, $i1;
+        float $f0, $f1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i0 = $i0 + 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i0);
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $f0 = (float) $i0;
+
+        $f1 = (float) $i1;
+
+        $f0 = $f0 / $f1;
+
+        return $f0;
+    }
+
+    private static byte[] parseProjFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int)
+    {
+        byte[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i3 = $i0 + 8;
+
+     label1:
+        $i2 = $i3 - $i0;
+
+        if $i2 >= $i1 goto label3;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i3);
+
+        $i4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i5 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_proj>;
+
+        if $i5 != $i2 goto label2;
+
+        $r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i0 = $i4 + $i3;
+
+        $r1 = staticinvoke <java.util.Arrays: byte[] copyOfRange(byte[],int,int)>($r1, $i3, $i0);
+
+        return $r1;
+
+     label2:
+        $i3 = $i3 + $i4;
+
+        goto label1;
+
+     label3:
+        return null;
+    }
+
+    private static android.util.Pair parseSampleEntryEncryptionData(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int)
+    {
+        android.util.Pair $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+     label1:
+        $i3 = $i2 - $i0;
+
+        if $i3 >= $i1 goto label5;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        $i3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        if $i3 <= 0 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, "childAtomSize should be positive");
+
+        $i4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i5 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_sinf>;
+
+        if $i4 != $i5 goto label4;
+
+        $r1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: android.util.Pair parseCommonEncryptionSinfFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int)>($r0, $i2, $i3);
+
+        if $r1 == null goto label4;
+
+        return $r1;
+
+     label4:
+        $i2 = $i2 + $i3;
+
+        goto label1;
+
+     label5:
+        return null;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox parseSchiFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int, java.lang.String)
+    {
+        byte[] $r1, $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox $r4;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        java.lang.String $r0;
+        boolean $z0;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r0 := @parameter3: java.lang.String;
+
+        $i2 = $i0 + 8;
+
+     label1:
+        $i3 = $i2 - $i0;
+
+        $r3 = null;
+
+        if $i3 >= $i1 goto label8;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        $i3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i4 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i5 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_tenc>;
+
+        if $i4 != $i5 goto label7;
+
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int parseFullAtomVersion(int)>($i0);
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(1);
+
+        if $i0 != 0 goto label2;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(1);
+
+        $i1 = 0;
+
+        $i0 = 0;
+
+        goto label3;
+
+     label2:
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i1 = $i0 & 240;
+
+        $i0 = $i0 & 15;
+
+        $i1 = $i1 >> 4;
+
+     label3:
+        $i2 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        if $i2 != 1 goto label4;
+
+        $z0 = 1;
+
+        goto label5;
+
+     label4:
+        $z0 = 0;
+
+     label5:
+        $i2 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r1 = newarray (byte)[16];
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r1, 0, 16);
+
+        if $z0 == 0 goto label6;
+
+        if $i2 != 0 goto label6;
+
+        $i3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $r3 = newarray (byte)[$i3];
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r3, 0, $i3);
+
+     label6:
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox: void <init>(boolean,java.lang.String,int,byte[],int,int,byte[])>($z0, $r0, $i2, $r1, $i1, $i0, $r3);
+
+        return $r4;
+
+     label7:
+        $i2 = $i2 + $i3;
+
+        goto label1;
+
+     label8:
+        return null;
+    }
+
+    public static com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable parseStbl(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track, com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom, com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder) throws com.mbridge.msdk.playercommon.exoplayer2.ParserException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.ParserException $r35;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator $r16, $r32;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track $r0, $r20;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom $r1;
+        byte $b18;
+        int[] $r6, $r8, $r24, $r25, $r28;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable $r31;
+        boolean $z0, $z1, $z2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$UnhandledEditListException $r34;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$Stz2SampleSizeBox $r30;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.FixedSampleSizeRechunker$Results $r22;
+        java.lang.StringBuilder $r21, $r33;
+        long $l0, $l1, $l10, $l12, $l17, $l19, $l20;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r10, $r11, $r12, $r13, $r14, $r15;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox $r4;
+        long[] $r5, $r7, $r23, $r26, $r27;
+        int $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i11, $i13, $i14, $i15, $i16;
+        java.lang.String $r18, $r19;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom $r3, $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r17;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StszSampleSizeBox $r29;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder $r2;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom;
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder;
+
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_stsz>;
+
+        $r3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i2);
+
+        if $r3 == null goto label01;
+
+        $r29 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StszSampleSizeBox;
+
+        $r4 = $r29;
+
+        specialinvoke $r29.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StszSampleSizeBox: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom)>($r3);
+
+        goto label02;
+
+     label01:
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_stz2>;
+
+        $r3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i2);
+
+        if $r3 == null goto label70;
+
+        $r30 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$Stz2SampleSizeBox;
+
+        $r4 = $r30;
+
+        specialinvoke $r30.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$Stz2SampleSizeBox: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom)>($r3);
+
+     label02:
+        $i2 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox: int getSampleCount()>();
+
+        if $i2 != 0 goto label03;
+
+        $r31 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable;
+
+        $r5 = newarray (long)[0];
+
+        $r6 = newarray (int)[0];
+
+        $r7 = newarray (long)[0];
+
+        $r8 = newarray (int)[0];
+
+        specialinvoke $r31.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track,long[],int[],int,long[],int[],long)>($r0, $r5, $r6, 0, $r7, $r8, -9223372036854775807L);
+
+        return $r31;
+
+     label03:
+        $i3 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_stco>;
+
+        $r3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i3);
+
+        $r9 = $r3;
+
+        if $r3 != null goto label04;
+
+        $i3 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_co64>;
+
+        $r9 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i3);
+
+        $z0 = 1;
+
+        goto label05;
+
+     label04:
+        $z0 = 0;
+
+     label05:
+        $r10 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        $i3 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_stsc>;
+
+        $r3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i3);
+
+        $r11 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        $i3 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_stts>;
+
+        $r3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i3);
+
+        $r12 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        $i3 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_stss>;
+
+        $r3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i3);
+
+        $r13 = null;
+
+        if $r3 == null goto label06;
+
+        $r14 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        goto label07;
+
+     label06:
+        $r14 = null;
+
+     label07:
+        $i3 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_ctts>;
+
+        $r3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i3);
+
+        if $r3 == null goto label08;
+
+        $r15 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        goto label09;
+
+     label08:
+        $r15 = null;
+
+     label09:
+        $r32 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator;
+
+        $r16 = $r32;
+
+        specialinvoke $r32.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: void <init>(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,boolean)>($r11, $r10, $z0);
+
+        virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(12);
+
+        $i3 = virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $i4 = $i3 - 1;
+
+        $i5 = virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $i3 = virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        if $r15 == null goto label10;
+
+        virtualinvoke $r15.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(12);
+
+        $i7 = virtualinvoke $r15.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        goto label11;
+
+     label10:
+        $i7 = 0;
+
+     label11:
+        $i8 = -1;
+
+        if $r14 == null goto label12;
+
+        virtualinvoke $r14.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(12);
+
+        $i9 = virtualinvoke $r14.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $i6 = $i9;
+
+        if $i9 <= 0 goto label13;
+
+        $i9 = virtualinvoke $r14.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $i8 = $i9 + -1;
+
+        $r13 = $r14;
+
+        goto label13;
+
+     label12:
+        $r13 = $r14;
+
+        $i6 = 0;
+
+     label13:
+        $z0 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox: boolean isFixedSampleSize()>();
+
+        if $z0 == 0 goto label14;
+
+        $r17 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $r18 = $r17.<com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String sampleMimeType>;
+
+        $r19 = "audio/raw";
+
+        $z0 = virtualinvoke $r19.<java.lang.String: boolean equals(java.lang.Object)>($r18);
+
+        if $z0 == 0 goto label14;
+
+        if $i4 != 0 goto label14;
+
+        if $i7 != 0 goto label14;
+
+        if $i6 != 0 goto label14;
+
+        $z0 = 1;
+
+        goto label15;
+
+     label14:
+        $z0 = 0;
+
+     label15:
+        $l10 = 0L;
+
+        if $z0 != 0 goto label36;
+
+        $r7 = newarray (long)[$i2];
+
+        $r8 = newarray (int)[$i2];
+
+        $r5 = newarray (long)[$i2];
+
+        $r6 = newarray (int)[$i2];
+
+        $i11 = $i3;
+
+        $l12 = 0L;
+
+        $l0 = 0L;
+
+        $i13 = $i4;
+
+        $i14 = 0;
+
+        $i3 = 0;
+
+        $i9 = 0;
+
+        $i15 = 0;
+
+        $i4 = 0;
+
+        $i16 = $i5;
+
+     label16:
+        if $i14 >= $i2 goto label27;
+
+     label17:
+        if $i4 != 0 goto label18;
+
+        $z0 = virtualinvoke $r16.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: boolean moveNext()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $l0 = $r16.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: long offset>;
+
+        $i4 = $r16.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: int numSamples>;
+
+        goto label17;
+
+     label18:
+        $i5 = $i13;
+
+        $i13 = $i16;
+
+        if $r15 == null goto label21;
+
+     label19:
+        if $i9 != 0 goto label20;
+
+        if $i7 <= 0 goto label20;
+
+        $i9 = virtualinvoke $r15.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $i15 = virtualinvoke $r15.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i7 = $i7 + -1;
+
+        goto label19;
+
+     label20:
+        $i9 = $i9 + -1;
+
+     label21:
+        $r7[$i14] = $l0;
+
+        $i16 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$SampleSizeBox: int readNextSampleSize()>();
+
+        $r8[$i14] = $i16;
+
+        if $i16 <= $i3 goto label22;
+
+        $i3 = $i16;
+
+     label22:
+        $l17 = (long) $i15;
+
+        $l17 = $l12 + $l17;
+
+        $r5[$i14] = $l17;
+
+        if $r13 != null goto label23;
+
+        $b18 = 1;
+
+        goto label24;
+
+     label23:
+        $b18 = 0;
+
+     label24:
+        $r6[$i14] = $b18;
+
+        if $i14 != $i8 goto label25;
+
+        $r6[$i14] = 1;
+
+        $i6 = $i6 + -1;
+
+        if $i6 <= 0 goto label25;
+
+        $i8 = virtualinvoke $r13.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $i8 = $i8 - 1;
+
+     label25:
+        $l17 = (long) $i11;
+
+        $l12 = $l12 + $l17;
+
+        $i13 = $i13 + -1;
+
+        if $i13 != 0 goto label26;
+
+        if $i5 <= 0 goto label26;
+
+        $i5 = $i5 + -1;
+
+        $i13 = virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $i11 = virtualinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+     label26:
+        $i16 = $r8[$i14];
+
+        $l17 = (long) $i16;
+
+        $l0 = $l0 + $l17;
+
+        $i4 = $i4 + -1;
+
+        $i14 = $i14 + 1;
+
+        $i16 = $i13;
+
+        $i13 = $i5;
+
+        goto label16;
+
+     label27:
+        $i14 = $i13;
+
+        $i11 = $i16;
+
+        $l0 = (long) $i15;
+
+        $l12 = $l12 + $l0;
+
+        if $i9 != 0 goto label28;
+
+        $z0 = 1;
+
+        goto label29;
+
+     label28:
+        $z0 = 0;
+
+     label29:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean)>($z0);
+
+     label30:
+        if $i7 <= 0 goto label33;
+
+        $i9 = virtualinvoke $r15.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        if $i9 != 0 goto label31;
+
+        $z0 = 1;
+
+        goto label32;
+
+     label31:
+        $z0 = 0;
+
+     label32:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean)>($z0);
+
+        virtualinvoke $r15.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i7 = $i7 + -1;
+
+        goto label30;
+
+     label33:
+        if $i6 != 0 goto label34;
+
+        if $i11 != 0 goto label34;
+
+        $i9 = $i4;
+
+        if $i4 != 0 goto label35;
+
+        if $i14 != 0 goto label35;
+
+        $r20 = $r0;
+
+        goto label39;
+
+     label34:
+        $i9 = $i4;
+
+     label35:
+        $r33 = new java.lang.StringBuilder;
+
+        $r21 = $r33;
+
+        specialinvoke $r33.<java.lang.StringBuilder: void <init>(java.lang.String)>("Inconsistent stbl box for track ");
+
+        $r20 = $r0;
+
+        $i4 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: int id>;
+
+        virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i4);
+
+        virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": remainingSynchronizationSamples ");
+
+        virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i6);
+
+        virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", remainingSamplesAtTimestampDelta ");
+
+        virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i11);
+
+        virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", remainingSamplesInChunk ");
+
+        virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i9);
+
+        virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", remainingTimestampDeltaChanges ");
+
+        virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i14);
+
+        $r18 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("AtomParsers", $r18);
+
+        goto label39;
+
+     label36:
+        $r20 = $r0;
+
+        $i6 = $r16.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: int length>;
+
+        $r5 = newarray (long)[$i6];
+
+        $i6 = $r16.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: int length>;
+
+        $r6 = newarray (int)[$i6];
+
+     label37:
+        $z0 = virtualinvoke $r16.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: boolean moveNext()>();
+
+        if $z0 == 0 goto label38;
+
+        $i6 = $r16.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: int index>;
+
+        $l12 = $r16.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: long offset>;
+
+        $r5[$i6] = $l12;
+
+        $i6 = $r16.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: int index>;
+
+        $i4 = $r16.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$ChunkIterator: int numSamples>;
+
+        $r6[$i6] = $i4;
+
+        goto label37;
+
+     label38:
+        $r17 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $i6 = $r17.<com.mbridge.msdk.playercommon.exoplayer2.Format: int pcmEncoding>;
+
+        $r17 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $i4 = $r17.<com.mbridge.msdk.playercommon.exoplayer2.Format: int channelCount>;
+
+        $i6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int getPcmFrameSize(int,int)>($i6, $i4);
+
+        $l12 = (long) $i3;
+
+        $r22 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.FixedSampleSizeRechunker: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.FixedSampleSizeRechunker$Results rechunk(int,long[],int[],long)>($i6, $r5, $r6, $l12);
+
+        $r7 = $r22.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.FixedSampleSizeRechunker$Results: long[] offsets>;
+
+        $r8 = $r22.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.FixedSampleSizeRechunker$Results: int[] sizes>;
+
+        $i3 = $r22.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.FixedSampleSizeRechunker$Results: int maximumSize>;
+
+        $r5 = $r22.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.FixedSampleSizeRechunker$Results: long[] timestamps>;
+
+        $r6 = $r22.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.FixedSampleSizeRechunker$Results: int[] flags>;
+
+        $l12 = $r22.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.FixedSampleSizeRechunker$Results: long duration>;
+
+     label39:
+        $l0 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        $l0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l12, 1000000L, $l0);
+
+        $r23 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListDurations>;
+
+        if $r23 == null goto label69;
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder: boolean hasGaplessInfo()>();
+
+        if $z0 != 0 goto label69;
+
+        $r23 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListDurations>;
+
+        $i6 = lengthof $r23;
+
+        if $i6 != 1 goto label41;
+
+        $i6 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: int type>;
+
+        if $i6 != 1 goto label41;
+
+        $i6 = lengthof $r5;
+
+        if $i6 < 2 goto label41;
+
+        $r23 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListMediaTimes>;
+
+        $l1 = $r23[0];
+
+        $r23 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListDurations>;
+
+        $l17 = $r23[0];
+
+        $l19 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        $l20 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long movieTimescale>;
+
+        $l17 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l17, $l19, $l20);
+
+        $l17 = $l1 + $l17;
+
+        $r18 = "AtomParsers";
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: boolean canApplyEditWithGaplessInfo(long[],long,long,long)>($r5, $l12, $l1, $l17);
+
+        if $z0 == 0 goto label42;
+
+        $l17 = $l12 - $l17;
+
+        $l19 = $r5[0];
+
+        $l1 = $l1 - $l19;
+
+        $r17 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $i6 = $r17.<com.mbridge.msdk.playercommon.exoplayer2.Format: int sampleRate>;
+
+        $l19 = (long) $i6;
+
+        $l20 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        $l1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l1, $l19, $l20);
+
+        $r17 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $i6 = $r17.<com.mbridge.msdk.playercommon.exoplayer2.Format: int sampleRate>;
+
+        $l19 = (long) $i6;
+
+        $l20 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        $l17 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l17, $l19, $l20);
+
+        $b18 = $l1 cmp 0L;
+
+        if $b18 != 0 goto label40;
+
+        $b18 = $l17 cmp 0L;
+
+        if $b18 == 0 goto label42;
+
+     label40:
+        $b18 = $l1 cmp 2147483647L;
+
+        $i6 = (int) $b18;
+
+        if $i6 > 0 goto label42;
+
+        $b18 = $l17 cmp 2147483647L;
+
+        $i6 = (int) $b18;
+
+        if $i6 > 0 goto label42;
+
+        $i2 = (int) $l1;
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder: int encoderDelay> = $i2;
+
+        $i2 = (int) $l17;
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.GaplessInfoHolder: int encoderPadding> = $i2;
+
+        $l10 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: void scaleLargeTimestampsInPlace(long[],long,long)>($r5, 1000000L, $l10);
+
+        $r31 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable;
+
+        specialinvoke $r31.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track,long[],int[],int,long[],int[],long)>($r0, $r7, $r8, $i3, $r5, $r6, $l0);
+
+        return $r31;
+
+     label41:
+        $r18 = "AtomParsers";
+
+     label42:
+        $r23 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListDurations>;
+
+        $i6 = lengthof $r23;
+
+        if $i6 != 1 goto label45;
+
+        $r23 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListDurations>;
+
+        $l0 = $r23[0];
+
+        $b18 = $l0 cmp 0L;
+
+        if $b18 != 0 goto label45;
+
+        $r23 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListMediaTimes>;
+
+        $l10 = $r23[0];
+
+        $i2 = 0;
+
+     label43:
+        $i6 = lengthof $r5;
+
+        if $i2 >= $i6 goto label44;
+
+        $l0 = $r5[$i2];
+
+        $l0 = $l0 - $l10;
+
+        $l17 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        $l0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l0, 1000000L, $l17);
+
+        $r5[$i2] = $l0;
+
+        $i2 = $i2 + 1;
+
+        goto label43;
+
+     label44:
+        $l10 = $l12 - $l10;
+
+        $l12 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        $l10 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l10, 1000000L, $l12);
+
+        $r31 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable;
+
+        specialinvoke $r31.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track,long[],int[],int,long[],int[],long)>($r0, $r7, $r8, $i3, $r5, $r6, $l10);
+
+        return $r31;
+
+     label45:
+        $i6 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: int type>;
+
+        if $i6 != 1 goto label46;
+
+        $z0 = 1;
+
+        goto label47;
+
+     label46:
+        $z0 = 0;
+
+     label47:
+        $z1 = 0;
+
+        $i6 = 0;
+
+        $i4 = 0;
+
+        $i9 = 0;
+
+     label48:
+        $r23 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListDurations>;
+
+        $i7 = lengthof $r23;
+
+        if $i4 >= $i7 goto label52;
+
+        $r23 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListMediaTimes>;
+
+        $l12 = $r23[$i4];
+
+        $b18 = $l12 cmp -1L;
+
+        if $b18 == 0 goto label51;
+
+        $r23 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListDurations>;
+
+        $l0 = $r23[$i4];
+
+        $l17 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        $l1 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long movieTimescale>;
+
+        $l0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l0, $l17, $l1);
+
+        $i7 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int binarySearchCeil(long[],long,boolean,boolean)>($r5, $l12, 1, 1);
+
+        $l12 = $l12 + $l0;
+
+        $i14 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int binarySearchCeil(long[],long,boolean,boolean)>($r5, $l12, $z0, 0);
+
+        $i11 = $i14 - $i7;
+
+        $i6 = $i6 + $i11;
+
+        if $i9 == $i7 goto label49;
+
+        $z2 = 1;
+
+        goto label50;
+
+     label49:
+        $z2 = 0;
+
+     label50:
+        $z1 = $z1 | $z2;
+
+        $i9 = $i14;
+
+     label51:
+        $i4 = $i4 + 1;
+
+        goto label48;
+
+     label52:
+        if $i6 == $i2 goto label53;
+
+        $z2 = 1;
+
+        goto label54;
+
+     label53:
+        $z2 = 0;
+
+     label54:
+        $z1 = $z1 | $z2;
+
+        if $z1 == 0 goto label55;
+
+        $r23 = newarray (long)[$i6];
+
+        goto label56;
+
+     label55:
+        $r23 = $r7;
+
+     label56:
+        if $z1 == 0 goto label57;
+
+        $r24 = newarray (int)[$i6];
+
+        goto label58;
+
+     label57:
+        $r24 = $r8;
+
+     label58:
+        if $z1 == 0 goto label59;
+
+        $i3 = 0;
+
+        if $z1 == 0 goto label59;
+
+        $r25 = newarray (int)[$i6];
+
+        goto label60;
+
+     label59:
+        $r25 = $r6;
+
+     label60:
+        $r26 = newarray (long)[$i6];
+
+        $i6 = 0;
+
+        $i2 = 0;
+
+     label61:
+        $r27 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListDurations>;
+
+        $i4 = lengthof $r27;
+
+        if $i6 >= $i4 goto label68;
+
+        $r27 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListMediaTimes>;
+
+        $l0 = $r27[$i6];
+
+        $r27 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long[] editListDurations>;
+
+        $l12 = $r27[$i6];
+
+        $b18 = $l0 cmp -1L;
+
+        if $b18 == 0 goto label66;
+
+        $l17 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        $l1 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long movieTimescale>;
+
+        $l17 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l12, $l17, $l1);
+
+        $l17 = $l17 + $l0;
+
+        $i7 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int binarySearchCeil(long[],long,boolean,boolean)>($r5, $l0, 1, 1);
+
+        $i4 = $i7;
+
+        $i14 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int binarySearchCeil(long[],long,boolean,boolean)>($r5, $l17, $z0, 0);
+
+        $i9 = $i14;
+
+        if $z1 == 0 goto label62;
+
+        $i11 = $i14 - $i7;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r7, $i7, $r23, $i2, $i11);
+
+        $r28 = $r8;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r8, $i7, $r24, $i2, $i11);
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r6, $i7, $r25, $i2, $i11);
+
+        goto label63;
+
+     label62:
+        $r28 = $r8;
+
+     label63:
+        if $i7 >= $i14 goto label64;
+
+        $i7 = $r25[$i2];
+
+        $i7 = $i7 & 1;
+
+        if $i7 != 0 goto label64;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>($r18, "Ignoring edit list: edit does not start with a sync sample.");
+
+        $r34 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$UnhandledEditListException;
+
+        specialinvoke $r34.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$UnhandledEditListException: void <init>()>();
+
+        throw $r34;
+
+     label64:
+        if $i4 >= $i9 goto label67;
+
+        $l17 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long movieTimescale>;
+
+        $l17 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l10, 1000000L, $l17);
+
+        $l1 = $r5[$i4];
+
+        $l1 = $l1 - $l0;
+
+        $l19 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        $l1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l1, 1000000L, $l19);
+
+        $l17 = $l17 + $l1;
+
+        $r26[$i2] = $l17;
+
+        if $z1 == 0 goto label65;
+
+        $i7 = $r24[$i2];
+
+        if $i7 <= $i3 goto label65;
+
+        $i3 = $r28[$i4];
+
+     label65:
+        $i2 = $i2 + 1;
+
+        $i4 = $i4 + 1;
+
+        goto label64;
+
+     label66:
+        $r28 = $r8;
+
+     label67:
+        $l10 = $l10 + $l12;
+
+        $i6 = $i6 + 1;
+
+        $r8 = $r28;
+
+        goto label61;
+
+     label68:
+        $l12 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        $l10 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l10, 1000000L, $l12);
+
+        $r31 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable;
+
+        specialinvoke $r31.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track,long[],int[],int,long[],int[],long)>($r0, $r23, $r24, $i3, $r26, $r25, $l10);
+
+        return $r31;
+
+     label69:
+        $l10 = $r20.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: long timescale>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: void scaleLargeTimestampsInPlace(long[],long,long)>($r5, 1000000L, $l10);
+
+        $r31 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable;
+
+        specialinvoke $r31.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackSampleTable: void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track,long[],int[],int,long[],int[],long)>($r0, $r7, $r8, $i3, $r5, $r6, $l0);
+
+        return $r31;
+
+     label70:
+        $r35 = new com.mbridge.msdk.playercommon.exoplayer2.ParserException;
+
+        specialinvoke $r35.<com.mbridge.msdk.playercommon.exoplayer2.ParserException: void <init>(java.lang.String)>("Track has no sample table size information");
+
+        throw $r35;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData parseStsd(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int, java.lang.String, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData, boolean) throws com.mbridge.msdk.playercommon.exoplayer2.ParserException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData $r3, $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+        java.lang.String $r1, $r4;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r5;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 := @parameter3: java.lang.String;
+
+        $r2 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData;
+
+        $z0 := @parameter5: boolean;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(12);
+
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $r6 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData;
+
+        $r3 = $r6;
+
+        specialinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: void <init>(int)>($i2);
+
+        $i3 = 0;
+
+     label1:
+        if $i3 >= $i2 goto label8;
+
+        $i4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i5 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        if $i5 <= 0 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z1, "childAtomSize should be positive");
+
+        $i6 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_avc1>;
+
+        if $i6 == $i7 goto label6;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_avc3>;
+
+        if $i6 == $i7 goto label6;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_encv>;
+
+        if $i6 == $i7 goto label6;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_mp4v>;
+
+        if $i6 == $i7 goto label6;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_hvc1>;
+
+        if $i6 == $i7 goto label6;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_hev1>;
+
+        if $i6 == $i7 goto label6;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_s263>;
+
+        if $i6 == $i7 goto label6;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_vp08>;
+
+        if $i6 == $i7 goto label6;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_vp09>;
+
+        if $i6 == $i7 goto label6;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_mp4a>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_enca>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_ac_3>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_ec_3>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_dtsc>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_dtse>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_dtsh>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_dtsl>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_samr>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_sawb>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_lpcm>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_sowt>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE__mp3>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_alac>;
+
+        if $i6 == $i7 goto label5;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_TTML>;
+
+        if $i6 == $i7 goto label4;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_tx3g>;
+
+        if $i6 == $i7 goto label4;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_wvtt>;
+
+        if $i6 == $i7 goto label4;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_stpp>;
+
+        if $i6 == $i7 goto label4;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_c608>;
+
+        if $i6 == $i7 goto label4;
+
+        $i7 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_camm>;
+
+        if $i6 != $i7 goto label7;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i0);
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format createSampleFormat(java.lang.String,java.lang.String,java.lang.String,int,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData)>($r4, "application/x-camera-motion", null, -1, null);
+
+        $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.Format format> = $r5;
+
+        goto label7;
+
+     label4:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: void parseTextSampleEntry(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int,int,int,java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData)>($r0, $i6, $i4, $i5, $i0, $r1, $r3);
+
+        goto label7;
+
+     label5:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: void parseAudioSampleEntry(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int,int,int,java.lang.String,boolean,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData,int)>($r0, $i6, $i4, $i5, $i0, $r1, $z0, $r2, $r3, $i3);
+
+        goto label7;
+
+     label6:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: void parseVideoSampleEntry(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int,int,int,int,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData,int)>($r0, $i6, $i4, $i5, $i0, $i1, $r2, $r3, $i3);
+
+     label7:
+        $i4 = $i4 + $i5;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i4);
+
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label8:
+        return $r3;
+    }
+
+    private static void parseTextSampleEntry(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int, int, int, java.lang.String, com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData) throws com.mbridge.msdk.playercommon.exoplayer2.ParserException
+    {
+        byte[] $r5;
+        java.lang.IllegalStateException $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        long $l4;
+        java.util.List $r4;
+        int $i0, $i1, $i2, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r7;
+        java.lang.String $r1, $r3, $r6;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $i3 := @parameter4: int;
+
+        $r1 := @parameter5: java.lang.String;
+
+        $r2 := @parameter6: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData;
+
+        $i1 = $i1 + 8;
+
+        $i1 = $i1 + 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i1);
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_TTML>;
+
+        $r3 = "application/ttml+xml";
+
+        $r4 = null;
+
+        $l4 = 9223372036854775807L;
+
+        if $i0 == $i1 goto label5;
+
+     label1:
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_tx3g>;
+
+        if $i0 != $i1 goto label2;
+
+        $i0 = $i2 + -8;
+
+        $i0 = $i0 + -8;
+
+        $r5 = newarray (byte)[$i0];
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r5, 0, $i0);
+
+        staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>($r5);
+
+        goto label1;
+
+     label2:
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_wvtt>;
+
+        if $i0 != $i1 goto label3;
+
+        goto label1;
+
+     label3:
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_stpp>;
+
+        if $i0 != $i1 goto label4;
+
+        goto label1;
+
+     label4:
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_c608>;
+
+        if $i0 != $i1 goto label6;
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: int requiredSampleTransformation> = 1;
+
+        goto label1;
+
+     label5:
+        $r6 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i3);
+
+        $r7 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format createTextSampleFormat(java.lang.String,java.lang.String,java.lang.String,int,int,java.lang.String,int,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,long,java.util.List)>($r6, $r3, null, -1, 0, $r1, -1, null, $l4, $r4);
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.Format format> = $r7;
+
+        return;
+
+     label6:
+        $r8 = new java.lang.IllegalStateException;
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r8;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData parseTkhd(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)
+    {
+        byte[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        long $l8, $l9;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData $r2;
+        short $s5;
+        byte $b0, $b3;
+        int $i1, $i2, $i4, $i6, $i7;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $b0 = 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(8);
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int parseFullAtomVersion(int)>($i1);
+
+        if $i2 != 0 goto label01;
+
+        $b3 = 8;
+
+        goto label02;
+
+     label01:
+        $b3 = 16;
+
+     label02:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($b3);
+
+        $i1 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(4);
+
+        $i4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        if $i2 != 0 goto label03;
+
+        $b0 = 4;
+
+     label03:
+        $s5 = 0;
+
+        $i6 = 0;
+
+     label04:
+        if $i6 >= $b0 goto label06;
+
+        $r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i7 = $i4 + $i6;
+
+        $b3 = $r1[$i7];
+
+        $i7 = (int) $b3;
+
+        if $i7 == -1 goto label05;
+
+        $z0 = 0;
+
+        goto label07;
+
+     label05:
+        $i6 = $i6 + 1;
+
+        goto label04;
+
+     label06:
+        $z0 = 1;
+
+     label07:
+        $l8 = -9223372036854775807L;
+
+        if $z0 == 0 goto label08;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($b0);
+
+        goto label11;
+
+     label08:
+        if $i2 != 0 goto label09;
+
+        $l9 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: long readUnsignedInt()>();
+
+        goto label10;
+
+     label09:
+        $l9 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: long readUnsignedLongToLong()>();
+
+     label10:
+        $b0 = $l9 cmp 0L;
+
+        if $b0 == 0 goto label11;
+
+        $l8 = $l9;
+
+     label11:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(16);
+
+        $i2 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(4);
+
+        $i6 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i7 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        if $i2 != 0 goto label13;
+
+        if $i4 != 65536 goto label12;
+
+        if $i6 != -65536 goto label12;
+
+        if $i7 != 0 goto label12;
+
+        $s5 = 90;
+
+        goto label14;
+
+     label12:
+        if $i2 != 0 goto label13;
+
+        if $i4 != -65536 goto label13;
+
+        if $i6 != 65536 goto label13;
+
+        if $i7 != 0 goto label13;
+
+        $s5 = 270;
+
+        goto label14;
+
+     label13:
+        if $i2 != -65536 goto label14;
+
+        if $i4 != 0 goto label14;
+
+        if $i6 != 0 goto label14;
+
+        if $i7 != -65536 goto label14;
+
+        $s5 = 180;
+
+     label14:
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData: void <init>(int,long,int)>($i1, $l8, $s5);
+
+        return $r2;
+    }
+
+    public static com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track parseTrak(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom, com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom, long, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData, boolean, boolean) throws com.mbridge.msdk.playercommon.exoplayer2.ParserException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData $r11;
+        android.util.Pair $r8, $r12;
+        long $l0, $l3, $l5;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox[] $r17;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track $r18;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom $r0, $r3, $r7;
+        long[] $r13, $r14;
+        byte $b4;
+        java.lang.Long $r16;
+        int $i1, $i2, $i6, $i7;
+        java.lang.String $r10;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom $r1, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r15;
+        java.lang.Object $r9;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom;
+
+        $l0 := @parameter2: long;
+
+        $r2 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData;
+
+        $z0 := @parameter4: boolean;
+
+        $z1 := @parameter5: boolean;
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_mdia>;
+
+        $r3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom getContainerAtomOfType(int)>($i1);
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_hdlr>;
+
+        $r4 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i1);
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: int parseHdlr(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r5);
+
+        if $i1 != -1 goto label1;
+
+        return null;
+
+     label1:
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_tkhd>;
+
+        $r4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i2);
+
+        $r5 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData parseTkhd(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r5);
+
+        $l3 = -9223372036854775807L;
+
+        $b4 = $l0 cmp -9223372036854775807L;
+
+        if $b4 != 0 goto label2;
+
+        $l5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData: long access$000(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData)>($r6);
+
+        goto label3;
+
+     label2:
+        $l5 = $l0;
+
+     label3:
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        $l0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: long parseMvhd(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r5);
+
+        $b4 = $l5 cmp -9223372036854775807L;
+
+        if $b4 == 0 goto label4;
+
+        $l3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: long scaleLargeTimestamp(long,long,long)>($l5, 1000000L, $l0);
+
+     label4:
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_minf>;
+
+        $r7 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom getContainerAtomOfType(int)>($i2);
+
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_stbl>;
+
+        $r7 = virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom getContainerAtomOfType(int)>($i2);
+
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_mdhd>;
+
+        $r1 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i2);
+
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        $r8 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: android.util.Pair parseMdhd(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r5);
+
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_stsd>;
+
+        $r1 = virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom getLeafAtomOfType(int)>($i2);
+
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData: int access$100(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData)>($r6);
+
+        $i6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData: int access$200(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData)>($r6);
+
+        $r9 = $r8.<android.util.Pair: java.lang.Object second>;
+
+        $r10 = (java.lang.String) $r9;
+
+        $r11 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData parseStsd(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int,java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData,boolean)>($r5, $i2, $i6, $r10, $r2, $z1);
+
+        if $z0 != 0 goto label5;
+
+        $i2 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_edts>;
+
+        $r0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom getContainerAtomOfType(int)>($i2);
+
+        $r12 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: android.util.Pair parseEdts(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$ContainerAtom)>($r0);
+
+        $r9 = $r12.<android.util.Pair: java.lang.Object first>;
+
+        $r13 = (long[]) $r9;
+
+        $r9 = $r12.<android.util.Pair: java.lang.Object second>;
+
+        $r14 = (long[]) $r9;
+
+        goto label6;
+
+     label5:
+        $r13 = null;
+
+        $r14 = null;
+
+     label6:
+        $r15 = $r11.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        if $r15 != null goto label7;
+
+        return null;
+
+     label7:
+        $r18 = new com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track;
+
+        $i2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData: int access$100(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$TkhdData)>($r6);
+
+        $r9 = $r8.<android.util.Pair: java.lang.Object first>;
+
+        $r16 = (java.lang.Long) $r9;
+
+        $l5 = virtualinvoke $r16.<java.lang.Long: long longValue()>();
+
+        $r15 = $r11.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        $i6 = $r11.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: int requiredSampleTransformation>;
+
+        $r17 = $r11.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox[] trackEncryptionBoxes>;
+
+        $i7 = $r11.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: int nalUnitLengthFieldLength>;
+
+        specialinvoke $r18.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Track: void <init>(int,int,long,long,long,com.mbridge.msdk.playercommon.exoplayer2.Format,int,com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox[],int,long[],long[])>($i2, $i1, $l5, $l0, $l3, $r15, $i6, $r17, $i7, $r13, $r14);
+
+        return $r18;
+    }
+
+    public static com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata parseUdta(com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata $r2;
+        int $i0, $i1, $i2, $i3;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom;
+
+        $z0 := @parameter1: boolean;
+
+        if $z0 == 0 goto label1;
+
+        return null;
+
+     label1:
+        $r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom$LeafAtom: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray data>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(8);
+
+     label2:
+        $i1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i1 < 8 goto label4;
+
+        $i2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_meta>;
+
+        if $i3 != $i0 goto label3;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i2);
+
+        $i1 = $i2 + $i1;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: com.mbridge.msdk.playercommon.exoplayer2.metadata.Metadata parseMetaAtom(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r1, $i1);
+
+        return $r2;
+
+     label3:
+        $i1 = $i1 + -8;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>($i1);
+
+        goto label2;
+
+     label4:
+        return null;
+    }
+
+    private static void parseVideoSampleEntry(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int, int, int, int, int, com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData, com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData, int) throws com.mbridge.msdk.playercommon.exoplayer2.ParserException
+    {
+        byte[] $r12;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.video.HevcConfig $r14;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox[] $r10;
+        java.lang.Integer $r7;
+        byte $b12;
+        com.mbridge.msdk.playercommon.exoplayer2.video.AvcConfig $r13;
+        boolean $z0, $z1, $z2;
+        java.util.List $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData $r1, $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox $r8;
+        float $f0;
+        android.util.Pair $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11;
+        java.lang.String $r4, $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r15;
+        java.lang.Object $r6;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $i3 := @parameter4: int;
+
+        $i4 := @parameter5: int;
+
+        $r1 := @parameter6: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData;
+
+        $r2 := @parameter7: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData;
+
+        $i5 := @parameter8: int;
+
+        $r3 = $r1;
+
+        $i6 = $i1 + 8;
+
+        $i6 = $i6 + 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i6);
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(16);
+
+        $i6 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedShort()>();
+
+        $i7 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedShort()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(50);
+
+        $i8 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i9 = $i8;
+
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_encv>;
+
+        $r4 = null;
+
+        $i11 = $i0;
+
+        if $i0 != $i10 goto label04;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: android.util.Pair parseSampleEntryEncryptionData(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int)>($r0, $i1, $i2);
+
+        if $r5 == null goto label03;
+
+        $r6 = $r5.<android.util.Pair: java.lang.Object first>;
+
+        $r7 = (java.lang.Integer) $r6;
+
+        $i11 = virtualinvoke $r7.<java.lang.Integer: int intValue()>();
+
+        if $r1 != null goto label01;
+
+        $r3 = null;
+
+        goto label02;
+
+     label01:
+        $r6 = $r5.<android.util.Pair: java.lang.Object second>;
+
+        $r8 = (com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox) $r6;
+
+        $r9 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox: java.lang.String schemeType>;
+
+        $r3 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData: com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData copyWithSchemeType(java.lang.String)>($r9);
+
+     label02:
+        $r10 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox[] trackEncryptionBoxes>;
+
+        $r6 = $r5.<android.util.Pair: java.lang.Object second>;
+
+        $r8 = (com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.TrackEncryptionBox) $r6;
+
+        $r10[$i5] = $r8;
+
+     label03:
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i8);
+
+     label04:
+        $r1 = $r3;
+
+        $r11 = null;
+
+        $r12 = null;
+
+        $z0 = 0;
+
+        $f0 = 1.0F;
+
+        $b12 = -1;
+
+     label05:
+        $i0 = $i9 - $i1;
+
+        if $i0 >= $i2 goto label27;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i9);
+
+        $i5 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        if $i0 != 0 goto label06;
+
+        $i8 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int getPosition()>();
+
+        $i8 = $i8 - $i1;
+
+        if $i8 == $i2 goto label27;
+
+     label06:
+        $z1 = 1;
+
+        if $i0 <= 0 goto label07;
+
+        $z2 = 1;
+
+        goto label08;
+
+     label07:
+        $z2 = 0;
+
+     label08:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z2, "childAtomSize should be positive");
+
+        $i8 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readInt()>();
+
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_avcC>;
+
+        if $i8 != $i10 goto label11;
+
+        if $r4 == null goto label09;
+
+        $z1 = 0;
+
+     label09:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z1);
+
+        $i5 = $i5 + 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i5);
+
+        $r13 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.video.AvcConfig: com.mbridge.msdk.playercommon.exoplayer2.video.AvcConfig parse(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r0);
+
+        $r11 = $r13.<com.mbridge.msdk.playercommon.exoplayer2.video.AvcConfig: java.util.List initializationData>;
+
+        $i5 = $r13.<com.mbridge.msdk.playercommon.exoplayer2.video.AvcConfig: int nalUnitLengthFieldLength>;
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: int nalUnitLengthFieldLength> = $i5;
+
+        if $z0 != 0 goto label10;
+
+        $f0 = $r13.<com.mbridge.msdk.playercommon.exoplayer2.video.AvcConfig: float pixelWidthAspectRatio>;
+
+     label10:
+        $r4 = "video/avc";
+
+        goto label26;
+
+     label11:
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_hvcC>;
+
+        if $i8 != $i10 goto label13;
+
+        if $r4 == null goto label12;
+
+        $z1 = 0;
+
+     label12:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z1);
+
+        $i5 = $i5 + 8;
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>($i5);
+
+        $r14 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.video.HevcConfig: com.mbridge.msdk.playercommon.exoplayer2.video.HevcConfig parse(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r0);
+
+        $r11 = $r14.<com.mbridge.msdk.playercommon.exoplayer2.video.HevcConfig: java.util.List initializationData>;
+
+        $i5 = $r14.<com.mbridge.msdk.playercommon.exoplayer2.video.HevcConfig: int nalUnitLengthFieldLength>;
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: int nalUnitLengthFieldLength> = $i5;
+
+        $r4 = "video/hevc";
+
+        goto label26;
+
+     label13:
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_vpcC>;
+
+        if $i8 != $i10 goto label16;
+
+        if $r4 == null goto label14;
+
+        $z1 = 0;
+
+     label14:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z1);
+
+        $i5 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_vp08>;
+
+        if $i11 != $i5 goto label15;
+
+        $r4 = "video/x-vnd.on2.vp8";
+
+        goto label26;
+
+     label15:
+        $r4 = "video/x-vnd.on2.vp9";
+
+        goto label26;
+
+     label16:
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_d263>;
+
+        if $i8 != $i10 goto label18;
+
+        if $r4 == null goto label17;
+
+        $z1 = 0;
+
+     label17:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z1);
+
+        $r4 = "video/3gpp";
+
+        goto label26;
+
+     label18:
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_esds>;
+
+        if $i8 != $i10 goto label20;
+
+        if $r4 == null goto label19;
+
+        $z1 = 0;
+
+     label19:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z1);
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: android.util.Pair parseEsdsFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r0, $i5);
+
+        $r6 = $r5.<android.util.Pair: java.lang.Object first>;
+
+        $r4 = (java.lang.String) $r6;
+
+        $r6 = $r5.<android.util.Pair: java.lang.Object second>;
+
+        $r11 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>($r6);
+
+        goto label26;
+
+     label20:
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_pasp>;
+
+        if $i8 != $i10 goto label21;
+
+        $f0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: float parsePaspFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int)>($r0, $i5);
+
+        $z0 = 1;
+
+        goto label26;
+
+     label21:
+        $i10 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_sv3d>;
+
+        if $i8 != $i10 goto label22;
+
+        $r12 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers: byte[] parseProjFromParent(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray,int,int)>($r0, $i5, $i0);
+
+        goto label26;
+
+     label22:
+        $i5 = <com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.Atom: int TYPE_st3d>;
+
+        if $i8 != $i5 goto label26;
+
+        $i5 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void skipBytes(int)>(3);
+
+        if $i5 != 0 goto label26;
+
+        $i5 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedByte()>();
+
+        if $i5 == 0 goto label25;
+
+        if $i5 == 1 goto label24;
+
+        if $i5 == 2 goto label23;
+
+        if $i5 != 3 goto label26;
+
+        $b12 = 3;
+
+        goto label26;
+
+     label23:
+        $b12 = 2;
+
+        goto label26;
+
+     label24:
+        $b12 = 1;
+
+        goto label26;
+
+     label25:
+        $b12 = 0;
+
+     label26:
+        $i9 = $i9 + $i0;
+
+        goto label05;
+
+     label27:
+        if $r4 != null goto label28;
+
+        return;
+
+     label28:
+        $r9 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i3);
+
+        $r15 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format createVideoSampleFormat(java.lang.String,java.lang.String,java.lang.String,int,int,int,int,float,java.util.List,int,float,byte[],int,com.mbridge.msdk.playercommon.exoplayer2.video.ColorInfo,com.mbridge.msdk.playercommon.exoplayer2.drm.DrmInitData)>($r9, $r4, null, -1, -1, $i6, $i7, -1.0F, $r11, $i4, $f0, $r12, $b12, null, $r1);
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.extractor.mp4.AtomParsers$StsdData: com.mbridge.msdk.playercommon.exoplayer2.Format format> = $r15;
+
+        return;
+    }
+}

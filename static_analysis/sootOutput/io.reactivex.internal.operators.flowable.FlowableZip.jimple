@@ -1,0 +1,132 @@
+public final class io.reactivex.internal.operators.flowable.FlowableZip extends io.reactivex.Flowable
+{
+    final int bufferSize;
+    final boolean delayError;
+    final org.reactivestreams.Publisher[] sources;
+    final java.lang.Iterable sourcesIterable;
+    final io.reactivex.functions.Function zipper;
+
+    public void <init>(org.reactivestreams.Publisher[], java.lang.Iterable, io.reactivex.functions.Function, int, boolean)
+    {
+        io.reactivex.functions.Function $r3;
+        io.reactivex.internal.operators.flowable.FlowableZip r0;
+        org.reactivestreams.Publisher[] $r1;
+        int $i0;
+        java.lang.Iterable $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableZip;
+
+        $r1 := @parameter0: org.reactivestreams.Publisher[];
+
+        $r2 := @parameter1: java.lang.Iterable;
+
+        $r3 := @parameter2: io.reactivex.functions.Function;
+
+        $i0 := @parameter3: int;
+
+        $z0 := @parameter4: boolean;
+
+        specialinvoke r0.<io.reactivex.Flowable: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableZip: org.reactivestreams.Publisher[] sources> = null;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableZip: java.lang.Iterable sourcesIterable> = $r2;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableZip: io.reactivex.functions.Function zipper> = $r3;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableZip: int bufferSize> = $i0;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableZip: boolean delayError> = 0;
+
+        return;
+    }
+
+    public void subscribeActual(org.reactivestreams.Subscriber)
+    {
+        java.util.Iterator $r5;
+        org.reactivestreams.Publisher $r7;
+        io.reactivex.internal.operators.flowable.FlowableZip r0;
+        java.lang.Iterable $r4;
+        io.reactivex.functions.Function $r9;
+        org.reactivestreams.Publisher[] $r3, $r8;
+        int $i0, $i1;
+        io.reactivex.internal.operators.flowable.FlowableZip$ZipCoordinator $r2;
+        java.lang.Object $r6;
+        org.reactivestreams.Subscriber $r1;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableZip;
+
+        $r1 := @parameter0: org.reactivestreams.Subscriber;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableZip: org.reactivestreams.Publisher[] sources>;
+
+        if $r3 != null goto label3;
+
+        $r3 = newarray (org.reactivestreams.Publisher)[8];
+
+        $r4 = r0.<io.reactivex.internal.operators.flowable.FlowableZip: java.lang.Iterable sourcesIterable>;
+
+        $r5 = interfaceinvoke $r4.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $i0 = 0;
+
+     label1:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (org.reactivestreams.Publisher) $r6;
+
+        $i1 = lengthof $r3;
+
+        if $i0 != $i1 goto label2;
+
+        $i1 = $i0 >> 2;
+
+        $i1 = $i1 + $i0;
+
+        $r8 = newarray (org.reactivestreams.Publisher)[$i1];
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r3, 0, $r8, 0, $i0);
+
+        $r3 = $r8;
+
+     label2:
+        $r3[$i0] = $r7;
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label3:
+        $i0 = lengthof $r3;
+
+     label4:
+        if $i0 != 0 goto label5;
+
+        staticinvoke <io.reactivex.internal.subscriptions.EmptySubscription: void complete(org.reactivestreams.Subscriber)>($r1);
+
+        return;
+
+     label5:
+        $r2 = new io.reactivex.internal.operators.flowable.FlowableZip$ZipCoordinator;
+
+        $r9 = r0.<io.reactivex.internal.operators.flowable.FlowableZip: io.reactivex.functions.Function zipper>;
+
+        $i1 = r0.<io.reactivex.internal.operators.flowable.FlowableZip: int bufferSize>;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableZip: boolean delayError>;
+
+        specialinvoke $r2.<io.reactivex.internal.operators.flowable.FlowableZip$ZipCoordinator: void <init>(org.reactivestreams.Subscriber,io.reactivex.functions.Function,int,int,boolean)>($r1, $r9, $i0, $i1, $z0);
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onSubscribe(org.reactivestreams.Subscription)>($r2);
+
+        virtualinvoke $r2.<io.reactivex.internal.operators.flowable.FlowableZip$ZipCoordinator: void subscribe(org.reactivestreams.Publisher[],int)>($r3, $i0);
+
+        return;
+    }
+}

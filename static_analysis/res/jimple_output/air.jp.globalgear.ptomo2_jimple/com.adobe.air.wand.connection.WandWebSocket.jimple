@@ -1,0 +1,1440 @@
+public class com.adobe.air.wand.connection.WandWebSocket extends java.lang.Object implements com.adobe.air.wand.connection.Connection
+{
+    private static final java.lang.String CONNECT_PING_URL;
+    private static final java.lang.String LOG_TAG;
+    private static final java.lang.String WEBSOCKET_PROTOCOL;
+    private final java.lang.String HANDSHAKE_SYNCHRONIZER;
+    private final java.lang.String OPEN_SYNCHRONIZER;
+    private android.app.Activity mActivity;
+    private boolean mAllowIncomingConnection;
+    private org.java_websocket.WebSocket mConnection;
+    private com.adobe.air.wand.connection.Connection$Listener mConnectionListener;
+    private java.lang.String mConnectionToken;
+    private com.adobe.air.wand.connection.WandWebSocket$Handshake mHandshake;
+    private java.util.Timer mHandshakeTimer;
+    private boolean mIsDisposed;
+    private java.lang.String mLocalID;
+    private com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer;
+
+    public void <init>(android.app.Activity) throws java.net.UnknownHostException
+    {
+        java.util.Timer $r2;
+        android.app.Activity $r1;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 := @parameter0: android.app.Activity;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String OPEN_SYNCHRONIZER> = "OPEN_SYNCHRONIZER";
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String HANDSHAKE_SYNCHRONIZER> = "HANDSHAKE_SYNCHRONIZER";
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.Connection$Listener mConnectionListener> = null;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: org.java_websocket.WebSocket mConnection> = null;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mAllowIncomingConnection> = 0;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String mConnectionToken> = null;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String mLocalID> = null;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$Handshake mHandshake> = null;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: java.util.Timer mHandshakeTimer> = null;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer> = null;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mIsDisposed> = 0;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: android.app.Activity mActivity> = $r1;
+
+        $r2 = new java.util.Timer;
+
+        specialinvoke $r2.<java.util.Timer: void <init>()>();
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: java.util.Timer mHandshakeTimer> = $r2;
+
+        return;
+    }
+
+    static com.adobe.air.wand.connection.WandWebSocket$WandSocketServer access$000(com.adobe.air.wand.connection.WandWebSocket)
+    {
+        com.adobe.air.wand.connection.WandWebSocket$WandSocketServer r1;
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        r1 = $r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer>;
+
+        return r1;
+    }
+
+    static com.adobe.air.wand.connection.WandWebSocket$WandSocketServer access$002(com.adobe.air.wand.connection.WandWebSocket, com.adobe.air.wand.connection.WandWebSocket$WandSocketServer)
+    {
+        com.adobe.air.wand.connection.WandWebSocket$WandSocketServer $r1;
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 := @parameter1: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer;
+
+        $r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer> = $r1;
+
+        return $r1;
+    }
+
+    static org.java_websocket.WebSocket access$100(com.adobe.air.wand.connection.WandWebSocket)
+    {
+        org.java_websocket.WebSocket r1;
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        r1 = $r0.<com.adobe.air.wand.connection.WandWebSocket: org.java_websocket.WebSocket mConnection>;
+
+        return r1;
+    }
+
+    static org.java_websocket.WebSocket access$102(com.adobe.air.wand.connection.WandWebSocket, org.java_websocket.WebSocket)
+    {
+        org.java_websocket.WebSocket $r1;
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 := @parameter1: org.java_websocket.WebSocket;
+
+        $r0.<com.adobe.air.wand.connection.WandWebSocket: org.java_websocket.WebSocket mConnection> = $r1;
+
+        return $r1;
+    }
+
+    static void access$200(com.adobe.air.wand.connection.WandWebSocket)
+    {
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        specialinvoke $r0.<com.adobe.air.wand.connection.WandWebSocket: void forceCloseConnection()>();
+
+        return;
+    }
+
+    static void access$300(com.adobe.air.wand.connection.WandWebSocket) throws java.lang.Exception
+    {
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        specialinvoke $r0.<com.adobe.air.wand.connection.WandWebSocket: void startSocketServer()>();
+
+        return;
+    }
+
+    static boolean access$400(com.adobe.air.wand.connection.WandWebSocket)
+    {
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        z0 = $r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mAllowIncomingConnection>;
+
+        return z0;
+    }
+
+    static com.adobe.air.wand.connection.WandWebSocket$Handshake access$500(com.adobe.air.wand.connection.WandWebSocket)
+    {
+        com.adobe.air.wand.connection.WandWebSocket$Handshake r1;
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        r1 = $r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$Handshake mHandshake>;
+
+        return r1;
+    }
+
+    static com.adobe.air.wand.connection.WandWebSocket$Handshake access$502(com.adobe.air.wand.connection.WandWebSocket, com.adobe.air.wand.connection.WandWebSocket$Handshake)
+    {
+        com.adobe.air.wand.connection.WandWebSocket$Handshake $r1;
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 := @parameter1: com.adobe.air.wand.connection.WandWebSocket$Handshake;
+
+        $r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$Handshake mHandshake> = $r1;
+
+        return $r1;
+    }
+
+    static java.util.Timer access$600(com.adobe.air.wand.connection.WandWebSocket)
+    {
+        java.util.Timer r1;
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        r1 = $r0.<com.adobe.air.wand.connection.WandWebSocket: java.util.Timer mHandshakeTimer>;
+
+        return r1;
+    }
+
+    static com.adobe.air.wand.connection.Connection$Listener access$700(com.adobe.air.wand.connection.WandWebSocket)
+    {
+        com.adobe.air.wand.connection.Connection$Listener r1;
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        r1 = $r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.Connection$Listener mConnectionListener>;
+
+        return r1;
+    }
+
+    static void access$800(com.adobe.air.wand.connection.WandWebSocket, com.adobe.air.wand.connection.WandWebSocket$Handshake) throws java.lang.Exception
+    {
+        com.adobe.air.wand.connection.WandWebSocket$Handshake $r1;
+        com.adobe.air.wand.connection.WandWebSocket $r0;
+
+        $r0 := @parameter0: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 := @parameter1: com.adobe.air.wand.connection.WandWebSocket$Handshake;
+
+        specialinvoke $r0.<com.adobe.air.wand.connection.WandWebSocket: void validateHandshake(com.adobe.air.wand.connection.WandWebSocket$Handshake)>($r1);
+
+        return;
+    }
+
+    private java.lang.String constructLocalID() throws java.lang.Exception
+    {
+        byte[] $r2;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        long $l2, $l3;
+        java.net.InetAddress $r1;
+        byte $b0;
+        int $i1;
+        java.lang.String $r3;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: java.net.InetAddress getLocalIpAddress()>();
+
+        if $r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r2 = virtualinvoke $r1.<java.net.InetAddress: byte[] getAddress()>();
+
+        $b0 = $r2[3];
+
+        $i1 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: int getUnsignedByte(byte)>($b0);
+
+        $l2 = (long) $i1;
+
+        $l2 = $l2 * 1L;
+
+        $b0 = $r2[2];
+
+        $i1 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: int getUnsignedByte(byte)>($b0);
+
+        $l3 = (long) $i1;
+
+        $l3 = $l3 * 256L;
+
+        $l2 = $l2 + $l3;
+
+        $b0 = $r2[1];
+
+        $i1 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: int getUnsignedByte(byte)>($b0);
+
+        $l3 = (long) $i1;
+
+        $l3 = $l3 * 65536L;
+
+        $l2 = $l2 + $l3;
+
+        $b0 = $r2[0];
+
+        $i1 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: int getUnsignedByte(byte)>($b0);
+
+        $l3 = (long) $i1;
+
+        $l3 = $l3 * 16777216L;
+
+        $l2 = $l2 + $l3;
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.String toString(long,int)>($l2, 32);
+
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String toUpperCase()>();
+
+        return $r3;
+    }
+
+    private void forceCloseConnection()
+    {
+        org.java_websocket.WebSocket $r1;
+        com.adobe.air.wand.connection.WandWebSocket$WandSocketServer $r2;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 = r0.<com.adobe.air.wand.connection.WandWebSocket: org.java_websocket.WebSocket mConnection>;
+
+        $r2 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer>;
+
+        virtualinvoke $r2.<com.adobe.air.wand.connection.WandWebSocket$WandSocketServer: void onClose(org.java_websocket.WebSocket,int,java.lang.String,boolean)>($r1, 1001, "AIR Gamepad has closed", 0);
+
+        interfaceinvoke $r1.<org.java_websocket.WebSocket: void close(int,java.lang.String)>(1001, "AIR Gamepad has closed");
+
+        return;
+    }
+
+    private java.net.InetAddress getLocalIpAddress()
+    {
+        java.net.InetAddress $r2;
+        java.lang.Exception $r1;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+     label1:
+        $r2 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: java.net.InetAddress getWiFiIpAddress()>();
+
+     label2:
+        if $r2 != null goto label7;
+
+     label3:
+        $r2 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: java.net.InetAddress getWiFiHotspotIpAddress()>();
+
+     label4:
+        return $r2;
+
+     label5:
+        return null;
+
+     label6:
+        $r1 := @caughtexception;
+
+        goto label5;
+
+     label7:
+        return $r2;
+
+        catch java.lang.Exception from label1 to label2 with label6;
+        catch java.lang.Exception from label3 to label4 with label6;
+    }
+
+    private int getPreferredPort()
+    {
+        com.adobe.air.wand.connection.WandWebSocket r0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        return 1234;
+    }
+
+    private int getUnsignedByte(byte)
+    {
+        int $i1;
+        byte $b0;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $b0 := @parameter0: byte;
+
+        $i1 = (int) $b0;
+
+        if $i1 < 0 goto label1;
+
+        $i1 = (int) $b0;
+
+        return $i1;
+
+     label1:
+        $i1 = (int) $b0;
+
+        $i1 = $i1 + 256;
+
+        return $i1;
+    }
+
+    private java.net.InetAddress getWiFiHotspotIpAddress() throws java.net.UnknownHostException, java.net.SocketException
+    {
+        byte[] $r17, $r24;
+        java.util.Enumeration $r20, $r22;
+        android.net.wifi.WifiInfo $r16;
+        java.lang.reflect.Method[] $r11;
+        java.net.InetAddress $r23;
+        byte $b0, $b4;
+        java.lang.reflect.Method $r12;
+        boolean $z0, $z1;
+        android.net.ConnectivityManager $r7;
+        java.net.NetworkInterface $r21;
+        java.lang.Throwable $r1, $r2, $r3, $r4;
+        android.content.Context $r8;
+        java.lang.Object[] $r14;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.lang.String[] $r19;
+        int $i1, $i2, $i3;
+        java.lang.Boolean $r15;
+        java.lang.String $r13, $r18;
+        android.net.wifi.WifiManager $r9;
+        java.lang.Object $r6;
+        java.lang.Class $r10;
+        android.app.Activity $r5;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r5 = r0.<com.adobe.air.wand.connection.WandWebSocket: android.app.Activity mActivity>;
+
+        $r6 = virtualinvoke $r5.<android.app.Activity: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r7 = (android.net.ConnectivityManager) $r6;
+
+        if $r7 != null goto label01;
+
+        return null;
+
+     label01:
+        $r5 = r0.<com.adobe.air.wand.connection.WandWebSocket: android.app.Activity mActivity>;
+
+        $r8 = virtualinvoke $r5.<android.app.Activity: android.content.Context getApplicationContext()>();
+
+        $r6 = virtualinvoke $r8.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("wifi");
+
+        $r9 = (android.net.wifi.WifiManager) $r6;
+
+        if $r9 != null goto label02;
+
+        return null;
+
+     label02:
+        $r10 = virtualinvoke $r9.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.Class: java.lang.reflect.Method[] getDeclaredMethods()>();
+
+        $i1 = lengthof $r11;
+
+        $i2 = 0;
+
+        $z0 = 0;
+
+     label03:
+        if $i2 >= $i1 goto label09;
+
+        $r12 = $r11[$i2];
+
+        $r13 = virtualinvoke $r12.<java.lang.reflect.Method: java.lang.String getName()>();
+
+        $z1 = virtualinvoke $r13.<java.lang.String: boolean equals(java.lang.Object)>("isWifiApEnabled");
+
+        if $z1 == 0 goto label08;
+
+        $r14 = newarray (java.lang.Object)[0];
+
+     label04:
+        $r6 = virtualinvoke $r12.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r9, $r14);
+
+     label05:
+        $r15 = (java.lang.Boolean) $r6;
+
+     label06:
+        $z1 = virtualinvoke $r15.<java.lang.Boolean: boolean booleanValue()>();
+
+     label07:
+        if $z1 == 0 goto label08;
+
+        $z0 = 1;
+
+     label08:
+        $i2 = $i2 + 1;
+
+        goto label03;
+
+     label09:
+        if $z0 != 0 goto label10;
+
+        return null;
+
+     label10:
+        $r16 = virtualinvoke $r9.<android.net.wifi.WifiManager: android.net.wifi.WifiInfo getConnectionInfo()>();
+
+        if $r16 != null goto label11;
+
+        return null;
+
+     label11:
+        $r13 = virtualinvoke $r16.<android.net.wifi.WifiInfo: java.lang.String getMacAddress()>();
+
+        $r13 = virtualinvoke $r13.<java.lang.String: java.lang.String toLowerCase()>();
+
+        $r17 = newarray (byte)[6];
+
+        $i1 = virtualinvoke $r13.<java.lang.String: int indexOf(java.lang.String)>(":");
+
+        if $i1 != -1 goto label13;
+
+        $i1 = virtualinvoke $r13.<java.lang.String: int length()>();
+
+        if $i1 != 12 goto label13;
+
+        $i1 = 0;
+
+     label12:
+        if $i1 >= 6 goto label15;
+
+        $i2 = $i1 * 2;
+
+        $i3 = $i2 + 2;
+
+        $r18 = virtualinvoke $r13.<java.lang.String: java.lang.String substring(int,int)>($i2, $i3);
+
+        $i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String,int)>($r18, 16);
+
+        $b0 = (byte) $i2;
+
+        $r17[$i1] = $b0;
+
+        $i1 = $i1 + 1;
+
+        goto label12;
+
+     label13:
+        $r19 = virtualinvoke $r13.<java.lang.String: java.lang.String[] split(java.lang.String)>(":");
+
+        $i1 = 0;
+
+     label14:
+        if $i1 >= 6 goto label15;
+
+        $i2 = lengthof $r19;
+
+        if $i1 >= $i2 goto label15;
+
+        $r13 = $r19[$i1];
+
+        $i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String,int)>($r13, 16);
+
+        $b0 = (byte) $i2;
+
+        $r17[$i1] = $b0;
+
+        $i1 = $i1 + 1;
+
+        goto label14;
+
+     label15:
+        $r20 = staticinvoke <java.net.NetworkInterface: java.util.Enumeration getNetworkInterfaces()>();
+
+     label16:
+        $z0 = interfaceinvoke $r20.<java.util.Enumeration: boolean hasMoreElements()>();
+
+        if $z0 == 0 goto label26;
+
+        $r6 = interfaceinvoke $r20.<java.util.Enumeration: java.lang.Object nextElement()>();
+
+        $r21 = (java.net.NetworkInterface) $r6;
+
+        $r22 = virtualinvoke $r21.<java.net.NetworkInterface: java.util.Enumeration getInetAddresses()>();
+
+     label17:
+        $z0 = interfaceinvoke $r22.<java.util.Enumeration: boolean hasMoreElements()>();
+
+        if $z0 == 0 goto label16;
+
+        $r6 = interfaceinvoke $r22.<java.util.Enumeration: java.lang.Object nextElement()>();
+
+        $r23 = (java.net.InetAddress) $r6;
+
+        $z0 = virtualinvoke $r23.<java.net.InetAddress: boolean isLoopbackAddress()>();
+
+        if $z0 != 0 goto label17;
+
+        $r13 = virtualinvoke $r23.<java.net.InetAddress: java.lang.String getHostAddress()>();
+
+        $z0 = staticinvoke <org.apache.http.conn.util.InetAddressUtils: boolean isIPv4Address(java.lang.String)>($r13);
+
+        if $z0 == 0 goto label17;
+
+     label18:
+        $r24 = virtualinvoke $r21.<java.net.NetworkInterface: byte[] getHardwareAddress()>();
+
+     label19:
+        if $r24 == null goto label17;
+
+        $i1 = lengthof $r24;
+
+        if $i1 == 6 goto label20;
+
+        goto label17;
+
+     label20:
+        $i1 = 0;
+
+     label21:
+        $i2 = lengthof $r24;
+
+        if $i1 >= $i2 goto label23;
+
+        $b4 = $r24[$i1];
+
+        $b0 = $r17[$i1];
+
+        $i2 = (int) $b4;
+
+        $i3 = (int) $b0;
+
+        if $i2 == $i3 goto label22;
+
+        $z0 = 0;
+
+        goto label24;
+
+     label22:
+        $i1 = $i1 + 1;
+
+        goto label21;
+
+     label23:
+        $z0 = 1;
+
+     label24:
+        if $z0 == 0 goto label17;
+
+        return $r23;
+
+     label25:
+        goto label17;
+
+     label26:
+        return null;
+
+     label27:
+        $r1 := @caughtexception;
+
+        goto label08;
+
+     label28:
+        $r2 := @caughtexception;
+
+        goto label08;
+
+     label29:
+        $r3 := @caughtexception;
+
+        goto label08;
+
+     label30:
+        $r4 := @caughtexception;
+
+        goto label25;
+
+        catch java.lang.IllegalArgumentException from label04 to label05 with label27;
+        catch java.lang.IllegalArgumentException from label06 to label07 with label27;
+        catch java.lang.IllegalAccessException from label04 to label05 with label28;
+        catch java.lang.IllegalAccessException from label06 to label07 with label28;
+        catch java.lang.reflect.InvocationTargetException from label04 to label05 with label29;
+        catch java.lang.reflect.InvocationTargetException from label06 to label07 with label29;
+        catch java.net.SocketException from label18 to label19 with label30;
+    }
+
+    private java.net.InetAddress getWiFiIpAddress() throws java.net.UnknownHostException
+    {
+        android.content.Context $r2;
+        java.lang.Object[] $r6;
+        android.net.wifi.WifiInfo $r5;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.lang.Integer $r7;
+        java.net.InetAddress $r9;
+        android.net.wifi.WifiManager $r4;
+        int $i0, $i1;
+        java.lang.Object $r3;
+        java.lang.String $r8;
+        android.app.Activity $r1;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 = r0.<com.adobe.air.wand.connection.WandWebSocket: android.app.Activity mActivity>;
+
+        $r2 = virtualinvoke $r1.<android.app.Activity: android.content.Context getApplicationContext()>();
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("wifi");
+
+        $r4 = (android.net.wifi.WifiManager) $r3;
+
+        if $r4 != null goto label1;
+
+        return null;
+
+     label1:
+        $r5 = virtualinvoke $r4.<android.net.wifi.WifiManager: android.net.wifi.WifiInfo getConnectionInfo()>();
+
+        if $r5 != null goto label2;
+
+        return null;
+
+     label2:
+        $i0 = virtualinvoke $r5.<android.net.wifi.WifiInfo: int getIpAddress()>();
+
+        if $i0 != 0 goto label3;
+
+        return null;
+
+     label3:
+        $r6 = newarray (java.lang.Object)[4];
+
+        $i1 = $i0 & 255;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r6[0] = $r7;
+
+        $i1 = $i0 >> 8;
+
+        $i1 = $i1 & 255;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r6[1] = $r7;
+
+        $i1 = $i0 >> 16;
+
+        $i1 = $i1 & 255;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r6[2] = $r7;
+
+        $i0 = $i0 >> 24;
+
+        $i0 = $i0 & 255;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r6[3] = $r7;
+
+        $r8 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%d.%d.%d.%d", $r6);
+
+        $r9 = staticinvoke <java.net.InetAddress: java.net.InetAddress getByName(java.lang.String)>($r8);
+
+        return $r9;
+    }
+
+    private void pingServerOnConnect(java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        com.adobe.air.wand.connection.WandWebSocket$ConnectPingTask $r1;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.lang.StringBuilder $r2;
+        java.lang.String[] $r5;
+        java.lang.String $r3, $r4;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r4 := @parameter1: java.lang.String;
+
+        if $r3 == null goto label2;
+
+        if $r4 != null goto label1;
+
+        goto label2;
+
+     label1:
+        $r1 = new com.adobe.air.wand.connection.WandWebSocket$ConnectPingTask;
+
+        specialinvoke $r1.<com.adobe.air.wand.connection.WandWebSocket$ConnectPingTask: void <init>(com.adobe.air.wand.connection.WandWebSocket,com.adobe.air.wand.connection.WandWebSocket$1)>(r0, null);
+
+        $r5 = newarray (java.lang.String)[1];
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("http://dh8vjmvwgc27o.cloudfront.net/AIRGamepad/connect_ping.txt?publisher=");
+
+        $r3 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r3, "UTF-8");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("&applicationURL=");
+
+        $r3 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r4, "UTF-8");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5[0] = $r3;
+
+        virtualinvoke $r1.<com.adobe.air.wand.connection.WandWebSocket$ConnectPingTask: android.os.AsyncTask execute(java.lang.Object[])>($r5);
+
+        return;
+
+     label2:
+        $r1 = new com.adobe.air.wand.connection.WandWebSocket$ConnectPingTask;
+
+        specialinvoke $r1.<com.adobe.air.wand.connection.WandWebSocket$ConnectPingTask: void <init>(com.adobe.air.wand.connection.WandWebSocket,com.adobe.air.wand.connection.WandWebSocket$1)>(r0, null);
+
+        $r5 = newarray (java.lang.String)[1];
+
+        $r5[0] = "http://dh8vjmvwgc27o.cloudfront.net/AIRGamepad/connect_ping.txt";
+
+        virtualinvoke $r1.<com.adobe.air.wand.connection.WandWebSocket$ConnectPingTask: android.os.AsyncTask execute(java.lang.Object[])>($r5);
+
+        return;
+    }
+
+    private void startSocketServer() throws java.lang.Exception
+    {
+        java.net.InetAddress $r3;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        int $i0;
+        com.adobe.air.wand.connection.WandWebSocket$WandSocketServer $r1;
+        java.net.InetSocketAddress $r2;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer>;
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.net.InetSocketAddress;
+
+        $r3 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: java.net.InetAddress getLocalIpAddress()>();
+
+        $i0 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: int getPreferredPort()>();
+
+        specialinvoke $r2.<java.net.InetSocketAddress: void <init>(java.net.InetAddress,int)>($r3, $i0);
+
+        $r1 = new com.adobe.air.wand.connection.WandWebSocket$WandSocketServer;
+
+        specialinvoke $r1.<com.adobe.air.wand.connection.WandWebSocket$WandSocketServer: void <init>(com.adobe.air.wand.connection.WandWebSocket,java.net.InetSocketAddress)>(r0, $r2);
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer> = $r1;
+
+        virtualinvoke $r1.<com.adobe.air.wand.connection.WandWebSocket$WandSocketServer: void start()>();
+
+     label1:
+        return;
+    }
+
+    private void stopSocketServer()
+    {
+        com.adobe.air.wand.connection.WandWebSocket$WandSocketServer $r1;
+        java.lang.Exception $r2;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer>;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer> = null;
+
+        if $r1 == null goto label4;
+
+     label1:
+        virtualinvoke $r1.<org.java_websocket.server.WebSocketServer: void stop()>();
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+     label4:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    private void validateHandshake(com.adobe.air.wand.connection.WandWebSocket$Handshake) throws java.lang.Exception
+    {
+        java.net.URL $r6;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.lang.Exception $r1;
+        com.adobe.air.wand.connection.WandWebSocket$Handshake $r2;
+        java.lang.String $r3, $r4, $r5;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r2 := @parameter0: com.adobe.air.wand.connection.WandWebSocket$Handshake;
+
+        if $r2 == null goto label10;
+
+        $r3 = virtualinvoke $r2.<com.adobe.air.wand.connection.WandWebSocket$Handshake: java.lang.String getVersion()>();
+
+        $z0 = staticinvoke <java.util.regex.Pattern: boolean matches(java.lang.String,java.lang.CharSequence)>("\\d+\\.\\d+\\.\\d+", $r3);
+
+        if $z0 == 0 goto label09;
+
+        $z0 = staticinvoke <com.adobe.air.wand.Version: boolean isGreaterThan(java.lang.String,java.lang.String)>($r3, "1.1.0");
+
+        if $z0 != 0 goto label08;
+
+        $z0 = staticinvoke <com.adobe.air.wand.Version: boolean isGreaterThanEqualTo(java.lang.String,java.lang.String)>($r3, "1.0.0");
+
+        if $z0 == 0 goto label08;
+
+        $r4 = "WEBSOCKET";
+
+        $r5 = virtualinvoke $r2.<com.adobe.air.wand.connection.WandWebSocket$Handshake: java.lang.String getProtocol()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label07;
+
+        $r4 = r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String mLocalID>;
+
+        $r5 = virtualinvoke $r2.<com.adobe.air.wand.connection.WandWebSocket$Handshake: java.lang.String getDestinationID()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label06;
+
+        $z0 = staticinvoke <com.adobe.air.wand.Version: boolean isGreaterThanEqualTo(java.lang.String,java.lang.String)>($r3, "1.1.0");
+
+        if $z0 == 0 goto label12;
+
+        $r3 = virtualinvoke $r2.<com.adobe.air.wand.connection.WandWebSocket$Handshake: java.lang.String getPublisher()>();
+
+        if $r3 == null goto label05;
+
+        $r3 = virtualinvoke $r2.<com.adobe.air.wand.connection.WandWebSocket$Handshake: java.lang.String getApplicationURL()>();
+
+        if $r3 == null goto label04;
+
+        $r6 = new java.net.URL;
+
+     label01:
+        specialinvoke $r6.<java.net.URL: void <init>(java.lang.String)>($r3);
+
+     label02:
+        return;
+
+     label03:
+        $r1 = new java.lang.Exception;
+
+        specialinvoke $r1.<java.lang.Exception: void <init>(java.lang.String)>("Invalid applicationURL");
+
+        throw $r1;
+
+     label04:
+        $r1 = new java.lang.Exception;
+
+        specialinvoke $r1.<java.lang.Exception: void <init>(java.lang.String)>("Invalid applicationURL");
+
+        throw $r1;
+
+     label05:
+        $r1 = new java.lang.Exception;
+
+        specialinvoke $r1.<java.lang.Exception: void <init>(java.lang.String)>("Invalid publisher");
+
+        throw $r1;
+
+     label06:
+        $r1 = new java.lang.Exception;
+
+        specialinvoke $r1.<java.lang.Exception: void <init>(java.lang.String)>("Invalid destinationID");
+
+        throw $r1;
+
+     label07:
+        $r1 = new java.lang.Exception;
+
+        specialinvoke $r1.<java.lang.Exception: void <init>(java.lang.String)>("Invalid protocol");
+
+        throw $r1;
+
+     label08:
+        $r1 = new java.lang.Exception;
+
+        specialinvoke $r1.<java.lang.Exception: void <init>(java.lang.String)>("Unsupported version");
+
+        throw $r1;
+
+     label09:
+        $r1 = new java.lang.Exception;
+
+        specialinvoke $r1.<java.lang.Exception: void <init>(java.lang.String)>("Invalid version format");
+
+        throw $r1;
+
+     label10:
+        $r1 = new java.lang.Exception;
+
+        specialinvoke $r1.<java.lang.Exception: void <init>(java.lang.String)>("Handshake is null");
+
+        throw $r1;
+
+     label11:
+        $r1 := @caughtexception;
+
+        goto label03;
+
+     label12:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label11;
+    }
+
+    public void connect() throws java.lang.Exception
+    {
+        com.adobe.air.wand.connection.Connection$Listener $r3;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        com.adobe.air.wand.connection.WandWebSocket$WandSocketServer $r1;
+        java.lang.String $r2;
+        java.lang.Exception $r4;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mIsDisposed>;
+
+        if $z0 != 0 goto label4;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mAllowIncomingConnection>;
+
+        if $z0 != 0 goto label3;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mAllowIncomingConnection> = 1;
+
+        $r1 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer>;
+
+        if $r1 != null goto label1;
+
+        specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: void startSocketServer()>();
+
+     label1:
+        $r2 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String constructLocalID()>();
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String mLocalID> = $r2;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String mConnectionToken> = $r2;
+
+        $r3 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.Connection$Listener mConnectionListener>;
+
+        if $r3 == null goto label2;
+
+        $r2 = virtualinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String getConnectionToken()>();
+
+        interfaceinvoke $r3.<com.adobe.air.wand.connection.Connection$Listener: void updateConnectionToken(java.lang.String)>($r2);
+
+     label2:
+        $r3 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.Connection$Listener mConnectionListener>;
+
+        if $r3 == null goto label5;
+
+        interfaceinvoke $r3.<com.adobe.air.wand.connection.Connection$Listener: void onConnectSuccess()>();
+
+        return;
+
+     label3:
+        $r4 = new java.lang.Exception;
+
+        specialinvoke $r4.<java.lang.Exception: void <init>(java.lang.String)>("Connection is already established");
+
+        throw $r4;
+
+     label4:
+        $r4 = new java.lang.Exception;
+
+        specialinvoke $r4.<java.lang.Exception: void <init>(java.lang.String)>("Connection has been disposed");
+
+        throw $r4;
+
+     label5:
+        return;
+    }
+
+    public void disconnect() throws java.lang.Exception
+    {
+        org.java_websocket.WebSocket $r1;
+        com.adobe.air.wand.connection.Connection$Listener $r2;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.lang.Exception $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mIsDisposed>;
+
+        if $z0 != 0 goto label3;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mAllowIncomingConnection>;
+
+        if $z0 == 0 goto label2;
+
+        $r1 = r0.<com.adobe.air.wand.connection.WandWebSocket: org.java_websocket.WebSocket mConnection>;
+
+        if $r1 == null goto label1;
+
+        specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: void forceCloseConnection()>();
+
+     label1:
+        specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: void stopSocketServer()>();
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mAllowIncomingConnection> = 0;
+
+        $r2 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.Connection$Listener mConnectionListener>;
+
+        if $r2 == null goto label4;
+
+        interfaceinvoke $r2.<com.adobe.air.wand.connection.Connection$Listener: void onDisconnectSuccess()>();
+
+        return;
+
+     label2:
+        $r3 = new java.lang.Exception;
+
+        specialinvoke $r3.<java.lang.Exception: void <init>(java.lang.String)>("Connection is not established");
+
+        throw $r3;
+
+     label3:
+        $r3 = new java.lang.Exception;
+
+        specialinvoke $r3.<java.lang.Exception: void <init>(java.lang.String)>("Connection has been disposed");
+
+        throw $r3;
+
+     label4:
+        return;
+    }
+
+    public void dispose() throws java.lang.Exception
+    {
+        org.java_websocket.WebSocket $r1;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.util.Timer $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mIsDisposed>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mIsDisposed> = 1;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mAllowIncomingConnection>;
+
+        if $z0 == 0 goto label2;
+
+        virtualinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: void disconnect()>();
+
+     label2:
+        virtualinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: void unregisterListener()>();
+
+        $r1 = r0.<com.adobe.air.wand.connection.WandWebSocket: org.java_websocket.WebSocket mConnection>;
+
+        if $r1 == null goto label3;
+
+        interfaceinvoke $r1.<org.java_websocket.WebSocket: void close(int,java.lang.String)>(1001, "AIR Gamepad has closed");
+
+     label3:
+        r0.<com.adobe.air.wand.connection.WandWebSocket: org.java_websocket.WebSocket mConnection> = null;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$Handshake mHandshake> = null;
+
+        $r2 = r0.<com.adobe.air.wand.connection.WandWebSocket: java.util.Timer mHandshakeTimer>;
+
+        if $r2 == null goto label4;
+
+        virtualinvoke $r2.<java.util.Timer: void cancel()>();
+
+        $r2 = r0.<com.adobe.air.wand.connection.WandWebSocket: java.util.Timer mHandshakeTimer>;
+
+        virtualinvoke $r2.<java.util.Timer: int purge()>();
+
+     label4:
+        r0.<com.adobe.air.wand.connection.WandWebSocket: java.util.Timer mHandshakeTimer> = null;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$WandSocketServer mWandSocketServer> = null;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: android.app.Activity mActivity> = null;
+
+        return;
+    }
+
+    public java.lang.String getConnectionToken() throws java.lang.Exception
+    {
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.lang.String $r1;
+        java.lang.Exception $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mIsDisposed>;
+
+        if $z0 != 0 goto label2;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mAllowIncomingConnection>;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String mConnectionToken>;
+
+        if $r1 != null goto label3;
+
+        return "";
+
+     label1:
+        $r2 = new java.lang.Exception;
+
+        specialinvoke $r2.<java.lang.Exception: void <init>(java.lang.String)>("Connection is not established");
+
+        throw $r2;
+
+     label2:
+        $r2 = new java.lang.Exception;
+
+        specialinvoke $r2.<java.lang.Exception: void <init>(java.lang.String)>("Connection has been disposed");
+
+        throw $r2;
+
+     label3:
+        return $r1;
+    }
+
+    public void onConnectionChanged()
+    {
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.lang.String $r1, $r3;
+        java.lang.Exception $r2;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mIsDisposed>;
+
+        if $z0 == 0 goto label01;
+
+        return;
+
+     label01:
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mAllowIncomingConnection>;
+
+        if $z0 != 0 goto label02;
+
+        return;
+
+     label02:
+        $r3 = specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String constructLocalID()>();
+
+        $r1 = r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String mLocalID>;
+
+     label03:
+        if $r1 != null goto label04;
+
+        if $r3 != null goto label04;
+
+        return;
+
+     label04:
+        if $r1 == null goto label07;
+
+        if $r3 == null goto label07;
+
+     label05:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+     label06:
+        if $z0 != 0 goto label10;
+
+     label07:
+        virtualinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: void disconnect()>();
+
+        virtualinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: void connect()>();
+
+     label08:
+        return;
+
+     label09:
+        $r2 := @caughtexception;
+
+     label10:
+        return;
+
+        catch java.lang.Exception from label02 to label03 with label09;
+        catch java.lang.Exception from label05 to label06 with label09;
+        catch java.lang.Exception from label07 to label08 with label09;
+    }
+
+    public void onReadyForConnection() throws java.lang.Exception
+    {
+        com.adobe.air.wand.connection.WandWebSocket$Handshake $r2;
+        org.java_websocket.WebSocket $r1;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.lang.String $r3, $r4;
+        java.lang.Exception $r5;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r2 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$Handshake mHandshake>;
+
+        if $r2 == null goto label1;
+
+        $r3 = r0.<com.adobe.air.wand.connection.WandWebSocket: java.lang.String mLocalID>;
+
+        if $r3 == null goto label1;
+
+        $r1 = r0.<com.adobe.air.wand.connection.WandWebSocket: org.java_websocket.WebSocket mConnection>;
+
+        $r3 = virtualinvoke $r2.<com.adobe.air.wand.connection.WandWebSocket$Handshake: java.lang.String getSuccessResponse(java.lang.String)>($r3);
+
+        interfaceinvoke $r1.<org.java_websocket.WebSocket: void send(java.lang.String)>($r3);
+
+        $r2 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$Handshake mHandshake>;
+
+        $r3 = staticinvoke <com.adobe.air.wand.connection.WandWebSocket$Handshake: java.lang.String access$1000(com.adobe.air.wand.connection.WandWebSocket$Handshake)>($r2);
+
+        $r2 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.WandWebSocket$Handshake mHandshake>;
+
+        $r4 = staticinvoke <com.adobe.air.wand.connection.WandWebSocket$Handshake: java.lang.String access$1100(com.adobe.air.wand.connection.WandWebSocket$Handshake)>($r2);
+
+        specialinvoke r0.<com.adobe.air.wand.connection.WandWebSocket: void pingServerOnConnect(java.lang.String,java.lang.String)>($r3, $r4);
+
+        return;
+
+     label1:
+        $r5 = new java.lang.Exception;
+
+        specialinvoke $r5.<java.lang.Exception: void <init>(java.lang.String)>("Invalid state at onReadyForConnection callback.");
+
+        throw $r5;
+    }
+
+    public void registerListener(com.adobe.air.wand.connection.Connection$Listener) throws java.lang.Exception
+    {
+        com.adobe.air.wand.connection.Connection$Listener $r1, $r2;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.lang.Exception $r3;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r1 := @parameter0: com.adobe.air.wand.connection.Connection$Listener;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mIsDisposed>;
+
+        if $z0 != 0 goto label3;
+
+        if $r1 == null goto label2;
+
+        $r2 = r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.Connection$Listener mConnectionListener>;
+
+        if $r2 != null goto label1;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.Connection$Listener mConnectionListener> = $r1;
+
+        return;
+
+     label1:
+        $r3 = new java.lang.Exception;
+
+        specialinvoke $r3.<java.lang.Exception: void <init>(java.lang.String)>("A listener is already registered");
+
+        throw $r3;
+
+     label2:
+        $r3 = new java.lang.Exception;
+
+        specialinvoke $r3.<java.lang.Exception: void <init>(java.lang.String)>("Invalid Connection.Listener");
+
+        throw $r3;
+
+     label3:
+        $r3 = new java.lang.Exception;
+
+        specialinvoke $r3.<java.lang.Exception: void <init>(java.lang.String)>("Connection has been disposed");
+
+        throw $r3;
+    }
+
+    public void send(java.lang.String) throws java.lang.Exception
+    {
+        java.lang.Throwable $r1;
+        org.java_websocket.WebSocket $r3;
+        com.adobe.air.wand.connection.WandWebSocket r0;
+        java.lang.String $r2;
+        java.lang.Exception $r4;
+        boolean $z0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $z0 = r0.<com.adobe.air.wand.connection.WandWebSocket: boolean mIsDisposed>;
+
+        if $z0 != 0 goto label4;
+
+        $r3 = r0.<com.adobe.air.wand.connection.WandWebSocket: org.java_websocket.WebSocket mConnection>;
+
+        if $r3 == null goto label6;
+
+     label1:
+        interfaceinvoke $r3.<org.java_websocket.WebSocket: void send(java.lang.String)>($r2);
+
+     label2:
+        return;
+
+     label3:
+        $r4 = new java.lang.Exception;
+
+        specialinvoke $r4.<java.lang.Exception: void <init>(java.lang.String)>("Unable to send Message");
+
+        throw $r4;
+
+     label4:
+        $r4 = new java.lang.Exception;
+
+        specialinvoke $r4.<java.lang.Exception: void <init>(java.lang.String)>("Connection has been disposed");
+
+        throw $r4;
+
+     label5:
+        $r1 := @caughtexception;
+
+        goto label3;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+    }
+
+    public void unregisterListener()
+    {
+        com.adobe.air.wand.connection.WandWebSocket r0;
+
+        r0 := @this: com.adobe.air.wand.connection.WandWebSocket;
+
+        r0.<com.adobe.air.wand.connection.WandWebSocket: com.adobe.air.wand.connection.Connection$Listener mConnectionListener> = null;
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.adobe.air.wand.connection.WandWebSocket: java.lang.String WEBSOCKET_PROTOCOL> = "WEBSOCKET";
+
+        <com.adobe.air.wand.connection.WandWebSocket: java.lang.String LOG_TAG> = "WandWebSocket";
+
+        <com.adobe.air.wand.connection.WandWebSocket: java.lang.String CONNECT_PING_URL> = "http://dh8vjmvwgc27o.cloudfront.net/AIRGamepad/connect_ping.txt";
+
+        return;
+    }
+}

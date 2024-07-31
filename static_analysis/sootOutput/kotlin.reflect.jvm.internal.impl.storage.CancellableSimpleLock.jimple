@@ -1,0 +1,111 @@
+public final class kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock extends kotlin.reflect.jvm.internal.impl.storage.DefaultSimpleLock
+{
+    private final java.lang.Runnable checkCancelled;
+    private final kotlin.jvm.functions.Function1 interruptedExceptionHandler;
+
+    public void <init>(java.lang.Runnable, kotlin.jvm.functions.Function1)
+    {
+        java.util.concurrent.locks.Lock $r4;
+        kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock r0;
+        java.util.concurrent.locks.ReentrantLock $r3;
+        kotlin.jvm.functions.Function1 $r2;
+        java.lang.Runnable $r1;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        $r2 := @parameter1: kotlin.jvm.functions.Function1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(null, "checkCancelled");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(null, "interruptedExceptionHandler");
+
+        $r3 = new java.util.concurrent.locks.ReentrantLock;
+
+        specialinvoke $r3.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        $r4 = (java.util.concurrent.locks.Lock) $r3;
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock: void <init>(java.util.concurrent.locks.Lock,java.lang.Runnable,kotlin.jvm.functions.Function1)>($r4, null, null);
+
+        return;
+    }
+
+    public void <init>(java.util.concurrent.locks.Lock, java.lang.Runnable, kotlin.jvm.functions.Function1)
+    {
+        java.util.concurrent.locks.Lock $r1;
+        kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock r0;
+        kotlin.jvm.functions.Function1 $r3;
+        java.lang.Runnable $r2;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock;
+
+        $r1 := @parameter0: java.util.concurrent.locks.Lock;
+
+        $r2 := @parameter1: java.lang.Runnable;
+
+        $r3 := @parameter2: kotlin.jvm.functions.Function1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "lock");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(null, "checkCancelled");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(null, "interruptedExceptionHandler");
+
+        specialinvoke r0.<kotlin.reflect.jvm.internal.impl.storage.DefaultSimpleLock: void <init>(java.util.concurrent.locks.Lock)>($r1);
+
+        r0.<kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock: java.lang.Runnable checkCancelled> = null;
+
+        r0.<kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock: kotlin.jvm.functions.Function1 interruptedExceptionHandler> = null;
+
+        return;
+    }
+
+    public void lock()
+    {
+        java.util.concurrent.TimeUnit $r2;
+        java.lang.Throwable $r4;
+        java.util.concurrent.locks.Lock $r1;
+        kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock r0;
+        kotlin.jvm.functions.Function1 $r5;
+        java.lang.Runnable $r3;
+        boolean $z0;
+
+        r0 := @this: kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock;
+
+     label1:
+        $r1 = virtualinvoke r0.<kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock: java.util.concurrent.locks.Lock getLock()>();
+
+     label2:
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+     label3:
+        $z0 = interfaceinvoke $r1.<java.util.concurrent.locks.Lock: boolean tryLock(long,java.util.concurrent.TimeUnit)>(50L, $r2);
+
+     label4:
+        if $z0 != 0 goto label8;
+
+        $r3 = r0.<kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock: java.lang.Runnable checkCancelled>;
+
+     label5:
+        interfaceinvoke $r3.<java.lang.Runnable: void run()>();
+
+     label6:
+        goto label1;
+
+     label7:
+        $r4 := @caughtexception;
+
+        $r5 = r0.<kotlin.reflect.jvm.internal.impl.storage.CancellableSimpleLock: kotlin.jvm.functions.Function1 interruptedExceptionHandler>;
+
+        interfaceinvoke $r5.<kotlin.jvm.functions.Function1: java.lang.Object invoke(java.lang.Object)>($r4);
+
+     label8:
+        return;
+
+        catch java.lang.InterruptedException from label1 to label2 with label7;
+        catch java.lang.InterruptedException from label3 to label4 with label7;
+        catch java.lang.InterruptedException from label5 to label6 with label7;
+    }
+}

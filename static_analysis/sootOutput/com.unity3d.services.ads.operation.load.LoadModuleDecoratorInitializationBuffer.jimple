@@ -1,0 +1,299 @@
+public class com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer extends com.unity3d.services.ads.operation.load.LoadModuleDecorator implements com.unity3d.services.core.configuration.IInitializationListener
+{
+    private static final java.lang.String errorMsgInitializationFailed;
+    private static final java.lang.String errorMsgInitializationFailure;
+    private java.util.concurrent.ConcurrentHashMap _queuedLoadEvents;
+
+    public void <init>(com.unity3d.services.ads.operation.load.ILoadModule, com.unity3d.services.core.configuration.IInitializationNotificationCenter)
+    {
+        java.util.concurrent.ConcurrentHashMap $r3;
+        com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer r0;
+        com.unity3d.services.core.configuration.IInitializationNotificationCenter $r1;
+        com.unity3d.services.ads.operation.load.ILoadModule $r2;
+
+        r0 := @this: com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer;
+
+        $r2 := @parameter0: com.unity3d.services.ads.operation.load.ILoadModule;
+
+        $r1 := @parameter1: com.unity3d.services.core.configuration.IInitializationNotificationCenter;
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.load.LoadModuleDecorator: void <init>(com.unity3d.services.ads.operation.load.ILoadModule)>($r2);
+
+        interfaceinvoke $r1.<com.unity3d.services.core.configuration.IInitializationNotificationCenter: void addListener(com.unity3d.services.core.configuration.IInitializationListener)>(r0);
+
+        $r3 = new java.util.concurrent.ConcurrentHashMap;
+
+        specialinvoke $r3.<java.util.concurrent.ConcurrentHashMap: void <init>()>();
+
+        r0.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: java.util.concurrent.ConcurrentHashMap _queuedLoadEvents> = $r3;
+
+        return;
+    }
+
+    private void sendOnUnityAdsFailedToLoad(com.unity3d.services.ads.operation.load.LoadOperationState, com.unity3d.ads.UnityAds$UnityAdsLoadError, java.lang.String)
+    {
+        com.unity3d.services.ads.operation.load.LoadOperationState $r1;
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r5;
+        long $l0;
+        com.unity3d.ads.IUnityAdsLoadListener $r4;
+        java.lang.Long $r6;
+        com.unity3d.ads.UnityAds$UnityAdsLoadError $r2;
+        com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer r0;
+        com.unity3d.services.core.request.metrics.Metric $r7;
+        java.lang.String $r3;
+        com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer$1 $r8;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer;
+
+        $r1 := @parameter0: com.unity3d.services.ads.operation.load.LoadOperationState;
+
+        $r2 := @parameter1: com.unity3d.ads.UnityAds$UnityAdsLoadError;
+
+        $r3 := @parameter2: java.lang.String;
+
+        if $r1 == null goto label2;
+
+        $r4 = $r1.<com.unity3d.services.ads.operation.load.LoadOperationState: com.unity3d.ads.IUnityAdsLoadListener listener>;
+
+        if $r4 != null goto label1;
+
+        return;
+
+     label1:
+        $r5 = virtualinvoke r0.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: com.unity3d.services.core.request.metrics.SDKMetricsSender getMetricSender()>();
+
+        $l0 = virtualinvoke $r1.<com.unity3d.services.ads.operation.load.LoadOperationState: long duration()>();
+
+        $r6 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $z0 = virtualinvoke $r1.<com.unity3d.services.ads.operation.load.LoadOperationState: boolean isBanner()>();
+
+        $r7 = staticinvoke <com.unity3d.services.core.request.metrics.AdOperationMetric: com.unity3d.services.core.request.metrics.Metric newAdLoadFailure(com.unity3d.ads.UnityAds$UnityAdsLoadError,java.lang.Long,boolean)>($r2, $r6, $z0);
+
+        interfaceinvoke $r5.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetricWithInitState(com.unity3d.services.core.request.metrics.Metric)>($r7);
+
+        $r8 = new com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer$1;
+
+        specialinvoke $r8.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer$1: void <init>(com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer,com.unity3d.services.ads.operation.load.LoadOperationState,com.unity3d.ads.UnityAds$UnityAdsLoadError,java.lang.String)>(r0, $r1, $r2, $r3);
+
+        staticinvoke <com.unity3d.services.core.misc.Utilities: void runOnUiThread(java.lang.Runnable)>($r8);
+
+     label2:
+        return;
+    }
+
+    public void executeAdOperation(com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker, com.unity3d.services.ads.operation.load.LoadOperationState)
+    {
+        com.unity3d.services.ads.operation.load.LoadOperationState $r1;
+        com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker $r2;
+        java.util.concurrent.ConcurrentHashMap $r5;
+        int[] $r3;
+        com.unity3d.ads.UnityAds$UnityAdsLoadError $r6;
+        int $i0;
+        com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer r0;
+        com.unity3d.services.core.properties.SdkProperties$InitializationState $r4;
+
+        r0 := @this: com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer;
+
+        $r2 := @parameter0: com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker;
+
+        $r1 := @parameter1: com.unity3d.services.ads.operation.load.LoadOperationState;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r3 = <com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer$2: int[] $SwitchMap$com$unity3d$services$core$properties$SdkProperties$InitializationState>;
+
+        $r4 = staticinvoke <com.unity3d.services.core.properties.SdkProperties: com.unity3d.services.core.properties.SdkProperties$InitializationState getCurrentInitializationState()>();
+
+        $i0 = virtualinvoke $r4.<com.unity3d.services.core.properties.SdkProperties$InitializationState: int ordinal()>();
+
+        $i0 = $r3[$i0];
+
+        if $i0 == 1 goto label3;
+
+        if $i0 == 2 goto label2;
+
+        $r5 = r0.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: java.util.concurrent.ConcurrentHashMap _queuedLoadEvents>;
+
+        virtualinvoke $r5.<java.util.concurrent.ConcurrentHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r1, $r2);
+
+        return;
+
+     label2:
+        $r6 = <com.unity3d.ads.UnityAds$UnityAdsLoadError: com.unity3d.ads.UnityAds$UnityAdsLoadError INITIALIZE_FAILED>;
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: void sendOnUnityAdsFailedToLoad(com.unity3d.services.ads.operation.load.LoadOperationState,com.unity3d.ads.UnityAds$UnityAdsLoadError,java.lang.String)>($r1, $r6, "[UnityAds] SDK Initialization Failed");
+
+        return;
+
+     label3:
+        specialinvoke r0.<com.unity3d.services.ads.operation.load.LoadModuleDecorator: void executeAdOperation(com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker,com.unity3d.services.ads.operation.load.LoadOperationState)>($r2, $r1);
+
+        return;
+    }
+
+    public volatile void executeAdOperation(com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker, java.lang.Object)
+    {
+        com.unity3d.services.ads.operation.load.LoadOperationState $r3;
+        com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker $r1;
+        com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer r0;
+        java.lang.Object $r2;
+
+        r0 := @this: com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer;
+
+        $r1 := @parameter0: com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker;
+
+        $r2 := @parameter1: java.lang.Object;
+
+        $r3 = (com.unity3d.services.ads.operation.load.LoadOperationState) $r2;
+
+        virtualinvoke r0.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: void executeAdOperation(com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker,com.unity3d.services.ads.operation.load.LoadOperationState)>($r1, $r3);
+
+        return;
+    }
+
+    public void onSdkInitializationFailed(java.lang.String, com.unity3d.services.core.configuration.ErrorState, int)
+    {
+        com.unity3d.services.ads.operation.load.LoadOperationState $r7;
+        java.lang.Throwable $r9;
+        java.util.Iterator $r5;
+        java.util.concurrent.ConcurrentHashMap $r3;
+        java.util.Set $r4;
+        com.unity3d.ads.UnityAds$UnityAdsLoadError $r8;
+        int $i0;
+        com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer r0;
+        java.lang.Object $r6;
+        java.lang.String $r1;
+        com.unity3d.services.core.configuration.ErrorState $r2;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.unity3d.services.core.configuration.ErrorState;
+
+        $i0 := @parameter2: int;
+
+        entermonitor r0;
+
+     label1:
+        $r3 = r0.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: java.util.concurrent.ConcurrentHashMap _queuedLoadEvents>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.ConcurrentHashMap: java.util.Set keySet()>();
+
+        $r5 = interfaceinvoke $r4.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (com.unity3d.services.ads.operation.load.LoadOperationState) $r6;
+
+        $r8 = <com.unity3d.ads.UnityAds$UnityAdsLoadError: com.unity3d.ads.UnityAds$UnityAdsLoadError INITIALIZE_FAILED>;
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: void sendOnUnityAdsFailedToLoad(com.unity3d.services.ads.operation.load.LoadOperationState,com.unity3d.ads.UnityAds$UnityAdsLoadError,java.lang.String)>($r7, $r8, "[UnityAds] SDK Initialization Failure");
+
+        goto label2;
+
+     label3:
+        $r3 = r0.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: java.util.concurrent.ConcurrentHashMap _queuedLoadEvents>;
+
+        virtualinvoke $r3.<java.util.concurrent.ConcurrentHashMap: void clear()>();
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r9 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r9;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+    }
+
+    public void onSdkInitialized()
+    {
+        com.unity3d.services.ads.operation.load.LoadOperationState $r7;
+        java.lang.Throwable $r8;
+        java.util.Map$Entry $r5;
+        com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker $r6;
+        java.util.Iterator $r3;
+        java.util.concurrent.ConcurrentHashMap $r1;
+        java.util.Set $r2;
+        com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer r0;
+        java.lang.Object $r4;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: java.util.concurrent.ConcurrentHashMap _queuedLoadEvents>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.ConcurrentHashMap: java.util.Set entrySet()>();
+
+        $r3 = interfaceinvoke $r2.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.util.Map$Entry) $r4;
+
+        $r4 = interfaceinvoke $r5.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r6 = (com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker) $r4;
+
+        $r4 = interfaceinvoke $r5.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r7 = (com.unity3d.services.ads.operation.load.LoadOperationState) $r4;
+
+        specialinvoke r0.<com.unity3d.services.ads.operation.load.LoadModuleDecorator: void executeAdOperation(com.unity3d.services.core.webview.bridge.IWebViewBridgeInvoker,com.unity3d.services.ads.operation.load.LoadOperationState)>($r6, $r7);
+
+        goto label2;
+
+     label3:
+        $r1 = r0.<com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: java.util.concurrent.ConcurrentHashMap _queuedLoadEvents>;
+
+        virtualinvoke $r1.<java.util.concurrent.ConcurrentHashMap: void clear()>();
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r8 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r8;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+    }
+
+    public static void <clinit>()
+    {
+        <com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: java.lang.String errorMsgInitializationFailure> = "[UnityAds] SDK Initialization Failure";
+
+        <com.unity3d.services.ads.operation.load.LoadModuleDecoratorInitializationBuffer: java.lang.String errorMsgInitializationFailed> = "[UnityAds] SDK Initialization Failed";
+
+        return;
+    }
+}

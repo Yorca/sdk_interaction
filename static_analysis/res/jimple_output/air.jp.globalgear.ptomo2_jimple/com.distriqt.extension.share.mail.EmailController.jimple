@@ -1,0 +1,487 @@
+public class com.distriqt.extension.share.mail.EmailController extends com.distriqt.core.ActivityStateListener
+{
+    public static final java.lang.String EMAIL_INTENT_TYPE;
+    public static final int SEND_MAIL_REQUEST_CODE;
+    public static final java.lang.String TAG;
+    private com.distriqt.core.utils.IExtensionContext _extContext;
+
+    static void <clinit>()
+    {
+        <com.distriqt.extension.share.mail.EmailController: java.lang.String TAG> = "EmailController";
+
+        <com.distriqt.extension.share.mail.EmailController: int SEND_MAIL_REQUEST_CODE> = 550044;
+
+        <com.distriqt.extension.share.mail.EmailController: java.lang.String EMAIL_INTENT_TYPE> = "message/rfc822";
+
+        return;
+    }
+
+    public void <init>(com.distriqt.core.utils.IExtensionContext)
+    {
+        com.distriqt.core.utils.IExtensionContext $r1;
+        com.distriqt.extension.share.mail.EmailController r0;
+
+        r0 := @this: com.distriqt.extension.share.mail.EmailController;
+
+        $r1 := @parameter0: com.distriqt.core.utils.IExtensionContext;
+
+        specialinvoke r0.<com.distriqt.core.ActivityStateListener: void <init>()>();
+
+        r0.<com.distriqt.extension.share.mail.EmailController: com.distriqt.core.utils.IExtensionContext _extContext> = $r1;
+
+        return;
+    }
+
+    public static android.content.Intent fromOptions(android.app.Activity, com.distriqt.extension.share.mail.MailOptions)
+    {
+        android.content.Context $r12;
+        android.text.Spanned $r5;
+        java.lang.Object[] $r10;
+        android.net.Uri $r13;
+        android.content.Intent $r1;
+        java.lang.String[] $r3;
+        java.util.ArrayList $r6, $r7;
+        int $i0, $i1;
+        java.lang.String $r4, $r11;
+        com.distriqt.extension.share.mail.MailOptions $r0;
+        boolean $z0;
+        com.distriqt.extension.share.mail.MessageAttachment $r9;
+        java.lang.Exception $r14, $r15;
+        java.lang.Object $r8;
+        android.app.Activity $r2;
+
+        $r2 := @parameter0: android.app.Activity;
+
+        $r0 := @parameter1: com.distriqt.extension.share.mail.MailOptions;
+
+        $r1 = new android.content.Intent;
+
+        specialinvoke $r1.<android.content.Intent: void <init>(java.lang.String)>("android.intent.action.SEND");
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent addFlags(int)>(67108864);
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent setType(java.lang.String)>("message/rfc822");
+
+        $r3 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.lang.String[] getRecipients()>();
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String[])>("android.intent.extra.EMAIL", $r3);
+
+        $r4 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.lang.String getSubject()>();
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("android.intent.extra.SUBJECT", $r4);
+
+        $z0 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: boolean isHtml()>();
+
+        if $z0 == 0 goto label01;
+
+        $r4 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.lang.String getBody()>();
+
+        $r5 = staticinvoke <android.text.Html: android.text.Spanned fromHtml(java.lang.String)>($r4);
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.CharSequence)>("android.intent.extra.TEXT", $r5);
+
+        goto label02;
+
+     label01:
+        $r4 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.lang.String getBody()>();
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("android.intent.extra.TEXT", $r4);
+
+     label02:
+        $r3 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.lang.String[] getCcRecipients()>();
+
+        $i0 = lengthof $r3;
+
+        if $i0 < 1 goto label03;
+
+        $r3 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.lang.String[] getCcRecipients()>();
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String[])>("android.intent.extra.CC", $r3);
+
+     label03:
+        $r3 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.lang.String[] getBccRecipients()>();
+
+        $i0 = lengthof $r3;
+
+        if $i0 < 1 goto label04;
+
+        $r3 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.lang.String[] getBccRecipients()>();
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String[])>("android.intent.extra.BCC", $r3);
+
+     label04:
+        $r6 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.util.ArrayList getAttachments()>();
+
+        if $r6 == null goto label20;
+
+        $r6 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.util.ArrayList getAttachments()>();
+
+        $i0 = virtualinvoke $r6.<java.util.ArrayList: int size()>();
+
+        if $i0 <= 0 goto label20;
+
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("android.intent.action.SEND_MULTIPLE");
+
+        $i0 = 0;
+
+     label05:
+        $r7 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.util.ArrayList getAttachments()>();
+
+        $i1 = virtualinvoke $r7.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label19;
+
+        $r7 = virtualinvoke $r0.<com.distriqt.extension.share.mail.MailOptions: java.util.ArrayList getAttachments()>();
+
+        $r8 = virtualinvoke $r7.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r9 = (com.distriqt.extension.share.mail.MessageAttachment) $r8;
+
+        $r4 = <com.distriqt.extension.share.mail.EmailController: java.lang.String TAG>;
+
+        $r10 = newarray (java.lang.Object)[1];
+
+        $r11 = $r9.<com.distriqt.extension.share.mail.MessageAttachment: java.lang.String nativePath>;
+
+        $r10[0] = $r11;
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r4, "attachment: %s", $r10);
+
+     label06:
+        $r12 = virtualinvoke $r2.<android.app.Activity: android.content.Context getApplicationContext()>();
+
+        $r4 = staticinvoke <com.distriqt.extension.share.content.ShareFileProvider: java.lang.String authority(android.content.Context)>($r12);
+
+        $r11 = $r9.<com.distriqt.extension.share.mail.MessageAttachment: java.lang.String nativePath>;
+
+        $r13 = staticinvoke <com.distriqt.core.utils.FileProviderUtils: android.net.Uri copyFileToProviderCache(android.content.Context,java.lang.String,java.lang.String,boolean)>($r12, $r4, $r11, 1);
+
+     label07:
+        goto label11;
+
+     label08:
+        $r14 := @caughtexception;
+
+     label09:
+        staticinvoke <com.distriqt.extension.share.utils.Errors: void handleException(java.lang.Throwable)>($r14);
+
+     label10:
+        $r13 = null;
+
+     label11:
+        if $r13 == null goto label14;
+
+     label12:
+        virtualinvoke $r6.<java.util.ArrayList: boolean add(java.lang.Object)>($r13);
+
+     label13:
+        goto label18;
+
+     label14:
+        $r4 = <com.distriqt.extension.share.mail.EmailController: java.lang.String TAG>;
+
+        $r10 = newarray (java.lang.Object)[0];
+
+     label15:
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r4, "ATTACHMENT_ERROR::File doesn\'t exist?", $r10);
+
+     label16:
+        goto label18;
+
+     label17:
+        $r15 := @caughtexception;
+
+        staticinvoke <com.distriqt.extension.share.utils.Errors: void handleException(java.lang.Throwable)>($r15);
+
+     label18:
+        $i0 = $i0 + 1;
+
+        goto label05;
+
+     label19:
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent putParcelableArrayListExtra(java.lang.String,java.util.ArrayList)>("android.intent.extra.STREAM", $r6);
+
+     label20:
+        return $r1;
+
+        catch java.lang.Exception from label06 to label07 with label08;
+        catch java.lang.Exception from label09 to label10 with label17;
+        catch java.lang.Exception from label12 to label13 with label17;
+        catch java.lang.Exception from label15 to label16 with label17;
+    }
+
+    public void dispose()
+    {
+        com.distriqt.extension.share.mail.EmailController r0;
+
+        r0 := @this: com.distriqt.extension.share.mail.EmailController;
+
+        return;
+    }
+
+    public boolean isMailSupported()
+    {
+        android.content.pm.PackageManager $r4;
+        android.content.Intent $r1;
+        java.lang.Exception $r6;
+        com.distriqt.core.utils.IExtensionContext $r2;
+        java.util.List $r5;
+        int $i0;
+        android.app.Activity $r3;
+        com.distriqt.extension.share.mail.EmailController r0;
+
+        r0 := @this: com.distriqt.extension.share.mail.EmailController;
+
+     label1:
+        $r2 = r0.<com.distriqt.extension.share.mail.EmailController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r3 = interfaceinvoke $r2.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r4 = virtualinvoke $r3.<android.app.Activity: android.content.pm.PackageManager getPackageManager()>();
+
+     label2:
+        $r1 = new android.content.Intent;
+
+     label3:
+        specialinvoke $r1.<android.content.Intent: void <init>(java.lang.String)>("android.intent.action.SEND");
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent setType(java.lang.String)>("message/rfc822");
+
+        $r5 = virtualinvoke $r4.<android.content.pm.PackageManager: java.util.List queryIntentActivities(android.content.Intent,int)>($r1, 65600);
+
+        $i0 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+     label4:
+        if $i0 == 0 goto label6;
+
+        return 1;
+
+     label5:
+        $r6 := @caughtexception;
+
+        staticinvoke <com.distriqt.extension.share.utils.Errors: void handleException(java.lang.Throwable)>($r6);
+
+     label6:
+        return 0;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public void onActivityResult(int, int, android.content.Intent)
+    {
+        java.lang.Object[] $r3;
+        android.content.Intent $r2;
+        java.lang.Integer $r4;
+        com.distriqt.core.utils.IExtensionContext $r5;
+        int $i0, $i1;
+        java.lang.String $r1, $r6;
+        com.distriqt.extension.share.mail.EmailController r0;
+
+        r0 := @this: com.distriqt.extension.share.mail.EmailController;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r2 := @parameter2: android.content.Intent;
+
+        $r1 = <com.distriqt.extension.share.mail.EmailController: java.lang.String TAG>;
+
+        $r3 = newarray (java.lang.Object)[2];
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r3[0] = $r4;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r3[1] = $r4;
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r1, "onActivityResult(%d,%d,...)", $r3);
+
+        specialinvoke r0.<com.distriqt.core.ActivityStateListener: void onActivityResult(int,int,android.content.Intent)>($i0, $i1, $r2);
+
+        if $i0 != 550044 goto label1;
+
+        $r5 = r0.<com.distriqt.extension.share.mail.EmailController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        if $r5 == null goto label1;
+
+        $r1 = <com.distriqt.extension.share.events.MessageEvent: java.lang.String MESSAGE_MAIL_COMPOSE>;
+
+        $r6 = <com.distriqt.extension.share.events.MessageEvent: java.lang.String MESSAGE_MAIL_COMPOSE_COMPLETE>;
+
+        interfaceinvoke $r5.<com.distriqt.core.utils.IExtensionContext: void dispatchEvent(java.lang.String,java.lang.String)>($r1, $r6);
+
+     label1:
+        return;
+    }
+
+    public boolean sendMail(java.lang.String, java.lang.String, java.lang.String[])
+    {
+        java.lang.Object[] $r5;
+        java.lang.String[] $r3;
+        android.content.Intent $r10;
+        com.distriqt.core.utils.IExtensionContext $r8;
+        java.lang.String $r1, $r2, $r4, $r6;
+        android.app.Activity $r9;
+        com.distriqt.extension.share.mail.EmailController r0;
+        com.distriqt.extension.share.mail.MailOptions $r7;
+
+        r0 := @this: com.distriqt.extension.share.mail.EmailController;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String[];
+
+        $r4 = <com.distriqt.extension.share.mail.EmailController: java.lang.String TAG>;
+
+        $r5 = newarray (java.lang.Object)[3];
+
+        $r5[0] = $r1;
+
+        $r5[1] = $r2;
+
+        $r6 = staticinvoke <java.util.Arrays: java.lang.String toString(java.lang.Object[])>($r3);
+
+        $r5[2] = $r6;
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r4, "sendMail( %s, %s, %s )", $r5);
+
+        $r7 = new com.distriqt.extension.share.mail.MailOptions;
+
+        specialinvoke $r7.<com.distriqt.extension.share.mail.MailOptions: void <init>()>();
+
+        virtualinvoke $r7.<com.distriqt.extension.share.mail.MailOptions: void setSubject(java.lang.String)>($r1);
+
+        virtualinvoke $r7.<com.distriqt.extension.share.mail.MailOptions: void setBody(java.lang.String)>($r2);
+
+        virtualinvoke $r7.<com.distriqt.extension.share.mail.MailOptions: void setRecipients(java.lang.String[])>($r3);
+
+        $r8 = r0.<com.distriqt.extension.share.mail.EmailController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r9 = interfaceinvoke $r8.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r10 = staticinvoke <com.distriqt.extension.share.mail.EmailController: android.content.Intent fromOptions(android.app.Activity,com.distriqt.extension.share.mail.MailOptions)>($r9, $r7);
+
+        $r8 = r0.<com.distriqt.extension.share.mail.EmailController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r9 = interfaceinvoke $r8.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r1 = virtualinvoke $r7.<com.distriqt.extension.share.mail.MailOptions: java.lang.String getTitle()>();
+
+        $r10 = staticinvoke <android.content.Intent: android.content.Intent createChooser(android.content.Intent,java.lang.CharSequence)>($r10, $r1);
+
+        virtualinvoke $r9.<android.app.Activity: void startActivityForResult(android.content.Intent,int)>($r10, 550044);
+
+        return 1;
+    }
+
+    public boolean sendMailWithOptions(java.lang.String, java.lang.String, java.lang.String[], java.lang.String[], java.lang.String[], java.util.ArrayList, boolean, boolean)
+    {
+        java.lang.Object[] $r8;
+        java.lang.String[] $r1, $r5, $r6;
+        android.content.Intent $r13;
+        java.util.ArrayList $r2;
+        com.distriqt.core.utils.IExtensionContext $r11;
+        int $i0;
+        java.lang.String $r3, $r4, $r7, $r9;
+        com.distriqt.extension.share.mail.EmailController r0;
+        boolean $z0, $z1;
+        com.distriqt.extension.share.mail.MailOptions $r10;
+        android.app.Activity $r12;
+
+        r0 := @this: com.distriqt.extension.share.mail.EmailController;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r4 := @parameter1: java.lang.String;
+
+        $r5 := @parameter2: java.lang.String[];
+
+        $r6 := @parameter3: java.lang.String[];
+
+        $r1 := @parameter4: java.lang.String[];
+
+        $r2 := @parameter5: java.util.ArrayList;
+
+        $z0 := @parameter6: boolean;
+
+        $z1 := @parameter7: boolean;
+
+        $r7 = <com.distriqt.extension.share.mail.EmailController: java.lang.String TAG>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r8[0] = $r3;
+
+        $r8[1] = $r4;
+
+        $r9 = staticinvoke <java.util.Arrays: java.lang.String toString(java.lang.Object[])>($r5);
+
+        $r8[2] = $r9;
+
+        staticinvoke <com.distriqt.extension.share.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r7, "sendMailWithOptions( %s, %s, %s )", $r8);
+
+        $r10 = new com.distriqt.extension.share.mail.MailOptions;
+
+        specialinvoke $r10.<com.distriqt.extension.share.mail.MailOptions: void <init>()>();
+
+        virtualinvoke $r10.<com.distriqt.extension.share.mail.MailOptions: void setSubject(java.lang.String)>($r3);
+
+        virtualinvoke $r10.<com.distriqt.extension.share.mail.MailOptions: void setBody(java.lang.String)>($r4);
+
+        virtualinvoke $r10.<com.distriqt.extension.share.mail.MailOptions: void setRecipients(java.lang.String[])>($r5);
+
+        virtualinvoke $r10.<com.distriqt.extension.share.mail.MailOptions: void setCcRecipients(java.lang.String[])>($r6);
+
+        virtualinvoke $r10.<com.distriqt.extension.share.mail.MailOptions: void setBccRecipients(java.lang.String[])>($r1);
+
+        virtualinvoke $r10.<com.distriqt.extension.share.mail.MailOptions: void setHtml(boolean)>($z0);
+
+        if $r2 == null goto label1;
+
+        $i0 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        if $i0 <= 0 goto label1;
+
+        virtualinvoke $r10.<com.distriqt.extension.share.mail.MailOptions: void setAttachments(java.util.ArrayList)>($r2);
+
+     label1:
+        $r11 = r0.<com.distriqt.extension.share.mail.EmailController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r12 = interfaceinvoke $r11.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r13 = staticinvoke <com.distriqt.extension.share.mail.EmailController: android.content.Intent fromOptions(android.app.Activity,com.distriqt.extension.share.mail.MailOptions)>($r12, $r10);
+
+        if $z1 == 0 goto label2;
+
+        $r11 = r0.<com.distriqt.extension.share.mail.EmailController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r12 = interfaceinvoke $r11.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        $r3 = virtualinvoke $r10.<com.distriqt.extension.share.mail.MailOptions: java.lang.String getTitle()>();
+
+        $r13 = staticinvoke <android.content.Intent: android.content.Intent createChooser(android.content.Intent,java.lang.CharSequence)>($r13, $r3);
+
+        virtualinvoke $r12.<android.app.Activity: void startActivityForResult(android.content.Intent,int)>($r13, 550044);
+
+        return 1;
+
+     label2:
+        $r11 = r0.<com.distriqt.extension.share.mail.EmailController: com.distriqt.core.utils.IExtensionContext _extContext>;
+
+        $r12 = interfaceinvoke $r11.<com.distriqt.core.utils.IExtensionContext: android.app.Activity getActivity()>();
+
+        virtualinvoke $r12.<android.app.Activity: void startActivityForResult(android.content.Intent,int)>($r13, 550044);
+
+        return 1;
+    }
+}

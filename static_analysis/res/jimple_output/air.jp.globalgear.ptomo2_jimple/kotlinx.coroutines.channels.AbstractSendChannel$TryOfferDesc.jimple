@@ -1,0 +1,126 @@
+public final class kotlinx.coroutines.channels.AbstractSendChannel$TryOfferDesc extends kotlinx.coroutines.internal.LockFreeLinkedListNode$RemoveFirstDesc
+{
+    public final java.lang.Object element;
+
+    public void <init>(java.lang.Object, kotlinx.coroutines.internal.LockFreeLinkedListHead)
+    {
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r2;
+        kotlinx.coroutines.channels.AbstractSendChannel$TryOfferDesc r0;
+        java.lang.Object $r1;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r3;
+
+        r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$TryOfferDesc;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 := @parameter1: kotlinx.coroutines.internal.LockFreeLinkedListHead;
+
+        $r3 = (kotlinx.coroutines.internal.LockFreeLinkedListNode) $r2;
+
+        specialinvoke r0.<kotlinx.coroutines.internal.LockFreeLinkedListNode$RemoveFirstDesc: void <init>(kotlinx.coroutines.internal.LockFreeLinkedListNode)>($r3);
+
+        r0.<kotlinx.coroutines.channels.AbstractSendChannel$TryOfferDesc: java.lang.Object element> = $r1;
+
+        return;
+    }
+
+    protected java.lang.Object failure(kotlinx.coroutines.internal.LockFreeLinkedListNode)
+    {
+        kotlinx.coroutines.internal.Symbol r2;
+        kotlinx.coroutines.channels.AbstractSendChannel$TryOfferDesc r0;
+        boolean $z0;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r1;
+
+        r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$TryOfferDesc;
+
+        $r1 := @parameter0: kotlinx.coroutines.internal.LockFreeLinkedListNode;
+
+        $z0 = $r1 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label1;
+
+        return $r1;
+
+     label1:
+        $z0 = $r1 instanceof kotlinx.coroutines.channels.ReceiveOrClosed;
+
+        if $z0 != 0 goto label2;
+
+        r2 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_FAILED>;
+
+        return r2;
+
+     label2:
+        return null;
+    }
+
+    public java.lang.Object onPrepare(kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp)
+    {
+        kotlinx.coroutines.internal.Symbol $r5, $r6;
+        kotlinx.coroutines.channels.AbstractSendChannel$TryOfferDesc r0;
+        kotlinx.coroutines.channels.ReceiveOrClosed $r4;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp $r2;
+        java.lang.AssertionError $r7;
+        java.lang.Object $r1;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r3;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$TryOfferDesc;
+
+        $r2 := @parameter0: kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp;
+
+        $r3 = $r2.<kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp: kotlinx.coroutines.internal.LockFreeLinkedListNode affected>;
+
+        $r4 = (kotlinx.coroutines.channels.ReceiveOrClosed) $r3;
+
+        $r1 = r0.<kotlinx.coroutines.channels.AbstractSendChannel$TryOfferDesc: java.lang.Object element>;
+
+        $r5 = interfaceinvoke $r4.<kotlinx.coroutines.channels.ReceiveOrClosed: kotlinx.coroutines.internal.Symbol tryResumeReceive(java.lang.Object,kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp)>($r1, $r2);
+
+        if $r5 != null goto label1;
+
+        $r1 = <kotlinx.coroutines.internal.LockFreeLinkedList_commonKt: java.lang.Object REMOVE_PREPARED>;
+
+        return $r1;
+
+     label1:
+        $r1 = <kotlinx.coroutines.internal.AtomicKt: java.lang.Object RETRY_ATOMIC>;
+
+        if $r5 != $r1 goto label2;
+
+        $r1 = <kotlinx.coroutines.internal.AtomicKt: java.lang.Object RETRY_ATOMIC>;
+
+        return $r1;
+
+     label2:
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 == 0 goto label6;
+
+        $r6 = <kotlinx.coroutines.CancellableContinuationImplKt: kotlinx.coroutines.internal.Symbol RESUME_TOKEN>;
+
+        if $r5 != $r6 goto label3;
+
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        if $z0 == 0 goto label5;
+
+        goto label6;
+
+     label5:
+        $r7 = new java.lang.AssertionError;
+
+        specialinvoke $r7.<java.lang.AssertionError: void <init>()>();
+
+        throw $r7;
+
+     label6:
+        return null;
+    }
+}

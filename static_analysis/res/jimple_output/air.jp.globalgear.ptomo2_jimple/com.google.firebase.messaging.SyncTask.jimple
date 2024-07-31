@@ -1,0 +1,485 @@
+class com.google.firebase.messaging.SyncTask extends java.lang.Object implements java.lang.Runnable
+{
+    private final com.google.firebase.messaging.FirebaseMessaging firebaseMessaging;
+    private final long nextDelaySeconds;
+    java.util.concurrent.ExecutorService processorExecutor;
+    private final android.os.PowerManager$WakeLock syncWakeLock;
+
+    public void <init>(com.google.firebase.messaging.FirebaseMessaging, long)
+    {
+        android.content.Context $r6;
+        com.google.android.gms.common.util.concurrent.NamedThreadFactory $r3;
+        java.util.concurrent.ThreadPoolExecutor $r4;
+        com.google.firebase.messaging.FirebaseMessaging $r5;
+        long $l0;
+        com.google.firebase.messaging.SyncTask r0;
+        java.util.concurrent.LinkedBlockingQueue $r2;
+        android.os.PowerManager$WakeLock $r9;
+        java.util.concurrent.TimeUnit $r1;
+        android.os.PowerManager $r8;
+        java.lang.Object $r7;
+
+        r0 := @this: com.google.firebase.messaging.SyncTask;
+
+        $r5 := @parameter0: com.google.firebase.messaging.FirebaseMessaging;
+
+        $l0 := @parameter1: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new java.util.concurrent.ThreadPoolExecutor;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $r2 = new java.util.concurrent.LinkedBlockingQueue;
+
+        specialinvoke $r2.<java.util.concurrent.LinkedBlockingQueue: void <init>()>();
+
+        $r3 = new com.google.android.gms.common.util.concurrent.NamedThreadFactory;
+
+        specialinvoke $r3.<com.google.android.gms.common.util.concurrent.NamedThreadFactory: void <init>(java.lang.String)>("firebase-iid-executor");
+
+        specialinvoke $r4.<java.util.concurrent.ThreadPoolExecutor: void <init>(int,int,long,java.util.concurrent.TimeUnit,java.util.concurrent.BlockingQueue,java.util.concurrent.ThreadFactory)>(0, 1, 30L, $r1, $r2, $r3);
+
+        r0.<com.google.firebase.messaging.SyncTask: java.util.concurrent.ExecutorService processorExecutor> = $r4;
+
+        r0.<com.google.firebase.messaging.SyncTask: com.google.firebase.messaging.FirebaseMessaging firebaseMessaging> = $r5;
+
+        r0.<com.google.firebase.messaging.SyncTask: long nextDelaySeconds> = $l0;
+
+        $r6 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: android.content.Context getContext()>();
+
+        $r7 = virtualinvoke $r6.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("power");
+
+        $r8 = (android.os.PowerManager) $r7;
+
+        $r9 = virtualinvoke $r8.<android.os.PowerManager: android.os.PowerManager$WakeLock newWakeLock(int,java.lang.String)>(1, "fiid-sync");
+
+        r0.<com.google.firebase.messaging.SyncTask: android.os.PowerManager$WakeLock syncWakeLock> = $r9;
+
+        virtualinvoke $r9.<android.os.PowerManager$WakeLock: void setReferenceCounted(boolean)>(0);
+
+        return;
+    }
+
+    static com.google.firebase.messaging.FirebaseMessaging access$000(com.google.firebase.messaging.SyncTask)
+    {
+        com.google.firebase.messaging.FirebaseMessaging r1;
+        com.google.firebase.messaging.SyncTask $r0;
+
+        $r0 := @parameter0: com.google.firebase.messaging.SyncTask;
+
+        r1 = $r0.<com.google.firebase.messaging.SyncTask: com.google.firebase.messaging.FirebaseMessaging firebaseMessaging>;
+
+        return r1;
+    }
+
+    static boolean isDebugLogEnabled()
+    {
+        int $i0;
+        boolean $z0;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z0 != 0 goto label2;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 != 23 goto label1;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    android.content.Context getContext()
+    {
+        com.google.firebase.messaging.FirebaseMessaging $r2;
+        android.content.Context $r1;
+        com.google.firebase.messaging.SyncTask r0;
+
+        r0 := @this: com.google.firebase.messaging.SyncTask;
+
+        $r2 = r0.<com.google.firebase.messaging.SyncTask: com.google.firebase.messaging.FirebaseMessaging firebaseMessaging>;
+
+        $r1 = virtualinvoke $r2.<com.google.firebase.messaging.FirebaseMessaging: android.content.Context getApplicationContext()>();
+
+        return $r1;
+    }
+
+    boolean isDeviceConnected()
+    {
+        android.net.ConnectivityManager $r3;
+        android.content.Context $r1;
+        android.net.NetworkInfo $r4;
+        java.lang.Object $r2;
+        com.google.firebase.messaging.SyncTask r0;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.SyncTask;
+
+        $r1 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: android.content.Context getContext()>();
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r3 = (android.net.ConnectivityManager) $r2;
+
+        if $r3 == null goto label1;
+
+        $r4 = virtualinvoke $r3.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        goto label2;
+
+     label1:
+        $r4 = null;
+
+     label2:
+        if $r4 == null goto label3;
+
+        $z0 = virtualinvoke $r4.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 == 0 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    boolean maybeRefreshToken() throws java.io.IOException
+    {
+        java.lang.Throwable $r1, $r4;
+        com.google.firebase.messaging.FirebaseMessaging $r2;
+        java.io.IOException $r7;
+        com.google.firebase.messaging.SyncTask r0;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.SyncTask;
+
+        $r2 = r0.<com.google.firebase.messaging.SyncTask: com.google.firebase.messaging.FirebaseMessaging firebaseMessaging>;
+
+     label01:
+        $r3 = virtualinvoke $r2.<com.google.firebase.messaging.FirebaseMessaging: java.lang.String blockingGetToken()>();
+
+     label02:
+        if $r3 != null goto label05;
+
+     label03:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", "Token retrieval failed: null");
+
+     label04:
+        return 0;
+
+     label05:
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+     label06:
+        if $z0 == 0 goto label08;
+
+     label07:
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("FirebaseMessaging", "Token successfully retrieved");
+
+     label08:
+        return 1;
+
+     label09:
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", "Token retrieval failed with SecurityException. Will retry token retrieval");
+
+        return 0;
+
+     label10:
+        $r4 := @caughtexception;
+
+        $r7 = (java.io.IOException) $r4;
+
+        $r3 = virtualinvoke $r7.<java.io.IOException: java.lang.String getMessage()>();
+
+        $z0 = staticinvoke <com.google.firebase.messaging.GmsRpc: boolean isErrorMessageForRetryableError(java.lang.String)>($r3);
+
+        if $z0 == 0 goto label11;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Token retrieval failed: ");
+
+        $r7 = (java.io.IOException) $r4;
+
+        $r3 = virtualinvoke $r7.<java.io.IOException: java.lang.String getMessage()>();
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Will retry token retrieval");
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", $r3);
+
+        return 0;
+
+     label11:
+        $r7 = (java.io.IOException) $r4;
+
+        $r3 = virtualinvoke $r7.<java.io.IOException: java.lang.String getMessage()>();
+
+        if $r3 != null goto label12;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", "Token retrieval failed without exception message. Will retry token retrieval");
+
+        return 0;
+
+     label12:
+        throw $r4;
+
+     label13:
+        $r1 := @caughtexception;
+
+        goto label09;
+
+        catch java.io.IOException from label01 to label02 with label10;
+        catch java.io.IOException from label03 to label04 with label10;
+        catch java.io.IOException from label05 to label06 with label10;
+        catch java.io.IOException from label07 to label08 with label10;
+        catch java.lang.SecurityException from label01 to label02 with label13;
+        catch java.lang.SecurityException from label03 to label04 with label13;
+        catch java.lang.SecurityException from label05 to label06 with label13;
+        catch java.lang.SecurityException from label07 to label08 with label13;
+    }
+
+    public void run()
+    {
+        java.lang.Throwable $r7, $r8;
+        android.content.Context $r3;
+        com.google.firebase.messaging.ServiceStarter $r2;
+        com.google.firebase.messaging.FirebaseMessaging $r5;
+        com.google.firebase.messaging.SyncTask$ConnectivityChangeReceiver $r10;
+        long $l0;
+        java.io.IOException $r12;
+        com.google.firebase.messaging.SyncTask r0;
+        android.os.PowerManager$WakeLock $r4;
+        java.lang.StringBuilder $r11;
+        java.lang.String $r9;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.SyncTask;
+
+        $r2 = staticinvoke <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter getInstance()>();
+
+        $r3 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: android.content.Context getContext()>();
+
+        $z0 = virtualinvoke $r2.<com.google.firebase.messaging.ServiceStarter: boolean hasWakeLockPermission(android.content.Context)>($r3);
+
+        if $z0 == 0 goto label01;
+
+        $r4 = r0.<com.google.firebase.messaging.SyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+        virtualinvoke $r4.<android.os.PowerManager$WakeLock: void acquire()>();
+
+     label01:
+        $r5 = r0.<com.google.firebase.messaging.SyncTask: com.google.firebase.messaging.FirebaseMessaging firebaseMessaging>;
+
+     label02:
+        virtualinvoke $r5.<com.google.firebase.messaging.FirebaseMessaging: void setSyncScheduledOrRunning(boolean)>(1);
+
+     label03:
+        $r5 = r0.<com.google.firebase.messaging.SyncTask: com.google.firebase.messaging.FirebaseMessaging firebaseMessaging>;
+
+     label04:
+        $z0 = virtualinvoke $r5.<com.google.firebase.messaging.FirebaseMessaging: boolean isGmsCorePresent()>();
+
+     label05:
+        if $z0 != 0 goto label09;
+
+     label06:
+        $r5 = r0.<com.google.firebase.messaging.SyncTask: com.google.firebase.messaging.FirebaseMessaging firebaseMessaging>;
+
+     label07:
+        virtualinvoke $r5.<com.google.firebase.messaging.FirebaseMessaging: void setSyncScheduledOrRunning(boolean)>(0);
+
+     label08:
+        $r2 = staticinvoke <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter getInstance()>();
+
+        $r3 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: android.content.Context getContext()>();
+
+        $z0 = virtualinvoke $r2.<com.google.firebase.messaging.ServiceStarter: boolean hasWakeLockPermission(android.content.Context)>($r3);
+
+        if $z0 == 0 goto label33;
+
+        $r4 = r0.<com.google.firebase.messaging.SyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+        virtualinvoke $r4.<android.os.PowerManager$WakeLock: void release()>();
+
+        return;
+
+     label09:
+        $r2 = staticinvoke <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter getInstance()>();
+
+        $r3 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: android.content.Context getContext()>();
+
+        $z0 = virtualinvoke $r2.<com.google.firebase.messaging.ServiceStarter: boolean hasAccessNetworkStatePermission(android.content.Context)>($r3);
+
+     label10:
+        if $z0 == 0 goto label16;
+
+     label11:
+        $z0 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: boolean isDeviceConnected()>();
+
+     label12:
+        if $z0 != 0 goto label16;
+
+     label13:
+        $r10 = new com.google.firebase.messaging.SyncTask$ConnectivityChangeReceiver;
+
+     label14:
+        specialinvoke $r10.<com.google.firebase.messaging.SyncTask$ConnectivityChangeReceiver: void <init>(com.google.firebase.messaging.SyncTask)>(r0);
+
+        virtualinvoke $r10.<com.google.firebase.messaging.SyncTask$ConnectivityChangeReceiver: void registerReceiver()>();
+
+     label15:
+        $r2 = staticinvoke <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter getInstance()>();
+
+        $r3 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: android.content.Context getContext()>();
+
+        $z0 = virtualinvoke $r2.<com.google.firebase.messaging.ServiceStarter: boolean hasWakeLockPermission(android.content.Context)>($r3);
+
+        if $z0 == 0 goto label33;
+
+        $r4 = r0.<com.google.firebase.messaging.SyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+        virtualinvoke $r4.<android.os.PowerManager$WakeLock: void release()>();
+
+        return;
+
+     label16:
+        $z0 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: boolean maybeRefreshToken()>();
+
+     label17:
+        if $z0 == 0 goto label21;
+
+     label18:
+        $r5 = r0.<com.google.firebase.messaging.SyncTask: com.google.firebase.messaging.FirebaseMessaging firebaseMessaging>;
+
+     label19:
+        virtualinvoke $r5.<com.google.firebase.messaging.FirebaseMessaging: void setSyncScheduledOrRunning(boolean)>(0);
+
+     label20:
+        goto label23;
+
+     label21:
+        $r5 = r0.<com.google.firebase.messaging.SyncTask: com.google.firebase.messaging.FirebaseMessaging firebaseMessaging>;
+
+        $l0 = r0.<com.google.firebase.messaging.SyncTask: long nextDelaySeconds>;
+
+     label22:
+        virtualinvoke $r5.<com.google.firebase.messaging.FirebaseMessaging: void syncWithDelaySecondsInternal(long)>($l0);
+
+     label23:
+        $r2 = staticinvoke <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter getInstance()>();
+
+        $r3 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: android.content.Context getContext()>();
+
+        $z0 = virtualinvoke $r2.<com.google.firebase.messaging.ServiceStarter: boolean hasWakeLockPermission(android.content.Context)>($r3);
+
+        if $z0 == 0 goto label30;
+
+     label24:
+        $r4 = r0.<com.google.firebase.messaging.SyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+        virtualinvoke $r4.<android.os.PowerManager$WakeLock: void release()>();
+
+        return;
+
+     label25:
+        $r7 := @caughtexception;
+
+        goto label31;
+
+     label26:
+        $r8 := @caughtexception;
+
+     label27:
+        $r11 = new java.lang.StringBuilder;
+
+     label28:
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("Topic sync or token retrieval failed on hard failure exceptions: ");
+
+        $r12 = (java.io.IOException) $r8;
+
+        $r9 = virtualinvoke $r12.<java.io.IOException: java.lang.String getMessage()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Won\'t retry the operation.");
+
+        $r9 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", $r9);
+
+        $r5 = r0.<com.google.firebase.messaging.SyncTask: com.google.firebase.messaging.FirebaseMessaging firebaseMessaging>;
+
+        virtualinvoke $r5.<com.google.firebase.messaging.FirebaseMessaging: void setSyncScheduledOrRunning(boolean)>(0);
+
+     label29:
+        $r2 = staticinvoke <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter getInstance()>();
+
+        $r3 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: android.content.Context getContext()>();
+
+        $z0 = virtualinvoke $r2.<com.google.firebase.messaging.ServiceStarter: boolean hasWakeLockPermission(android.content.Context)>($r3);
+
+        if $z0 == 0 goto label33;
+
+        goto label24;
+
+     label30:
+        return;
+
+     label31:
+        $r2 = staticinvoke <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter getInstance()>();
+
+        $r3 = virtualinvoke r0.<com.google.firebase.messaging.SyncTask: android.content.Context getContext()>();
+
+        $z0 = virtualinvoke $r2.<com.google.firebase.messaging.ServiceStarter: boolean hasWakeLockPermission(android.content.Context)>($r3);
+
+        if $z0 == 0 goto label32;
+
+        $r4 = r0.<com.google.firebase.messaging.SyncTask: android.os.PowerManager$WakeLock syncWakeLock>;
+
+        virtualinvoke $r4.<android.os.PowerManager$WakeLock: void release()>();
+
+     label32:
+        throw $r7;
+
+     label33:
+        return;
+
+        catch java.io.IOException from label02 to label03 with label26;
+        catch java.io.IOException from label04 to label05 with label26;
+        catch java.io.IOException from label07 to label08 with label26;
+        catch java.lang.Throwable from label01 to label05 with label25;
+        catch java.lang.Throwable from label06 to label08 with label25;
+        catch java.io.IOException from label09 to label10 with label26;
+        catch java.io.IOException from label11 to label12 with label26;
+        catch java.io.IOException from label14 to label15 with label26;
+        catch java.lang.Throwable from label09 to label10 with label25;
+        catch java.lang.Throwable from label11 to label12 with label25;
+        catch java.lang.Throwable from label13 to label14 with label25;
+        catch java.lang.Throwable from label14 to label15 with label25;
+        catch java.io.IOException from label16 to label17 with label26;
+        catch java.io.IOException from label19 to label20 with label26;
+        catch java.io.IOException from label22 to label23 with label26;
+        catch java.lang.Throwable from label16 to label17 with label25;
+        catch java.lang.Throwable from label18 to label20 with label25;
+        catch java.lang.Throwable from label21 to label23 with label25;
+        catch java.lang.Throwable from label27 to label28 with label25;
+        catch java.lang.Throwable from label28 to label29 with label25;
+    }
+}

@@ -1,0 +1,396 @@
+class io.grpc.okhttp.Headers extends java.lang.Object
+{
+    public static final io.grpc.okhttp.internal.framed.Header CONTENT_TYPE_HEADER;
+    public static final io.grpc.okhttp.internal.framed.Header HTTPS_SCHEME_HEADER;
+    public static final io.grpc.okhttp.internal.framed.Header HTTP_SCHEME_HEADER;
+    public static final io.grpc.okhttp.internal.framed.Header METHOD_GET_HEADER;
+    public static final io.grpc.okhttp.internal.framed.Header METHOD_HEADER;
+    public static final io.grpc.okhttp.internal.framed.Header TE_HEADER;
+
+    static void <clinit>()
+    {
+        okio.ByteString $r2;
+        java.lang.String $r0;
+        io.grpc.Metadata$Key $r3;
+        io.grpc.okhttp.internal.framed.Header $r1;
+
+        $r1 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r2 = <io.grpc.okhttp.internal.framed.Header: okio.ByteString TARGET_SCHEME>;
+
+        specialinvoke $r1.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,java.lang.String)>($r2, "https");
+
+        <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header HTTPS_SCHEME_HEADER> = $r1;
+
+        $r1 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r2 = <io.grpc.okhttp.internal.framed.Header: okio.ByteString TARGET_SCHEME>;
+
+        specialinvoke $r1.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,java.lang.String)>($r2, "http");
+
+        <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header HTTP_SCHEME_HEADER> = $r1;
+
+        $r1 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r2 = <io.grpc.okhttp.internal.framed.Header: okio.ByteString TARGET_METHOD>;
+
+        specialinvoke $r1.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,java.lang.String)>($r2, "POST");
+
+        <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header METHOD_HEADER> = $r1;
+
+        $r1 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r2 = <io.grpc.okhttp.internal.framed.Header: okio.ByteString TARGET_METHOD>;
+
+        specialinvoke $r1.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,java.lang.String)>($r2, "GET");
+
+        <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header METHOD_GET_HEADER> = $r1;
+
+        $r1 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r3 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key CONTENT_TYPE_KEY>;
+
+        $r0 = virtualinvoke $r3.<io.grpc.Metadata$Key: java.lang.String name()>();
+
+        specialinvoke $r1.<io.grpc.okhttp.internal.framed.Header: void <init>(java.lang.String,java.lang.String)>($r0, "application/grpc");
+
+        <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header CONTENT_TYPE_HEADER> = $r1;
+
+        $r1 = new io.grpc.okhttp.internal.framed.Header;
+
+        specialinvoke $r1.<io.grpc.okhttp.internal.framed.Header: void <init>(java.lang.String,java.lang.String)>("te", "trailers");
+
+        <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header TE_HEADER> = $r1;
+
+        return;
+    }
+
+    void <init>()
+    {
+        io.grpc.okhttp.Headers r0;
+
+        r0 := @this: io.grpc.okhttp.Headers;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static java.util.List addMetadata(java.util.List, io.grpc.Metadata)
+    {
+        byte[] $r3;
+        java.util.List $r0;
+        byte[][] $r2;
+        byte $b2;
+        okio.ByteString $r4, $r5;
+        int $i0, $i1;
+        io.grpc.Metadata $r1;
+        io.grpc.okhttp.internal.framed.Header $r6;
+
+        $r0 := @parameter0: java.util.List;
+
+        $r1 := @parameter1: io.grpc.Metadata;
+
+        $r2 = staticinvoke <io.grpc.internal.TransportFrameUtil: byte[][] toHttp2Headers(io.grpc.Metadata)>($r1);
+
+        $i0 = 0;
+
+     label1:
+        $i1 = lengthof $r2;
+
+        if $i0 >= $i1 goto label4;
+
+        $r3 = $r2[$i0];
+
+        $r4 = staticinvoke <okio.ByteString: okio.ByteString of(byte[])>($r3);
+
+        $i1 = virtualinvoke $r4.<okio.ByteString: int size()>();
+
+        if $i1 == 0 goto label3;
+
+        $b2 = virtualinvoke $r4.<okio.ByteString: byte getByte(int)>(0);
+
+        $i1 = (int) $b2;
+
+        if $i1 != 58 goto label2;
+
+        goto label3;
+
+     label2:
+        $i1 = $i0 + 1;
+
+        $r3 = $r2[$i1];
+
+        $r5 = staticinvoke <okio.ByteString: okio.ByteString of(byte[])>($r3);
+
+        $r6 = new io.grpc.okhttp.internal.framed.Header;
+
+        specialinvoke $r6.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,okio.ByteString)>($r4, $r5);
+
+        interfaceinvoke $r0.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+     label3:
+        $i0 = $i0 + 2;
+
+        goto label1;
+
+     label4:
+        return $r0;
+    }
+
+    public static java.util.List createHttpResponseHeaders(int, java.lang.String, io.grpc.Metadata)
+    {
+        io.grpc.Metadata$Key $r7;
+        java.util.ArrayList $r2;
+        java.util.List $r8;
+        okio.ByteString $r3;
+        int $i0, $i1;
+        io.grpc.Metadata $r1;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r0, $r6;
+        io.grpc.okhttp.internal.framed.Header $r5;
+
+        $i0 := @parameter0: int;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: io.grpc.Metadata;
+
+        $r2 = new java.util.ArrayList;
+
+        $i1 = staticinvoke <io.grpc.InternalMetadata: int headerCount(io.grpc.Metadata)>($r1);
+
+        $i1 = $i1 + 2;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>(int)>($i1);
+
+        $r5 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r3 = <io.grpc.okhttp.internal.framed.Header: okio.ByteString RESPONSE_STATUS>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,java.lang.String)>($r3, $r6);
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        $r5 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r7 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key CONTENT_TYPE_KEY>;
+
+        $r6 = virtualinvoke $r7.<io.grpc.Metadata$Key: java.lang.String name()>();
+
+        specialinvoke $r5.<io.grpc.okhttp.internal.framed.Header: void <init>(java.lang.String,java.lang.String)>($r6, $r0);
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        $r8 = staticinvoke <io.grpc.okhttp.Headers: java.util.List addMetadata(java.util.List,io.grpc.Metadata)>($r2, $r1);
+
+        return $r8;
+    }
+
+    public static java.util.List createRequestHeaders(io.grpc.Metadata, java.lang.String, java.lang.String, java.lang.String, boolean, boolean)
+    {
+        io.grpc.Metadata$Key $r7;
+        java.util.ArrayList $r4;
+        java.util.List $r8;
+        okio.ByteString $r6;
+        int $i0;
+        io.grpc.Metadata $r1;
+        java.lang.String $r0, $r2, $r3;
+        io.grpc.okhttp.internal.framed.Header $r5;
+        boolean $z0, $z1;
+
+        $r1 := @parameter0: io.grpc.Metadata;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r0 := @parameter3: java.lang.String;
+
+        $z0 := @parameter4: boolean;
+
+        $z1 := @parameter5: boolean;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "headers");
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "defaultPath");
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r3, "authority");
+
+        staticinvoke <io.grpc.okhttp.Headers: void stripNonApplicationHeaders(io.grpc.Metadata)>($r1);
+
+        $r4 = new java.util.ArrayList;
+
+        $i0 = staticinvoke <io.grpc.InternalMetadata: int headerCount(io.grpc.Metadata)>($r1);
+
+        $i0 = $i0 + 7;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(int)>($i0);
+
+        if $z1 == 0 goto label1;
+
+        $r5 = <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header HTTP_SCHEME_HEADER>;
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        goto label2;
+
+     label1:
+        $r5 = <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header HTTPS_SCHEME_HEADER>;
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        $r5 = <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header METHOD_GET_HEADER>;
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        goto label4;
+
+     label3:
+        $r5 = <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header METHOD_HEADER>;
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+     label4:
+        $r5 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r6 = <io.grpc.okhttp.internal.framed.Header: okio.ByteString TARGET_AUTHORITY>;
+
+        specialinvoke $r5.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,java.lang.String)>($r6, $r3);
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        $r5 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r6 = <io.grpc.okhttp.internal.framed.Header: okio.ByteString TARGET_PATH>;
+
+        specialinvoke $r5.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,java.lang.String)>($r6, $r2);
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        $r5 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r7 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key USER_AGENT_KEY>;
+
+        $r2 = virtualinvoke $r7.<io.grpc.Metadata$Key: java.lang.String name()>();
+
+        specialinvoke $r5.<io.grpc.okhttp.internal.framed.Header: void <init>(java.lang.String,java.lang.String)>($r2, $r0);
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        $r5 = <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header CONTENT_TYPE_HEADER>;
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        $r5 = <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header TE_HEADER>;
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        $r8 = staticinvoke <io.grpc.okhttp.Headers: java.util.List addMetadata(java.util.List,io.grpc.Metadata)>($r4, $r1);
+
+        return $r8;
+    }
+
+    public static java.util.List createResponseHeaders(io.grpc.Metadata)
+    {
+        java.util.List $r4;
+        okio.ByteString $r1;
+        int $i0;
+        io.grpc.Metadata $r2;
+        io.grpc.okhttp.internal.framed.Header $r3;
+        java.util.ArrayList $r0;
+
+        $r2 := @parameter0: io.grpc.Metadata;
+
+        staticinvoke <io.grpc.okhttp.Headers: void stripNonApplicationHeaders(io.grpc.Metadata)>($r2);
+
+        $r0 = new java.util.ArrayList;
+
+        $i0 = staticinvoke <io.grpc.InternalMetadata: int headerCount(io.grpc.Metadata)>($r2);
+
+        $i0 = $i0 + 2;
+
+        specialinvoke $r0.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $r3 = new io.grpc.okhttp.internal.framed.Header;
+
+        $r1 = <io.grpc.okhttp.internal.framed.Header: okio.ByteString RESPONSE_STATUS>;
+
+        specialinvoke $r3.<io.grpc.okhttp.internal.framed.Header: void <init>(okio.ByteString,java.lang.String)>($r1, "200");
+
+        interfaceinvoke $r0.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+        $r3 = <io.grpc.okhttp.Headers: io.grpc.okhttp.internal.framed.Header CONTENT_TYPE_HEADER>;
+
+        interfaceinvoke $r0.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+        $r4 = staticinvoke <io.grpc.okhttp.Headers: java.util.List addMetadata(java.util.List,io.grpc.Metadata)>($r0, $r2);
+
+        return $r4;
+    }
+
+    public static java.util.List createResponseTrailers(io.grpc.Metadata, boolean)
+    {
+        java.util.List $r1;
+        int $i0;
+        io.grpc.Metadata $r0;
+        boolean $z0;
+        java.util.ArrayList $r2;
+
+        $r0 := @parameter0: io.grpc.Metadata;
+
+        $z0 := @parameter1: boolean;
+
+        if $z0 != 0 goto label1;
+
+        $r1 = staticinvoke <io.grpc.okhttp.Headers: java.util.List createResponseHeaders(io.grpc.Metadata)>($r0);
+
+        return $r1;
+
+     label1:
+        staticinvoke <io.grpc.okhttp.Headers: void stripNonApplicationHeaders(io.grpc.Metadata)>($r0);
+
+        $r2 = new java.util.ArrayList;
+
+        $i0 = staticinvoke <io.grpc.InternalMetadata: int headerCount(io.grpc.Metadata)>($r0);
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $r1 = staticinvoke <io.grpc.okhttp.Headers: java.util.List addMetadata(java.util.List,io.grpc.Metadata)>($r2, $r0);
+
+        return $r1;
+    }
+
+    private static void stripNonApplicationHeaders(io.grpc.Metadata)
+    {
+        io.grpc.Metadata $r0;
+        io.grpc.Metadata$Key $r1;
+
+        $r0 := @parameter0: io.grpc.Metadata;
+
+        $r1 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key CONTENT_TYPE_KEY>;
+
+        virtualinvoke $r0.<io.grpc.Metadata: void discardAll(io.grpc.Metadata$Key)>($r1);
+
+        $r1 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key TE_HEADER>;
+
+        virtualinvoke $r0.<io.grpc.Metadata: void discardAll(io.grpc.Metadata$Key)>($r1);
+
+        $r1 = <io.grpc.internal.GrpcUtil: io.grpc.Metadata$Key USER_AGENT_KEY>;
+
+        virtualinvoke $r0.<io.grpc.Metadata: void discardAll(io.grpc.Metadata$Key)>($r1);
+
+        return;
+    }
+}

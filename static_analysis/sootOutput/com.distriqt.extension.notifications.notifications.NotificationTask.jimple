@@ -1,0 +1,415 @@
+public class com.distriqt.extension.notifications.notifications.NotificationTask extends android.os.AsyncTask
+{
+    private static final java.lang.String TAG;
+    private android.content.Context _context;
+    private com.distriqt.extension.notifications.notifications.data.NotificationData _data;
+    private boolean _fromAlarm;
+
+    static void <clinit>()
+    {
+        <com.distriqt.extension.notifications.notifications.NotificationTask: java.lang.String TAG> = "NotificationTask";
+
+        return;
+    }
+
+    public void <init>(android.content.Context, com.distriqt.extension.notifications.notifications.data.NotificationData)
+    {
+        android.content.Context $r2;
+        com.distriqt.extension.notifications.notifications.data.NotificationData $r1;
+        com.distriqt.extension.notifications.notifications.NotificationTask r0;
+
+        r0 := @this: com.distriqt.extension.notifications.notifications.NotificationTask;
+
+        $r2 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.distriqt.extension.notifications.notifications.data.NotificationData;
+
+        specialinvoke r0.<android.os.AsyncTask: void <init>()>();
+
+        r0.<com.distriqt.extension.notifications.notifications.NotificationTask: android.content.Context _context> = $r2;
+
+        r0.<com.distriqt.extension.notifications.notifications.NotificationTask: com.distriqt.extension.notifications.notifications.data.NotificationData _data> = $r1;
+
+        r0.<com.distriqt.extension.notifications.notifications.NotificationTask: boolean _fromAlarm> = 0;
+
+        return;
+    }
+
+    public void <init>(android.content.Context, com.distriqt.extension.notifications.notifications.data.NotificationData, boolean)
+    {
+        android.content.Context $r1;
+        com.distriqt.extension.notifications.notifications.data.NotificationData $r2;
+        com.distriqt.extension.notifications.notifications.NotificationTask r0;
+        boolean $z0;
+
+        r0 := @this: com.distriqt.extension.notifications.notifications.NotificationTask;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: com.distriqt.extension.notifications.notifications.data.NotificationData;
+
+        $z0 := @parameter2: boolean;
+
+        specialinvoke r0.<android.os.AsyncTask: void <init>()>();
+
+        r0.<com.distriqt.extension.notifications.notifications.NotificationTask: android.content.Context _context> = $r1;
+
+        r0.<com.distriqt.extension.notifications.notifications.NotificationTask: com.distriqt.extension.notifications.notifications.data.NotificationData _data> = $r2;
+
+        r0.<com.distriqt.extension.notifications.notifications.NotificationTask: boolean _fromAlarm> = 1;
+
+        return;
+    }
+
+    public static void getNotificationAssets(android.content.Context, com.distriqt.extension.notifications.notifications.data.NotificationData)
+    {
+        java.net.HttpURLConnection $r9;
+        java.lang.Throwable $r13, $r14;
+        android.content.Context $r0;
+        java.lang.Object[] $r3;
+        java.net.URL $r7;
+        java.util.regex.Matcher $r6;
+        java.net.URLConnection $r8;
+        java.lang.String $r2, $r4;
+        com.distriqt.extension.notifications.notifications.data.NotificationData $r1;
+        boolean $z0;
+        com.distriqt.extension.notifications.notifications.data.NotificationStyleData $r16;
+        java.lang.Exception $r12, $r15, $r17;
+        android.graphics.Bitmap $r11;
+        java.util.regex.Pattern $r5;
+        java.io.InputStream $r10;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.distriqt.extension.notifications.notifications.data.NotificationData;
+
+        $r2 = <com.distriqt.extension.notifications.notifications.NotificationTask: java.lang.String TAG>;
+
+        $r3 = newarray (java.lang.Object)[1];
+
+     label01:
+        $r4 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: java.lang.String largeIconName>;
+
+     label02:
+        if $r4 != null goto label03;
+
+        $r4 = "null";
+
+        goto label04;
+
+     label03:
+        $r4 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: java.lang.String largeIconName>;
+
+     label04:
+        $r3[0] = $r4;
+
+        staticinvoke <com.distriqt.extension.notifications.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r2, "getNotificationAssets(): largeIcon: %s", $r3);
+
+        $r4 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: java.lang.String largeIconName>;
+
+     label05:
+        if $r4 == null goto label24;
+
+        $r5 = <android.util.Patterns: java.util.regex.Pattern WEB_URL>;
+
+     label06:
+        $r4 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: java.lang.String largeIconName>;
+
+        $r6 = virtualinvoke $r5.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r4);
+
+        $z0 = virtualinvoke $r6.<java.util.regex.Matcher: boolean matches()>();
+
+     label07:
+        if $z0 == 0 goto label24;
+
+        $r3 = newarray (java.lang.Object)[1];
+
+     label08:
+        $r4 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: java.lang.String largeIconName>;
+
+        $r3[0] = $r4;
+
+        staticinvoke <com.distriqt.extension.notifications.utils.Logger: void d(java.lang.String,java.lang.String,java.lang.Object[])>($r2, "getNotificationAssets(): DOWNLOADING LARGE ICON: %s", $r3);
+
+     label09:
+        $r7 = new java.net.URL;
+
+     label10:
+        $r2 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: java.lang.String largeIconName>;
+
+        specialinvoke $r7.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+        $r8 = virtualinvoke $r7.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r9 = (java.net.HttpURLConnection) $r8;
+
+     label11:
+        virtualinvoke $r9.<java.net.HttpURLConnection: void setDoInput(boolean)>(1);
+
+        virtualinvoke $r9.<java.net.HttpURLConnection: void connect()>();
+
+        $r10 = virtualinvoke $r9.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+        $r11 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeStream(java.io.InputStream)>($r10);
+
+        $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: android.graphics.Bitmap largeIconBitmap> = $r11;
+
+     label12:
+        if $r9 == null goto label24;
+
+     label13:
+        virtualinvoke $r9.<java.net.HttpURLConnection: void disconnect()>();
+
+     label14:
+        goto label24;
+
+     label15:
+        $r12 := @caughtexception;
+
+        goto label18;
+
+     label16:
+        $r13 := @caughtexception;
+
+        $r9 = null;
+
+        $r14 = $r13;
+
+        goto label21;
+
+     label17:
+        $r15 := @caughtexception;
+
+        $r9 = null;
+
+        $r12 = $r15;
+
+     label18:
+        virtualinvoke $r12.<java.lang.Exception: void printStackTrace()>();
+
+     label19:
+        if $r9 == null goto label24;
+
+        goto label13;
+
+     label20:
+        $r14 := @caughtexception;
+
+     label21:
+        if $r9 == null goto label23;
+
+     label22:
+        virtualinvoke $r9.<java.net.HttpURLConnection: void disconnect()>();
+
+     label23:
+        throw $r14;
+
+     label24:
+        $r16 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: com.distriqt.extension.notifications.notifications.data.NotificationStyleData style>;
+
+     label25:
+        if $r16 == null goto label31;
+
+     label26:
+        $r16 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: com.distriqt.extension.notifications.notifications.data.NotificationStyleData style>;
+
+        $r2 = $r16.<com.distriqt.extension.notifications.notifications.data.NotificationStyleData: java.lang.String image>;
+
+     label27:
+        if $r2 == null goto label31;
+
+        $r5 = <android.util.Patterns: java.util.regex.Pattern WEB_URL>;
+
+     label28:
+        $r16 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: com.distriqt.extension.notifications.notifications.data.NotificationStyleData style>;
+
+        $r2 = $r16.<com.distriqt.extension.notifications.notifications.data.NotificationStyleData: java.lang.String image>;
+
+        $r6 = virtualinvoke $r5.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r2);
+
+        $z0 = virtualinvoke $r6.<java.util.regex.Matcher: boolean matches()>();
+
+     label29:
+        if $z0 == 0 goto label31;
+
+        $r7 = new java.net.URL;
+
+     label30:
+        $r16 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: com.distriqt.extension.notifications.notifications.data.NotificationStyleData style>;
+
+        $r2 = $r16.<com.distriqt.extension.notifications.notifications.data.NotificationStyleData: java.lang.String image>;
+
+        specialinvoke $r7.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+        $r8 = virtualinvoke $r7.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r9 = (java.net.HttpURLConnection) $r8;
+
+        virtualinvoke $r9.<java.net.HttpURLConnection: void setDoInput(boolean)>(1);
+
+        virtualinvoke $r9.<java.net.HttpURLConnection: void connect()>();
+
+        $r10 = virtualinvoke $r9.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+        $r16 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: com.distriqt.extension.notifications.notifications.data.NotificationStyleData style>;
+
+        $r11 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeStream(java.io.InputStream)>($r10);
+
+        $r16.<com.distriqt.extension.notifications.notifications.data.NotificationStyleData: android.graphics.Bitmap imageBitmap> = $r11;
+
+     label31:
+        $r2 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: java.lang.String backgroundImage>;
+
+     label32:
+        if $r2 == null goto label38;
+
+        $r5 = <android.util.Patterns: java.util.regex.Pattern WEB_URL>;
+
+     label33:
+        $r2 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: java.lang.String backgroundImage>;
+
+        $r6 = virtualinvoke $r5.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r2);
+
+        $z0 = virtualinvoke $r6.<java.util.regex.Matcher: boolean matches()>();
+
+     label34:
+        if $z0 == 0 goto label38;
+
+        $r7 = new java.net.URL;
+
+     label35:
+        $r2 = $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: java.lang.String backgroundImage>;
+
+        specialinvoke $r7.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+        $r8 = virtualinvoke $r7.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r9 = (java.net.HttpURLConnection) $r8;
+
+        virtualinvoke $r9.<java.net.HttpURLConnection: void setDoInput(boolean)>(1);
+
+        virtualinvoke $r9.<java.net.HttpURLConnection: void connect()>();
+
+        $r10 = virtualinvoke $r9.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+        $r11 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeStream(java.io.InputStream)>($r10);
+
+        $r1.<com.distriqt.extension.notifications.notifications.data.NotificationData: android.graphics.Bitmap backgroundImageBitmap> = $r11;
+
+     label36:
+        return;
+
+     label37:
+        $r17 := @caughtexception;
+
+        virtualinvoke $r17.<java.lang.Exception: void printStackTrace()>();
+
+     label38:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label37;
+        catch java.lang.Exception from label03 to label05 with label37;
+        catch java.lang.Exception from label06 to label07 with label37;
+        catch java.lang.Exception from label08 to label09 with label37;
+        catch java.lang.Exception from label10 to label11 with label17;
+        catch java.lang.Throwable from label09 to label11 with label16;
+        catch java.lang.Exception from label11 to label12 with label15;
+        catch java.lang.Throwable from label11 to label12 with label20;
+        catch java.lang.Exception from label13 to label14 with label37;
+        catch java.lang.Throwable from label18 to label19 with label20;
+        catch java.lang.Exception from label22 to label25 with label37;
+        catch java.lang.Exception from label26 to label27 with label37;
+        catch java.lang.Exception from label28 to label29 with label37;
+        catch java.lang.Exception from label30 to label32 with label37;
+        catch java.lang.Exception from label33 to label34 with label37;
+        catch java.lang.Exception from label35 to label36 with label37;
+    }
+
+    protected transient java.lang.Boolean doInBackground(java.lang.Void[])
+    {
+        android.content.Context $r4;
+        java.lang.Boolean $r2;
+        com.distriqt.extension.notifications.notifications.data.NotificationData $r1;
+        java.lang.Void[] $r3;
+        com.distriqt.extension.notifications.notifications.NotificationTask r0;
+
+        r0 := @this: com.distriqt.extension.notifications.notifications.NotificationTask;
+
+        $r3 := @parameter0: java.lang.Void[];
+
+        $r4 = r0.<com.distriqt.extension.notifications.notifications.NotificationTask: android.content.Context _context>;
+
+        $r1 = r0.<com.distriqt.extension.notifications.notifications.NotificationTask: com.distriqt.extension.notifications.notifications.data.NotificationData _data>;
+
+        staticinvoke <com.distriqt.extension.notifications.notifications.NotificationTask: void getNotificationAssets(android.content.Context,com.distriqt.extension.notifications.notifications.data.NotificationData)>($r4, $r1);
+
+        $r2 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+        return $r2;
+    }
+
+    protected volatile java.lang.Object doInBackground(java.lang.Object[])
+    {
+        java.lang.Object[] $r2;
+        java.lang.Boolean $r1;
+        java.lang.Void[] $r3;
+        com.distriqt.extension.notifications.notifications.NotificationTask r0;
+
+        r0 := @this: com.distriqt.extension.notifications.notifications.NotificationTask;
+
+        $r2 := @parameter0: java.lang.Object[];
+
+        $r3 = (java.lang.Void[]) $r2;
+
+        $r1 = virtualinvoke r0.<com.distriqt.extension.notifications.notifications.NotificationTask: java.lang.Boolean doInBackground(java.lang.Void[])>($r3);
+
+        return $r1;
+    }
+
+    protected void onPostExecute(java.lang.Boolean)
+    {
+        android.content.Context $r3;
+        com.distriqt.extension.notifications.notifications.Notifications $r2;
+        java.lang.Boolean $r1;
+        com.distriqt.extension.notifications.notifications.data.NotificationData $r4;
+        com.distriqt.extension.notifications.notifications.NotificationTask r0;
+        boolean $z0;
+
+        r0 := @this: com.distriqt.extension.notifications.notifications.NotificationTask;
+
+        $r1 := @parameter0: java.lang.Boolean;
+
+        $r2 = staticinvoke <com.distriqt.extension.notifications.notifications.Notifications: com.distriqt.extension.notifications.notifications.Notifications instance()>();
+
+        $r3 = r0.<com.distriqt.extension.notifications.notifications.NotificationTask: android.content.Context _context>;
+
+        virtualinvoke $r2.<com.distriqt.extension.notifications.notifications.Notifications: void setContext(android.content.Context)>($r3);
+
+        $r2 = staticinvoke <com.distriqt.extension.notifications.notifications.Notifications: com.distriqt.extension.notifications.notifications.Notifications instance()>();
+
+        $r4 = r0.<com.distriqt.extension.notifications.notifications.NotificationTask: com.distriqt.extension.notifications.notifications.data.NotificationData _data>;
+
+        $z0 = r0.<com.distriqt.extension.notifications.notifications.NotificationTask: boolean _fromAlarm>;
+
+        virtualinvoke $r2.<com.distriqt.extension.notifications.notifications.Notifications: void processNotification(com.distriqt.extension.notifications.notifications.data.NotificationData,boolean)>($r4, $z0);
+
+        return;
+    }
+
+    protected volatile void onPostExecute(java.lang.Object)
+    {
+        java.lang.Boolean $r2;
+        java.lang.Object $r1;
+        com.distriqt.extension.notifications.notifications.NotificationTask r0;
+
+        r0 := @this: com.distriqt.extension.notifications.notifications.NotificationTask;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Boolean) $r1;
+
+        virtualinvoke r0.<com.distriqt.extension.notifications.notifications.NotificationTask: void onPostExecute(java.lang.Boolean)>($r2);
+
+        return;
+    }
+}

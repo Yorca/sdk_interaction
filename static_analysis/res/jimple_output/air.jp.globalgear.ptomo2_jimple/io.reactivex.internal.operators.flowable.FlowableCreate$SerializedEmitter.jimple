@@ -1,0 +1,430 @@
+final class io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter extends java.util.concurrent.atomic.AtomicInteger implements io.reactivex.FlowableEmitter
+{
+    private static final long serialVersionUID;
+    volatile boolean done;
+    final io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter;
+    final io.reactivex.internal.util.AtomicThrowable error;
+    final io.reactivex.internal.fuseable.SimplePlainQueue queue;
+
+    void <init>(io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter)
+    {
+        io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter $r1;
+        io.reactivex.internal.queue.SpscLinkedArrayQueue $r3;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        io.reactivex.internal.util.AtomicThrowable $r2;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r1 := @parameter0: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter;
+
+        specialinvoke r0.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter> = $r1;
+
+        $r2 = new io.reactivex.internal.util.AtomicThrowable;
+
+        specialinvoke $r2.<io.reactivex.internal.util.AtomicThrowable: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.util.AtomicThrowable error> = $r2;
+
+        $r3 = new io.reactivex.internal.queue.SpscLinkedArrayQueue;
+
+        specialinvoke $r3.<io.reactivex.internal.queue.SpscLinkedArrayQueue: void <init>(int)>(16);
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.fuseable.SimplePlainQueue queue> = $r3;
+
+        return;
+    }
+
+    void drain()
+    {
+        int $i0;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: int getAndIncrement()>();
+
+        if $i0 != 0 goto label1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: void drainLoop()>();
+
+     label1:
+        return;
+    }
+
+    void drainLoop()
+    {
+        io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter $r1;
+        java.lang.Throwable $r5;
+        io.reactivex.internal.util.AtomicThrowable $r2;
+        int $i0, $i1;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        java.lang.Object $r4;
+        io.reactivex.internal.fuseable.SimplePlainQueue $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter>;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.fuseable.SimplePlainQueue queue>;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $i0 = 1;
+
+     label1:
+        $z0 = virtualinvoke $r1.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: boolean isCancelled()>();
+
+        if $z0 == 0 goto label2;
+
+        interfaceinvoke $r3.<io.reactivex.internal.fuseable.SimplePlainQueue: void clear()>();
+
+        return;
+
+     label2:
+        $r4 = virtualinvoke $r2.<io.reactivex.internal.util.AtomicThrowable: java.lang.Object get()>();
+
+        if $r4 == null goto label3;
+
+        interfaceinvoke $r3.<io.reactivex.internal.fuseable.SimplePlainQueue: void clear()>();
+
+        $r5 = virtualinvoke $r2.<io.reactivex.internal.util.AtomicThrowable: java.lang.Throwable terminate()>();
+
+        virtualinvoke $r1.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: void onError(java.lang.Throwable)>($r5);
+
+        return;
+
+     label3:
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: boolean done>;
+
+        $r4 = interfaceinvoke $r3.<io.reactivex.internal.fuseable.SimplePlainQueue: java.lang.Object poll()>();
+
+        if $r4 != null goto label4;
+
+        $z1 = 1;
+
+        goto label5;
+
+     label4:
+        $z1 = 0;
+
+     label5:
+        if $z0 == 0 goto label6;
+
+        if $z1 == 0 goto label6;
+
+        virtualinvoke $r1.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: void onComplete()>();
+
+        return;
+
+     label6:
+        if $z1 == 0 goto label7;
+
+        $i0 = neg $i0;
+
+        $i1 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: int addAndGet(int)>($i0);
+
+        $i0 = $i1;
+
+        if $i1 != 0 goto label1;
+
+        return;
+
+     label7:
+        virtualinvoke $r1.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: void onNext(java.lang.Object)>($r4);
+
+        goto label1;
+    }
+
+    public boolean isCancelled()
+    {
+        io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter $r1;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter>;
+
+        $z0 = virtualinvoke $r1.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: boolean isCancelled()>();
+
+        return $z0;
+    }
+
+    public void onComplete()
+    {
+        io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter $r1;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter>;
+
+        $z0 = virtualinvoke $r1.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: boolean isCancelled()>();
+
+        if $z0 != 0 goto label2;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: void drain()>();
+
+     label2:
+        return;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $z0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: boolean tryOnError(java.lang.Throwable)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void onNext(java.lang.Object)
+    {
+        io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter $r2;
+        java.lang.Throwable $r5;
+        java.lang.NullPointerException $r3;
+        int $i0;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        java.lang.Object $r1;
+        io.reactivex.internal.fuseable.SimplePlainQueue $r4;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter>;
+
+        $z0 = virtualinvoke $r2.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: boolean isCancelled()>();
+
+        if $z0 != 0 goto label10;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: boolean done>;
+
+        if $z0 == 0 goto label01;
+
+        return;
+
+     label01:
+        if $r1 != null goto label02;
+
+        $r3 = new java.lang.NullPointerException;
+
+        specialinvoke $r3.<java.lang.NullPointerException: void <init>(java.lang.String)>("onNext called with null. Null values are generally not allowed in 2.x operators and sources.");
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: void onError(java.lang.Throwable)>($r3);
+
+        return;
+
+     label02:
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: int get()>();
+
+        if $i0 != 0 goto label03;
+
+        $z0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: boolean compareAndSet(int,int)>(0, 1);
+
+        if $z0 == 0 goto label03;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter>;
+
+        virtualinvoke $r2.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: void onNext(java.lang.Object)>($r1);
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: int decrementAndGet()>();
+
+        if $i0 != 0 goto label06;
+
+        return;
+
+     label03:
+        $r4 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.fuseable.SimplePlainQueue queue>;
+
+        entermonitor $r4;
+
+     label04:
+        interfaceinvoke $r4.<io.reactivex.internal.fuseable.SimplePlainQueue: boolean offer(java.lang.Object)>($r1);
+
+        exitmonitor $r4;
+
+     label05:
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: int getAndIncrement()>();
+
+        if $i0 == 0 goto label06;
+
+        return;
+
+     label06:
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: void drainLoop()>();
+
+        return;
+
+     label07:
+        $r5 := @caughtexception;
+
+     label08:
+        exitmonitor $r4;
+
+     label09:
+        throw $r5;
+
+     label10:
+        return;
+
+        catch java.lang.Throwable from label04 to label05 with label07;
+        catch java.lang.Throwable from label08 to label09 with label07;
+    }
+
+    public long requested()
+    {
+        io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter $r1;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        long $l0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter>;
+
+        $l0 = virtualinvoke $r1.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: long requested()>();
+
+        return $l0;
+    }
+
+    public io.reactivex.FlowableEmitter serialize()
+    {
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        return r0;
+    }
+
+    public void setCancellable(io.reactivex.functions.Cancellable)
+    {
+        io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter $r2;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        io.reactivex.functions.Cancellable $r1;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r1 := @parameter0: io.reactivex.functions.Cancellable;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter>;
+
+        virtualinvoke $r2.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: void setCancellable(io.reactivex.functions.Cancellable)>($r1);
+
+        return;
+    }
+
+    public void setDisposable(io.reactivex.disposables.Disposable)
+    {
+        io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter $r2;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        io.reactivex.disposables.Disposable $r1;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r1 := @parameter0: io.reactivex.disposables.Disposable;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter>;
+
+        virtualinvoke $r2.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: void setDisposable(io.reactivex.disposables.Disposable)>($r1);
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter $r2;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        java.lang.String $r1;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter>;
+
+        $r1 = virtualinvoke $r2.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public boolean tryOnError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter $r2;
+        io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter r0;
+        io.reactivex.internal.util.AtomicThrowable $r3;
+        java.lang.NullPointerException $r4;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter emitter>;
+
+        $z0 = virtualinvoke $r2.<io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter: boolean isCancelled()>();
+
+        if $z0 != 0 goto label3;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        if $r1 != null goto label2;
+
+        $r4 = new java.lang.NullPointerException;
+
+        $r1 = $r4;
+
+        specialinvoke $r4.<java.lang.NullPointerException: void <init>(java.lang.String)>("onError called with null. Null values are generally not allowed in 2.x operators and sources.");
+
+     label2:
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: io.reactivex.internal.util.AtomicThrowable error>;
+
+        $z0 = virtualinvoke $r3.<io.reactivex.internal.util.AtomicThrowable: boolean addThrowable(java.lang.Throwable)>($r1);
+
+        if $z0 == 0 goto label3;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: void drain()>();
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    public static void <clinit>()
+    {
+        <io.reactivex.internal.operators.flowable.FlowableCreate$SerializedEmitter: long serialVersionUID> = 4883307006032401862L;
+
+        return;
+    }
+}

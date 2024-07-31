@@ -1,0 +1,150 @@
+class com.vungle.warren.log.JVMCrashCollector extends java.lang.Object implements java.lang.Thread$UncaughtExceptionHandler
+{
+    private java.lang.String collectFilter;
+    private final java.lang.Thread$UncaughtExceptionHandler defaultExceptionHandler;
+    private com.vungle.warren.log.LogManager$SdkLoggingEventListener sdkLoggingEventListener;
+
+    void <init>(com.vungle.warren.log.LogManager$SdkLoggingEventListener)
+    {
+        java.lang.Thread$UncaughtExceptionHandler $r2;
+        com.vungle.warren.log.JVMCrashCollector r0;
+        java.lang.String $r1;
+        com.vungle.warren.log.LogManager$SdkLoggingEventListener $r3;
+
+        r0 := @this: com.vungle.warren.log.JVMCrashCollector;
+
+        $r3 := @parameter0: com.vungle.warren.log.LogManager$SdkLoggingEventListener;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = <com.vungle.warren.log.LogManager: java.lang.String sDefaultCollectFilter>;
+
+        r0.<com.vungle.warren.log.JVMCrashCollector: java.lang.String collectFilter> = $r1;
+
+        r0.<com.vungle.warren.log.JVMCrashCollector: com.vungle.warren.log.LogManager$SdkLoggingEventListener sdkLoggingEventListener> = $r3;
+
+        $r2 = staticinvoke <java.lang.Thread: java.lang.Thread$UncaughtExceptionHandler getDefaultUncaughtExceptionHandler()>();
+
+        r0.<com.vungle.warren.log.JVMCrashCollector: java.lang.Thread$UncaughtExceptionHandler defaultExceptionHandler> = $r2;
+
+        staticinvoke <java.lang.Thread: void setDefaultUncaughtExceptionHandler(java.lang.Thread$UncaughtExceptionHandler)>(r0);
+
+        return;
+    }
+
+    public void uncaughtException(java.lang.Thread, java.lang.Throwable)
+    {
+        java.lang.Throwable $r2, $r4;
+        com.vungle.warren.VungleLogger$LoggerLevel $r11;
+        long $l2;
+        java.lang.Thread$UncaughtExceptionHandler $r12;
+        java.lang.Thread $r1;
+        int $i0, $i1;
+        java.lang.StackTraceElement $r6;
+        java.lang.String $r7, $r8, $r10;
+        com.vungle.warren.log.LogManager$SdkLoggingEventListener $r3;
+        boolean $z0, $z1;
+        java.lang.StackTraceElement[] $r5;
+        com.vungle.warren.log.JVMCrashCollector r0;
+        java.lang.Class $r9;
+
+        r0 := @this: com.vungle.warren.log.JVMCrashCollector;
+
+        $r1 := @parameter0: java.lang.Thread;
+
+        $r2 := @parameter1: java.lang.Throwable;
+
+        $r3 = r0.<com.vungle.warren.log.JVMCrashCollector: com.vungle.warren.log.LogManager$SdkLoggingEventListener sdkLoggingEventListener>;
+
+        $z0 = interfaceinvoke $r3.<com.vungle.warren.log.LogManager$SdkLoggingEventListener: boolean isCrashReportEnabled()>();
+
+        if $z0 == 0 goto label6;
+
+        if $r1 == null goto label6;
+
+        if $r2 == null goto label6;
+
+        $r4 = $r2;
+
+        $z0 = 0;
+
+     label1:
+        if $r4 == null goto label5;
+
+        $r5 = virtualinvoke $r4.<java.lang.Throwable: java.lang.StackTraceElement[] getStackTrace()>();
+
+        $i0 = lengthof $r5;
+
+        $i1 = 0;
+
+     label2:
+        if $i1 >= $i0 goto label4;
+
+        $r6 = $r5[$i1];
+
+        $r7 = virtualinvoke $r6.<java.lang.StackTraceElement: java.lang.String getClassName()>();
+
+        $r8 = r0.<com.vungle.warren.log.JVMCrashCollector: java.lang.String collectFilter>;
+
+        $z1 = virtualinvoke $r7.<java.lang.String: boolean startsWith(java.lang.String)>($r8);
+
+        if $z1 == 0 goto label3;
+
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label4:
+        $r4 = virtualinvoke $r4.<java.lang.Throwable: java.lang.Throwable getCause()>();
+
+        goto label1;
+
+     label5:
+        if $z0 == 0 goto label6;
+
+        $r7 = staticinvoke <android.util.Log: java.lang.String getStackTraceString(java.lang.Throwable)>($r2);
+
+        $r9 = virtualinvoke $r2.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r8 = virtualinvoke $r9.<java.lang.Class: java.lang.String toString()>();
+
+        $l2 = virtualinvoke $r1.<java.lang.Thread: long getId()>();
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(long)>($l2);
+
+        $r3 = r0.<com.vungle.warren.log.JVMCrashCollector: com.vungle.warren.log.LogManager$SdkLoggingEventListener sdkLoggingEventListener>;
+
+        $r11 = <com.vungle.warren.VungleLogger$LoggerLevel: com.vungle.warren.VungleLogger$LoggerLevel CRASH>;
+
+        interfaceinvoke $r3.<com.vungle.warren.log.LogManager$SdkLoggingEventListener: void saveLog(com.vungle.warren.VungleLogger$LoggerLevel,java.lang.String,java.lang.String,java.lang.String,java.lang.String)>($r11, "crash", $r7, $r8, $r10);
+
+     label6:
+        $r12 = r0.<com.vungle.warren.log.JVMCrashCollector: java.lang.Thread$UncaughtExceptionHandler defaultExceptionHandler>;
+
+        if $r12 == null goto label7;
+
+        interfaceinvoke $r12.<java.lang.Thread$UncaughtExceptionHandler: void uncaughtException(java.lang.Thread,java.lang.Throwable)>($r1, $r2);
+
+     label7:
+        return;
+    }
+
+    void updateConfig(java.lang.String)
+    {
+        com.vungle.warren.log.JVMCrashCollector r0;
+        java.lang.String $r1;
+
+        r0 := @this: com.vungle.warren.log.JVMCrashCollector;
+
+        $r1 := @parameter0: java.lang.String;
+
+        r0.<com.vungle.warren.log.JVMCrashCollector: java.lang.String collectFilter> = $r1;
+
+        return;
+    }
+}

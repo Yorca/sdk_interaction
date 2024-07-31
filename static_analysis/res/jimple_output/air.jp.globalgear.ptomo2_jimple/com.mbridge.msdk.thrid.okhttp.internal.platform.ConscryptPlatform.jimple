@@ -1,0 +1,254 @@
+public class com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform extends com.mbridge.msdk.thrid.okhttp.internal.platform.Platform
+{
+
+    private void <init>()
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform r0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform;
+
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.platform.Platform: void <init>()>();
+
+        return;
+    }
+
+    public static com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform buildIfSupported()
+    {
+        java.lang.ClassNotFoundException $r0;
+        com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform $r1;
+        boolean $z0;
+
+     label1:
+        staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("org.conscrypt.Conscrypt");
+
+        $z0 = staticinvoke <org.conscrypt.Conscrypt: boolean isAvailable()>();
+
+     label2:
+        if $z0 != 0 goto label3;
+
+        return null;
+
+     label3:
+        $r1 = new com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform;
+
+     label4:
+        specialinvoke $r1.<com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform: void <init>()>();
+
+     label5:
+        return $r1;
+
+     label6:
+        $r0 := @caughtexception;
+
+        return null;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label6;
+        catch java.lang.ClassNotFoundException from label4 to label5 with label6;
+    }
+
+    private java.security.Provider getProvider()
+    {
+        org.conscrypt.Conscrypt$ProviderBuilder $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform r0;
+        java.security.Provider $r2;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform;
+
+        $r1 = staticinvoke <org.conscrypt.Conscrypt: org.conscrypt.Conscrypt$ProviderBuilder newProviderBuilder()>();
+
+        $r1 = virtualinvoke $r1.<org.conscrypt.Conscrypt$ProviderBuilder: org.conscrypt.Conscrypt$ProviderBuilder provideTrustManager()>();
+
+        $r2 = virtualinvoke $r1.<org.conscrypt.Conscrypt$ProviderBuilder: java.security.Provider build()>();
+
+        return $r2;
+    }
+
+    public void configureSslSocketFactory(javax.net.ssl.SSLSocketFactory)
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform r0;
+        javax.net.ssl.SSLSocketFactory $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocketFactory;
+
+        $z0 = staticinvoke <org.conscrypt.Conscrypt: boolean isConscrypt(javax.net.ssl.SSLSocketFactory)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <org.conscrypt.Conscrypt: void setUseEngineSocket(javax.net.ssl.SSLSocketFactory,boolean)>($r1, 1);
+
+     label1:
+        return;
+    }
+
+    public void configureTlsExtensions(javax.net.ssl.SSLSocket, java.lang.String, java.util.List) throws java.io.IOException
+    {
+        java.util.List $r3;
+        java.lang.Object[] $r5;
+        com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform r0;
+        javax.net.ssl.SSLSocket $r1;
+        java.lang.String[] $r4;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.util.List;
+
+        $z0 = staticinvoke <org.conscrypt.Conscrypt: boolean isConscrypt(javax.net.ssl.SSLSocket)>($r1);
+
+        if $z0 == 0 goto label2;
+
+        if $r2 == null goto label1;
+
+        staticinvoke <org.conscrypt.Conscrypt: void setUseSessionTickets(javax.net.ssl.SSLSocket,boolean)>($r1, 1);
+
+        staticinvoke <org.conscrypt.Conscrypt: void setHostname(javax.net.ssl.SSLSocket,java.lang.String)>($r1, $r2);
+
+     label1:
+        $r3 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.platform.Platform: java.util.List alpnProtocolNames(java.util.List)>($r3);
+
+        $r4 = newarray (java.lang.String)[0];
+
+        $r5 = interfaceinvoke $r3.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r4);
+
+        $r4 = (java.lang.String[]) $r5;
+
+        staticinvoke <org.conscrypt.Conscrypt: void setApplicationProtocols(javax.net.ssl.SSLSocket,java.lang.String[])>($r1, $r4);
+
+        return;
+
+     label2:
+        specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.platform.Platform: void configureTlsExtensions(javax.net.ssl.SSLSocket,java.lang.String,java.util.List)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    public javax.net.ssl.SSLContext getSSLContext()
+    {
+        java.lang.Throwable $r1, $r4;
+        java.lang.IllegalStateException $r5;
+        javax.net.ssl.SSLContext $r3;
+        com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform r0;
+        java.security.Provider $r2;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform;
+
+     label1:
+        $r2 = specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform: java.security.Provider getProvider()>();
+
+        $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String,java.security.Provider)>("TLSv1.3", $r2);
+
+     label2:
+        return $r3;
+
+     label3:
+        $r4 := @caughtexception;
+
+     label4:
+        $r2 = specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform: java.security.Provider getProvider()>();
+
+        $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String,java.security.Provider)>("TLS", $r2);
+
+     label5:
+        return $r3;
+
+     label6:
+        $r5 = new java.lang.IllegalStateException;
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("No TLS provider", $r4);
+
+        throw $r5;
+
+     label7:
+        $r1 := @caughtexception;
+
+        goto label6;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch java.security.NoSuchAlgorithmException from label4 to label5 with label7;
+    }
+
+    public java.lang.String getSelectedProtocol(javax.net.ssl.SSLSocket)
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform r0;
+        javax.net.ssl.SSLSocket $r1;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $z0 = staticinvoke <org.conscrypt.Conscrypt: boolean isConscrypt(javax.net.ssl.SSLSocket)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = staticinvoke <org.conscrypt.Conscrypt: java.lang.String getApplicationProtocol(javax.net.ssl.SSLSocket)>($r1);
+
+        return $r2;
+
+     label1:
+        $r2 = specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.platform.Platform: java.lang.String getSelectedProtocol(javax.net.ssl.SSLSocket)>($r1);
+
+        return $r2;
+    }
+
+    public javax.net.ssl.X509TrustManager trustManager(javax.net.ssl.SSLSocketFactory)
+    {
+        java.lang.UnsupportedOperationException $r5;
+        com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform r0;
+        javax.net.ssl.X509TrustManager $r2;
+        java.lang.Object $r3;
+        java.lang.Exception $r4;
+        javax.net.ssl.SSLSocketFactory $r1;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocketFactory;
+
+        $z0 = staticinvoke <org.conscrypt.Conscrypt: boolean isConscrypt(javax.net.ssl.SSLSocketFactory)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $r2 = specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.platform.Platform: javax.net.ssl.X509TrustManager trustManager(javax.net.ssl.SSLSocketFactory)>($r1);
+
+        return $r2;
+
+     label1:
+        $r3 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform: java.lang.Object readFieldOrNull(java.lang.Object,java.lang.Class,java.lang.String)>($r1, class "Ljava/lang/Object;", "sslParameters");
+
+     label2:
+        if $r3 == null goto label5;
+
+     label3:
+        $r3 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.platform.ConscryptPlatform: java.lang.Object readFieldOrNull(java.lang.Object,java.lang.Class,java.lang.String)>($r3, class "Ljavax/net/ssl/X509TrustManager;", "x509TrustManager");
+
+        $r2 = (javax.net.ssl.X509TrustManager) $r3;
+
+     label4:
+        return $r2;
+
+     label5:
+        return null;
+
+     label6:
+        $r4 := @caughtexception;
+
+        $r5 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r5.<java.lang.UnsupportedOperationException: void <init>(java.lang.String,java.lang.Throwable)>("clientBuilder.sslSocketFactory(SSLSocketFactory) not supported on Conscrypt", $r4);
+
+        throw $r5;
+
+        catch java.lang.Exception from label1 to label2 with label6;
+        catch java.lang.Exception from label3 to label4 with label6;
+    }
+}

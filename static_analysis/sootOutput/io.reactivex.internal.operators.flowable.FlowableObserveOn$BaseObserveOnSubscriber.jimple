@@ -1,0 +1,419 @@
+abstract class io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber extends io.reactivex.internal.subscriptions.BasicIntQueueSubscription implements io.reactivex.FlowableSubscriber, java.lang.Runnable
+{
+    private static final long serialVersionUID;
+    volatile boolean cancelled;
+    final boolean delayError;
+    volatile boolean done;
+    java.lang.Throwable error;
+    final int limit;
+    boolean outputFused;
+    final int prefetch;
+    long produced;
+    io.reactivex.internal.fuseable.SimpleQueue queue;
+    final java.util.concurrent.atomic.AtomicLong requested;
+    org.reactivestreams.Subscription s;
+    int sourceMode;
+    final io.reactivex.Scheduler$Worker worker;
+
+    void <init>(io.reactivex.Scheduler$Worker, boolean, int)
+    {
+        java.util.concurrent.atomic.AtomicLong $r2;
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+        int $i0, $i1;
+        io.reactivex.Scheduler$Worker $r1;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $r1 := @parameter0: io.reactivex.Scheduler$Worker;
+
+        $z0 := @parameter1: boolean;
+
+        $i0 := @parameter2: int;
+
+        specialinvoke r0.<io.reactivex.internal.subscriptions.BasicIntQueueSubscription: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: io.reactivex.Scheduler$Worker worker> = $r1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean delayError> = $z0;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: int prefetch> = $i0;
+
+        $r2 = new java.util.concurrent.atomic.AtomicLong;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicLong: void <init>()>();
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: java.util.concurrent.atomic.AtomicLong requested> = $r2;
+
+        $i1 = $i0 >> 2;
+
+        $i0 = $i0 - $i1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: int limit> = $i0;
+
+        return;
+    }
+
+    public final void cancel()
+    {
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+        org.reactivestreams.Subscription $r1;
+        int $i0;
+        io.reactivex.internal.fuseable.SimpleQueue $r3;
+        io.reactivex.Scheduler$Worker $r2;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean cancelled>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean cancelled> = 1;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: org.reactivestreams.Subscription s>;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscription: void cancel()>();
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: io.reactivex.Scheduler$Worker worker>;
+
+        virtualinvoke $r2.<io.reactivex.Scheduler$Worker: void dispose()>();
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: int getAndIncrement()>();
+
+        if $i0 != 0 goto label2;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        interfaceinvoke $r3.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+     label2:
+        return;
+    }
+
+    final boolean checkTerminated(boolean, boolean, org.reactivestreams.Subscriber)
+    {
+        java.lang.Throwable $r2;
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+        io.reactivex.Scheduler$Worker $r3;
+        org.reactivestreams.Subscriber $r1;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $z2 := @parameter0: boolean;
+
+        $z0 := @parameter1: boolean;
+
+        $r1 := @parameter2: org.reactivestreams.Subscriber;
+
+        $z1 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean cancelled>;
+
+        if $z1 == 0 goto label1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: void clear()>();
+
+        return 1;
+
+     label1:
+        if $z2 == 0 goto label6;
+
+        $z2 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean delayError>;
+
+        if $z2 == 0 goto label4;
+
+        if $z0 == 0 goto label6;
+
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: java.lang.Throwable error>;
+
+        if $r2 == null goto label2;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r2);
+
+        goto label3;
+
+     label2:
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onComplete()>();
+
+     label3:
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: io.reactivex.Scheduler$Worker worker>;
+
+        virtualinvoke $r3.<io.reactivex.Scheduler$Worker: void dispose()>();
+
+        return 1;
+
+     label4:
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: java.lang.Throwable error>;
+
+        if $r2 == null goto label5;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: void clear()>();
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onError(java.lang.Throwable)>($r2);
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: io.reactivex.Scheduler$Worker worker>;
+
+        virtualinvoke $r3.<io.reactivex.Scheduler$Worker: void dispose()>();
+
+        return 1;
+
+     label5:
+        if $z0 == 0 goto label6;
+
+        interfaceinvoke $r1.<org.reactivestreams.Subscriber: void onComplete()>();
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: io.reactivex.Scheduler$Worker worker>;
+
+        virtualinvoke $r3.<io.reactivex.Scheduler$Worker: void dispose()>();
+
+        return 1;
+
+     label6:
+        return 0;
+    }
+
+    public final void clear()
+    {
+        io.reactivex.internal.fuseable.SimpleQueue $r1;
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        interfaceinvoke $r1.<io.reactivex.internal.fuseable.SimpleQueue: void clear()>();
+
+        return;
+    }
+
+    public final boolean isEmpty()
+    {
+        io.reactivex.internal.fuseable.SimpleQueue $r1;
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        $z0 = interfaceinvoke $r1.<io.reactivex.internal.fuseable.SimpleQueue: boolean isEmpty()>();
+
+        return $z0;
+    }
+
+    public final void onComplete()
+    {
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean done>;
+
+        if $z0 != 0 goto label1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: void trySchedule()>();
+
+     label1:
+        return;
+    }
+
+    public final void onError(java.lang.Throwable)
+    {
+        java.lang.Throwable $r1;
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <io.reactivex.plugins.RxJavaPlugins: void onError(java.lang.Throwable)>($r1);
+
+        return;
+
+     label1:
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: java.lang.Throwable error> = $r1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean done> = 1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: void trySchedule()>();
+
+        return;
+    }
+
+    public final void onNext(java.lang.Object)
+    {
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+        org.reactivestreams.Subscription $r3;
+        int $i0;
+        io.reactivex.internal.fuseable.SimpleQueue $r2;
+        java.lang.Object $r1;
+        io.reactivex.exceptions.MissingBackpressureException $r4;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean done>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: int sourceMode>;
+
+        if $i0 != 2 goto label2;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: void trySchedule()>();
+
+        return;
+
+     label2:
+        $r2 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: io.reactivex.internal.fuseable.SimpleQueue queue>;
+
+        $z0 = interfaceinvoke $r2.<io.reactivex.internal.fuseable.SimpleQueue: boolean offer(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label3;
+
+        $r3 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: org.reactivestreams.Subscription s>;
+
+        interfaceinvoke $r3.<org.reactivestreams.Subscription: void cancel()>();
+
+        $r4 = new io.reactivex.exceptions.MissingBackpressureException;
+
+        specialinvoke $r4.<io.reactivex.exceptions.MissingBackpressureException: void <init>(java.lang.String)>("Queue is full?!");
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: java.lang.Throwable error> = $r4;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean done> = 1;
+
+     label3:
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: void trySchedule()>();
+
+        return;
+    }
+
+    public final void request(long)
+    {
+        java.util.concurrent.atomic.AtomicLong $r1;
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+        long $l0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $l0 := @parameter0: long;
+
+        $z0 = staticinvoke <io.reactivex.internal.subscriptions.SubscriptionHelper: boolean validate(long)>($l0);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: java.util.concurrent.atomic.AtomicLong requested>;
+
+        staticinvoke <io.reactivex.internal.util.BackpressureHelper: long add(java.util.concurrent.atomic.AtomicLong,long)>($r1, $l0);
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: void trySchedule()>();
+
+     label1:
+        return;
+    }
+
+    public final int requestFusion(int)
+    {
+        int $i0;
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $i0 := @parameter0: int;
+
+        $i0 = $i0 & 2;
+
+        if $i0 == 0 goto label1;
+
+        r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean outputFused> = 1;
+
+        return 2;
+
+     label1:
+        return 0;
+    }
+
+    public final void run()
+    {
+        int $i0;
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $z0 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: boolean outputFused>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: void runBackfused()>();
+
+        return;
+
+     label1:
+        $i0 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: int sourceMode>;
+
+        if $i0 != 1 goto label2;
+
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: void runSync()>();
+
+        return;
+
+     label2:
+        virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: void runAsync()>();
+
+        return;
+    }
+
+    abstract void runAsync();
+
+    abstract void runBackfused();
+
+    abstract void runSync();
+
+    final void trySchedule()
+    {
+        int $i0;
+        io.reactivex.Scheduler$Worker $r1;
+        io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber r0;
+
+        r0 := @this: io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber;
+
+        $i0 = virtualinvoke r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: int getAndIncrement()>();
+
+        if $i0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = r0.<io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: io.reactivex.Scheduler$Worker worker>;
+
+        virtualinvoke $r1.<io.reactivex.Scheduler$Worker: io.reactivex.disposables.Disposable schedule(java.lang.Runnable)>(r0);
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <io.reactivex.internal.operators.flowable.FlowableObserveOn$BaseObserveOnSubscriber: long serialVersionUID> = -8241002408341274697L;
+
+        return;
+    }
+}

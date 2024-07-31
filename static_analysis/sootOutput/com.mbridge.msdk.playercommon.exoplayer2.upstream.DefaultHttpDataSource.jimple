@@ -1,0 +1,1581 @@
+public class com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource
+{
+    private static final java.util.regex.Pattern CONTENT_RANGE_HEADER;
+    public static final int DEFAULT_CONNECT_TIMEOUT_MILLIS;
+    public static final int DEFAULT_READ_TIMEOUT_MILLIS;
+    private static final long MAX_BYTES_TO_DRAIN;
+    private static final int MAX_REDIRECTS;
+    private static final java.lang.String TAG;
+    private static final java.util.concurrent.atomic.AtomicReference skipBufferReference;
+    private final boolean allowCrossProtocolRedirects;
+    private long bytesRead;
+    private long bytesSkipped;
+    private long bytesToRead;
+    private long bytesToSkip;
+    private final int connectTimeoutMillis;
+    private java.net.HttpURLConnection connection;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.Predicate contentTypePredicate;
+    private com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec dataSpec;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties defaultRequestProperties;
+    private java.io.InputStream inputStream;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener listener;
+    private boolean opened;
+    private final int readTimeoutMillis;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties requestProperties;
+    private final java.lang.String userAgent;
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0;
+        java.util.concurrent.atomic.AtomicReference $r1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.lang.String TAG> = "DefaultHttpDataSource";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: int MAX_REDIRECTS> = 20;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long MAX_BYTES_TO_DRAIN> = 2048L;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: int DEFAULT_READ_TIMEOUT_MILLIS> = 8000;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: int DEFAULT_CONNECT_TIMEOUT_MILLIS> = 8000;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("^bytes (\\d+)-(\\d+)/(\\d+)$");
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.util.regex.Pattern CONTENT_RANGE_HEADER> = $r0;
+
+        $r1 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r1.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.util.concurrent.atomic.AtomicReference skipBufferReference> = $r1;
+
+        return;
+    }
+
+    public void <init>(java.lang.String, com.mbridge.msdk.playercommon.exoplayer2.util.Predicate)
+    {
+        java.lang.String $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.Predicate $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.util.Predicate;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void <init>(java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.util.Predicate,com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener)>($r1, $r2, null);
+
+        return;
+    }
+
+    public void <init>(java.lang.String, com.mbridge.msdk.playercommon.exoplayer2.util.Predicate, com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener $r3;
+        java.lang.String $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.Predicate $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.util.Predicate;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void <init>(java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.util.Predicate,com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener,int,int)>($r1, $r2, $r3, 8000, 8000);
+
+        return;
+    }
+
+    public void <init>(java.lang.String, com.mbridge.msdk.playercommon.exoplayer2.util.Predicate, com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener, int, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener $r3;
+        int $i0, $i1;
+        java.lang.String $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.Predicate $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.util.Predicate;
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener;
+
+        $i0 := @parameter3: int;
+
+        $i1 := @parameter4: int;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void <init>(java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.util.Predicate,com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener,int,int,boolean,com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties)>($r1, $r2, $r3, $i0, $i1, 0, null);
+
+        return;
+    }
+
+    public void <init>(java.lang.String, com.mbridge.msdk.playercommon.exoplayer2.util.Predicate, com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener, int, int, boolean, com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.Predicate $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties $r3, $r5;
+        int $i0, $i1;
+        java.lang.String $r4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r4 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.util.Predicate;
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener;
+
+        $i0 := @parameter3: int;
+
+        $i1 := @parameter4: int;
+
+        $z0 := @parameter5: boolean;
+
+        $r3 := @parameter6: com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.String checkNotEmpty(java.lang.String)>($r4);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.lang.String userAgent> = $r4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.util.Predicate contentTypePredicate> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener listener> = $r2;
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties requestProperties> = $r5;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: int connectTimeoutMillis> = $i0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: int readTimeoutMillis> = $i1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: boolean allowCrossProtocolRedirects> = $z0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties defaultRequestProperties> = $r3;
+
+        return;
+    }
+
+    private void closeConnectionQuietly()
+    {
+        java.net.HttpURLConnection $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        java.lang.Exception $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection>;
+
+        if $r1 == null goto label5;
+
+     label1:
+        virtualinvoke $r1.<java.net.HttpURLConnection: void disconnect()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("DefaultHttpDataSource", "Unexpected error while disconnecting", $r2);
+
+     label4:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection> = null;
+
+     label5:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    private static long getContentLength(java.net.HttpURLConnection)
+    {
+        java.lang.Throwable $r0, $r1;
+        java.net.HttpURLConnection $r2;
+        long $l0, $l1, $l2;
+        java.util.regex.Matcher $r7;
+        byte $b3;
+        int $i4;
+        java.lang.String $r3, $r5, $r8;
+        boolean $z0;
+        java.lang.StringBuilder $r4, $r9;
+        java.util.regex.Pattern $r6;
+
+        $r2 := @parameter0: java.net.HttpURLConnection;
+
+        $r3 = virtualinvoke $r2.<java.net.HttpURLConnection: java.lang.String getHeaderField(java.lang.String)>("Content-Length");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+        if $z0 != 0 goto label04;
+
+     label01:
+        $l0 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r3);
+
+     label02:
+        goto label05;
+
+     label03:
+        $r9 = new java.lang.StringBuilder;
+
+        $r4 = $r9;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unexpected Content-Length [");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("DefaultHttpDataSource", $r5);
+
+     label04:
+        $l0 = -1L;
+
+     label05:
+        $r5 = virtualinvoke $r2.<java.net.HttpURLConnection: java.lang.String getHeaderField(java.lang.String)>("Content-Range");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r5);
+
+        if $z0 != 0 goto label14;
+
+        $r6 = <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.util.regex.Pattern CONTENT_RANGE_HEADER>;
+
+        $r7 = virtualinvoke $r6.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r5);
+
+        $z0 = virtualinvoke $r7.<java.util.regex.Matcher: boolean find()>();
+
+        if $z0 == 0 goto label14;
+
+     label06:
+        $r8 = virtualinvoke $r7.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        $l1 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r7.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $l2 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r8);
+
+     label07:
+        $l1 = $l1 - $l2;
+
+        $l1 = $l1 + 1L;
+
+        $b3 = $l0 cmp 0L;
+
+        $i4 = (int) $b3;
+
+        if $i4 >= 0 goto label08;
+
+        return $l1;
+
+     label08:
+        $b3 = $l0 cmp $l1;
+
+        if $b3 == 0 goto label14;
+
+        $r9 = new java.lang.StringBuilder;
+
+        $r4 = $r9;
+
+     label09:
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("Inconsistent headers [");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] [");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("DefaultHttpDataSource", $r3);
+
+        $l1 = staticinvoke <java.lang.Math: long max(long,long)>($l0, $l1);
+
+     label10:
+        return $l1;
+
+     label11:
+        $r9 = new java.lang.StringBuilder;
+
+        $r4 = $r9;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unexpected Content-Range [");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("DefaultHttpDataSource", $r3);
+
+        return $l0;
+
+     label12:
+        $r0 := @caughtexception;
+
+        goto label03;
+
+     label13:
+        $r1 := @caughtexception;
+
+        goto label11;
+
+     label14:
+        return $l0;
+
+        catch java.lang.NumberFormatException from label01 to label02 with label12;
+        catch java.lang.NumberFormatException from label06 to label07 with label13;
+        catch java.lang.NumberFormatException from label09 to label10 with label13;
+    }
+
+    private static java.net.URL handleRedirect(java.net.URL, java.lang.String) throws java.io.IOException
+    {
+        java.net.ProtocolException $r4;
+        java.net.URL $r0, $r2;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r1, $r3;
+        boolean $z0;
+
+        $r0 := @parameter0: java.net.URL;
+
+        $r1 := @parameter1: java.lang.String;
+
+        if $r1 == null goto label2;
+
+        $r2 = new java.net.URL;
+
+        specialinvoke $r2.<java.net.URL: void <init>(java.net.URL,java.lang.String)>($r0, $r1);
+
+        $r1 = virtualinvoke $r2.<java.net.URL: java.lang.String getProtocol()>();
+
+        $r3 = "https";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label3;
+
+        $r3 = "http";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        return $r2;
+
+     label1:
+        $r4 = new java.net.ProtocolException;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unsupported protocol redirect: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.net.ProtocolException: void <init>(java.lang.String)>($r1);
+
+        throw $r4;
+
+     label2:
+        $r4 = new java.net.ProtocolException;
+
+        specialinvoke $r4.<java.net.ProtocolException: void <init>(java.lang.String)>("Null location redirect");
+
+        throw $r4;
+
+     label3:
+        return $r2;
+    }
+
+    private java.net.HttpURLConnection makeConnection(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec) throws java.io.IOException
+    {
+        java.net.HttpURLConnection $r6;
+        byte[] $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r1;
+        java.net.URL $r2;
+        android.net.Uri $r3;
+        long $l0, $l1, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        int $i3, $i4;
+        java.lang.String $r4;
+        boolean $z0, $z1;
+        java.lang.StringBuilder $r8;
+        java.net.NoRouteToHostException $r7;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec;
+
+        $r2 = new java.net.URL;
+
+        $r3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: android.net.Uri uri>;
+
+        $r4 = virtualinvoke $r3.<android.net.Uri: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.net.URL: void <init>(java.lang.String)>($r4);
+
+        $r5 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: byte[] postBody>;
+
+        $l2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long position>;
+
+        $l0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long length>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: boolean isFlagSet(int)>(1);
+
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: boolean allowCrossProtocolRedirects>;
+
+        if $z1 != 0 goto label1;
+
+        $r6 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection makeConnection(java.net.URL,byte[],long,long,boolean,boolean)>($r2, $r5, $l2, $l0, $z0, 1);
+
+        return $r6;
+
+     label1:
+        $i3 = 0;
+
+     label2:
+        $i4 = $i3 + 1;
+
+        if $i3 > 20 goto label5;
+
+        $l1 = $l2;
+
+        $r6 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection makeConnection(java.net.URL,byte[],long,long,boolean,boolean)>($r2, $r5, $l2, $l0, $z0, 0);
+
+        $i3 = virtualinvoke $r6.<java.net.HttpURLConnection: int getResponseCode()>();
+
+        if $i3 == 300 goto label4;
+
+        if $i3 == 301 goto label4;
+
+        if $i3 == 302 goto label4;
+
+        if $i3 == 303 goto label4;
+
+        if $r5 != null goto label3;
+
+        if $i3 == 307 goto label4;
+
+        if $i3 != 308 goto label6;
+
+        goto label4;
+
+     label3:
+        return $r6;
+
+     label4:
+        $r4 = virtualinvoke $r6.<java.net.HttpURLConnection: java.lang.String getHeaderField(java.lang.String)>("Location");
+
+        virtualinvoke $r6.<java.net.HttpURLConnection: void disconnect()>();
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.URL handleRedirect(java.net.URL,java.lang.String)>($r2, $r4);
+
+        $r5 = null;
+
+        $i3 = $i4;
+
+        $l2 = $l1;
+
+        goto label2;
+
+     label5:
+        $r7 = new java.net.NoRouteToHostException;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("Too many redirects: ");
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i4);
+
+        $r4 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r7.<java.net.NoRouteToHostException: void <init>(java.lang.String)>($r4);
+
+        throw $r7;
+
+     label6:
+        return $r6;
+    }
+
+    private java.net.HttpURLConnection makeConnection(java.net.URL, byte[], long, long, boolean, boolean) throws java.io.IOException
+    {
+        java.net.HttpURLConnection $r4;
+        byte[] $r1;
+        java.net.URL $r2;
+        long $l1, $l2;
+        byte $b0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties $r5;
+        java.net.URLConnection $r3;
+        java.util.Map $r6;
+        int $i3;
+        java.lang.String $r11, $r12;
+        boolean $z0, $z1, $z2;
+        java.io.OutputStream $r14;
+        java.util.Map$Entry $r10;
+        java.util.Iterator $r8;
+        java.util.Set $r7;
+        java.lang.Object $r9;
+        java.lang.StringBuilder $r13;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r2 := @parameter0: java.net.URL;
+
+        $r1 := @parameter1: byte[];
+
+        $l1 := @parameter2: long;
+
+        $l2 := @parameter3: long;
+
+        $z0 := @parameter4: boolean;
+
+        $z1 := @parameter5: boolean;
+
+        $r3 = virtualinvoke $r2.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r4 = (java.net.HttpURLConnection) $r3;
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: int connectTimeoutMillis>;
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setConnectTimeout(int)>($i3);
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: int readTimeoutMillis>;
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setReadTimeout(int)>($i3);
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties defaultRequestProperties>;
+
+        if $r5 == null goto label02;
+
+        $r6 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties: java.util.Map getSnapshot()>();
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.util.Set entrySet()>();
+
+        $r8 = interfaceinvoke $r7.<java.util.Set: java.util.Iterator iterator()>();
+
+     label01:
+        $z2 = interfaceinvoke $r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label02;
+
+        $r9 = interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (java.util.Map$Entry) $r9;
+
+        $r9 = interfaceinvoke $r10.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r11 = (java.lang.String) $r9;
+
+        $r9 = interfaceinvoke $r10.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r12 = (java.lang.String) $r9;
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setRequestProperty(java.lang.String,java.lang.String)>($r11, $r12);
+
+        goto label01;
+
+     label02:
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties requestProperties>;
+
+        $r6 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties: java.util.Map getSnapshot()>();
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.util.Set entrySet()>();
+
+        $r8 = interfaceinvoke $r7.<java.util.Set: java.util.Iterator iterator()>();
+
+     label03:
+        $z2 = interfaceinvoke $r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label04;
+
+        $r9 = interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (java.util.Map$Entry) $r9;
+
+        $r9 = interfaceinvoke $r10.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r11 = (java.lang.String) $r9;
+
+        $r9 = interfaceinvoke $r10.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r12 = (java.lang.String) $r9;
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setRequestProperty(java.lang.String,java.lang.String)>($r11, $r12);
+
+        goto label03;
+
+     label04:
+        $b0 = $l1 cmp 0L;
+
+        if $b0 != 0 goto label05;
+
+        $b0 = $l2 cmp -1L;
+
+        if $b0 == 0 goto label07;
+
+     label05:
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>(java.lang.String)>("bytes=");
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("-");
+
+        $r11 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r12 = $r11;
+
+        $b0 = $l2 cmp -1L;
+
+        if $b0 == 0 goto label06;
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $l1 = $l1 + $l2;
+
+        $l1 = $l1 - 1L;
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r12 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label06:
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setRequestProperty(java.lang.String,java.lang.String)>("Range", $r12);
+
+     label07:
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.lang.String userAgent>;
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setRequestProperty(java.lang.String,java.lang.String)>("User-Agent", $r11);
+
+        if $z0 != 0 goto label08;
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setRequestProperty(java.lang.String,java.lang.String)>("Accept-Encoding", "identity");
+
+     label08:
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setInstanceFollowRedirects(boolean)>($z1);
+
+        if $r1 == null goto label09;
+
+        $z0 = 1;
+
+        goto label10;
+
+     label09:
+        $z0 = 0;
+
+     label10:
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setDoOutput(boolean)>($z0);
+
+        if $r1 == null goto label11;
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>("POST");
+
+        $i3 = lengthof $r1;
+
+        if $i3 == 0 goto label11;
+
+        $i3 = lengthof $r1;
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void setFixedLengthStreamingMode(int)>($i3);
+
+        virtualinvoke $r4.<java.net.HttpURLConnection: void connect()>();
+
+        $r14 = virtualinvoke $r4.<java.net.HttpURLConnection: java.io.OutputStream getOutputStream()>();
+
+        virtualinvoke $r14.<java.io.OutputStream: void write(byte[])>($r1);
+
+        virtualinvoke $r14.<java.io.OutputStream: void close()>();
+
+        return $r4;
+
+     label11:
+        virtualinvoke $r4.<java.net.HttpURLConnection: void connect()>();
+
+        return $r4;
+    }
+
+    private static void maybeTerminateInputStream(java.net.HttpURLConnection, long)
+    {
+        java.net.HttpURLConnection $r1;
+        java.lang.Object[] $r8;
+        java.lang.Class[] $r6;
+        long $l0;
+        java.lang.Exception $r0;
+        byte $b2;
+        int $i1;
+        java.lang.Class $r3;
+        java.lang.String $r4, $r5;
+        java.lang.reflect.Method $r7;
+        java.io.InputStream $r2;
+        boolean $z0;
+
+        $r1 := @parameter0: java.net.HttpURLConnection;
+
+        $l0 := @parameter1: long;
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i1 == 19 goto label01;
+
+        $i1 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i1 == 20 goto label01;
+
+        return;
+
+     label01:
+        $r2 = virtualinvoke $r1.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+     label02:
+        $b2 = $l0 cmp -1L;
+
+        if $b2 != 0 goto label05;
+
+     label03:
+        $i1 = virtualinvoke $r2.<java.io.InputStream: int read()>();
+
+     label04:
+        if $i1 != -1 goto label06;
+
+        return;
+
+     label05:
+        $b2 = $l0 cmp 2048L;
+
+        $i1 = (int) $b2;
+
+        if $i1 > 0 goto label06;
+
+        return;
+
+     label06:
+        $r3 = virtualinvoke $r2.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.Class: java.lang.String getName()>();
+
+     label07:
+        $r5 = "com.android.okhttp.internal.http.HttpTransport$ChunkedInputStream";
+
+     label08:
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+     label09:
+        if $z0 != 0 goto label12;
+
+        $r5 = "com.android.okhttp.internal.http.HttpTransport$FixedLengthInputStream";
+
+     label10:
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+     label11:
+        if $z0 == 0 goto label19;
+
+     label12:
+        $r3 = virtualinvoke $r2.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.Class: java.lang.Class getSuperclass()>();
+
+     label13:
+        $r6 = newarray (java.lang.Class)[0];
+
+     label14:
+        $r7 = virtualinvoke $r3.<java.lang.Class: java.lang.reflect.Method getDeclaredMethod(java.lang.String,java.lang.Class[])>("unexpectedEndOfInput", $r6);
+
+        virtualinvoke $r7.<java.lang.reflect.Method: void setAccessible(boolean)>(1);
+
+     label15:
+        $r8 = newarray (java.lang.Object)[0];
+
+     label16:
+        virtualinvoke $r7.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r2, $r8);
+
+     label17:
+        return;
+
+     label18:
+        $r0 := @caughtexception;
+
+     label19:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label18;
+        catch java.lang.Exception from label03 to label04 with label18;
+        catch java.lang.Exception from label06 to label07 with label18;
+        catch java.lang.Exception from label08 to label09 with label18;
+        catch java.lang.Exception from label10 to label11 with label18;
+        catch java.lang.Exception from label12 to label13 with label18;
+        catch java.lang.Exception from label14 to label15 with label18;
+        catch java.lang.Exception from label16 to label17 with label18;
+    }
+
+    private int readInternal(byte[], int, int) throws java.io.IOException
+    {
+        byte[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener $r3;
+        long $l3, $l4;
+        java.io.EOFException $r4;
+        byte $b0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        int $i1, $i2;
+        java.io.InputStream $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 := @parameter0: byte[];
+
+        $i1 := @parameter1: int;
+
+        $i2 := @parameter2: int;
+
+        if $i2 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToRead>;
+
+        $b0 = $l3 cmp -1L;
+
+        if $b0 == 0 goto label3;
+
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesRead>;
+
+        $l3 = $l3 - $l4;
+
+        $b0 = $l3 cmp 0L;
+
+        if $b0 != 0 goto label2;
+
+        return -1;
+
+     label2:
+        $l4 = (long) $i2;
+
+        $l3 = staticinvoke <java.lang.Math: long min(long,long)>($l4, $l3);
+
+        $i2 = (int) $l3;
+
+     label3:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.io.InputStream inputStream>;
+
+        $i1 = virtualinvoke $r2.<java.io.InputStream: int read(byte[],int,int)>($r1, $i1, $i2);
+
+        if $i1 != -1 goto label5;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToRead>;
+
+        $b0 = $l3 cmp -1L;
+
+        if $b0 != 0 goto label4;
+
+        return -1;
+
+     label4:
+        $r4 = new java.io.EOFException;
+
+        specialinvoke $r4.<java.io.EOFException: void <init>()>();
+
+        throw $r4;
+
+     label5:
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesRead>;
+
+        $l4 = (long) $i1;
+
+        $l3 = $l3 + $l4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesRead> = $l3;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener listener>;
+
+        if $r3 == null goto label6;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener: void onBytesTransferred(java.lang.Object,int)>(r0, $i1);
+
+     label6:
+        return $i1;
+    }
+
+    private void skipInternal() throws java.io.IOException
+    {
+        byte[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener $r6;
+        long $l1, $l2;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        java.io.EOFException $r7;
+        java.io.InterruptedIOException $r8;
+        byte $b0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        java.lang.Thread $r5;
+        int $i3;
+        java.lang.Object $r2;
+        java.io.InputStream $r4;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesSkipped>;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToSkip>;
+
+        $b0 = $l1 cmp $l2;
+
+        if $b0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.util.concurrent.atomic.AtomicReference skipBufferReference>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: java.lang.Object getAndSet(java.lang.Object)>(null);
+
+        $r3 = (byte[]) $r2;
+
+        if $r3 != null goto label2;
+
+        $r3 = newarray (byte)[4096];
+
+     label2:
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesSkipped>;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToSkip>;
+
+        $b0 = $l1 cmp $l2;
+
+        if $b0 == 0 goto label5;
+
+        $l1 = $l2 - $l1;
+
+        $i3 = lengthof $r3;
+
+        $l2 = (long) $i3;
+
+        $l1 = staticinvoke <java.lang.Math: long min(long,long)>($l1, $l2);
+
+        $i3 = (int) $l1;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.io.InputStream inputStream>;
+
+        $i3 = virtualinvoke $r4.<java.io.InputStream: int read(byte[],int,int)>($r3, 0, $i3);
+
+        $r5 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        $z0 = virtualinvoke $r5.<java.lang.Thread: boolean isInterrupted()>();
+
+        if $z0 != 0 goto label4;
+
+        if $i3 == -1 goto label3;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesSkipped>;
+
+        $l2 = (long) $i3;
+
+        $l1 = $l1 + $l2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesSkipped> = $l1;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener listener>;
+
+        if $r6 == null goto label2;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener: void onBytesTransferred(java.lang.Object,int)>(r0, $i3);
+
+        goto label2;
+
+     label3:
+        $r7 = new java.io.EOFException;
+
+        specialinvoke $r7.<java.io.EOFException: void <init>()>();
+
+        throw $r7;
+
+     label4:
+        $r8 = new java.io.InterruptedIOException;
+
+        specialinvoke $r8.<java.io.InterruptedIOException: void <init>()>();
+
+        throw $r8;
+
+     label5:
+        $r1 = <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.util.concurrent.atomic.AtomicReference skipBufferReference>;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>($r3);
+
+        return;
+    }
+
+    protected final long bytesRead()
+    {
+        long l0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesRead>;
+
+        return l0;
+    }
+
+    protected final long bytesRemaining()
+    {
+        byte $b0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        long $l1, $l2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToRead>;
+
+        $b0 = $l1 cmp -1L;
+
+        if $b0 != 0 goto label1;
+
+        return $l1;
+
+     label1:
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesRead>;
+
+        $l1 = $l1 - $l2;
+
+        return $l1;
+    }
+
+    protected final long bytesSkipped()
+    {
+        long l0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesSkipped>;
+
+        return l0;
+    }
+
+    public void clearAllRequestProperties()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties requestProperties>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties: void clear()>();
+
+        return;
+    }
+
+    public void clearRequestProperty(java.lang.String)
+    {
+        java.lang.String $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 := @parameter0: java.lang.String;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties requestProperties>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties: void remove(java.lang.String)>($r1);
+
+        return;
+    }
+
+    public void close() throws com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException
+    {
+        java.net.HttpURLConnection $r3;
+        java.lang.Throwable $r4, $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener $r6;
+        long $l0;
+        java.io.IOException $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException $r5, $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        java.io.InputStream $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+     label01:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.io.InputStream inputStream>;
+
+     label02:
+        if $r2 == null goto label11;
+
+     label03:
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection>;
+
+        $l0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesRemaining()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void maybeTerminateInputStream(java.net.HttpURLConnection,long)>($r3, $l0);
+
+     label04:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.io.InputStream inputStream>;
+
+     label05:
+        virtualinvoke $r2.<java.io.InputStream: void close()>();
+
+     label06:
+        goto label11;
+
+     label07:
+        $r4 := @caughtexception;
+
+     label08:
+        $r8 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException;
+
+     label09:
+        $r5 = $r8;
+
+     label10:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec dataSpec>;
+
+        $r9 = (java.io.IOException) $r4;
+
+        specialinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException: void <init>(java.io.IOException,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int)>($r9, $r1, 3);
+
+        throw $r5;
+
+     label11:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.io.InputStream inputStream> = null;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void closeConnectionQuietly()>();
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: boolean opened>;
+
+        if $z0 == 0 goto label14;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: boolean opened> = 0;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener listener>;
+
+        if $r6 == null goto label14;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener: void onTransferEnd(java.lang.Object)>(r0);
+
+        return;
+
+     label12:
+        $r7 := @caughtexception;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.io.InputStream inputStream> = null;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void closeConnectionQuietly()>();
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: boolean opened>;
+
+        if $z0 == 0 goto label13;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: boolean opened> = 0;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener listener>;
+
+        if $r6 == null goto label13;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener: void onTransferEnd(java.lang.Object)>(r0);
+
+     label13:
+        throw $r7;
+
+     label14:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label12;
+        catch java.lang.Throwable from label03 to label04 with label12;
+        catch java.io.IOException from label05 to label06 with label07;
+        catch java.lang.Throwable from label04 to label06 with label12;
+        catch java.lang.Throwable from label08 to label09 with label12;
+        catch java.lang.Throwable from label10 to label11 with label12;
+    }
+
+    protected final java.net.HttpURLConnection getConnection()
+    {
+        java.net.HttpURLConnection r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection>;
+
+        return r1;
+    }
+
+    public java.util.Map getResponseHeaders()
+    {
+        java.net.HttpURLConnection $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        java.util.Map $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection>;
+
+        if $r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = virtualinvoke $r2.<java.net.HttpURLConnection: java.util.Map getHeaderFields()>();
+
+        return $r1;
+    }
+
+    public android.net.Uri getUri()
+    {
+        java.net.HttpURLConnection $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        java.net.URL $r2;
+        android.net.Uri $r4;
+        java.lang.String $r3;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection>;
+
+        if $r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r2 = virtualinvoke $r1.<java.net.HttpURLConnection: java.net.URL getURL()>();
+
+        $r3 = virtualinvoke $r2.<java.net.URL: java.lang.String toString()>();
+
+        $r4 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r3);
+
+        return $r4;
+    }
+
+    public long open(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec) throws com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException
+    {
+        java.net.HttpURLConnection $r2;
+        java.lang.Throwable $r7, $r10, $r13;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$InvalidResponseCodeException $r9, $r16;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener $r6;
+        android.net.Uri $r12;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSourceException $r17;
+        byte $b3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        java.util.Map $r8;
+        int $i1;
+        java.lang.String $r3;
+        boolean $z0;
+        java.io.IOException $r19;
+        com.mbridge.msdk.playercommon.exoplayer2.util.Predicate $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException $r15;
+        java.lang.StringBuilder $r11, $r18;
+        java.io.InputStream $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$InvalidContentTypeException $r14;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec dataSpec> = $r1;
+
+        $l0 = 0L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesRead> = 0L;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesSkipped> = 0L;
+
+     label01:
+        $r2 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection makeConnection(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec)>($r1);
+
+     label02:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection> = $r2;
+
+     label03:
+        $i1 = virtualinvoke $r2.<java.net.HttpURLConnection: int getResponseCode()>();
+
+     label04:
+        if $i1 < 200 goto label15;
+
+        if $i1 > 299 goto label15;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection>;
+
+        $r3 = virtualinvoke $r2.<java.net.HttpURLConnection: java.lang.String getContentType()>();
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.util.Predicate contentTypePredicate>;
+
+        if $r4 == null goto label05;
+
+        $z0 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.Predicate: boolean evaluate(java.lang.Object)>($r3);
+
+        if $z0 != 0 goto label05;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void closeConnectionQuietly()>();
+
+        $r14 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$InvalidContentTypeException;
+
+        specialinvoke $r14.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$InvalidContentTypeException: void <init>(java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec)>($r3, $r1);
+
+        throw $r14;
+
+     label05:
+        if $i1 != 200 goto label06;
+
+        $l2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long position>;
+
+        $b3 = $l2 cmp 0L;
+
+        if $b3 == 0 goto label06;
+
+        $l0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long position>;
+
+     label06:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToSkip> = $l0;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: boolean isFlagSet(int)>(1);
+
+        if $z0 != 0 goto label09;
+
+        $l2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long length>;
+
+        $l0 = -1L;
+
+        $b3 = $l2 cmp -1L;
+
+        if $b3 == 0 goto label07;
+
+        $l0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long length>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToRead> = $l0;
+
+        goto label10;
+
+     label07:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection>;
+
+        $l2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long getContentLength(java.net.HttpURLConnection)>($r2);
+
+        $b3 = $l2 cmp -1L;
+
+        if $b3 == 0 goto label08;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToSkip>;
+
+        $l0 = $l2 - $l0;
+
+     label08:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToRead> = $l0;
+
+        goto label10;
+
+     label09:
+        $l0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long length>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToRead> = $l0;
+
+     label10:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection>;
+
+     label11:
+        $r5 = virtualinvoke $r2.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+     label12:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.io.InputStream inputStream> = $r5;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: boolean opened> = 1;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener listener>;
+
+        if $r6 == null goto label13;
+
+        interfaceinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.upstream.TransferListener: void onTransferStart(java.lang.Object,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec)>(r0, $r1);
+
+     label13:
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: long bytesToRead>;
+
+        return $l0;
+
+     label14:
+        $r7 := @caughtexception;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void closeConnectionQuietly()>();
+
+        $r15 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException;
+
+        $r19 = (java.io.IOException) $r7;
+
+        specialinvoke $r15.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException: void <init>(java.io.IOException,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int)>($r19, $r1, 1);
+
+        throw $r15;
+
+     label15:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: java.net.HttpURLConnection connection>;
+
+        $r8 = virtualinvoke $r2.<java.net.HttpURLConnection: java.util.Map getHeaderFields()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void closeConnectionQuietly()>();
+
+        $r16 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$InvalidResponseCodeException;
+
+        $r9 = $r16;
+
+        specialinvoke $r16.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$InvalidResponseCodeException: void <init>(int,java.util.Map,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec)>($i1, $r8, $r1);
+
+        if $i1 != 416 goto label16;
+
+        $r17 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSourceException;
+
+        specialinvoke $r17.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSourceException: void <init>(int)>(0);
+
+        virtualinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$InvalidResponseCodeException: java.lang.Throwable initCause(java.lang.Throwable)>($r17);
+
+     label16:
+        throw $r9;
+
+     label17:
+        $r10 := @caughtexception;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void closeConnectionQuietly()>();
+
+        $r15 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException;
+
+        $r18 = new java.lang.StringBuilder;
+
+        $r11 = $r18;
+
+        specialinvoke $r18.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unable to connect to ");
+
+        $r12 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: android.net.Uri uri>;
+
+        $r3 = virtualinvoke $r12.<android.net.Uri: java.lang.String toString()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r19 = (java.io.IOException) $r10;
+
+        specialinvoke $r15.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException: void <init>(java.lang.String,java.io.IOException,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int)>($r3, $r19, $r1, 1);
+
+        throw $r15;
+
+     label18:
+        $r13 := @caughtexception;
+
+        $r15 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException;
+
+        $r18 = new java.lang.StringBuilder;
+
+        $r11 = $r18;
+
+        specialinvoke $r18.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unable to connect to ");
+
+        $r12 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: android.net.Uri uri>;
+
+        $r3 = virtualinvoke $r12.<android.net.Uri: java.lang.String toString()>();
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r19 = (java.io.IOException) $r13;
+
+        specialinvoke $r15.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException: void <init>(java.lang.String,java.io.IOException,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int)>($r3, $r19, $r1, 1);
+
+        throw $r15;
+
+        catch java.io.IOException from label01 to label02 with label18;
+        catch java.io.IOException from label03 to label04 with label17;
+        catch java.io.IOException from label11 to label12 with label14;
+    }
+
+    public int read(byte[], int, int) throws com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException
+    {
+        java.lang.Throwable $r2;
+        byte[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r3;
+        java.io.IOException $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        int $i0, $i1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+     label1:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: void skipInternal()>();
+
+        $i0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: int readInternal(byte[],int,int)>($r1, $i0, $i1);
+
+     label2:
+        return $i0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec dataSpec>;
+
+        $r5 = (java.io.IOException) $r2;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$HttpDataSourceException: void <init>(java.io.IOException,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec,int)>($r5, $r3, 2);
+
+        throw $r4;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public void setRequestProperty(java.lang.String, java.lang.String)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties $r3;
+        java.lang.String $r1, $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DefaultHttpDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties requestProperties>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.HttpDataSource$RequestProperties: void set(java.lang.String,java.lang.String)>($r1, $r2);
+
+        return;
+    }
+}

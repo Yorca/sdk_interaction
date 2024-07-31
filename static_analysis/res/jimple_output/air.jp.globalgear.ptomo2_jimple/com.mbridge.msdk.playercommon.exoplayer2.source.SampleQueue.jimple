@@ -1,0 +1,1576 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput
+{
+    public static final int ADVANCE_FAILED;
+    private static final int INITIAL_SCRATCH_SIZE;
+    private final int allocationLength;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator allocator;
+    private com.mbridge.msdk.playercommon.exoplayer2.Format downstreamFormat;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder extrasHolder;
+    private com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode;
+    private com.mbridge.msdk.playercommon.exoplayer2.Format lastUnadjustedFormat;
+    private final com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue;
+    private boolean pendingFormatAdjustment;
+    private boolean pendingSplice;
+    private com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode;
+    private long sampleOffsetUs;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch;
+    private long totalBytesWritten;
+    private com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$UpstreamFormatChangedListener upstreamFormatChangeListener;
+    private com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode;
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder $r3;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator allocator> = $r1;
+
+        $i0 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator: int getIndividualAllocationLength()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int allocationLength> = $i0;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue> = $r2;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder extrasHolder> = $r3;
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void <init>(int)>(32);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch> = $r4;
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: void <init>(long,int)>(0L, $i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode> = $r5;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode> = $r5;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode> = $r5;
+
+        return;
+    }
+
+    private void advanceReadTo(long)
+    {
+        byte $b1;
+        int $i3;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $l0 := @parameter0: long;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $l2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $b1 = $l0 cmp $l2;
+
+        $i3 = (int) $b1;
+
+        if $i3 < 0 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $r1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode next>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode> = $r1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void clearAllocationNodes(com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator $r5;
+        long $l0, $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[] $r3;
+        int $i2, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r1, $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode;
+
+        $z0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: boolean wasInitialized>;
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $z0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: boolean wasInitialized>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $l0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long startPosition>;
+
+        $l1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long startPosition>;
+
+        $l0 = $l0 - $l1;
+
+        $i2 = (int) $l0;
+
+        $i3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int allocationLength>;
+
+        $i2 = $i2 / $i3;
+
+        $i3 = (int) $z0;
+
+        $i2 = $i3 + $i2;
+
+        $r3 = newarray (com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation)[$i2];
+
+        $i3 = 0;
+
+     label2:
+        if $i3 >= $i2 goto label3;
+
+        $r4 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation allocation>;
+
+        $r3[$i3] = $r4;
+
+        $r1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode clear()>();
+
+        $i3 = $i3 + 1;
+
+        goto label2;
+
+     label3:
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator allocator>;
+
+        interfaceinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator: void release(com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation[])>($r3);
+
+        return;
+    }
+
+    private void discardDownstreamTo(long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator $r2;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        byte $b1;
+        int $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $l0 := @parameter0: long;
+
+        $b1 = $l0 cmp -1L;
+
+        if $b1 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode>;
+
+        $l2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $b1 = $l0 cmp $l2;
+
+        $i3 = (int) $b1;
+
+        if $i3 < 0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator allocator>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode>;
+
+        $r3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation allocation>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator: void release(com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation)>($r3);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode>;
+
+        $r1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode clear()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode> = $r1;
+
+        goto label1;
+
+     label2:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $l0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long startPosition>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode>;
+
+        $l2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long startPosition>;
+
+        $b1 = $l0 cmp $l2;
+
+        $i3 = (int) $b1;
+
+        if $i3 >= 0 goto label3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode> = $r1;
+
+     label3:
+        return;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.Format getAdjustedSampleFormat(com.mbridge.msdk.playercommon.exoplayer2.Format, long)
+    {
+        byte $b1;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r0;
+        long $l0, $l2;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $l0 := @parameter1: long;
+
+        if $r0 != null goto label1;
+
+        return null;
+
+     label1:
+        $b1 = $l0 cmp 0L;
+
+        if $b1 == 0 goto label2;
+
+        $l2 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: long subsampleOffsetUs>;
+
+        $b1 = $l2 cmp 9223372036854775807L;
+
+        if $b1 == 0 goto label2;
+
+        $l2 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: long subsampleOffsetUs>;
+
+        $l0 = $l2 + $l0;
+
+        $r0 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: com.mbridge.msdk.playercommon.exoplayer2.Format copyWithSubsampleOffsetUs(long)>($l0);
+
+     label2:
+        return $r0;
+    }
+
+    private void postAppend(int)
+    {
+        byte $b3;
+        int $i0;
+        long $l1, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $i0 := @parameter0: int;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten>;
+
+        $l2 = (long) $i0;
+
+        $l1 = $l1 + $l2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten> = $l1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $l2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $b3 = $l1 cmp $l2;
+
+        if $b3 != 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $r1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode next>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode> = $r1;
+
+     label1:
+        return;
+    }
+
+    private int preAppend(int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator $r2;
+        long $l2, $l3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r1, $r4, $r5;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $i1 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $z0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: boolean wasInitialized>;
+
+        if $z0 != 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator allocator>;
+
+        $r3 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation allocate()>();
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $l2 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int allocationLength>;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: void <init>(long,int)>($l2, $i0);
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: void initialize(com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation,com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode)>($r3, $r4);
+
+     label1:
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $l2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten>;
+
+        $l2 = $l2 - $l3;
+
+        $i0 = (int) $l2;
+
+        $i1 = staticinvoke <java.lang.Math: int min(int,int)>($i1, $i0);
+
+        return $i1;
+    }
+
+    private void readData(long, java.nio.ByteBuffer, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r3;
+        byte[] $r4;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        java.nio.ByteBuffer $r1;
+        byte $b5;
+        int $i1, $i3, $i4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.nio.ByteBuffer;
+
+        $i1 := @parameter2: int;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void advanceReadTo(long)>($l0);
+
+     label1:
+        if $i1 <= 0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $l2 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $l2 = $l2 - $l0;
+
+        $i3 = (int) $l2;
+
+        $i3 = staticinvoke <java.lang.Math: int min(int,int)>($i1, $i3);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation allocation>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: byte[] data>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $i4 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: int translateOffset(long)>($l0);
+
+        virtualinvoke $r1.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte[],int,int)>($r4, $i4, $i3);
+
+        $i1 = $i1 - $i3;
+
+        $l2 = (long) $i3;
+
+        $l0 = $l0 + $l2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $l2 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $b5 = $l0 cmp $l2;
+
+        if $b5 != 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $r2 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode next>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode> = $r2;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void readData(long, byte[], int)
+    {
+        byte[] $r1, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r3;
+        long $l2, $l4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        byte $b7;
+        int $i0, $i1, $i3, $i5, $i6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $l2 := @parameter0: long;
+
+        $r1 := @parameter1: byte[];
+
+        $i0 := @parameter2: int;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void advanceReadTo(long)>($l2);
+
+        $i3 = $i0;
+
+     label1:
+        if $i3 <= 0 goto label2;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $l4 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $l4 = $l4 - $l2;
+
+        $i1 = (int) $l4;
+
+        $i5 = staticinvoke <java.lang.Math: int min(int,int)>($i3, $i1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation allocation>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: byte[] data>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $i6 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: int translateOffset(long)>($l2);
+
+        $i1 = $i0 - $i3;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, $i6, $r1, $i1, $i5);
+
+        $i3 = $i3 - $i5;
+
+        $l4 = (long) $i5;
+
+        $l2 = $l2 + $l4;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $l4 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $b7 = $l2 cmp $l4;
+
+        if $b7 != 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        $r2 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode next>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode> = $r2;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void readEncryptionData(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer, com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder)
+    {
+        byte[] $r5, $r6;
+        long $l1, $l4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        short $s3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder $r2;
+        byte $b2;
+        int[] $r3, $r4, $r9;
+        int $i0, $i5, $i6, $i7;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo $r8, $r11;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder;
+
+        $l1 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: long offset>;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset(int)>(1);
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $r5 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void readData(long,byte[],int)>($l1, $r5, 1);
+
+        $l1 = $l1 + 1L;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $r5 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        $i0 = 0;
+
+        $b2 = $r5[0];
+
+        $s3 = (short) $b2;
+
+        $s3 = $s3 & 128;
+
+        if $s3 == 0 goto label01;
+
+        $z0 = 1;
+
+        goto label02;
+
+     label01:
+        $z0 = 0;
+
+     label02:
+        $b2 = $b2 & 127;
+
+        $r8 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo cryptoInfo>;
+
+        $r5 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo: byte[] iv>;
+
+        if $r5 != null goto label03;
+
+        $r8 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo cryptoInfo>;
+
+        $r5 = newarray (byte)[16];
+
+        $r8.<com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo: byte[] iv> = $r5;
+
+     label03:
+        $r8 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo cryptoInfo>;
+
+        $r5 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo: byte[] iv>;
+
+        $i5 = (int) $b2;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void readData(long,byte[],int)>($l1, $r5, $i5);
+
+        $l4 = (long) $b2;
+
+        $l1 = $l1 + $l4;
+
+        if $z0 == 0 goto label04;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset(int)>(2);
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $r5 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void readData(long,byte[],int)>($l1, $r5, 2);
+
+        $l1 = $l1 + 2L;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $i5 = virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedShort()>();
+
+        goto label05;
+
+     label04:
+        $i5 = 1;
+
+     label05:
+        $r8 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo cryptoInfo>;
+
+        $r3 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo: int[] numBytesOfClearData>;
+
+        if $r3 == null goto label06;
+
+        $i6 = lengthof $r3;
+
+        if $i6 >= $i5 goto label07;
+
+     label06:
+        $r3 = newarray (int)[$i5];
+
+     label07:
+        $r8 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo cryptoInfo>;
+
+        $r9 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo: int[] numBytesOfEncryptedData>;
+
+        if $r9 == null goto label08;
+
+        $i6 = lengthof $r9;
+
+        if $i6 >= $i5 goto label09;
+
+     label08:
+        $r9 = newarray (int)[$i5];
+
+     label09:
+        $r4 = $r9;
+
+        if $z0 == 0 goto label11;
+
+        $i6 = $i5 * 6;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void reset(int)>($i6);
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $r5 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: byte[] data>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void readData(long,byte[],int)>($l1, $r5, $i6);
+
+        $l4 = (long) $i6;
+
+        $l1 = $l1 + $l4;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void setPosition(int)>(0);
+
+     label10:
+        if $i0 >= $i5 goto label12;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $i6 = virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedShort()>();
+
+        $r3[$i0] = $i6;
+
+        $r7 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray scratch>;
+
+        $i6 = virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        $r4[$i0] = $i6;
+
+        $i0 = $i0 + 1;
+
+        goto label10;
+
+     label11:
+        $r3[0] = 0;
+
+        $i0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: int size>;
+
+        $l4 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: long offset>;
+
+        $l4 = $l1 - $l4;
+
+        $i6 = (int) $l4;
+
+        $i0 = $i0 - $i6;
+
+        $r9[0] = $i0;
+
+     label12:
+        $r10 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData cryptoData>;
+
+        $r8 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo cryptoInfo>;
+
+        $r5 = $r10.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData: byte[] encryptionKey>;
+
+        $r11 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo cryptoInfo>;
+
+        $r6 = $r11.<com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo: byte[] iv>;
+
+        $i0 = $r10.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData: int cryptoMode>;
+
+        $i6 = $r10.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData: int encryptedBlocks>;
+
+        $i7 = $r10.<com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData: int clearBlocks>;
+
+        virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.decoder.CryptoInfo: void set(int,int[],int[],byte[],byte[],int,int,int)>($i5, $r3, $r4, $r5, $r6, $i0, $i6, $i7);
+
+        $l4 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: long offset>;
+
+        $l1 = $l1 - $l4;
+
+        $i5 = (int) $l1;
+
+        $l1 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: long offset>;
+
+        $l4 = (long) $i5;
+
+        $l1 = $l1 + $l4;
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: long offset> = $l1;
+
+        $i0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: int size>;
+
+        $i5 = $i0 - $i5;
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: int size> = $i5;
+
+        return;
+    }
+
+    public final int advanceTo(long, boolean, boolean)
+    {
+        int $i0;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $l1 := @parameter0: long;
+
+        $z0 := @parameter1: boolean;
+
+        $z1 := @parameter2: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: int advanceTo(long,boolean,boolean)>($l1, $z0, $z1);
+
+        return $i0;
+    }
+
+    public final int advanceToEnd()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: int advanceToEnd()>();
+
+        return $i0;
+    }
+
+    public final void discardTo(long, boolean, boolean)
+    {
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $l0 := @parameter0: long;
+
+        $z0 := @parameter1: boolean;
+
+        $z1 := @parameter2: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $l0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: long discardTo(long,boolean,boolean)>($l0, $z0, $z1);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardDownstreamTo(long)>($l0);
+
+        return;
+    }
+
+    public final void discardToEnd()
+    {
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $l0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: long discardToEnd()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardDownstreamTo(long)>($l0);
+
+        return;
+    }
+
+    public final void discardToRead()
+    {
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $l0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: long discardToRead()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void discardDownstreamTo(long)>($l0);
+
+        return;
+    }
+
+    public final void discardUpstreamSamples(int)
+    {
+        long $l0, $l3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        byte $b1;
+        int $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r2, $r3, $r4, $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $i2 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $l0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: long discardUpstreamSamples(int)>($i2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten> = $l0;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 == 0 goto label6;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode>;
+
+        $l3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long startPosition>;
+
+        $b1 = $l0 cmp $l3;
+
+        if $b1 != 0 goto label1;
+
+        goto label6;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode>;
+
+     label2:
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten>;
+
+        $l3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $b1 = $l0 cmp $l3;
+
+        $i2 = (int) $b1;
+
+        if $i2 <= 0 goto label3;
+
+        $r2 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode next>;
+
+        goto label2;
+
+     label3:
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode next>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void clearAllocationNodes(com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode)>($r3);
+
+        $r5 = new com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode;
+
+        $l0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int allocationLength>;
+
+        specialinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: void <init>(long,int)>($l0, $i2);
+
+        $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode next> = $r5;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten>;
+
+        $l0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: long endPosition>;
+
+        $b1 = $l3 cmp $l0;
+
+        if $b1 != 0 goto label4;
+
+        $r4 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode next>;
+
+        goto label5;
+
+     label4:
+        $r4 = $r2;
+
+     label5:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode> = $r4;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode>;
+
+        if $r4 != $r3 goto label7;
+
+        $r2 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode next>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode> = $r2;
+
+        return;
+
+     label6:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void clearAllocationNodes(com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode)>($r2);
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten>;
+
+        $i2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int allocationLength>;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: void <init>(long,int)>($l0, $i2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode> = $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode> = $r3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode> = $r3;
+
+     label7:
+        return;
+    }
+
+    public final void format(com.mbridge.msdk.playercommon.exoplayer2.Format)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r1, $r2;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$UpstreamFormatChangedListener $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long sampleOffsetUs>;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.Format getAdjustedSampleFormat(com.mbridge.msdk.playercommon.exoplayer2.Format,long)>($r1, $l0);
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: boolean format(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.Format lastUnadjustedFormat> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: boolean pendingFormatAdjustment> = 0;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$UpstreamFormatChangedListener upstreamFormatChangeListener>;
+
+        if $r4 == null goto label1;
+
+        if $z0 == 0 goto label1;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$UpstreamFormatChangedListener: void onUpstreamFormatChanged(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r2);
+
+     label1:
+        return;
+    }
+
+    public final int getFirstIndex()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: int getFirstIndex()>();
+
+        return $i0;
+    }
+
+    public final long getFirstTimestampUs()
+    {
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $l0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: long getFirstTimestampUs()>();
+
+        return $l0;
+    }
+
+    public final long getLargestQueuedTimestampUs()
+    {
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $l0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: long getLargestQueuedTimestampUs()>();
+
+        return $l0;
+    }
+
+    public final int getReadIndex()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: int getReadIndex()>();
+
+        return $i0;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.Format getUpstreamFormat()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $r1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: com.mbridge.msdk.playercommon.exoplayer2.Format getUpstreamFormat()>();
+
+        return $r1;
+    }
+
+    public final int getWriteIndex()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: int getWriteIndex()>();
+
+        return $i0;
+    }
+
+    public final boolean hasNextSample()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: boolean hasNextSample()>();
+
+        return $z0;
+    }
+
+    public final int peekSourceId()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: int peekSourceId()>();
+
+        return $i0;
+    }
+
+    public final int read(com.mbridge.msdk.playercommon.exoplayer2.FormatHolder, com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer, boolean, boolean, long)
+    {
+        java.lang.IllegalStateException $r7;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        java.nio.ByteBuffer $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder $r2;
+        byte $b3;
+        com.mbridge.msdk.playercommon.exoplayer2.FormatHolder $r3;
+        int $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r5;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.FormatHolder;
+
+        $r4 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer;
+
+        $z0 := @parameter2: boolean;
+
+        $z1 := @parameter3: boolean;
+
+        $l0 := @parameter4: long;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.Format downstreamFormat>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder extrasHolder>;
+
+        $i1 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: int read(com.mbridge.msdk.playercommon.exoplayer2.FormatHolder,com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer,boolean,boolean,com.mbridge.msdk.playercommon.exoplayer2.Format,com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder)>($r3, $r4, $z0, $z1, $r1, $r2);
+
+        if $i1 == -5 goto label5;
+
+        if $i1 == -4 goto label2;
+
+        if $i1 != -3 goto label1;
+
+        return -3;
+
+     label1:
+        $r7 = new java.lang.IllegalStateException;
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r7;
+
+     label2:
+        $z0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: boolean isEndOfStream()>();
+
+        if $z0 != 0 goto label6;
+
+        $l2 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: long timeUs>;
+
+        $b3 = $l2 cmp $l0;
+
+        $i1 = (int) $b3;
+
+        if $i1 >= 0 goto label3;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: void addFlag(int)>(-2147483648);
+
+     label3:
+        $z0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: boolean isEncrypted()>();
+
+        if $z0 == 0 goto label4;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder extrasHolder>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void readEncryptionData(com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer,com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder)>($r4, $r2);
+
+     label4:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder extrasHolder>;
+
+        $i1 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: int size>;
+
+        virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: void ensureSpaceForWrite(int)>($i1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder extrasHolder>;
+
+        $l0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: long offset>;
+
+        $r6 = $r4.<com.mbridge.msdk.playercommon.exoplayer2.decoder.DecoderInputBuffer: java.nio.ByteBuffer data>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder extrasHolder>;
+
+        $i1 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue$SampleExtrasHolder: int size>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void readData(long,java.nio.ByteBuffer,int)>($l0, $r6, $i1);
+
+        return -4;
+
+     label5:
+        $r1 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.FormatHolder: com.mbridge.msdk.playercommon.exoplayer2.Format format>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.Format downstreamFormat> = $r1;
+
+        return -5;
+
+     label6:
+        return -4;
+    }
+
+    public final void reset()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void reset(boolean)>(0);
+
+        return;
+    }
+
+    public final void reset(boolean)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: void reset(boolean)>($z0);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode>;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void clearAllocationNodes(com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode)>($r2);
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int allocationLength>;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: void <init>(long,int)>(0L, $i0);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode> = $r2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode> = $r2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode> = $r2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten> = 0L;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator allocator>;
+
+        interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocator: void trim()>();
+
+        return;
+    }
+
+    public final void rewind()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: void rewind()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode firstAllocationNode>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode readAllocationNode> = $r2;
+
+        return;
+    }
+
+    public final int sampleData(com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput, int, boolean) throws java.io.IOException, java.lang.InterruptedException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r3;
+        byte[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput $r1;
+        long $l0;
+        java.io.EOFException $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        int $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput;
+
+        $i1 := @parameter1: int;
+
+        $z0 := @parameter2: boolean;
+
+        $i1 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int preAppend(int)>($i1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation allocation>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: byte[] data>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten>;
+
+        $i2 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: int translateOffset(long)>($l0);
+
+        $i1 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ExtractorInput: int read(byte[],int,int)>($r4, $i2, $i1);
+
+        if $i1 != -1 goto label2;
+
+        if $z0 == 0 goto label1;
+
+        return -1;
+
+     label1:
+        $r5 = new java.io.EOFException;
+
+        specialinvoke $r5.<java.io.EOFException: void <init>()>();
+
+        throw $r5;
+
+     label2:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void postAppend(int)>($i1);
+
+        return $i1;
+    }
+
+    public final void sampleData(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation $r3;
+        byte[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        int $i1, $i2, $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode $r2;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $i1 := @parameter1: int;
+
+     label1:
+        if $i1 <= 0 goto label2;
+
+        $i2 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int preAppend(int)>($i1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation allocation>;
+
+        $r4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.Allocation: byte[] data>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode writeAllocationNode>;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten>;
+
+        $i3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$AllocationNode: int translateOffset(long)>($l0);
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r4, $i3, $i2);
+
+        $i1 = $i1 - $i2;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void postAppend(int)>($i2);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public final void sampleMetadata(long, int, int, int, com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData)
+    {
+        long $l0, $l4, $l6;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        int $i1, $i2, $i3, $i5;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r3;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $l0 := @parameter0: long;
+
+        $i1 := @parameter1: int;
+
+        $i2 := @parameter2: int;
+
+        $i3 := @parameter3: int;
+
+        $r1 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: boolean pendingFormatAdjustment>;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.Format lastUnadjustedFormat>;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: void format(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r2);
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: boolean pendingSplice>;
+
+        if $z0 == 0 goto label4;
+
+        $i5 = $i1 & 1;
+
+        if $i5 == 0 goto label3;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: boolean attemptSplice(long)>($l0);
+
+        if $z0 != 0 goto label2;
+
+        return;
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: boolean pendingSplice> = 0;
+
+        goto label4;
+
+     label3:
+        return;
+
+     label4:
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long sampleOffsetUs>;
+
+        $l0 = $l0 + $l4;
+
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long totalBytesWritten>;
+
+        $l6 = (long) $i2;
+
+        $l4 = $l4 - $l6;
+
+        $l6 = (long) $i3;
+
+        $l4 = $l4 - $l6;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: void commitSample(long,int,long,int,com.mbridge.msdk.playercommon.exoplayer2.extractor.TrackOutput$CryptoData)>($l0, $i1, $l4, $i2, $r1);
+
+        return;
+    }
+
+    public final boolean setReadPosition(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: boolean setReadPosition(int)>($i0);
+
+        return $z0;
+    }
+
+    public final void setSampleOffsetUs(long)
+    {
+        byte $b1;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $l2 := @parameter0: long;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long sampleOffsetUs>;
+
+        $b1 = $l0 cmp $l2;
+
+        if $b1 == 0 goto label1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: long sampleOffsetUs> = $l2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: boolean pendingFormatAdjustment> = 1;
+
+     label1:
+        return;
+    }
+
+    public final void setUpstreamFormatChangeListener(com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$UpstreamFormatChangedListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$UpstreamFormatChangedListener $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$UpstreamFormatChangedListener;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue$UpstreamFormatChangedListener upstreamFormatChangeListener> = $r1;
+
+        return;
+    }
+
+    public final void sourceId(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue metadataQueue>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleMetadataQueue: void sourceId(int)>($i0);
+
+        return;
+    }
+
+    public final void splice()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: boolean pendingSplice> = 1;
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int INITIAL_SCRATCH_SIZE> = 32;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.source.SampleQueue: int ADVANCE_FAILED> = -1;
+
+        return;
+    }
+}

@@ -1,0 +1,422 @@
+final class io.grpc.okhttp.OkHttpServer extends java.lang.Object implements io.grpc.internal.InternalServer
+{
+    private static final java.util.logging.Logger log;
+    private java.net.SocketAddress actualListenAddress;
+    private final io.grpc.InternalChannelz channelz;
+    private io.grpc.InternalInstrumented listenInstrumented;
+    private io.grpc.internal.ServerListener listener;
+    private final java.net.SocketAddress originalListenAddress;
+    private java.util.concurrent.ScheduledExecutorService scheduledExecutorService;
+    private final io.grpc.internal.ObjectPool scheduledExecutorServicePool;
+    private java.net.ServerSocket serverSocket;
+    private boolean shutdown;
+    private final javax.net.ServerSocketFactory socketFactory;
+    private final io.grpc.okhttp.OkHttpServerTransport$Config transportConfig;
+    private java.util.concurrent.Executor transportExecutor;
+    private final io.grpc.internal.ObjectPool transportExecutorPool;
+
+    public static void $r8$lambda$nWZgluu-gd0CBu46dJMXNIRQajA(io.grpc.okhttp.OkHttpServer)
+    {
+        io.grpc.okhttp.OkHttpServer $r0;
+
+        $r0 := @parameter0: io.grpc.okhttp.OkHttpServer;
+
+        specialinvoke $r0.<io.grpc.okhttp.OkHttpServer: void acceptConnections()>();
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+
+        $r0 = class "Lio/grpc/okhttp/OkHttpServer;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <io.grpc.okhttp.OkHttpServer: java.util.logging.Logger log> = $r2;
+
+        return;
+    }
+
+    public void <init>(io.grpc.okhttp.OkHttpServerBuilder, java.util.List, io.grpc.InternalChannelz)
+    {
+        java.net.SocketAddress $r4;
+        io.grpc.okhttp.OkHttpServer r0;
+        io.grpc.internal.ObjectPool $r7;
+        io.grpc.okhttp.OkHttpServerTransport$Config $r8;
+        java.util.List $r1;
+        io.grpc.okhttp.OkHttpServerBuilder $r3;
+        javax.net.ServerSocketFactory $r6;
+        io.grpc.InternalChannelz $r2;
+        java.lang.Object $r5;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServer;
+
+        $r3 := @parameter0: io.grpc.okhttp.OkHttpServerBuilder;
+
+        $r1 := @parameter1: java.util.List;
+
+        $r2 := @parameter2: io.grpc.InternalChannelz;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = $r3.<io.grpc.okhttp.OkHttpServerBuilder: java.net.SocketAddress listenAddress>;
+
+        $r5 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r4, "listenAddress");
+
+        $r4 = (java.net.SocketAddress) $r5;
+
+        r0.<io.grpc.okhttp.OkHttpServer: java.net.SocketAddress originalListenAddress> = $r4;
+
+        $r6 = $r3.<io.grpc.okhttp.OkHttpServerBuilder: javax.net.ServerSocketFactory socketFactory>;
+
+        $r5 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r6, "socketFactory");
+
+        $r6 = (javax.net.ServerSocketFactory) $r5;
+
+        r0.<io.grpc.okhttp.OkHttpServer: javax.net.ServerSocketFactory socketFactory> = $r6;
+
+        $r7 = $r3.<io.grpc.okhttp.OkHttpServerBuilder: io.grpc.internal.ObjectPool transportExecutorPool>;
+
+        $r5 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r7, "transportExecutorPool");
+
+        $r7 = (io.grpc.internal.ObjectPool) $r5;
+
+        r0.<io.grpc.okhttp.OkHttpServer: io.grpc.internal.ObjectPool transportExecutorPool> = $r7;
+
+        $r7 = $r3.<io.grpc.okhttp.OkHttpServerBuilder: io.grpc.internal.ObjectPool scheduledExecutorServicePool>;
+
+        $r5 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r7, "scheduledExecutorServicePool");
+
+        $r7 = (io.grpc.internal.ObjectPool) $r5;
+
+        r0.<io.grpc.okhttp.OkHttpServer: io.grpc.internal.ObjectPool scheduledExecutorServicePool> = $r7;
+
+        $r8 = new io.grpc.okhttp.OkHttpServerTransport$Config;
+
+        specialinvoke $r8.<io.grpc.okhttp.OkHttpServerTransport$Config: void <init>(io.grpc.okhttp.OkHttpServerBuilder,java.util.List)>($r3, $r1);
+
+        r0.<io.grpc.okhttp.OkHttpServer: io.grpc.okhttp.OkHttpServerTransport$Config transportConfig> = $r8;
+
+        $r5 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "channelz");
+
+        $r2 = (io.grpc.InternalChannelz) $r5;
+
+        r0.<io.grpc.okhttp.OkHttpServer: io.grpc.InternalChannelz channelz> = $r2;
+
+        return;
+    }
+
+    private void acceptConnections()
+    {
+        java.lang.Throwable $r7, $r8;
+        java.net.Socket $r2;
+        io.grpc.okhttp.OkHttpServer r0;
+        io.grpc.okhttp.OkHttpServerTransport $r3;
+        java.util.logging.Logger $r9;
+        java.util.logging.Level $r10;
+        java.net.ServerSocket $r1;
+        io.grpc.internal.ServerTransportListener $r6;
+        io.grpc.okhttp.OkHttpServerTransport$Config $r4;
+        io.grpc.internal.ServerListener $r5;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServer;
+
+     label01:
+        $r1 = r0.<io.grpc.okhttp.OkHttpServer: java.net.ServerSocket serverSocket>;
+
+     label02:
+        $r2 = virtualinvoke $r1.<java.net.ServerSocket: java.net.Socket accept()>();
+
+     label03:
+        $r3 = new io.grpc.okhttp.OkHttpServerTransport;
+
+        $r4 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.okhttp.OkHttpServerTransport$Config transportConfig>;
+
+        specialinvoke $r3.<io.grpc.okhttp.OkHttpServerTransport: void <init>(io.grpc.okhttp.OkHttpServerTransport$Config,java.net.Socket)>($r4, $r2);
+
+        $r5 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.internal.ServerListener listener>;
+
+        $r6 = interfaceinvoke $r5.<io.grpc.internal.ServerListener: io.grpc.internal.ServerTransportListener transportCreated(io.grpc.internal.ServerTransport)>($r3);
+
+        virtualinvoke $r3.<io.grpc.okhttp.OkHttpServerTransport: void start(io.grpc.internal.ServerTransportListener)>($r6);
+
+     label04:
+        goto label01;
+
+     label05:
+        $r7 := @caughtexception;
+
+        goto label10;
+
+     label06:
+        $r8 := @caughtexception;
+
+     label07:
+        $z0 = r0.<io.grpc.okhttp.OkHttpServer: boolean shutdown>;
+
+     label08:
+        if $z0 != 0 goto label11;
+
+     label09:
+        throw $r8;
+
+     label10:
+        $r9 = <io.grpc.okhttp.OkHttpServer: java.util.logging.Logger log>;
+
+        $r10 = <java.util.logging.Level: java.util.logging.Level SEVERE>;
+
+        virtualinvoke $r9.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String,java.lang.Throwable)>($r10, "Accept loop failed", $r7);
+
+     label11:
+        $r5 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.internal.ServerListener listener>;
+
+        interfaceinvoke $r5.<io.grpc.internal.ServerListener: void serverShutdown()>();
+
+        return;
+
+        catch java.io.IOException from label02 to label03 with label06;
+        catch java.lang.Throwable from label01 to label03 with label05;
+        catch java.lang.Throwable from label03 to label04 with label05;
+        catch java.lang.Throwable from label07 to label08 with label05;
+        catch java.lang.Throwable from label09 to label10 with label05;
+    }
+
+    public java.net.SocketAddress getListenSocketAddress()
+    {
+        java.net.SocketAddress r1;
+        io.grpc.okhttp.OkHttpServer r0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServer;
+
+        r1 = r0.<io.grpc.okhttp.OkHttpServer: java.net.SocketAddress actualListenAddress>;
+
+        return r1;
+    }
+
+    public java.util.List getListenSocketAddresses()
+    {
+        java.util.List $r2;
+        java.net.SocketAddress $r1;
+        io.grpc.okhttp.OkHttpServer r0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServer;
+
+        $r1 = virtualinvoke r0.<io.grpc.okhttp.OkHttpServer: java.net.SocketAddress getListenSocketAddress()>();
+
+        $r2 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>($r1);
+
+        return $r2;
+    }
+
+    public io.grpc.InternalInstrumented getListenSocketStats()
+    {
+        io.grpc.okhttp.OkHttpServer r0;
+        io.grpc.InternalInstrumented r1;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServer;
+
+        r1 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.InternalInstrumented listenInstrumented>;
+
+        return r1;
+    }
+
+    public java.util.List getListenSocketStatsList()
+    {
+        java.util.List $r2;
+        io.grpc.okhttp.OkHttpServer r0;
+        io.grpc.InternalInstrumented $r1;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServer;
+
+        $r1 = virtualinvoke r0.<io.grpc.okhttp.OkHttpServer: io.grpc.InternalInstrumented getListenSocketStats()>();
+
+        $r2 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>($r1);
+
+        return $r2;
+    }
+
+    public void shutdown()
+    {
+        java.lang.Throwable $r2;
+        io.grpc.okhttp.OkHttpServer r0;
+        java.util.concurrent.Executor $r8;
+        io.grpc.InternalInstrumented $r4;
+        java.util.logging.Logger $r5;
+        java.util.logging.Level $r6;
+        io.grpc.internal.ObjectPool $r7;
+        java.net.ServerSocket $r1;
+        java.util.concurrent.ScheduledExecutorService $r10;
+        io.grpc.InternalChannelz $r3;
+        java.lang.Object $r9;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServer;
+
+        $z0 = r0.<io.grpc.okhttp.OkHttpServer: boolean shutdown>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<io.grpc.okhttp.OkHttpServer: boolean shutdown> = 1;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServer: java.net.ServerSocket serverSocket>;
+
+        if $r1 != null goto label2;
+
+        return;
+
+     label2:
+        $r3 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.InternalChannelz channelz>;
+
+        $r4 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.InternalInstrumented listenInstrumented>;
+
+        virtualinvoke $r3.<io.grpc.InternalChannelz: void removeListenSocket(io.grpc.InternalInstrumented)>($r4);
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServer: java.net.ServerSocket serverSocket>;
+
+     label3:
+        virtualinvoke $r1.<java.net.ServerSocket: void close()>();
+
+     label4:
+        goto label6;
+
+     label5:
+        $r5 = <io.grpc.okhttp.OkHttpServer: java.util.logging.Logger log>;
+
+        $r6 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpServer: java.net.ServerSocket serverSocket>;
+
+        virtualinvoke $r5.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String,java.lang.Object)>($r6, "Failed closing server socket", $r1);
+
+     label6:
+        $r7 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.internal.ObjectPool transportExecutorPool>;
+
+        $r8 = r0.<io.grpc.okhttp.OkHttpServer: java.util.concurrent.Executor transportExecutor>;
+
+        $r9 = interfaceinvoke $r7.<io.grpc.internal.ObjectPool: java.lang.Object returnObject(java.lang.Object)>($r8);
+
+        $r8 = (java.util.concurrent.Executor) $r9;
+
+        r0.<io.grpc.okhttp.OkHttpServer: java.util.concurrent.Executor transportExecutor> = $r8;
+
+        $r7 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.internal.ObjectPool scheduledExecutorServicePool>;
+
+        $r10 = r0.<io.grpc.okhttp.OkHttpServer: java.util.concurrent.ScheduledExecutorService scheduledExecutorService>;
+
+        $r9 = interfaceinvoke $r7.<io.grpc.internal.ObjectPool: java.lang.Object returnObject(java.lang.Object)>($r10);
+
+        $r10 = (java.util.concurrent.ScheduledExecutorService) $r9;
+
+        r0.<io.grpc.okhttp.OkHttpServer: java.util.concurrent.ScheduledExecutorService scheduledExecutorService> = $r10;
+
+        return;
+
+     label7:
+        $r2 := @caughtexception;
+
+        goto label5;
+
+        catch java.io.IOException from label3 to label4 with label7;
+    }
+
+    public void start(io.grpc.internal.ServerListener) throws java.io.IOException
+    {
+        java.lang.Throwable $r13;
+        java.net.SocketAddress $r5;
+        io.grpc.okhttp.OkHttpServer r0;
+        java.util.concurrent.Executor $r8;
+        io.grpc.okhttp.OkHttpServer$$ExternalSyntheticLambda0 $r12;
+        io.grpc.InternalInstrumented $r11;
+        io.grpc.internal.ObjectPool $r7;
+        java.net.ServerSocket $r4;
+        io.grpc.okhttp.OkHttpServer$ListenSocket $r6;
+        io.grpc.internal.ServerListener $r1;
+        javax.net.ServerSocketFactory $r3;
+        java.util.concurrent.ScheduledExecutorService $r9;
+        java.lang.Object $r2;
+        io.grpc.InternalChannelz $r10;
+
+        r0 := @this: io.grpc.okhttp.OkHttpServer;
+
+        $r1 := @parameter0: io.grpc.internal.ServerListener;
+
+        $r2 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "listener");
+
+        $r1 = (io.grpc.internal.ServerListener) $r2;
+
+        r0.<io.grpc.okhttp.OkHttpServer: io.grpc.internal.ServerListener listener> = $r1;
+
+        $r3 = r0.<io.grpc.okhttp.OkHttpServer: javax.net.ServerSocketFactory socketFactory>;
+
+        $r4 = virtualinvoke $r3.<javax.net.ServerSocketFactory: java.net.ServerSocket createServerSocket()>();
+
+        $r5 = r0.<io.grpc.okhttp.OkHttpServer: java.net.SocketAddress originalListenAddress>;
+
+     label1:
+        virtualinvoke $r4.<java.net.ServerSocket: void bind(java.net.SocketAddress)>($r5);
+
+     label2:
+        r0.<io.grpc.okhttp.OkHttpServer: java.net.ServerSocket serverSocket> = $r4;
+
+        $r5 = virtualinvoke $r4.<java.net.ServerSocket: java.net.SocketAddress getLocalSocketAddress()>();
+
+        r0.<io.grpc.okhttp.OkHttpServer: java.net.SocketAddress actualListenAddress> = $r5;
+
+        $r6 = new io.grpc.okhttp.OkHttpServer$ListenSocket;
+
+        specialinvoke $r6.<io.grpc.okhttp.OkHttpServer$ListenSocket: void <init>(java.net.ServerSocket)>($r4);
+
+        r0.<io.grpc.okhttp.OkHttpServer: io.grpc.InternalInstrumented listenInstrumented> = $r6;
+
+        $r7 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.internal.ObjectPool transportExecutorPool>;
+
+        $r2 = interfaceinvoke $r7.<io.grpc.internal.ObjectPool: java.lang.Object getObject()>();
+
+        $r8 = (java.util.concurrent.Executor) $r2;
+
+        r0.<io.grpc.okhttp.OkHttpServer: java.util.concurrent.Executor transportExecutor> = $r8;
+
+        $r7 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.internal.ObjectPool scheduledExecutorServicePool>;
+
+        $r2 = interfaceinvoke $r7.<io.grpc.internal.ObjectPool: java.lang.Object getObject()>();
+
+        $r9 = (java.util.concurrent.ScheduledExecutorService) $r2;
+
+        r0.<io.grpc.okhttp.OkHttpServer: java.util.concurrent.ScheduledExecutorService scheduledExecutorService> = $r9;
+
+        $r10 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.InternalChannelz channelz>;
+
+        $r11 = r0.<io.grpc.okhttp.OkHttpServer: io.grpc.InternalInstrumented listenInstrumented>;
+
+        virtualinvoke $r10.<io.grpc.InternalChannelz: void addListenSocket(io.grpc.InternalInstrumented)>($r11);
+
+        $r8 = r0.<io.grpc.okhttp.OkHttpServer: java.util.concurrent.Executor transportExecutor>;
+
+        $r12 = new io.grpc.okhttp.OkHttpServer$$ExternalSyntheticLambda0;
+
+        specialinvoke $r12.<io.grpc.okhttp.OkHttpServer$$ExternalSyntheticLambda0: void <init>(io.grpc.okhttp.OkHttpServer)>(r0);
+
+        interfaceinvoke $r8.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r12);
+
+        return;
+
+     label3:
+        $r13 := @caughtexception;
+
+        virtualinvoke $r4.<java.net.ServerSocket: void close()>();
+
+        throw $r13;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+}

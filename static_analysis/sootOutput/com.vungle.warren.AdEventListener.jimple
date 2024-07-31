@@ -1,0 +1,1008 @@
+public class com.vungle.warren.AdEventListener extends java.lang.Object implements com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener
+{
+    private static final java.lang.String TAG;
+    private final com.vungle.warren.AdLoader adLoader;
+    private boolean adRewarded;
+    private com.vungle.warren.model.Advertisement advertisement;
+    private final com.vungle.warren.tasks.JobRunner jobRunner;
+    private int percentViewed;
+    private com.vungle.warren.model.Placement placement;
+    private final com.vungle.warren.PlayAdCallback playAdCallback;
+    private final java.util.Map playOperations;
+    private final com.vungle.warren.persistence.Repository repository;
+    private final com.vungle.warren.AdRequest request;
+    private boolean successfulView;
+    private final com.vungle.warren.VisionController visionController;
+
+    static void <clinit>()
+    {
+        <com.vungle.warren.AdEventListener: java.lang.String TAG> = "com.vungle.warren.AdEventListener";
+
+        return;
+    }
+
+    void <init>(com.vungle.warren.AdRequest, java.util.Map, com.vungle.warren.PlayAdCallback, com.vungle.warren.persistence.Repository, com.vungle.warren.AdLoader, com.vungle.warren.tasks.JobRunner, com.vungle.warren.VisionController, com.vungle.warren.model.Placement, com.vungle.warren.model.Advertisement)
+    {
+        com.vungle.warren.AdLoader $r3;
+        com.vungle.warren.PlayAdCallback $r9;
+        com.vungle.warren.AdEventListener r0;
+        com.vungle.warren.model.Placement $r6;
+        com.vungle.warren.model.Advertisement $r7;
+        com.vungle.warren.AdRequest $r8;
+        com.vungle.warren.tasks.JobRunner $r4;
+        com.vungle.warren.persistence.Repository $r2;
+        java.util.Map $r1;
+        java.lang.Boolean $r11;
+        java.lang.String $r10;
+        com.vungle.warren.VisionController $r5;
+
+        r0 := @this: com.vungle.warren.AdEventListener;
+
+        $r8 := @parameter0: com.vungle.warren.AdRequest;
+
+        $r1 := @parameter1: java.util.Map;
+
+        $r9 := @parameter2: com.vungle.warren.PlayAdCallback;
+
+        $r2 := @parameter3: com.vungle.warren.persistence.Repository;
+
+        $r3 := @parameter4: com.vungle.warren.AdLoader;
+
+        $r4 := @parameter5: com.vungle.warren.tasks.JobRunner;
+
+        $r5 := @parameter6: com.vungle.warren.VisionController;
+
+        $r6 := @parameter7: com.vungle.warren.model.Placement;
+
+        $r7 := @parameter8: com.vungle.warren.model.Advertisement;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.vungle.warren.AdEventListener: int percentViewed> = -1;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdRequest request> = $r8;
+
+        r0.<com.vungle.warren.AdEventListener: java.util.Map playOperations> = $r1;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback> = $r9;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.persistence.Repository repository> = $r2;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdLoader adLoader> = $r3;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.tasks.JobRunner jobRunner> = $r4;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.VisionController visionController> = $r5;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Placement placement> = $r6;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement> = $r7;
+
+        $r10 = virtualinvoke $r8.<com.vungle.warren.AdRequest: java.lang.String getPlacementId()>();
+
+        $r11 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r10, $r11);
+
+        return;
+    }
+
+    private void loadAdvertisement()
+    {
+        com.vungle.warren.AdEventListener r0;
+        com.vungle.warren.model.Advertisement $r1;
+        com.vungle.warren.AdRequest $r3;
+        com.vungle.warren.persistence.Repository $r2;
+        java.lang.Object $r7;
+        java.lang.String $r4, $r5;
+        com.vungle.warren.persistence.FutureResult $r6;
+
+        r0 := @this: com.vungle.warren.AdEventListener;
+
+        $r1 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+        if $r1 != null goto label1;
+
+        $r2 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.persistence.Repository repository>;
+
+        $r3 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdRequest request>;
+
+        $r4 = virtualinvoke $r3.<com.vungle.warren.AdRequest: java.lang.String getPlacementId()>();
+
+        $r3 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdRequest request>;
+
+        $r5 = virtualinvoke $r3.<com.vungle.warren.AdRequest: java.lang.String getEventId()>();
+
+        $r6 = virtualinvoke $r2.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult findValidAdvertisementForPlacement(java.lang.String,java.lang.String)>($r4, $r5);
+
+        $r7 = virtualinvoke $r6.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r1 = (com.vungle.warren.model.Advertisement) $r7;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement> = $r1;
+
+     label1:
+        return;
+    }
+
+    private void loadPlacement()
+    {
+        com.vungle.warren.AdEventListener r0;
+        com.vungle.warren.model.Placement $r1;
+        com.vungle.warren.persistence.Repository $r2;
+        java.lang.Object $r6;
+        java.lang.String $r4;
+        com.vungle.warren.AdRequest $r3;
+        com.vungle.warren.persistence.FutureResult $r5;
+
+        r0 := @this: com.vungle.warren.AdEventListener;
+
+        $r1 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Placement placement>;
+
+        if $r1 != null goto label1;
+
+        $r2 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.persistence.Repository repository>;
+
+        $r3 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdRequest request>;
+
+        $r4 = virtualinvoke $r3.<com.vungle.warren.AdRequest: java.lang.String getPlacementId()>();
+
+        $r5 = virtualinvoke $r2.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>($r4, class "Lcom/vungle/warren/model/Placement;");
+
+        $r6 = virtualinvoke $r5.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r1 = (com.vungle.warren.model.Placement) $r6;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Placement placement> = $r1;
+
+     label1:
+        return;
+    }
+
+    public void onError(com.vungle.warren.error.VungleException, java.lang.String)
+    {
+        com.vungle.warren.AdLoader $r1;
+        com.vungle.warren.PlayAdCallback $r9;
+        com.vungle.warren.AdEventListener r0;
+        com.vungle.warren.model.Placement $r2;
+        com.vungle.warren.model.Advertisement $r6;
+        com.vungle.warren.persistence.DatabaseHelper$DBException $r3;
+        com.vungle.warren.persistence.Repository $r7;
+        int $i0;
+        java.lang.StringBuilder $r10;
+        java.lang.String $r5, $r11;
+        com.vungle.warren.error.VungleException $r4;
+        com.vungle.warren.AdConfig$AdSize $r8;
+
+        r0 := @this: com.vungle.warren.AdEventListener;
+
+        $r4 := @parameter0: com.vungle.warren.error.VungleException;
+
+        $r5 := @parameter1: java.lang.String;
+
+        specialinvoke r0.<com.vungle.warren.AdEventListener: void loadAdvertisement()>();
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+        if $r6 == null goto label1;
+
+        $i0 = virtualinvoke $r4.<com.vungle.warren.error.VungleException: int getExceptionCode()>();
+
+        if $i0 != 27 goto label1;
+
+        $r1 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdLoader adLoader>;
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+        $r5 = virtualinvoke $r6.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        virtualinvoke $r1.<com.vungle.warren.AdLoader: void dropCache(java.lang.String)>($r5);
+
+        return;
+
+     label1:
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+        if $r6 == null goto label7;
+
+        $i0 = virtualinvoke $r4.<com.vungle.warren.error.VungleException: int getExceptionCode()>();
+
+        if $i0 == 15 goto label7;
+
+        $i0 = virtualinvoke $r4.<com.vungle.warren.error.VungleException: int getExceptionCode()>();
+
+        if $i0 == 25 goto label7;
+
+        $i0 = virtualinvoke $r4.<com.vungle.warren.error.VungleException: int getExceptionCode()>();
+
+        if $i0 == 36 goto label7;
+
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.persistence.Repository repository>;
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label2:
+        virtualinvoke $r7.<com.vungle.warren.persistence.Repository: void saveAndApplyState(com.vungle.warren.model.Advertisement,java.lang.String,int)>($r6, $r5, 4);
+
+        specialinvoke r0.<com.vungle.warren.AdEventListener: void loadPlacement()>();
+
+     label3:
+        $r2 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Placement placement>;
+
+        if $r2 == null goto label7;
+
+        $r1 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdLoader adLoader>;
+
+     label4:
+        $r8 = virtualinvoke $r2.<com.vungle.warren.model.Placement: com.vungle.warren.AdConfig$AdSize getAdSize()>();
+
+        virtualinvoke $r1.<com.vungle.warren.AdLoader: void loadEndlessIfNeeded(com.vungle.warren.model.Placement,com.vungle.warren.AdConfig$AdSize,long,boolean)>($r2, $r8, 0L, 0);
+
+     label5:
+        goto label7;
+
+     label6:
+        $r4 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r4.<com.vungle.warren.error.VungleException: void <init>(int)>(26);
+
+     label7:
+        virtualinvoke r0.<com.vungle.warren.AdEventListener: void onFinished()>();
+
+        $r9 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+        if $r9 == null goto label9;
+
+        interfaceinvoke $r9.<com.vungle.warren.PlayAdCallback: void onError(java.lang.String,com.vungle.warren.error.VungleException)>($r5, $r4);
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r4.<com.vungle.warren.error.VungleException: java.lang.String getLocalizedMessage()>();
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" :");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("AdEventListener#PlayAdCallback", $r5);
+
+        return;
+
+     label8:
+        $r3 := @caughtexception;
+
+        goto label6;
+
+     label9:
+        return;
+
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label2 to label3 with label8;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label4 to label5 with label8;
+    }
+
+    protected void onFinished()
+    {
+        com.vungle.warren.AdEventListener r0;
+        java.util.Map $r1;
+        java.lang.String $r2;
+        com.vungle.warren.AdRequest $r3;
+
+        r0 := @this: com.vungle.warren.AdEventListener;
+
+        $r1 = r0.<com.vungle.warren.AdEventListener: java.util.Map playOperations>;
+
+        $r3 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdRequest request>;
+
+        $r2 = virtualinvoke $r3.<com.vungle.warren.AdRequest: java.lang.String getPlacementId()>();
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object remove(java.lang.Object)>($r2);
+
+        return;
+    }
+
+    public void onNext(java.lang.String, java.lang.String, java.lang.String)
+    {
+        com.vungle.warren.AdLoader $r15;
+        com.vungle.warren.model.Advertisement $r6;
+        com.vungle.warren.model.Placement $r11;
+        java.lang.String[] $r26;
+        com.vungle.warren.persistence.DatabaseHelper$DBException $r2, $r3;
+        com.vungle.warren.session.SessionAttribute $r24;
+        com.vungle.warren.persistence.Repository $r12;
+        com.vungle.warren.SessionTracker $r21;
+        com.vungle.warren.tasks.JobInfo $r20;
+        int $i0;
+        java.lang.String $r1, $r4, $r5, $r18;
+        com.vungle.warren.error.VungleException $r9;
+        boolean $z0, $z1, $z2;
+        com.vungle.warren.AdConfig$AdSize $r16;
+        com.vungle.warren.PlayAdCallback $r7;
+        com.vungle.warren.AdEventListener r0;
+        com.vungle.warren.AdRequest $r8;
+        com.vungle.warren.session.SessionEvent $r23;
+        com.vungle.warren.model.SessionData $r25;
+        com.vungle.warren.tasks.JobRunner $r19;
+        java.lang.StringBuilder $r10;
+        java.lang.Object $r14;
+        com.vungle.warren.model.SessionData$Builder $r22;
+        com.vungle.warren.persistence.FutureResult $r13;
+        com.vungle.warren.VisionController $r17;
+
+        r0 := @this: com.vungle.warren.AdEventListener;
+
+        $r4 := @parameter0: java.lang.String;
+
+        $r5 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: java.lang.String;
+
+        specialinvoke r0.<com.vungle.warren.AdEventListener: void loadAdvertisement()>();
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+        if $r6 != null goto label001;
+
+        $r4 = <com.vungle.warren.AdEventListener: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r4, "No Advertisement for ID");
+
+        virtualinvoke r0.<com.vungle.warren.AdEventListener: void onFinished()>();
+
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+        if $r7 == null goto label114;
+
+        $r8 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdRequest request>;
+
+        $r4 = virtualinvoke $r8.<com.vungle.warren.AdRequest: java.lang.String getPlacementId()>();
+
+        $r9 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r9.<com.vungle.warren.error.VungleException: void <init>(int)>(10);
+
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void onError(java.lang.String,com.vungle.warren.error.VungleException)>($r4, $r9);
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": AD_UNABLE_TO_PLAY");
+
+        $r4 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("AdEventListener#PlayAdCallback", $r4);
+
+        return;
+
+     label001:
+        specialinvoke r0.<com.vungle.warren.AdEventListener: void loadPlacement()>();
+
+        $r11 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Placement placement>;
+
+        if $r11 != null goto label002;
+
+        $r4 = <com.vungle.warren.AdEventListener: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r4, "No Placement for ID");
+
+        virtualinvoke r0.<com.vungle.warren.AdEventListener: void onFinished()>();
+
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+        if $r7 == null goto label114;
+
+        $r8 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdRequest request>;
+
+        $r4 = virtualinvoke $r8.<com.vungle.warren.AdRequest: java.lang.String getPlacementId()>();
+
+        $r9 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r9.<com.vungle.warren.error.VungleException: void <init>(int)>(13);
+
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void onError(java.lang.String,com.vungle.warren.error.VungleException)>($r4, $r9);
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("PLACEMENT_NOT_FOUND: ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("AdEventListener#PlayAdCallback", $r4);
+
+        return;
+
+     label002:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("start");
+
+     label003:
+        $z1 = 0;
+
+        if $z0 == 0 goto label024;
+
+        $r12 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.persistence.Repository repository>;
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label004:
+        virtualinvoke $r12.<com.vungle.warren.persistence.Repository: void saveAndApplyState(com.vungle.warren.model.Advertisement,java.lang.String,int)>($r6, $r1, 2);
+
+     label005:
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+        if $r7 == null goto label009;
+
+     label006:
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void onAdStart(java.lang.String)>($r1);
+
+     label007:
+        $r10 = new java.lang.StringBuilder;
+
+     label008:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("onAdStart: ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void debug(java.lang.String,java.lang.String)>("AdEventListener#PlayAdCallback", $r4);
+
+     label009:
+        r0.<com.vungle.warren.AdEventListener: int percentViewed> = 0;
+
+        $r12 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.persistence.Repository repository>;
+
+        $r8 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdRequest request>;
+
+     label010:
+        $r4 = virtualinvoke $r8.<com.vungle.warren.AdRequest: java.lang.String getPlacementId()>();
+
+        $r13 = virtualinvoke $r12.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>($r4, class "Lcom/vungle/warren/model/Placement;");
+
+        $r14 = virtualinvoke $r13.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+     label011:
+        $r11 = (com.vungle.warren.model.Placement) $r14;
+
+        r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Placement placement> = $r11;
+
+        if $r11 == null goto label015;
+
+        $r15 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdLoader adLoader>;
+
+     label012:
+        $r16 = virtualinvoke $r11.<com.vungle.warren.model.Placement: com.vungle.warren.AdConfig$AdSize getAdSize()>();
+
+     label013:
+        $r8 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.AdRequest request>;
+
+     label014:
+        $z1 = virtualinvoke $r8.<com.vungle.warren.AdRequest: boolean getIsExplicit()>();
+
+        virtualinvoke $r15.<com.vungle.warren.AdLoader: void loadEndlessIfNeeded(com.vungle.warren.model.Placement,com.vungle.warren.AdConfig$AdSize,long,boolean)>($r11, $r16, 0L, $z1);
+
+     label015:
+        $r17 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.VisionController visionController>;
+
+     label016:
+        $z1 = virtualinvoke $r17.<com.vungle.warren.VisionController: boolean isEnabled()>();
+
+     label017:
+        if $z1 == 0 goto label114;
+
+        $r17 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.VisionController visionController>;
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label018:
+        $r4 = virtualinvoke $r6.<com.vungle.warren.model.Advertisement: java.lang.String getCreativeId()>();
+
+     label019:
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label020:
+        $r5 = virtualinvoke $r6.<com.vungle.warren.model.Advertisement: java.lang.String getCampaignId()>();
+
+     label021:
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label022:
+        $r18 = virtualinvoke $r6.<com.vungle.warren.model.Advertisement: java.lang.String getAdvertiserAppId()>();
+
+        virtualinvoke $r17.<com.vungle.warren.VisionController: void reportData(java.lang.String,java.lang.String,java.lang.String)>($r4, $r5, $r18);
+
+     label023:
+        return;
+
+     label024:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("end");
+
+     label025:
+        if $z0 == 0 goto label052;
+
+        $r10 = new java.lang.StringBuilder;
+
+     label026:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("Cleaning up metadata and assets for placement ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" and advertisement ");
+
+     label027:
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label028:
+        $r4 = virtualinvoke $r6.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("Vungle", $r4);
+
+     label029:
+        $r12 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.persistence.Repository repository>;
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label030:
+        virtualinvoke $r12.<com.vungle.warren.persistence.Repository: void saveAndApplyState(com.vungle.warren.model.Advertisement,java.lang.String,int)>($r6, $r1, 3);
+
+     label031:
+        $r12 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.persistence.Repository repository>;
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label032:
+        $r4 = virtualinvoke $r6.<com.vungle.warren.model.Advertisement: java.lang.String getAppID()>();
+
+        virtualinvoke $r12.<com.vungle.warren.persistence.Repository: void updateAndSaveReportState(java.lang.String,java.lang.String,int,int)>($r1, $r4, 0, 1);
+
+     label033:
+        $r19 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.tasks.JobRunner jobRunner>;
+
+     label034:
+        $r20 = staticinvoke <com.vungle.warren.tasks.SendReportsJob: com.vungle.warren.tasks.JobInfo makeJobInfo(boolean)>(0);
+
+        interfaceinvoke $r19.<com.vungle.warren.tasks.JobRunner: void execute(com.vungle.warren.tasks.JobInfo)>($r20);
+
+        virtualinvoke r0.<com.vungle.warren.AdEventListener: void onFinished()>();
+
+     label035:
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+        if $r7 == null goto label114;
+
+        $z0 = r0.<com.vungle.warren.AdEventListener: boolean successfulView>;
+
+        if $z0 != 0 goto label036;
+
+        $i0 = r0.<com.vungle.warren.AdEventListener: int percentViewed>;
+
+        if $i0 >= 80 goto label036;
+
+        $z0 = 0;
+
+        goto label037;
+
+     label036:
+        $z0 = 1;
+
+     label037:
+        if $r5 == null goto label040;
+
+     label038:
+        $z2 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>("isCTAClicked");
+
+     label039:
+        if $z2 == 0 goto label040;
+
+        $z1 = 1;
+
+     label040:
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void onAdEnd(java.lang.String,boolean,boolean)>($r1, $z0, $z1);
+
+     label041:
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+     label042:
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void onAdEnd(java.lang.String)>($r1);
+
+        $r21 = staticinvoke <com.vungle.warren.SessionTracker: com.vungle.warren.SessionTracker getInstance()>();
+
+     label043:
+        $r22 = new com.vungle.warren.model.SessionData$Builder;
+
+     label044:
+        specialinvoke $r22.<com.vungle.warren.model.SessionData$Builder: void <init>()>();
+
+     label045:
+        $r23 = <com.vungle.warren.session.SessionEvent: com.vungle.warren.session.SessionEvent DID_CLOSE>;
+
+     label046:
+        $r22 = virtualinvoke $r22.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData$Builder setEvent(com.vungle.warren.session.SessionEvent)>($r23);
+
+     label047:
+        $r24 = <com.vungle.warren.session.SessionAttribute: com.vungle.warren.session.SessionAttribute EVENT_ID>;
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label048:
+        $r4 = virtualinvoke $r6.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        $r22 = virtualinvoke $r22.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData$Builder addData(com.vungle.warren.session.SessionAttribute,java.lang.String)>($r24, $r4);
+
+        $r25 = virtualinvoke $r22.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData build()>();
+
+        virtualinvoke $r21.<com.vungle.warren.SessionTracker: void trackEvent(com.vungle.warren.model.SessionData)>($r25);
+
+     label049:
+        $r10 = new java.lang.StringBuilder;
+
+     label050:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("onAdEnd: ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void debug(java.lang.String,java.lang.String)>("AdEventListener#PlayAdCallback", $r4);
+
+     label051:
+        return;
+
+     label052:
+        $z1 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("successfulView");
+
+     label053:
+        if $z1 == 0 goto label066;
+
+        $r11 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Placement placement>;
+
+     label054:
+        $z1 = virtualinvoke $r11.<com.vungle.warren.model.Placement: boolean isIncentivized()>();
+
+     label055:
+        if $z1 == 0 goto label066;
+
+        r0.<com.vungle.warren.AdEventListener: boolean successfulView> = 1;
+
+        $z1 = r0.<com.vungle.warren.AdEventListener: boolean adRewarded>;
+
+        if $z1 != 0 goto label114;
+
+        r0.<com.vungle.warren.AdEventListener: boolean adRewarded> = 1;
+
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+        if $r7 == null goto label114;
+
+     label056:
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void onAdRewarded(java.lang.String)>($r1);
+
+        $r21 = staticinvoke <com.vungle.warren.SessionTracker: com.vungle.warren.SessionTracker getInstance()>();
+
+     label057:
+        $r22 = new com.vungle.warren.model.SessionData$Builder;
+
+     label058:
+        specialinvoke $r22.<com.vungle.warren.model.SessionData$Builder: void <init>()>();
+
+     label059:
+        $r23 = <com.vungle.warren.session.SessionEvent: com.vungle.warren.session.SessionEvent REWARDED>;
+
+     label060:
+        $r22 = virtualinvoke $r22.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData$Builder setEvent(com.vungle.warren.session.SessionEvent)>($r23);
+
+     label061:
+        $r24 = <com.vungle.warren.session.SessionAttribute: com.vungle.warren.session.SessionAttribute EVENT_ID>;
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label062:
+        $r4 = virtualinvoke $r6.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        $r22 = virtualinvoke $r22.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData$Builder addData(com.vungle.warren.session.SessionAttribute,java.lang.String)>($r24, $r4);
+
+        $r25 = virtualinvoke $r22.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData build()>();
+
+        virtualinvoke $r21.<com.vungle.warren.SessionTracker: void trackEvent(com.vungle.warren.model.SessionData)>($r25);
+
+     label063:
+        $r10 = new java.lang.StringBuilder;
+
+     label064:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("onAdRewarded: ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void debug(java.lang.String,java.lang.String)>("AdEventListener#PlayAdCallback", $r4);
+
+     label065:
+        return;
+
+     label066:
+        $z1 = virtualinvoke $r4.<java.lang.String: boolean startsWith(java.lang.String)>("percentViewed");
+
+     label067:
+        if $z1 == 0 goto label085;
+
+        $r11 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Placement placement>;
+
+     label068:
+        $z1 = virtualinvoke $r11.<com.vungle.warren.model.Placement: boolean isIncentivized()>();
+
+     label069:
+        if $z1 == 0 goto label085;
+
+     label070:
+        $r26 = virtualinvoke $r4.<java.lang.String: java.lang.String[] split(java.lang.String)>(":");
+
+     label071:
+        $i0 = lengthof $r26;
+
+        if $i0 != 2 goto label074;
+
+        $r4 = $r26[1];
+
+     label072:
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r4);
+
+     label073:
+        r0.<com.vungle.warren.AdEventListener: int percentViewed> = $i0;
+
+     label074:
+        $z1 = r0.<com.vungle.warren.AdEventListener: boolean adRewarded>;
+
+        if $z1 != 0 goto label114;
+
+        $i0 = r0.<com.vungle.warren.AdEventListener: int percentViewed>;
+
+        if $i0 < 80 goto label114;
+
+        r0.<com.vungle.warren.AdEventListener: boolean adRewarded> = 1;
+
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+        if $r7 == null goto label114;
+
+     label075:
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void onAdRewarded(java.lang.String)>($r1);
+
+        $r21 = staticinvoke <com.vungle.warren.SessionTracker: com.vungle.warren.SessionTracker getInstance()>();
+
+     label076:
+        $r22 = new com.vungle.warren.model.SessionData$Builder;
+
+     label077:
+        specialinvoke $r22.<com.vungle.warren.model.SessionData$Builder: void <init>()>();
+
+     label078:
+        $r23 = <com.vungle.warren.session.SessionEvent: com.vungle.warren.session.SessionEvent REWARDED>;
+
+     label079:
+        $r22 = virtualinvoke $r22.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData$Builder setEvent(com.vungle.warren.session.SessionEvent)>($r23);
+
+     label080:
+        $r24 = <com.vungle.warren.session.SessionAttribute: com.vungle.warren.session.SessionAttribute EVENT_ID>;
+
+        $r6 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.model.Advertisement advertisement>;
+
+     label081:
+        $r4 = virtualinvoke $r6.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        $r22 = virtualinvoke $r22.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData$Builder addData(com.vungle.warren.session.SessionAttribute,java.lang.String)>($r24, $r4);
+
+        $r25 = virtualinvoke $r22.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData build()>();
+
+        virtualinvoke $r21.<com.vungle.warren.SessionTracker: void trackEvent(com.vungle.warren.model.SessionData)>($r25);
+
+     label082:
+        $r10 = new java.lang.StringBuilder;
+
+     label083:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("onAdRewarded: ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void debug(java.lang.String,java.lang.String)>("AdEventListener#PlayAdCallback", $r4);
+
+     label084:
+        return;
+
+     label085:
+        $r18 = "open";
+
+     label086:
+        $z1 = virtualinvoke $r18.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+     label087:
+        if $z1 == 0 goto label101;
+
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+        if $r7 == null goto label101;
+
+        $r4 = "adClick";
+
+     label088:
+        $z1 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+     label089:
+        if $z1 == 0 goto label094;
+
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+     label090:
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void onAdClick(java.lang.String)>($r1);
+
+     label091:
+        $r10 = new java.lang.StringBuilder;
+
+     label092:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("onAdClick: ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void debug(java.lang.String,java.lang.String)>("AdEventListener#PlayAdCallback", $r4);
+
+     label093:
+        return;
+
+     label094:
+        $r4 = "adLeftApplication";
+
+     label095:
+        $z1 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+     label096:
+        if $z1 == 0 goto label114;
+
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+     label097:
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void onAdLeftApplication(java.lang.String)>($r1);
+
+     label098:
+        $r10 = new java.lang.StringBuilder;
+
+     label099:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("onAdLeftApplication: ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void debug(java.lang.String,java.lang.String)>("AdEventListener#PlayAdCallback", $r4);
+
+     label100:
+        return;
+
+     label101:
+        $r18 = "adViewed";
+
+     label102:
+        $z1 = virtualinvoke $r18.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+     label103:
+        if $z1 == 0 goto label106;
+
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+        if $r7 == null goto label106;
+
+     label104:
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void onAdViewed(java.lang.String)>($r1);
+
+     label105:
+        return;
+
+     label106:
+        $r18 = "attach";
+
+     label107:
+        $z1 = virtualinvoke $r18.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+     label108:
+        if $z1 == 0 goto label114;
+
+        $r7 = r0.<com.vungle.warren.AdEventListener: com.vungle.warren.PlayAdCallback playAdCallback>;
+
+        if $r7 == null goto label114;
+
+     label109:
+        interfaceinvoke $r7.<com.vungle.warren.PlayAdCallback: void creativeId(java.lang.String)>($r5);
+
+     label110:
+        return;
+
+     label111:
+        $r9 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r9.<com.vungle.warren.error.VungleException: void <init>(int)>(26);
+
+        virtualinvoke r0.<com.vungle.warren.AdEventListener: void onError(com.vungle.warren.error.VungleException,java.lang.String)>($r9, $r1);
+
+        return;
+
+     label112:
+        $r2 := @caughtexception;
+
+        goto label111;
+
+     label113:
+        $r3 := @caughtexception;
+
+        goto label111;
+
+     label114:
+        return;
+
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label002 to label003 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label004 to label005 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label006 to label007 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label008 to label009 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label010 to label011 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label012 to label013 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label014 to label015 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label016 to label017 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label018 to label019 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label020 to label021 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label022 to label023 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label024 to label025 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label026 to label027 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label028 to label029 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label030 to label031 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label032 to label033 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label034 to label035 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label038 to label039 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label040 to label041 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label042 to label043 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label044 to label045 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label046 to label047 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label048 to label049 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label050 to label051 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label052 to label053 with label112;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label054 to label055 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label056 to label057 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label058 to label059 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label060 to label061 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label062 to label063 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label064 to label065 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label066 to label067 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label068 to label069 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label070 to label071 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label072 to label073 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label075 to label076 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label077 to label078 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label079 to label080 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label081 to label082 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label083 to label084 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label086 to label087 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label088 to label089 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label090 to label091 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label092 to label093 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label095 to label096 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label097 to label098 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label099 to label100 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label102 to label103 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label104 to label105 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label107 to label108 with label113;
+        catch com.vungle.warren.persistence.DatabaseHelper$DBException from label109 to label110 with label113;
+    }
+}

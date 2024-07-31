@@ -1,0 +1,765 @@
+class io.grpc.okhttp.OkHttpFrameLogger extends java.lang.Object
+{
+    private static final int BUFFER_LENGTH_THRESHOLD;
+    private final java.util.logging.Level level;
+    private final java.util.logging.Logger logger;
+
+    void <init>(java.util.logging.Level, java.lang.Class)
+    {
+        java.lang.Class $r2;
+        java.lang.String $r3;
+        java.util.logging.Logger $r4;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r1;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r1 := @parameter0: java.util.logging.Level;
+
+        $r2 := @parameter1: java.lang.Class;
+
+        $r3 = virtualinvoke $r2.<java.lang.Class: java.lang.String getName()>();
+
+        $r4 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r3);
+
+        specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: void <init>(java.util.logging.Level,java.util.logging.Logger)>($r1, $r4);
+
+        return;
+    }
+
+    void <init>(java.util.logging.Level, java.util.logging.Logger)
+    {
+        java.lang.Object $r3;
+        java.util.logging.Logger $r1;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r2;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r2 := @parameter0: java.util.logging.Level;
+
+        $r1 := @parameter1: java.util.logging.Logger;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "level");
+
+        $r2 = (java.util.logging.Level) $r3;
+
+        r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level> = $r2;
+
+        $r3 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "logger");
+
+        $r1 = (java.util.logging.Logger) $r3;
+
+        r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger> = $r1;
+
+        return;
+    }
+
+    private boolean isEnabled()
+    {
+        java.util.logging.Logger $r2;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r2 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $z0 = virtualinvoke $r2.<java.util.logging.Logger: boolean isLoggable(java.util.logging.Level)>($r1);
+
+        return $z0;
+    }
+
+    private static java.lang.String toString(io.grpc.okhttp.internal.framed.Settings)
+    {
+        java.util.EnumMap $r0;
+        io.grpc.okhttp.OkHttpFrameLogger$SettingParams $r1;
+        java.lang.Integer $r4;
+        int $i0, $i1, $i2;
+        io.grpc.okhttp.OkHttpFrameLogger$SettingParams[] $r3;
+        java.lang.String $r5;
+        io.grpc.okhttp.internal.framed.Settings $r2;
+        boolean $z0;
+
+        $r2 := @parameter0: io.grpc.okhttp.internal.framed.Settings;
+
+        $r0 = new java.util.EnumMap;
+
+        specialinvoke $r0.<java.util.EnumMap: void <init>(java.lang.Class)>(class "Lio/grpc/okhttp/OkHttpFrameLogger$SettingParams;");
+
+        $r3 = staticinvoke <io.grpc.okhttp.OkHttpFrameLogger$SettingParams: io.grpc.okhttp.OkHttpFrameLogger$SettingParams[] values()>();
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $r1 = $r3[$i1];
+
+        $i2 = virtualinvoke $r1.<io.grpc.okhttp.OkHttpFrameLogger$SettingParams: int getBit()>();
+
+        $z0 = virtualinvoke $r2.<io.grpc.okhttp.internal.framed.Settings: boolean isSet(int)>($i2);
+
+        if $z0 == 0 goto label2;
+
+        $i2 = virtualinvoke $r1.<io.grpc.okhttp.OkHttpFrameLogger$SettingParams: int getBit()>();
+
+        $i2 = virtualinvoke $r2.<io.grpc.okhttp.internal.framed.Settings: int get(int)>($i2);
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        virtualinvoke $r0.<java.util.EnumMap: java.lang.Object put(java.lang.Enum,java.lang.Object)>($r1, $r4);
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        $r5 = virtualinvoke $r0.<java.util.EnumMap: java.lang.String toString()>();
+
+        return $r5;
+    }
+
+    private static java.lang.String toString(okio.Buffer)
+    {
+        okio.Buffer $r0;
+        byte $b1;
+        okio.ByteString $r1;
+        int $i0;
+        long $l2;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r2;
+
+        $r0 := @parameter0: okio.Buffer;
+
+        $l2 = virtualinvoke $r0.<okio.Buffer: long size()>();
+
+        $b1 = $l2 cmp 64L;
+
+        $i0 = (int) $b1;
+
+        if $i0 > 0 goto label1;
+
+        $r1 = virtualinvoke $r0.<okio.Buffer: okio.ByteString snapshot()>();
+
+        $r2 = virtualinvoke $r1.<okio.ByteString: java.lang.String hex()>();
+
+        return $r2;
+
+     label1:
+        $l2 = virtualinvoke $r0.<okio.Buffer: long size()>();
+
+        $l2 = staticinvoke <java.lang.Math: long min(long,long)>($l2, 64L);
+
+        $i0 = (int) $l2;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<okio.Buffer: okio.ByteString snapshot(int)>($i0);
+
+        $r2 = virtualinvoke $r1.<okio.ByteString: java.lang.String hex()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+        $r2 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    void logData(io.grpc.okhttp.OkHttpFrameLogger$Direction, int, okio.Buffer, int, boolean)
+    {
+        okio.Buffer $r1;
+        java.util.logging.Logger $r5;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r2;
+        int $i0, $i1;
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r4;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r6;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r4 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: okio.Buffer;
+
+        $i1 := @parameter3: int;
+
+        $z0 := @parameter4: boolean;
+
+        $z1 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z1 == 0 goto label1;
+
+        $r5 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r2 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" DATA: streamId=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" endStream=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" length=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" bytes=");
+
+        $r6 = staticinvoke <io.grpc.okhttp.OkHttpFrameLogger: java.lang.String toString(okio.Buffer)>($r1);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r2, $r6);
+
+     label1:
+        return;
+    }
+
+    void logGoAway(io.grpc.okhttp.OkHttpFrameLogger$Direction, int, io.grpc.okhttp.internal.framed.ErrorCode, okio.ByteString)
+    {
+        okio.Buffer $r7;
+        java.util.logging.Logger $r6;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r3;
+        io.grpc.okhttp.internal.framed.ErrorCode $r1;
+        okio.ByteString $r2;
+        int $i0;
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r5;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r8;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r5 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: io.grpc.okhttp.internal.framed.ErrorCode;
+
+        $r2 := @parameter3: okio.ByteString;
+
+        $z0 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r6 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r3 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r5);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" GO_AWAY: lastStreamId=");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" errorCode=");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" length=");
+
+        $i0 = virtualinvoke $r2.<okio.ByteString: int size()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" bytes=");
+
+        $r7 = new okio.Buffer;
+
+        specialinvoke $r7.<okio.Buffer: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<okio.Buffer: okio.Buffer write(okio.ByteString)>($r2);
+
+        $r8 = staticinvoke <io.grpc.okhttp.OkHttpFrameLogger: java.lang.String toString(okio.Buffer)>($r7);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r6.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r3, $r8);
+
+     label1:
+        return;
+    }
+
+    void logHeaders(io.grpc.okhttp.OkHttpFrameLogger$Direction, int, java.util.List, boolean)
+    {
+        java.util.logging.Logger $r5;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r2;
+        java.util.List $r1;
+        int $i0;
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r4;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r6;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r4 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: java.util.List;
+
+        $z0 := @parameter3: boolean;
+
+        $z1 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z1 == 0 goto label1;
+
+        $r5 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r2 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" HEADERS: streamId=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" headers=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" endStream=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r2, $r6);
+
+     label1:
+        return;
+    }
+
+    void logPing(io.grpc.okhttp.OkHttpFrameLogger$Direction, long)
+    {
+        long $l0;
+        java.util.logging.Logger $r4;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r1;
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r3;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r3 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $l0 := @parameter1: long;
+
+        $z0 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r4 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" PING: ack=false bytes=");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r5 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r1, $r5);
+
+     label1:
+        return;
+    }
+
+    void logPingAck(io.grpc.okhttp.OkHttpFrameLogger$Direction, long)
+    {
+        long $l0;
+        java.util.logging.Logger $r4;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r1;
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r3;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r3 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $l0 := @parameter1: long;
+
+        $z0 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r4 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" PING: ack=true bytes=");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r5 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r1, $r5);
+
+     label1:
+        return;
+    }
+
+    public void logPriority(io.grpc.okhttp.OkHttpFrameLogger$Direction, int, int, int, boolean)
+    {
+        java.util.logging.Logger $r4;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r1;
+        int $i0, $i1, $i2;
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r3;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r5;
+        boolean $z0, $z1;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r3 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $z0 := @parameter4: boolean;
+
+        $z1 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z1 == 0 goto label1;
+
+        $r4 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" PRIORITY: streamId=");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" streamDependency=");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" weight=");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" exclusive=");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r5 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r1, $r5);
+
+     label1:
+        return;
+    }
+
+    void logPushPromise(io.grpc.okhttp.OkHttpFrameLogger$Direction, int, int, java.util.List)
+    {
+        java.util.logging.Logger $r5;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r2;
+        java.util.List $r1;
+        int $i0, $i1;
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r4;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r6;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r4 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 := @parameter3: java.util.List;
+
+        $z0 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r5 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r2 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" PUSH_PROMISE: streamId=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" promisedStreamId=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" headers=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r2, $r6);
+
+     label1:
+        return;
+    }
+
+    void logRstStream(io.grpc.okhttp.OkHttpFrameLogger$Direction, int, io.grpc.okhttp.internal.framed.ErrorCode)
+    {
+        java.util.logging.Logger $r5;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r2;
+        io.grpc.okhttp.internal.framed.ErrorCode $r1;
+        int $i0;
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r4;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r6;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r4 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: io.grpc.okhttp.internal.framed.ErrorCode;
+
+        $z0 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r5 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r2 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" RST_STREAM: streamId=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" errorCode=");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r2, $r6);
+
+     label1:
+        return;
+    }
+
+    void logSettings(io.grpc.okhttp.OkHttpFrameLogger$Direction, io.grpc.okhttp.internal.framed.Settings)
+    {
+        java.util.logging.Logger $r5;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r2;
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r4;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r6;
+        io.grpc.okhttp.internal.framed.Settings $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r4 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $r1 := @parameter1: io.grpc.okhttp.internal.framed.Settings;
+
+        $z0 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r5 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r2 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" SETTINGS: ack=false settings=");
+
+        $r6 = staticinvoke <io.grpc.okhttp.OkHttpFrameLogger: java.lang.String toString(io.grpc.okhttp.internal.framed.Settings)>($r1);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r2, $r6);
+
+     label1:
+        return;
+    }
+
+    void logSettingsAck(io.grpc.okhttp.OkHttpFrameLogger$Direction)
+    {
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r3;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r5;
+        java.util.logging.Logger $r4;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r1;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r3 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $z0 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r4 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" SETTINGS: ack=true");
+
+        $r5 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r1, $r5);
+
+     label1:
+        return;
+    }
+
+    void logWindowsUpdate(io.grpc.okhttp.OkHttpFrameLogger$Direction, int, long)
+    {
+        long $l1;
+        java.util.logging.Logger $r4;
+        io.grpc.okhttp.OkHttpFrameLogger r0;
+        java.util.logging.Level $r1;
+        int $i0;
+        io.grpc.okhttp.OkHttpFrameLogger$Direction $r3;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: io.grpc.okhttp.OkHttpFrameLogger;
+
+        $r3 := @parameter0: io.grpc.okhttp.OkHttpFrameLogger$Direction;
+
+        $i0 := @parameter1: int;
+
+        $l1 := @parameter2: long;
+
+        $z0 = specialinvoke r0.<io.grpc.okhttp.OkHttpFrameLogger: boolean isEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r4 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Logger logger>;
+
+        $r1 = r0.<io.grpc.okhttp.OkHttpFrameLogger: java.util.logging.Level level>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" WINDOW_UPDATE: streamId=");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" windowSizeIncrement=");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r5 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String)>($r1, $r5);
+
+     label1:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <io.grpc.okhttp.OkHttpFrameLogger: int BUFFER_LENGTH_THRESHOLD> = 64;
+
+        return;
+    }
+}

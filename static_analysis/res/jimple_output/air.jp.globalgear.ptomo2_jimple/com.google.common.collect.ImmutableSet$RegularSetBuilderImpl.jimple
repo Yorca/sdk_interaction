@@ -1,0 +1,586 @@
+final class com.google.common.collect.ImmutableSet$RegularSetBuilderImpl extends com.google.common.collect.ImmutableSet$SetBuilderImpl
+{
+    static final int MAX_RUN_MULTIPLIER;
+    private int expandTableThreshold;
+    private int hashCode;
+    private java.lang.Object[] hashTable;
+    private int maxRunBeforeFallback;
+
+    void <init>(int)
+    {
+        int $i0;
+        com.google.common.collect.ImmutableSet$RegularSetBuilderImpl r0;
+
+        r0 := @this: com.google.common.collect.ImmutableSet$RegularSetBuilderImpl;
+
+        $i0 := @parameter0: int;
+
+        specialinvoke r0.<com.google.common.collect.ImmutableSet$SetBuilderImpl: void <init>(int)>($i0);
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable> = null;
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int maxRunBeforeFallback> = 0;
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int expandTableThreshold> = 0;
+
+        return;
+    }
+
+    void <init>(com.google.common.collect.ImmutableSet$RegularSetBuilderImpl)
+    {
+        com.google.common.collect.ImmutableSet$RegularSetBuilderImpl r0, $r2;
+        java.lang.Object[] $r3;
+        int $i0;
+        java.lang.Object $r1;
+
+        r0 := @this: com.google.common.collect.ImmutableSet$RegularSetBuilderImpl;
+
+        $r2 := @parameter0: com.google.common.collect.ImmutableSet$RegularSetBuilderImpl;
+
+        specialinvoke r0.<com.google.common.collect.ImmutableSet$SetBuilderImpl: void <init>(com.google.common.collect.ImmutableSet$SetBuilderImpl)>($r2);
+
+        $r3 = $r2.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        if $r3 != null goto label1;
+
+        $r3 = null;
+
+        goto label2;
+
+     label1:
+        $r1 = virtualinvoke $r3.<java.lang.Object: java.lang.Object clone()>();
+
+        $r3 = (java.lang.Object[]) $r1;
+
+     label2:
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable> = $r3;
+
+        $i0 = $r2.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int maxRunBeforeFallback>;
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int maxRunBeforeFallback> = $i0;
+
+        $i0 = $r2.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int expandTableThreshold>;
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int expandTableThreshold> = $i0;
+
+        $i0 = $r2.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int hashCode>;
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int hashCode> = $i0;
+
+        return;
+    }
+
+    static boolean hashFloodingDetected(java.lang.Object[])
+    {
+        java.lang.Object[] $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        java.lang.Object $r1;
+
+        $r0 := @parameter0: java.lang.Object[];
+
+        $i0 = lengthof $r0;
+
+        $i0 = staticinvoke <com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int maxRunBeforeFallback(int)>($i0);
+
+        $i1 = lengthof $r0;
+
+        $i1 = $i1 - 1;
+
+        $i2 = 0;
+
+        $i3 = 0;
+
+     label1:
+        $i4 = lengthof $r0;
+
+        if $i2 >= $i4 goto label8;
+
+        if $i2 != $i3 goto label4;
+
+        $r1 = $r0[$i2];
+
+        if $r1 != null goto label4;
+
+        $i3 = $i2 + $i0;
+
+        $i4 = $i3 + -1;
+
+        $i4 = $i4 & $i1;
+
+        $r1 = $r0[$i4];
+
+        if $r1 != null goto label2;
+
+        goto label3;
+
+     label2:
+        $i3 = $i2 + 1;
+
+     label3:
+        $i2 = $i3;
+
+        goto label1;
+
+     label4:
+        $i2 = $i2 + $i0;
+
+        $i4 = $i2 + -1;
+
+     label5:
+        if $i4 < $i3 goto label7;
+
+        $i5 = $i4 & $i1;
+
+        $r1 = $r0[$i5];
+
+        if $r1 != null goto label6;
+
+        $i3 = $i2;
+
+        $i2 = $i4 + 1;
+
+        goto label1;
+
+     label6:
+        $i4 = $i4 + -1;
+
+        goto label5;
+
+     label7:
+        return 1;
+
+     label8:
+        return 0;
+    }
+
+    private com.google.common.collect.ImmutableSet$SetBuilderImpl insertInHashTable(java.lang.Object)
+    {
+        com.google.common.collect.ImmutableSet$SetBuilderImpl $r4;
+        java.lang.Object[] $r2;
+        com.google.common.collect.ImmutableSet$RegularSetBuilderImpl r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        java.lang.Object $r1, $r3;
+        boolean $z0;
+        com.google.common.collect.ImmutableSet$JdkBackedSetBuilderImpl $r5;
+
+        r0 := @this: com.google.common.collect.ImmutableSet$RegularSetBuilderImpl;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r2);
+
+        $i0 = virtualinvoke $r1.<java.lang.Object: int hashCode()>();
+
+        $i1 = staticinvoke <com.google.common.collect.Hashing: int smear(int)>($i0);
+
+        $r2 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        $i2 = lengthof $r2;
+
+        $i2 = $i2 + -1;
+
+        $i3 = $i1;
+
+     label1:
+        $i4 = $i3 - $i1;
+
+        $i5 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int maxRunBeforeFallback>;
+
+        if $i4 >= $i5 goto label4;
+
+        $i4 = $i3 & $i2;
+
+        $r2 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        $r3 = $r2[$i4];
+
+        if $r3 != null goto label2;
+
+        virtualinvoke r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: void addDedupedElement(java.lang.Object)>($r1);
+
+        $r2 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        $r2[$i4] = $r1;
+
+        $i1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int hashCode>;
+
+        $i0 = $i1 + $i0;
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int hashCode> = $i0;
+
+        $i0 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int distinct>;
+
+        virtualinvoke r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: void ensureTableCapacity(int)>($i0);
+
+        return r0;
+
+     label2:
+        $z0 = virtualinvoke $r3.<java.lang.Object: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label3;
+
+        return r0;
+
+     label3:
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label4:
+        $r5 = new com.google.common.collect.ImmutableSet$JdkBackedSetBuilderImpl;
+
+        specialinvoke $r5.<com.google.common.collect.ImmutableSet$JdkBackedSetBuilderImpl: void <init>(com.google.common.collect.ImmutableSet$SetBuilderImpl)>(r0);
+
+        $r4 = virtualinvoke $r5.<com.google.common.collect.ImmutableSet$JdkBackedSetBuilderImpl: com.google.common.collect.ImmutableSet$SetBuilderImpl add(java.lang.Object)>($r1);
+
+        return $r4;
+    }
+
+    static int maxRunBeforeFallback(int)
+    {
+        int $i0;
+        java.math.RoundingMode $r0;
+
+        $i0 := @parameter0: int;
+
+        $r0 = <java.math.RoundingMode: java.math.RoundingMode UNNECESSARY>;
+
+        $i0 = staticinvoke <com.google.common.math.IntMath: int log2(int,java.math.RoundingMode)>($i0, $r0);
+
+        $i0 = $i0 * 13;
+
+        return $i0;
+    }
+
+    static java.lang.Object[] rebuildHashTable(int, java.lang.Object[], int)
+    {
+        java.lang.Object[] $r0, $r1;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.Object $r2, $r3;
+
+        $i2 := @parameter0: int;
+
+        $r0 := @parameter1: java.lang.Object[];
+
+        $i0 := @parameter2: int;
+
+        $r1 = newarray (java.lang.Object)[$i2];
+
+        $i2 = $i2 + -1;
+
+        $i3 = 0;
+
+     label1:
+        if $i3 >= $i0 goto label4;
+
+        $r2 = $r0[$i3];
+
+        $r3 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r2);
+
+        $i1 = virtualinvoke $r3.<java.lang.Object: int hashCode()>();
+
+        $i4 = staticinvoke <com.google.common.collect.Hashing: int smear(int)>($i1);
+
+     label2:
+        $i1 = $i4 & $i2;
+
+        $r2 = $r1[$i1];
+
+        if $r2 != null goto label3;
+
+        $r1[$i1] = $r3;
+
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label3:
+        $i4 = $i4 + 1;
+
+        goto label2;
+
+     label4:
+        return $r1;
+    }
+
+    com.google.common.collect.ImmutableSet$SetBuilderImpl add(java.lang.Object)
+    {
+        com.google.common.collect.ImmutableSet$SetBuilderImpl $r4;
+        com.google.common.collect.ImmutableSet$RegularSetBuilderImpl r0;
+        java.lang.Object[] $r2;
+        int $i0;
+        java.lang.Object $r1, $r3;
+
+        r0 := @this: com.google.common.collect.ImmutableSet$RegularSetBuilderImpl;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r2 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        if $r2 != null goto label2;
+
+        $i0 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int distinct>;
+
+        if $i0 != 0 goto label1;
+
+        virtualinvoke r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: void addDedupedElement(java.lang.Object)>($r1);
+
+        return r0;
+
+     label1:
+        $r2 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] dedupedElements>;
+
+        $i0 = lengthof $r2;
+
+        virtualinvoke r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: void ensureTableCapacity(int)>($i0);
+
+        $r2 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] dedupedElements>;
+
+        $r3 = $r2[0];
+
+        $i0 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int distinct>;
+
+        $i0 = $i0 + -1;
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int distinct> = $i0;
+
+        $r4 = specialinvoke r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: com.google.common.collect.ImmutableSet$SetBuilderImpl insertInHashTable(java.lang.Object)>($r3);
+
+        $r4 = virtualinvoke $r4.<com.google.common.collect.ImmutableSet$SetBuilderImpl: com.google.common.collect.ImmutableSet$SetBuilderImpl add(java.lang.Object)>($r1);
+
+        return $r4;
+
+     label2:
+        $r4 = specialinvoke r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: com.google.common.collect.ImmutableSet$SetBuilderImpl insertInHashTable(java.lang.Object)>($r1);
+
+        return $r4;
+    }
+
+    com.google.common.collect.ImmutableSet build()
+    {
+        java.lang.Object[] $r1, $r3, $r5;
+        com.google.common.collect.ImmutableSet $r6;
+        com.google.common.collect.RegularImmutableSet $r2;
+        com.google.common.collect.ImmutableSet$RegularSetBuilderImpl r0;
+        int $i0, $i1;
+        java.lang.Object $r4;
+
+        r0 := @this: com.google.common.collect.ImmutableSet$RegularSetBuilderImpl;
+
+        $i0 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int distinct>;
+
+        if $i0 == 0 goto label4;
+
+        if $i0 == 1 goto label3;
+
+        $i0 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int distinct>;
+
+        $r1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] dedupedElements>;
+
+        $i1 = lengthof $r1;
+
+        if $i0 != $i1 goto label1;
+
+        $r1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] dedupedElements>;
+
+        goto label2;
+
+     label1:
+        $r1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] dedupedElements>;
+
+        $i0 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int distinct>;
+
+        $r1 = staticinvoke <java.util.Arrays: java.lang.Object[] copyOf(java.lang.Object[],int)>($r1, $i0);
+
+     label2:
+        $r2 = new com.google.common.collect.RegularImmutableSet;
+
+        $i0 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int hashCode>;
+
+        $r3 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        $r4 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r3);
+
+        $r3 = (java.lang.Object[]) $r4;
+
+        $r5 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        $i1 = lengthof $r5;
+
+        $i1 = $i1 - 1;
+
+        specialinvoke $r2.<com.google.common.collect.RegularImmutableSet: void <init>(java.lang.Object[],int,java.lang.Object[],int)>($r1, $i0, $r3, $i1);
+
+        return $r2;
+
+     label3:
+        $r1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] dedupedElements>;
+
+        $r4 = $r1[0];
+
+        $r4 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r4);
+
+        $r6 = staticinvoke <com.google.common.collect.ImmutableSet: com.google.common.collect.ImmutableSet of(java.lang.Object)>($r4);
+
+        return $r6;
+
+     label4:
+        $r6 = staticinvoke <com.google.common.collect.ImmutableSet: com.google.common.collect.ImmutableSet of()>();
+
+        return $r6;
+    }
+
+    com.google.common.collect.ImmutableSet$SetBuilderImpl copy()
+    {
+        com.google.common.collect.ImmutableSet$RegularSetBuilderImpl r0, $r1;
+
+        r0 := @this: com.google.common.collect.ImmutableSet$RegularSetBuilderImpl;
+
+        $r1 = new com.google.common.collect.ImmutableSet$RegularSetBuilderImpl;
+
+        specialinvoke $r1.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: void <init>(com.google.common.collect.ImmutableSet$RegularSetBuilderImpl)>(r0);
+
+        return $r1;
+    }
+
+    void ensureTableCapacity(int)
+    {
+        com.google.common.collect.ImmutableSet$RegularSetBuilderImpl r0;
+        java.lang.Object[] $r1;
+        int $i0, $i1;
+        double $d0;
+
+        r0 := @this: com.google.common.collect.ImmutableSet$RegularSetBuilderImpl;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        if $r1 != null goto label1;
+
+        $i1 = staticinvoke <com.google.common.collect.ImmutableSet: int chooseTableSize(int)>($i0);
+
+        $i0 = $i1;
+
+        $r1 = newarray (java.lang.Object)[$i1];
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable> = $r1;
+
+        goto label2;
+
+     label1:
+        $i1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int expandTableThreshold>;
+
+        if $i0 <= $i1 goto label3;
+
+        $i0 = lengthof $r1;
+
+        if $i0 >= 1073741824 goto label3;
+
+        $i0 = lengthof $r1;
+
+        $i0 = $i0 * 2;
+
+        $r1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] dedupedElements>;
+
+        $i1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int distinct>;
+
+        $r1 = staticinvoke <com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] rebuildHashTable(int,java.lang.Object[],int)>($i0, $r1, $i1);
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable> = $r1;
+
+     label2:
+        $i1 = staticinvoke <com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int maxRunBeforeFallback(int)>($i0);
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int maxRunBeforeFallback> = $i1;
+
+        $d0 = (double) $i0;
+
+        $d0 = $d0 * 0.7;
+
+        $i0 = (int) $d0;
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int expandTableThreshold> = $i0;
+
+     label3:
+        return;
+    }
+
+    com.google.common.collect.ImmutableSet$SetBuilderImpl review()
+    {
+        java.lang.Object[] $r1;
+        com.google.common.collect.ImmutableSet$RegularSetBuilderImpl r0;
+        int $i0, $i1, $i2;
+        double $d0;
+        boolean $z0;
+        com.google.common.collect.ImmutableSet$JdkBackedSetBuilderImpl $r2;
+
+        r0 := @this: com.google.common.collect.ImmutableSet$RegularSetBuilderImpl;
+
+        $r1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        if $r1 != null goto label1;
+
+        return r0;
+
+     label1:
+        $i0 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int distinct>;
+
+        $i0 = staticinvoke <com.google.common.collect.ImmutableSet: int chooseTableSize(int)>($i0);
+
+        $i1 = $i0 * 2;
+
+        $r1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        $i2 = lengthof $r1;
+
+        if $i1 >= $i2 goto label2;
+
+        $r1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] dedupedElements>;
+
+        $i1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int distinct>;
+
+        $r1 = staticinvoke <com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] rebuildHashTable(int,java.lang.Object[],int)>($i0, $r1, $i1);
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable> = $r1;
+
+        $i1 = staticinvoke <com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int maxRunBeforeFallback(int)>($i0);
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int maxRunBeforeFallback> = $i1;
+
+        $d0 = (double) $i0;
+
+        $d0 = $d0 * 0.7;
+
+        $i0 = (int) $d0;
+
+        r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int expandTableThreshold> = $i0;
+
+     label2:
+        $r1 = r0.<com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: java.lang.Object[] hashTable>;
+
+        $z0 = staticinvoke <com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: boolean hashFloodingDetected(java.lang.Object[])>($r1);
+
+        if $z0 == 0 goto label3;
+
+        $r2 = new com.google.common.collect.ImmutableSet$JdkBackedSetBuilderImpl;
+
+        specialinvoke $r2.<com.google.common.collect.ImmutableSet$JdkBackedSetBuilderImpl: void <init>(com.google.common.collect.ImmutableSet$SetBuilderImpl)>(r0);
+
+        return $r2;
+
+     label3:
+        return r0;
+    }
+
+    public static void <clinit>()
+    {
+        <com.google.common.collect.ImmutableSet$RegularSetBuilderImpl: int MAX_RUN_MULTIPLIER> = 13;
+
+        return;
+    }
+}

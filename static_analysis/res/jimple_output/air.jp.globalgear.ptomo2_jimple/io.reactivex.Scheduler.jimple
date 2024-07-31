@@ -1,0 +1,188 @@
+public abstract class io.reactivex.Scheduler extends java.lang.Object
+{
+    static final long CLOCK_DRIFT_TOLERANCE_NANOSECONDS;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.TimeUnit $r0;
+        long $l0;
+        java.lang.Long $r1;
+
+        $r0 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MINUTES>;
+
+        $r1 = staticinvoke <java.lang.Long: java.lang.Long getLong(java.lang.String,long)>("rx2.scheduler.drift-tolerance", 15L);
+
+        $l0 = virtualinvoke $r1.<java.lang.Long: long longValue()>();
+
+        $l0 = virtualinvoke $r0.<java.util.concurrent.TimeUnit: long toNanos(long)>($l0);
+
+        <io.reactivex.Scheduler: long CLOCK_DRIFT_TOLERANCE_NANOSECONDS> = $l0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        io.reactivex.Scheduler r0;
+
+        r0 := @this: io.reactivex.Scheduler;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static long clockDriftTolerance()
+    {
+        long l0;
+
+        l0 = <io.reactivex.Scheduler: long CLOCK_DRIFT_TOLERANCE_NANOSECONDS>;
+
+        return l0;
+    }
+
+    public abstract io.reactivex.Scheduler$Worker createWorker();
+
+    public long now(java.util.concurrent.TimeUnit)
+    {
+        java.util.concurrent.TimeUnit $r1, $r2;
+        io.reactivex.Scheduler r0;
+        long $l0;
+
+        r0 := @this: io.reactivex.Scheduler;
+
+        $r1 := @parameter0: java.util.concurrent.TimeUnit;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $l0 = virtualinvoke $r1.<java.util.concurrent.TimeUnit: long convert(long,java.util.concurrent.TimeUnit)>($l0, $r2);
+
+        return $l0;
+    }
+
+    public io.reactivex.disposables.Disposable scheduleDirect(java.lang.Runnable)
+    {
+        java.util.concurrent.TimeUnit $r1;
+        io.reactivex.disposables.Disposable $r2;
+        io.reactivex.Scheduler r0;
+        java.lang.Runnable $r3;
+
+        r0 := @this: io.reactivex.Scheduler;
+
+        $r3 := @parameter0: java.lang.Runnable;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r2 = virtualinvoke r0.<io.reactivex.Scheduler: io.reactivex.disposables.Disposable scheduleDirect(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r3, 0L, $r1);
+
+        return $r2;
+    }
+
+    public io.reactivex.disposables.Disposable scheduleDirect(java.lang.Runnable, long, java.util.concurrent.TimeUnit)
+    {
+        java.util.concurrent.TimeUnit $r1;
+        io.reactivex.Scheduler r0;
+        long $l0;
+        io.reactivex.Scheduler$DisposeTask $r2;
+        io.reactivex.Scheduler$Worker $r4;
+        java.lang.Runnable $r3;
+
+        r0 := @this: io.reactivex.Scheduler;
+
+        $r3 := @parameter0: java.lang.Runnable;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: java.util.concurrent.TimeUnit;
+
+        $r4 = virtualinvoke r0.<io.reactivex.Scheduler: io.reactivex.Scheduler$Worker createWorker()>();
+
+        $r3 = staticinvoke <io.reactivex.plugins.RxJavaPlugins: java.lang.Runnable onSchedule(java.lang.Runnable)>($r3);
+
+        $r2 = new io.reactivex.Scheduler$DisposeTask;
+
+        specialinvoke $r2.<io.reactivex.Scheduler$DisposeTask: void <init>(java.lang.Runnable,io.reactivex.Scheduler$Worker)>($r3, $r4);
+
+        virtualinvoke $r4.<io.reactivex.Scheduler$Worker: io.reactivex.disposables.Disposable schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r2, $l0, $r1);
+
+        return $r2;
+    }
+
+    public io.reactivex.disposables.Disposable schedulePeriodicallyDirect(java.lang.Runnable, long, long, java.util.concurrent.TimeUnit)
+    {
+        io.reactivex.Scheduler$PeriodicDirectTask $r2;
+        long $l0, $l1;
+        java.lang.Runnable $r3;
+        java.util.concurrent.TimeUnit $r1;
+        io.reactivex.disposables.Disposable $r5;
+        io.reactivex.Scheduler r0;
+        io.reactivex.internal.disposables.EmptyDisposable $r6;
+        io.reactivex.Scheduler$Worker $r4;
+
+        r0 := @this: io.reactivex.Scheduler;
+
+        $r3 := @parameter0: java.lang.Runnable;
+
+        $l1 := @parameter1: long;
+
+        $l0 := @parameter2: long;
+
+        $r1 := @parameter3: java.util.concurrent.TimeUnit;
+
+        $r4 = virtualinvoke r0.<io.reactivex.Scheduler: io.reactivex.Scheduler$Worker createWorker()>();
+
+        $r3 = staticinvoke <io.reactivex.plugins.RxJavaPlugins: java.lang.Runnable onSchedule(java.lang.Runnable)>($r3);
+
+        $r2 = new io.reactivex.Scheduler$PeriodicDirectTask;
+
+        specialinvoke $r2.<io.reactivex.Scheduler$PeriodicDirectTask: void <init>(java.lang.Runnable,io.reactivex.Scheduler$Worker)>($r3, $r4);
+
+        $r5 = virtualinvoke $r4.<io.reactivex.Scheduler$Worker: io.reactivex.disposables.Disposable schedulePeriodically(java.lang.Runnable,long,long,java.util.concurrent.TimeUnit)>($r2, $l1, $l0, $r1);
+
+        $r6 = <io.reactivex.internal.disposables.EmptyDisposable: io.reactivex.internal.disposables.EmptyDisposable INSTANCE>;
+
+        if $r5 != $r6 goto label1;
+
+        return $r5;
+
+     label1:
+        return $r2;
+    }
+
+    public void shutdown()
+    {
+        io.reactivex.Scheduler r0;
+
+        r0 := @this: io.reactivex.Scheduler;
+
+        return;
+    }
+
+    public void start()
+    {
+        io.reactivex.Scheduler r0;
+
+        r0 := @this: io.reactivex.Scheduler;
+
+        return;
+    }
+
+    public io.reactivex.Scheduler when(io.reactivex.functions.Function)
+    {
+        io.reactivex.Scheduler r0;
+        io.reactivex.internal.schedulers.SchedulerWhen $r2;
+        io.reactivex.functions.Function $r1;
+
+        r0 := @this: io.reactivex.Scheduler;
+
+        $r1 := @parameter0: io.reactivex.functions.Function;
+
+        $r2 = new io.reactivex.internal.schedulers.SchedulerWhen;
+
+        specialinvoke $r2.<io.reactivex.internal.schedulers.SchedulerWhen: void <init>(io.reactivex.functions.Function,io.reactivex.Scheduler)>($r1, r0);
+
+        return $r2;
+    }
+}

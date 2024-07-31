@@ -1,0 +1,371 @@
+public class com.unity3d.services.core.request.metrics.MetricSender extends com.unity3d.services.core.request.metrics.MetricSenderBase implements com.unity3d.services.core.di.IServiceComponent
+{
+    private final com.unity3d.services.core.request.metrics.MetricCommonTags commonTags;
+    private final com.unity3d.services.core.domain.ISDKDispatchers dispatchers;
+    private final com.unity3d.services.core.network.core.HttpClient httpClient;
+    private final java.lang.String metricEndPoint;
+    private final java.lang.String metricSampleRate;
+    private final kotlinx.coroutines.CoroutineScope scope;
+    private final java.lang.String sessionToken;
+
+    public void <init>(com.unity3d.services.core.configuration.Configuration, com.unity3d.services.core.properties.InitializationStatusReader)
+    {
+        kotlin.reflect.KClass $r7;
+        com.unity3d.services.core.di.IServicesRegistry $r6;
+        com.unity3d.services.core.request.metrics.MetricSender r0;
+        kotlinx.coroutines.CoroutineScope $r13;
+        com.unity3d.services.core.request.metrics.MetricCommonTags $r3;
+        com.unity3d.services.core.properties.InitializationStatusReader $r2;
+        int $i0;
+        java.lang.String $r4;
+        com.unity3d.services.core.domain.ISDKDispatchers $r9;
+        double $d0;
+        com.unity3d.services.core.network.core.HttpClient $r10;
+        com.unity3d.services.core.configuration.Configuration $r1;
+        kotlinx.coroutines.CoroutineDispatcher $r11;
+        kotlin.coroutines.CoroutineContext $r12;
+        com.unity3d.services.core.di.ServiceProvider $r5;
+        java.lang.Object $r8;
+
+        r0 := @this: com.unity3d.services.core.request.metrics.MetricSender;
+
+        $r1 := @parameter0: com.unity3d.services.core.configuration.Configuration;
+
+        $r2 := @parameter1: com.unity3d.services.core.properties.InitializationStatusReader;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "configuration");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "initializationStatusReader");
+
+        specialinvoke r0.<com.unity3d.services.core.request.metrics.MetricSenderBase: void <init>(com.unity3d.services.core.properties.InitializationStatusReader)>($r2);
+
+        $r3 = new com.unity3d.services.core.request.metrics.MetricCommonTags;
+
+        specialinvoke $r3.<com.unity3d.services.core.request.metrics.MetricCommonTags: void <init>()>();
+
+        virtualinvoke $r3.<com.unity3d.services.core.request.metrics.MetricCommonTags: void updateWithConfig(com.unity3d.services.core.configuration.Configuration)>($r1);
+
+        r0.<com.unity3d.services.core.request.metrics.MetricSender: com.unity3d.services.core.request.metrics.MetricCommonTags commonTags> = $r3;
+
+        $d0 = virtualinvoke $r1.<com.unity3d.services.core.configuration.Configuration: double getMetricSampleRate()>();
+
+        $i0 = staticinvoke <kotlin.math.MathKt: int roundToInt(double)>($d0);
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        r0.<com.unity3d.services.core.request.metrics.MetricSender: java.lang.String metricSampleRate> = $r4;
+
+        $r4 = virtualinvoke $r1.<com.unity3d.services.core.configuration.Configuration: java.lang.String getSessionToken()>();
+
+        r0.<com.unity3d.services.core.request.metrics.MetricSender: java.lang.String sessionToken> = $r4;
+
+        $r5 = <com.unity3d.services.core.di.ServiceProvider: com.unity3d.services.core.di.ServiceProvider INSTANCE>;
+
+        $r6 = virtualinvoke $r5.<com.unity3d.services.core.di.ServiceProvider: com.unity3d.services.core.di.IServicesRegistry getRegistry()>();
+
+        $r7 = staticinvoke <kotlin.jvm.internal.Reflection: kotlin.reflect.KClass getOrCreateKotlinClass(java.lang.Class)>(class "Lcom/unity3d/services/core/domain/ISDKDispatchers;");
+
+        $r8 = interfaceinvoke $r6.<com.unity3d.services.core.di.IServicesRegistry: java.lang.Object getService(java.lang.String,kotlin.reflect.KClass)>("", $r7);
+
+        $r9 = (com.unity3d.services.core.domain.ISDKDispatchers) $r8;
+
+        r0.<com.unity3d.services.core.request.metrics.MetricSender: com.unity3d.services.core.domain.ISDKDispatchers dispatchers> = $r9;
+
+        $r5 = <com.unity3d.services.core.di.ServiceProvider: com.unity3d.services.core.di.ServiceProvider INSTANCE>;
+
+        $r6 = virtualinvoke $r5.<com.unity3d.services.core.di.ServiceProvider: com.unity3d.services.core.di.IServicesRegistry getRegistry()>();
+
+        $r7 = staticinvoke <kotlin.jvm.internal.Reflection: kotlin.reflect.KClass getOrCreateKotlinClass(java.lang.Class)>(class "Lcom/unity3d/services/core/network/core/HttpClient;");
+
+        $r8 = interfaceinvoke $r6.<com.unity3d.services.core.di.IServicesRegistry: java.lang.Object getService(java.lang.String,kotlin.reflect.KClass)>("", $r7);
+
+        $r10 = (com.unity3d.services.core.network.core.HttpClient) $r8;
+
+        r0.<com.unity3d.services.core.request.metrics.MetricSender: com.unity3d.services.core.network.core.HttpClient httpClient> = $r10;
+
+        $r11 = interfaceinvoke $r9.<com.unity3d.services.core.domain.ISDKDispatchers: kotlinx.coroutines.CoroutineDispatcher getIo()>();
+
+        $r12 = (kotlin.coroutines.CoroutineContext) $r11;
+
+        $r13 = staticinvoke <kotlinx.coroutines.CoroutineScopeKt: kotlinx.coroutines.CoroutineScope CoroutineScope(kotlin.coroutines.CoroutineContext)>($r12);
+
+        r0.<com.unity3d.services.core.request.metrics.MetricSender: kotlinx.coroutines.CoroutineScope scope> = $r13;
+
+        $r4 = virtualinvoke $r1.<com.unity3d.services.core.configuration.Configuration: java.lang.String getMetricsUrl()>();
+
+        r0.<com.unity3d.services.core.request.metrics.MetricSender: java.lang.String metricEndPoint> = $r4;
+
+        return;
+    }
+
+    public static final com.unity3d.services.core.request.metrics.MetricCommonTags access$getCommonTags$p(com.unity3d.services.core.request.metrics.MetricSender)
+    {
+        com.unity3d.services.core.request.metrics.MetricCommonTags r1;
+        com.unity3d.services.core.request.metrics.MetricSender $r0;
+
+        $r0 := @parameter0: com.unity3d.services.core.request.metrics.MetricSender;
+
+        r1 = $r0.<com.unity3d.services.core.request.metrics.MetricSender: com.unity3d.services.core.request.metrics.MetricCommonTags commonTags>;
+
+        return r1;
+    }
+
+    public static final com.unity3d.services.core.network.core.HttpClient access$getHttpClient$p(com.unity3d.services.core.request.metrics.MetricSender)
+    {
+        com.unity3d.services.core.network.core.HttpClient r1;
+        com.unity3d.services.core.request.metrics.MetricSender $r0;
+
+        $r0 := @parameter0: com.unity3d.services.core.request.metrics.MetricSender;
+
+        r1 = $r0.<com.unity3d.services.core.request.metrics.MetricSender: com.unity3d.services.core.network.core.HttpClient httpClient>;
+
+        return r1;
+    }
+
+    public static final java.lang.String access$getMetricSampleRate$p(com.unity3d.services.core.request.metrics.MetricSender)
+    {
+        java.lang.String r1;
+        com.unity3d.services.core.request.metrics.MetricSender $r0;
+
+        $r0 := @parameter0: com.unity3d.services.core.request.metrics.MetricSender;
+
+        r1 = $r0.<com.unity3d.services.core.request.metrics.MetricSender: java.lang.String metricSampleRate>;
+
+        return r1;
+    }
+
+    public static final java.lang.String access$getSessionToken$p(com.unity3d.services.core.request.metrics.MetricSender)
+    {
+        java.lang.String r1;
+        com.unity3d.services.core.request.metrics.MetricSender $r0;
+
+        $r0 := @parameter0: com.unity3d.services.core.request.metrics.MetricSender;
+
+        r1 = $r0.<com.unity3d.services.core.request.metrics.MetricSender: java.lang.String sessionToken>;
+
+        return r1;
+    }
+
+    public boolean areMetricsEnabledForCurrentSession()
+    {
+        com.unity3d.services.core.request.metrics.MetricSender r0;
+
+        r0 := @this: com.unity3d.services.core.request.metrics.MetricSender;
+
+        return 1;
+    }
+
+    public java.lang.String getMetricEndPoint()
+    {
+        java.lang.String r1;
+        com.unity3d.services.core.request.metrics.MetricSender r0;
+
+        r0 := @this: com.unity3d.services.core.request.metrics.MetricSender;
+
+        r1 = r0.<com.unity3d.services.core.request.metrics.MetricSender: java.lang.String metricEndPoint>;
+
+        return r1;
+    }
+
+    public com.unity3d.services.core.di.IServiceProvider getServiceProvider()
+    {
+        com.unity3d.services.core.di.IServiceProvider $r1;
+        com.unity3d.services.core.request.metrics.MetricSender r0;
+
+        r0 := @this: com.unity3d.services.core.request.metrics.MetricSender;
+
+        $r1 = staticinvoke <com.unity3d.services.core.di.IServiceComponent$DefaultImpls: com.unity3d.services.core.di.IServiceProvider getServiceProvider(com.unity3d.services.core.di.IServiceComponent)>(r0);
+
+        return $r1;
+    }
+
+    public void sendEvent(java.lang.String, java.lang.String, java.util.Map)
+    {
+        java.lang.CharSequence $r4;
+        com.unity3d.services.core.request.metrics.MetricSender r0;
+        java.util.List $r7;
+        java.util.Map $r3;
+        int $i0;
+        com.unity3d.services.core.request.metrics.Metric $r6;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r1, $r2;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.core.request.metrics.MetricSender;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.util.Map;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "event");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r3, "tags");
+
+        $r4 = (java.lang.CharSequence) $r1;
+
+        $i0 = interfaceinvoke $r4.<java.lang.CharSequence: int length()>();
+
+        if $i0 != 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Metric event not sent due to being null or empty: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>($r1);
+
+        return;
+
+     label3:
+        $r6 = new com.unity3d.services.core.request.metrics.Metric;
+
+        specialinvoke $r6.<com.unity3d.services.core.request.metrics.Metric: void <init>(java.lang.String,java.lang.Object,java.util.Map)>($r1, $r2, $r3);
+
+        $r7 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List listOf(java.lang.Object)>($r6);
+
+        virtualinvoke r0.<com.unity3d.services.core.request.metrics.MetricSender: void sendMetrics(java.util.List)>($r7);
+
+        return;
+    }
+
+    public void sendMetric(com.unity3d.services.core.request.metrics.Metric)
+    {
+        com.unity3d.services.core.request.metrics.Metric $r2;
+        java.util.List $r1;
+        com.unity3d.services.core.request.metrics.MetricSender r0;
+
+        r0 := @this: com.unity3d.services.core.request.metrics.MetricSender;
+
+        $r2 := @parameter0: com.unity3d.services.core.request.metrics.Metric;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "metric");
+
+        $r1 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List listOf(java.lang.Object)>($r2);
+
+        virtualinvoke r0.<com.unity3d.services.core.request.metrics.MetricSender: void sendMetrics(java.util.List)>($r1);
+
+        return;
+    }
+
+    public void sendMetrics(java.util.List)
+    {
+        com.unity3d.services.core.request.metrics.MetricSender$sendMetrics$$inlined$CoroutineExceptionHandler$1 $r7;
+        java.lang.CharSequence $r4;
+        com.unity3d.services.core.request.metrics.MetricSender r0;
+        com.unity3d.services.core.request.metrics.MetricSender$sendMetrics$1 $r10;
+        kotlin.jvm.functions.Function2 $r11;
+        kotlin.coroutines.CoroutineContext $r9;
+        kotlinx.coroutines.CoroutineScope $r1;
+        kotlinx.coroutines.CoroutineExceptionHandler$Key $r6;
+        java.util.List $r2;
+        kotlinx.coroutines.CoroutineExceptionHandler $r8;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.core.request.metrics.MetricSender;
+
+        $r2 := @parameter0: java.util.List;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "metrics");
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>("Metrics event not send due to being empty");
+
+        return;
+
+     label1:
+        $r3 = virtualinvoke r0.<com.unity3d.services.core.request.metrics.MetricSender: java.lang.String getMetricEndPoint()>();
+
+        $r4 = (java.lang.CharSequence) $r3;
+
+        if $r4 == null goto label2;
+
+        $z0 = staticinvoke <kotlin.text.StringsKt: boolean isBlank(java.lang.CharSequence)>($r4);
+
+        if $z0 != 0 goto label2;
+
+        $z0 = 0;
+
+        goto label3;
+
+     label2:
+        $z0 = 1;
+
+     label3:
+        if $z0 == 0 goto label4;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Metrics: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" was not sent to null or empty endpoint: ");
+
+        $r3 = virtualinvoke r0.<com.unity3d.services.core.request.metrics.MetricSender: java.lang.String getMetricEndPoint()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>($r3);
+
+        return;
+
+     label4:
+        $r6 = <kotlinx.coroutines.CoroutineExceptionHandler: kotlinx.coroutines.CoroutineExceptionHandler$Key Key>;
+
+        $r7 = new com.unity3d.services.core.request.metrics.MetricSender$sendMetrics$$inlined$CoroutineExceptionHandler$1;
+
+        specialinvoke $r7.<com.unity3d.services.core.request.metrics.MetricSender$sendMetrics$$inlined$CoroutineExceptionHandler$1: void <init>(kotlinx.coroutines.CoroutineExceptionHandler$Key,java.util.List)>($r6, $r2);
+
+        $r8 = (kotlinx.coroutines.CoroutineExceptionHandler) $r7;
+
+        $r1 = r0.<com.unity3d.services.core.request.metrics.MetricSender: kotlinx.coroutines.CoroutineScope scope>;
+
+        $r9 = (kotlin.coroutines.CoroutineContext) $r8;
+
+        $r10 = new com.unity3d.services.core.request.metrics.MetricSender$sendMetrics$1;
+
+        specialinvoke $r10.<com.unity3d.services.core.request.metrics.MetricSender$sendMetrics$1: void <init>(com.unity3d.services.core.request.metrics.MetricSender,java.util.List,kotlin.coroutines.Continuation)>(r0, $r2, null);
+
+        $r11 = (kotlin.jvm.functions.Function2) $r10;
+
+        staticinvoke <kotlinx.coroutines.BuildersKt: kotlinx.coroutines.Job launch$default(kotlinx.coroutines.CoroutineScope,kotlin.coroutines.CoroutineContext,kotlinx.coroutines.CoroutineStart,kotlin.jvm.functions.Function2,int,java.lang.Object)>($r1, $r9, null, $r11, 2, null);
+
+        return;
+    }
+
+    public final void shutdown()
+    {
+        com.unity3d.services.core.request.metrics.MetricCommonTags $r1;
+        com.unity3d.services.core.request.metrics.MetricSender r0;
+
+        r0 := @this: com.unity3d.services.core.request.metrics.MetricSender;
+
+        $r1 = r0.<com.unity3d.services.core.request.metrics.MetricSender: com.unity3d.services.core.request.metrics.MetricCommonTags commonTags>;
+
+        virtualinvoke $r1.<com.unity3d.services.core.request.metrics.MetricCommonTags: void shutdown()>();
+
+        return;
+    }
+}

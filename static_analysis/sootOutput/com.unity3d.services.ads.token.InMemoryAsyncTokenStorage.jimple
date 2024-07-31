@@ -1,0 +1,824 @@
+public class com.unity3d.services.ads.token.InMemoryAsyncTokenStorage extends java.lang.Object implements com.unity3d.services.ads.token.AsyncTokenStorage
+{
+    private com.unity3d.services.core.configuration.Configuration _configuration;
+    private boolean _configurationWasSet;
+    private com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilderWithExtras _deviceInfoReaderBuilderWithExtras;
+    private final android.os.Handler _handler;
+    private final com.unity3d.services.core.properties.InitializationStatusReader _initStatusReader;
+    private com.unity3d.services.ads.token.INativeTokenGenerator _nativeTokenGenerator;
+    private final com.unity3d.services.core.request.metrics.SDKMetricsSender _sdkMetrics;
+    private boolean _tokenAvailable;
+    private final java.util.List _tokenListeners;
+    private com.unity3d.services.ads.token.TokenStorage _tokenStorage;
+
+    public void <init>(com.unity3d.services.ads.token.INativeTokenGenerator, android.os.Handler, com.unity3d.services.core.request.metrics.SDKMetricsSender, com.unity3d.services.ads.token.TokenStorage)
+    {
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r3;
+        com.unity3d.services.core.configuration.Configuration $r6;
+        com.unity3d.services.ads.token.INativeTokenGenerator $r1;
+        com.unity3d.services.core.properties.InitializationStatusReader $r7;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        android.os.Handler $r2;
+        com.unity3d.services.ads.token.TokenStorage $r4;
+        java.util.LinkedList $r5;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r1 := @parameter0: com.unity3d.services.ads.token.INativeTokenGenerator;
+
+        $r2 := @parameter1: android.os.Handler;
+
+        $r3 := @parameter2: com.unity3d.services.core.request.metrics.SDKMetricsSender;
+
+        $r4 := @parameter3: com.unity3d.services.ads.token.TokenStorage;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r5 = new java.util.LinkedList;
+
+        specialinvoke $r5.<java.util.LinkedList: void <init>()>();
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: java.util.List _tokenListeners> = $r5;
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: boolean _tokenAvailable> = 0;
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: boolean _configurationWasSet> = 0;
+
+        $r6 = new com.unity3d.services.core.configuration.Configuration;
+
+        specialinvoke $r6.<com.unity3d.services.core.configuration.Configuration: void <init>()>();
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.configuration.Configuration _configuration> = $r6;
+
+        $r7 = new com.unity3d.services.core.properties.InitializationStatusReader;
+
+        specialinvoke $r7.<com.unity3d.services.core.properties.InitializationStatusReader: void <init>()>();
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.properties.InitializationStatusReader _initStatusReader> = $r7;
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: android.os.Handler _handler> = $r2;
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.ads.token.INativeTokenGenerator _nativeTokenGenerator> = null;
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.request.metrics.SDKMetricsSender _sdkMetrics> = $r3;
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.ads.token.TokenStorage _tokenStorage> = $r4;
+
+        return;
+    }
+
+    static void access$000(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage, com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState, java.lang.String)
+    {
+        java.lang.String $r2;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState $r1;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage $r0;
+
+        $r0 := @parameter0: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r1 := @parameter1: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState;
+
+        $r2 := @parameter2: java.lang.String;
+
+        specialinvoke $r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void notifyTokenReady(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState,java.lang.String)>($r1, $r2);
+
+        return;
+    }
+
+    static android.os.Handler access$100(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage)
+    {
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage $r0;
+        android.os.Handler r1;
+
+        $r0 := @parameter0: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        r1 = $r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: android.os.Handler _handler>;
+
+        return r1;
+    }
+
+    private com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState addTimeoutHandler(com.unity3d.services.ads.gmascar.managers.IBiddingManager)
+    {
+        java.lang.Throwable $r9;
+        com.unity3d.services.core.configuration.Configuration $r8;
+        long $l1;
+        com.unity3d.services.core.device.TokenType $r4;
+        java.lang.Runnable $r2;
+        com.unity3d.services.ads.gmascar.managers.IBiddingManager $r3;
+        java.util.List $r6;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        android.os.Handler $r7;
+        int $i0;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState $r1;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$1 $r5;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r3 := @parameter0: com.unity3d.services.ads.gmascar.managers.IBiddingManager;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = new com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState;
+
+        specialinvoke $r1.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: void <init>(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage)>(r0);
+
+        $r1.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: com.unity3d.services.ads.gmascar.managers.IBiddingManager biddingManager> = $r3;
+
+        $r4 = <com.unity3d.services.core.device.TokenType: com.unity3d.services.core.device.TokenType TOKEN_REMOTE>;
+
+        $r1.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: com.unity3d.services.core.device.TokenType tokenType> = $r4;
+
+        $r5 = new com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$1;
+
+        specialinvoke $r5.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$1: void <init>(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage,com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState)>(r0, $r1);
+
+        $r1.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: java.lang.Runnable runnable> = $r5;
+
+        $r6 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: java.util.List _tokenListeners>;
+
+        interfaceinvoke $r6.<java.util.List: boolean add(java.lang.Object)>($r1);
+
+        $r7 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: android.os.Handler _handler>;
+
+        $r2 = $r1.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: java.lang.Runnable runnable>;
+
+        $r8 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.configuration.Configuration _configuration>;
+
+        $i0 = virtualinvoke $r8.<com.unity3d.services.core.configuration.Configuration: int getTokenTimeout()>();
+
+        $l1 = (long) $i0;
+
+        virtualinvoke $r7.<android.os.Handler: boolean postDelayed(java.lang.Runnable,long)>($r2, $l1);
+
+     label2:
+        exitmonitor r0;
+
+        return $r1;
+
+     label3:
+        $r9 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r9;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    private java.util.Map getMetricTags()
+    {
+        com.unity3d.services.core.properties.InitializationStatusReader $r2;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        java.util.HashMap $r1;
+        java.lang.String $r4;
+        com.unity3d.services.core.properties.SdkProperties$InitializationState $r3;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+        $r2 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.properties.InitializationStatusReader _initStatusReader>;
+
+        $r3 = staticinvoke <com.unity3d.services.core.properties.SdkProperties: com.unity3d.services.core.properties.SdkProperties$InitializationState getCurrentInitializationState()>();
+
+        $r4 = virtualinvoke $r2.<com.unity3d.services.core.properties.InitializationStatusReader: java.lang.String getInitializationStateString(com.unity3d.services.core.properties.SdkProperties$InitializationState)>($r3);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("state", $r4);
+
+        return $r1;
+    }
+
+    private void handleTokenInvocation(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState)
+    {
+        com.unity3d.services.ads.gmascar.GMA $r3;
+        com.unity3d.services.ads.token.INativeTokenGenerator $r8;
+        java.util.HashMap $r5;
+        com.unity3d.services.core.device.TokenType $r2;
+        com.unity3d.services.ads.gmascar.managers.IBiddingManager $r6;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$2 $r9;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilderWithExtras $r4;
+        com.unity3d.services.ads.token.TokenStorage $r10;
+        java.lang.String $r7;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState $r1;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r1 := @parameter0: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState;
+
+        $z0 = $r1.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: boolean invoked>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r1.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: boolean invoked> = 1;
+
+        $z0 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: boolean _tokenAvailable>;
+
+        if $z0 != 0 goto label3;
+
+        $r2 = <com.unity3d.services.core.device.TokenType: com.unity3d.services.core.device.TokenType TOKEN_NATIVE>;
+
+        $r1.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: com.unity3d.services.core.device.TokenType tokenType> = $r2;
+
+        $r3 = staticinvoke <com.unity3d.services.ads.gmascar.GMA: com.unity3d.services.ads.gmascar.GMA getInstance()>();
+
+        $z0 = virtualinvoke $r3.<com.unity3d.services.ads.gmascar.GMA: boolean hasSCARBiddingSupport()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilderWithExtras _deviceInfoReaderBuilderWithExtras>;
+
+        if $r4 == null goto label2;
+
+        $r5 = new java.util.HashMap;
+
+        specialinvoke $r5.<java.util.HashMap: void <init>()>();
+
+        $r6 = $r1.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: com.unity3d.services.ads.gmascar.managers.IBiddingManager biddingManager>;
+
+        $r7 = interfaceinvoke $r6.<com.unity3d.services.ads.gmascar.managers.IBiddingManager: java.lang.String getTokenIdentifier()>();
+
+        interfaceinvoke $r5.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("tid", $r7);
+
+        $r4 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilderWithExtras _deviceInfoReaderBuilderWithExtras>;
+
+        virtualinvoke $r4.<com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilderWithExtras: void setExtras(java.util.Map)>($r5);
+
+     label2:
+        $r8 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.ads.token.INativeTokenGenerator _nativeTokenGenerator>;
+
+        $r9 = new com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$2;
+
+        specialinvoke $r9.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$2: void <init>(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage,com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState)>(r0, $r1);
+
+        interfaceinvoke $r8.<com.unity3d.services.ads.token.INativeTokenGenerator: void generateToken(com.unity3d.services.ads.token.INativeTokenGeneratorListener)>($r9);
+
+        return;
+
+     label3:
+        $r2 = <com.unity3d.services.core.device.TokenType: com.unity3d.services.core.device.TokenType TOKEN_REMOTE>;
+
+        $r1.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: com.unity3d.services.core.device.TokenType tokenType> = $r2;
+
+        $r10 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.ads.token.TokenStorage _tokenStorage>;
+
+        $r7 = interfaceinvoke $r10.<com.unity3d.services.ads.token.TokenStorage: java.lang.String getToken()>();
+
+        if $r7 == null goto label5;
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 == 0 goto label4;
+
+        return;
+
+     label4:
+        specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void notifyTokenReady(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState,java.lang.String)>($r1, $r7);
+
+     label5:
+        return;
+    }
+
+    private boolean isValidConfig(com.unity3d.services.core.configuration.Configuration)
+    {
+        com.unity3d.services.core.configuration.Configuration $r1;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r1 := @parameter0: com.unity3d.services.core.configuration.Configuration;
+
+        if $r1 == null goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private void notifyListenersTokenReady()
+    {
+        java.lang.Throwable $r6;
+        java.util.List $r1;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        com.unity3d.services.ads.token.TokenStorage $r2;
+        java.lang.Object $r4;
+        java.lang.String $r3;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState $r5;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: java.util.List _tokenListeners>;
+
+        $z0 = interfaceinvoke $r1.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label3;
+
+        $r2 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.ads.token.TokenStorage _tokenStorage>;
+
+        $r3 = interfaceinvoke $r2.<com.unity3d.services.ads.token.TokenStorage: java.lang.String getToken()>();
+
+        if $r3 == null goto label3;
+
+        $r1 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: java.util.List _tokenListeners>;
+
+        $r4 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r5 = (com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState) $r4;
+
+        specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void notifyTokenReady(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState,java.lang.String)>($r5, $r3);
+
+     label2:
+        goto label1;
+
+     label3:
+        exitmonitor r0;
+
+        return;
+
+     label4:
+        $r6 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label2 with label4;
+    }
+
+    private void notifyTokenReady(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState, java.lang.String)
+    {
+        java.lang.Throwable $r11;
+        com.unity3d.services.core.device.TokenType $r4, $r5;
+        com.unity3d.services.ads.gmascar.managers.IBiddingManager $r6;
+        java.lang.Runnable $r9;
+        java.lang.Exception $r10;
+        java.util.List $r3;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        android.os.Handler $r8;
+        java.lang.String $r1, $r7;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState $r2;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r2 := @parameter0: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState;
+
+        $r1 := @parameter1: java.lang.String;
+
+        entermonitor r0;
+
+     label01:
+        $r3 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: java.util.List _tokenListeners>;
+
+        $z0 = interfaceinvoke $r3.<java.util.List: boolean remove(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label08;
+
+        $r4 = $r2.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: com.unity3d.services.core.device.TokenType tokenType>;
+
+        $r5 = <com.unity3d.services.core.device.TokenType: com.unity3d.services.core.device.TokenType TOKEN_REMOTE>;
+
+        if $r4 != $r5 goto label02;
+
+        $r6 = $r2.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: com.unity3d.services.ads.gmascar.managers.IBiddingManager biddingManager>;
+
+        $r7 = interfaceinvoke $r6.<com.unity3d.services.ads.gmascar.managers.IBiddingManager: java.lang.String getFormattedToken(java.lang.String)>($r1);
+
+        goto label03;
+
+     label02:
+        $r7 = $r1;
+
+     label03:
+        $r6 = $r2.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: com.unity3d.services.ads.gmascar.managers.IBiddingManager biddingManager>;
+
+        interfaceinvoke $r6.<com.unity3d.services.ads.gmascar.managers.IBiddingManager: void onUnityAdsTokenReady(java.lang.String)>($r7);
+
+     label04:
+        $r8 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: android.os.Handler _handler>;
+
+        $r9 = $r2.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: java.lang.Runnable runnable>;
+
+        virtualinvoke $r8.<android.os.Handler: void removeCallbacks(java.lang.Runnable)>($r9);
+
+     label05:
+        goto label08;
+
+     label06:
+        $r10 := @caughtexception;
+
+     label07:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void exception(java.lang.String,java.lang.Exception)>("Failed to remove callback from a handler", $r10);
+
+     label08:
+        $r4 = $r2.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState: com.unity3d.services.core.device.TokenType tokenType>;
+
+        specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void sendTokenMetrics(java.lang.String,com.unity3d.services.core.device.TokenType)>($r1, $r4);
+
+     label09:
+        exitmonitor r0;
+
+        return;
+
+     label10:
+        $r11 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r11;
+
+        catch java.lang.Throwable from label01 to label04 with label10;
+        catch java.lang.Exception from label04 to label05 with label06;
+        catch java.lang.Throwable from label04 to label05 with label10;
+        catch java.lang.Throwable from label07 to label09 with label10;
+    }
+
+    private void sendNativeTokenMetrics(java.lang.String)
+    {
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r1;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        java.util.Map $r3;
+        com.unity3d.services.core.request.metrics.Metric $r4;
+        java.lang.String $r2;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.request.metrics.SDKMetricsSender _sdkMetrics>;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        if $r2 != null goto label2;
+
+        $r3 = specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: java.util.Map getMetricTags()>();
+
+        $r4 = staticinvoke <com.unity3d.services.core.request.metrics.TSIMetric: com.unity3d.services.core.request.metrics.Metric newNativeGeneratedTokenNull(java.util.Map)>($r3);
+
+        interfaceinvoke $r1.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetric(com.unity3d.services.core.request.metrics.Metric)>($r4);
+
+        return;
+
+     label2:
+        $r3 = specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: java.util.Map getMetricTags()>();
+
+        $r4 = staticinvoke <com.unity3d.services.core.request.metrics.TSIMetric: com.unity3d.services.core.request.metrics.Metric newNativeGeneratedTokenAvailable(java.util.Map)>($r3);
+
+        interfaceinvoke $r1.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetric(com.unity3d.services.core.request.metrics.Metric)>($r4);
+
+        return;
+    }
+
+    private void sendRemoteTokenMetrics(java.lang.String)
+    {
+        com.unity3d.services.core.request.metrics.SDKMetricsSender $r2;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        java.util.Map $r3;
+        com.unity3d.services.core.request.metrics.Metric $r4;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.request.metrics.SDKMetricsSender _sdkMetrics>;
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        if $r1 == null goto label2;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $r2 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.request.metrics.SDKMetricsSender _sdkMetrics>;
+
+        $r3 = specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: java.util.Map getMetricTags()>();
+
+        $r4 = staticinvoke <com.unity3d.services.core.request.metrics.TSIMetric: com.unity3d.services.core.request.metrics.Metric newAsyncTokenAvailable(java.util.Map)>($r3);
+
+        interfaceinvoke $r2.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetric(com.unity3d.services.core.request.metrics.Metric)>($r4);
+
+        return;
+
+     label2:
+        $r2 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.request.metrics.SDKMetricsSender _sdkMetrics>;
+
+        $r3 = specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: java.util.Map getMetricTags()>();
+
+        $r4 = staticinvoke <com.unity3d.services.core.request.metrics.TSIMetric: com.unity3d.services.core.request.metrics.Metric newAsyncTokenNull(java.util.Map)>($r3);
+
+        interfaceinvoke $r2.<com.unity3d.services.core.request.metrics.SDKMetricsSender: void sendMetric(com.unity3d.services.core.request.metrics.Metric)>($r4);
+
+        return;
+    }
+
+    private void sendTokenMetrics(java.lang.String, com.unity3d.services.core.device.TokenType)
+    {
+        int[] $r3;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        int $i0;
+        java.lang.String $r1;
+        com.unity3d.services.core.device.TokenType $r2;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.unity3d.services.core.device.TokenType;
+
+        $r3 = <com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$3: int[] $SwitchMap$com$unity3d$services$core$device$TokenType>;
+
+        $i0 = virtualinvoke $r2.<com.unity3d.services.core.device.TokenType: int ordinal()>();
+
+        $i0 = $r3[$i0];
+
+        if $i0 == 1 goto label2;
+
+        if $i0 == 2 goto label1;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void error(java.lang.String)>("Unknown token type passed to sendTokenMetrics");
+
+        return;
+
+     label1:
+        specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void sendRemoteTokenMetrics(java.lang.String)>($r1);
+
+        return;
+
+     label2:
+        specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void sendNativeTokenMetrics(java.lang.String)>($r1);
+
+        return;
+    }
+
+    public void getToken(com.unity3d.services.ads.gmascar.managers.IBiddingManager)
+    {
+        java.lang.Throwable $r6;
+        com.unity3d.services.core.device.TokenType $r4;
+        com.unity3d.services.ads.gmascar.managers.IBiddingManager $r1;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        com.unity3d.services.core.properties.SdkProperties$InitializationState $r2, $r3;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState $r5;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r1 := @parameter0: com.unity3d.services.ads.gmascar.managers.IBiddingManager;
+
+        entermonitor r0;
+
+     label1:
+        $r2 = staticinvoke <com.unity3d.services.core.properties.SdkProperties: com.unity3d.services.core.properties.SdkProperties$InitializationState getCurrentInitializationState()>();
+
+        $r3 = <com.unity3d.services.core.properties.SdkProperties$InitializationState: com.unity3d.services.core.properties.SdkProperties$InitializationState INITIALIZED_FAILED>;
+
+        if $r2 != $r3 goto label3;
+
+        interfaceinvoke $r1.<com.unity3d.services.ads.gmascar.managers.IBiddingManager: void onUnityAdsTokenReady(java.lang.String)>(null);
+
+        $r4 = <com.unity3d.services.core.device.TokenType: com.unity3d.services.core.device.TokenType TOKEN_REMOTE>;
+
+        specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void sendTokenMetrics(java.lang.String,com.unity3d.services.core.device.TokenType)>(null, $r4);
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 = staticinvoke <com.unity3d.services.core.properties.SdkProperties: com.unity3d.services.core.properties.SdkProperties$InitializationState getCurrentInitializationState()>();
+
+        $r3 = <com.unity3d.services.core.properties.SdkProperties$InitializationState: com.unity3d.services.core.properties.SdkProperties$InitializationState NOT_INITIALIZED>;
+
+        if $r2 != $r3 goto label5;
+
+        interfaceinvoke $r1.<com.unity3d.services.ads.gmascar.managers.IBiddingManager: void onUnityAdsTokenReady(java.lang.String)>(null);
+
+        $r4 = <com.unity3d.services.core.device.TokenType: com.unity3d.services.core.device.TokenType TOKEN_REMOTE>;
+
+        specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void sendTokenMetrics(java.lang.String,com.unity3d.services.core.device.TokenType)>(null, $r4);
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r5 = specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState addTimeoutHandler(com.unity3d.services.ads.gmascar.managers.IBiddingManager)>($r1);
+
+        $z0 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: boolean _configurationWasSet>;
+
+     label6:
+        if $z0 != 0 goto label7;
+
+        exitmonitor r0;
+
+        return;
+
+     label7:
+        specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void handleTokenInvocation(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState)>($r5);
+
+     label8:
+        exitmonitor r0;
+
+        return;
+
+     label9:
+        $r6 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label2 with label9;
+        catch java.lang.Throwable from label3 to label4 with label9;
+        catch java.lang.Throwable from label5 to label6 with label9;
+        catch java.lang.Throwable from label7 to label8 with label9;
+    }
+
+    public void onTokenAvailable()
+    {
+        java.lang.Throwable $r1;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        boolean $z0;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        entermonitor r0;
+
+     label1:
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: boolean _tokenAvailable> = 1;
+
+        $z0 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: boolean _configurationWasSet>;
+
+     label2:
+        if $z0 != 0 goto label3;
+
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void notifyListenersTokenReady()>();
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r1 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    public void setConfiguration(com.unity3d.services.core.configuration.Configuration)
+    {
+        java.lang.Throwable $r16;
+        com.unity3d.services.core.device.reader.GameSessionIdReader $r6;
+        com.unity3d.services.ads.token.INativeTokenGenerator $r2;
+        java.util.ArrayList $r11;
+        com.unity3d.services.core.configuration.IExperiments $r9;
+        com.unity3d.services.ads.token.NativeTokenGenerator $r8;
+        int $i0;
+        com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilderWithExtras $r3;
+        java.util.concurrent.ExecutorService $r7;
+        boolean $z0;
+        java.util.Iterator $r13;
+        com.unity3d.services.core.configuration.Configuration $r1;
+        com.unity3d.services.core.configuration.PrivacyConfigStorage $r5;
+        com.unity3d.services.ads.token.NativeTokenGeneratorWithPrivacyAwait $r10;
+        java.util.List $r12;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage r0;
+        com.unity3d.services.core.configuration.ConfigurationReader $r4;
+        java.lang.Object $r14;
+        com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState $r15;
+
+        r0 := @this: com.unity3d.services.ads.token.InMemoryAsyncTokenStorage;
+
+        $r1 := @parameter0: com.unity3d.services.core.configuration.Configuration;
+
+        entermonitor r0;
+
+     label1:
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.configuration.Configuration _configuration> = $r1;
+
+        $z0 = specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: boolean isValidConfig(com.unity3d.services.core.configuration.Configuration)>($r1);
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: boolean _configurationWasSet> = $z0;
+
+     label2:
+        if $z0 != 0 goto label3;
+
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r2 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.ads.token.INativeTokenGenerator _nativeTokenGenerator>;
+
+        if $r2 != null goto label4;
+
+        $r3 = new com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilderWithExtras;
+
+        $r4 = new com.unity3d.services.core.configuration.ConfigurationReader;
+
+        specialinvoke $r4.<com.unity3d.services.core.configuration.ConfigurationReader: void <init>()>();
+
+        $r5 = staticinvoke <com.unity3d.services.core.configuration.PrivacyConfigStorage: com.unity3d.services.core.configuration.PrivacyConfigStorage getInstance()>();
+
+        $r6 = staticinvoke <com.unity3d.services.core.device.reader.GameSessionIdReader: com.unity3d.services.core.device.reader.GameSessionIdReader getInstance()>();
+
+        specialinvoke $r3.<com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilderWithExtras: void <init>(com.unity3d.services.core.configuration.ConfigurationReader,com.unity3d.services.core.configuration.PrivacyConfigStorage,com.unity3d.services.core.device.reader.IGameSessionIdReader)>($r4, $r5, $r6);
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilderWithExtras _deviceInfoReaderBuilderWithExtras> = $r3;
+
+        $r7 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ExecutorService newSingleThreadExecutor()>();
+
+        $r8 = new com.unity3d.services.ads.token.NativeTokenGenerator;
+
+        $r3 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilderWithExtras _deviceInfoReaderBuilderWithExtras>;
+
+        specialinvoke $r8.<com.unity3d.services.ads.token.NativeTokenGenerator: void <init>(java.util.concurrent.ExecutorService,com.unity3d.services.core.device.reader.builder.DeviceInfoReaderBuilder)>($r7, $r3);
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.ads.token.INativeTokenGenerator _nativeTokenGenerator> = $r8;
+
+        $r9 = virtualinvoke $r1.<com.unity3d.services.core.configuration.Configuration: com.unity3d.services.core.configuration.IExperiments getExperiments()>();
+
+        $z0 = interfaceinvoke $r9.<com.unity3d.services.core.configuration.IExperiments: boolean shouldNativeTokenAwaitPrivacy()>();
+
+        if $z0 == 0 goto label4;
+
+        $r10 = new com.unity3d.services.ads.token.NativeTokenGeneratorWithPrivacyAwait;
+
+        $r2 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.ads.token.INativeTokenGenerator _nativeTokenGenerator>;
+
+        $i0 = virtualinvoke $r1.<com.unity3d.services.core.configuration.Configuration: int getPrivacyRequestWaitTimeout()>();
+
+        specialinvoke $r10.<com.unity3d.services.ads.token.NativeTokenGeneratorWithPrivacyAwait: void <init>(java.util.concurrent.ExecutorService,com.unity3d.services.ads.token.INativeTokenGenerator,int)>($r7, $r2, $i0);
+
+        r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: com.unity3d.services.ads.token.INativeTokenGenerator _nativeTokenGenerator> = $r10;
+
+     label4:
+        $r11 = new java.util.ArrayList;
+
+        $r12 = r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: java.util.List _tokenListeners>;
+
+        specialinvoke $r11.<java.util.ArrayList: void <init>(java.util.Collection)>($r12);
+
+        $r13 = virtualinvoke $r11.<java.util.ArrayList: java.util.Iterator iterator()>();
+
+     label5:
+        $z0 = interfaceinvoke $r13.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label7;
+
+        $r14 = interfaceinvoke $r13.<java.util.Iterator: java.lang.Object next()>();
+
+        $r15 = (com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState) $r14;
+
+        specialinvoke r0.<com.unity3d.services.ads.token.InMemoryAsyncTokenStorage: void handleTokenInvocation(com.unity3d.services.ads.token.InMemoryAsyncTokenStorage$TokenListenerState)>($r15);
+
+     label6:
+        goto label5;
+
+     label7:
+        exitmonitor r0;
+
+        return;
+
+     label8:
+        $r16 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r16;
+
+        catch java.lang.Throwable from label1 to label2 with label8;
+        catch java.lang.Throwable from label3 to label6 with label8;
+    }
+}

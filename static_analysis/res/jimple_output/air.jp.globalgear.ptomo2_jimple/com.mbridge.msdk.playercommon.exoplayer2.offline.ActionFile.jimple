@@ -1,0 +1,217 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile extends java.lang.Object
+{
+    static final int VERSION;
+    private final java.io.File actionFile;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile atomicFile;
+
+    public void <init>(java.io.File)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile r0;
+        java.io.File $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile;
+
+        $r1 := @parameter0: java.io.File;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile: java.io.File actionFile> = $r1;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile: void <init>(java.io.File)>($r1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile: com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile atomicFile> = $r2;
+
+        return;
+    }
+
+    public final transient com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction[] load(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[]) throws java.io.IOException
+    {
+        java.lang.Throwable $r12;
+        java.io.DataInputStream $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r8;
+        int $i0, $i1;
+        java.lang.String $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile r0;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction[] $r3;
+        java.io.IOException $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile $r5;
+        java.io.File $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[] $r1;
+        java.lang.StringBuilder $r10;
+        java.io.InputStream $r4, $r6;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[];
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile: java.io.File actionFile>;
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean exists()>();
+
+        $i0 = 0;
+
+        if $z0 != 0 goto label01;
+
+        $r3 = newarray (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction)[0];
+
+        return $r3;
+
+     label01:
+        $r4 = null;
+
+     label02:
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile: com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile atomicFile>;
+
+        $r6 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile: java.io.InputStream openRead()>();
+
+     label03:
+        $r4 = $r6;
+
+     label04:
+        $r7 = new java.io.DataInputStream;
+
+        specialinvoke $r7.<java.io.DataInputStream: void <init>(java.io.InputStream)>($r6);
+
+        $i1 = virtualinvoke $r7.<java.io.DataInputStream: int readInt()>();
+
+     label05:
+        if $i1 > 0 goto label11;
+
+     label06:
+        $i1 = virtualinvoke $r7.<java.io.DataInputStream: int readInt()>();
+
+        $r3 = newarray (com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction)[$i1];
+
+     label07:
+        if $i0 >= $i1 goto label10;
+
+     label08:
+        $r8 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction deserializeFromStream(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction$Deserializer[],java.io.InputStream)>($r1, $r7);
+
+        $r3[$i0] = $r8;
+
+     label09:
+        $i0 = $i0 + 1;
+
+        goto label07;
+
+     label10:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: void closeQuietly(java.io.Closeable)>($r6);
+
+        return $r3;
+
+     label11:
+        $r9 = new java.io.IOException;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unsupported action file version: ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r9.<java.io.IOException: void <init>(java.lang.String)>($r11);
+
+        throw $r9;
+
+     label12:
+        $r12 := @caughtexception;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: void closeQuietly(java.io.Closeable)>($r4);
+
+        throw $r12;
+
+        catch java.lang.Throwable from label02 to label03 with label12;
+        catch java.lang.Throwable from label04 to label05 with label12;
+        catch java.lang.Throwable from label06 to label07 with label12;
+        catch java.lang.Throwable from label08 to label09 with label12;
+        catch java.lang.Throwable from label11 to label12 with label12;
+    }
+
+    public final transient void store(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction[]) throws java.io.IOException
+    {
+        java.io.OutputStream $r3;
+        java.lang.Throwable $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile $r6;
+        java.io.DataOutputStream $r1, $r5;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile;
+
+        $r4 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction[];
+
+        $r5 = null;
+
+     label01:
+        $r1 = new java.io.DataOutputStream;
+
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile: com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile atomicFile>;
+
+        $r3 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile: java.io.OutputStream startWrite()>();
+
+        specialinvoke $r1.<java.io.DataOutputStream: void <init>(java.io.OutputStream)>($r3);
+
+     label02:
+        $i0 = 0;
+
+     label03:
+        virtualinvoke $r1.<java.io.DataOutputStream: void writeInt(int)>(0);
+
+        $i1 = lengthof $r4;
+
+        virtualinvoke $r1.<java.io.DataOutputStream: void writeInt(int)>($i1);
+
+        $i1 = lengthof $r4;
+
+     label04:
+        if $i0 >= $i1 goto label07;
+
+     label05:
+        $r2 = $r4[$i0];
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction: void serializeToStream(com.mbridge.msdk.playercommon.exoplayer2.offline.DownloadAction,java.io.OutputStream)>($r2, $r1);
+
+     label06:
+        $i0 = $i0 + 1;
+
+        goto label04;
+
+     label07:
+        $r6 = r0.<com.mbridge.msdk.playercommon.exoplayer2.offline.ActionFile: com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile atomicFile>;
+
+        virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.util.AtomicFile: void endWrite(java.io.OutputStream)>($r1);
+
+     label08:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: void closeQuietly(java.io.Closeable)>(null);
+
+        return;
+
+     label09:
+        $r7 := @caughtexception;
+
+        $r5 = $r1;
+
+        goto label11;
+
+     label10:
+        $r7 := @caughtexception;
+
+     label11:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: void closeQuietly(java.io.Closeable)>($r5);
+
+        throw $r7;
+
+        catch java.lang.Throwable from label01 to label02 with label10;
+        catch java.lang.Throwable from label03 to label04 with label09;
+        catch java.lang.Throwable from label05 to label06 with label09;
+        catch java.lang.Throwable from label07 to label08 with label09;
+    }
+}

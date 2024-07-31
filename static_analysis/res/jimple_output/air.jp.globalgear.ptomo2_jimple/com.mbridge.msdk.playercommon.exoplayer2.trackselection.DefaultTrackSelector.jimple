@@ -1,0 +1,2558 @@
+public class com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector extends com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector
+{
+    private static final float FRACTION_TO_CONSIDER_FULLSCREEN;
+    private static final int[] NO_TRACKS;
+    private static final int WITHIN_RENDERER_CAPABILITIES_BONUS;
+    private final com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory adaptiveTrackSelectionFactory;
+    private final java.util.concurrent.atomic.AtomicReference parametersReference;
+
+    static void <clinit>()
+    {
+        int[] $r0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int WITHIN_RENDERER_CAPABILITIES_BONUS> = 1000;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: float FRACTION_TO_CONSIDER_FULLSCREEN> = 0.98F;
+
+        $r0 = newarray (int)[0];
+
+        <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int[] NO_TRACKS> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void <init>(com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory)>(null);
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r1;
+        java.util.concurrent.atomic.AtomicReference $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory adaptiveTrackSelectionFactory> = $r2;
+
+        $r3 = new java.util.concurrent.atomic.AtomicReference;
+
+        $r1 = <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters DEFAULT>;
+
+        specialinvoke $r3.<java.util.concurrent.atomic.AtomicReference: void <init>(java.lang.Object)>($r1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: java.util.concurrent.atomic.AtomicReference parametersReference> = $r3;
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.BandwidthMeter)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.AdaptiveTrackSelection$Factory $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.BandwidthMeter $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.BandwidthMeter;
+
+        $r2 = new com.mbridge.msdk.playercommon.exoplayer2.trackselection.AdaptiveTrackSelection$Factory;
+
+        specialinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.AdaptiveTrackSelection$Factory: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.BandwidthMeter)>($r1);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void <init>(com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory)>($r2);
+
+        return;
+    }
+
+    static int access$300(int, int)
+    {
+        int $i0, $i1;
+
+        $i1 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        $i1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int compareInts(int,int)>($i1, $i0);
+
+        return $i1;
+    }
+
+    private static int compareFormatValues(int, int)
+    {
+        int $i0, $i1;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        if $i0 != -1 goto label1;
+
+        if $i1 != -1 goto label3;
+
+        return 0;
+
+     label1:
+        if $i1 != -1 goto label2;
+
+        return 1;
+
+     label2:
+        $i0 = $i0 - $i1;
+
+        return $i0;
+
+     label3:
+        return -1;
+    }
+
+    private static int compareInts(int, int)
+    {
+        int $i0, $i1;
+
+        $i1 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        if $i1 <= $i0 goto label1;
+
+        return 1;
+
+     label1:
+        if $i0 <= $i1 goto label2;
+
+        return -1;
+
+     label2:
+        return 0;
+    }
+
+    private static void filterAdaptiveVideoTrackCountForMimeType(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup, int[], int, java.lang.String, int, int, int, java.util.List)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r0;
+        java.lang.Integer $r5;
+        java.util.List $r3;
+        int[] $r1;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r6;
+        java.lang.Object $r4;
+        java.lang.String $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup;
+
+        $r1 := @parameter1: int[];
+
+        $i0 := @parameter2: int;
+
+        $r2 := @parameter3: java.lang.String;
+
+        $i1 := @parameter4: int;
+
+        $i2 := @parameter5: int;
+
+        $i3 := @parameter6: int;
+
+        $r3 := @parameter7: java.util.List;
+
+        $i5 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        $i5 = $i5 + -1;
+
+     label1:
+        if $i5 < 0 goto label3;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i5);
+
+        $r5 = (java.lang.Integer) $r4;
+
+        $i4 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+        $r6 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i4);
+
+        $i4 = $r1[$i4];
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupportedAdaptiveVideoTrack(com.mbridge.msdk.playercommon.exoplayer2.Format,java.lang.String,int,int,int,int,int)>($r6, $r2, $i4, $i0, $i1, $i2, $i3);
+
+        if $z0 != 0 goto label2;
+
+        interfaceinvoke $r3.<java.util.List: java.lang.Object remove(int)>($i5);
+
+     label2:
+        $i5 = $i5 + -1;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    protected static boolean formatHasLanguage(com.mbridge.msdk.playercommon.exoplayer2.Format, java.lang.String)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r1;
+        java.lang.String $r0, $r2;
+        boolean $z0;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $r0 := @parameter1: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $r2 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String language>;
+
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: java.lang.String normalizeLanguageCode(java.lang.String)>($r2);
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean equals(java.lang.CharSequence,java.lang.CharSequence)>($r0, $r2);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    protected static boolean formatHasNoLanguage(com.mbridge.msdk.playercommon.exoplayer2.Format)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r0;
+        java.lang.String $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $r1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String language>;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean formatHasLanguage(com.mbridge.msdk.playercommon.exoplayer2.Format,java.lang.String)>($r0, "und");
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    private static int getAdaptiveAudioTrackCount(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup, int[], com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r0;
+        int[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple $r2;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r3;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup;
+
+        $r1 := @parameter1: int[];
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple;
+
+        $i1 = 0;
+
+        $i2 = 0;
+
+     label1:
+        $i0 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i1 >= $i0 goto label3;
+
+        $r3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i1);
+
+        $i0 = $r1[$i1];
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupportedAdaptiveAudioTrack(com.mbridge.msdk.playercommon.exoplayer2.Format,int,com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple)>($r3, $i0, $r2);
+
+        if $z0 == 0 goto label2;
+
+        $i2 = $i2 + 1;
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        return $i2;
+    }
+
+    private static int[] getAdaptiveAudioTracks(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup, int[], boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r2;
+        java.util.HashSet $r3;
+        int[] $r0, $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple $r1, $r4;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.String $r6;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r5;
+        java.lang.Object $r8;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup;
+
+        $r0 := @parameter1: int[];
+
+        $z0 := @parameter2: boolean;
+
+        $r3 = new java.util.HashSet;
+
+        specialinvoke $r3.<java.util.HashSet: void <init>()>();
+
+        $i2 = 0;
+
+        $r4 = null;
+
+        $i3 = 0;
+
+        $i4 = 0;
+
+     label1:
+        $i0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i3 >= $i0 goto label5;
+
+        $r5 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i3);
+
+        $r1 = new com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple;
+
+        $i0 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.Format: int channelCount>;
+
+        $i1 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.Format: int sampleRate>;
+
+        if $z0 == 0 goto label2;
+
+        $r6 = null;
+
+        goto label3;
+
+     label2:
+        $r6 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String sampleMimeType>;
+
+     label3:
+        specialinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple: void <init>(int,int,java.lang.String)>($i0, $i1, $r6);
+
+        $z1 = virtualinvoke $r3.<java.util.HashSet: boolean add(java.lang.Object)>($r1);
+
+        if $z1 == 0 goto label4;
+
+        $i0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int getAdaptiveAudioTrackCount(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int[],com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple)>($r2, $r0, $r1);
+
+        if $i0 <= $i4 goto label4;
+
+        $i4 = $i0;
+
+        $r4 = $r1;
+
+     label4:
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label5:
+        if $i4 <= 1 goto label9;
+
+        $r7 = newarray (int)[$i4];
+
+        $i3 = 0;
+
+     label6:
+        $i4 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i2 >= $i4 goto label8;
+
+        $r5 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i2);
+
+        $i4 = $r0[$i2];
+
+        $r8 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        $r1 = (com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple) $r8;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupportedAdaptiveAudioTrack(com.mbridge.msdk.playercommon.exoplayer2.Format,int,com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple)>($r5, $i4, $r1);
+
+        if $z0 == 0 goto label7;
+
+        $r7[$i3] = $i2;
+
+        $i3 = $i3 + 1;
+
+     label7:
+        $i2 = $i2 + 1;
+
+        goto label6;
+
+     label8:
+        return $r7;
+
+     label9:
+        $r0 = <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int[] NO_TRACKS>;
+
+        return $r0;
+    }
+
+    private static int getAdaptiveVideoTrackCountForMimeType(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup, int[], int, java.lang.String, int, int, int, java.util.List)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r0;
+        java.lang.Integer $r5;
+        java.util.List $r3;
+        int[] $r1;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r6;
+        java.lang.Object $r4;
+        java.lang.String $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup;
+
+        $r1 := @parameter1: int[];
+
+        $i0 := @parameter2: int;
+
+        $r2 := @parameter3: java.lang.String;
+
+        $i1 := @parameter4: int;
+
+        $i2 := @parameter5: int;
+
+        $i3 := @parameter6: int;
+
+        $r3 := @parameter7: java.util.List;
+
+        $i5 = 0;
+
+        $i6 = 0;
+
+     label1:
+        $i4 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i5 >= $i4 goto label3;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i5);
+
+        $r5 = (java.lang.Integer) $r4;
+
+        $i4 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+        $r6 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i4);
+
+        $i4 = $r1[$i4];
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupportedAdaptiveVideoTrack(com.mbridge.msdk.playercommon.exoplayer2.Format,java.lang.String,int,int,int,int,int)>($r6, $r2, $i4, $i0, $i1, $i2, $i3);
+
+        if $z0 == 0 goto label2;
+
+        $i6 = $i6 + 1;
+
+     label2:
+        $i5 = $i5 + 1;
+
+        goto label1;
+
+     label3:
+        return $i6;
+    }
+
+    private static int[] getAdaptiveVideoTracksForGroup(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup, int[], boolean, int, int, int, int, int, int, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r0;
+        java.lang.Integer $r7;
+        java.util.HashSet $r2;
+        int[] $r1;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        java.lang.String $r3, $r5;
+        boolean $z0, $z1;
+        java.util.List $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r8;
+        java.lang.Object $r6;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup;
+
+        $r1 := @parameter1: int[];
+
+        $z0 := @parameter2: boolean;
+
+        $i0 := @parameter3: int;
+
+        $i1 := @parameter4: int;
+
+        $i2 := @parameter5: int;
+
+        $i3 := @parameter6: int;
+
+        $i4 := @parameter7: int;
+
+        $i5 := @parameter8: int;
+
+        $z1 := @parameter9: boolean;
+
+        $i6 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i6 >= 2 goto label1;
+
+        $r1 = <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int[] NO_TRACKS>;
+
+        return $r1;
+
+     label1:
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: java.util.List getViewportFilteredTrackIndices(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int,int,boolean)>($r0, $i4, $i5, $z1);
+
+        $i4 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        if $i4 >= 2 goto label2;
+
+        $r1 = <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int[] NO_TRACKS>;
+
+        return $r1;
+
+     label2:
+        if $z0 != 0 goto label6;
+
+        $r2 = new java.util.HashSet;
+
+        specialinvoke $r2.<java.util.HashSet: void <init>()>();
+
+        $r5 = null;
+
+        $i4 = 0;
+
+        $i5 = 0;
+
+     label3:
+        $i6 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        if $i4 >= $i6 goto label5;
+
+        $r6 = interfaceinvoke $r4.<java.util.List: java.lang.Object get(int)>($i4);
+
+        $r7 = (java.lang.Integer) $r6;
+
+        $i6 = virtualinvoke $r7.<java.lang.Integer: int intValue()>();
+
+        $r8 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i6);
+
+        $r3 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String sampleMimeType>;
+
+        $z0 = virtualinvoke $r2.<java.util.HashSet: boolean add(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label4;
+
+        $i6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int getAdaptiveVideoTrackCountForMimeType(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int[],int,java.lang.String,int,int,int,java.util.List)>($r0, $r1, $i0, $r3, $i1, $i2, $i3, $r4);
+
+        if $i6 <= $i5 goto label4;
+
+        $i5 = $i6;
+
+        $r5 = $r3;
+
+     label4:
+        $i4 = $i4 + 1;
+
+        goto label3;
+
+     label5:
+        $r3 = $r5;
+
+        goto label7;
+
+     label6:
+        $r3 = null;
+
+     label7:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void filterAdaptiveVideoTrackCountForMimeType(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int[],int,java.lang.String,int,int,int,java.util.List)>($r0, $r1, $i0, $r3, $i1, $i2, $i3, $r4);
+
+        $i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        if $i0 >= 2 goto label8;
+
+        $r1 = <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int[] NO_TRACKS>;
+
+        return $r1;
+
+     label8:
+        $r1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int[] toArray(java.util.List)>($r4);
+
+        return $r1;
+    }
+
+    private static android.graphics.Point getMaxVideoSizeInViewport(boolean, int, int, int, int)
+    {
+        android.graphics.Point $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        boolean $z0, $z1;
+
+        $z0 := @parameter0: boolean;
+
+        $i3 := @parameter1: int;
+
+        $i4 := @parameter2: int;
+
+        $i0 := @parameter3: int;
+
+        $i1 := @parameter4: int;
+
+        if $z0 == 0 goto label5;
+
+        $z0 = 1;
+
+        if $i0 <= $i1 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        if $i3 <= $i4 goto label3;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        if $z1 == $z0 goto label5;
+
+        goto label6;
+
+     label5:
+        $i2 = $i4;
+
+        $i4 = $i3;
+
+        $i3 = $i2;
+
+     label6:
+        $i2 = $i0 * $i3;
+
+        $i5 = $i1 * $i4;
+
+        if $i2 < $i5 goto label7;
+
+        $r0 = new android.graphics.Point;
+
+        $i3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int ceilDivide(int,int)>($i5, $i0);
+
+        specialinvoke $r0.<android.graphics.Point: void <init>(int,int)>($i4, $i3);
+
+        return $r0;
+
+     label7:
+        $r0 = new android.graphics.Point;
+
+        $i4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int ceilDivide(int,int)>($i2, $i1);
+
+        specialinvoke $r0.<android.graphics.Point: void <init>(int,int)>($i4, $i3);
+
+        return $r0;
+    }
+
+    private static java.util.List getViewportFilteredTrackIndices(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup, int, int, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r0;
+        android.graphics.Point $r4;
+        java.lang.Integer $r2;
+        java.util.ArrayList $r6;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r3;
+        float $f0;
+        java.lang.Object $r5;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $z0 := @parameter3: boolean;
+
+        $r6 = new java.util.ArrayList;
+
+        $i2 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>(int)>($i2);
+
+        $i3 = 0;
+
+        $i2 = 0;
+
+     label01:
+        $i4 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i2 >= $i4 goto label02;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        virtualinvoke $r6.<java.util.ArrayList: boolean add(java.lang.Object)>($r2);
+
+        $i2 = $i2 + 1;
+
+        goto label01;
+
+     label02:
+        if $i0 == 2147483647 goto label10;
+
+        if $i1 != 2147483647 goto label03;
+
+        return $r6;
+
+     label03:
+        $i2 = 2147483647;
+
+     label04:
+        $i4 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i3 >= $i4 goto label06;
+
+        $r3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i3);
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.Format: int width>;
+
+        if $i4 <= 0 goto label05;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.Format: int height>;
+
+        if $i4 <= 0 goto label05;
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.Format: int width>;
+
+        $i5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.Format: int height>;
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: android.graphics.Point getMaxVideoSizeInViewport(boolean,int,int,int,int)>($z0, $i0, $i1, $i4, $i5);
+
+        $i4 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.Format: int width>;
+
+        $i5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.Format: int height>;
+
+        $i4 = $i4 * $i5;
+
+        $i5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.Format: int width>;
+
+        $i6 = $r4.<android.graphics.Point: int x>;
+
+        $f0 = (float) $i6;
+
+        $f0 = $f0 * 0.98F;
+
+        $i6 = (int) $f0;
+
+        if $i5 < $i6 goto label05;
+
+        $i5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.Format: int height>;
+
+        $i6 = $r4.<android.graphics.Point: int y>;
+
+        $f0 = (float) $i6;
+
+        $f0 = $f0 * 0.98F;
+
+        $i6 = (int) $f0;
+
+        if $i5 < $i6 goto label05;
+
+        if $i4 >= $i2 goto label05;
+
+        $i2 = $i4;
+
+     label05:
+        $i3 = $i3 + 1;
+
+        goto label04;
+
+     label06:
+        if $i2 == 2147483647 goto label10;
+
+        $i0 = virtualinvoke $r6.<java.util.ArrayList: int size()>();
+
+        $i0 = $i0 + -1;
+
+     label07:
+        if $i0 < 0 goto label10;
+
+        $r5 = virtualinvoke $r6.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r2 = (java.lang.Integer) $r5;
+
+        $i1 = virtualinvoke $r2.<java.lang.Integer: int intValue()>();
+
+        $r3 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i1);
+
+        $i1 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.Format: int getPixelCount()>();
+
+        if $i1 == -1 goto label08;
+
+        if $i1 <= $i2 goto label09;
+
+     label08:
+        virtualinvoke $r6.<java.util.ArrayList: java.lang.Object remove(int)>($i0);
+
+     label09:
+        $i0 = $i0 + -1;
+
+        goto label07;
+
+     label10:
+        return $r6;
+    }
+
+    protected static boolean isSupported(int, boolean)
+    {
+        int $i0;
+        boolean $z0;
+
+        $i0 := @parameter0: int;
+
+        $z0 := @parameter1: boolean;
+
+        $i0 = $i0 & 7;
+
+        if $i0 == 4 goto label2;
+
+        if $z0 == 0 goto label1;
+
+        if $i0 != 3 goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    private static boolean isSupportedAdaptiveAudioTrack(com.mbridge.msdk.playercommon.exoplayer2.Format, int, com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple $r0;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r1;
+        java.lang.String $r2, $r3;
+        boolean $z0;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $i0 := @parameter1: int;
+
+        $r0 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupported(int,boolean)>($i0, 0);
+
+        if $z0 == 0 goto label2;
+
+        $i0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.Format: int channelCount>;
+
+        $i1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple: int channelCount>;
+
+        if $i0 != $i1 goto label2;
+
+        $i0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.Format: int sampleRate>;
+
+        $i1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple: int sampleRate>;
+
+        if $i0 != $i1 goto label2;
+
+        $r2 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple: java.lang.String mimeType>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioConfigurationTuple: java.lang.String mimeType>;
+
+        $r3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String sampleMimeType>;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean equals(java.lang.CharSequence,java.lang.CharSequence)>($r2, $r3);
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    private static boolean isSupportedAdaptiveVideoTrack(com.mbridge.msdk.playercommon.exoplayer2.Format, java.lang.String, int, int, int, int, int)
+    {
+        int $i0, $i1, $i2, $i3, $i4;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r0;
+        java.lang.String $r1, $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.Format;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $i4 := @parameter2: int;
+
+        $i0 := @parameter3: int;
+
+        $i1 := @parameter4: int;
+
+        $i2 := @parameter5: int;
+
+        $i3 := @parameter6: int;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupported(int,boolean)>($i4, 0);
+
+        if $z0 == 0 goto label5;
+
+        $i4 = $i4 & $i0;
+
+        if $i4 == 0 goto label5;
+
+        if $r1 == null goto label1;
+
+        $r2 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: java.lang.String sampleMimeType>;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Util: boolean areEqual(java.lang.Object,java.lang.Object)>($r2, $r1);
+
+        if $z0 == 0 goto label5;
+
+     label1:
+        $i4 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: int width>;
+
+        if $i4 == -1 goto label2;
+
+        $i4 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: int width>;
+
+        if $i4 > $i1 goto label5;
+
+     label2:
+        $i4 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: int height>;
+
+        if $i4 == -1 goto label3;
+
+        $i4 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: int height>;
+
+        if $i4 > $i2 goto label5;
+
+     label3:
+        $i4 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: int bitrate>;
+
+        if $i4 == -1 goto label4;
+
+        $i4 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.Format: int bitrate>;
+
+        if $i4 > $i3 goto label5;
+
+     label4:
+        return 1;
+
+     label5:
+        return 0;
+    }
+
+    private static void maybeConfigureRenderersForTunneling(com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo, int[][][], com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration[], com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[], int)
+    {
+        int[][] $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r4;
+        int[][][] $r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration[] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r6;
+        boolean $z0, $z1;
+
+        $r3 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo;
+
+        $r0 := @parameter1: int[][][];
+
+        $r1 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration[];
+
+        $r2 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[];
+
+        $i0 := @parameter4: int;
+
+        if $i0 != 0 goto label01;
+
+        return;
+
+     label01:
+        $z0 = 0;
+
+        $i1 = 0;
+
+        $i2 = -1;
+
+        $i3 = -1;
+
+     label02:
+        $i4 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: int getRendererCount()>();
+
+        if $i1 >= $i4 goto label09;
+
+        $i4 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: int getRendererType(int)>($i1);
+
+        $r4 = $r2[$i1];
+
+        if $i4 == 1 goto label03;
+
+        if $i4 != 2 goto label08;
+
+     label03:
+        if $r4 == null goto label08;
+
+        $r5 = $r0[$i1];
+
+        $r6 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getTrackGroups(int)>($i1);
+
+        $z1 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean rendererSupportsTunneling(int[][],com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray,com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection)>($r5, $r6, $r4);
+
+        if $z1 == 0 goto label08;
+
+        if $i4 != 1 goto label05;
+
+        if $i3 == -1 goto label04;
+
+        goto label06;
+
+     label04:
+        $i3 = $i1;
+
+        goto label08;
+
+     label05:
+        if $i2 == -1 goto label07;
+
+     label06:
+        $z1 = 0;
+
+        goto label10;
+
+     label07:
+        $i2 = $i1;
+
+     label08:
+        $i1 = $i1 + 1;
+
+        goto label02;
+
+     label09:
+        $z1 = 1;
+
+     label10:
+        if $i3 == -1 goto label11;
+
+        if $i2 == -1 goto label11;
+
+        $z0 = 1;
+
+     label11:
+        $z0 = $z1 & $z0;
+
+        if $z0 == 0 goto label12;
+
+        $r8 = new com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration;
+
+        specialinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration: void <init>(int)>($i0);
+
+        $r1[$i3] = $r8;
+
+        $r1[$i2] = $r8;
+
+     label12:
+        return;
+    }
+
+    private static boolean rendererSupportsTunneling(int[][], com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray, com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection)
+    {
+        int[][] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r0;
+        int[] $r4;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r2;
+
+        $r1 := @parameter0: int[][];
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r0 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection;
+
+        if $r0 != null goto label1;
+
+        return 0;
+
+     label1:
+        $r3 = interfaceinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup getTrackGroup()>();
+
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int indexOf(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup)>($r3);
+
+        $i1 = 0;
+
+     label2:
+        $i2 = interfaceinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection: int length()>();
+
+        if $i1 >= $i2 goto label4;
+
+        $r4 = $r1[$i0];
+
+        $i2 = interfaceinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection: int getIndexInTrackGroup(int)>($i1);
+
+        $i2 = $r4[$i2];
+
+        $i2 = $i2 & 32;
+
+        if $i2 == 32 goto label3;
+
+        return 0;
+
+     label3:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label4:
+        return 1;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectAdaptiveVideoTrack(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray, int[][], int, com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters, com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        int[][] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory $r3;
+        byte $b6;
+        int[] $r5;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r0;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r7;
+        java.lang.Object $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r2;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r1 := @parameter1: int[][];
+
+        $i0 := @parameter2: int;
+
+        $r2 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters;
+
+        $r3 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory;
+
+        $z0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean allowNonSeamlessAdaptiveness>;
+
+        if $z0 == 0 goto label1;
+
+        $b6 = 24;
+
+        goto label2;
+
+     label1:
+        $b6 = 16;
+
+     label2:
+        $z0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean allowMixedMimeAdaptiveness>;
+
+        if $z0 == 0 goto label3;
+
+        $i0 = $i0 & $b6;
+
+        if $i0 == 0 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        $i0 = 0;
+
+     label5:
+        $i1 = $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int length>;
+
+        if $i0 >= $i1 goto label7;
+
+        $r4 = virtualinvoke $r0.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i0);
+
+        $r5 = $r1[$i0];
+
+        $i1 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int maxVideoWidth>;
+
+        $i2 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int maxVideoHeight>;
+
+        $i3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int maxVideoBitrate>;
+
+        $i4 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int viewportWidth>;
+
+        $i5 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int viewportHeight>;
+
+        $z0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean viewportOrientationMayChange>;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int[] getAdaptiveVideoTracksForGroup(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int[],boolean,int,int,int,int,int,int,boolean)>($r4, $r5, $z1, $b6, $i1, $i2, $i3, $i4, $i5, $z0);
+
+        $i1 = lengthof $r5;
+
+        if $i1 <= 0 goto label6;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory) $r6;
+
+        $r7 = interfaceinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection createTrackSelection(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int[])>($r4, $r5);
+
+        return $r7;
+
+     label6:
+        $i0 = $i0 + 1;
+
+        goto label5;
+
+     label7:
+        return null;
+    }
+
+    private static com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectFixedVideoTrack(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray, int[][], com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters)
+    {
+        int[][] $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r4, $r5;
+        java.lang.Integer $r9;
+        int[] $r7;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r0, $r3;
+        boolean $z0, $z1, $z2, $z3;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection $r10;
+        java.util.List $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r2;
+
+        $r0 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r1 := @parameter1: int[][];
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters;
+
+        $r3 = $r0;
+
+        $i0 = 0;
+
+        $r4 = null;
+
+        $i1 = 0;
+
+        $i2 = 0;
+
+        $i3 = -1;
+
+        $i4 = -1;
+
+     label01:
+        $i5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int length>;
+
+        if $i0 >= $i5 goto label23;
+
+        $r5 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i0);
+
+        $i5 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int viewportWidth>;
+
+        $i6 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int viewportHeight>;
+
+        $z0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean viewportOrientationMayChange>;
+
+        $r6 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: java.util.List getViewportFilteredTrackIndices(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int,int,boolean)>($r5, $i5, $i6, $z0);
+
+        $r7 = $r1[$i0];
+
+        $i5 = 0;
+
+     label02:
+        $i6 = $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i5 >= $i6 goto label22;
+
+        $i6 = $r7[$i5];
+
+        $z0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean exceedRendererCapabilitiesIfNecessary>;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupported(int,boolean)>($i6, $z0);
+
+        if $z0 == 0 goto label21;
+
+        $r8 = virtualinvoke $r5.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i5);
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i5);
+
+        $z1 = interfaceinvoke $r6.<java.util.List: boolean contains(java.lang.Object)>($r9);
+
+        $z0 = 1;
+
+        if $z1 == 0 goto label06;
+
+        $i6 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int width>;
+
+        if $i6 == -1 goto label03;
+
+        $i6 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int width>;
+
+        $i7 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int maxVideoWidth>;
+
+        if $i6 > $i7 goto label06;
+
+     label03:
+        $i6 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int height>;
+
+        if $i6 == -1 goto label04;
+
+        $i6 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int height>;
+
+        $i7 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int maxVideoHeight>;
+
+        if $i6 > $i7 goto label06;
+
+     label04:
+        $i6 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int bitrate>;
+
+        if $i6 == -1 goto label05;
+
+        $i6 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int bitrate>;
+
+        $i7 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int maxVideoBitrate>;
+
+        if $i6 > $i7 goto label06;
+
+     label05:
+        $z1 = 1;
+
+        goto label07;
+
+     label06:
+        $z1 = 0;
+
+     label07:
+        if $z1 != 0 goto label08;
+
+        $z2 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean exceedVideoConstraintsIfNecessary>;
+
+        if $z2 != 0 goto label08;
+
+        goto label21;
+
+     label08:
+        if $z1 == 0 goto label09;
+
+        $i6 = 2;
+
+        goto label10;
+
+     label09:
+        $i6 = 1;
+
+     label10:
+        $i7 = $r7[$i5];
+
+        $z2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupported(int,boolean)>($i7, 0);
+
+        if $z2 == 0 goto label11;
+
+        $i6 = $i6 + 1000;
+
+     label11:
+        if $i6 <= $i2 goto label12;
+
+        $z3 = 1;
+
+        goto label13;
+
+     label12:
+        $z3 = 0;
+
+     label13:
+        if $i6 != $i2 goto label20;
+
+        $z3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean forceLowestBitrate>;
+
+        if $z3 == 0 goto label16;
+
+        $i7 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int bitrate>;
+
+        $i7 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int compareFormatValues(int,int)>($i7, $i4);
+
+        if $i7 >= 0 goto label14;
+
+        goto label15;
+
+     label14:
+        $z0 = 0;
+
+     label15:
+        $z3 = $z0;
+
+        goto label20;
+
+     label16:
+        $i7 = virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int getPixelCount()>();
+
+        if $i7 == $i3 goto label17;
+
+        $i7 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int compareFormatValues(int,int)>($i7, $i3);
+
+        goto label18;
+
+     label17:
+        $i7 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int bitrate>;
+
+        $i7 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int compareFormatValues(int,int)>($i7, $i4);
+
+     label18:
+        if $z2 == 0 goto label19;
+
+        if $z1 == 0 goto label19;
+
+        if $i7 <= 0 goto label14;
+
+        goto label15;
+
+     label19:
+        if $i7 >= 0 goto label14;
+
+        goto label15;
+
+     label20:
+        if $z3 == 0 goto label21;
+
+        $i4 = $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int bitrate>;
+
+        $i3 = virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.Format: int getPixelCount()>();
+
+        $r4 = $r5;
+
+        $i1 = $i5;
+
+        $i2 = $i6;
+
+     label21:
+        $i5 = $i5 + 1;
+
+        goto label02;
+
+     label22:
+        $i0 = $i0 + 1;
+
+        $r3 = $r0;
+
+        goto label01;
+
+     label23:
+        if $r4 != null goto label24;
+
+        return null;
+
+     label24:
+        $r10 = new com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection;
+
+        specialinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int)>($r4, $i1);
+
+        return $r10;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder buildUponParameters()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters getParameters()>();
+
+        $r2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder buildUpon()>();
+
+        return $r2;
+    }
+
+    public final void clearSelectionOverride(int, com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder $r2;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r2 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder buildUponParameters()>();
+
+        $r2 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder clearSelectionOverride(int,com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray)>($i0, $r1);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void setParameters(com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder)>($r2);
+
+        return;
+    }
+
+    public final void clearSelectionOverrides()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder buildUponParameters()>();
+
+        $r1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder clearSelectionOverrides()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void setParameters(com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder)>($r1);
+
+        return;
+    }
+
+    public final void clearSelectionOverrides(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder buildUponParameters()>();
+
+        $r1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder clearSelectionOverrides(int)>($i0);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void setParameters(com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder)>($r1);
+
+        return;
+    }
+
+    public com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters getParameters()
+    {
+        java.lang.Object $r1;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: java.util.concurrent.atomic.AtomicReference parametersReference>;
+
+        $r1 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r3 = (com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters) $r1;
+
+        return $r3;
+    }
+
+    public final boolean getRendererDisabled(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters getParameters()>();
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean getRendererDisabled(int)>($i0);
+
+        return $z0;
+    }
+
+    public final com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride getSelectionOverride(int, com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r2 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters getParameters()>();
+
+        $r3 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride getSelectionOverride(int,com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray)>($i0, $r1);
+
+        return $r3;
+    }
+
+    public final boolean hasSelectionOverride(int, com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r2 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters getParameters()>();
+
+        $z0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean hasSelectionOverride(int,com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray)>($i0, $r1);
+
+        return $z0;
+    }
+
+    protected com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[] selectAllTracks(com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo, int[][][], int[], com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        int[][] $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[] $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo $r1;
+        int[] $r3;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r6;
+        boolean $z0, $z1, $z2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r9;
+        int[][][] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo;
+
+        $r2 := @parameter1: int[][][];
+
+        $r3 := @parameter2: int[];
+
+        $r4 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: int getRendererCount()>();
+
+        $r5 = newarray (com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection)[$i0];
+
+        $z0 = 0;
+
+        $i1 = 0;
+
+        $z1 = 0;
+
+     label01:
+        $z2 = 1;
+
+        if $i1 >= $i0 goto label07;
+
+        $i2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: int getRendererType(int)>($i1);
+
+        if 2 != $i2 goto label06;
+
+        if $z0 != 0 goto label03;
+
+        $r6 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getTrackGroups(int)>($i1);
+
+        $r7 = $r2[$i1];
+
+        $i2 = $r3[$i1];
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory adaptiveTrackSelectionFactory>;
+
+        $r9 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectVideoTrack(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray,int[][],int,com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters,com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory)>($r6, $r7, $i2, $r4, $r8);
+
+        $r5[$i1] = $r9;
+
+        if $r9 == null goto label02;
+
+        $z0 = 1;
+
+        goto label03;
+
+     label02:
+        $z0 = 0;
+
+     label03:
+        $r6 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getTrackGroups(int)>($i1);
+
+        $i2 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int length>;
+
+        if $i2 <= 0 goto label04;
+
+        goto label05;
+
+     label04:
+        $z2 = 0;
+
+     label05:
+        $z1 = $z1 | $z2;
+
+     label06:
+        $i1 = $i1 + 1;
+
+        goto label01;
+
+     label07:
+        $z0 = 0;
+
+        $i1 = 0;
+
+        $z2 = 0;
+
+     label08:
+        if $i1 >= $i0 goto label16;
+
+        $i2 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: int getRendererType(int)>($i1);
+
+        if $i2 == 1 goto label11;
+
+        if $i2 == 2 goto label15;
+
+        if $i2 == 3 goto label09;
+
+        $r6 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getTrackGroups(int)>($i1);
+
+        $r7 = $r2[$i1];
+
+        $r9 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectOtherTrack(int,com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray,int[][],com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters)>($i2, $r6, $r7, $r4);
+
+        $r5[$i1] = $r9;
+
+        goto label15;
+
+     label09:
+        if $z2 != 0 goto label15;
+
+        $r6 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getTrackGroups(int)>($i1);
+
+        $r7 = $r2[$i1];
+
+        $r9 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectTextTrack(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray,int[][],com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters)>($r6, $r7, $r4);
+
+        $r5[$i1] = $r9;
+
+        if $r9 == null goto label10;
+
+        $z2 = 1;
+
+        goto label15;
+
+     label10:
+        $z2 = 0;
+
+        goto label15;
+
+     label11:
+        if $z0 != 0 goto label15;
+
+        $r6 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getTrackGroups(int)>($i1);
+
+        $r7 = $r2[$i1];
+
+        $i2 = $r3[$i1];
+
+        if $z1 == 0 goto label12;
+
+        $r8 = null;
+
+        goto label13;
+
+     label12:
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory adaptiveTrackSelectionFactory>;
+
+     label13:
+        $r9 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectAudioTrack(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray,int[][],int,com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters,com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory)>($r6, $r7, $i2, $r4, $r8);
+
+        $r5[$i1] = $r9;
+
+        if $r9 == null goto label14;
+
+        $z0 = 1;
+
+        goto label15;
+
+     label14:
+        $z0 = 0;
+
+     label15:
+        $i1 = $i1 + 1;
+
+        goto label08;
+
+     label16:
+        return $r5;
+    }
+
+    protected com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectAudioTrack(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray, int[][], int, com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters, com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        int[][] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory $r4;
+        int[] $r5;
+        int $i0, $i1, $i2, $i3, $i4;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r1;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection $r12;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioTrackScore $r6, $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r2 := @parameter1: int[][];
+
+        $i0 := @parameter2: int;
+
+        $r3 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters;
+
+        $r4 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory;
+
+        $r6 = null;
+
+        $i0 = 0;
+
+        $i2 = -1;
+
+        $i3 = -1;
+
+     label1:
+        $i4 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int length>;
+
+        if $i0 >= $i4 goto label6;
+
+        $r7 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i0);
+
+        $r5 = $r2[$i0];
+
+        $i4 = 0;
+
+     label2:
+        $i1 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i4 >= $i1 goto label5;
+
+        $i1 = $r5[$i4];
+
+        $z0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean exceedRendererCapabilitiesIfNecessary>;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupported(int,boolean)>($i1, $z0);
+
+        if $z0 == 0 goto label4;
+
+        $r8 = virtualinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i4);
+
+        $r11 = new com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioTrackScore;
+
+        $i1 = $r5[$i4];
+
+        specialinvoke $r11.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioTrackScore: void <init>(com.mbridge.msdk.playercommon.exoplayer2.Format,com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters,int)>($r8, $r3, $i1);
+
+        if $r6 == null goto label3;
+
+        $i1 = virtualinvoke $r11.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioTrackScore: int compareTo(com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$AudioTrackScore)>($r6);
+
+        if $i1 <= 0 goto label4;
+
+     label3:
+        $i2 = $i0;
+
+        $i3 = $i4;
+
+        $r6 = $r11;
+
+     label4:
+        $i4 = $i4 + 1;
+
+        goto label2;
+
+     label5:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label6:
+        if $i2 != -1 goto label7;
+
+        return null;
+
+     label7:
+        $r7 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i2);
+
+        $z0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean forceLowestBitrate>;
+
+        if $z0 != 0 goto label8;
+
+        if $r4 == null goto label8;
+
+        $r5 = $r2[$i2];
+
+        $z0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean allowMixedMimeAdaptiveness>;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: int[] getAdaptiveAudioTracks(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int[],boolean)>($r7, $r5, $z0);
+
+        $i0 = lengthof $r5;
+
+        if $i0 <= 0 goto label8;
+
+        $r10 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection createTrackSelection(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int[])>($r7, $r5);
+
+        return $r10;
+
+     label8:
+        $r12 = new com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection;
+
+        specialinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int)>($r7, $i3);
+
+        return $r12;
+    }
+
+    protected com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectOtherTrack(int, com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray, int[][], com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        int[][] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r5, $r6;
+        int[] $r4;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r1;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r2 := @parameter2: int[][];
+
+        $r3 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters;
+
+        $r5 = null;
+
+        $i0 = 0;
+
+        $i1 = 0;
+
+        $i2 = 0;
+
+     label01:
+        $i3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int length>;
+
+        if $i0 >= $i3 goto label09;
+
+        $r6 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i0);
+
+        $r4 = $r2[$i0];
+
+        $i3 = 0;
+
+     label02:
+        $i4 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i3 >= $i4 goto label08;
+
+        $i4 = $r4[$i3];
+
+        $z0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean exceedRendererCapabilitiesIfNecessary>;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupported(int,boolean)>($i4, $z0);
+
+        if $z0 == 0 goto label07;
+
+        $r7 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i3);
+
+        $i5 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.Format: int selectionFlags>;
+
+        $i4 = 1;
+
+        $i5 = $i5 & 1;
+
+        if $i5 == 0 goto label03;
+
+        $z0 = 1;
+
+        goto label04;
+
+     label03:
+        $z0 = 0;
+
+     label04:
+        if $z0 == 0 goto label05;
+
+        $i4 = 2;
+
+     label05:
+        $i5 = $r4[$i3];
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupported(int,boolean)>($i5, 0);
+
+        if $z0 == 0 goto label06;
+
+        $i4 = $i4 + 1000;
+
+     label06:
+        if $i4 <= $i2 goto label07;
+
+        $r5 = $r6;
+
+        $i1 = $i3;
+
+        $i2 = $i4;
+
+     label07:
+        $i3 = $i3 + 1;
+
+        goto label02;
+
+     label08:
+        $i0 = $i0 + 1;
+
+        goto label01;
+
+     label09:
+        if $r5 != null goto label10;
+
+        return null;
+
+     label10:
+        $r8 = new com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection;
+
+        specialinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int)>($r5, $i1);
+
+        return $r8;
+    }
+
+    protected com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectTextTrack(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray, int[][], com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        int[][] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r5, $r6;
+        byte $b7;
+        int[] $r4;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        java.lang.String $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r1;
+        boolean $z0, $z1, $z2, $z3;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.Format $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r2 := @parameter1: int[][];
+
+        $r3 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters;
+
+        $i0 = 0;
+
+        $r5 = null;
+
+        $i1 = 0;
+
+        $i2 = 0;
+
+     label01:
+        $i3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: int length>;
+
+        if $i0 >= $i3 goto label17;
+
+        $r6 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i0);
+
+        $r4 = $r2[$i0];
+
+        $i3 = 0;
+
+     label02:
+        $i4 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: int length>;
+
+        if $i3 >= $i4 goto label16;
+
+        $i4 = $r4[$i3];
+
+        $z0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean exceedRendererCapabilitiesIfNecessary>;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupported(int,boolean)>($i4, $z0);
+
+        if $z0 == 0 goto label15;
+
+        $r7 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup: com.mbridge.msdk.playercommon.exoplayer2.Format getFormat(int)>($i3);
+
+        $i4 = $r7.<com.mbridge.msdk.playercommon.exoplayer2.Format: int selectionFlags>;
+
+        $i5 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int disabledTextTrackSelectionFlags>;
+
+        $i5 = $i5 ^ -1;
+
+        $i5 = $i4 & $i5;
+
+        $i6 = $i5 & 1;
+
+        $i4 = 1;
+
+        if $i6 == 0 goto label03;
+
+        $z0 = 1;
+
+        goto label04;
+
+     label03:
+        $z0 = 0;
+
+     label04:
+        $i5 = $i5 & 2;
+
+        if $i5 == 0 goto label05;
+
+        $z1 = 1;
+
+        goto label06;
+
+     label05:
+        $z1 = 0;
+
+     label06:
+        $r8 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: java.lang.String preferredTextLanguage>;
+
+        $z2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean formatHasLanguage(com.mbridge.msdk.playercommon.exoplayer2.Format,java.lang.String)>($r7, $r8);
+
+        if $z2 != 0 goto label09;
+
+        $z3 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean selectUndeterminedTextLanguage>;
+
+        if $z3 == 0 goto label07;
+
+        $z3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean formatHasNoLanguage(com.mbridge.msdk.playercommon.exoplayer2.Format)>($r7);
+
+        if $z3 == 0 goto label07;
+
+        goto label09;
+
+     label07:
+        if $z0 == 0 goto label08;
+
+        $i4 = 3;
+
+        goto label13;
+
+     label08:
+        if $z1 == 0 goto label15;
+
+        $r8 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: java.lang.String preferredAudioLanguage>;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean formatHasLanguage(com.mbridge.msdk.playercommon.exoplayer2.Format,java.lang.String)>($r7, $r8);
+
+        if $z0 == 0 goto label13;
+
+        $i4 = 2;
+
+        goto label13;
+
+     label09:
+        if $z0 == 0 goto label10;
+
+        $b7 = 8;
+
+        goto label12;
+
+     label10:
+        if $z1 != 0 goto label11;
+
+        $b7 = 6;
+
+        goto label12;
+
+     label11:
+        $b7 = 4;
+
+     label12:
+        $i4 = (int) $z2;
+
+        $i4 = $b7 + $i4;
+
+     label13:
+        $i5 = $r4[$i3];
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: boolean isSupported(int,boolean)>($i5, 0);
+
+        if $z0 == 0 goto label14;
+
+        $i4 = $i4 + 1000;
+
+     label14:
+        if $i4 <= $i2 goto label15;
+
+        $r5 = $r6;
+
+        $i1 = $i3;
+
+        $i2 = $i4;
+
+     label15:
+        $i3 = $i3 + 1;
+
+        goto label02;
+
+     label16:
+        $i0 = $i0 + 1;
+
+        goto label01;
+
+     label17:
+        if $r5 != null goto label18;
+
+        return null;
+
+     label18:
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int)>($r5, $i1);
+
+        return $r9;
+    }
+
+    protected final android.util.Pair selectTracks(com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo, int[][][], int[]) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[] $r7;
+        android.util.Pair $r16;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory $r12;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo $r2;
+        java.util.concurrent.atomic.AtomicReference $r4;
+        int[] $r3;
+        int $i0, $i1, $i2;
+        com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration[] $r14;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r8;
+        boolean $z0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration $r15;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r13;
+        int[][][] $r1;
+        java.lang.Object $r5;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride $r9;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo;
+
+        $r1 := @parameter1: int[][][];
+
+        $r3 := @parameter2: int[];
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: java.util.concurrent.atomic.AtomicReference parametersReference>;
+
+        $r5 = virtualinvoke $r4.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r6 = (com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters) $r5;
+
+        $i0 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: int getRendererCount()>();
+
+        $r7 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[] selectAllTracks(com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo,int[][][],int[],com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters)>($r2, $r1, $r3, $r6);
+
+        $i1 = 0;
+
+     label01:
+        if $i1 >= $i0 goto label06;
+
+        $z0 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean getRendererDisabled(int)>($i1);
+
+        if $z0 == 0 goto label02;
+
+        $r7[$i1] = null;
+
+        goto label05;
+
+     label02:
+        $r8 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray getTrackGroups(int)>($i1);
+
+        $z0 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean hasSelectionOverride(int,com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray)>($i1, $r8);
+
+        if $z0 == 0 goto label05;
+
+        $r9 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride getSelectionOverride(int,com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray)>($i1, $r8);
+
+        if $r9 != null goto label03;
+
+        $r7[$i1] = null;
+
+        goto label05;
+
+     label03:
+        $i2 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride: int length>;
+
+        if $i2 != 1 goto label04;
+
+        $r10 = new com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection;
+
+        $i2 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride: int groupIndex>;
+
+        $r11 = virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i2);
+
+        $r3 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride: int[] tracks>;
+
+        $i2 = $r3[0];
+
+        specialinvoke $r10.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.FixedTrackSelection: void <init>(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int)>($r11, $i2);
+
+        $r7[$i1] = $r10;
+
+        goto label05;
+
+     label04:
+        $r12 = r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory adaptiveTrackSelectionFactory>;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r12);
+
+        $r12 = (com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory) $r5;
+
+        $i2 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride: int groupIndex>;
+
+        $r11 = virtualinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup get(int)>($i2);
+
+        $r3 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride: int[] tracks>;
+
+        $r13 = interfaceinvoke $r12.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection createTrackSelection(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroup,int[])>($r11, $r3);
+
+        $r7[$i1] = $r13;
+
+     label05:
+        $i1 = $i1 + 1;
+
+        goto label01;
+
+     label06:
+        $r14 = newarray (com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration)[$i0];
+
+        $i1 = 0;
+
+     label07:
+        if $i1 >= $i0 goto label13;
+
+        $z0 = virtualinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean getRendererDisabled(int)>($i1);
+
+        if $z0 != 0 goto label09;
+
+        $i2 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo: int getRendererType(int)>($i1);
+
+        if $i2 == 5 goto label08;
+
+        $r13 = $r7[$i1];
+
+        if $r13 == null goto label09;
+
+     label08:
+        $z0 = 1;
+
+        goto label10;
+
+     label09:
+        $z0 = 0;
+
+     label10:
+        if $z0 == 0 goto label11;
+
+        $r15 = <com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration: com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration DEFAULT>;
+
+        goto label12;
+
+     label11:
+        $r15 = null;
+
+     label12:
+        $r14[$i1] = $r15;
+
+        $i1 = $i1 + 1;
+
+        goto label07;
+
+     label13:
+        $i0 = $r6.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: int tunnelingAudioSessionId>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void maybeConfigureRenderersForTunneling(com.mbridge.msdk.playercommon.exoplayer2.trackselection.MappingTrackSelector$MappedTrackInfo,int[][][],com.mbridge.msdk.playercommon.exoplayer2.RendererConfiguration[],com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection[],int)>($r2, $r1, $r14, $r7, $i0);
+
+        $r16 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r14, $r7);
+
+        return $r16;
+    }
+
+    protected com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectVideoTrack(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray, int[][], int, com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters, com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory) throws com.mbridge.msdk.playercommon.exoplayer2.ExoPlaybackException
+    {
+        int[][] $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection $r5;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r2 := @parameter1: int[][];
+
+        $i0 := @parameter2: int;
+
+        $r3 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters;
+
+        $r4 := @parameter4: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory;
+
+        $z0 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean forceLowestBitrate>;
+
+        if $z0 != 0 goto label1;
+
+        if $r4 == null goto label1;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectAdaptiveVideoTrack(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray,int[][],int,com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters,com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection$Factory)>($r1, $r2, $i0, $r3, $r4);
+
+        goto label2;
+
+     label1:
+        $r5 = null;
+
+     label2:
+        if $r5 != null goto label3;
+
+        $r5 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.TrackSelection selectFixedVideoTrack(com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray,int[][],com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters)>($r1, $r2, $r3);
+
+     label3:
+        return $r5;
+    }
+
+    public void setParameters(com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters)
+    {
+        java.lang.Object $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r1, $r4;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: java.util.concurrent.atomic.AtomicReference parametersReference>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicReference: java.lang.Object getAndSet(java.lang.Object)>($r1);
+
+        $r4 = (com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters) $r3;
+
+        $z0 = virtualinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void invalidate()>();
+
+     label1:
+        return;
+    }
+
+    public void setParameters(com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $r2 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder;
+
+        $r1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters build()>();
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void setParameters(com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$Parameters)>($r1);
+
+        return;
+    }
+
+    public final void setRendererDisabled(int, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder $r1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $i0 := @parameter0: int;
+
+        $z0 := @parameter1: boolean;
+
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder buildUponParameters()>();
+
+        $r1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder setRendererDisabled(int,boolean)>($i0, $z0);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void setParameters(com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder)>($r1);
+
+        return;
+    }
+
+    public final void setSelectionOverride(int, com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray, com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder $r3;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray;
+
+        $r2 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride;
+
+        $r3 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder buildUponParameters()>();
+
+        $r3 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder setSelectionOverride(int,com.mbridge.msdk.playercommon.exoplayer2.source.TrackGroupArray,com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride)>($i0, $r1, $r2);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void setParameters(com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder)>($r3);
+
+        return;
+    }
+
+    public void setTunnelingAudioSessionId(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector;
+
+        $i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder buildUponParameters()>();
+
+        $r1 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder: com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder setTunnelingAudioSessionId(int)>($i0);
+
+        virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector: void setParameters(com.mbridge.msdk.playercommon.exoplayer2.trackselection.DefaultTrackSelector$ParametersBuilder)>($r1);
+
+        return;
+    }
+}

@@ -1,0 +1,1045 @@
+public final class com.google.firebase.messaging.CommonNotificationBuilder extends java.lang.Object
+{
+    private static final java.lang.String ACTION_MESSAGING_EVENT;
+    public static final java.lang.String FCM_FALLBACK_NOTIFICATION_CHANNEL;
+    public static final java.lang.String FCM_FALLBACK_NOTIFICATION_CHANNEL_LABEL;
+    private static final java.lang.String FCM_FALLBACK_NOTIFICATION_CHANNEL_NAME_NO_RESOURCE;
+    private static final int ILLEGAL_RESOURCE_ID;
+    public static final java.lang.String METADATA_DEFAULT_CHANNEL_ID;
+    public static final java.lang.String METADATA_DEFAULT_COLOR;
+    public static final java.lang.String METADATA_DEFAULT_ICON;
+    private static final java.util.concurrent.atomic.AtomicInteger requestCodeProvider;
+
+    static void <clinit>()
+    {
+        int $i0;
+        long $l1;
+        java.util.concurrent.atomic.AtomicInteger $r0;
+
+        <com.google.firebase.messaging.CommonNotificationBuilder: java.lang.String METADATA_DEFAULT_ICON> = "com.google.firebase.messaging.default_notification_icon";
+
+        <com.google.firebase.messaging.CommonNotificationBuilder: java.lang.String METADATA_DEFAULT_COLOR> = "com.google.firebase.messaging.default_notification_color";
+
+        <com.google.firebase.messaging.CommonNotificationBuilder: java.lang.String METADATA_DEFAULT_CHANNEL_ID> = "com.google.firebase.messaging.default_notification_channel_id";
+
+        <com.google.firebase.messaging.CommonNotificationBuilder: int ILLEGAL_RESOURCE_ID> = 0;
+
+        <com.google.firebase.messaging.CommonNotificationBuilder: java.lang.String FCM_FALLBACK_NOTIFICATION_CHANNEL_NAME_NO_RESOURCE> = "Misc";
+
+        <com.google.firebase.messaging.CommonNotificationBuilder: java.lang.String FCM_FALLBACK_NOTIFICATION_CHANNEL_LABEL> = "fcm_fallback_notification_channel_label";
+
+        <com.google.firebase.messaging.CommonNotificationBuilder: java.lang.String FCM_FALLBACK_NOTIFICATION_CHANNEL> = "fcm_fallback_notification_channel";
+
+        <com.google.firebase.messaging.CommonNotificationBuilder: java.lang.String ACTION_MESSAGING_EVENT> = "com.google.firebase.MESSAGING_EVENT";
+
+        $r0 = new java.util.concurrent.atomic.AtomicInteger;
+
+        $l1 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        $i0 = (int) $l1;
+
+        specialinvoke $r0.<java.util.concurrent.atomic.AtomicInteger: void <init>(int)>($i0);
+
+        <com.google.firebase.messaging.CommonNotificationBuilder: java.util.concurrent.atomic.AtomicInteger requestCodeProvider> = $r0;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        com.google.firebase.messaging.CommonNotificationBuilder r0;
+
+        r0 := @this: com.google.firebase.messaging.CommonNotificationBuilder;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static android.app.PendingIntent createContentIntent(android.content.Context, com.google.firebase.messaging.NotificationParams, java.lang.String, android.content.pm.PackageManager)
+    {
+        android.content.Context $r0;
+        android.os.Bundle $r5;
+        android.content.pm.PackageManager $r3;
+        android.content.Intent $r4;
+        android.app.PendingIntent $r6;
+        com.google.firebase.messaging.NotificationParams $r1;
+        int $i0, $i1;
+        java.lang.String $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.google.firebase.messaging.NotificationParams;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: android.content.pm.PackageManager;
+
+        $r4 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: android.content.Intent createTargetIntent(java.lang.String,com.google.firebase.messaging.NotificationParams,android.content.pm.PackageManager)>($r2, $r1, $r3);
+
+        if $r4 != null goto label1;
+
+        return null;
+
+     label1:
+        virtualinvoke $r4.<android.content.Intent: android.content.Intent addFlags(int)>(67108864);
+
+        $r5 = virtualinvoke $r1.<com.google.firebase.messaging.NotificationParams: android.os.Bundle paramsWithReservedKeysRemoved()>();
+
+        virtualinvoke $r4.<android.content.Intent: android.content.Intent putExtras(android.os.Bundle)>($r5);
+
+        $z0 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: boolean shouldUploadMetrics(com.google.firebase.messaging.NotificationParams)>($r1);
+
+        if $z0 == 0 goto label2;
+
+        $r5 = virtualinvoke $r1.<com.google.firebase.messaging.NotificationParams: android.os.Bundle paramsForAnalyticsIntent()>();
+
+        virtualinvoke $r4.<android.content.Intent: android.content.Intent putExtra(java.lang.String,android.os.Bundle)>("gcm.n.analytics_data", $r5);
+
+     label2:
+        $i0 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: int generatePendingIntentRequestCode()>();
+
+        $i1 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: int getPendingIntentFlags(int)>(1073741824);
+
+        $r6 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getActivity(android.content.Context,int,android.content.Intent,int)>($r0, $i0, $r4, $i1);
+
+        return $r6;
+    }
+
+    private static android.app.PendingIntent createDeleteIntent(android.content.Context, android.content.Context, com.google.firebase.messaging.NotificationParams)
+    {
+        android.content.Context $r0, $r1;
+        android.os.Bundle $r4;
+        android.content.Intent $r3;
+        android.app.PendingIntent $r5;
+        com.google.firebase.messaging.NotificationParams $r2;
+        boolean $z0;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r0 := @parameter1: android.content.Context;
+
+        $r2 := @parameter2: com.google.firebase.messaging.NotificationParams;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: boolean shouldUploadMetrics(com.google.firebase.messaging.NotificationParams)>($r2);
+
+        if $z0 != 0 goto label1;
+
+        return null;
+
+     label1:
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(java.lang.String)>("com.google.firebase.messaging.NOTIFICATION_DISMISS");
+
+        $r4 = virtualinvoke $r2.<com.google.firebase.messaging.NotificationParams: android.os.Bundle paramsForAnalyticsIntent()>();
+
+        $r3 = virtualinvoke $r3.<android.content.Intent: android.content.Intent putExtras(android.os.Bundle)>($r4);
+
+        $r5 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: android.app.PendingIntent createMessagingPendingIntent(android.content.Context,android.content.Context,android.content.Intent)>($r1, $r0, $r3);
+
+        return $r5;
+    }
+
+    private static android.app.PendingIntent createMessagingPendingIntent(android.content.Context, android.content.Context, android.content.Intent)
+    {
+        android.content.Context $r0, $r1;
+        android.content.ComponentName $r4;
+        android.content.Intent $r2, $r3;
+        android.app.PendingIntent $r5;
+        int $i0, $i1;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: android.content.Context;
+
+        $r2 := @parameter2: android.content.Intent;
+
+        $i0 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: int generatePendingIntentRequestCode()>();
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(java.lang.String)>("com.google.firebase.MESSAGING_EVENT");
+
+        $r4 = new android.content.ComponentName;
+
+        specialinvoke $r4.<android.content.ComponentName: void <init>(android.content.Context,java.lang.String)>($r1, "com.google.firebase.iid.FirebaseInstanceIdReceiver");
+
+        $r3 = virtualinvoke $r3.<android.content.Intent: android.content.Intent setComponent(android.content.ComponentName)>($r4);
+
+        $r2 = virtualinvoke $r3.<android.content.Intent: android.content.Intent putExtra(java.lang.String,android.os.Parcelable)>("wrapped_intent", $r2);
+
+        $i1 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: int getPendingIntentFlags(int)>(1073741824);
+
+        $r5 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getBroadcast(android.content.Context,int,android.content.Intent,int)>($r0, $i0, $r2, $i1);
+
+        return $r5;
+    }
+
+    public static com.google.firebase.messaging.CommonNotificationBuilder$DisplayNotificationInfo createNotificationInfo(android.content.Context, android.content.Context, com.google.firebase.messaging.NotificationParams, java.lang.String, android.os.Bundle)
+    {
+        android.content.Context $r2, $r3;
+        com.google.firebase.messaging.CommonNotificationBuilder$DisplayNotificationInfo $r16;
+        android.os.Bundle $r5;
+        android.content.pm.PackageManager $r8;
+        androidx.core.app.NotificationCompat$Builder $r1;
+        android.net.Uri $r10;
+        long $l1;
+        android.app.PendingIntent $r11;
+        java.lang.Integer $r12;
+        long[] $r14;
+        java.lang.Long $r13;
+        int[] $r15;
+        int $i0, $i2, $i3;
+        java.lang.String $r4, $r6;
+        boolean $z0;
+        androidx.core.app.NotificationCompat$BigTextStyle $r9;
+        com.google.firebase.messaging.NotificationParams $r0;
+        android.content.res.Resources $r7;
+
+        $r2 := @parameter0: android.content.Context;
+
+        $r3 := @parameter1: android.content.Context;
+
+        $r0 := @parameter2: com.google.firebase.messaging.NotificationParams;
+
+        $r4 := @parameter3: java.lang.String;
+
+        $r5 := @parameter4: android.os.Bundle;
+
+        $r6 = virtualinvoke $r3.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r7 = virtualinvoke $r3.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r8 = virtualinvoke $r3.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r1 = new androidx.core.app.NotificationCompat$Builder;
+
+        specialinvoke $r1.<androidx.core.app.NotificationCompat$Builder: void <init>(android.content.Context,java.lang.String)>($r3, $r4);
+
+        $r4 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.String getPossiblyLocalizedString(android.content.res.Resources,java.lang.String,java.lang.String)>($r7, $r6, "gcm.n.title");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r4);
+
+        if $z0 != 0 goto label01;
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setContentTitle(java.lang.CharSequence)>($r4);
+
+     label01:
+        $r4 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.String getPossiblyLocalizedString(android.content.res.Resources,java.lang.String,java.lang.String)>($r7, $r6, "gcm.n.body");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r4);
+
+        if $z0 != 0 goto label02;
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setContentText(java.lang.CharSequence)>($r4);
+
+        $r9 = new androidx.core.app.NotificationCompat$BigTextStyle;
+
+        specialinvoke $r9.<androidx.core.app.NotificationCompat$BigTextStyle: void <init>()>();
+
+        $r9 = virtualinvoke $r9.<androidx.core.app.NotificationCompat$BigTextStyle: androidx.core.app.NotificationCompat$BigTextStyle bigText(java.lang.CharSequence)>($r4);
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setStyle(androidx.core.app.NotificationCompat$Style)>($r9);
+
+     label02:
+        $r4 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.String getString(java.lang.String)>("gcm.n.icon");
+
+        $i0 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: int getSmallIcon(android.content.pm.PackageManager,android.content.res.Resources,java.lang.String,java.lang.String,android.os.Bundle)>($r8, $r7, $r6, $r4, $r5);
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setSmallIcon(int)>($i0);
+
+        $r10 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: android.net.Uri getSound(java.lang.String,com.google.firebase.messaging.NotificationParams,android.content.res.Resources)>($r6, $r0, $r7);
+
+        if $r10 == null goto label03;
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setSound(android.net.Uri)>($r10);
+
+     label03:
+        $r11 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: android.app.PendingIntent createContentIntent(android.content.Context,com.google.firebase.messaging.NotificationParams,java.lang.String,android.content.pm.PackageManager)>($r2, $r0, $r6, $r8);
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setContentIntent(android.app.PendingIntent)>($r11);
+
+        $r11 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: android.app.PendingIntent createDeleteIntent(android.content.Context,android.content.Context,com.google.firebase.messaging.NotificationParams)>($r2, $r3, $r0);
+
+        if $r11 == null goto label04;
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setDeleteIntent(android.app.PendingIntent)>($r11);
+
+     label04:
+        $r4 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.String getString(java.lang.String)>("gcm.n.color");
+
+        $r12 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: java.lang.Integer getColor(android.content.Context,java.lang.String,android.os.Bundle)>($r3, $r4, $r5);
+
+        if $r12 == null goto label05;
+
+        $i0 = virtualinvoke $r12.<java.lang.Integer: int intValue()>();
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setColor(int)>($i0);
+
+     label05:
+        $z0 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: boolean getBoolean(java.lang.String)>("gcm.n.sticky");
+
+        $z0 = $z0 ^ 1;
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setAutoCancel(boolean)>($z0);
+
+        $z0 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: boolean getBoolean(java.lang.String)>("gcm.n.local_only");
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setLocalOnly(boolean)>($z0);
+
+        $r4 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.String getString(java.lang.String)>("gcm.n.ticker");
+
+        if $r4 == null goto label06;
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setTicker(java.lang.CharSequence)>($r4);
+
+     label06:
+        $r12 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.Integer getNotificationPriority()>();
+
+        if $r12 == null goto label07;
+
+        $i0 = virtualinvoke $r12.<java.lang.Integer: int intValue()>();
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setPriority(int)>($i0);
+
+     label07:
+        $r12 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.Integer getVisibility()>();
+
+        if $r12 == null goto label08;
+
+        $i0 = virtualinvoke $r12.<java.lang.Integer: int intValue()>();
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setVisibility(int)>($i0);
+
+     label08:
+        $r12 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.Integer getNotificationCount()>();
+
+        if $r12 == null goto label09;
+
+        $i0 = virtualinvoke $r12.<java.lang.Integer: int intValue()>();
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setNumber(int)>($i0);
+
+     label09:
+        $r13 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.Long getLong(java.lang.String)>("gcm.n.event_time");
+
+        if $r13 == null goto label10;
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setShowWhen(boolean)>(1);
+
+        $l1 = virtualinvoke $r13.<java.lang.Long: long longValue()>();
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setWhen(long)>($l1);
+
+     label10:
+        $r14 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: long[] getVibrateTimings()>();
+
+        if $r14 == null goto label11;
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setVibrate(long[])>($r14);
+
+     label11:
+        $r15 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: int[] getLightSettings()>();
+
+        if $r15 == null goto label12;
+
+        $i0 = $r15[0];
+
+        $i2 = $r15[1];
+
+        $i3 = $r15[2];
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setLights(int,int,int)>($i0, $i2, $i3);
+
+     label12:
+        $i0 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: int getConsolidatedDefaults(com.google.firebase.messaging.NotificationParams)>($r0);
+
+        virtualinvoke $r1.<androidx.core.app.NotificationCompat$Builder: androidx.core.app.NotificationCompat$Builder setDefaults(int)>($i0);
+
+        $r16 = new com.google.firebase.messaging.CommonNotificationBuilder$DisplayNotificationInfo;
+
+        $r4 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: java.lang.String getTag(com.google.firebase.messaging.NotificationParams)>($r0);
+
+        specialinvoke $r16.<com.google.firebase.messaging.CommonNotificationBuilder$DisplayNotificationInfo: void <init>(androidx.core.app.NotificationCompat$Builder,java.lang.String,int)>($r1, $r4, 0);
+
+        return $r16;
+    }
+
+    static com.google.firebase.messaging.CommonNotificationBuilder$DisplayNotificationInfo createNotificationInfo(android.content.Context, com.google.firebase.messaging.NotificationParams)
+    {
+        android.content.Context $r1;
+        com.google.firebase.messaging.CommonNotificationBuilder$DisplayNotificationInfo $r5;
+        android.os.Bundle $r4;
+        android.content.pm.PackageManager $r2;
+        java.lang.String $r3;
+        com.google.firebase.messaging.NotificationParams $r0;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r0 := @parameter1: com.google.firebase.messaging.NotificationParams;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r4 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: android.os.Bundle getManifestMetadata(android.content.pm.PackageManager,java.lang.String)>($r2, $r3);
+
+        $r3 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.String getNotificationChannelId()>();
+
+        $r3 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: java.lang.String getOrCreateChannel(android.content.Context,java.lang.String,android.os.Bundle)>($r1, $r3, $r4);
+
+        $r5 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: com.google.firebase.messaging.CommonNotificationBuilder$DisplayNotificationInfo createNotificationInfo(android.content.Context,android.content.Context,com.google.firebase.messaging.NotificationParams,java.lang.String,android.os.Bundle)>($r1, $r1, $r0, $r3, $r4);
+
+        return $r5;
+    }
+
+    private static android.content.Intent createTargetIntent(java.lang.String, com.google.firebase.messaging.NotificationParams, android.content.pm.PackageManager)
+    {
+        android.content.pm.PackageManager $r2;
+        android.net.Uri $r5;
+        android.content.Intent $r4;
+        java.lang.String $r0, $r3;
+        com.google.firebase.messaging.NotificationParams $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.google.firebase.messaging.NotificationParams;
+
+        $r2 := @parameter2: android.content.pm.PackageManager;
+
+        $r3 = virtualinvoke $r1.<com.google.firebase.messaging.NotificationParams: java.lang.String getString(java.lang.String)>("gcm.n.click_action");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+        if $z0 != 0 goto label1;
+
+        $r4 = new android.content.Intent;
+
+        specialinvoke $r4.<android.content.Intent: void <init>(java.lang.String)>($r3);
+
+        virtualinvoke $r4.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>($r0);
+
+        virtualinvoke $r4.<android.content.Intent: android.content.Intent setFlags(int)>(268435456);
+
+        return $r4;
+
+     label1:
+        $r5 = virtualinvoke $r1.<com.google.firebase.messaging.NotificationParams: android.net.Uri getLink()>();
+
+        if $r5 == null goto label2;
+
+        $r4 = new android.content.Intent;
+
+        specialinvoke $r4.<android.content.Intent: void <init>(java.lang.String)>("android.intent.action.VIEW");
+
+        virtualinvoke $r4.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>($r0);
+
+        virtualinvoke $r4.<android.content.Intent: android.content.Intent setData(android.net.Uri)>($r5);
+
+        return $r4;
+
+     label2:
+        $r4 = virtualinvoke $r2.<android.content.pm.PackageManager: android.content.Intent getLaunchIntentForPackage(java.lang.String)>($r0);
+
+        if $r4 != null goto label3;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", "No activity found to launch app");
+
+     label3:
+        return $r4;
+    }
+
+    private static int generatePendingIntentRequestCode()
+    {
+        int $i0;
+        java.util.concurrent.atomic.AtomicInteger $r0;
+
+        $r0 = <com.google.firebase.messaging.CommonNotificationBuilder: java.util.concurrent.atomic.AtomicInteger requestCodeProvider>;
+
+        $i0 = virtualinvoke $r0.<java.util.concurrent.atomic.AtomicInteger: int incrementAndGet()>();
+
+        return $i0;
+    }
+
+    private static java.lang.Integer getColor(android.content.Context, java.lang.String, android.os.Bundle)
+    {
+        java.lang.Throwable $r1, $r2;
+        android.content.Context $r3;
+        android.os.Bundle $r0;
+        java.lang.Integer $r5;
+        int $i0;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r4;
+        boolean $z0;
+
+        $r3 := @parameter0: android.content.Context;
+
+        $r4 := @parameter1: java.lang.String;
+
+        $r0 := @parameter2: android.os.Bundle;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r4);
+
+        if $z0 != 0 goto label04;
+
+     label01:
+        $i0 = staticinvoke <android.graphics.Color: int parseColor(java.lang.String)>($r4);
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label02:
+        return $r5;
+
+     label03:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("Color is invalid: ");
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Notification will use default color.");
+
+        $r4 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", $r4);
+
+     label04:
+        $i0 = virtualinvoke $r0.<android.os.Bundle: int getInt(java.lang.String,int)>("com.google.firebase.messaging.default_notification_color", 0);
+
+        if $i0 == 0 goto label08;
+
+     label05:
+        $i0 = staticinvoke <androidx.core.content.ContextCompat: int getColor(android.content.Context,int)>($r3, $i0);
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label06:
+        return $r5;
+
+     label07:
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", "Cannot find the color resource referenced in AndroidManifest.");
+
+     label08:
+        return null;
+
+     label09:
+        $r1 := @caughtexception;
+
+        goto label03;
+
+     label10:
+        $r2 := @caughtexception;
+
+        goto label07;
+
+        catch java.lang.IllegalArgumentException from label01 to label02 with label09;
+        catch android.content.res.Resources$NotFoundException from label05 to label06 with label10;
+    }
+
+    private static int getConsolidatedDefaults(com.google.firebase.messaging.NotificationParams)
+    {
+        byte $b0;
+        com.google.firebase.messaging.NotificationParams $r0;
+        boolean $z0, $z1;
+
+        $r0 := @parameter0: com.google.firebase.messaging.NotificationParams;
+
+        $z0 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: boolean getBoolean(java.lang.String)>("gcm.n.default_sound");
+
+        $b0 = $z0;
+
+        $z1 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: boolean getBoolean(java.lang.String)>("gcm.n.default_vibrate_timings");
+
+        if $z1 == 0 goto label1;
+
+        $b0 = $z0 | 2;
+
+     label1:
+        $z0 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: boolean getBoolean(java.lang.String)>("gcm.n.default_light_settings");
+
+        if $z0 == 0 goto label2;
+
+        $b0 = $b0 | 4;
+
+     label2:
+        return $b0;
+    }
+
+    private static android.os.Bundle getManifestMetadata(android.content.pm.PackageManager, java.lang.String)
+    {
+        java.lang.Throwable $r4;
+        android.os.Bundle $r3;
+        android.content.pm.PackageManager $r0;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r1;
+        android.content.pm.ApplicationInfo $r2;
+
+        $r0 := @parameter0: android.content.pm.PackageManager;
+
+        $r1 := @parameter1: java.lang.String;
+
+     label1:
+        $r2 = virtualinvoke $r0.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>($r1, 128);
+
+     label2:
+        if $r2 == null goto label4;
+
+        $r3 = $r2.<android.content.pm.ApplicationInfo: android.os.Bundle metaData>;
+
+        if $r3 == null goto label4;
+
+        $r3 = $r2.<android.content.pm.ApplicationInfo: android.os.Bundle metaData>;
+
+        return $r3;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Couldn\'t get own application info: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", $r1);
+
+     label4:
+        $r3 = <android.os.Bundle: android.os.Bundle EMPTY>;
+
+        return $r3;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    public static java.lang.String getOrCreateChannel(android.content.Context, java.lang.String, android.os.Bundle)
+    {
+        java.lang.Throwable $r0;
+        android.content.Context $r1;
+        android.os.Bundle $r3;
+        android.app.NotificationManager $r8;
+        android.content.pm.PackageManager $r4;
+        int $i0;
+        android.app.NotificationChannel $r9;
+        java.lang.Object $r7;
+        java.lang.StringBuilder $r10;
+        java.lang.String $r2, $r5;
+        android.content.pm.ApplicationInfo $r6;
+        boolean $z0;
+        android.content.res.Resources $r11;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: android.os.Bundle;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 >= 26 goto label01;
+
+        return null;
+
+     label01:
+        $r4 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r5 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r6 = virtualinvoke $r4.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>($r5, 0);
+
+     label02:
+        $i0 = $r6.<android.content.pm.ApplicationInfo: int targetSdkVersion>;
+
+        if $i0 >= 26 goto label03;
+
+        return null;
+
+     label03:
+        $r7 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.Class)>(class "Landroid/app/NotificationManager;");
+
+        $r8 = (android.app.NotificationManager) $r7;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label05;
+
+        $r9 = virtualinvoke $r8.<android.app.NotificationManager: android.app.NotificationChannel getNotificationChannel(java.lang.String)>($r2);
+
+        if $r9 == null goto label04;
+
+        return $r2;
+
+     label04:
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("Notification Channel requested (");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") has not been created by the app. Manifest configuration, or default, value will be used.");
+
+        $r2 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", $r2);
+
+     label05:
+        $r2 = virtualinvoke $r3.<android.os.Bundle: java.lang.String getString(java.lang.String)>("com.google.firebase.messaging.default_notification_channel_id");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label07;
+
+        $r9 = virtualinvoke $r8.<android.app.NotificationManager: android.app.NotificationChannel getNotificationChannel(java.lang.String)>($r2);
+
+        if $r9 == null goto label06;
+
+        return $r2;
+
+     label06:
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", "Notification Channel set in AndroidManifest.xml has not been created by the app. Default value will be used.");
+
+        goto label08;
+
+     label07:
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", "Missing Default Notification Channel metadata in AndroidManifest. Default value will be used.");
+
+     label08:
+        $r9 = virtualinvoke $r8.<android.app.NotificationManager: android.app.NotificationChannel getNotificationChannel(java.lang.String)>("fcm_fallback_notification_channel");
+
+        if $r9 != null goto label12;
+
+        $r11 = virtualinvoke $r1.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        $i0 = virtualinvoke $r11.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>("fcm_fallback_notification_channel_label", "string", $r2);
+
+        if $i0 != 0 goto label09;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", "String resource \"fcm_fallback_notification_channel_label\" is not found. Using default string channel name.");
+
+        $r2 = "Misc";
+
+        goto label10;
+
+     label09:
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.String getString(int)>($i0);
+
+     label10:
+        $r9 = new android.app.NotificationChannel;
+
+        specialinvoke $r9.<android.app.NotificationChannel: void <init>(java.lang.String,java.lang.CharSequence,int)>("fcm_fallback_notification_channel", $r2, 3);
+
+        virtualinvoke $r8.<android.app.NotificationManager: void createNotificationChannel(android.app.NotificationChannel)>($r9);
+
+        return "fcm_fallback_notification_channel";
+
+     label11:
+        $r0 := @caughtexception;
+
+        return null;
+
+     label12:
+        return "fcm_fallback_notification_channel";
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label01 to label02 with label11;
+    }
+
+    private static int getPendingIntentFlags(int)
+    {
+        int $i0, $i1;
+
+        $i0 := @parameter0: int;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 23 goto label1;
+
+        $i0 = $i0 | 67108864;
+
+     label1:
+        return $i0;
+    }
+
+    private static int getSmallIcon(android.content.pm.PackageManager, android.content.res.Resources, java.lang.String, java.lang.String, android.os.Bundle)
+    {
+        java.lang.Throwable $r7;
+        android.os.Bundle $r4;
+        android.content.pm.PackageManager $r1;
+        int $i0, $i1;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r2, $r3;
+        android.content.pm.ApplicationInfo $r6;
+        android.content.res.Resources $r0;
+        boolean $z0;
+
+        $r1 := @parameter0: android.content.pm.PackageManager;
+
+        $r0 := @parameter1: android.content.res.Resources;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $r4 := @parameter4: android.os.Bundle;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+        if $z0 != 0 goto label3;
+
+        $i0 = virtualinvoke $r0.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>($r3, "drawable", $r2);
+
+        if $i0 == 0 goto label1;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: boolean isValidIcon(android.content.res.Resources,int)>($r0, $i0);
+
+        if $z0 == 0 goto label1;
+
+        return $i0;
+
+     label1:
+        $i0 = virtualinvoke $r0.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>($r3, "mipmap", $r2);
+
+        if $i0 == 0 goto label2;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: boolean isValidIcon(android.content.res.Resources,int)>($r0, $i0);
+
+        if $z0 == 0 goto label2;
+
+        return $i0;
+
+     label2:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Icon resource ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" not found. Notification will use default icon.");
+
+        $r3 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", $r3);
+
+     label3:
+        $i0 = virtualinvoke $r4.<android.os.Bundle: int getInt(java.lang.String,int)>("com.google.firebase.messaging.default_notification_icon", 0);
+
+        $i1 = $i0;
+
+        if $i0 == 0 goto label4;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: boolean isValidIcon(android.content.res.Resources,int)>($r0, $i0);
+
+        if $z0 != 0 goto label7;
+
+     label4:
+        $r6 = virtualinvoke $r1.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>($r2, 0);
+
+     label5:
+        $i1 = $r6.<android.content.pm.ApplicationInfo: int icon>;
+
+        goto label7;
+
+     label6:
+        $r7 := @caughtexception;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Couldn\'t get own application info: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r7);
+
+        $r2 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", $r2);
+
+     label7:
+        if $i1 == 0 goto label8;
+
+        $z0 = staticinvoke <com.google.firebase.messaging.CommonNotificationBuilder: boolean isValidIcon(android.content.res.Resources,int)>($r0, $i1);
+
+        if $z0 != 0 goto label9;
+
+     label8:
+        return 17301651;
+
+     label9:
+        return $i1;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label4 to label5 with label6;
+    }
+
+    private static android.net.Uri getSound(java.lang.String, com.google.firebase.messaging.NotificationParams, android.content.res.Resources)
+    {
+        android.net.Uri $r6;
+        com.google.firebase.messaging.NotificationParams $r1;
+        int $i0;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r0, $r3, $r4;
+        android.content.res.Resources $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.google.firebase.messaging.NotificationParams;
+
+        $r2 := @parameter2: android.content.res.Resources;
+
+        $r3 = virtualinvoke $r1.<com.google.firebase.messaging.NotificationParams: java.lang.String getSoundResourceName()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+        if $z0 == 0 goto label1;
+
+        return null;
+
+     label1:
+        $r4 = "default";
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 != 0 goto label2;
+
+        $i0 = virtualinvoke $r2.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>($r3, "raw", $r0);
+
+        if $i0 == 0 goto label2;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("android.resource://");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/raw/");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r0 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r0);
+
+        return $r6;
+
+     label2:
+        $r6 = staticinvoke <android.media.RingtoneManager: android.net.Uri getDefaultUri(int)>(2);
+
+        return $r6;
+    }
+
+    private static java.lang.String getTag(com.google.firebase.messaging.NotificationParams)
+    {
+        java.lang.StringBuilder $r2;
+        long $l0;
+        java.lang.String $r1;
+        com.google.firebase.messaging.NotificationParams $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.firebase.messaging.NotificationParams;
+
+        $r1 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: java.lang.String getString(java.lang.String)>("gcm.n.tag");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        return $r1;
+
+     label1:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("FCM-Notification:");
+
+        $l0 = staticinvoke <android.os.SystemClock: long uptimeMillis()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    private static boolean isValidIcon(android.content.res.Resources, int)
+    {
+        java.lang.Throwable $r0;
+        android.graphics.drawable.Drawable $r2;
+        int $i0, $i1;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4;
+        android.content.res.Resources $r1;
+        boolean $z0;
+
+        $r1 := @parameter0: android.content.res.Resources;
+
+        $i0 := @parameter1: int;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 == 26 goto label1;
+
+        return 1;
+
+     label1:
+        $r2 = virtualinvoke $r1.<android.content.res.Resources: android.graphics.drawable.Drawable getDrawable(int,android.content.res.Resources$Theme)>($i0, null);
+
+     label2:
+        $z0 = $r2 instanceof android.graphics.drawable.AdaptiveIconDrawable;
+
+        if $z0 == 0 goto label5;
+
+        $r3 = new java.lang.StringBuilder;
+
+     label3:
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Adaptive icons cannot be used in notifications. Ignoring icon id: ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", $r4);
+
+     label4:
+        return 0;
+
+     label5:
+        return 1;
+
+     label6:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Couldn\'t find resource ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", treating it as an invalid icon");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("FirebaseMessaging", $r4);
+
+        return 0;
+
+     label7:
+        $r0 := @caughtexception;
+
+        goto label6;
+
+        catch android.content.res.Resources$NotFoundException from label1 to label2 with label7;
+        catch android.content.res.Resources$NotFoundException from label3 to label4 with label7;
+    }
+
+    static boolean shouldUploadMetrics(com.google.firebase.messaging.NotificationParams)
+    {
+        com.google.firebase.messaging.NotificationParams $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.firebase.messaging.NotificationParams;
+
+        $z0 = virtualinvoke $r0.<com.google.firebase.messaging.NotificationParams: boolean getBoolean(java.lang.String)>("google.c.a.e");
+
+        return $z0;
+    }
+}

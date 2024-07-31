@@ -1,0 +1,1554 @@
+final class com.google.i18n.phonenumbers.PhoneNumberMatcher extends java.lang.Object implements java.util.Iterator
+{
+    private static final java.util.regex.Pattern[] INNER_MATCHES;
+    private static final java.util.regex.Pattern LEAD_CLASS;
+    private static final java.util.regex.Pattern MATCHING_BRACKETS;
+    private static final java.util.regex.Pattern PATTERN;
+    private static final java.util.regex.Pattern PUB_PAGES;
+    private static final java.util.regex.Pattern SLASH_SEPARATED_DATES;
+    private static final java.util.regex.Pattern TIME_STAMPS;
+    private static final java.util.regex.Pattern TIME_STAMPS_SUFFIX;
+    private com.google.i18n.phonenumbers.PhoneNumberMatch lastMatch;
+    private final com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency leniency;
+    private long maxTries;
+    private final com.google.i18n.phonenumbers.PhoneNumberUtil phoneUtil;
+    private final java.lang.String preferredRegion;
+    private int searchIndex;
+    private com.google.i18n.phonenumbers.PhoneNumberMatcher$State state;
+    private final java.lang.CharSequence text;
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern[] $r1;
+        java.lang.StringBuilder $r3;
+        java.util.regex.Pattern $r0;
+        java.lang.String $r2, $r4, $r5, $r6;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("\\d{1,5}-+\\d{1,5}\\s{0,4}\\(\\d{1,4}");
+
+        <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern PUB_PAGES> = $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("(?:(?:[0-3]?\\d/[01]?\\d)|(?:[01]?\\d/[0-3]?\\d))/(?:[12]\\d)?\\d{2}");
+
+        <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern SLASH_SEPARATED_DATES> = $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("[12]\\d{3}[-/]?[01]\\d[-/]?[0-3]\\d +[0-2]\\d$");
+
+        <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern TIME_STAMPS> = $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>(":[0-5]\\d");
+
+        <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern TIME_STAMPS_SUFFIX> = $r0;
+
+        $r1 = newarray (java.util.regex.Pattern)[6];
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("/+(.*)");
+
+        $r1[0] = $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("(\\([^(]*)");
+
+        $r1[1] = $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("(?:\\p{Z}-|-\\p{Z})\\p{Z}*(.+)");
+
+        $r1[2] = $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("[\u2012-\u2015\uff0d]\\p{Z}*(.+)");
+
+        $r1[3] = $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("\\.+\\p{Z}*([^.]+)");
+
+        $r1[4] = $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("\\p{Z}+(\\P{Z}+)");
+
+        $r1[5] = $r0;
+
+        <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern[] INNER_MATCHES> = $r1;
+
+        $r2 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.String limit(int,int)>(0, 3);
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("(?:[(\\[\uff08\uff3b])?(?:[^(\\[\uff08\uff3b)\\]\uff09\uff3d]+[)\\]\uff09\uff3d])?[^(\\[\uff08\uff3b)\\]\uff09\uff3d]+(?:[(\\[\uff08\uff3b][^(\\[\uff08\uff3b)\\]\uff09\uff3d]+[)\\]\uff09\uff3d])");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("[^(\\[\uff08\uff3b)\\]\uff09\uff3d]*");
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>($r2);
+
+        <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern MATCHING_BRACKETS> = $r0;
+
+        $r2 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.String limit(int,int)>(0, 2);
+
+        $r4 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.String limit(int,int)>(0, 4);
+
+        $r5 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.String limit(int,int)>(0, 20);
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("[-x\u2010-\u2015\u2212\u30fc\uff0d-\uff0f \u00a0\u00ad\u200b\u2060\u3000()\uff08\uff09\uff3b\uff3d.\\[\\]/~\u2053\u223c\uff5e]");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("\\p{Nd}");
+
+        $r6 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.String limit(int,int)>(1, 20);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("[(\\[\uff08\uff3b+\uff0b]");
+
+        <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern LEAD_CLASS> = $r0;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("(?:[(\\[\uff08\uff3b+\uff0b]");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("(?:");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("(?:");
+
+        $r2 = <com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String EXTN_PATTERNS_FOR_MATCHING>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")?");
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String,int)>($r2, 66);
+
+        <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern PATTERN> = $r0;
+
+        return;
+    }
+
+    void <init>(com.google.i18n.phonenumbers.PhoneNumberUtil, java.lang.CharSequence, java.lang.String, com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency, long)
+    {
+        java.lang.CharSequence $r8;
+        long $l0;
+        java.lang.IllegalArgumentException $r6;
+        java.lang.NullPointerException $r7;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher r0;
+        com.google.i18n.phonenumbers.PhoneNumberUtil $r3;
+        byte $b1;
+        com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency $r2;
+        int $i2;
+        java.lang.Object $r4;
+        java.lang.String $r1;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher$State $r5;
+
+        r0 := @this: com.google.i18n.phonenumbers.PhoneNumberMatcher;
+
+        $r3 := @parameter0: com.google.i18n.phonenumbers.PhoneNumberUtil;
+
+        $r4 := @parameter1: java.lang.CharSequence;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $r2 := @parameter3: com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency;
+
+        $l0 := @parameter4: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r5 = <com.google.i18n.phonenumbers.PhoneNumberMatcher$State: com.google.i18n.phonenumbers.PhoneNumberMatcher$State NOT_READY>;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatcher$State state> = $r5;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch lastMatch> = null;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: int searchIndex> = 0;
+
+        if $r3 == null goto label4;
+
+        if $r2 == null goto label4;
+
+        $b1 = $l0 cmp 0L;
+
+        $i2 = (int) $b1;
+
+        if $i2 < 0 goto label3;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberUtil phoneUtil> = $r3;
+
+        if $r4 == null goto label1;
+
+        goto label2;
+
+     label1:
+        $r4 = "";
+
+     label2:
+        $r8 = (java.lang.CharSequence) $r4;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence text> = $r8;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.String preferredRegion> = $r1;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency leniency> = $r2;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: long maxTries> = $l0;
+
+        return;
+
+     label3:
+        $r6 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>()>();
+
+        throw $r6;
+
+     label4:
+        $r7 = new java.lang.NullPointerException;
+
+        specialinvoke $r7.<java.lang.NullPointerException: void <init>(java.lang.String)>("Null throw statement replaced by Soot");
+
+        throw $r7;
+    }
+
+    static boolean allNumberGroupsAreExactlyPresent(com.google.i18n.phonenumbers.PhoneNumberUtil, com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.StringBuilder, java.lang.String[])
+    {
+        java.lang.String[] $r0, $r6;
+        com.google.i18n.phonenumbers.PhoneNumberUtil $r2;
+        int $i0, $i1;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r1, $r7;
+        java.util.regex.Pattern $r5;
+        boolean $z0;
+
+        $r2 := @parameter0: com.google.i18n.phonenumbers.PhoneNumberUtil;
+
+        $r3 := @parameter1: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r4 := @parameter2: java.lang.StringBuilder;
+
+        $r0 := @parameter3: java.lang.String[];
+
+        $r5 = <com.google.i18n.phonenumbers.PhoneNumberUtil: java.util.regex.Pattern NON_DIGITS_PATTERN>;
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = virtualinvoke $r5.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>($r1);
+
+        $z0 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: boolean hasExtension()>();
+
+        if $z0 == 0 goto label1;
+
+        $i0 = lengthof $r6;
+
+        $i0 = $i0 + -2;
+
+        goto label2;
+
+     label1:
+        $i0 = lengthof $r6;
+
+        $i0 = $i0 - 1;
+
+     label2:
+        $i1 = lengthof $r6;
+
+        if $i1 == 1 goto label8;
+
+        $r1 = $r6[$i0];
+
+        $r7 = virtualinvoke $r2.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r3);
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean contains(java.lang.CharSequence)>($r7);
+
+        if $z0 == 0 goto label3;
+
+        return 1;
+
+     label3:
+        $i1 = lengthof $r0;
+
+        $i1 = $i1 - 1;
+
+     label4:
+        if $i1 <= 0 goto label6;
+
+        if $i0 < 0 goto label6;
+
+        $r7 = $r6[$i0];
+
+        $r1 = $r0[$i1];
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label5;
+
+        return 0;
+
+     label5:
+        $i1 = $i1 + -1;
+
+        $i0 = $i0 + -1;
+
+        goto label4;
+
+     label6:
+        if $i0 < 0 goto label7;
+
+        $r1 = $r6[$i0];
+
+        $r7 = $r0[0];
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean endsWith(java.lang.String)>($r7);
+
+        if $z0 == 0 goto label7;
+
+        return 1;
+
+     label7:
+        return 0;
+
+     label8:
+        return 1;
+    }
+
+    static boolean allNumberGroupsRemainGrouped(com.google.i18n.phonenumbers.PhoneNumberUtil, com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.StringBuilder, java.lang.String[])
+    {
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource $r4, $r5;
+        java.lang.String[] $r1;
+        char $c3;
+        com.google.i18n.phonenumbers.PhoneNumberUtil $r2;
+        int $i0, $i1, $i2;
+        java.lang.StringBuilder $r0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r3;
+        java.lang.String $r6, $r7;
+        boolean $z0;
+
+        $r2 := @parameter0: com.google.i18n.phonenumbers.PhoneNumberUtil;
+
+        $r3 := @parameter1: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r0 := @parameter2: java.lang.StringBuilder;
+
+        $r1 := @parameter3: java.lang.String[];
+
+        $r4 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource getCountryCodeSource()>();
+
+        $r5 = <com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource FROM_DEFAULT_COUNTRY>;
+
+        if $r4 == $r5 goto label1;
+
+        $i0 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i0);
+
+        $i0 = virtualinvoke $r0.<java.lang.StringBuilder: int indexOf(java.lang.String)>($r6);
+
+        $i1 = virtualinvoke $r6.<java.lang.String: int length()>();
+
+        $i1 = $i0 + $i1;
+
+        goto label2;
+
+     label1:
+        $i1 = 0;
+
+     label2:
+        $i0 = 0;
+
+     label3:
+        $i2 = lengthof $r1;
+
+        if $i0 >= $i2 goto label6;
+
+        $r6 = $r1[$i0];
+
+        $i1 = virtualinvoke $r0.<java.lang.StringBuilder: int indexOf(java.lang.String,int)>($r6, $i1);
+
+        if $i1 >= 0 goto label4;
+
+        return 0;
+
+     label4:
+        $r6 = $r1[$i0];
+
+        $i2 = virtualinvoke $r6.<java.lang.String: int length()>();
+
+        $i1 = $i1 + $i2;
+
+        if $i0 != 0 goto label5;
+
+        $i2 = virtualinvoke $r0.<java.lang.StringBuilder: int length()>();
+
+        if $i1 >= $i2 goto label5;
+
+        $i2 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r6 = virtualinvoke $r2.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String getRegionCodeForCountryCode(int)>($i2);
+
+        $r6 = virtualinvoke $r2.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String getNddPrefixForRegion(java.lang.String,boolean)>($r6, 1);
+
+        if $r6 == null goto label5;
+
+        $c3 = virtualinvoke $r0.<java.lang.StringBuilder: char charAt(int)>($i1);
+
+        $z0 = staticinvoke <java.lang.Character: boolean isDigit(char)>($c3);
+
+        if $z0 == 0 goto label5;
+
+        $r6 = virtualinvoke $r2.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r3);
+
+        $r7 = $r1[$i0];
+
+        $i0 = virtualinvoke $r7.<java.lang.String: int length()>();
+
+        $i0 = $i1 - $i0;
+
+        $r7 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String substring(int)>($i0);
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean startsWith(java.lang.String)>($r6);
+
+        return $z0;
+
+     label5:
+        $i0 = $i0 + 1;
+
+        goto label3;
+
+     label6:
+        $r6 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String substring(int)>($i1);
+
+        $r7 = virtualinvoke $r3.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: java.lang.String getExtension()>();
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean contains(java.lang.CharSequence)>($r7);
+
+        return $z0;
+    }
+
+    static boolean checkNumberGroupingIsValid(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.CharSequence, com.google.i18n.phonenumbers.PhoneNumberUtil, com.google.i18n.phonenumbers.PhoneNumberMatcher$NumberGroupingChecker)
+    {
+        com.google.i18n.phonenumbers.PhoneNumberMatcher$NumberGroupingChecker $r1;
+        java.lang.CharSequence $r3;
+        java.util.Iterator $r8;
+        com.google.i18n.phonenumbers.Phonemetadata$NumberFormat $r10;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r6;
+        java.lang.String[] $r5;
+        com.google.i18n.phonenumbers.PhoneNumberUtil $r0;
+        java.util.List $r7;
+        int $i0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r2;
+        java.lang.StringBuilder $r4;
+        java.lang.Object $r9;
+        boolean $z0;
+
+        $r2 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r3 := @parameter1: java.lang.CharSequence;
+
+        $r0 := @parameter2: com.google.i18n.phonenumbers.PhoneNumberUtil;
+
+        $r1 := @parameter3: com.google.i18n.phonenumbers.PhoneNumberMatcher$NumberGroupingChecker;
+
+        $r4 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.StringBuilder normalizeDigits(java.lang.CharSequence,boolean)>($r3, 1);
+
+        $r5 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.String[] getNationalNumberGroups(com.google.i18n.phonenumbers.PhoneNumberUtil,com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,com.google.i18n.phonenumbers.Phonemetadata$NumberFormat)>($r0, $r2, null);
+
+        $z0 = interfaceinvoke $r1.<com.google.i18n.phonenumbers.PhoneNumberMatcher$NumberGroupingChecker: boolean checkGroups(com.google.i18n.phonenumbers.PhoneNumberUtil,com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.StringBuilder,java.lang.String[])>($r0, $r2, $r4, $r5);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        $i0 = virtualinvoke $r2.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r6 = staticinvoke <com.google.i18n.phonenumbers.MetadataManager: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getAlternateFormatsForCountry(int)>($i0);
+
+        if $r6 == null goto label3;
+
+        $r7 = virtualinvoke $r6.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: java.util.List numberFormats()>();
+
+        $r8 = interfaceinvoke $r7.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r9 = interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (com.google.i18n.phonenumbers.Phonemetadata$NumberFormat) $r9;
+
+        $r5 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.String[] getNationalNumberGroups(com.google.i18n.phonenumbers.PhoneNumberUtil,com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,com.google.i18n.phonenumbers.Phonemetadata$NumberFormat)>($r0, $r2, $r10);
+
+        $z0 = interfaceinvoke $r1.<com.google.i18n.phonenumbers.PhoneNumberMatcher$NumberGroupingChecker: boolean checkGroups(com.google.i18n.phonenumbers.PhoneNumberUtil,com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.StringBuilder,java.lang.String[])>($r0, $r2, $r4, $r5);
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    static boolean containsMoreThanOneSlashInNationalNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.String)
+    {
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource $r2, $r3;
+        int $i0, $i1;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r0;
+        java.lang.String $r1, $r4, $r5;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int indexOf(int)>(47);
+
+        if $i0 >= 0 goto label1;
+
+        return 0;
+
+     label1:
+        $i1 = $i0 + 1;
+
+        $i1 = virtualinvoke $r1.<java.lang.String: int indexOf(int,int)>(47, $i1);
+
+        if $i1 >= 0 goto label2;
+
+        return 0;
+
+     label2:
+        $r2 = virtualinvoke $r0.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource getCountryCodeSource()>();
+
+        $r3 = <com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource FROM_NUMBER_WITH_PLUS_SIGN>;
+
+        if $r2 == $r3 goto label4;
+
+        $r2 = virtualinvoke $r0.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource getCountryCodeSource()>();
+
+        $r3 = <com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource FROM_NUMBER_WITHOUT_PLUS_SIGN>;
+
+        if $r2 != $r3 goto label3;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+        goto label5;
+
+     label4:
+        $z0 = 1;
+
+     label5:
+        if $z0 == 0 goto label6;
+
+        $r4 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int,int)>(0, $i0);
+
+        $r4 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String normalizeDigitsOnly(java.lang.CharSequence)>($r4);
+
+        $i0 = virtualinvoke $r0.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i0);
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label6;
+
+        $i0 = $i1 + 1;
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean contains(java.lang.CharSequence)>("/");
+
+        return $z0;
+
+     label6:
+        return 1;
+    }
+
+    static boolean containsOnlyValidXChars(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, java.lang.String, com.google.i18n.phonenumbers.PhoneNumberUtil)
+    {
+        char $c2;
+        com.google.i18n.phonenumbers.PhoneNumberUtil$MatchType $r5, $r6;
+        com.google.i18n.phonenumbers.PhoneNumberUtil $r2;
+        int $i0, $i1, $i3;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r0;
+        java.lang.String $r1, $r3, $r4;
+        boolean $z0;
+
+        $r0 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: com.google.i18n.phonenumbers.PhoneNumberUtil;
+
+        $i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        $i1 = $i1 - 1;
+
+        if $i0 >= $i1 goto label7;
+
+        $c2 = virtualinvoke $r1.<java.lang.String: char charAt(int)>($i0);
+
+        $i1 = (int) $c2;
+
+        if $i1 == 120 goto label2;
+
+        $i1 = (int) $c2;
+
+        if $i1 != 88 goto label6;
+
+     label2:
+        $i1 = $i0 + 1;
+
+        $c2 = virtualinvoke $r1.<java.lang.String: char charAt(int)>($i1);
+
+        $i3 = (int) $c2;
+
+        if $i3 == 120 goto label4;
+
+        $i3 = (int) $c2;
+
+        if $i3 != 88 goto label3;
+
+        goto label4;
+
+     label3:
+        $r3 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        $r3 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String normalizeDigitsOnly(java.lang.CharSequence)>($r3);
+
+        $r4 = virtualinvoke $r0.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: java.lang.String getExtension()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 != 0 goto label6;
+
+        return 0;
+
+     label4:
+        $r3 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int)>($i1);
+
+        $r5 = virtualinvoke $r2.<com.google.i18n.phonenumbers.PhoneNumberUtil: com.google.i18n.phonenumbers.PhoneNumberUtil$MatchType isNumberMatch(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.CharSequence)>($r0, $r3);
+
+        $r6 = <com.google.i18n.phonenumbers.PhoneNumberUtil$MatchType: com.google.i18n.phonenumbers.PhoneNumberUtil$MatchType NSN_MATCH>;
+
+        if $r5 == $r6 goto label5;
+
+        return 0;
+
+     label5:
+        $i0 = $i1;
+
+     label6:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label7:
+        return 1;
+    }
+
+    private com.google.i18n.phonenumbers.PhoneNumberMatch extractInnerMatch(java.lang.CharSequence, int)
+    {
+        long $l4;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher r0;
+        java.util.regex.Matcher $r4;
+        byte $b2;
+        int $i0, $i1, $i3, $i5;
+        com.google.i18n.phonenumbers.PhoneNumberMatch $r6;
+        java.lang.String $r7;
+        boolean $z0, $z1;
+        java.lang.CharSequence $r2, $r5;
+        java.util.regex.Pattern[] $r1;
+        java.util.regex.Pattern $r3;
+
+        r0 := @this: com.google.i18n.phonenumbers.PhoneNumberMatcher;
+
+        $r2 := @parameter0: java.lang.CharSequence;
+
+        $i0 := @parameter1: int;
+
+        $r1 = <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern[] INNER_MATCHES>;
+
+        $i1 = lengthof $r1;
+
+        $i3 = 0;
+
+     label1:
+        if $i3 >= $i1 goto label7;
+
+        $r3 = $r1[$i3];
+
+        $r4 = virtualinvoke $r3.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r2);
+
+        $z0 = 1;
+
+     label2:
+        $z1 = virtualinvoke $r4.<java.util.regex.Matcher: boolean find()>();
+
+        if $z1 == 0 goto label6;
+
+        $l4 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: long maxTries>;
+
+        $b2 = $l4 cmp 0L;
+
+        $i5 = (int) $b2;
+
+        if $i5 <= 0 goto label6;
+
+        if $z0 == 0 goto label4;
+
+        $r3 = <com.google.i18n.phonenumbers.PhoneNumberUtil: java.util.regex.Pattern UNWANTED_END_CHAR_PATTERN>;
+
+        $i5 = virtualinvoke $r4.<java.util.regex.Matcher: int start()>();
+
+        $r5 = interfaceinvoke $r2.<java.lang.CharSequence: java.lang.CharSequence subSequence(int,int)>(0, $i5);
+
+        $r5 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence trimAfterFirstMatch(java.util.regex.Pattern,java.lang.CharSequence)>($r3, $r5);
+
+        $r6 = specialinvoke r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch parseAndVerify(java.lang.CharSequence,int)>($r5, $i0);
+
+        if $r6 == null goto label3;
+
+        return $r6;
+
+     label3:
+        $l4 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: long maxTries>;
+
+        $l4 = $l4 - 1L;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: long maxTries> = $l4;
+
+        $z0 = 0;
+
+     label4:
+        $r3 = <com.google.i18n.phonenumbers.PhoneNumberUtil: java.util.regex.Pattern UNWANTED_END_CHAR_PATTERN>;
+
+        $r7 = virtualinvoke $r4.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r5 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence trimAfterFirstMatch(java.util.regex.Pattern,java.lang.CharSequence)>($r3, $r7);
+
+        $i5 = virtualinvoke $r4.<java.util.regex.Matcher: int start(int)>(1);
+
+        $i5 = $i5 + $i0;
+
+        $r6 = specialinvoke r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch parseAndVerify(java.lang.CharSequence,int)>($r5, $i5);
+
+        if $r6 == null goto label5;
+
+        return $r6;
+
+     label5:
+        $l4 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: long maxTries>;
+
+        $l4 = $l4 - 1L;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: long maxTries> = $l4;
+
+        goto label2;
+
+     label6:
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label7:
+        return null;
+    }
+
+    private com.google.i18n.phonenumbers.PhoneNumberMatch extractMatch(java.lang.CharSequence, int)
+    {
+        java.lang.CharSequence $r1, $r4;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher r0;
+        java.util.regex.Matcher $r3;
+        int $i0, $i1;
+        com.google.i18n.phonenumbers.PhoneNumberMatch $r6;
+        java.util.regex.Pattern $r2;
+        java.lang.String $r5;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.PhoneNumberMatcher;
+
+        $r1 := @parameter0: java.lang.CharSequence;
+
+        $i0 := @parameter1: int;
+
+        $r2 = <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern SLASH_SEPARATED_DATES>;
+
+        $r3 = virtualinvoke $r2.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r1);
+
+        $z0 = virtualinvoke $r3.<java.util.regex.Matcher: boolean find()>();
+
+        if $z0 == 0 goto label1;
+
+        return null;
+
+     label1:
+        $r2 = <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern TIME_STAMPS>;
+
+        $r3 = virtualinvoke $r2.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r1);
+
+        $z0 = virtualinvoke $r3.<java.util.regex.Matcher: boolean find()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence text>;
+
+        $r5 = interfaceinvoke $r4.<java.lang.CharSequence: java.lang.String toString()>();
+
+        $i1 = interfaceinvoke $r1.<java.lang.CharSequence: int length()>();
+
+        $i1 = $i1 + $i0;
+
+        $r5 = virtualinvoke $r5.<java.lang.String: java.lang.String substring(int)>($i1);
+
+        $r2 = <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern TIME_STAMPS_SUFFIX>;
+
+        $r3 = virtualinvoke $r2.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r5);
+
+        $z0 = virtualinvoke $r3.<java.util.regex.Matcher: boolean lookingAt()>();
+
+        if $z0 == 0 goto label2;
+
+        return null;
+
+     label2:
+        $r6 = specialinvoke r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch parseAndVerify(java.lang.CharSequence,int)>($r1, $i0);
+
+        if $r6 == null goto label3;
+
+        return $r6;
+
+     label3:
+        $r6 = specialinvoke r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch extractInnerMatch(java.lang.CharSequence,int)>($r1, $i0);
+
+        return $r6;
+    }
+
+    private com.google.i18n.phonenumbers.PhoneNumberMatch find(int)
+    {
+        java.lang.CharSequence $r2;
+        long $l2;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher r0;
+        java.util.regex.Matcher $r3;
+        byte $b0;
+        int $i1, $i3;
+        com.google.i18n.phonenumbers.PhoneNumberMatch $r4;
+        java.util.regex.Pattern $r1;
+        boolean $z0;
+
+        r0 := @this: com.google.i18n.phonenumbers.PhoneNumberMatcher;
+
+        $i1 := @parameter0: int;
+
+        $r1 = <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern PATTERN>;
+
+        $r2 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence text>;
+
+        $r3 = virtualinvoke $r1.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r2);
+
+     label1:
+        $l2 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: long maxTries>;
+
+        $b0 = $l2 cmp 0L;
+
+        $i3 = (int) $b0;
+
+        if $i3 <= 0 goto label3;
+
+        $z0 = virtualinvoke $r3.<java.util.regex.Matcher: boolean find(int)>($i1);
+
+        if $z0 == 0 goto label3;
+
+        $i1 = virtualinvoke $r3.<java.util.regex.Matcher: int start()>();
+
+        $r2 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence text>;
+
+        $i3 = virtualinvoke $r3.<java.util.regex.Matcher: int end()>();
+
+        $r2 = interfaceinvoke $r2.<java.lang.CharSequence: java.lang.CharSequence subSequence(int,int)>($i1, $i3);
+
+        $r1 = <com.google.i18n.phonenumbers.PhoneNumberUtil: java.util.regex.Pattern SECOND_NUMBER_START_PATTERN>;
+
+        $r2 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence trimAfterFirstMatch(java.util.regex.Pattern,java.lang.CharSequence)>($r1, $r2);
+
+        $r4 = specialinvoke r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch extractMatch(java.lang.CharSequence,int)>($r2, $i1);
+
+        if $r4 == null goto label2;
+
+        return $r4;
+
+     label2:
+        $i3 = interfaceinvoke $r2.<java.lang.CharSequence: int length()>();
+
+        $i1 = $i1 + $i3;
+
+        $l2 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: long maxTries>;
+
+        $l2 = $l2 - 1L;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: long maxTries> = $l2;
+
+        goto label1;
+
+     label3:
+        return null;
+    }
+
+    private static java.lang.String[] getNationalNumberGroups(com.google.i18n.phonenumbers.PhoneNumberUtil, com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, com.google.i18n.phonenumbers.Phonemetadata$NumberFormat)
+    {
+        com.google.i18n.phonenumbers.Phonemetadata$NumberFormat $r3;
+        java.lang.String[] $r5;
+        com.google.i18n.phonenumbers.PhoneNumberUtil $r1;
+        com.google.i18n.phonenumbers.PhoneNumberUtil$PhoneNumberFormat $r0;
+        int $i0, $i1;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r2;
+        java.lang.String $r4;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.PhoneNumberUtil;
+
+        $r2 := @parameter1: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r3 := @parameter2: com.google.i18n.phonenumbers.Phonemetadata$NumberFormat;
+
+        if $r3 != null goto label2;
+
+        $r0 = <com.google.i18n.phonenumbers.PhoneNumberUtil$PhoneNumberFormat: com.google.i18n.phonenumbers.PhoneNumberUtil$PhoneNumberFormat RFC3966>;
+
+        $r4 = virtualinvoke $r1.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String format(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,com.google.i18n.phonenumbers.PhoneNumberUtil$PhoneNumberFormat)>($r2, $r0);
+
+        $i0 = virtualinvoke $r4.<java.lang.String: int indexOf(int)>(59);
+
+        $i1 = $i0;
+
+        if $i0 >= 0 goto label1;
+
+        $i1 = virtualinvoke $r4.<java.lang.String: int length()>();
+
+     label1:
+        $i0 = virtualinvoke $r4.<java.lang.String: int indexOf(int)>(45);
+
+        $i0 = $i0 + 1;
+
+        $r4 = virtualinvoke $r4.<java.lang.String: java.lang.String substring(int,int)>($i0, $i1);
+
+        $r5 = virtualinvoke $r4.<java.lang.String: java.lang.String[] split(java.lang.String)>("-");
+
+        return $r5;
+
+     label2:
+        $r4 = virtualinvoke $r1.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r2);
+
+        $r0 = <com.google.i18n.phonenumbers.PhoneNumberUtil$PhoneNumberFormat: com.google.i18n.phonenumbers.PhoneNumberUtil$PhoneNumberFormat RFC3966>;
+
+        $r4 = virtualinvoke $r1.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String formatNsnUsingPattern(java.lang.String,com.google.i18n.phonenumbers.Phonemetadata$NumberFormat,com.google.i18n.phonenumbers.PhoneNumberUtil$PhoneNumberFormat)>($r4, $r3, $r0);
+
+        $r5 = virtualinvoke $r4.<java.lang.String: java.lang.String[] split(java.lang.String)>("-");
+
+        return $r5;
+    }
+
+    private static boolean isInvalidPunctuationSymbol(char)
+    {
+        int $i0;
+        char $c1;
+
+        $c1 := @parameter0: char;
+
+        $i0 = (int) $c1;
+
+        if $i0 == 37 goto label2;
+
+        $i0 = staticinvoke <java.lang.Character: int getType(char)>($c1);
+
+        if $i0 != 26 goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    static boolean isLatinLetter(char)
+    {
+        java.lang.Character$UnicodeBlock $r0, $r1;
+        int $i1;
+        char $c0;
+        boolean $z0;
+
+        $c0 := @parameter0: char;
+
+        $z0 = staticinvoke <java.lang.Character: boolean isLetter(char)>($c0);
+
+        if $z0 != 0 goto label1;
+
+        $i1 = staticinvoke <java.lang.Character: int getType(char)>($c0);
+
+        if $i1 == 6 goto label1;
+
+        return 0;
+
+     label1:
+        $r0 = staticinvoke <java.lang.Character$UnicodeBlock: java.lang.Character$UnicodeBlock of(char)>($c0);
+
+        $r1 = <java.lang.Character$UnicodeBlock: java.lang.Character$UnicodeBlock BASIC_LATIN>;
+
+        $z0 = virtualinvoke $r0.<java.lang.Character$UnicodeBlock: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        $r1 = <java.lang.Character$UnicodeBlock: java.lang.Character$UnicodeBlock LATIN_1_SUPPLEMENT>;
+
+        $z0 = virtualinvoke $r0.<java.lang.Character$UnicodeBlock: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        $r1 = <java.lang.Character$UnicodeBlock: java.lang.Character$UnicodeBlock LATIN_EXTENDED_A>;
+
+        $z0 = virtualinvoke $r0.<java.lang.Character$UnicodeBlock: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        $r1 = <java.lang.Character$UnicodeBlock: java.lang.Character$UnicodeBlock LATIN_EXTENDED_ADDITIONAL>;
+
+        $z0 = virtualinvoke $r0.<java.lang.Character$UnicodeBlock: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        $r1 = <java.lang.Character$UnicodeBlock: java.lang.Character$UnicodeBlock LATIN_EXTENDED_B>;
+
+        $z0 = virtualinvoke $r0.<java.lang.Character$UnicodeBlock: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        $r1 = <java.lang.Character$UnicodeBlock: java.lang.Character$UnicodeBlock COMBINING_DIACRITICAL_MARKS>;
+
+        $z0 = virtualinvoke $r0.<java.lang.Character$UnicodeBlock: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label3;
+
+     label2:
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    static boolean isNationalPrefixPresentIfRequired(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber, com.google.i18n.phonenumbers.PhoneNumberUtil)
+    {
+        com.google.i18n.phonenumbers.Phonemetadata$NumberFormat $r7;
+        com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata $r5;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource $r2, $r3;
+        com.google.i18n.phonenumbers.PhoneNumberUtil $r0;
+        java.util.List $r6;
+        int $i0;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r1;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r4;
+        boolean $z0;
+
+        $r1 := @parameter0: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber;
+
+        $r0 := @parameter1: com.google.i18n.phonenumbers.PhoneNumberUtil;
+
+        $r2 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource getCountryCodeSource()>();
+
+        $r3 = <com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber$CountryCodeSource FROM_DEFAULT_COUNTRY>;
+
+        if $r2 == $r3 goto label1;
+
+        return 1;
+
+     label1:
+        $i0 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r4 = virtualinvoke $r0.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String getRegionCodeForCountryCode(int)>($i0);
+
+        $r5 = virtualinvoke $r0.<com.google.i18n.phonenumbers.PhoneNumberUtil: com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata getMetadataForRegion(java.lang.String)>($r4);
+
+        if $r5 != null goto label2;
+
+        return 1;
+
+     label2:
+        $r4 = virtualinvoke $r0.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r1);
+
+        $r6 = virtualinvoke $r5.<com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata: java.util.List numberFormats()>();
+
+        $r7 = virtualinvoke $r0.<com.google.i18n.phonenumbers.PhoneNumberUtil: com.google.i18n.phonenumbers.Phonemetadata$NumberFormat chooseFormattingPatternForNumber(java.util.List,java.lang.String)>($r6, $r4);
+
+        if $r7 == null goto label5;
+
+        $r4 = virtualinvoke $r7.<com.google.i18n.phonenumbers.Phonemetadata$NumberFormat: java.lang.String getNationalPrefixFormattingRule()>();
+
+        $i0 = virtualinvoke $r4.<java.lang.String: int length()>();
+
+        if $i0 <= 0 goto label5;
+
+        $z0 = virtualinvoke $r7.<com.google.i18n.phonenumbers.Phonemetadata$NumberFormat: boolean getNationalPrefixOptionalWhenFormatting()>();
+
+        if $z0 == 0 goto label3;
+
+        return 1;
+
+     label3:
+        $r4 = virtualinvoke $r7.<com.google.i18n.phonenumbers.Phonemetadata$NumberFormat: java.lang.String getNationalPrefixFormattingRule()>();
+
+        $z0 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberUtil: boolean formattingRuleHasFirstGroupOnly(java.lang.String)>($r4);
+
+        if $z0 == 0 goto label4;
+
+        return 1;
+
+     label4:
+        $r4 = virtualinvoke $r1.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: java.lang.String getRawInput()>();
+
+        $r4 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String normalizeDigitsOnly(java.lang.CharSequence)>($r4);
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>($r4);
+
+        $z0 = virtualinvoke $r0.<com.google.i18n.phonenumbers.PhoneNumberUtil: boolean maybeStripNationalPrefixAndCarrierCode(java.lang.StringBuilder,com.google.i18n.phonenumbers.Phonemetadata$PhoneMetadata,java.lang.StringBuilder)>($r8, $r5, null);
+
+        return $z0;
+
+     label5:
+        return 1;
+    }
+
+    private static java.lang.String limit(int, int)
+    {
+        int $i0, $i1;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1;
+        java.lang.IllegalArgumentException $r2;
+
+        $i1 := @parameter0: int;
+
+        $i0 := @parameter1: int;
+
+        if $i1 < 0 goto label1;
+
+        if $i0 <= 0 goto label1;
+
+        if $i0 < $i1 goto label1;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>("{");
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",");
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("}");
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label1:
+        $r2 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>()>();
+
+        throw $r2;
+    }
+
+    private com.google.i18n.phonenumbers.PhoneNumberMatch parseAndVerify(java.lang.CharSequence, int)
+    {
+        com.google.i18n.phonenumbers.PhoneNumberMatcher r0;
+        com.google.i18n.phonenumbers.PhoneNumberUtil $r8;
+        java.util.regex.Matcher $r4;
+        int $i0, $i1, $i3;
+        com.google.i18n.phonenumbers.PhoneNumberMatch $r11;
+        java.lang.String $r9;
+        boolean $z0;
+        java.lang.CharSequence $r2, $r7;
+        char $c2;
+        com.google.i18n.phonenumbers.NumberParseException $r1;
+        com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency $r5, $r6;
+        com.google.i18n.phonenumbers.Phonenumber$PhoneNumber $r10;
+        java.util.regex.Pattern $r3;
+
+        r0 := @this: com.google.i18n.phonenumbers.PhoneNumberMatcher;
+
+        $r2 := @parameter0: java.lang.CharSequence;
+
+        $i0 := @parameter1: int;
+
+        $r3 = <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern MATCHING_BRACKETS>;
+
+     label01:
+        $r4 = virtualinvoke $r3.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r2);
+
+        $z0 = virtualinvoke $r4.<java.util.regex.Matcher: boolean matches()>();
+
+     label02:
+        if $z0 == 0 goto label38;
+
+        $r3 = <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern PUB_PAGES>;
+
+     label03:
+        $r4 = virtualinvoke $r3.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r2);
+
+        $z0 = virtualinvoke $r4.<java.util.regex.Matcher: boolean find()>();
+
+     label04:
+        if $z0 == 0 goto label05;
+
+        return null;
+
+     label05:
+        $r5 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency leniency>;
+
+        $r6 = <com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency: com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency VALID>;
+
+     label06:
+        $i1 = virtualinvoke $r5.<com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency: int compareTo(java.lang.Enum)>($r6);
+
+     label07:
+        if $i1 < 0 goto label22;
+
+        if $i0 <= 0 goto label14;
+
+        $r3 = <com.google.i18n.phonenumbers.PhoneNumberMatcher: java.util.regex.Pattern LEAD_CLASS>;
+
+     label08:
+        $r4 = virtualinvoke $r3.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r2);
+
+        $z0 = virtualinvoke $r4.<java.util.regex.Matcher: boolean lookingAt()>();
+
+     label09:
+        if $z0 != 0 goto label14;
+
+        $r7 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence text>;
+
+        $i1 = $i0 + -1;
+
+     label10:
+        $c2 = interfaceinvoke $r7.<java.lang.CharSequence: char charAt(int)>($i1);
+
+        $z0 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: boolean isInvalidPunctuationSymbol(char)>($c2);
+
+     label11:
+        if $z0 != 0 goto label40;
+
+     label12:
+        $z0 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: boolean isLatinLetter(char)>($c2);
+
+     label13:
+        if $z0 == 0 goto label14;
+
+        return null;
+
+     label14:
+        $i1 = interfaceinvoke $r2.<java.lang.CharSequence: int length()>();
+
+     label15:
+        $i1 = $i1 + $i0;
+
+        $r7 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence text>;
+
+     label16:
+        $i3 = interfaceinvoke $r7.<java.lang.CharSequence: int length()>();
+
+     label17:
+        if $i1 >= $i3 goto label22;
+
+        $r7 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence text>;
+
+     label18:
+        $c2 = interfaceinvoke $r7.<java.lang.CharSequence: char charAt(int)>($i1);
+
+        $z0 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: boolean isInvalidPunctuationSymbol(char)>($c2);
+
+     label19:
+        if $z0 != 0 goto label40;
+
+     label20:
+        $z0 = staticinvoke <com.google.i18n.phonenumbers.PhoneNumberMatcher: boolean isLatinLetter(char)>($c2);
+
+     label21:
+        if $z0 == 0 goto label22;
+
+        return null;
+
+     label22:
+        $r8 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberUtil phoneUtil>;
+
+        $r9 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.String preferredRegion>;
+
+     label23:
+        $r10 = virtualinvoke $r8.<com.google.i18n.phonenumbers.PhoneNumberUtil: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber parseAndKeepRawInput(java.lang.CharSequence,java.lang.String)>($r2, $r9);
+
+     label24:
+        $r8 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberUtil phoneUtil>;
+
+     label25:
+        $i1 = virtualinvoke $r10.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: int getCountryCode()>();
+
+        $r9 = virtualinvoke $r8.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String getRegionCodeForCountryCode(int)>($i1);
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>("IL");
+
+     label26:
+        if $z0 == 0 goto label31;
+
+        $r8 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberUtil phoneUtil>;
+
+     label27:
+        $r9 = virtualinvoke $r8.<com.google.i18n.phonenumbers.PhoneNumberUtil: java.lang.String getNationalSignificantNumber(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($r10);
+
+        $i1 = virtualinvoke $r9.<java.lang.String: int length()>();
+
+     label28:
+        if $i1 != 4 goto label31;
+
+        if $i0 == 0 goto label40;
+
+        if $i0 <= 0 goto label31;
+
+        $r7 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: java.lang.CharSequence text>;
+
+        $i1 = $i0 + -1;
+
+     label29:
+        $c2 = interfaceinvoke $r7.<java.lang.CharSequence: char charAt(int)>($i1);
+
+     label30:
+        $i1 = (int) $c2;
+
+        if $i1 == 42 goto label31;
+
+        return null;
+
+     label31:
+        $r5 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency leniency>;
+
+        $r8 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberUtil phoneUtil>;
+
+     label32:
+        $z0 = virtualinvoke $r5.<com.google.i18n.phonenumbers.PhoneNumberUtil$Leniency: boolean verify(com.google.i18n.phonenumbers.Phonenumber$PhoneNumber,java.lang.CharSequence,com.google.i18n.phonenumbers.PhoneNumberUtil)>($r10, $r2, $r8);
+
+     label33:
+        if $z0 == 0 goto label40;
+
+     label34:
+        virtualinvoke $r10.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber clearCountryCodeSource()>();
+
+        virtualinvoke $r10.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber clearRawInput()>();
+
+        virtualinvoke $r10.<com.google.i18n.phonenumbers.Phonenumber$PhoneNumber: com.google.i18n.phonenumbers.Phonenumber$PhoneNumber clearPreferredDomesticCarrierCode()>();
+
+     label35:
+        $r11 = new com.google.i18n.phonenumbers.PhoneNumberMatch;
+
+     label36:
+        $r9 = interfaceinvoke $r2.<java.lang.CharSequence: java.lang.String toString()>();
+
+        specialinvoke $r11.<com.google.i18n.phonenumbers.PhoneNumberMatch: void <init>(int,java.lang.String,com.google.i18n.phonenumbers.Phonenumber$PhoneNumber)>($i0, $r9, $r10);
+
+     label37:
+        return $r11;
+
+     label38:
+        return null;
+
+     label39:
+        $r1 := @caughtexception;
+
+     label40:
+        return null;
+
+        catch com.google.i18n.phonenumbers.NumberParseException from label01 to label02 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label03 to label04 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label06 to label07 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label08 to label09 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label10 to label11 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label12 to label13 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label14 to label15 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label16 to label17 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label18 to label19 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label20 to label21 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label23 to label24 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label25 to label26 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label27 to label28 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label29 to label30 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label32 to label33 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label34 to label35 with label39;
+        catch com.google.i18n.phonenumbers.NumberParseException from label36 to label37 with label39;
+    }
+
+    private static java.lang.CharSequence trimAfterFirstMatch(java.util.regex.Pattern, java.lang.CharSequence)
+    {
+        java.util.regex.Matcher $r2;
+        java.lang.CharSequence $r1;
+        int $i0;
+        java.util.regex.Pattern $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.util.regex.Pattern;
+
+        $r1 := @parameter1: java.lang.CharSequence;
+
+        $r2 = virtualinvoke $r0.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r1);
+
+        $z0 = virtualinvoke $r2.<java.util.regex.Matcher: boolean find()>();
+
+        if $z0 == 0 goto label1;
+
+        $i0 = virtualinvoke $r2.<java.util.regex.Matcher: int start()>();
+
+        $r1 = interfaceinvoke $r1.<java.lang.CharSequence: java.lang.CharSequence subSequence(int,int)>(0, $i0);
+
+     label1:
+        return $r1;
+    }
+
+    public boolean hasNext()
+    {
+        int $i0;
+        com.google.i18n.phonenumbers.PhoneNumberMatch $r3;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher r0;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher$State $r1, $r2;
+
+        r0 := @this: com.google.i18n.phonenumbers.PhoneNumberMatcher;
+
+        $r1 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatcher$State state>;
+
+        $r2 = <com.google.i18n.phonenumbers.PhoneNumberMatcher$State: com.google.i18n.phonenumbers.PhoneNumberMatcher$State NOT_READY>;
+
+        if $r1 != $r2 goto label2;
+
+        $i0 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: int searchIndex>;
+
+        $r3 = specialinvoke r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch find(int)>($i0);
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch lastMatch> = $r3;
+
+        if $r3 != null goto label1;
+
+        $r1 = <com.google.i18n.phonenumbers.PhoneNumberMatcher$State: com.google.i18n.phonenumbers.PhoneNumberMatcher$State DONE>;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatcher$State state> = $r1;
+
+        goto label2;
+
+     label1:
+        $i0 = virtualinvoke $r3.<com.google.i18n.phonenumbers.PhoneNumberMatch: int end()>();
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: int searchIndex> = $i0;
+
+        $r1 = <com.google.i18n.phonenumbers.PhoneNumberMatcher$State: com.google.i18n.phonenumbers.PhoneNumberMatcher$State READY>;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatcher$State state> = $r1;
+
+     label2:
+        $r1 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatcher$State state>;
+
+        $r2 = <com.google.i18n.phonenumbers.PhoneNumberMatcher$State: com.google.i18n.phonenumbers.PhoneNumberMatcher$State READY>;
+
+        if $r1 != $r2 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    public com.google.i18n.phonenumbers.PhoneNumberMatch next()
+    {
+        com.google.i18n.phonenumbers.PhoneNumberMatch r3;
+        java.util.NoSuchElementException $r2;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher r0;
+        boolean $z0;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher$State $r1;
+
+        r0 := @this: com.google.i18n.phonenumbers.PhoneNumberMatcher;
+
+        $z0 = virtualinvoke r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: boolean hasNext()>();
+
+        if $z0 == 0 goto label1;
+
+        r3 = r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch lastMatch>;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch lastMatch> = null;
+
+        $r1 = <com.google.i18n.phonenumbers.PhoneNumberMatcher$State: com.google.i18n.phonenumbers.PhoneNumberMatcher$State NOT_READY>;
+
+        r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatcher$State state> = $r1;
+
+        return r3;
+
+     label1:
+        $r2 = new java.util.NoSuchElementException;
+
+        specialinvoke $r2.<java.util.NoSuchElementException: void <init>()>();
+
+        throw $r2;
+    }
+
+    public volatile java.lang.Object next()
+    {
+        com.google.i18n.phonenumbers.PhoneNumberMatch $r1;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher r0;
+
+        r0 := @this: com.google.i18n.phonenumbers.PhoneNumberMatcher;
+
+        $r1 = virtualinvoke r0.<com.google.i18n.phonenumbers.PhoneNumberMatcher: com.google.i18n.phonenumbers.PhoneNumberMatch next()>();
+
+        return $r1;
+    }
+
+    public void remove()
+    {
+        java.lang.UnsupportedOperationException $r1;
+        com.google.i18n.phonenumbers.PhoneNumberMatcher r0;
+
+        r0 := @this: com.google.i18n.phonenumbers.PhoneNumberMatcher;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+}

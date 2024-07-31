@@ -1,0 +1,120 @@
+final class com.inmobi.media.iu$3 extends java.lang.Object implements java.lang.Runnable
+{
+
+    void <init>()
+    {
+        com.inmobi.media.iu$3 r0;
+
+        r0 := @this: com.inmobi.media.iu$3;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public final void run()
+    {
+        android.content.Context $r2;
+        long $l0, $l2;
+        android.os.storage.StorageVolume $r8;
+        android.app.usage.StorageStatsManager $r4;
+        int $i1;
+        java.lang.String $r9;
+        boolean $z0;
+        android.os.storage.StorageManager $r5;
+        java.util.Iterator $r7;
+        java.util.UUID $r10;
+        java.lang.Exception $r1;
+        java.util.List $r6;
+        com.inmobi.media.iu$3 r0;
+        java.lang.Object $r3;
+        java.lang.StringBuilder $r11;
+
+        r0 := @this: com.inmobi.media.iu$3;
+
+        $r2 = staticinvoke <com.inmobi.media.'if': android.content.Context c()>();
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("storagestats");
+
+        $r4 = (android.app.usage.StorageStatsManager) $r3;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("storage");
+
+        $r5 = (android.os.storage.StorageManager) $r3;
+
+        $r6 = virtualinvoke $r5.<android.os.storage.StorageManager: java.util.List getStorageVolumes()>();
+
+        $r7 = interfaceinvoke $r6.<java.util.List: java.util.Iterator iterator()>();
+
+        $l0 = 0L;
+
+     label2:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label8;
+
+        $r3 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (android.os.storage.StorageVolume) $r3;
+
+        $r9 = virtualinvoke $r8.<android.os.storage.StorageVolume: java.lang.String getUuid()>();
+
+        if $r9 != null goto label3;
+
+        $r10 = <android.os.storage.StorageManager: java.util.UUID UUID_DEFAULT>;
+
+        goto label4;
+
+     label3:
+        $i1 = virtualinvoke $r9.<java.lang.String: int length()>();
+
+        if $i1 != 34 goto label2;
+
+        $r10 = staticinvoke <java.util.UUID: java.util.UUID fromString(java.lang.String)>($r9);
+
+     label4:
+        $r9 = virtualinvoke $r8.<android.os.storage.StorageVolume: java.lang.String getState()>();
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>("mounted");
+
+        if $z0 == 0 goto label2;
+
+     label5:
+        $l2 = virtualinvoke $r4.<android.app.usage.StorageStatsManager: long getFreeBytes(java.util.UUID)>($r10);
+
+     label6:
+        $l0 = $l0 + $l2;
+
+        goto label2;
+
+     label7:
+        goto label2;
+
+     label8:
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $l0 = $l0 / 1048576L;
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r9 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.inmobi.media.iu: java.lang.String b(java.lang.String)>($r9);
+
+        return;
+
+     label9:
+        $r1 := @caughtexception;
+
+        goto label7;
+
+        catch java.lang.Exception from label5 to label6 with label9;
+    }
+}

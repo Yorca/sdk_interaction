@@ -1,0 +1,1249 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource extends java.lang.Object implements com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource
+{
+    public static final int CACHE_IGNORED_REASON_ERROR;
+    public static final int CACHE_IGNORED_REASON_UNSET_LENGTH;
+    private static final int CACHE_NOT_IGNORED;
+    public static final long DEFAULT_MAX_CACHE_FILE_SIZE;
+    public static final int FLAG_BLOCK_ON_CACHE;
+    public static final int FLAG_IGNORE_CACHE_FOR_UNSET_LENGTH_REQUESTS;
+    public static final int FLAG_IGNORE_CACHE_ON_ERROR;
+    private static final long MIN_READ_BEFORE_CHECKING_CACHE;
+    private android.net.Uri actualUri;
+    private final boolean blockOnCache;
+    private long bytesRemaining;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource cacheReadDataSource;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource cacheWriteDataSource;
+    private long checkCachePosition;
+    private com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource currentDataSource;
+    private boolean currentDataSpecLengthUnset;
+    private com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan currentHoleSpan;
+    private boolean currentRequestIgnoresCache;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener eventListener;
+    private int flags;
+    private final boolean ignoreCacheForUnsetLengthRequests;
+    private final boolean ignoreCacheOnError;
+    private java.lang.String key;
+    private long readPosition;
+    private boolean seenCacheError;
+    private long totalCachedBytesRead;
+    private final com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource upstreamDataSource;
+    private android.net.Uri uri;
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache, com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource,int,long)>($r1, $r2, 0, 2097152L);
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache, com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource, int)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r2;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource;
+
+        $i0 := @parameter2: int;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource,int,long)>($r1, $r2, $i0, 2097152L);
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache, com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource, int, long)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSink $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.FileDataSource $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r2;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r1;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource;
+
+        $i0 := @parameter2: int;
+
+        $l1 := @parameter3: long;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.FileDataSource;
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.FileDataSource: void <init>()>();
+
+        $r4 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSink;
+
+        specialinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSink: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache,long)>($r1, $l1);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSink,int,com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener)>($r1, $r2, $r3, $r4, $i0, null);
+
+        return;
+    }
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache, com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource, com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource, com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSink, int, com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.TeeDataSource $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r1, $r5;
+        int $i0, $i1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSink $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r4 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache;
+
+        $r1 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource;
+
+        $r5 := @parameter2: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource;
+
+        $r2 := @parameter3: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSink;
+
+        $i0 := @parameter4: int;
+
+        $r3 := @parameter5: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache> = $r4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource cacheReadDataSource> = $r5;
+
+        $i1 = $i0 & 1;
+
+        $z0 = 0;
+
+        if $i1 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean blockOnCache> = $z1;
+
+        $i1 = $i0 & 2;
+
+        if $i1 == 0 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean ignoreCacheOnError> = $z1;
+
+        $i0 = $i0 & 4;
+
+        if $i0 == 0 goto label5;
+
+        $z0 = 1;
+
+     label5:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean ignoreCacheForUnsetLengthRequests> = $z0;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource upstreamDataSource> = $r1;
+
+        if $r2 == null goto label6;
+
+        $r6 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.TeeDataSource;
+
+        specialinvoke $r6.<com.mbridge.msdk.playercommon.exoplayer2.upstream.TeeDataSource: void <init>(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource,com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSink)>($r1, $r2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource cacheWriteDataSource> = $r6;
+
+        goto label7;
+
+     label6:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource cacheWriteDataSource> = null;
+
+     label7:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener eventListener> = $r3;
+
+        return;
+    }
+
+    private void closeCurrentSource() throws java.io.IOException
+    {
+        java.lang.Throwable $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource currentDataSource>;
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource: void close()>();
+
+     label2:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource currentDataSource> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean currentDataSpecLengthUnset> = 0;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan currentHoleSpan>;
+
+        if $r3 == null goto label5;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: void releaseHoleSpan(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan)>($r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan currentHoleSpan> = null;
+
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource currentDataSource> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean currentDataSpecLengthUnset> = 0;
+
+        $r3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan currentHoleSpan>;
+
+        if $r3 == null goto label4;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: void releaseHoleSpan(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan)>($r3);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan currentHoleSpan> = null;
+
+     label4:
+        throw $r4;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    private static android.net.Uri getRedirectedUriOrDefault(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache, java.lang.String, android.net.Uri)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadata $r3;
+        android.net.Uri $r2, $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r1;
+        java.lang.String $r0;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: android.net.Uri;
+
+        $r3 = interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadata getContentMetadata(java.lang.String)>($r0);
+
+        $r4 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataInternal: android.net.Uri getRedirectedUri(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadata)>($r3);
+
+        if $r4 != null goto label1;
+
+        return $r2;
+
+     label1:
+        return $r4;
+    }
+
+    private void handleBeforeThrow(java.io.IOException)
+    {
+        java.io.IOException $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r1 := @parameter0: java.io.IOException;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean isReadingFromCache()>();
+
+        if $z0 != 0 goto label1;
+
+        $z0 = $r1 instanceof com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache$CacheException;
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean seenCacheError> = 1;
+
+     label2:
+        return;
+    }
+
+    private boolean isBypassingCache()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r1, $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource currentDataSource>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource upstreamDataSource>;
+
+        if $r2 != $r1 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private static boolean isCausedByPositionOutOfRange(java.io.IOException)
+    {
+        java.lang.Throwable $r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSourceException $r2;
+        int $i0;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        $r1 := @parameter0: java.io.IOException;
+
+     label1:
+        if $r1 == null goto label3;
+
+        $z0 = $r1 instanceof com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSourceException;
+
+        if $z0 == 0 goto label2;
+
+        $r2 = (com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSourceException) $r1;
+
+        $i0 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSourceException: int reason>;
+
+        if $i0 != 0 goto label2;
+
+        return 1;
+
+     label2:
+        $r0 = (java.lang.Throwable) $r1;
+
+        $r1 = virtualinvoke $r0.<java.lang.Throwable: java.lang.Throwable getCause()>();
+
+        goto label1;
+
+     label3:
+        return 0;
+    }
+
+    private boolean isReadingFromCache()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r1, $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource currentDataSource>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource cacheReadDataSource>;
+
+        if $r2 != $r1 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private boolean isReadingFromUpstream()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean isReadingFromCache()>();
+
+        $z0 = $z0 ^ 1;
+
+        return $z0;
+    }
+
+    private boolean isWritingToCache()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r1, $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource currentDataSource>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource cacheWriteDataSource>;
+
+        if $r2 != $r1 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private void notifyBytesRead()
+    {
+        byte $b1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener $r1;
+        int $i3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r2;
+        long $l0, $l2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener eventListener>;
+
+        if $r1 == null goto label1;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long totalCachedBytesRead>;
+
+        $b1 = $l0 cmp 0L;
+
+        $i3 = (int) $b1;
+
+        if $i3 <= 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        $l0 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: long getCacheSpace()>();
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long totalCachedBytesRead>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener: void onCachedBytesRead(long,long)>($l0, $l2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long totalCachedBytesRead> = 0L;
+
+     label1:
+        return;
+    }
+
+    private void notifyCacheIgnored(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener $r1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener eventListener>;
+
+        if $r1 == null goto label1;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource$EventListener: void onCacheIgnored(int)>($i0);
+
+     label1:
+        return;
+    }
+
+    private void openNextSource(boolean) throws java.io.IOException
+    {
+        java.lang.Throwable $r2, $r12;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r9;
+        android.net.Uri $r1, $r14;
+        long $l1, $l2, $l3;
+        java.io.InterruptedIOException $r7;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+        byte $b4;
+        java.lang.Thread $r6;
+        int $i0;
+        java.lang.String $r5;
+        boolean $z0, $z1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataMutations $r13;
+        java.io.File $r10;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r8, $r11;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r4;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $z0 := @parameter0: boolean;
+
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean currentRequestIgnoresCache>;
+
+        if $z1 == 0 goto label01;
+
+        $r3 = null;
+
+        goto label06;
+
+     label01:
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean blockOnCache>;
+
+        if $z1 == 0 goto label05;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: java.lang.String key>;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+     label02:
+        $r3 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan startReadWrite(java.lang.String,long)>($r5, $l1);
+
+     label03:
+        goto label06;
+
+     label04:
+        $r6 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r6.<java.lang.Thread: void interrupt()>();
+
+        $r7 = new java.io.InterruptedIOException;
+
+        specialinvoke $r7.<java.io.InterruptedIOException: void <init>()>();
+
+        throw $r7;
+
+     label05:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: java.lang.String key>;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+        $r3 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan startReadWriteNonBlocking(java.lang.String,long)>($r5, $l1);
+
+     label06:
+        if $r3 != null goto label07;
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource upstreamDataSource>;
+
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri uri>;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: java.lang.String key>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int flags>;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: void <init>(android.net.Uri,long,long,java.lang.String,int)>($r1, $l1, $l2, $r5, $i0);
+
+        goto label13;
+
+     label07:
+        $z1 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan: boolean isCached>;
+
+        if $z1 == 0 goto label09;
+
+        $r10 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan: java.io.File file>;
+
+        $r1 = staticinvoke <android.net.Uri: android.net.Uri fromFile(java.io.File)>($r10);
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+        $l2 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan: long position>;
+
+        $l1 = $l1 - $l2;
+
+        $l2 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan: long length>;
+
+        $l2 = $l2 - $l1;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining>;
+
+        $b4 = $l3 cmp -1L;
+
+        if $b4 == 0 goto label08;
+
+        $l2 = staticinvoke <java.lang.Math: long min(long,long)>($l2, $l3);
+
+     label08:
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec;
+
+        $l3 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: java.lang.String key>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int flags>;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: void <init>(android.net.Uri,long,long,long,java.lang.String,int)>($r1, $l3, $l1, $l2, $r5, $i0);
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource cacheReadDataSource>;
+
+        goto label13;
+
+     label09:
+        $z1 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan: boolean isOpenEnded()>();
+
+        if $z1 == 0 goto label10;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining>;
+
+        goto label11;
+
+     label10:
+        $l1 = $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan: long length>;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining>;
+
+        $b4 = $l2 cmp -1L;
+
+        if $b4 == 0 goto label11;
+
+        $l1 = staticinvoke <java.lang.Math: long min(long,long)>($l1, $l2);
+
+     label11:
+        $r9 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri uri>;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: java.lang.String key>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int flags>;
+
+        specialinvoke $r9.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: void <init>(android.net.Uri,long,long,java.lang.String,int)>($r1, $l2, $l1, $r5, $i0);
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource cacheWriteDataSource>;
+
+        if $r8 == null goto label12;
+
+        goto label13;
+
+     label12:
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource upstreamDataSource>;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: void releaseHoleSpan(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan)>($r3);
+
+        $r3 = null;
+
+     label13:
+        $z1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean currentRequestIgnoresCache>;
+
+        if $z1 != 0 goto label14;
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource upstreamDataSource>;
+
+        if $r8 != $r11 goto label14;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+        $l1 = $l1 + 102400L;
+
+        goto label15;
+
+     label14:
+        $l1 = 9223372036854775807L;
+
+     label15:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long checkCachePosition> = $l1;
+
+        if $z0 == 0 goto label20;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean isBypassingCache()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.util.Assertions: void checkState(boolean)>($z0);
+
+        $r11 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource upstreamDataSource>;
+
+        if $r8 != $r11 goto label16;
+
+        return;
+
+     label16:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void closeCurrentSource()>();
+
+     label17:
+        goto label20;
+
+     label18:
+        $r12 := @caughtexception;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan: boolean isHoleSpan()>();
+
+        if $z0 == 0 goto label19;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: void releaseHoleSpan(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan)>($r3);
+
+     label19:
+        throw $r12;
+
+     label20:
+        if $r3 == null goto label21;
+
+        $z0 = virtualinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan: boolean isHoleSpan()>();
+
+        if $z0 == 0 goto label21;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheSpan currentHoleSpan> = $r3;
+
+     label21:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource currentDataSource> = $r8;
+
+        $l1 = $r9.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long length>;
+
+        $b4 = $l1 cmp -1L;
+
+        if $b4 != 0 goto label22;
+
+        $z0 = 1;
+
+        goto label23;
+
+     label22:
+        $z0 = 0;
+
+     label23:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean currentDataSpecLengthUnset> = $z0;
+
+        $l1 = interfaceinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource: long open(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec)>($r9);
+
+        $r13 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataMutations;
+
+        specialinvoke $r13.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataMutations: void <init>()>();
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean currentDataSpecLengthUnset>;
+
+        if $z0 == 0 goto label24;
+
+        $b4 = $l1 cmp -1L;
+
+        if $b4 == 0 goto label24;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining> = $l1;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+        $l1 = $l2 + $l1;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataInternal: void setContentLength(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataMutations,long)>($r13, $l1);
+
+     label24:
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean isReadingFromUpstream()>();
+
+        if $z0 == 0 goto label26;
+
+        $r8 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource currentDataSource>;
+
+        $r1 = interfaceinvoke $r8.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource: android.net.Uri getUri()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri actualUri> = $r1;
+
+        $r14 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri uri>;
+
+        $z0 = virtualinvoke $r14.<android.net.Uri: boolean equals(java.lang.Object)>($r1);
+
+        $z0 = 1 ^ $z0;
+
+        if $z0 == 0 goto label25;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri actualUri>;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataInternal: void setRedirectedUri(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataMutations,android.net.Uri)>($r13, $r1);
+
+        goto label26;
+
+     label25:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataInternal: void removeRedirectedUri(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataMutations)>($r13);
+
+     label26:
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean isWritingToCache()>();
+
+        if $z0 == 0 goto label28;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        $r5 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: java.lang.String key>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: void applyContentMetadataMutations(java.lang.String,com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.ContentMetadataMutations)>($r5, $r13);
+
+        return;
+
+     label27:
+        $r2 := @caughtexception;
+
+        goto label04;
+
+     label28:
+        return;
+
+        catch java.lang.InterruptedException from label02 to label03 with label27;
+        catch java.lang.Throwable from label16 to label17 with label18;
+    }
+
+    private void setNoBytesRemainingAndMaybeStoreLength() throws java.io.IOException
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r2;
+        long $l0;
+        java.lang.String $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining> = 0L;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean isWritingToCache()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: java.lang.String key>;
+
+        $l0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+        interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: void setContentLength(java.lang.String,long)>($r1, $l0);
+
+     label1:
+        return;
+    }
+
+    private int shouldIgnoreCacheForRequest(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec)
+    {
+        byte $b1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r1;
+        long $l0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean ignoreCacheOnError>;
+
+        if $z0 == 0 goto label1;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean seenCacheError>;
+
+        if $z0 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean ignoreCacheForUnsetLengthRequests>;
+
+        if $z0 == 0 goto label2;
+
+        $l0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long length>;
+
+        $b1 = $l0 cmp -1L;
+
+        if $b1 != 0 goto label2;
+
+        return 1;
+
+     label2:
+        return -1;
+    }
+
+    public final void close() throws java.io.IOException
+    {
+        java.lang.Throwable $r1;
+        java.io.IOException $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri uri> = null;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri actualUri> = null;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void notifyBytesRead()>();
+
+     label1:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void closeCurrentSource()>();
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        $r2 = (java.io.IOException) $r1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void handleBeforeThrow(java.io.IOException)>($r2);
+
+        throw $r1;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public final android.net.Uri getUri()
+    {
+        android.net.Uri r1;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri actualUri>;
+
+        return r1;
+    }
+
+    public final long open(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec) throws java.io.IOException
+    {
+        java.lang.Throwable $r6;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec $r1;
+        android.net.Uri $r3;
+        long $l1, $l3;
+        java.io.IOException $r8;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSourceException $r7;
+        byte $b2;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache $r4;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec;
+
+     label01:
+        $r2 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheUtil: java.lang.String getKey(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec)>($r1);
+
+     label02:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: java.lang.String key> = $r2;
+
+        $r3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: android.net.Uri uri>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri uri> = $r3;
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: java.lang.String key>;
+
+     label03:
+        $r3 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri getRedirectedUriOrDefault(com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache,java.lang.String,android.net.Uri)>($r4, $r2, $r3);
+
+     label04:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: android.net.Uri actualUri> = $r3;
+
+        $i0 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: int flags>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int flags> = $i0;
+
+        $l1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long position>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition> = $l1;
+
+     label05:
+        $i0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int shouldIgnoreCacheForRequest(com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec)>($r1);
+
+     label06:
+        if $i0 == -1 goto label07;
+
+        $z0 = 1;
+
+        goto label08;
+
+     label07:
+        $z0 = 0;
+
+     label08:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean currentRequestIgnoresCache> = $z0;
+
+        if $z0 == 0 goto label10;
+
+     label09:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void notifyCacheIgnored(int)>($i0);
+
+     label10:
+        $l1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long length>;
+
+        $b2 = $l1 cmp -1L;
+
+        if $b2 != 0 goto label16;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean currentRequestIgnoresCache>;
+
+        if $z0 == 0 goto label11;
+
+        goto label16;
+
+     label11:
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache cache>;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: java.lang.String key>;
+
+     label12:
+        $l1 = interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.Cache: long getContentLength(java.lang.String)>($r2);
+
+     label13:
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining> = $l1;
+
+        $b2 = $l1 cmp -1L;
+
+        if $b2 == 0 goto label17;
+
+        $l3 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long position>;
+
+        $l1 = $l1 - $l3;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining> = $l1;
+
+        $b2 = $l1 cmp 0L;
+
+        $i0 = (int) $b2;
+
+        if $i0 <= 0 goto label14;
+
+        goto label17;
+
+     label14:
+        $r7 = new com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSourceException;
+
+     label15:
+        specialinvoke $r7.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSourceException: void <init>(int)>(0);
+
+        throw $r7;
+
+     label16:
+        $l1 = $r1.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSpec: long length>;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining> = $l1;
+
+     label17:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void openNextSource(boolean)>(0);
+
+     label18:
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining>;
+
+        return $l1;
+
+     label19:
+        $r6 := @caughtexception;
+
+        $r8 = (java.io.IOException) $r6;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void handleBeforeThrow(java.io.IOException)>($r8);
+
+        throw $r6;
+
+        catch java.io.IOException from label01 to label02 with label19;
+        catch java.io.IOException from label03 to label04 with label19;
+        catch java.io.IOException from label05 to label06 with label19;
+        catch java.io.IOException from label09 to label10 with label19;
+        catch java.io.IOException from label12 to label13 with label19;
+        catch java.io.IOException from label15 to label16 with label19;
+        catch java.io.IOException from label17 to label18 with label19;
+    }
+
+    public final int read(byte[], int, int) throws java.io.IOException
+    {
+        java.lang.Throwable $r3;
+        byte[] $r1;
+        long $l2, $l4;
+        java.io.IOException $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource r0;
+        com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource $r2;
+        byte $b3;
+        int $i0, $i1, $i5, $i6;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource;
+
+        $r1 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        if $i1 != 0 goto label01;
+
+        return 0;
+
+     label01:
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining>;
+
+        $b3 = $l2 cmp 0L;
+
+        if $b3 != 0 goto label02;
+
+        return -1;
+
+     label02:
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long checkCachePosition>;
+
+        $b3 = $l2 cmp $l4;
+
+        $i5 = (int) $b3;
+
+        if $i5 < 0 goto label04;
+
+     label03:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void openNextSource(boolean)>(1);
+
+     label04:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource currentDataSource>;
+
+     label05:
+        $i5 = interfaceinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.upstream.DataSource: int read(byte[],int,int)>($r1, $i0, $i1);
+
+     label06:
+        if $i5 == -1 goto label10;
+
+     label07:
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean isReadingFromCache()>();
+
+     label08:
+        if $z0 == 0 goto label09;
+
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long totalCachedBytesRead>;
+
+        $l4 = (long) $i5;
+
+        $l2 = $l2 + $l4;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long totalCachedBytesRead> = $l2;
+
+     label09:
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition>;
+
+        $l2 = (long) $i5;
+
+        $l4 = $l4 + $l2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long readPosition> = $l4;
+
+        $l4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining>;
+
+        $b3 = $l4 cmp -1L;
+
+        if $b3 == 0 goto label14;
+
+        $l2 = $l4 - $l2;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining> = $l2;
+
+        return $i5;
+
+     label10:
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean currentDataSpecLengthUnset>;
+
+        if $z0 == 0 goto label13;
+
+     label11:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void setNoBytesRemainingAndMaybeStoreLength()>();
+
+     label12:
+        return $i5;
+
+     label13:
+        $l2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long bytesRemaining>;
+
+        $b3 = $l2 cmp 0L;
+
+        $i6 = (int) $b3;
+
+        if $i6 > 0 goto label15;
+
+        $b3 = $l2 cmp -1L;
+
+        if $b3 != 0 goto label19;
+
+        goto label15;
+
+     label14:
+        return $i5;
+
+     label15:
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void closeCurrentSource()>();
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void openNextSource(boolean)>(0);
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int read(byte[],int,int)>($r1, $i0, $i1);
+
+     label16:
+        return $i0;
+
+     label17:
+        $r3 := @caughtexception;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean currentDataSpecLengthUnset>;
+
+        if $z0 == 0 goto label18;
+
+        $r4 = (java.io.IOException) $r3;
+
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: boolean isCausedByPositionOutOfRange(java.io.IOException)>($r4);
+
+        if $z0 == 0 goto label18;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void setNoBytesRemainingAndMaybeStoreLength()>();
+
+        return -1;
+
+     label18:
+        $r4 = (java.io.IOException) $r3;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: void handleBeforeThrow(java.io.IOException)>($r4);
+
+        throw $r3;
+
+     label19:
+        return $i5;
+
+        catch java.io.IOException from label03 to label04 with label17;
+        catch java.io.IOException from label05 to label06 with label17;
+        catch java.io.IOException from label07 to label08 with label17;
+        catch java.io.IOException from label11 to label12 with label17;
+        catch java.io.IOException from label15 to label16 with label17;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long MIN_READ_BEFORE_CHECKING_CACHE> = 102400L;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int FLAG_IGNORE_CACHE_ON_ERROR> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int FLAG_IGNORE_CACHE_FOR_UNSET_LENGTH_REQUESTS> = 4;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int FLAG_BLOCK_ON_CACHE> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: long DEFAULT_MAX_CACHE_FILE_SIZE> = 2097152L;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int CACHE_NOT_IGNORED> = -1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int CACHE_IGNORED_REASON_UNSET_LENGTH> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.upstream.cache.CacheDataSource: int CACHE_IGNORED_REASON_ERROR> = 0;
+
+        return;
+    }
+}

@@ -1,0 +1,675 @@
+class com.vungle.warren.VisionController extends java.lang.Object
+{
+    static final java.lang.String ADVERTISER_DETAILS;
+    static final java.lang.String AGGREGATE;
+    static final java.lang.String CAMPAIGN_DETAILS;
+    static final java.lang.String CREATIVE_DETAILS;
+    static final java.lang.String DATA_SCIENCE_CACHE;
+    static final java.lang.String FILTER_ID;
+    static final java.lang.String LAST_TIME_VIEWED;
+    static final java.lang.String LAST_VIEWED_ADVERTISER_ID;
+    static final java.lang.String LAST_VIEWED_CAMPAIGN_ID;
+    static final java.lang.String LAST_VIEWED_CREATIVE_ID;
+    static final java.lang.String TOTAL_VIEW_COUNT;
+    static final java.lang.String VIEW_COUNT;
+    static final java.lang.String VISION;
+    static final java.lang.String VISION_COOKIE;
+    static final java.lang.String WINDOW;
+    private com.vungle.warren.vision.VisionConfig config;
+    private final com.vungle.warren.utility.NetworkProvider networkProvider;
+    private final com.vungle.warren.persistence.Repository repository;
+
+    void <init>(com.vungle.warren.persistence.Repository, com.vungle.warren.utility.NetworkProvider)
+    {
+        com.vungle.warren.persistence.Repository $r1;
+        com.vungle.warren.vision.VisionConfig $r3;
+        com.vungle.warren.utility.NetworkProvider $r2;
+        com.vungle.warren.VisionController r0;
+
+        r0 := @this: com.vungle.warren.VisionController;
+
+        $r1 := @parameter0: com.vungle.warren.persistence.Repository;
+
+        $r2 := @parameter1: com.vungle.warren.utility.NetworkProvider;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new com.vungle.warren.vision.VisionConfig;
+
+        specialinvoke $r3.<com.vungle.warren.vision.VisionConfig: void <init>()>();
+
+        r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config> = $r3;
+
+        r0.<com.vungle.warren.VisionController: com.vungle.warren.persistence.Repository repository> = $r1;
+
+        r0.<com.vungle.warren.VisionController: com.vungle.warren.utility.NetworkProvider networkProvider> = $r2;
+
+        return;
+    }
+
+    private java.lang.String getDataScienceCache()
+    {
+        com.vungle.warren.persistence.Repository $r1;
+        java.lang.Object $r3;
+        com.vungle.warren.model.Cookie $r4;
+        java.lang.String $r5;
+        com.vungle.warren.VisionController r0;
+        com.vungle.warren.persistence.FutureResult $r2;
+
+        r0 := @this: com.vungle.warren.VisionController;
+
+        $r1 = r0.<com.vungle.warren.VisionController: com.vungle.warren.persistence.Repository repository>;
+
+        $r2 = virtualinvoke $r1.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>("visionCookie", class "Lcom/vungle/warren/model/Cookie;");
+
+        $r3 = virtualinvoke $r2.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r4 = (com.vungle.warren.model.Cookie) $r3;
+
+        if $r4 != null goto label1;
+
+        return null;
+
+     label1:
+        $r5 = virtualinvoke $r4.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("data_science_cache");
+
+        return $r5;
+    }
+
+    void clearData() throws com.vungle.warren.persistence.DatabaseHelper$DBException
+    {
+        com.vungle.warren.persistence.Repository $r1;
+        com.vungle.warren.VisionController r0;
+
+        r0 := @this: com.vungle.warren.VisionController;
+
+        $r1 = r0.<com.vungle.warren.VisionController: com.vungle.warren.persistence.Repository repository>;
+
+        virtualinvoke $r1.<com.vungle.warren.persistence.Repository: void trimVisionData(int)>(0);
+
+        return;
+    }
+
+    java.lang.String getFilterName(java.lang.String)
+    {
+        byte $b1;
+        int $i0;
+        java.lang.String $r1;
+        com.vungle.warren.VisionController r0;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.VisionController;
+
+        $r1 := @parameter0: java.lang.String;
+
+        virtualinvoke $r1.<java.lang.String: int hashCode()>();
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int hashCode()>();
+
+        $b1 = -1;
+
+        lookupswitch($i0)
+        {
+            case -1329100269: goto label06;
+            case 1272113586: goto label04;
+            case 1845893934: goto label02;
+            default: goto label01;
+        };
+
+     label01:
+        goto label08;
+
+     label02:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("advertiser_details");
+
+        if $z0 != 0 goto label03;
+
+        goto label08;
+
+     label03:
+        $b1 = 2;
+
+        goto label08;
+
+     label04:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("creative_details");
+
+        if $z0 != 0 goto label05;
+
+        goto label08;
+
+     label05:
+        $b1 = 1;
+
+        goto label08;
+
+     label06:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("campaign_details");
+
+        if $z0 != 0 goto label07;
+
+        goto label08;
+
+     label07:
+        $b1 = 0;
+
+     label08:
+        lookupswitch($b1)
+        {
+            case 0: goto label12;
+            case 1: goto label11;
+            case 2: goto label10;
+            default: goto label09;
+        };
+
+     label09:
+        return null;
+
+     label10:
+        return "advertiser";
+
+     label11:
+        return "creative";
+
+     label12:
+        return "campaign";
+    }
+
+    public com.google.gson.JsonObject getPayload()
+    {
+        com.google.gson.JsonObject $r1, $r3, $r22;
+        com.vungle.warren.vision.VisionAggregationData $r21;
+        java.lang.Integer $r15;
+        int[] $r9;
+        com.vungle.warren.persistence.Repository $r11;
+        java.lang.Long $r25;
+        com.vungle.warren.vision.VisionAggregationInfo $r14;
+        boolean $z0;
+        com.vungle.warren.utility.NetworkProvider $r8;
+        com.google.gson.JsonArray $r2, $r17;
+        java.util.List $r19;
+        java.lang.StringBuilder $r23;
+        com.vungle.warren.persistence.FutureResult $r12;
+        long $l0, $l2, $l8;
+        com.vungle.warren.vision.VisionConfig $r6;
+        com.vungle.warren.vision.VisionConfig$Limits $r7;
+        java.lang.String[] $r16;
+        int $i1, $i3, $i4, $i5, $i6, $i7;
+        java.lang.String $r5, $r18, $r24;
+        java.util.Iterator $r20;
+        java.util.concurrent.TimeUnit $r10;
+        java.lang.Object $r13;
+        com.vungle.warren.VisionController r0, $r4;
+
+        r0 := @this: com.vungle.warren.VisionController;
+
+        $r4 = r0;
+
+        $r1 = new com.google.gson.JsonObject;
+
+        specialinvoke $r1.<com.google.gson.JsonObject: void <init>()>();
+
+        $r5 = specialinvoke r0.<com.vungle.warren.VisionController: java.lang.String getDataScienceCache()>();
+
+        if $r5 == null goto label01;
+
+        virtualinvoke $r1.<com.google.gson.JsonObject: void addProperty(java.lang.String,java.lang.String)>("data_science_cache", $r5);
+
+     label01:
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r7 = $r6.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        if $r7 == null goto label06;
+
+        $r8 = r0.<com.vungle.warren.VisionController: com.vungle.warren.utility.NetworkProvider networkProvider>;
+
+        $i1 = virtualinvoke $r8.<com.vungle.warren.utility.NetworkProvider: int getCurrentNetworkType()>();
+
+        if $i1 == 0 goto label04;
+
+        if $i1 == 1 goto label02;
+
+        if $i1 == 4 goto label04;
+
+        if $i1 == 9 goto label02;
+
+        if $i1 == 17 goto label04;
+
+        if $i1 == 6 goto label02;
+
+        if $i1 == 7 goto label04;
+
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r7 = $r6.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        $i1 = $r7.<com.vungle.warren.vision.VisionConfig$Limits: int device>;
+
+        goto label07;
+
+     label02:
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r7 = $r6.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        $i1 = $r7.<com.vungle.warren.vision.VisionConfig$Limits: int wifi>;
+
+        if $i1 <= 0 goto label03;
+
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r7 = $r6.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        $i1 = $r7.<com.vungle.warren.vision.VisionConfig$Limits: int wifi>;
+
+        goto label07;
+
+     label03:
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r7 = $r6.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        $i1 = $r7.<com.vungle.warren.vision.VisionConfig$Limits: int device>;
+
+        goto label07;
+
+     label04:
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r7 = $r6.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        $i1 = $r7.<com.vungle.warren.vision.VisionConfig$Limits: int mobile>;
+
+        if $i1 <= 0 goto label05;
+
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r7 = $r6.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        $i1 = $r7.<com.vungle.warren.vision.VisionConfig$Limits: int mobile>;
+
+        goto label07;
+
+     label05:
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r7 = $r6.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        $i1 = $r7.<com.vungle.warren.vision.VisionConfig$Limits: int device>;
+
+        goto label07;
+
+     label06:
+        $i1 = 0;
+
+     label07:
+        $l2 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r2 = new com.google.gson.JsonArray;
+
+        specialinvoke $r2.<com.google.gson.JsonArray: void <init>()>();
+
+        virtualinvoke $r1.<com.google.gson.JsonObject: void add(java.lang.String,com.google.gson.JsonElement)>("aggregate", $r2);
+
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r9 = $r6.<com.vungle.warren.vision.VisionConfig: int[] aggregationTimeWindows>;
+
+        if $r9 == null goto label17;
+
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r9 = $r6.<com.vungle.warren.vision.VisionConfig: int[] aggregationTimeWindows>;
+
+        $i3 = lengthof $r9;
+
+        $i4 = 0;
+
+     label08:
+        if $i4 >= $i3 goto label17;
+
+        $i5 = $r9[$i4];
+
+        $r10 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit DAYS>;
+
+        $l0 = (long) $i5;
+
+        $l0 = virtualinvoke $r10.<java.util.concurrent.TimeUnit: long toMillis(long)>($l0);
+
+        $l0 = $l2 - $l0;
+
+        $r11 = $r4.<com.vungle.warren.VisionController: com.vungle.warren.persistence.Repository repository>;
+
+        $r12 = virtualinvoke $r11.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult getVisionAggregationInfo(long)>($l0);
+
+        $r13 = virtualinvoke $r12.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r14 = (com.vungle.warren.vision.VisionAggregationInfo) $r13;
+
+        $r3 = new com.google.gson.JsonObject;
+
+        specialinvoke $r3.<com.google.gson.JsonObject: void <init>()>();
+
+        $r15 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i5);
+
+        virtualinvoke $r3.<com.google.gson.JsonObject: void addProperty(java.lang.String,java.lang.Number)>("window", $r15);
+
+        if $r14 == null goto label09;
+
+        $r5 = $r14.<com.vungle.warren.vision.VisionAggregationInfo: java.lang.String lastCreative>;
+
+        goto label10;
+
+     label09:
+        $r5 = null;
+
+     label10:
+        virtualinvoke $r3.<com.google.gson.JsonObject: void addProperty(java.lang.String,java.lang.String)>("last_viewed_creative_id", $r5);
+
+        if $r14 == null goto label11;
+
+        $i5 = $r14.<com.vungle.warren.vision.VisionAggregationInfo: int totalCount>;
+
+        goto label12;
+
+     label11:
+        $i5 = 0;
+
+     label12:
+        $r15 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i5);
+
+        virtualinvoke $r3.<com.google.gson.JsonObject: void addProperty(java.lang.String,java.lang.Number)>("total_view_count", $r15);
+
+        $r6 = $r4.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r16 = $r6.<com.vungle.warren.vision.VisionConfig: java.lang.String[] aggregationFilters>;
+
+        if $r16 == null goto label16;
+
+        $r6 = $r4.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r16 = $r6.<com.vungle.warren.vision.VisionConfig: java.lang.String[] aggregationFilters>;
+
+        $i5 = lengthof $r16;
+
+        $i6 = 0;
+
+     label13:
+        if $i6 >= $i5 goto label16;
+
+        $r5 = $r16[$i6];
+
+        $r17 = new com.google.gson.JsonArray;
+
+        specialinvoke $r17.<com.google.gson.JsonArray: void <init>()>();
+
+        virtualinvoke $r3.<com.google.gson.JsonObject: void add(java.lang.String,com.google.gson.JsonElement)>($r5, $r17);
+
+        $r18 = virtualinvoke $r4.<com.vungle.warren.VisionController: java.lang.String getFilterName(java.lang.String)>($r5);
+
+        $r5 = $r18;
+
+        $r11 = $r4.<com.vungle.warren.VisionController: com.vungle.warren.persistence.Repository repository>;
+
+        $r12 = virtualinvoke $r11.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult getVisionAggregationData(long,int,java.lang.String)>($l0, $i1, $r18);
+
+        $r13 = virtualinvoke $r12.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r19 = (java.util.List) $r13;
+
+        if $r19 == null goto label15;
+
+        $r20 = interfaceinvoke $r19.<java.util.List: java.util.Iterator iterator()>();
+
+     label14:
+        $z0 = interfaceinvoke $r20.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label15;
+
+        $r13 = interfaceinvoke $r20.<java.util.Iterator: java.lang.Object next()>();
+
+        $r21 = (com.vungle.warren.vision.VisionAggregationData) $r13;
+
+        $r22 = new com.google.gson.JsonObject;
+
+        specialinvoke $r22.<com.google.gson.JsonObject: void <init>()>();
+
+        $r23 = new java.lang.StringBuilder;
+
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("_id");
+
+        $r18 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r24 = $r21.<com.vungle.warren.vision.VisionAggregationData: java.lang.String id>;
+
+        virtualinvoke $r22.<com.google.gson.JsonObject: void addProperty(java.lang.String,java.lang.String)>($r18, $r24);
+
+        $i7 = $r21.<com.vungle.warren.vision.VisionAggregationData: int viewCount>;
+
+        $r15 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i7);
+
+        virtualinvoke $r22.<com.google.gson.JsonObject: void addProperty(java.lang.String,java.lang.Number)>("view_count", $r15);
+
+        $r10 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $l8 = $r21.<com.vungle.warren.vision.VisionAggregationData: long lastTimeStamp>;
+
+        $l8 = virtualinvoke $r10.<java.util.concurrent.TimeUnit: long toSeconds(long)>($l8);
+
+        $r25 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l8);
+
+        virtualinvoke $r22.<com.google.gson.JsonObject: void addProperty(java.lang.String,java.lang.Number)>("last_time_viewed", $r25);
+
+        virtualinvoke $r17.<com.google.gson.JsonArray: void add(com.google.gson.JsonElement)>($r22);
+
+        goto label14;
+
+     label15:
+        $i6 = $i6 + 1;
+
+        $r4 = r0;
+
+        goto label13;
+
+     label16:
+        virtualinvoke $r2.<com.google.gson.JsonArray: void add(com.google.gson.JsonElement)>($r3);
+
+        $i4 = $i4 + 1;
+
+        $r4 = r0;
+
+        goto label08;
+
+     label17:
+        return $r1;
+    }
+
+    com.vungle.warren.vision.VisionConfig getVisionConfig()
+    {
+        com.vungle.warren.vision.VisionConfig r1;
+        com.vungle.warren.VisionController r0;
+
+        r0 := @this: com.vungle.warren.VisionController;
+
+        r1 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        return r1;
+    }
+
+    boolean isEnabled()
+    {
+        com.vungle.warren.vision.VisionConfig $r1;
+        com.vungle.warren.VisionController r0;
+        boolean z0;
+
+        r0 := @this: com.vungle.warren.VisionController;
+
+        $r1 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        z0 = $r1.<com.vungle.warren.vision.VisionConfig: boolean enabled>;
+
+        return z0;
+    }
+
+    void reportData(java.lang.String, java.lang.String, java.lang.String) throws com.vungle.warren.persistence.DatabaseHelper$DBException
+    {
+        long $l0;
+        com.vungle.warren.vision.VisionConfig $r6;
+        com.vungle.warren.vision.VisionConfig$Limits $r7;
+        com.vungle.warren.persistence.Repository $r2;
+        int $i1;
+        java.lang.String $r1, $r4, $r5;
+        com.vungle.warren.model.VisionData $r3;
+        com.vungle.warren.VisionController r0;
+
+        r0 := @this: com.vungle.warren.VisionController;
+
+        $r4 := @parameter0: java.lang.String;
+
+        $r5 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $r2 = r0.<com.vungle.warren.VisionController: com.vungle.warren.persistence.Repository repository>;
+
+        $r3 = new com.vungle.warren.model.VisionData;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        specialinvoke $r3.<com.vungle.warren.model.VisionData: void <init>(long,java.lang.String,java.lang.String,java.lang.String)>($l0, $r4, $r5, $r1);
+
+        virtualinvoke $r2.<com.vungle.warren.persistence.Repository: void save(java.lang.Object)>($r3);
+
+        $r2 = r0.<com.vungle.warren.VisionController: com.vungle.warren.persistence.Repository repository>;
+
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r7 = $r6.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        if $r7 == null goto label1;
+
+        $r6 = r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config>;
+
+        $r7 = $r6.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        $i1 = $r7.<com.vungle.warren.vision.VisionConfig$Limits: int device>;
+
+        goto label2;
+
+     label1:
+        $i1 = 0;
+
+     label2:
+        virtualinvoke $r2.<com.vungle.warren.persistence.Repository: void trimVisionData(int)>($i1);
+
+        return;
+    }
+
+    void setConfig(com.vungle.warren.vision.VisionConfig) throws com.vungle.warren.persistence.DatabaseHelper$DBException
+    {
+        com.vungle.warren.persistence.Repository $r3;
+        int $i0;
+        com.vungle.warren.vision.VisionConfig$Limits $r1;
+        com.vungle.warren.vision.VisionConfig $r2;
+        com.vungle.warren.VisionController r0;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.VisionController;
+
+        $r2 := @parameter0: com.vungle.warren.vision.VisionConfig;
+
+        r0.<com.vungle.warren.VisionController: com.vungle.warren.vision.VisionConfig config> = $r2;
+
+        $z0 = $r2.<com.vungle.warren.vision.VisionConfig: boolean enabled>;
+
+        if $z0 == 0 goto label3;
+
+        $r3 = r0.<com.vungle.warren.VisionController: com.vungle.warren.persistence.Repository repository>;
+
+        $r1 = $r2.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        if $r1 == null goto label1;
+
+        $r1 = $r2.<com.vungle.warren.vision.VisionConfig: com.vungle.warren.vision.VisionConfig$Limits viewLimit>;
+
+        $i0 = $r1.<com.vungle.warren.vision.VisionConfig$Limits: int device>;
+
+        goto label2;
+
+     label1:
+        $i0 = 0;
+
+     label2:
+        virtualinvoke $r3.<com.vungle.warren.persistence.Repository: void trimVisionData(int)>($i0);
+
+     label3:
+        return;
+    }
+
+    void setDataScienceCache(java.lang.String) throws com.vungle.warren.persistence.DatabaseHelper$DBException
+    {
+        com.vungle.warren.persistence.Repository $r3;
+        com.vungle.warren.model.Cookie $r1;
+        java.lang.String $r2;
+        com.vungle.warren.VisionController r0;
+
+        r0 := @this: com.vungle.warren.VisionController;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 = new com.vungle.warren.model.Cookie;
+
+        specialinvoke $r1.<com.vungle.warren.model.Cookie: void <init>(java.lang.String)>("visionCookie");
+
+        if $r2 == null goto label1;
+
+        virtualinvoke $r1.<com.vungle.warren.model.Cookie: void putValue(java.lang.String,java.lang.Object)>("data_science_cache", $r2);
+
+     label1:
+        $r3 = r0.<com.vungle.warren.VisionController: com.vungle.warren.persistence.Repository repository>;
+
+        virtualinvoke $r3.<com.vungle.warren.persistence.Repository: void save(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.vungle.warren.VisionController: java.lang.String WINDOW> = "window";
+
+        <com.vungle.warren.VisionController: java.lang.String VISION_COOKIE> = "visionCookie";
+
+        <com.vungle.warren.VisionController: java.lang.String VISION> = "vision";
+
+        <com.vungle.warren.VisionController: java.lang.String VIEW_COUNT> = "view_count";
+
+        <com.vungle.warren.VisionController: java.lang.String TOTAL_VIEW_COUNT> = "total_view_count";
+
+        <com.vungle.warren.VisionController: java.lang.String LAST_VIEWED_CREATIVE_ID> = "last_viewed_creative_id";
+
+        <com.vungle.warren.VisionController: java.lang.String LAST_VIEWED_CAMPAIGN_ID> = "last_viewed_campaign_id";
+
+        <com.vungle.warren.VisionController: java.lang.String LAST_VIEWED_ADVERTISER_ID> = "last_viewed_advertiser_id";
+
+        <com.vungle.warren.VisionController: java.lang.String LAST_TIME_VIEWED> = "last_time_viewed";
+
+        <com.vungle.warren.VisionController: java.lang.String FILTER_ID> = "_id";
+
+        <com.vungle.warren.VisionController: java.lang.String DATA_SCIENCE_CACHE> = "data_science_cache";
+
+        <com.vungle.warren.VisionController: java.lang.String CREATIVE_DETAILS> = "creative_details";
+
+        <com.vungle.warren.VisionController: java.lang.String CAMPAIGN_DETAILS> = "campaign_details";
+
+        <com.vungle.warren.VisionController: java.lang.String AGGREGATE> = "aggregate";
+
+        <com.vungle.warren.VisionController: java.lang.String ADVERTISER_DETAILS> = "advertiser_details";
+
+        return;
+    }
+}

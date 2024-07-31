@@ -1,0 +1,167 @@
+public class com.adobe.air.AndroidMediaStream extends java.lang.Object
+{
+    private static final int ERROR;
+    private int mBufferSize;
+    private java.io.BufferedInputStream mBufferedStream;
+    private android.net.Uri mContentURI;
+
+    public void <init>()
+    {
+        com.adobe.air.AndroidMediaStream r0;
+
+        r0 := @this: com.adobe.air.AndroidMediaStream;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.adobe.air.AndroidMediaStream: java.io.BufferedInputStream mBufferedStream> = null;
+
+        r0.<com.adobe.air.AndroidMediaStream: int mBufferSize> = 0;
+
+        r0.<com.adobe.air.AndroidMediaStream: android.net.Uri mContentURI> = null;
+
+        return;
+    }
+
+    public void Close()
+    {
+        java.io.BufferedInputStream $r2;
+        java.lang.Exception $r1;
+        com.adobe.air.AndroidMediaStream r0;
+
+        r0 := @this: com.adobe.air.AndroidMediaStream;
+
+        $r2 = r0.<com.adobe.air.AndroidMediaStream: java.io.BufferedInputStream mBufferedStream>;
+
+        if $r2 == null goto label4;
+
+     label1:
+        virtualinvoke $r2.<java.io.BufferedInputStream: void close()>();
+
+     label2:
+        r0.<com.adobe.air.AndroidMediaStream: java.io.BufferedInputStream mBufferedStream> = null;
+
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        goto label2;
+
+     label4:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public int Read(byte[], int)
+    {
+        java.lang.Throwable $r2;
+        byte[] $r3;
+        java.io.BufferedInputStream $r1;
+        com.adobe.air.AndroidMediaStream r0;
+        int $i0;
+
+        r0 := @this: com.adobe.air.AndroidMediaStream;
+
+        $r3 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $r1 = r0.<com.adobe.air.AndroidMediaStream: java.io.BufferedInputStream mBufferedStream>;
+
+     label1:
+        $i0 = virtualinvoke $r1.<java.io.BufferedInputStream: int read(byte[],int,int)>($r3, 0, $i0);
+
+     label2:
+        return $i0;
+
+     label3:
+        $i0 = -2;
+
+        return $i0;
+
+     label4:
+        $r2 := @caughtexception;
+
+        goto label3;
+
+        catch java.io.IOException from label1 to label2 with label4;
+    }
+
+    public boolean loadContentURI(java.lang.String)
+    {
+        java.lang.Throwable $r1;
+        java.io.BufferedInputStream $r5;
+        com.adobe.air.AndroidMediaStream r0;
+        android.net.Uri $r4;
+        java.lang.Exception $r2;
+        android.content.ContentResolver $r8;
+        java.lang.String $r3;
+        com.adobe.air.AndroidActivityWrapper $r6;
+        android.app.Activity $r7;
+        java.io.InputStream $r9;
+
+        r0 := @this: com.adobe.air.AndroidMediaStream;
+
+        $r3 := @parameter0: java.lang.String;
+
+        $r4 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r3);
+
+        r0.<com.adobe.air.AndroidMediaStream: android.net.Uri mContentURI> = $r4;
+
+        $r5 = r0.<com.adobe.air.AndroidMediaStream: java.io.BufferedInputStream mBufferedStream>;
+
+        if $r5 != null goto label08;
+
+        $r6 = staticinvoke <com.adobe.air.AndroidActivityWrapper: com.adobe.air.AndroidActivityWrapper GetAndroidActivityWrapper()>();
+
+     label01:
+        $r7 = virtualinvoke $r6.<com.adobe.air.AndroidActivityWrapper: android.app.Activity getActivity()>();
+
+        $r8 = virtualinvoke $r7.<android.app.Activity: android.content.ContentResolver getContentResolver()>();
+
+     label02:
+        $r4 = r0.<com.adobe.air.AndroidMediaStream: android.net.Uri mContentURI>;
+
+     label03:
+        $r9 = virtualinvoke $r8.<android.content.ContentResolver: java.io.InputStream openInputStream(android.net.Uri)>($r4);
+
+     label04:
+        $r5 = new java.io.BufferedInputStream;
+
+     label05:
+        specialinvoke $r5.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r9);
+
+     label06:
+        r0.<com.adobe.air.AndroidMediaStream: java.io.BufferedInputStream mBufferedStream> = $r5;
+
+     label07:
+        goto label08;
+
+     label08:
+        return 1;
+
+     label09:
+        $r1 := @caughtexception;
+
+        return 0;
+
+     label10:
+        $r2 := @caughtexception;
+
+        return 0;
+
+        catch java.io.FileNotFoundException from label01 to label02 with label09;
+        catch java.io.FileNotFoundException from label03 to label04 with label09;
+        catch java.io.FileNotFoundException from label05 to label06 with label09;
+        catch java.lang.Exception from label01 to label04 with label10;
+        catch java.lang.Exception from label05 to label07 with label10;
+    }
+
+    public static void <clinit>()
+    {
+        <com.adobe.air.AndroidMediaStream: int ERROR> = -2;
+
+        return;
+    }
+}

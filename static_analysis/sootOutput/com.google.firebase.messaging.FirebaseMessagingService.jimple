@@ -1,0 +1,501 @@
+public class com.google.firebase.messaging.FirebaseMessagingService extends com.google.firebase.messaging.EnhancedIntentService
+{
+    public static final java.lang.String ACTION_DIRECT_BOOT_REMOTE_INTENT;
+    static final java.lang.String ACTION_NEW_TOKEN;
+    static final java.lang.String ACTION_REMOTE_INTENT;
+    static final java.lang.String EXTRA_TOKEN;
+    private static final int RECENTLY_RECEIVED_MESSAGE_IDS_MAX_SIZE;
+    private static final java.util.Queue recentlyReceivedMessageIds;
+
+    static void <clinit>()
+    {
+        java.util.ArrayDeque $r0;
+
+        <com.google.firebase.messaging.FirebaseMessagingService: int RECENTLY_RECEIVED_MESSAGE_IDS_MAX_SIZE> = 10;
+
+        <com.google.firebase.messaging.FirebaseMessagingService: java.lang.String EXTRA_TOKEN> = "token";
+
+        <com.google.firebase.messaging.FirebaseMessagingService: java.lang.String ACTION_REMOTE_INTENT> = "com.google.android.c2dm.intent.RECEIVE";
+
+        <com.google.firebase.messaging.FirebaseMessagingService: java.lang.String ACTION_NEW_TOKEN> = "com.google.firebase.messaging.NEW_TOKEN";
+
+        <com.google.firebase.messaging.FirebaseMessagingService: java.lang.String ACTION_DIRECT_BOOT_REMOTE_INTENT> = "com.google.firebase.messaging.RECEIVE_DIRECT_BOOT";
+
+        $r0 = new java.util.ArrayDeque;
+
+        specialinvoke $r0.<java.util.ArrayDeque: void <init>(int)>(10);
+
+        <com.google.firebase.messaging.FirebaseMessagingService: java.util.Queue recentlyReceivedMessageIds> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        specialinvoke r0.<com.google.firebase.messaging.EnhancedIntentService: void <init>()>();
+
+        return;
+    }
+
+    private boolean alreadyReceivedMessage(java.lang.String)
+    {
+        int $i0;
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r1;
+        java.util.Queue $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r2 = <com.google.firebase.messaging.FirebaseMessagingService: java.util.Queue recentlyReceivedMessageIds>;
+
+        $z0 = interfaceinvoke $r2.<java.util.Queue: boolean contains(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label3;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("FirebaseMessaging", 3);
+
+        if $z0 == 0 goto label2;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Received duplicate message: ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("FirebaseMessaging", $r1);
+
+     label2:
+        return 1;
+
+     label3:
+        $i0 = interfaceinvoke $r2.<java.util.Queue: int size()>();
+
+        if $i0 < 10 goto label4;
+
+        interfaceinvoke $r2.<java.util.Queue: java.lang.Object remove()>();
+
+     label4:
+        interfaceinvoke $r2.<java.util.Queue: boolean add(java.lang.Object)>($r1);
+
+        return 0;
+    }
+
+    private void dispatchMessage(android.content.Intent)
+    {
+        java.lang.Throwable $r7;
+        android.os.Bundle $r3, $r4;
+        android.content.Intent $r2;
+        com.google.firebase.messaging.NotificationParams $r5;
+        com.google.firebase.messaging.DisplayNotification $r1;
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        com.google.firebase.messaging.RemoteMessage $r8;
+        java.util.concurrent.ExecutorService $r6;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r2 := @parameter0: android.content.Intent;
+
+        $r3 = virtualinvoke $r2.<android.content.Intent: android.os.Bundle getExtras()>();
+
+        $r4 = $r3;
+
+        if $r3 != null goto label1;
+
+        $r4 = new android.os.Bundle;
+
+        specialinvoke $r4.<android.os.Bundle: void <init>()>();
+
+     label1:
+        virtualinvoke $r4.<android.os.Bundle: void remove(java.lang.String)>("androidx.content.wakelockid");
+
+        $z0 = staticinvoke <com.google.firebase.messaging.NotificationParams: boolean isNotification(android.os.Bundle)>($r4);
+
+        if $z0 == 0 goto label6;
+
+        $r5 = new com.google.firebase.messaging.NotificationParams;
+
+        specialinvoke $r5.<com.google.firebase.messaging.NotificationParams: void <init>(android.os.Bundle)>($r4);
+
+        $r6 = staticinvoke <com.google.firebase.messaging.FcmExecutors: java.util.concurrent.ExecutorService newNetworkIOExecutor()>();
+
+        $r1 = new com.google.firebase.messaging.DisplayNotification;
+
+        specialinvoke $r1.<com.google.firebase.messaging.DisplayNotification: void <init>(android.content.Context,com.google.firebase.messaging.NotificationParams,java.util.concurrent.ExecutorService)>(r0, $r5, $r6);
+
+     label2:
+        $z0 = virtualinvoke $r1.<com.google.firebase.messaging.DisplayNotification: boolean handleNotification()>();
+
+     label3:
+        if $z0 == 0 goto label4;
+
+        interfaceinvoke $r6.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+        return;
+
+     label4:
+        interfaceinvoke $r6.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+        $z0 = staticinvoke <com.google.firebase.messaging.MessagingAnalytics: boolean shouldUploadScionMetrics(android.content.Intent)>($r2);
+
+        if $z0 == 0 goto label6;
+
+        staticinvoke <com.google.firebase.messaging.MessagingAnalytics: void logNotificationForeground(android.content.Intent)>($r2);
+
+        goto label6;
+
+     label5:
+        $r7 := @caughtexception;
+
+        interfaceinvoke $r6.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+        throw $r7;
+
+     label6:
+        $r8 = new com.google.firebase.messaging.RemoteMessage;
+
+        specialinvoke $r8.<com.google.firebase.messaging.RemoteMessage: void <init>(android.os.Bundle)>($r4);
+
+        virtualinvoke r0.<com.google.firebase.messaging.FirebaseMessagingService: void onMessageReceived(com.google.firebase.messaging.RemoteMessage)>($r8);
+
+        return;
+
+        catch java.lang.Throwable from label2 to label3 with label5;
+    }
+
+    private java.lang.String getMessageId(android.content.Intent)
+    {
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        android.content.Intent $r1;
+        java.lang.String $r2;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $r2 = virtualinvoke $r1.<android.content.Intent: java.lang.String getStringExtra(java.lang.String)>("google.message_id");
+
+        if $r2 != null goto label1;
+
+        $r2 = virtualinvoke $r1.<android.content.Intent: java.lang.String getStringExtra(java.lang.String)>("message_id");
+
+     label1:
+        return $r2;
+    }
+
+    private void handleMessageIntent(android.content.Intent)
+    {
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        android.content.Intent $r1;
+        java.lang.String $r2;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $r2 = virtualinvoke $r1.<android.content.Intent: java.lang.String getStringExtra(java.lang.String)>("google.message_id");
+
+        $z0 = specialinvoke r0.<com.google.firebase.messaging.FirebaseMessagingService: boolean alreadyReceivedMessage(java.lang.String)>($r2);
+
+        if $z0 != 0 goto label1;
+
+        specialinvoke r0.<com.google.firebase.messaging.FirebaseMessagingService: void passMessageIntentToSdk(android.content.Intent)>($r1);
+
+     label1:
+        return;
+    }
+
+    private void passMessageIntentToSdk(android.content.Intent)
+    {
+        android.content.Intent $r1;
+        byte $b1;
+        com.google.firebase.messaging.SendException $r5;
+        int $i0;
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r2, $r3;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $r2 = virtualinvoke $r1.<android.content.Intent: java.lang.String getStringExtra(java.lang.String)>("message_type");
+
+        $r3 = $r2;
+
+        if $r2 != null goto label01;
+
+        $r3 = "gcm";
+
+     label01:
+        virtualinvoke $r3.<java.lang.String: int hashCode()>();
+
+        $i0 = virtualinvoke $r3.<java.lang.String: int hashCode()>();
+
+        $b1 = -1;
+
+        lookupswitch($i0)
+        {
+            case -2062414158: goto label05;
+            case 102161: goto label04;
+            case 814694033: goto label03;
+            case 814800675: goto label02;
+            default: goto label06;
+        };
+
+     label02:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("send_event");
+
+        if $z0 == 0 goto label06;
+
+        $b1 = 3;
+
+        goto label06;
+
+     label03:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("send_error");
+
+        if $z0 == 0 goto label06;
+
+        $b1 = 2;
+
+        goto label06;
+
+     label04:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("gcm");
+
+        if $z0 == 0 goto label06;
+
+        $b1 = 1;
+
+        goto label06;
+
+     label05:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("deleted_messages");
+
+        if $z0 == 0 goto label06;
+
+        $b1 = 0;
+
+     label06:
+        lookupswitch($b1)
+        {
+            case 0: goto label11;
+            case 1: goto label10;
+            case 2: goto label09;
+            case 3: goto label08;
+            default: goto label07;
+        };
+
+     label07:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Received message with unknown type: ");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r2 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FirebaseMessaging", $r2);
+
+        return;
+
+     label08:
+        $r2 = virtualinvoke $r1.<android.content.Intent: java.lang.String getStringExtra(java.lang.String)>("google.message_id");
+
+        virtualinvoke r0.<com.google.firebase.messaging.FirebaseMessagingService: void onMessageSent(java.lang.String)>($r2);
+
+        return;
+
+     label09:
+        $r2 = specialinvoke r0.<com.google.firebase.messaging.FirebaseMessagingService: java.lang.String getMessageId(android.content.Intent)>($r1);
+
+        $r5 = new com.google.firebase.messaging.SendException;
+
+        $r3 = virtualinvoke $r1.<android.content.Intent: java.lang.String getStringExtra(java.lang.String)>("error");
+
+        specialinvoke $r5.<com.google.firebase.messaging.SendException: void <init>(java.lang.String)>($r3);
+
+        virtualinvoke r0.<com.google.firebase.messaging.FirebaseMessagingService: void onSendError(java.lang.String,java.lang.Exception)>($r2, $r5);
+
+        return;
+
+     label10:
+        staticinvoke <com.google.firebase.messaging.MessagingAnalytics: void logNotificationReceived(android.content.Intent)>($r1);
+
+        specialinvoke r0.<com.google.firebase.messaging.FirebaseMessagingService: void dispatchMessage(android.content.Intent)>($r1);
+
+        return;
+
+     label11:
+        virtualinvoke r0.<com.google.firebase.messaging.FirebaseMessagingService: void onDeletedMessages()>();
+
+        return;
+    }
+
+    static void resetForTesting()
+    {
+        java.util.Queue $r0;
+
+        $r0 = <com.google.firebase.messaging.FirebaseMessagingService: java.util.Queue recentlyReceivedMessageIds>;
+
+        interfaceinvoke $r0.<java.util.Queue: void clear()>();
+
+        return;
+    }
+
+    protected android.content.Intent getStartCommandIntent(android.content.Intent)
+    {
+        com.google.firebase.messaging.ServiceStarter $r2;
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        android.content.Intent $r1;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $r2 = staticinvoke <com.google.firebase.messaging.ServiceStarter: com.google.firebase.messaging.ServiceStarter getInstance()>();
+
+        $r1 = virtualinvoke $r2.<com.google.firebase.messaging.ServiceStarter: android.content.Intent getMessagingEvent()>();
+
+        return $r1;
+    }
+
+    public void handleIntent(android.content.Intent)
+    {
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        android.content.Intent $r1;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r2, $r3;
+        boolean $z0;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $r2 = virtualinvoke $r1.<android.content.Intent: java.lang.String getAction()>();
+
+        $r3 = "com.google.android.c2dm.intent.RECEIVE";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 != 0 goto label2;
+
+        $r3 = "com.google.firebase.messaging.RECEIVE_DIRECT_BOOT";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 != 0 goto label2;
+
+        $r3 = "com.google.firebase.messaging.NEW_TOKEN";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = virtualinvoke $r1.<android.content.Intent: java.lang.String getStringExtra(java.lang.String)>("token");
+
+        virtualinvoke r0.<com.google.firebase.messaging.FirebaseMessagingService: void onNewToken(java.lang.String)>($r2);
+
+        return;
+
+     label1:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unknown intent action: ");
+
+        $r2 = virtualinvoke $r1.<android.content.Intent: java.lang.String getAction()>();
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("FirebaseMessaging", $r2);
+
+        return;
+
+     label2:
+        specialinvoke r0.<com.google.firebase.messaging.FirebaseMessagingService: void handleMessageIntent(android.content.Intent)>($r1);
+
+        return;
+    }
+
+    public void onDeletedMessages()
+    {
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        return;
+    }
+
+    public void onMessageReceived(com.google.firebase.messaging.RemoteMessage)
+    {
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        com.google.firebase.messaging.RemoteMessage $r1;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r1 := @parameter0: com.google.firebase.messaging.RemoteMessage;
+
+        return;
+    }
+
+    public void onMessageSent(java.lang.String)
+    {
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        java.lang.String $r1;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r1 := @parameter0: java.lang.String;
+
+        return;
+    }
+
+    public void onNewToken(java.lang.String)
+    {
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        java.lang.String $r1;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r1 := @parameter0: java.lang.String;
+
+        return;
+    }
+
+    public void onSendError(java.lang.String, java.lang.Exception)
+    {
+        com.google.firebase.messaging.FirebaseMessagingService r0;
+        java.lang.String $r1;
+        java.lang.Exception $r2;
+
+        r0 := @this: com.google.firebase.messaging.FirebaseMessagingService;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.Exception;
+
+        return;
+    }
+}

@@ -1,0 +1,262 @@
+public final class com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor extends java.lang.Object implements com.mbridge.msdk.thrid.okhttp.Interceptor
+{
+    private final com.mbridge.msdk.thrid.okhttp.CookieJar cookieJar;
+
+    public void <init>(com.mbridge.msdk.thrid.okhttp.CookieJar)
+    {
+        com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor r0;
+        com.mbridge.msdk.thrid.okhttp.CookieJar $r1;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.CookieJar;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor: com.mbridge.msdk.thrid.okhttp.CookieJar cookieJar> = $r1;
+
+        return;
+    }
+
+    private java.lang.String cookieHeader(java.util.List)
+    {
+        com.mbridge.msdk.thrid.okhttp.Cookie $r4;
+        com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor r0;
+        java.util.List $r2;
+        int $i0, $i1;
+        java.lang.StringBuilder $r1;
+        java.lang.Object $r3;
+        java.lang.String $r5;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor;
+
+        $r2 := @parameter0: java.util.List;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        if $i1 <= 0 goto label2;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("; ");
+
+     label2:
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $r4 = (com.mbridge.msdk.thrid.okhttp.Cookie) $r3;
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okhttp.Cookie: java.lang.String name()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(61);
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okhttp.Cookie: java.lang.String value()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        $r5 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r5;
+    }
+
+    public com.mbridge.msdk.thrid.okhttp.Response intercept(com.mbridge.msdk.thrid.okhttp.Interceptor$Chain) throws java.io.IOException
+    {
+        com.mbridge.msdk.thrid.okhttp.MediaType $r5;
+        com.mbridge.msdk.thrid.okhttp.RequestBody $r4;
+        com.mbridge.msdk.thrid.okhttp.Interceptor$Chain $r1;
+        com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor r0;
+        com.mbridge.msdk.thrid.okhttp.ResponseBody $r16;
+        long $l0;
+        com.mbridge.msdk.thrid.okhttp.HttpUrl $r7;
+        com.mbridge.msdk.thrid.okhttp.Response$Builder $r14;
+        com.mbridge.msdk.thrid.okhttp.Request $r2, $r11;
+        byte $b1;
+        com.mbridge.msdk.thrid.okhttp.internal.http.RealResponseBody $r19;
+        com.mbridge.msdk.thrid.okhttp.Headers $r13;
+        java.lang.String $r6, $r8;
+        com.mbridge.msdk.thrid.okhttp.Headers$Builder $r18;
+        boolean $z0, $z1;
+        java.util.List $r10;
+        com.mbridge.msdk.thrid.okhttp.CookieJar $r9;
+        com.mbridge.msdk.thrid.okio.BufferedSource $r17;
+        com.mbridge.msdk.thrid.okhttp.Request$Builder $r3;
+        com.mbridge.msdk.thrid.okhttp.Response $r12;
+        com.mbridge.msdk.thrid.okio.GzipSource $r15;
+
+        r0 := @this: com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor;
+
+        $r1 := @parameter0: com.mbridge.msdk.thrid.okhttp.Interceptor$Chain;
+
+        $r2 = interfaceinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Interceptor$Chain: com.mbridge.msdk.thrid.okhttp.Request request()>();
+
+        $r3 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.Request$Builder newBuilder()>();
+
+        $r4 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.RequestBody body()>();
+
+        if $r4 == null goto label3;
+
+        $r5 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okhttp.RequestBody: com.mbridge.msdk.thrid.okhttp.MediaType contentType()>();
+
+        if $r5 == null goto label1;
+
+        $r6 = virtualinvoke $r5.<com.mbridge.msdk.thrid.okhttp.MediaType: java.lang.String toString()>();
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request$Builder header(java.lang.String,java.lang.String)>("Content-Type", $r6);
+
+     label1:
+        $l0 = virtualinvoke $r4.<com.mbridge.msdk.thrid.okhttp.RequestBody: long contentLength()>();
+
+        $b1 = $l0 cmp -1L;
+
+        if $b1 == 0 goto label2;
+
+        $r6 = staticinvoke <java.lang.Long: java.lang.String toString(long)>($l0);
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request$Builder header(java.lang.String,java.lang.String)>("Content-Length", $r6);
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request$Builder removeHeader(java.lang.String)>("Transfer-Encoding");
+
+        goto label3;
+
+     label2:
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request$Builder header(java.lang.String,java.lang.String)>("Transfer-Encoding", "chunked");
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request$Builder removeHeader(java.lang.String)>("Content-Length");
+
+     label3:
+        $r6 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: java.lang.String header(java.lang.String)>("Host");
+
+        $z0 = 0;
+
+        if $r6 != null goto label4;
+
+        $r7 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.HttpUrl url()>();
+
+        $r6 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.Util: java.lang.String hostHeader(com.mbridge.msdk.thrid.okhttp.HttpUrl,boolean)>($r7, 0);
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request$Builder header(java.lang.String,java.lang.String)>("Host", $r6);
+
+     label4:
+        $r6 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: java.lang.String header(java.lang.String)>("Connection");
+
+        if $r6 != null goto label5;
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request$Builder header(java.lang.String,java.lang.String)>("Connection", "Keep-Alive");
+
+     label5:
+        $r8 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: java.lang.String header(java.lang.String)>("Accept-Encoding");
+
+        $r6 = "gzip";
+
+        if $r8 != null goto label6;
+
+        $r8 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: java.lang.String header(java.lang.String)>("Range");
+
+        if $r8 != null goto label6;
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request$Builder header(java.lang.String,java.lang.String)>("Accept-Encoding", "gzip");
+
+        $z0 = 1;
+
+     label6:
+        $r9 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor: com.mbridge.msdk.thrid.okhttp.CookieJar cookieJar>;
+
+        $r7 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.HttpUrl url()>();
+
+        $r10 = interfaceinvoke $r9.<com.mbridge.msdk.thrid.okhttp.CookieJar: java.util.List loadForRequest(com.mbridge.msdk.thrid.okhttp.HttpUrl)>($r7);
+
+        $z1 = interfaceinvoke $r10.<java.util.List: boolean isEmpty()>();
+
+        if $z1 != 0 goto label7;
+
+        $r8 = specialinvoke r0.<com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor: java.lang.String cookieHeader(java.util.List)>($r10);
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request$Builder header(java.lang.String,java.lang.String)>("Cookie", $r8);
+
+     label7:
+        $r8 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: java.lang.String header(java.lang.String)>("User-Agent");
+
+        if $r8 != null goto label8;
+
+        $r8 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.Version: java.lang.String userAgent()>();
+
+        virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request$Builder header(java.lang.String,java.lang.String)>("User-Agent", $r8);
+
+     label8:
+        $r11 = virtualinvoke $r3.<com.mbridge.msdk.thrid.okhttp.Request$Builder: com.mbridge.msdk.thrid.okhttp.Request build()>();
+
+        $r12 = interfaceinvoke $r1.<com.mbridge.msdk.thrid.okhttp.Interceptor$Chain: com.mbridge.msdk.thrid.okhttp.Response proceed(com.mbridge.msdk.thrid.okhttp.Request)>($r11);
+
+        $r9 = r0.<com.mbridge.msdk.thrid.okhttp.internal.http.BridgeInterceptor: com.mbridge.msdk.thrid.okhttp.CookieJar cookieJar>;
+
+        $r7 = virtualinvoke $r2.<com.mbridge.msdk.thrid.okhttp.Request: com.mbridge.msdk.thrid.okhttp.HttpUrl url()>();
+
+        $r13 = virtualinvoke $r12.<com.mbridge.msdk.thrid.okhttp.Response: com.mbridge.msdk.thrid.okhttp.Headers headers()>();
+
+        staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http.HttpHeaders: void receiveHeaders(com.mbridge.msdk.thrid.okhttp.CookieJar,com.mbridge.msdk.thrid.okhttp.HttpUrl,com.mbridge.msdk.thrid.okhttp.Headers)>($r9, $r7, $r13);
+
+        $r14 = virtualinvoke $r12.<com.mbridge.msdk.thrid.okhttp.Response: com.mbridge.msdk.thrid.okhttp.Response$Builder newBuilder()>();
+
+        $r14 = virtualinvoke $r14.<com.mbridge.msdk.thrid.okhttp.Response$Builder: com.mbridge.msdk.thrid.okhttp.Response$Builder request(com.mbridge.msdk.thrid.okhttp.Request)>($r2);
+
+        if $z0 == 0 goto label9;
+
+        $r8 = virtualinvoke $r12.<com.mbridge.msdk.thrid.okhttp.Response: java.lang.String header(java.lang.String)>("Content-Encoding");
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r8);
+
+        if $z0 == 0 goto label9;
+
+        $z0 = staticinvoke <com.mbridge.msdk.thrid.okhttp.internal.http.HttpHeaders: boolean hasBody(com.mbridge.msdk.thrid.okhttp.Response)>($r12);
+
+        if $z0 == 0 goto label9;
+
+        $r15 = new com.mbridge.msdk.thrid.okio.GzipSource;
+
+        $r16 = virtualinvoke $r12.<com.mbridge.msdk.thrid.okhttp.Response: com.mbridge.msdk.thrid.okhttp.ResponseBody body()>();
+
+        $r17 = virtualinvoke $r16.<com.mbridge.msdk.thrid.okhttp.ResponseBody: com.mbridge.msdk.thrid.okio.BufferedSource source()>();
+
+        specialinvoke $r15.<com.mbridge.msdk.thrid.okio.GzipSource: void <init>(com.mbridge.msdk.thrid.okio.Source)>($r17);
+
+        $r13 = virtualinvoke $r12.<com.mbridge.msdk.thrid.okhttp.Response: com.mbridge.msdk.thrid.okhttp.Headers headers()>();
+
+        $r18 = virtualinvoke $r13.<com.mbridge.msdk.thrid.okhttp.Headers: com.mbridge.msdk.thrid.okhttp.Headers$Builder newBuilder()>();
+
+        $r18 = virtualinvoke $r18.<com.mbridge.msdk.thrid.okhttp.Headers$Builder: com.mbridge.msdk.thrid.okhttp.Headers$Builder removeAll(java.lang.String)>("Content-Encoding");
+
+        $r18 = virtualinvoke $r18.<com.mbridge.msdk.thrid.okhttp.Headers$Builder: com.mbridge.msdk.thrid.okhttp.Headers$Builder removeAll(java.lang.String)>("Content-Length");
+
+        $r13 = virtualinvoke $r18.<com.mbridge.msdk.thrid.okhttp.Headers$Builder: com.mbridge.msdk.thrid.okhttp.Headers build()>();
+
+        virtualinvoke $r14.<com.mbridge.msdk.thrid.okhttp.Response$Builder: com.mbridge.msdk.thrid.okhttp.Response$Builder headers(com.mbridge.msdk.thrid.okhttp.Headers)>($r13);
+
+        $r6 = virtualinvoke $r12.<com.mbridge.msdk.thrid.okhttp.Response: java.lang.String header(java.lang.String)>("Content-Type");
+
+        $r19 = new com.mbridge.msdk.thrid.okhttp.internal.http.RealResponseBody;
+
+        $r17 = staticinvoke <com.mbridge.msdk.thrid.okio.Okio: com.mbridge.msdk.thrid.okio.BufferedSource buffer(com.mbridge.msdk.thrid.okio.Source)>($r15);
+
+        specialinvoke $r19.<com.mbridge.msdk.thrid.okhttp.internal.http.RealResponseBody: void <init>(java.lang.String,long,com.mbridge.msdk.thrid.okio.BufferedSource)>($r6, -1L, $r17);
+
+        virtualinvoke $r14.<com.mbridge.msdk.thrid.okhttp.Response$Builder: com.mbridge.msdk.thrid.okhttp.Response$Builder body(com.mbridge.msdk.thrid.okhttp.ResponseBody)>($r19);
+
+     label9:
+        $r12 = virtualinvoke $r14.<com.mbridge.msdk.thrid.okhttp.Response$Builder: com.mbridge.msdk.thrid.okhttp.Response build()>();
+
+        return $r12;
+    }
+}

@@ -1,0 +1,2566 @@
+public class com.vungle.warren.ui.presenter.LocalAdPresenter extends java.lang.Object implements com.vungle.warren.ui.contract.LocalAdContract$LocalPresenter, com.vungle.warren.ui.view.WebViewAPI$WebClientErrorHandler
+{
+    static final java.lang.String EXTRA_INCENTIVIZED_SENT;
+    static final java.lang.String EXTRA_IN_POST;
+    static final java.lang.String EXTRA_IS_MUTED;
+    static final java.lang.String EXTRA_REPORT;
+    static final java.lang.String EXTRA_VIDEO_POSITION;
+    static final java.lang.String HTTPS_VUNGLE_COM_PRIVACY;
+    public static final int INCENTIVIZED_TRESHOLD;
+    static final java.lang.String TAG;
+    private com.vungle.warren.ui.contract.LocalAdContract$LocalView adView;
+    private boolean adViewed;
+    private com.vungle.warren.model.Advertisement advertisement;
+    private final com.vungle.warren.analytics.AdAnalytics analytics;
+    private java.io.File assetDir;
+    private com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus;
+    private java.util.concurrent.atomic.AtomicBoolean busy;
+    private java.util.LinkedList checkpointList;
+    private final java.util.Map cookies;
+    private java.lang.String dialogBody;
+    private java.lang.String dialogClose;
+    private java.lang.String dialogContinue;
+    private java.lang.String dialogTitle;
+    private int duration;
+    private com.vungle.warren.ui.DurationRecorder durationRecorder;
+    private com.vungle.warren.utility.AsyncFileUtils$ExistenceOperation fileExistenceOperation;
+    private final java.lang.String[] impressionUrls;
+    private boolean inPost;
+    private java.util.concurrent.atomic.AtomicBoolean isDestroying;
+    private boolean muted;
+    private com.vungle.warren.model.Placement placement;
+    private int progress;
+    private com.vungle.warren.persistence.Repository$SaveCallback repoCallback;
+    private com.vungle.warren.model.Report report;
+    private com.vungle.warren.persistence.Repository repository;
+    private final com.vungle.warren.utility.Scheduler scheduler;
+    private java.util.concurrent.atomic.AtomicBoolean sendReportIncentivized;
+    private boolean userExitEnabled;
+    private int videoPosition;
+    private final com.vungle.warren.ui.view.WebViewAPI webViewAPI;
+
+    public void <init>(com.vungle.warren.model.Advertisement, com.vungle.warren.model.Placement, com.vungle.warren.persistence.Repository, com.vungle.warren.utility.Scheduler, com.vungle.warren.analytics.AdAnalytics, com.vungle.warren.ui.view.WebViewAPI, com.vungle.warren.ui.state.OptionsState, java.io.File, java.lang.String[])
+    {
+        com.vungle.warren.model.Advertisement $r8;
+        com.vungle.warren.model.Placement $r9;
+        com.vungle.warren.ui.presenter.LocalAdPresenter$1 $r13;
+        com.vungle.warren.utility.Scheduler $r2;
+        java.util.concurrent.atomic.AtomicBoolean $r11;
+        java.lang.String[] $r7;
+        java.util.HashMap $r10;
+        com.vungle.warren.ui.view.WebViewAPI $r4;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        java.io.File $r6;
+        com.vungle.warren.ui.state.OptionsState $r5;
+        java.util.List $r14;
+        com.vungle.warren.persistence.Repository $r1;
+        com.vungle.warren.analytics.AdAnalytics $r3;
+        java.util.LinkedList $r12;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r8 := @parameter0: com.vungle.warren.model.Advertisement;
+
+        $r9 := @parameter1: com.vungle.warren.model.Placement;
+
+        $r1 := @parameter2: com.vungle.warren.persistence.Repository;
+
+        $r2 := @parameter3: com.vungle.warren.utility.Scheduler;
+
+        $r3 := @parameter4: com.vungle.warren.analytics.AdAnalytics;
+
+        $r4 := @parameter5: com.vungle.warren.ui.view.WebViewAPI;
+
+        $r5 := @parameter6: com.vungle.warren.ui.state.OptionsState;
+
+        $r6 := @parameter7: java.io.File;
+
+        $r7 := @parameter8: java.lang.String[];
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r10 = new java.util.HashMap;
+
+        specialinvoke $r10.<java.util.HashMap: void <init>()>();
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.Map cookies> = $r10;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogTitle> = "Are you sure?";
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogBody> = "If you exit now, you will not get your reward";
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogContinue> = "Continue";
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogClose> = "Close";
+
+        $r11 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r11.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.concurrent.atomic.AtomicBoolean sendReportIncentivized> = $r11;
+
+        $r11 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r11.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.concurrent.atomic.AtomicBoolean isDestroying> = $r11;
+
+        $r12 = new java.util.LinkedList;
+
+        specialinvoke $r12.<java.util.LinkedList: void <init>()>();
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.LinkedList checkpointList> = $r12;
+
+        $r13 = new com.vungle.warren.ui.presenter.LocalAdPresenter$1;
+
+        specialinvoke $r13.<com.vungle.warren.ui.presenter.LocalAdPresenter$1: void <init>(com.vungle.warren.ui.presenter.LocalAdPresenter)>(r0);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository$SaveCallback repoCallback> = $r13;
+
+        $r11 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r11.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.concurrent.atomic.AtomicBoolean busy> = $r11;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement> = $r8;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement> = $r9;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.utility.Scheduler scheduler> = $r2;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics> = $r3;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.view.WebViewAPI webViewAPI> = $r4;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository> = $r1;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.io.File assetDir> = $r6;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String[] impressionUrls> = $r7;
+
+        $r14 = virtualinvoke $r8.<com.vungle.warren.model.Advertisement: java.util.List getCheckpoints()>();
+
+        if $r14 == null goto label1;
+
+        $r12 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.LinkedList checkpointList>;
+
+        $r14 = virtualinvoke $r8.<com.vungle.warren.model.Advertisement: java.util.List getCheckpoints()>();
+
+        virtualinvoke $r12.<java.util.LinkedList: boolean addAll(java.util.Collection)>($r14);
+
+        $r12 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.LinkedList checkpointList>;
+
+        staticinvoke <java.util.Collections: void sort(java.util.List)>($r12);
+
+     label1:
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void loadData(com.vungle.warren.ui.state.OptionsState)>($r5);
+
+        return;
+    }
+
+    static void access$000(com.vungle.warren.ui.presenter.LocalAdPresenter, int)
+    {
+        int $i0;
+        com.vungle.warren.ui.presenter.LocalAdPresenter $r0;
+
+        $r0 := @parameter0: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $i0 := @parameter1: int;
+
+        specialinvoke $r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void makeBusError(int)>($i0);
+
+        return;
+    }
+
+    static void access$100(com.vungle.warren.ui.presenter.LocalAdPresenter)
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter $r0;
+
+        $r0 := @parameter0: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        specialinvoke $r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void closeAndReport()>();
+
+        return;
+    }
+
+    static com.vungle.warren.ui.contract.LocalAdContract$LocalView access$200(com.vungle.warren.ui.presenter.LocalAdPresenter)
+    {
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView r1;
+        com.vungle.warren.ui.presenter.LocalAdPresenter $r0;
+
+        $r0 := @parameter0: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        r1 = $r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        return r1;
+    }
+
+    static com.vungle.warren.model.Advertisement access$300(com.vungle.warren.ui.presenter.LocalAdPresenter)
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter $r0;
+        com.vungle.warren.model.Advertisement r1;
+
+        $r0 := @parameter0: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        r1 = $r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        return r1;
+    }
+
+    static com.vungle.warren.analytics.AdAnalytics access$400(com.vungle.warren.ui.presenter.LocalAdPresenter)
+    {
+        com.vungle.warren.analytics.AdAnalytics r1;
+        com.vungle.warren.ui.presenter.LocalAdPresenter $r0;
+
+        $r0 := @parameter0: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        r1 = $r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics>;
+
+        return r1;
+    }
+
+    static boolean access$500(com.vungle.warren.ui.presenter.LocalAdPresenter)
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter $r0;
+        boolean z0;
+
+        $r0 := @parameter0: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        z0 = $r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean inPost>;
+
+        return z0;
+    }
+
+    static boolean access$502(com.vungle.warren.ui.presenter.LocalAdPresenter, boolean)
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean inPost> = 1;
+
+        return 1;
+    }
+
+    static com.vungle.warren.persistence.Repository access$600(com.vungle.warren.ui.presenter.LocalAdPresenter)
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter $r0;
+        com.vungle.warren.persistence.Repository r1;
+
+        $r0 := @parameter0: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        r1 = $r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        return r1;
+    }
+
+    static void access$700(com.vungle.warren.ui.presenter.LocalAdPresenter)
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter $r0;
+
+        $r0 := @parameter0: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        specialinvoke $r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void continueWithPostroll()>();
+
+        return;
+    }
+
+    static boolean access$802(com.vungle.warren.ui.presenter.LocalAdPresenter, boolean)
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean userExitEnabled> = 1;
+
+        return 1;
+    }
+
+    private void closeAndReport()
+    {
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r3;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        com.vungle.warren.utility.Scheduler $r2;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.concurrent.atomic.AtomicBoolean busy>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("LocalAdPresenter", "Busy with closing");
+
+        return;
+
+     label1:
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.concurrent.atomic.AtomicBoolean busy>;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(1);
+
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportAction(java.lang.String,java.lang.String)>("close", null);
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.utility.Scheduler scheduler>;
+
+        interfaceinvoke $r2.<com.vungle.warren.utility.Scheduler: void cancelAll()>();
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r3.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void close()>();
+
+        return;
+    }
+
+    private void continueWithPostroll()
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        com.vungle.warren.model.Advertisement $r1;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $z0 = virtualinvoke $r1.<com.vungle.warren.model.Advertisement: boolean hasPostroll()>();
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void playPost()>();
+
+        return;
+
+     label1:
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void closeAndReport()>();
+
+        return;
+    }
+
+    private void download()
+    {
+        java.lang.Throwable $r2;
+        com.vungle.warren.ui.PresenterAppLeftCallback $r9;
+        com.vungle.warren.model.Placement $r1;
+        com.vungle.warren.model.Advertisement $r4;
+        java.lang.String[] $r5;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener $r10;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r7;
+        com.vungle.warren.ui.presenter.LocalAdPresenter$6 $r11;
+        java.lang.String $r6, $r8;
+        com.vungle.warren.analytics.AdAnalytics $r3;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportAction(java.lang.String,java.lang.String)>("cta", "");
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics>;
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+     label01:
+        $r5 = virtualinvoke $r4.<com.vungle.warren.model.Advertisement: java.lang.String[] getTpatUrls(java.lang.String)>("postroll_click");
+
+        interfaceinvoke $r3.<com.vungle.warren.analytics.AdAnalytics: java.lang.String[] ping(java.lang.String[])>($r5);
+
+     label02:
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics>;
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+     label03:
+        $r5 = virtualinvoke $r4.<com.vungle.warren.model.Advertisement: java.lang.String[] getTpatUrls(java.lang.String)>("click_url");
+
+        interfaceinvoke $r3.<com.vungle.warren.analytics.AdAnalytics: java.lang.String[] ping(java.lang.String[])>($r5);
+
+     label04:
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics>;
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+     label05:
+        $r5 = virtualinvoke $r4.<com.vungle.warren.model.Advertisement: java.lang.String[] getTpatUrls(java.lang.String)>("video_click");
+
+        interfaceinvoke $r3.<com.vungle.warren.analytics.AdAnalytics: java.lang.String[] ping(java.lang.String[])>($r5);
+
+     label06:
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics>;
+
+        $r5 = newarray (java.lang.String)[1];
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+     label07:
+        $r6 = virtualinvoke $r4.<com.vungle.warren.model.Advertisement: java.lang.String getCTAURL(boolean)>(1);
+
+     label08:
+        $r5[0] = $r6;
+
+     label09:
+        interfaceinvoke $r3.<com.vungle.warren.analytics.AdAnalytics: java.lang.String[] ping(java.lang.String[])>($r5);
+
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportAction(java.lang.String,java.lang.String)>("download", null);
+
+     label10:
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+     label11:
+        $r6 = virtualinvoke $r4.<com.vungle.warren.model.Advertisement: java.lang.String getCTAURL(boolean)>(0);
+
+     label12:
+        if $r6 == null goto label21;
+
+     label13:
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean isEmpty()>();
+
+     label14:
+        if $z0 != 0 goto label21;
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+     label15:
+        $r8 = virtualinvoke $r4.<com.vungle.warren.model.Advertisement: java.lang.String getDeeplinkUrl()>();
+
+     label16:
+        $r9 = new com.vungle.warren.ui.PresenterAppLeftCallback;
+
+        $r10 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus>;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+     label17:
+        specialinvoke $r9.<com.vungle.warren.ui.PresenterAppLeftCallback: void <init>(com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener,com.vungle.warren.model.Placement)>($r10, $r1);
+
+     label18:
+        $r11 = new com.vungle.warren.ui.presenter.LocalAdPresenter$6;
+
+     label19:
+        specialinvoke $r11.<com.vungle.warren.ui.presenter.LocalAdPresenter$6: void <init>(com.vungle.warren.ui.presenter.LocalAdPresenter)>(r0);
+
+        interfaceinvoke $r7.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void open(java.lang.String,java.lang.String,com.vungle.warren.utility.ActivityManager$LeftApplicationCallback,com.vungle.warren.ui.PresenterAdOpenCallback)>($r8, $r6, $r9, $r11);
+
+     label20:
+        goto label22;
+
+     label21:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("LocalAdPresenter", "CTA destination URL is not configured properly");
+
+     label22:
+        $r10 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus>;
+
+        if $r10 == null goto label27;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+     label23:
+        $r6 = virtualinvoke $r1.<com.vungle.warren.model.Placement: java.lang.String getId()>();
+
+        interfaceinvoke $r10.<com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener: void onNext(java.lang.String,java.lang.String,java.lang.String)>("open", "adClick", $r6);
+
+     label24:
+        return;
+
+     label25:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("LocalAdPresenter", "Unable to find destination activity");
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("LocalAdPresenter#download", "Download - Activity Not Found");
+
+        return;
+
+     label26:
+        $r2 := @caughtexception;
+
+        goto label25;
+
+     label27:
+        return;
+
+        catch android.content.ActivityNotFoundException from label01 to label02 with label26;
+        catch android.content.ActivityNotFoundException from label03 to label04 with label26;
+        catch android.content.ActivityNotFoundException from label05 to label06 with label26;
+        catch android.content.ActivityNotFoundException from label07 to label08 with label26;
+        catch android.content.ActivityNotFoundException from label09 to label10 with label26;
+        catch android.content.ActivityNotFoundException from label11 to label12 with label26;
+        catch android.content.ActivityNotFoundException from label13 to label14 with label26;
+        catch android.content.ActivityNotFoundException from label15 to label16 with label26;
+        catch android.content.ActivityNotFoundException from label17 to label18 with label26;
+        catch android.content.ActivityNotFoundException from label19 to label20 with label26;
+        catch android.content.ActivityNotFoundException from label21 to label22 with label26;
+        catch android.content.ActivityNotFoundException from label23 to label24 with label26;
+    }
+
+    private void handleWebViewException(int)
+    {
+        int $i0;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r1;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        if $r1 == null goto label1;
+
+        interfaceinvoke $r1.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void removeWebView()>();
+
+     label1:
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportErrorAndCloseAd(int)>($i0);
+
+        return;
+    }
+
+    private boolean isWebPageBlank()
+    {
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r1;
+        java.lang.String $r2, $r3;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $r2 = interfaceinvoke $r1.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: java.lang.String getWebsiteUrl()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label1;
+
+        $r3 = "about:blank";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r2);
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        return 1;
+    }
+
+    private void loadData(com.vungle.warren.ui.state.OptionsState)
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        com.vungle.warren.ui.state.OptionsState $r1;
+        com.vungle.warren.persistence.Repository $r3;
+        java.util.Map $r2;
+        java.lang.Object $r5;
+        java.lang.String $r6;
+        com.vungle.warren.persistence.FutureResult $r4;
+        boolean $z0;
+        com.vungle.warren.model.Report $r7;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: com.vungle.warren.ui.state.OptionsState;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.Map cookies>;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r4 = virtualinvoke $r3.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>("incentivizedTextSetByPub", class "Lcom/vungle/warren/model/Cookie;");
+
+        $r5 = virtualinvoke $r4.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        interfaceinvoke $r2.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("incentivizedTextSetByPub", $r5);
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.Map cookies>;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r4 = virtualinvoke $r3.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>("consentIsImportantToVungle", class "Lcom/vungle/warren/model/Cookie;");
+
+        $r5 = virtualinvoke $r4.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        interfaceinvoke $r2.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("consentIsImportantToVungle", $r5);
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.Map cookies>;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r4 = virtualinvoke $r3.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>("configSettings", class "Lcom/vungle/warren/model/Cookie;");
+
+        $r5 = virtualinvoke $r4.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        interfaceinvoke $r2.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("configSettings", $r5);
+
+        if $r1 == null goto label3;
+
+        $r6 = interfaceinvoke $r1.<com.vungle.warren.ui.state.OptionsState: java.lang.String getString(java.lang.String)>("saved_report");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r6);
+
+        if $z0 == 0 goto label1;
+
+        $r7 = null;
+
+        goto label2;
+
+     label1:
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r4 = virtualinvoke $r3.<com.vungle.warren.persistence.Repository: com.vungle.warren.persistence.FutureResult load(java.lang.String,java.lang.Class)>($r6, class "Lcom/vungle/warren/model/Report;");
+
+        $r5 = virtualinvoke $r4.<com.vungle.warren.persistence.FutureResult: java.lang.Object get()>();
+
+        $r7 = (com.vungle.warren.model.Report) $r5;
+
+     label2:
+        if $r7 == null goto label3;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report> = $r7;
+
+     label3:
+        return;
+    }
+
+    private void makeBusError(int)
+    {
+        com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener $r1;
+        com.vungle.warren.model.Placement $r4;
+        int $i0;
+        java.lang.String $r3;
+        com.vungle.warren.error.VungleException $r2;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus>;
+
+        if $r1 == null goto label1;
+
+        $r2 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r2.<com.vungle.warren.error.VungleException: void <init>(int)>($i0);
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $r3 = virtualinvoke $r4.<com.vungle.warren.model.Placement: java.lang.String getId()>();
+
+        interfaceinvoke $r1.<com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener: void onError(com.vungle.warren.error.VungleException,java.lang.String)>($r2, $r3);
+
+     label1:
+        return;
+    }
+
+    private boolean needShowGDPR(com.vungle.warren.model.Cookie)
+    {
+        java.lang.Boolean $r2;
+        com.vungle.warren.model.Cookie $r1;
+        java.lang.String $r3, $r4;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: com.vungle.warren.model.Cookie;
+
+        if $r1 == null goto label1;
+
+        $r2 = virtualinvoke $r1.<com.vungle.warren.model.Cookie: java.lang.Boolean getBoolean(java.lang.String)>("is_country_data_protected");
+
+        $z0 = virtualinvoke $r2.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label1;
+
+        $r3 = virtualinvoke $r1.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("consent_status");
+
+        $r4 = "unknown";
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private void playPost()
+    {
+        com.vungle.warren.utility.AsyncFileUtils$ExistenceOperation $r6;
+        com.vungle.warren.ui.presenter.LocalAdPresenter$2 $r5;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r4;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        java.io.File $r2, $r3;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r2 = new java.io.File;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.io.File assetDir>;
+
+        $r4 = virtualinvoke $r3.<java.io.File: java.lang.String getPath()>();
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        $r3 = new java.io.File;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r2.<java.io.File: java.lang.String getPath()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("index.html");
+
+        $r4 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        $r5 = new com.vungle.warren.ui.presenter.LocalAdPresenter$2;
+
+        specialinvoke $r5.<com.vungle.warren.ui.presenter.LocalAdPresenter$2: void <init>(com.vungle.warren.ui.presenter.LocalAdPresenter,java.io.File)>(r0, $r3);
+
+        $r6 = staticinvoke <com.vungle.warren.utility.AsyncFileUtils: com.vungle.warren.utility.AsyncFileUtils$ExistenceOperation isFileExistAsync(java.io.File,com.vungle.warren.utility.AsyncFileUtils$FileExistCallback)>($r3, $r5);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.utility.AsyncFileUtils$ExistenceOperation fileExistenceOperation> = $r6;
+
+        return;
+    }
+
+    private void prepare(com.vungle.warren.ui.state.OptionsState)
+    {
+        com.vungle.warren.ui.DurationRecorder $r11;
+        com.vungle.warren.persistence.Repository$SaveCallback $r10;
+        com.vungle.warren.model.Advertisement $r7;
+        com.vungle.warren.model.Placement $r8;
+        long $l0;
+        com.vungle.warren.ui.view.WebViewAPI $r12;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r13;
+        com.vungle.warren.persistence.Repository $r9;
+        java.util.Map $r2;
+        java.lang.String $r5;
+        com.vungle.warren.model.Report $r6;
+        boolean $z0, $z1;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        com.vungle.warren.ui.state.OptionsState $r1;
+        com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener $r14;
+        java.lang.Object $r3;
+        com.vungle.warren.model.Cookie $r4;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: com.vungle.warren.ui.state.OptionsState;
+
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void restoreFromSave(com.vungle.warren.ui.state.OptionsState)>($r1);
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.Map cookies>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>("incentivizedTextSetByPub");
+
+        $r4 = (com.vungle.warren.model.Cookie) $r3;
+
+        if $r4 != null goto label1;
+
+        $r5 = null;
+
+        goto label2;
+
+     label1:
+        $r5 = virtualinvoke $r4.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("userID");
+
+     label2:
+        $r6 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        if $r6 != null goto label3;
+
+        $r6 = new com.vungle.warren.model.Report;
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $r8 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        specialinvoke $r6.<com.vungle.warren.model.Report: void <init>(com.vungle.warren.model.Advertisement,com.vungle.warren.model.Placement,long,java.lang.String)>($r7, $r8, $l0, $r5);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report> = $r6;
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $l0 = virtualinvoke $r7.<com.vungle.warren.model.Advertisement: long getTtDownload()>();
+
+        virtualinvoke $r6.<com.vungle.warren.model.Report: void setTtDownload(long)>($l0);
+
+        $r9 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r6 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $r10 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository$SaveCallback repoCallback>;
+
+        virtualinvoke $r9.<com.vungle.warren.persistence.Repository: void save(java.lang.Object,com.vungle.warren.persistence.Repository$SaveCallback)>($r6, $r10);
+
+     label3:
+        $r11 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.DurationRecorder durationRecorder>;
+
+        if $r11 != null goto label4;
+
+        $r11 = new com.vungle.warren.ui.DurationRecorder;
+
+        $r6 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $r9 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r10 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository$SaveCallback repoCallback>;
+
+        specialinvoke $r11.<com.vungle.warren.ui.DurationRecorder: void <init>(com.vungle.warren.model.Report,com.vungle.warren.persistence.Repository,com.vungle.warren.persistence.Repository$SaveCallback)>($r6, $r9, $r10);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.DurationRecorder durationRecorder> = $r11;
+
+     label4:
+        $r12 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.view.WebViewAPI webViewAPI>;
+
+        interfaceinvoke $r12.<com.vungle.warren.ui.view.WebViewAPI: void setErrorHandler(com.vungle.warren.ui.view.WebViewAPI$WebClientErrorHandler)>(r0);
+
+        $r13 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $z0 = virtualinvoke $r7.<com.vungle.warren.model.Advertisement: boolean isCtaOverlayEnabled()>();
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $z1 = virtualinvoke $r7.<com.vungle.warren.model.Advertisement: boolean getCtaClickArea()>();
+
+        interfaceinvoke $r13.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void showCTAOverlay(boolean,boolean)>($z0, $z1);
+
+        $r14 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus>;
+
+        if $r14 == null goto label5;
+
+        $r8 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $r5 = virtualinvoke $r8.<com.vungle.warren.model.Placement: java.lang.String getId()>();
+
+        interfaceinvoke $r14.<com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener: void onNext(java.lang.String,java.lang.String,java.lang.String)>("start", null, $r5);
+
+     label5:
+        return;
+    }
+
+    private void reportError(java.lang.String)
+    {
+        com.vungle.warren.persistence.Repository$SaveCallback $r1;
+        com.vungle.warren.model.Advertisement $r5;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r6;
+        com.vungle.warren.persistence.Repository $r4;
+        java.lang.String $r2;
+        boolean $z0;
+        com.vungle.warren.model.Report $r3;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        virtualinvoke $r3.<com.vungle.warren.model.Report: void recordError(java.lang.String)>($r2);
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository$SaveCallback repoCallback>;
+
+        virtualinvoke $r4.<com.vungle.warren.persistence.Repository: void save(java.lang.Object,com.vungle.warren.persistence.Repository$SaveCallback)>($r3, $r1);
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void makeBusError(int)>(27);
+
+        $z0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean inPost>;
+
+        if $z0 != 0 goto label1;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $z0 = virtualinvoke $r5.<com.vungle.warren.model.Advertisement: boolean hasPostroll()>();
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void playPost()>();
+
+        return;
+
+     label1:
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void makeBusError(int)>(10);
+
+        $r6 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r6.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void close()>();
+
+        return;
+    }
+
+    private void reportErrorAndCloseAd(int)
+    {
+        int $i0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r3;
+        com.vungle.warren.error.VungleException $r2;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $i0 := @parameter0: int;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void makeBusError(int)>(31);
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>("WebViewException: ");
+
+        $r2 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r2.<com.vungle.warren.error.VungleException: void <init>(int)>(31);
+
+        $r3 = virtualinvoke $r2.<com.vungle.warren.error.VungleException: java.lang.String getLocalizedMessage()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("LocalAdPresenter", $r3);
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void closeAndReport()>();
+
+        return;
+    }
+
+    private void showDialog(java.lang.String, java.lang.String, java.lang.String, java.lang.String, android.content.DialogInterface$OnClickListener)
+    {
+        android.content.DialogInterface$OnClickListener $r5;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r6;
+        java.lang.String $r1, $r2, $r3, $r4;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String;
+
+        $r5 := @parameter4: android.content.DialogInterface$OnClickListener;
+
+        $r6 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r6.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void pauseVideo()>();
+
+        $r6 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r6.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void showDialog(java.lang.String,java.lang.String,java.lang.String,java.lang.String,android.content.DialogInterface$OnClickListener)>($r1, $r2, $r3, $r4, $r5);
+
+        return;
+    }
+
+    private void showGDPR(com.vungle.warren.model.Cookie)
+    {
+        com.vungle.warren.persistence.Repository$SaveCallback $r5;
+        com.vungle.warren.ui.presenter.LocalAdPresenter$3 $r2;
+        long $l0;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        java.lang.Long $r3;
+        com.vungle.warren.persistence.Repository $r4;
+        com.vungle.warren.model.Cookie $r1;
+        java.lang.String $r6, $r7, $r8, $r9;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: com.vungle.warren.model.Cookie;
+
+        $r2 = new com.vungle.warren.ui.presenter.LocalAdPresenter$3;
+
+        specialinvoke $r2.<com.vungle.warren.ui.presenter.LocalAdPresenter$3: void <init>(com.vungle.warren.ui.presenter.LocalAdPresenter,com.vungle.warren.model.Cookie)>(r0, $r1);
+
+        virtualinvoke $r1.<com.vungle.warren.model.Cookie: void putValue(java.lang.String,java.lang.Object)>("consent_status", "opted_out_by_timeout");
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l0 = $l0 / 1000L;
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        virtualinvoke $r1.<com.vungle.warren.model.Cookie: void putValue(java.lang.String,java.lang.Object)>("timestamp", $r3);
+
+        virtualinvoke $r1.<com.vungle.warren.model.Cookie: void putValue(java.lang.String,java.lang.Object)>("consent_source", "vungle_modal");
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository$SaveCallback repoCallback>;
+
+        virtualinvoke $r4.<com.vungle.warren.persistence.Repository: void save(java.lang.Object,com.vungle.warren.persistence.Repository$SaveCallback)>($r1, $r5);
+
+        $r6 = virtualinvoke $r1.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("consent_title");
+
+        $r7 = virtualinvoke $r1.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("consent_message");
+
+        $r8 = virtualinvoke $r1.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("button_accept");
+
+        $r9 = virtualinvoke $r1.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("button_deny");
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void showDialog(java.lang.String,java.lang.String,java.lang.String,java.lang.String,android.content.DialogInterface$OnClickListener)>($r6, $r7, $r8, $r9, $r2);
+
+        return;
+    }
+
+    private void showIncetivizedDialog()
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter$4 $r1;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        java.util.Map $r6;
+        java.lang.Object $r7;
+        java.lang.String $r2, $r3, $r4, $r5, $r9;
+        com.vungle.warren.model.Cookie $r8;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogTitle>;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogBody>;
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogContinue>;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogClose>;
+
+        $r6 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.Map cookies>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.lang.Object get(java.lang.Object)>("incentivizedTextSetByPub");
+
+        $r8 = (com.vungle.warren.model.Cookie) $r7;
+
+        if $r8 == null goto label4;
+
+        $r3 = virtualinvoke $r8.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("title");
+
+        $r2 = $r3;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogTitle>;
+
+     label1:
+        $r4 = virtualinvoke $r8.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("body");
+
+        $r3 = $r4;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r4);
+
+        if $z0 == 0 goto label2;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogBody>;
+
+     label2:
+        $r5 = virtualinvoke $r8.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("continue");
+
+        $r4 = $r5;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r5);
+
+        if $z0 == 0 goto label3;
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogContinue>;
+
+     label3:
+        $r9 = virtualinvoke $r8.<com.vungle.warren.model.Cookie: java.lang.String getString(java.lang.String)>("close");
+
+        $r5 = $r9;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r9);
+
+        if $z0 == 0 goto label4;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String dialogClose>;
+
+     label4:
+        $r1 = new com.vungle.warren.ui.presenter.LocalAdPresenter$4;
+
+        specialinvoke $r1.<com.vungle.warren.ui.presenter.LocalAdPresenter$4: void <init>(com.vungle.warren.ui.presenter.LocalAdPresenter)>(r0);
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void showDialog(java.lang.String,java.lang.String,java.lang.String,java.lang.String,android.content.DialogInterface$OnClickListener)>($r2, $r3, $r4, $r5, $r1);
+
+        return;
+    }
+
+    public volatile void attach(com.vungle.warren.ui.contract.AdContract$AdView, com.vungle.warren.ui.state.OptionsState)
+    {
+        com.vungle.warren.ui.state.OptionsState $r1;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r3;
+        com.vungle.warren.ui.contract.AdContract$AdView $r2;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r2 := @parameter0: com.vungle.warren.ui.contract.AdContract$AdView;
+
+        $r1 := @parameter1: com.vungle.warren.ui.state.OptionsState;
+
+        $r3 = (com.vungle.warren.ui.contract.LocalAdContract$LocalView) $r2;
+
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void attach(com.vungle.warren.ui.contract.LocalAdContract$LocalView,com.vungle.warren.ui.state.OptionsState)>($r3, $r1);
+
+        return;
+    }
+
+    public void attach(com.vungle.warren.ui.contract.LocalAdContract$LocalView, com.vungle.warren.ui.state.OptionsState)
+    {
+        com.vungle.warren.model.Advertisement $r5;
+        com.vungle.warren.model.Placement $r7;
+        java.util.concurrent.atomic.AtomicBoolean $r3;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r1;
+        com.vungle.warren.session.SessionAttribute $r14;
+        byte $b2;
+        com.vungle.warren.SessionTracker $r11;
+        int $i0, $i1;
+        com.vungle.warren.AdConfig $r9;
+        java.lang.String $r6, $r8;
+        boolean $z0, $z1;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        com.vungle.warren.session.SessionEvent $r13;
+        com.vungle.warren.model.SessionData $r15;
+        com.vungle.warren.ui.state.OptionsState $r2;
+        com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener $r4;
+        java.lang.StringBuilder $r10;
+        com.vungle.warren.model.SessionData$Builder $r12;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: com.vungle.warren.ui.contract.LocalAdContract$LocalView;
+
+        $r2 := @parameter1: com.vungle.warren.ui.state.OptionsState;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.concurrent.atomic.AtomicBoolean isDestroying>;
+
+        $z0 = 0;
+
+        virtualinvoke $r3.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(0);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView> = $r1;
+
+        interfaceinvoke $r1.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void setPresenter(com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter)>(r0);
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus>;
+
+        if $r4 == null goto label1;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $r6 = virtualinvoke $r5.<com.vungle.warren.model.Advertisement: java.lang.String getCreativeId()>();
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $r8 = virtualinvoke $r7.<com.vungle.warren.model.Placement: java.lang.String getId()>();
+
+        interfaceinvoke $r4.<com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener: void onNext(java.lang.String,java.lang.String,java.lang.String)>("attach", $r6, $r8);
+
+     label1:
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $r9 = virtualinvoke $r5.<com.vungle.warren.model.Advertisement: com.vungle.warren.AdConfig getAdConfig()>();
+
+        $i0 = virtualinvoke $r9.<com.vungle.warren.AdConfig: int getSettings()>();
+
+        if $i0 <= 0 goto label5;
+
+        $i1 = $i0 & 1;
+
+        if $i1 != 1 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean muted> = $z1;
+
+        $i0 = $i0 & 2;
+
+        if $i0 != 2 goto label4;
+
+        $z0 = 1;
+
+     label4:
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean userExitEnabled> = $z0;
+
+     label5:
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $r9 = virtualinvoke $r5.<com.vungle.warren.model.Advertisement: com.vungle.warren.AdConfig getAdConfig()>();
+
+        $i0 = virtualinvoke $r9.<com.vungle.warren.AdConfig: int getAdOrientation()>();
+
+        $b2 = 6;
+
+        if $i0 != 3 goto label6;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $i0 = virtualinvoke $r5.<com.vungle.warren.model.Advertisement: int getOrientation()>();
+
+        if $i0 == 0 goto label7;
+
+        if $i0 == 1 goto label9;
+
+        $b2 = -1;
+
+        goto label9;
+
+     label6:
+        if $i0 != 0 goto label8;
+
+     label7:
+        $b2 = 7;
+
+        goto label9;
+
+     label8:
+        if $i0 == 1 goto label9;
+
+        $b2 = 4;
+
+     label9:
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>("Requested Orientation ");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($b2);
+
+        $r6 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("LocalAdPresenter", $r6);
+
+        interfaceinvoke $r1.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void setOrientation(int)>($b2);
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void prepare(com.vungle.warren.ui.state.OptionsState)>($r2);
+
+        $r11 = staticinvoke <com.vungle.warren.SessionTracker: com.vungle.warren.SessionTracker getInstance()>();
+
+        $r12 = new com.vungle.warren.model.SessionData$Builder;
+
+        specialinvoke $r12.<com.vungle.warren.model.SessionData$Builder: void <init>()>();
+
+        $r13 = <com.vungle.warren.session.SessionEvent: com.vungle.warren.session.SessionEvent PLAY_AD>;
+
+        $r12 = virtualinvoke $r12.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData$Builder setEvent(com.vungle.warren.session.SessionEvent)>($r13);
+
+        $r14 = <com.vungle.warren.session.SessionAttribute: com.vungle.warren.session.SessionAttribute SUCCESS>;
+
+        $r12 = virtualinvoke $r12.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData$Builder addData(com.vungle.warren.session.SessionAttribute,boolean)>($r14, 1);
+
+        $r14 = <com.vungle.warren.session.SessionAttribute: com.vungle.warren.session.SessionAttribute EVENT_ID>;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $r6 = virtualinvoke $r5.<com.vungle.warren.model.Advertisement: java.lang.String getId()>();
+
+        $r12 = virtualinvoke $r12.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData$Builder addData(com.vungle.warren.session.SessionAttribute,java.lang.String)>($r14, $r6);
+
+        $r15 = virtualinvoke $r12.<com.vungle.warren.model.SessionData$Builder: com.vungle.warren.model.SessionData build()>();
+
+        virtualinvoke $r11.<com.vungle.warren.SessionTracker: void trackEvent(com.vungle.warren.model.SessionData)>($r15);
+
+        return;
+    }
+
+    public void detach(int)
+    {
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r2;
+        com.vungle.warren.utility.AsyncFileUtils$ExistenceOperation $r1;
+        int $i0;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.utility.AsyncFileUtils$ExistenceOperation fileExistenceOperation>;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r1.<com.vungle.warren.utility.AsyncFileUtils$ExistenceOperation: void cancel()>();
+
+     label1:
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void stop(int)>($i0);
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void destroyAdView(long)>(0L);
+
+        return;
+    }
+
+    public void generateSaveState(com.vungle.warren.ui.state.OptionsState)
+    {
+        com.vungle.warren.persistence.Repository$SaveCallback $r2;
+        java.util.concurrent.atomic.AtomicBoolean $r6;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        com.vungle.warren.ui.state.OptionsState $r1;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r7;
+        com.vungle.warren.persistence.Repository $r3;
+        int $i0;
+        java.lang.String $r5;
+        com.vungle.warren.model.Report $r4;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: com.vungle.warren.ui.state.OptionsState;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository$SaveCallback repoCallback>;
+
+        virtualinvoke $r3.<com.vungle.warren.persistence.Repository: void save(java.lang.Object,com.vungle.warren.persistence.Repository$SaveCallback)>($r4, $r2);
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        if $r4 != null goto label2;
+
+        $r5 = null;
+
+        goto label3;
+
+     label2:
+        $r5 = virtualinvoke $r4.<com.vungle.warren.model.Report: java.lang.String getId()>();
+
+     label3:
+        interfaceinvoke $r1.<com.vungle.warren.ui.state.OptionsState: void put(java.lang.String,java.lang.String)>("saved_report", $r5);
+
+        $r6 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.concurrent.atomic.AtomicBoolean sendReportIncentivized>;
+
+        $z0 = virtualinvoke $r6.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        interfaceinvoke $r1.<com.vungle.warren.ui.state.OptionsState: void put(java.lang.String,boolean)>("incentivized_sent", $z0);
+
+        $z0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean inPost>;
+
+        interfaceinvoke $r1.<com.vungle.warren.ui.state.OptionsState: void put(java.lang.String,boolean)>("in_post_roll", $z0);
+
+        $z0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean muted>;
+
+        interfaceinvoke $r1.<com.vungle.warren.ui.state.OptionsState: void put(java.lang.String,boolean)>("is_muted_mode", $z0);
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        if $r7 == null goto label4;
+
+        $z0 = interfaceinvoke $r7.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: boolean isVideoPlaying()>();
+
+        if $z0 == 0 goto label4;
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $i0 = interfaceinvoke $r7.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: int getVideoPosition()>();
+
+        goto label5;
+
+     label4:
+        $i0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int videoPosition>;
+
+     label5:
+        interfaceinvoke $r1.<com.vungle.warren.ui.state.OptionsState: void put(java.lang.String,int)>("videoPosition", $i0);
+
+        return;
+    }
+
+    public boolean handleExit()
+    {
+        com.vungle.warren.model.Placement $r1;
+        com.vungle.warren.model.Advertisement $r2;
+        int $i0;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $z0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean inPost>;
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void closeAndReport()>();
+
+        return 1;
+
+     label1:
+        $z0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean userExitEnabled>;
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $z0 = virtualinvoke $r1.<com.vungle.warren.model.Placement: boolean isIncentivized()>();
+
+        if $z0 == 0 goto label3;
+
+        $i0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int progress>;
+
+        if $i0 > 75 goto label3;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void showIncetivizedDialog()>();
+
+        return 0;
+
+     label3:
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportAction(java.lang.String,java.lang.String)>("video_close", null);
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $z0 = virtualinvoke $r2.<com.vungle.warren.model.Advertisement: boolean hasPostroll()>();
+
+        if $z0 == 0 goto label4;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void playPost()>();
+
+        return 0;
+
+     label4:
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void closeAndReport()>();
+
+        return 1;
+    }
+
+    public void onDownload()
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void download()>();
+
+        return;
+    }
+
+    public boolean onMediaError(java.lang.String)
+    {
+        java.lang.StringBuilder $r2;
+        java.lang.String $r1;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportError(java.lang.String)>($r1);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("Media Error: ");
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("LocalAdPresenter#onMediaError", $r1);
+
+        return 0;
+    }
+
+    public void onMraidAction(java.lang.String)
+    {
+        byte $b1;
+        int $i0;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r1;
+        java.lang.IllegalArgumentException $r2;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        virtualinvoke $r1.<java.lang.String: int hashCode()>();
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int hashCode()>();
+
+        $b1 = -1;
+
+        lookupswitch($i0)
+        {
+            case -314498168: goto label06;
+            case 94756344: goto label04;
+            case 1427818632: goto label02;
+            default: goto label01;
+        };
+
+     label01:
+        goto label08;
+
+     label02:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("download");
+
+        if $z0 != 0 goto label03;
+
+        goto label08;
+
+     label03:
+        $b1 = 2;
+
+        goto label08;
+
+     label04:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("close");
+
+        if $z0 != 0 goto label05;
+
+        goto label08;
+
+     label05:
+        $b1 = 1;
+
+        goto label08;
+
+     label06:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("privacy");
+
+        if $z0 != 0 goto label07;
+
+        goto label08;
+
+     label07:
+        $b1 = 0;
+
+     label08:
+        lookupswitch($b1)
+        {
+            case 0: goto label12;
+            case 1: goto label11;
+            case 2: goto label10;
+            default: goto label09;
+        };
+
+     label09:
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("LocalAdPresenter#onMraidAction", "Unknown MRAID Command");
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Unknown action ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r1);
+
+        throw $r2;
+
+     label10:
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void download()>();
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void closeAndReport()>();
+
+        return;
+
+     label11:
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void closeAndReport()>();
+
+     label12:
+        return;
+    }
+
+    public void onMute(boolean)
+    {
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $z0 := @parameter0: boolean;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean muted> = $z0;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportAction(java.lang.String,java.lang.String)>("mute", "true");
+
+        return;
+
+     label1:
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportAction(java.lang.String,java.lang.String)>("unmute", "false");
+
+        return;
+    }
+
+    public void onPrivacy()
+    {
+        com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener $r3;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r1;
+        com.vungle.warren.ui.PresenterAppLeftCallback $r2;
+        com.vungle.warren.model.Placement $r4;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $r2 = new com.vungle.warren.ui.PresenterAppLeftCallback;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus>;
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        specialinvoke $r2.<com.vungle.warren.ui.PresenterAppLeftCallback: void <init>(com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener,com.vungle.warren.model.Placement)>($r3, $r4);
+
+        interfaceinvoke $r1.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void open(java.lang.String,java.lang.String,com.vungle.warren.utility.ActivityManager$LeftApplicationCallback,com.vungle.warren.ui.PresenterAdOpenCallback)>(null, "https://vungle.com/privacy/", $r2, null);
+
+        return;
+    }
+
+    public void onProgressUpdate(int, float)
+    {
+        com.vungle.warren.ui.DurationRecorder $r1;
+        com.google.gson.JsonObject $r22, $r26;
+        com.vungle.warren.model.Placement $r5;
+        com.vungle.warren.model.Advertisement $r23;
+        java.lang.Integer $r11;
+        byte $b2;
+        com.vungle.warren.persistence.Repository $r16;
+        java.lang.Long $r24;
+        java.util.Locale $r9;
+        java.util.Map $r18;
+        boolean $z0;
+        float $f0, $f1;
+        java.lang.StringBuilder $r3, $r25;
+        com.vungle.warren.model.Cookie $r19;
+        java.lang.Object[] $r10;
+        com.vungle.warren.persistence.Repository$SaveCallback $r17;
+        java.util.concurrent.atomic.AtomicBoolean $r21;
+        java.lang.String[] $r7;
+        long $l3;
+        int $i0, $i1;
+        java.lang.Boolean $r20;
+        java.lang.String $r4, $r6;
+        com.google.gson.JsonPrimitive $r27;
+        java.util.LinkedList $r12;
+        com.vungle.warren.model.Report $r15;
+        com.vungle.warren.model.Advertisement$Checkpoint $r14;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener $r2;
+        java.lang.Object $r13;
+        com.vungle.warren.analytics.AdAnalytics $r8;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $i0 := @parameter0: int;
+
+        $f0 := @parameter1: float;
+
+        $f1 = (float) $i0;
+
+        $f0 = $f1 / $f0;
+
+        $f0 = $f0 * 100.0F;
+
+        $i1 = (int) $f0;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int progress> = $i1;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int videoPosition> = $i0;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.DurationRecorder durationRecorder>;
+
+        virtualinvoke $r1.<com.vungle.warren.ui.DurationRecorder: void update()>();
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus>;
+
+        if $r2 == null goto label1;
+
+        $r25 = new java.lang.StringBuilder;
+
+        $r3 = $r25;
+
+        specialinvoke $r25.<java.lang.StringBuilder: void <init>(java.lang.String)>("percentViewed:");
+
+        $i1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int progress>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $r6 = virtualinvoke $r5.<com.vungle.warren.model.Placement: java.lang.String getId()>();
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener: void onNext(java.lang.String,java.lang.String,java.lang.String)>($r4, null, $r6);
+
+     label1:
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus>;
+
+        if $r2 == null goto label2;
+
+        if $i0 <= 0 goto label2;
+
+        $z0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean adViewed>;
+
+        if $z0 != 0 goto label2;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean adViewed> = 1;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $r4 = virtualinvoke $r5.<com.vungle.warren.model.Placement: java.lang.String getId()>();
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener: void onNext(java.lang.String,java.lang.String,java.lang.String)>("adViewed", null, $r4);
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String[] impressionUrls>;
+
+        if $r7 == null goto label2;
+
+        $r8 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics>;
+
+        interfaceinvoke $r8.<com.vungle.warren.analytics.AdAnalytics: java.lang.String[] ping(java.lang.String[])>($r7);
+
+     label2:
+        $r9 = <java.util.Locale: java.util.Locale ENGLISH>;
+
+        $r10 = newarray (java.lang.Object)[1];
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r10[0] = $r11;
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r9, "%d", $r10);
+
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportAction(java.lang.String,java.lang.String)>("video_viewed", $r4);
+
+        $i0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int progress>;
+
+        if $i0 != 100 goto label4;
+
+        $r12 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.LinkedList checkpointList>;
+
+        $r13 = virtualinvoke $r12.<java.util.LinkedList: java.lang.Object peekLast()>();
+
+        if $r13 == null goto label3;
+
+        $r12 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.LinkedList checkpointList>;
+
+        $r13 = virtualinvoke $r12.<java.util.LinkedList: java.lang.Object peekLast()>();
+
+        $r14 = (com.vungle.warren.model.Advertisement$Checkpoint) $r13;
+
+        $b2 = virtualinvoke $r14.<com.vungle.warren.model.Advertisement$Checkpoint: byte getPercentage()>();
+
+        $i0 = (int) $b2;
+
+        if $i0 != 100 goto label3;
+
+        $r8 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics>;
+
+        $r12 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.LinkedList checkpointList>;
+
+        $r13 = virtualinvoke $r12.<java.util.LinkedList: java.lang.Object pollLast()>();
+
+        $r14 = (com.vungle.warren.model.Advertisement$Checkpoint) $r13;
+
+        $r7 = virtualinvoke $r14.<com.vungle.warren.model.Advertisement$Checkpoint: java.lang.String[] getUrls()>();
+
+        interfaceinvoke $r8.<com.vungle.warren.analytics.AdAnalytics: java.lang.String[] ping(java.lang.String[])>($r7);
+
+     label3:
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void continueWithPostroll()>();
+
+     label4:
+        $r15 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $i0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int videoPosition>;
+
+        virtualinvoke $r15.<com.vungle.warren.model.Report: void recordProgress(int)>($i0);
+
+        $r16 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r15 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $r17 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository$SaveCallback repoCallback>;
+
+        virtualinvoke $r16.<com.vungle.warren.persistence.Repository: void save(java.lang.Object,com.vungle.warren.persistence.Repository$SaveCallback)>($r15, $r17);
+
+     label5:
+        $r12 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.LinkedList checkpointList>;
+
+        $r13 = virtualinvoke $r12.<java.util.LinkedList: java.lang.Object peek()>();
+
+        if $r13 == null goto label6;
+
+        $i0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int progress>;
+
+        $r12 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.LinkedList checkpointList>;
+
+        $r13 = virtualinvoke $r12.<java.util.LinkedList: java.lang.Object peek()>();
+
+        $r14 = (com.vungle.warren.model.Advertisement$Checkpoint) $r13;
+
+        $b2 = virtualinvoke $r14.<com.vungle.warren.model.Advertisement$Checkpoint: byte getPercentage()>();
+
+        $i1 = (int) $b2;
+
+        if $i0 <= $i1 goto label6;
+
+        $r8 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics>;
+
+        $r12 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.LinkedList checkpointList>;
+
+        $r13 = virtualinvoke $r12.<java.util.LinkedList: java.lang.Object poll()>();
+
+        $r14 = (com.vungle.warren.model.Advertisement$Checkpoint) $r13;
+
+        $r7 = virtualinvoke $r14.<com.vungle.warren.model.Advertisement$Checkpoint: java.lang.String[] getUrls()>();
+
+        interfaceinvoke $r8.<com.vungle.warren.analytics.AdAnalytics: java.lang.String[] ping(java.lang.String[])>($r7);
+
+        goto label5;
+
+     label6:
+        $r18 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.Map cookies>;
+
+        $r13 = interfaceinvoke $r18.<java.util.Map: java.lang.Object get(java.lang.Object)>("configSettings");
+
+        $r19 = (com.vungle.warren.model.Cookie) $r13;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $z0 = virtualinvoke $r5.<com.vungle.warren.model.Placement: boolean isIncentivized()>();
+
+        if $z0 == 0 goto label7;
+
+        $i0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int progress>;
+
+        if $i0 <= 75 goto label7;
+
+        if $r19 == null goto label7;
+
+        $r20 = virtualinvoke $r19.<com.vungle.warren.model.Cookie: java.lang.Boolean getBoolean(java.lang.String)>("isReportIncentivizedEnabled");
+
+        $z0 = virtualinvoke $r20.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label7;
+
+        $r21 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.concurrent.atomic.AtomicBoolean sendReportIncentivized>;
+
+        $z0 = virtualinvoke $r21.<java.util.concurrent.atomic.AtomicBoolean: boolean getAndSet(boolean)>(1);
+
+        if $z0 != 0 goto label7;
+
+        $r26 = new com.google.gson.JsonObject;
+
+        $r22 = $r26;
+
+        specialinvoke $r26.<com.google.gson.JsonObject: void <init>()>();
+
+        $r27 = new com.google.gson.JsonPrimitive;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $r4 = virtualinvoke $r5.<com.vungle.warren.model.Placement: java.lang.String getId()>();
+
+        specialinvoke $r27.<com.google.gson.JsonPrimitive: void <init>(java.lang.String)>($r4);
+
+        virtualinvoke $r22.<com.google.gson.JsonObject: void add(java.lang.String,com.google.gson.JsonElement)>("placement_reference_id", $r27);
+
+        $r27 = new com.google.gson.JsonPrimitive;
+
+        $r23 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $r4 = virtualinvoke $r23.<com.vungle.warren.model.Advertisement: java.lang.String getAppID()>();
+
+        specialinvoke $r27.<com.google.gson.JsonPrimitive: void <init>(java.lang.String)>($r4);
+
+        virtualinvoke $r22.<com.google.gson.JsonObject: void add(java.lang.String,com.google.gson.JsonElement)>("app_id", $r27);
+
+        $r27 = new com.google.gson.JsonPrimitive;
+
+        $r15 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $l3 = virtualinvoke $r15.<com.vungle.warren.model.Report: long getAdStartTime()>();
+
+        $r24 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l3);
+
+        specialinvoke $r27.<com.google.gson.JsonPrimitive: void <init>(java.lang.Number)>($r24);
+
+        virtualinvoke $r22.<com.google.gson.JsonObject: void add(java.lang.String,com.google.gson.JsonElement)>("adStartTime", $r27);
+
+        $r27 = new com.google.gson.JsonPrimitive;
+
+        $r15 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $r4 = virtualinvoke $r15.<com.vungle.warren.model.Report: java.lang.String getUserID()>();
+
+        specialinvoke $r27.<com.google.gson.JsonPrimitive: void <init>(java.lang.String)>($r4);
+
+        virtualinvoke $r22.<com.google.gson.JsonObject: void add(java.lang.String,com.google.gson.JsonElement)>("user", $r27);
+
+        $r8 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics>;
+
+        interfaceinvoke $r8.<com.vungle.warren.analytics.AdAnalytics: void ri(com.google.gson.JsonObject)>($r22);
+
+     label7:
+        return;
+    }
+
+    public void onReceivedError(java.lang.String, boolean)
+    {
+        com.vungle.warren.persistence.Repository$SaveCallback $r3;
+        com.vungle.warren.persistence.Repository $r4;
+        java.lang.String $r1;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        com.vungle.warren.model.Report $r2;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 := @parameter1: boolean;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        if $r2 == null goto label1;
+
+        virtualinvoke $r2.<com.vungle.warren.model.Report: void recordError(java.lang.String)>($r1);
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository$SaveCallback repoCallback>;
+
+        virtualinvoke $r4.<com.vungle.warren.persistence.Repository: void save(java.lang.Object,com.vungle.warren.persistence.Repository$SaveCallback)>($r2, $r3);
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("LocalAdPresenteronReceivedError", $r1);
+
+     label1:
+        return;
+    }
+
+    public void onRenderProcessUnresponsive(android.webkit.WebView, android.webkit.WebViewRenderProcess)
+    {
+        android.webkit.WebViewRenderProcess $r3;
+        java.lang.String $r1;
+        android.webkit.WebView $r2;
+        com.vungle.warren.error.VungleException $r4;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r2 := @parameter0: android.webkit.WebView;
+
+        $r3 := @parameter1: android.webkit.WebViewRenderProcess;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void handleWebViewException(int)>(32);
+
+        $r4 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r4.<com.vungle.warren.error.VungleException: void <init>(int)>(32);
+
+        $r1 = virtualinvoke $r4.<com.vungle.warren.error.VungleException: java.lang.String getLocalizedMessage()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("LocalAdPresenter#onRenderProcessUnresponsive", $r1);
+
+        return;
+    }
+
+    public void onVideoStart(int, float)
+    {
+        java.lang.Object[] $r2;
+        java.util.Locale $r1;
+        int $i0;
+        float $f0;
+        java.lang.String $r4;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        java.lang.Integer $r3;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $i0 := @parameter0: int;
+
+        $f0 := @parameter1: float;
+
+        $r1 = <java.util.Locale: java.util.Locale ENGLISH>;
+
+        $r2 = newarray (java.lang.Object)[1];
+
+        $i0 = (int) $f0;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r2[0] = $r3;
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r1, "%d", $r2);
+
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportAction(java.lang.String,java.lang.String)>("videoLength", $r4);
+
+        return;
+    }
+
+    public void onViewConfigurationChanged()
+    {
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r2;
+        com.vungle.warren.ui.view.WebViewAPI $r1;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.view.WebViewAPI webViewAPI>;
+
+        interfaceinvoke $r1.<com.vungle.warren.ui.view.WebViewAPI: void notifyPropertiesChange(boolean)>(1);
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void refreshDialogIfVisible()>();
+
+        return;
+    }
+
+    public boolean onWebRenderingProcessGone(android.webkit.WebView, boolean)
+    {
+        java.lang.String $r1;
+        android.webkit.WebView $r2;
+        com.vungle.warren.error.VungleException $r3;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r2 := @parameter0: android.webkit.WebView;
+
+        $z0 := @parameter1: boolean;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void handleWebViewException(int)>(31);
+
+        $r3 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r3.<com.vungle.warren.error.VungleException: void <init>(int)>(31);
+
+        $r1 = virtualinvoke $r3.<com.vungle.warren.error.VungleException: java.lang.String getLocalizedMessage()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("LocalAdPresenter#onWebRenderingProcessGone", $r1);
+
+        return 1;
+    }
+
+    public void reportAction(java.lang.String, java.lang.String)
+    {
+        com.vungle.warren.persistence.Repository$SaveCallback $r5;
+        com.vungle.warren.model.Advertisement $r7;
+        long $l1;
+        java.lang.String[] $r8;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        byte $b2;
+        com.vungle.warren.persistence.Repository $r4;
+        int $i0;
+        java.lang.String $r1, $r2;
+        com.vungle.warren.analytics.AdAnalytics $r6;
+        boolean $z0;
+        com.vungle.warren.model.Report $r3;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("videoLength");
+
+        if $z0 == 0 goto label1;
+
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r2);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int duration> = $i0;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $l1 = (long) $i0;
+
+        virtualinvoke $r3.<com.vungle.warren.model.Report: void setVideoLength(long)>($l1);
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository$SaveCallback repoCallback>;
+
+        virtualinvoke $r4.<com.vungle.warren.persistence.Repository: void save(java.lang.Object,com.vungle.warren.persistence.Repository$SaveCallback)>($r3, $r5);
+
+        return;
+
+     label1:
+        virtualinvoke $r1.<java.lang.String: int hashCode()>();
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int hashCode()>();
+
+        $b2 = -1;
+
+        lookupswitch($i0)
+        {
+            case -840405966: goto label4;
+            case 3363353: goto label3;
+            case 1370606900: goto label2;
+            default: goto label5;
+        };
+
+     label2:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("video_close");
+
+        if $z0 == 0 goto label5;
+
+        $b2 = 2;
+
+        goto label5;
+
+     label3:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("mute");
+
+        if $z0 == 0 goto label5;
+
+        $b2 = 1;
+
+        goto label5;
+
+     label4:
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("unmute");
+
+        if $z0 == 0 goto label5;
+
+        $b2 = 0;
+
+     label5:
+        lookupswitch($b2)
+        {
+            case 0: goto label6;
+            case 1: goto label6;
+            case 2: goto label6;
+            default: goto label7;
+        };
+
+     label6:
+        $r6 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.analytics.AdAnalytics analytics>;
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $r8 = virtualinvoke $r7.<com.vungle.warren.model.Advertisement: java.lang.String[] getTpatUrls(java.lang.String)>($r1);
+
+        interfaceinvoke $r6.<com.vungle.warren.analytics.AdAnalytics: java.lang.String[] ping(java.lang.String[])>($r8);
+
+     label7:
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        virtualinvoke $r3.<com.vungle.warren.model.Report: void recordAction(java.lang.String,java.lang.String,long)>($r1, $r2, $l1);
+
+        $r4 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository repository>;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.persistence.Repository$SaveCallback repoCallback>;
+
+        virtualinvoke $r4.<com.vungle.warren.persistence.Repository: void save(java.lang.Object,com.vungle.warren.persistence.Repository$SaveCallback)>($r3, $r5);
+
+        return;
+    }
+
+    public void restoreFromSave(com.vungle.warren.ui.state.OptionsState)
+    {
+        com.vungle.warren.ui.state.OptionsState $r1;
+        int $i0;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        java.lang.Integer $r3;
+        boolean $z0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: com.vungle.warren.ui.state.OptionsState;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $z0 = interfaceinvoke $r1.<com.vungle.warren.ui.state.OptionsState: boolean getBoolean(java.lang.String,boolean)>("incentivized_sent", 0);
+
+        if $z0 == 0 goto label2;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.concurrent.atomic.AtomicBoolean sendReportIncentivized>;
+
+        virtualinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(1);
+
+     label2:
+        $z0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean inPost>;
+
+        $z0 = interfaceinvoke $r1.<com.vungle.warren.ui.state.OptionsState: boolean getBoolean(java.lang.String,boolean)>("in_post_roll", $z0);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean inPost> = $z0;
+
+        $z0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean muted>;
+
+        $z0 = interfaceinvoke $r1.<com.vungle.warren.ui.state.OptionsState: boolean getBoolean(java.lang.String,boolean)>("is_muted_mode", $z0);
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean muted> = $z0;
+
+        $i0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int videoPosition>;
+
+        $r3 = interfaceinvoke $r1.<com.vungle.warren.ui.state.OptionsState: java.lang.Integer getInt(java.lang.String,int)>("videoPosition", $i0);
+
+        $i0 = virtualinvoke $r3.<java.lang.Integer: int intValue()>();
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int videoPosition> = $i0;
+
+        return;
+    }
+
+    public void setEventListener(com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener)
+    {
+        com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener $r1;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 := @parameter0: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener;
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus> = $r1;
+
+        return;
+    }
+
+    public void start()
+    {
+        com.vungle.warren.ui.DurationRecorder $r1;
+        com.vungle.warren.model.Advertisement $r11;
+        com.vungle.warren.model.Placement $r12;
+        com.vungle.warren.utility.Scheduler $r13;
+        long $l1;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r2;
+        com.vungle.warren.ui.presenter.LocalAdPresenter$5 $r14;
+        java.util.Map $r5;
+        int $i0;
+        java.lang.String $r4;
+        com.vungle.warren.error.VungleException $r3;
+        boolean $z0;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        java.io.File $r8, $r10;
+        java.lang.Object $r6;
+        java.lang.StringBuilder $r9;
+        com.vungle.warren.model.Cookie $r7;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.DurationRecorder durationRecorder>;
+
+        virtualinvoke $r1.<com.vungle.warren.ui.DurationRecorder: void start()>();
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $z0 = interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: boolean hasWebView()>();
+
+        if $z0 != 0 goto label1;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportErrorAndCloseAd(int)>(31);
+
+        $r3 = new com.vungle.warren.error.VungleException;
+
+        specialinvoke $r3.<com.vungle.warren.error.VungleException: void <init>(int)>(31);
+
+        $r4 = virtualinvoke $r3.<com.vungle.warren.error.VungleException: java.lang.String getLocalizedMessage()>();
+
+        staticinvoke <com.vungle.warren.VungleLogger: void error(java.lang.String,java.lang.String)>("LocalAdPresenter#start", $r4);
+
+        return;
+
+     label1:
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void setImmersiveMode()>();
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void resumeWeb()>();
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.Map cookies>;
+
+        $r6 = interfaceinvoke $r5.<java.util.Map: java.lang.Object get(java.lang.Object)>("consentIsImportantToVungle");
+
+        $r7 = (com.vungle.warren.model.Cookie) $r6;
+
+        $z0 = specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean needShowGDPR(com.vungle.warren.model.Cookie)>($r7);
+
+        if $z0 == 0 goto label2;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void showGDPR(com.vungle.warren.model.Cookie)>($r7);
+
+        return;
+
+     label2:
+        $z0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean inPost>;
+
+        if $z0 == 0 goto label3;
+
+        $z0 = specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean isWebPageBlank()>();
+
+        if $z0 == 0 goto label5;
+
+        specialinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void playPost()>();
+
+        return;
+
+     label3:
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $z0 = interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: boolean isVideoPlaying()>();
+
+        if $z0 != 0 goto label5;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $z0 = interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: boolean isDialogVisible()>();
+
+        if $z0 != 0 goto label5;
+
+        $r8 = new java.io.File;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.io.File assetDir>;
+
+        $r4 = virtualinvoke $r10.<java.io.File: java.lang.String getPath()>();
+
+        virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = <java.io.File: java.lang.String separator>;
+
+        virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("video");
+
+        $r4 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $z0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean muted>;
+
+        $i0 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int videoPosition>;
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void playVideo(java.io.File,boolean,int)>($r8, $z0, $i0);
+
+        $r11 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Advertisement advertisement>;
+
+        $r12 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $z0 = virtualinvoke $r12.<com.vungle.warren.model.Placement: boolean isIncentivized()>();
+
+        $i0 = virtualinvoke $r11.<com.vungle.warren.model.Advertisement: int getShowCloseDelay(boolean)>($z0);
+
+        if $i0 <= 0 goto label4;
+
+        $r13 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.utility.Scheduler scheduler>;
+
+        $r14 = new com.vungle.warren.ui.presenter.LocalAdPresenter$5;
+
+        specialinvoke $r14.<com.vungle.warren.ui.presenter.LocalAdPresenter$5: void <init>(com.vungle.warren.ui.presenter.LocalAdPresenter)>(r0);
+
+        $l1 = (long) $i0;
+
+        interfaceinvoke $r13.<com.vungle.warren.utility.Scheduler: void schedule(java.lang.Runnable,long)>($r14, $l1);
+
+        return;
+
+     label4:
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean userExitEnabled> = 1;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void showCloseButton()>();
+
+     label5:
+        return;
+    }
+
+    public void stop(int)
+    {
+        com.vungle.warren.ui.DurationRecorder $r1;
+        com.vungle.warren.model.Placement $r8;
+        java.util.concurrent.atomic.AtomicBoolean $r3;
+        com.vungle.warren.utility.Scheduler $r5;
+        com.vungle.warren.ui.presenter.LocalAdPresenter r0;
+        com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener $r6;
+        com.vungle.warren.ui.contract.LocalAdContract$LocalView $r2;
+        int $i0, $i1;
+        java.lang.String $r4, $r9;
+        boolean $z0, $z1, $z2;
+        com.vungle.warren.model.Report $r7;
+
+        r0 := @this: com.vungle.warren.ui.presenter.LocalAdPresenter;
+
+        $i0 := @parameter0: int;
+
+        $r1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.DurationRecorder durationRecorder>;
+
+        virtualinvoke $r1.<com.vungle.warren.ui.DurationRecorder: void stop()>();
+
+        $i1 = $i0 & 1;
+
+        $z0 = 0;
+
+        if $i1 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        $i0 = $i0 & 2;
+
+        if $i0 == 0 goto label3;
+
+        $z0 = 1;
+
+     label3:
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void pauseWeb()>();
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $z2 = interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: boolean isVideoPlaying()>();
+
+        if $z2 == 0 goto label4;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        $i0 = interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: int getVideoPosition()>();
+
+        r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: int videoPosition> = $i0;
+
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void pauseVideo()>();
+
+     label4:
+        if $z1 != 0 goto label6;
+
+        if $z0 == 0 goto label6;
+
+        $r3 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: java.util.concurrent.atomic.AtomicBoolean isDestroying>;
+
+        $z0 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicBoolean: boolean getAndSet(boolean)>(1);
+
+        if $z0 != 0 goto label8;
+
+        $r4 = null;
+
+        virtualinvoke r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: void reportAction(java.lang.String,java.lang.String)>("close", null);
+
+        $r5 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.utility.Scheduler scheduler>;
+
+        interfaceinvoke $r5.<com.vungle.warren.utility.Scheduler: void cancelAll()>();
+
+        $r6 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener bus>;
+
+        if $r6 == null goto label8;
+
+        $r7 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Report report>;
+
+        $z0 = virtualinvoke $r7.<com.vungle.warren.model.Report: boolean isCTAClicked()>();
+
+        if $z0 == 0 goto label5;
+
+        $r4 = "isCTAClicked";
+
+     label5:
+        $r8 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.model.Placement placement>;
+
+        $r9 = virtualinvoke $r8.<com.vungle.warren.model.Placement: java.lang.String getId()>();
+
+        interfaceinvoke $r6.<com.vungle.warren.ui.contract.AdContract$AdvertisementPresenter$EventListener: void onNext(java.lang.String,java.lang.String,java.lang.String)>("end", $r4, $r9);
+
+        return;
+
+     label6:
+        $z1 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: boolean inPost>;
+
+        if $z1 != 0 goto label7;
+
+        if $z0 == 0 goto label8;
+
+     label7:
+        $r2 = r0.<com.vungle.warren.ui.presenter.LocalAdPresenter: com.vungle.warren.ui.contract.LocalAdContract$LocalView adView>;
+
+        interfaceinvoke $r2.<com.vungle.warren.ui.contract.LocalAdContract$LocalView: void showWebsite(java.lang.String)>("about:blank");
+
+     label8:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String TAG> = "LocalAdPresenter";
+
+        <com.vungle.warren.ui.presenter.LocalAdPresenter: int INCENTIVIZED_TRESHOLD> = 75;
+
+        <com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String HTTPS_VUNGLE_COM_PRIVACY> = "https://vungle.com/privacy/";
+
+        <com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String EXTRA_VIDEO_POSITION> = "videoPosition";
+
+        <com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String EXTRA_REPORT> = "saved_report";
+
+        <com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String EXTRA_IS_MUTED> = "is_muted_mode";
+
+        <com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String EXTRA_IN_POST> = "in_post_roll";
+
+        <com.vungle.warren.ui.presenter.LocalAdPresenter: java.lang.String EXTRA_INCENTIVIZED_SENT> = "incentivized_sent";
+
+        return;
+    }
+}

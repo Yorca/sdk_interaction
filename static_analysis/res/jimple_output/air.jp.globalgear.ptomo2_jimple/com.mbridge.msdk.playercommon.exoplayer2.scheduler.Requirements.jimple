@@ -1,0 +1,506 @@
+public final class com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements extends java.lang.Object
+{
+    private static final int DEVICE_CHARGING;
+    private static final int DEVICE_IDLE;
+    public static final int NETWORK_TYPE_ANY;
+    private static final int NETWORK_TYPE_MASK;
+    public static final int NETWORK_TYPE_METERED;
+    public static final int NETWORK_TYPE_NONE;
+    public static final int NETWORK_TYPE_NOT_ROAMING;
+    private static final java.lang.String[] NETWORK_TYPE_STRINGS;
+    public static final int NETWORK_TYPE_UNMETERED;
+    private static final java.lang.String TAG;
+    private final int requirements;
+
+    static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: java.lang.String TAG> = "Requirements";
+
+        <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int NETWORK_TYPE_UNMETERED> = 2;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int NETWORK_TYPE_NOT_ROAMING> = 3;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int NETWORK_TYPE_NONE> = 0;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int NETWORK_TYPE_METERED> = 4;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int NETWORK_TYPE_MASK> = 7;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int NETWORK_TYPE_ANY> = 1;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int DEVICE_IDLE> = 8;
+
+        <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int DEVICE_CHARGING> = 16;
+
+        return;
+    }
+
+    public void <init>(int)
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        $i0 := @parameter0: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int requirements> = $i0;
+
+        return;
+    }
+
+    public void <init>(int, boolean, boolean)
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+        byte $b1, $b2;
+        int $i0;
+        boolean $z0, $z1;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        $i0 := @parameter0: int;
+
+        $z1 := @parameter1: boolean;
+
+        $z0 := @parameter2: boolean;
+
+        $b1 = 0;
+
+        if $z1 == 0 goto label1;
+
+        $b2 = 16;
+
+        goto label2;
+
+     label1:
+        $b2 = 0;
+
+     label2:
+        $i0 = $i0 | $b2;
+
+        if $z0 == 0 goto label3;
+
+        $b1 = 8;
+
+     label3:
+        $i0 = $i0 | $b1;
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: void <init>(int)>($i0);
+
+        return;
+    }
+
+    private boolean checkChargingRequirement(android.content.Context)
+    {
+        android.content.Context $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+        int $i0;
+        android.content.IntentFilter $r3;
+        android.content.Intent $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: boolean isChargingRequired()>();
+
+        if $z0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        $r3 = new android.content.IntentFilter;
+
+        specialinvoke $r3.<android.content.IntentFilter: void <init>(java.lang.String)>("android.intent.action.BATTERY_CHANGED");
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>(null, $r3);
+
+        if $r2 != null goto label2;
+
+        return 0;
+
+     label2:
+        $i0 = virtualinvoke $r2.<android.content.Intent: int getIntExtra(java.lang.String,int)>("status", -1);
+
+        if $i0 == 2 goto label4;
+
+        if $i0 != 5 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+
+     label4:
+        return 1;
+    }
+
+    private boolean checkIdleRequirement(android.content.Context)
+    {
+        android.content.Context $r1;
+        android.os.PowerManager $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+        int $i0;
+        java.lang.Object $r2;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $z0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: boolean isIdleRequired()>();
+
+        if $z0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("power");
+
+        $r3 = (android.os.PowerManager) $r2;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i0 < 23 goto label3;
+
+        $z0 = virtualinvoke $r3.<android.os.PowerManager: boolean isDeviceIdleMode()>();
+
+        if $z0 != 0 goto label2;
+
+        return 1;
+
+     label2:
+        return 0;
+
+     label3:
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i0 < 20 goto label4;
+
+        $z0 = virtualinvoke $r3.<android.os.PowerManager: boolean isInteractive()>();
+
+        if $z0 != 0 goto label2;
+
+        return 1;
+
+     label4:
+        $z0 = virtualinvoke $r3.<android.os.PowerManager: boolean isScreenOn()>();
+
+        if $z0 != 0 goto label2;
+
+        return 1;
+    }
+
+    private static boolean checkInternetConnectivity(android.net.ConnectivityManager)
+    {
+        android.net.ConnectivityManager $r0;
+        android.net.NetworkCapabilities $r2;
+        android.net.Network $r1;
+        int $i0;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4;
+        boolean $z0, $z1;
+
+        $r0 := @parameter0: android.net.ConnectivityManager;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i0 >= 23 goto label1;
+
+        return 1;
+
+     label1:
+        $r1 = virtualinvoke $r0.<android.net.ConnectivityManager: android.net.Network getActiveNetwork()>();
+
+        $z0 = 0;
+
+        if $r1 != null goto label2;
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: void logd(java.lang.String)>("No active network.");
+
+        return 0;
+
+     label2:
+        $r2 = virtualinvoke $r0.<android.net.ConnectivityManager: android.net.NetworkCapabilities getNetworkCapabilities(android.net.Network)>($r1);
+
+        if $r2 == null goto label3;
+
+        $z1 = virtualinvoke $r2.<android.net.NetworkCapabilities: boolean hasCapability(int)>(16);
+
+        if $z1 != 0 goto label4;
+
+     label3:
+        $z0 = 1;
+
+     label4:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("Network capability validated: ");
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: void logd(java.lang.String)>($r4);
+
+        $z0 = $z0 ^ 1;
+
+        return $z0;
+    }
+
+    private boolean checkNetworkRequirements(android.content.Context)
+    {
+        android.net.ConnectivityManager $r3;
+        android.content.Context $r1;
+        java.lang.IllegalStateException $r7;
+        android.net.NetworkInfo $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+        int $i0;
+        java.lang.Object $r2;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $i0 = virtualinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int getRequiredNetworkType()>();
+
+        if $i0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r3 = (android.net.ConnectivityManager) $r2;
+
+        $r4 = virtualinvoke $r3.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if $r4 == null goto label8;
+
+        $z0 = virtualinvoke $r4.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 != 0 goto label2;
+
+        goto label8;
+
+     label2:
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: boolean checkInternetConnectivity(android.net.ConnectivityManager)>($r3);
+
+        if $z0 != 0 goto label3;
+
+        return 0;
+
+     label3:
+        if $i0 != 1 goto label4;
+
+        return 1;
+
+     label4:
+        if $i0 != 3 goto label5;
+
+        $z0 = virtualinvoke $r4.<android.net.NetworkInfo: boolean isRoaming()>();
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Roaming: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: void logd(java.lang.String)>($r6);
+
+        $z0 = $z0 ^ 1;
+
+        return $z0;
+
+     label5:
+        $z0 = staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: boolean isActiveNetworkMetered(android.net.ConnectivityManager,android.net.NetworkInfo)>($r3, $r4);
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("Metered network: ");
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: void logd(java.lang.String)>($r6);
+
+        if $i0 != 2 goto label6;
+
+        $z0 = $z0 ^ 1;
+
+        return $z0;
+
+     label6:
+        if $i0 != 4 goto label7;
+
+        return $z0;
+
+     label7:
+        $r7 = new java.lang.IllegalStateException;
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r7;
+
+     label8:
+        staticinvoke <com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: void logd(java.lang.String)>("No network info or no connection.");
+
+        return 0;
+    }
+
+    private static boolean isActiveNetworkMetered(android.net.ConnectivityManager, android.net.NetworkInfo)
+    {
+        android.net.ConnectivityManager $r0;
+        int $i0;
+        android.net.NetworkInfo $r1;
+        boolean $z0;
+
+        $r0 := @parameter0: android.net.ConnectivityManager;
+
+        $r1 := @parameter1: android.net.NetworkInfo;
+
+        $i0 = <com.mbridge.msdk.playercommon.exoplayer2.util.Util: int SDK_INT>;
+
+        if $i0 < 16 goto label1;
+
+        $z0 = virtualinvoke $r0.<android.net.ConnectivityManager: boolean isActiveNetworkMetered()>();
+
+        return $z0;
+
+     label1:
+        $i0 = virtualinvoke $r1.<android.net.NetworkInfo: int getType()>();
+
+        if $i0 == 1 goto label2;
+
+        if $i0 == 7 goto label2;
+
+        if $i0 == 9 goto label2;
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    private static void logd(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        return;
+    }
+
+    public final boolean checkRequirements(android.content.Context)
+    {
+        android.content.Context $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: boolean checkNetworkRequirements(android.content.Context)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: boolean checkChargingRequirement(android.content.Context)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        $z0 = specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: boolean checkIdleRequirement(android.content.Context)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public final int getRequiredNetworkType()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int requirements>;
+
+        $i0 = $i0 & 7;
+
+        return $i0;
+    }
+
+    public final int getRequirementsData()
+    {
+        int i0;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int requirements>;
+
+        return i0;
+    }
+
+    public final boolean isChargingRequired()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int requirements>;
+
+        $i0 = $i0 & 16;
+
+        if $i0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public final boolean isIdleRequired()
+    {
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements: int requirements>;
+
+        $i0 = $i0 & 8;
+
+        if $i0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public final java.lang.String toString()
+    {
+        java.lang.String $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.scheduler.Requirements;
+
+        $r1 = specialinvoke r0.<java.lang.Object: java.lang.String toString()>();
+
+        return $r1;
+    }
+}

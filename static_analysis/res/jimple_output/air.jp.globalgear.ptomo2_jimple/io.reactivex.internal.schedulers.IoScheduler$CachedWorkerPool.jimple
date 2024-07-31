@@ -1,0 +1,276 @@
+final class io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool extends java.lang.Object implements java.lang.Runnable
+{
+    final io.reactivex.disposables.CompositeDisposable allWorkers;
+    private final java.util.concurrent.ScheduledExecutorService evictorService;
+    private final java.util.concurrent.Future evictorTask;
+    private final java.util.concurrent.ConcurrentLinkedQueue expiringWorkerQueue;
+    private final long keepAliveTime;
+    private final java.util.concurrent.ThreadFactory threadFactory;
+
+    void <init>(long, java.util.concurrent.TimeUnit, java.util.concurrent.ThreadFactory)
+    {
+        io.reactivex.internal.schedulers.RxThreadFactory $r5;
+        java.util.concurrent.ScheduledFuture $r8;
+        io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool r0;
+        long $l0;
+        java.util.concurrent.TimeUnit $r1;
+        io.reactivex.disposables.CompositeDisposable $r4;
+        java.util.concurrent.ScheduledExecutorService $r6, $r7;
+        java.util.concurrent.ThreadFactory $r2;
+        java.util.concurrent.ConcurrentLinkedQueue $r3;
+
+        r0 := @this: io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.util.concurrent.TimeUnit;
+
+        $r2 := @parameter2: java.util.concurrent.ThreadFactory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        if $r1 == null goto label1;
+
+        $l0 = virtualinvoke $r1.<java.util.concurrent.TimeUnit: long toNanos(long)>($l0);
+
+        goto label2;
+
+     label1:
+        $l0 = 0L;
+
+     label2:
+        r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: long keepAliveTime> = $l0;
+
+        $r3 = new java.util.concurrent.ConcurrentLinkedQueue;
+
+        specialinvoke $r3.<java.util.concurrent.ConcurrentLinkedQueue: void <init>()>();
+
+        r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ConcurrentLinkedQueue expiringWorkerQueue> = $r3;
+
+        $r4 = new io.reactivex.disposables.CompositeDisposable;
+
+        specialinvoke $r4.<io.reactivex.disposables.CompositeDisposable: void <init>()>();
+
+        r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: io.reactivex.disposables.CompositeDisposable allWorkers> = $r4;
+
+        r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ThreadFactory threadFactory> = $r2;
+
+        if $r1 == null goto label3;
+
+        $r5 = <io.reactivex.internal.schedulers.IoScheduler: io.reactivex.internal.schedulers.RxThreadFactory EVICTOR_THREAD_FACTORY>;
+
+        $r6 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ScheduledExecutorService newScheduledThreadPool(int,java.util.concurrent.ThreadFactory)>(1, $r5);
+
+        $r7 = $r6;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r8 = interfaceinvoke $r6.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture scheduleWithFixedDelay(java.lang.Runnable,long,long,java.util.concurrent.TimeUnit)>(r0, $l0, $l0, $r1);
+
+        goto label4;
+
+     label3:
+        $r7 = null;
+
+        $r8 = null;
+
+     label4:
+        r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ScheduledExecutorService evictorService> = $r7;
+
+        r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.Future evictorTask> = $r8;
+
+        return;
+    }
+
+    void evictExpiredWorkers()
+    {
+        java.util.Iterator $r2;
+        io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool r0;
+        long $l1, $l2;
+        io.reactivex.disposables.CompositeDisposable $r5;
+        byte $b0;
+        io.reactivex.internal.schedulers.IoScheduler$ThreadWorker $r4;
+        int $i3;
+        java.lang.Object $r3;
+        java.util.concurrent.ConcurrentLinkedQueue $r1;
+        boolean $z0;
+
+        r0 := @this: io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool;
+
+        $r1 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ConcurrentLinkedQueue expiringWorkerQueue>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.ConcurrentLinkedQueue: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $l1 = virtualinvoke r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: long now()>();
+
+        $r1 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ConcurrentLinkedQueue expiringWorkerQueue>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.ConcurrentLinkedQueue: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (io.reactivex.internal.schedulers.IoScheduler$ThreadWorker) $r3;
+
+        $l2 = virtualinvoke $r4.<io.reactivex.internal.schedulers.IoScheduler$ThreadWorker: long getExpirationTime()>();
+
+        $b0 = $l2 cmp $l1;
+
+        $i3 = (int) $b0;
+
+        if $i3 > 0 goto label2;
+
+        $r1 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ConcurrentLinkedQueue expiringWorkerQueue>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.ConcurrentLinkedQueue: boolean remove(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label1;
+
+        $r5 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: io.reactivex.disposables.CompositeDisposable allWorkers>;
+
+        virtualinvoke $r5.<io.reactivex.disposables.CompositeDisposable: boolean remove(io.reactivex.disposables.Disposable)>($r4);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    io.reactivex.internal.schedulers.IoScheduler$ThreadWorker get()
+    {
+        io.reactivex.disposables.CompositeDisposable $r1;
+        io.reactivex.internal.schedulers.IoScheduler$ThreadWorker $r4;
+        io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool r0;
+        java.lang.Object $r3;
+        java.util.concurrent.ThreadFactory $r5;
+        boolean $z0;
+        java.util.concurrent.ConcurrentLinkedQueue $r2;
+
+        r0 := @this: io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool;
+
+        $r1 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: io.reactivex.disposables.CompositeDisposable allWorkers>;
+
+        $z0 = virtualinvoke $r1.<io.reactivex.disposables.CompositeDisposable: boolean isDisposed()>();
+
+        if $z0 == 0 goto label1;
+
+        $r4 = <io.reactivex.internal.schedulers.IoScheduler: io.reactivex.internal.schedulers.IoScheduler$ThreadWorker SHUTDOWN_THREAD_WORKER>;
+
+        return $r4;
+
+     label1:
+        $r2 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ConcurrentLinkedQueue expiringWorkerQueue>;
+
+        $z0 = virtualinvoke $r2.<java.util.concurrent.ConcurrentLinkedQueue: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $r2 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ConcurrentLinkedQueue expiringWorkerQueue>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.ConcurrentLinkedQueue: java.lang.Object poll()>();
+
+        $r4 = (io.reactivex.internal.schedulers.IoScheduler$ThreadWorker) $r3;
+
+        if $r4 == null goto label1;
+
+        return $r4;
+
+     label2:
+        $r4 = new io.reactivex.internal.schedulers.IoScheduler$ThreadWorker;
+
+        $r5 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ThreadFactory threadFactory>;
+
+        specialinvoke $r4.<io.reactivex.internal.schedulers.IoScheduler$ThreadWorker: void <init>(java.util.concurrent.ThreadFactory)>($r5);
+
+        $r1 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: io.reactivex.disposables.CompositeDisposable allWorkers>;
+
+        virtualinvoke $r1.<io.reactivex.disposables.CompositeDisposable: boolean add(io.reactivex.disposables.Disposable)>($r4);
+
+        return $r4;
+    }
+
+    long now()
+    {
+        io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool r0;
+        long $l0;
+
+        r0 := @this: io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool;
+
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        return $l0;
+    }
+
+    void release(io.reactivex.internal.schedulers.IoScheduler$ThreadWorker)
+    {
+        io.reactivex.internal.schedulers.IoScheduler$ThreadWorker $r1;
+        io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool r0;
+        long $l0, $l1;
+        java.util.concurrent.ConcurrentLinkedQueue $r2;
+
+        r0 := @this: io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool;
+
+        $r1 := @parameter0: io.reactivex.internal.schedulers.IoScheduler$ThreadWorker;
+
+        $l1 = virtualinvoke r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: long now()>();
+
+        $l0 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: long keepAliveTime>;
+
+        $l0 = $l1 + $l0;
+
+        virtualinvoke $r1.<io.reactivex.internal.schedulers.IoScheduler$ThreadWorker: void setExpirationTime(long)>($l0);
+
+        $r2 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ConcurrentLinkedQueue expiringWorkerQueue>;
+
+        virtualinvoke $r2.<java.util.concurrent.ConcurrentLinkedQueue: boolean offer(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void run()
+    {
+        io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool r0;
+
+        r0 := @this: io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool;
+
+        virtualinvoke r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: void evictExpiredWorkers()>();
+
+        return;
+    }
+
+    void shutdown()
+    {
+        io.reactivex.disposables.CompositeDisposable $r1;
+        java.util.concurrent.Future $r2;
+        java.util.concurrent.ScheduledExecutorService $r3;
+        io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool r0;
+
+        r0 := @this: io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool;
+
+        $r1 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: io.reactivex.disposables.CompositeDisposable allWorkers>;
+
+        virtualinvoke $r1.<io.reactivex.disposables.CompositeDisposable: void dispose()>();
+
+        $r2 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.Future evictorTask>;
+
+        if $r2 == null goto label1;
+
+        interfaceinvoke $r2.<java.util.concurrent.Future: boolean cancel(boolean)>(1);
+
+     label1:
+        $r3 = r0.<io.reactivex.internal.schedulers.IoScheduler$CachedWorkerPool: java.util.concurrent.ScheduledExecutorService evictorService>;
+
+        if $r3 == null goto label2;
+
+        interfaceinvoke $r3.<java.util.concurrent.ScheduledExecutorService: java.util.List shutdownNow()>();
+
+     label2:
+        return;
+    }
+}

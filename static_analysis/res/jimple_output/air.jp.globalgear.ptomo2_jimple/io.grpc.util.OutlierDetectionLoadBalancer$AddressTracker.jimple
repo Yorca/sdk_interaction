@@ -1,0 +1,570 @@
+class io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker extends java.lang.Object
+{
+    private volatile io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter activeCallCounter;
+    private io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig config;
+    private int ejectionTimeMultiplier;
+    private java.lang.Long ejectionTimeNanos;
+    private io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter inactiveCallCounter;
+    private final java.util.Set subchannels;
+
+    void <init>(io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig)
+    {
+        java.util.HashSet $r3;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter $r2;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig $r1;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 := @parameter0: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter;
+
+        specialinvoke $r2.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: void <init>(io.grpc.util.OutlierDetectionLoadBalancer$1)>(null);
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter activeCallCounter> = $r2;
+
+        $r2 = new io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter;
+
+        specialinvoke $r2.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: void <init>(io.grpc.util.OutlierDetectionLoadBalancer$1)>(null);
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter inactiveCallCounter> = $r2;
+
+        $r3 = new java.util.HashSet;
+
+        specialinvoke $r3.<java.util.HashSet: void <init>()>();
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.util.Set subchannels> = $r3;
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig config> = $r1;
+
+        return;
+    }
+
+    static java.lang.Long access$300(io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker)
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker $r0;
+        java.lang.Long r1;
+
+        $r0 := @parameter0: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        r1 = $r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.lang.Long ejectionTimeNanos>;
+
+        return r1;
+    }
+
+    long activeVolume()
+    {
+        java.util.concurrent.atomic.AtomicLong $r2;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter $r1;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        long $l0, $l1;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter activeCallCounter>;
+
+        $r2 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: java.util.concurrent.atomic.AtomicLong successCount>;
+
+        $l0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter activeCallCounter>;
+
+        $r2 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: java.util.concurrent.atomic.AtomicLong failureCount>;
+
+        $l1 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $l0 = $l0 + $l1;
+
+        return $l0;
+    }
+
+    boolean addSubchannel(io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel)
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel $r1;
+        java.util.Set $r2;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 := @parameter0: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel;
+
+        $z0 = virtualinvoke r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: boolean subchannelsEjected()>();
+
+        if $z0 == 0 goto label1;
+
+        $z0 = virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel: boolean isEjected()>();
+
+        if $z0 != 0 goto label1;
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel: void eject()>();
+
+        goto label2;
+
+     label1:
+        $z0 = virtualinvoke r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: boolean subchannelsEjected()>();
+
+        if $z0 != 0 goto label2;
+
+        $z0 = virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel: boolean isEjected()>();
+
+        if $z0 == 0 goto label2;
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel: void uneject()>();
+
+     label2:
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel: void setAddressTracker(io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker)>(r0);
+
+        $r2 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.util.Set subchannels>;
+
+        $z0 = interfaceinvoke $r2.<java.util.Set: boolean add(java.lang.Object)>($r1);
+
+        return $z0;
+    }
+
+    boolean containsSubchannel(io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel)
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel $r2;
+        java.util.Set $r1;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r2 := @parameter0: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.util.Set subchannels>;
+
+        $z0 = interfaceinvoke $r1.<java.util.Set: boolean contains(java.lang.Object)>($r2);
+
+        return $z0;
+    }
+
+    void decrementEjectionTimeMultiplier()
+    {
+        int $i0;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $i0 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: int ejectionTimeMultiplier>;
+
+        if $i0 != 0 goto label1;
+
+        $i0 = 0;
+
+        goto label2;
+
+     label1:
+        $i0 = $i0 + -1;
+
+     label2:
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: int ejectionTimeMultiplier> = $i0;
+
+        return;
+    }
+
+    void ejectSubchannels(long)
+    {
+        java.util.Iterator $r3;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel $r5;
+        java.util.Set $r2;
+        long $l0;
+        java.lang.Long $r1;
+        int $i1;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        java.lang.Object $r4;
+        boolean $z0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $l0 := @parameter0: long;
+
+        $r1 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.lang.Long ejectionTimeNanos> = $r1;
+
+        $i1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: int ejectionTimeMultiplier>;
+
+        $i1 = $i1 + 1;
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: int ejectionTimeMultiplier> = $i1;
+
+        $r2 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.util.Set subchannels>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel) $r4;
+
+        virtualinvoke $r5.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel: void eject()>();
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    double failureRate()
+    {
+        java.util.concurrent.atomic.AtomicLong $r2;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter $r1;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        long $l0;
+        double $d0, $d1;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter inactiveCallCounter>;
+
+        $r2 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: java.util.concurrent.atomic.AtomicLong failureCount>;
+
+        $l0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $d0 = (double) $l0;
+
+        $l0 = virtualinvoke r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: long inactiveVolume()>();
+
+        $d1 = (double) $l0;
+
+        $d0 = $d0 / $d1;
+
+        return $d0;
+    }
+
+    java.util.Set getSubchannels()
+    {
+        java.util.Set $r2;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        com.google.common.collect.ImmutableSet $r1;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r2 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.util.Set subchannels>;
+
+        $r1 = staticinvoke <com.google.common.collect.ImmutableSet: com.google.common.collect.ImmutableSet copyOf(java.util.Collection)>($r2);
+
+        return $r1;
+    }
+
+    long inactiveVolume()
+    {
+        java.util.concurrent.atomic.AtomicLong $r2;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter $r1;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        long $l0, $l1;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter inactiveCallCounter>;
+
+        $r2 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: java.util.concurrent.atomic.AtomicLong successCount>;
+
+        $l0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter inactiveCallCounter>;
+
+        $r2 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: java.util.concurrent.atomic.AtomicLong failureCount>;
+
+        $l1 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $l0 = $l0 + $l1;
+
+        return $l0;
+    }
+
+    void incrementCallCount(boolean)
+    {
+        java.util.concurrent.atomic.AtomicLong $r5;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection $r3;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter $r4;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig $r1;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        boolean $z0;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection $r2;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig config>;
+
+        $r2 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$SuccessRateEjection successRateEjection>;
+
+        if $r2 != null goto label1;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig config>;
+
+        $r3 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig$FailurePercentageEjection failurePercentageEjection>;
+
+        if $r3 != null goto label1;
+
+        return;
+
+     label1:
+        if $z0 == 0 goto label2;
+
+        $r4 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter activeCallCounter>;
+
+        $r5 = $r4.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: java.util.concurrent.atomic.AtomicLong successCount>;
+
+        virtualinvoke $r5.<java.util.concurrent.atomic.AtomicLong: long getAndIncrement()>();
+
+        return;
+
+     label2:
+        $r4 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter activeCallCounter>;
+
+        $r5 = $r4.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: java.util.concurrent.atomic.AtomicLong failureCount>;
+
+        virtualinvoke $r5.<java.util.concurrent.atomic.AtomicLong: long getAndIncrement()>();
+
+        return;
+    }
+
+    public boolean maxEjectionTimeElapsed(long)
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig $r1;
+        long $l0, $l1, $l2, $l3, $l5;
+        byte $b6;
+        java.lang.Long $r2;
+        int $i4;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $l0 := @parameter0: long;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig config>;
+
+        $r2 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig: java.lang.Long baseEjectionTimeNanos>;
+
+        $l1 = virtualinvoke $r2.<java.lang.Long: long longValue()>();
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig config>;
+
+        $r2 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig: java.lang.Long maxEjectionTimeNanos>;
+
+        $l2 = virtualinvoke $r2.<java.lang.Long: long longValue()>();
+
+        $l2 = staticinvoke <java.lang.Math: long max(long,long)>($l1, $l2);
+
+        $r2 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.lang.Long ejectionTimeNanos>;
+
+        $l1 = virtualinvoke $r2.<java.lang.Long: long longValue()>();
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig config>;
+
+        $r2 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig: java.lang.Long baseEjectionTimeNanos>;
+
+        $l3 = virtualinvoke $r2.<java.lang.Long: long longValue()>();
+
+        $i4 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: int ejectionTimeMultiplier>;
+
+        $l5 = (long) $i4;
+
+        $l3 = $l3 * $l5;
+
+        $l2 = staticinvoke <java.lang.Math: long min(long,long)>($l3, $l2);
+
+        $l1 = $l1 + $l2;
+
+        $b6 = $l0 cmp $l1;
+
+        $i4 = (int) $b6;
+
+        if $i4 <= 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    boolean removeSubchannel(io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel)
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel $r2;
+        java.util.Set $r1;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        boolean $z0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r2 := @parameter0: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel;
+
+        virtualinvoke $r2.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel: void clearAddressTracker()>();
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.util.Set subchannels>;
+
+        $z0 = interfaceinvoke $r1.<java.util.Set: boolean remove(java.lang.Object)>($r2);
+
+        return $z0;
+    }
+
+    void resetCallCounters()
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter $r1;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter activeCallCounter>;
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: void reset()>();
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter inactiveCallCounter>;
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: void reset()>();
+
+        return;
+    }
+
+    void resetEjectionTimeMultiplier()
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: int ejectionTimeMultiplier> = 0;
+
+        return;
+    }
+
+    void setConfig(io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig)
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig $r1;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 := @parameter0: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig;
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionLoadBalancerConfig config> = $r1;
+
+        return;
+    }
+
+    boolean subchannelsEjected()
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        java.lang.Long $r1;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.lang.Long ejectionTimeNanos>;
+
+        if $r1 == null goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    double successRate()
+    {
+        java.util.concurrent.atomic.AtomicLong $r2;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter $r1;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        long $l0;
+        double $d0, $d1;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter inactiveCallCounter>;
+
+        $r2 = $r1.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: java.util.concurrent.atomic.AtomicLong successCount>;
+
+        $l0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicLong: long get()>();
+
+        $d0 = (double) $l0;
+
+        $l0 = virtualinvoke r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: long inactiveVolume()>();
+
+        $d1 = (double) $l0;
+
+        $d0 = $d0 / $d1;
+
+        return $d0;
+    }
+
+    void swapCounters()
+    {
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter $r1, $r2;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter inactiveCallCounter>;
+
+        virtualinvoke $r1.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter: void reset()>();
+
+        $r2 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter activeCallCounter>;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter inactiveCallCounter>;
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter activeCallCounter> = $r1;
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker$CallCounter inactiveCallCounter> = $r2;
+
+        return;
+    }
+
+    void unejectSubchannels()
+    {
+        java.util.Iterator $r3;
+        java.lang.Long $r1;
+        io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel $r5;
+        java.util.Set $r2;
+        io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker r0;
+        java.lang.Object $r4;
+        boolean $z0;
+
+        r0 := @this: io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker;
+
+        $r1 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.lang.Long ejectionTimeNanos>;
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "not currently ejected");
+
+        r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.lang.Long ejectionTimeNanos> = null;
+
+        $r2 = r0.<io.grpc.util.OutlierDetectionLoadBalancer$AddressTracker: java.util.Set subchannels>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Set: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel) $r4;
+
+        virtualinvoke $r5.<io.grpc.util.OutlierDetectionLoadBalancer$OutlierDetectionSubchannel: void uneject()>();
+
+        goto label3;
+
+     label4:
+        return;
+    }
+}

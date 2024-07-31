@@ -1,0 +1,287 @@
+final class com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader extends java.lang.Object
+{
+    private static final int PES_SCRATCH_SIZE;
+    private boolean dtsFlag;
+    private int extendedHeaderLength;
+    private final com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader pesPayloadReader;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch;
+    private boolean ptsFlag;
+    private boolean seenFirstDts;
+    private long timeUs;
+    private final com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster timestampAdjuster;
+
+    public void <init>(com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader, com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster)
+    {
+        byte[] $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster $r2;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader;
+
+        $r2 := @parameter1: com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader pesPayloadReader> = $r1;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster timestampAdjuster> = $r2;
+
+        $r3 = new com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray;
+
+        $r4 = newarray (byte)[64];
+
+        specialinvoke $r3.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void <init>(byte[])>($r4);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch> = $r3;
+
+        return;
+    }
+
+    private void parseHeader()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray $r1;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader r0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void skipBits(int)>(8);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: boolean readBit()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: boolean ptsFlag> = $z0;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $z0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: boolean readBit()>();
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: boolean dtsFlag> = $z0;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void skipBits(int)>(6);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: int readBits(int)>(8);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: int extendedHeaderLength> = $i0;
+
+        return;
+    }
+
+    private void parseHeaderExtension()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray $r1;
+        long $l1, $l2, $l3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader r0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster $r2;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: long timeUs> = 0L;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: boolean ptsFlag>;
+
+        if $z0 == 0 goto label2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void skipBits(int)>(4);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: int readBits(int)>(3);
+
+        $l1 = (long) $i0;
+
+        $l1 = $l1 << 30;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: int readBits(int)>(15);
+
+        $i0 = $i0 << 15;
+
+        $l2 = (long) $i0;
+
+        $l1 = $l1 | $l2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: int readBits(int)>(15);
+
+        $l2 = (long) $i0;
+
+        $l1 = $l1 | $l2;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: boolean seenFirstDts>;
+
+        if $z0 != 0 goto label1;
+
+        $z0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: boolean dtsFlag>;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void skipBits(int)>(4);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: int readBits(int)>(3);
+
+        $l2 = (long) $i0;
+
+        $l2 = $l2 << 30;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: int readBits(int)>(15);
+
+        $i0 = $i0 << 15;
+
+        $l3 = (long) $i0;
+
+        $l2 = $l2 | $l3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $i0 = virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: int readBits(int)>(15);
+
+        $l3 = (long) $i0;
+
+        $l2 = $l2 | $l3;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster timestampAdjuster>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster: long adjustTsTimestamp(long)>($l2);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: boolean seenFirstDts> = 1;
+
+     label1:
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster timestampAdjuster>;
+
+        $l1 = virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.TimestampAdjuster: long adjustTsTimestamp(long)>($l1);
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: long timeUs> = $l1;
+
+     label2:
+        return;
+    }
+
+    public final void consume(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray) throws com.mbridge.msdk.playercommon.exoplayer2.ParserException
+    {
+        byte[] $r3;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader $r4;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray $r2;
+        int $i0;
+        com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray $r1;
+        long $l1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader;
+
+        $r1 := @parameter0: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray;
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: byte[] data>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r3, 0, 3);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void setPosition(int)>(0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: void parseHeader()>();
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        $r3 = $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: byte[] data>;
+
+        $i0 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: int extendedHeaderLength>;
+
+        virtualinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray: void readBytes(byte[],int,int)>($r3, 0, $i0);
+
+        $r2 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r2.<com.mbridge.msdk.playercommon.exoplayer2.util.ParsableBitArray: void setPosition(int)>(0);
+
+        specialinvoke r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: void parseHeaderExtension()>();
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader pesPayloadReader>;
+
+        $l1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: long timeUs>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader: void packetStarted(long,boolean)>($l1, 1);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader pesPayloadReader>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader: void consume(com.mbridge.msdk.playercommon.exoplayer2.util.ParsableByteArray)>($r1);
+
+        $r4 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader pesPayloadReader>;
+
+        interfaceinvoke $r4.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader: void packetFinished()>();
+
+        return;
+    }
+
+    public final void seek()
+    {
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader $r1;
+        com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader r0;
+
+        r0 := @this: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader;
+
+        r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: boolean seenFirstDts> = 0;
+
+        $r1 = r0.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader pesPayloadReader>;
+
+        interfaceinvoke $r1.<com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.ElementaryStreamReader: void seek()>();
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <com.mbridge.msdk.playercommon.exoplayer2.extractor.ts.PsExtractor$PesReader: int PES_SCRATCH_SIZE> = 64;
+
+        return;
+    }
+}

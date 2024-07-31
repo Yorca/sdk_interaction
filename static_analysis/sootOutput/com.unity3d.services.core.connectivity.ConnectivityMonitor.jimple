@@ -1,0 +1,600 @@
+public class com.unity3d.services.core.connectivity.ConnectivityMonitor extends java.lang.Object
+{
+    private static int _connected;
+    private static java.util.Set _listeners;
+    private static boolean _listening;
+    private static int _networkType;
+    private static boolean _webappMonitoring;
+    private static boolean _wifi;
+
+    static void <clinit>()
+    {
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _wifi> = 0;
+
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _webappMonitoring> = 0;
+
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _networkType> = -1;
+
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _listening> = 0;
+
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _connected> = -1;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.unity3d.services.core.connectivity.ConnectivityMonitor r0;
+
+        r0 := @this: com.unity3d.services.core.connectivity.ConnectivityMonitor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void addListener(com.unity3d.services.core.connectivity.IConnectivityListener)
+    {
+        java.util.concurrent.ConcurrentHashMap $r2;
+        com.unity3d.services.core.connectivity.IConnectivityListener $r0;
+        java.util.Set $r1;
+
+        $r0 := @parameter0: com.unity3d.services.core.connectivity.IConnectivityListener;
+
+        $r1 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: java.util.Set _listeners>;
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.util.concurrent.ConcurrentHashMap;
+
+        specialinvoke $r2.<java.util.concurrent.ConcurrentHashMap: void <init>()>();
+
+        $r1 = staticinvoke <java.util.Collections: java.util.Set newSetFromMap(java.util.Map)>($r2);
+
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: java.util.Set _listeners> = $r1;
+
+     label1:
+        $r1 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: java.util.Set _listeners>;
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>($r0);
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void updateListeningStatus()>();
+
+        return;
+    }
+
+    public static void connected()
+    {
+        com.unity3d.services.core.connectivity.IConnectivityListener $r3;
+        java.util.Iterator $r1;
+        int $i0;
+        java.util.Set $r0;
+        java.lang.Object $r2;
+        com.unity3d.services.core.connectivity.ConnectivityEvent $r4;
+        boolean $z0;
+
+        $i0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _connected>;
+
+        if $i0 != 1 goto label1;
+
+        return;
+
+     label1:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>("Unity Ads connectivity change: connected");
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void initConnectionStatus()>();
+
+        $r0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: java.util.Set _listeners>;
+
+        if $r0 == null goto label3;
+
+        $r1 = interfaceinvoke $r0.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r2 = interfaceinvoke $r1.<java.util.Iterator: java.lang.Object next()>();
+
+        $r3 = (com.unity3d.services.core.connectivity.IConnectivityListener) $r2;
+
+        interfaceinvoke $r3.<com.unity3d.services.core.connectivity.IConnectivityListener: void onConnected()>();
+
+        goto label2;
+
+     label3:
+        $r4 = <com.unity3d.services.core.connectivity.ConnectivityEvent: com.unity3d.services.core.connectivity.ConnectivityEvent CONNECTED>;
+
+        $z0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _wifi>;
+
+        $i0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _networkType>;
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void sendToWebview(com.unity3d.services.core.connectivity.ConnectivityEvent,boolean,int)>($r4, $z0, $i0);
+
+        return;
+    }
+
+    public static void connectionStatusChanged()
+    {
+        java.lang.Throwable $r0;
+        android.net.ConnectivityManager $r3;
+        android.content.Context $r1;
+        android.net.NetworkInfo $r4;
+        com.unity3d.services.core.connectivity.ConnectivityEvent $r6;
+        android.telephony.TelephonyManager $r5;
+        int $i0, $i1;
+        java.lang.Object $r2;
+        boolean $z0, $z1;
+
+        $i0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _connected>;
+
+        $z0 = 1;
+
+        if $i0 == 1 goto label01;
+
+        return;
+
+     label01:
+        $r1 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r3 = (android.net.ConnectivityManager) $r2;
+
+        $r4 = virtualinvoke $r3.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if $r4 == null goto label10;
+
+        $z1 = virtualinvoke $r4.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z1 == 0 goto label10;
+
+        $i0 = virtualinvoke $r4.<android.net.NetworkInfo: int getType()>();
+
+        if $i0 != 1 goto label02;
+
+        goto label03;
+
+     label02:
+        $z0 = 0;
+
+     label03:
+        $r1 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("phone");
+
+        $r5 = (android.telephony.TelephonyManager) $r2;
+
+     label04:
+        $i0 = virtualinvoke $r5.<android.telephony.TelephonyManager: int getNetworkType()>();
+
+     label05:
+        $i1 = $i0;
+
+        goto label07;
+
+     label06:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void warning(java.lang.String)>("Unity Ads was not able to get current network type due to missing permission");
+
+        $i1 = -1;
+
+     label07:
+        $z1 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _wifi>;
+
+        if $z0 != $z1 goto label08;
+
+        $i0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _networkType>;
+
+        if $i1 == $i0 goto label10;
+
+        if $z1 == 0 goto label08;
+
+        return;
+
+     label08:
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _wifi> = $z0;
+
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _networkType> = $i1;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>("Unity Ads connectivity change: network change");
+
+        $r6 = <com.unity3d.services.core.connectivity.ConnectivityEvent: com.unity3d.services.core.connectivity.ConnectivityEvent NETWORK_CHANGE>;
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void sendToWebview(com.unity3d.services.core.connectivity.ConnectivityEvent,boolean,int)>($r6, $z0, $i1);
+
+        return;
+
+     label09:
+        $r0 := @caughtexception;
+
+        goto label06;
+
+     label10:
+        return;
+
+        catch java.lang.SecurityException from label04 to label05 with label09;
+    }
+
+    public static void disconnected()
+    {
+        com.unity3d.services.core.connectivity.IConnectivityListener $r3;
+        java.util.Iterator $r1;
+        int $i0;
+        java.util.Set $r0;
+        java.lang.Object $r2;
+        com.unity3d.services.core.connectivity.ConnectivityEvent $r4;
+        boolean $z0;
+
+        $i0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _connected>;
+
+        if $i0 != 0 goto label1;
+
+        return;
+
+     label1:
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _connected> = 0;
+
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void debug(java.lang.String)>("Unity Ads connectivity change: disconnected");
+
+        $r0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: java.util.Set _listeners>;
+
+        if $r0 == null goto label3;
+
+        $r1 = interfaceinvoke $r0.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r2 = interfaceinvoke $r1.<java.util.Iterator: java.lang.Object next()>();
+
+        $r3 = (com.unity3d.services.core.connectivity.IConnectivityListener) $r2;
+
+        interfaceinvoke $r3.<com.unity3d.services.core.connectivity.IConnectivityListener: void onDisconnected()>();
+
+        goto label2;
+
+     label3:
+        $r4 = <com.unity3d.services.core.connectivity.ConnectivityEvent: com.unity3d.services.core.connectivity.ConnectivityEvent DISCONNECTED>;
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void sendToWebview(com.unity3d.services.core.connectivity.ConnectivityEvent,boolean,int)>($r4, 0, 0);
+
+        return;
+    }
+
+    private static void initConnectionStatus()
+    {
+        java.lang.Throwable $r0;
+        android.net.ConnectivityManager $r3;
+        android.content.Context $r1;
+        android.net.NetworkInfo $r4;
+        android.telephony.TelephonyManager $r5;
+        int $i0;
+        java.lang.Object $r2;
+        boolean $z0, $z1;
+
+        $r1 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r3 = (android.net.ConnectivityManager) $r2;
+
+        if $r3 != null goto label1;
+
+        return;
+
+     label1:
+        $r4 = virtualinvoke $r3.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        $z0 = 0;
+
+        if $r4 == null goto label6;
+
+        $z1 = virtualinvoke $r4.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z1 == 0 goto label6;
+
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _connected> = 1;
+
+        $i0 = virtualinvoke $r4.<android.net.NetworkInfo: int getType()>();
+
+        if $i0 != 1 goto label2;
+
+        $z0 = 1;
+
+     label2:
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _wifi> = $z0;
+
+        if $z0 != 0 goto label8;
+
+        $r1 = staticinvoke <com.unity3d.services.core.properties.ClientProperties: android.content.Context getApplicationContext()>();
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("phone");
+
+        $r5 = (android.telephony.TelephonyManager) $r2;
+
+     label3:
+        $i0 = virtualinvoke $r5.<android.telephony.TelephonyManager: int getNetworkType()>();
+
+     label4:
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _networkType> = $i0;
+
+        return;
+
+     label5:
+        staticinvoke <com.unity3d.services.core.log.DeviceLog: void warning(java.lang.String)>("Unity Ads was not able to get current network type due to missing permission");
+
+        return;
+
+     label6:
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: int _connected> = 0;
+
+        return;
+
+     label7:
+        $r0 := @caughtexception;
+
+        goto label5;
+
+     label8:
+        return;
+
+        catch java.lang.SecurityException from label3 to label4 with label7;
+    }
+
+    public static void removeListener(com.unity3d.services.core.connectivity.IConnectivityListener)
+    {
+        com.unity3d.services.core.connectivity.IConnectivityListener $r0;
+        java.util.Set $r1;
+
+        $r0 := @parameter0: com.unity3d.services.core.connectivity.IConnectivityListener;
+
+        $r1 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: java.util.Set _listeners>;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        interfaceinvoke $r1.<java.util.Set: boolean remove(java.lang.Object)>($r0);
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void updateListeningStatus()>();
+
+        return;
+    }
+
+    private static void sendToWebview(com.unity3d.services.core.connectivity.ConnectivityEvent, boolean, int)
+    {
+        java.lang.Object[] $r4;
+        com.unity3d.services.core.connectivity.ConnectivityEvent $r0;
+        java.lang.Integer $r6;
+        com.unity3d.services.core.webview.WebViewEventCategory $r3;
+        int[] $r2;
+        int $i0, $i1;
+        java.lang.Boolean $r5;
+        com.unity3d.services.core.webview.WebViewApp $r1;
+        boolean $z0, $z1;
+
+        $r0 := @parameter0: com.unity3d.services.core.connectivity.ConnectivityEvent;
+
+        $z0 := @parameter1: boolean;
+
+        $i0 := @parameter2: int;
+
+        $z1 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _webappMonitoring>;
+
+        if $z1 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = staticinvoke <com.unity3d.services.core.webview.WebViewApp: com.unity3d.services.core.webview.WebViewApp getCurrentApp()>();
+
+        if $r1 == null goto label8;
+
+        $z1 = virtualinvoke $r1.<com.unity3d.services.core.webview.WebViewApp: boolean isWebAppLoaded()>();
+
+        if $z1 != 0 goto label2;
+
+        return;
+
+     label2:
+        $r2 = <com.unity3d.services.core.connectivity.ConnectivityMonitor$1: int[] $SwitchMap$com$unity3d$services$core$connectivity$ConnectivityEvent>;
+
+        $i1 = virtualinvoke $r0.<com.unity3d.services.core.connectivity.ConnectivityEvent: int ordinal()>();
+
+        $i1 = $r2[$i1];
+
+        if $i1 == 1 goto label6;
+
+        if $i1 == 2 goto label5;
+
+        if $i1 == 3 goto label3;
+
+        return;
+
+     label3:
+        if $z0 == 0 goto label4;
+
+        $r3 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory CONNECTIVITY>;
+
+        $r0 = <com.unity3d.services.core.connectivity.ConnectivityEvent: com.unity3d.services.core.connectivity.ConnectivityEvent NETWORK_CHANGE>;
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r4[0] = $r5;
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(0);
+
+        $r4[1] = $r6;
+
+        virtualinvoke $r1.<com.unity3d.services.core.webview.WebViewApp: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r3, $r0, $r4);
+
+        return;
+
+     label4:
+        $r3 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory CONNECTIVITY>;
+
+        $r0 = <com.unity3d.services.core.connectivity.ConnectivityEvent: com.unity3d.services.core.connectivity.ConnectivityEvent NETWORK_CHANGE>;
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r4[0] = $r5;
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[1] = $r6;
+
+        virtualinvoke $r1.<com.unity3d.services.core.webview.WebViewApp: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r3, $r0, $r4);
+
+        return;
+
+     label5:
+        $r3 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory CONNECTIVITY>;
+
+        $r0 = <com.unity3d.services.core.connectivity.ConnectivityEvent: com.unity3d.services.core.connectivity.ConnectivityEvent DISCONNECTED>;
+
+        $r4 = newarray (java.lang.Object)[0];
+
+        virtualinvoke $r1.<com.unity3d.services.core.webview.WebViewApp: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r3, $r0, $r4);
+
+        return;
+
+     label6:
+        if $z0 == 0 goto label7;
+
+        $r3 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory CONNECTIVITY>;
+
+        $r0 = <com.unity3d.services.core.connectivity.ConnectivityEvent: com.unity3d.services.core.connectivity.ConnectivityEvent CONNECTED>;
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r4[0] = $r5;
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(0);
+
+        $r4[1] = $r6;
+
+        virtualinvoke $r1.<com.unity3d.services.core.webview.WebViewApp: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r3, $r0, $r4);
+
+        return;
+
+     label7:
+        $r3 = <com.unity3d.services.core.webview.WebViewEventCategory: com.unity3d.services.core.webview.WebViewEventCategory CONNECTIVITY>;
+
+        $r0 = <com.unity3d.services.core.connectivity.ConnectivityEvent: com.unity3d.services.core.connectivity.ConnectivityEvent CONNECTED>;
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        $r4[0] = $r5;
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[1] = $r6;
+
+        virtualinvoke $r1.<com.unity3d.services.core.webview.WebViewApp: boolean sendEvent(java.lang.Enum,java.lang.Enum,java.lang.Object[])>($r3, $r0, $r4);
+
+     label8:
+        return;
+    }
+
+    public static void setConnectionMonitoring(boolean)
+    {
+        boolean $z0;
+
+        $z0 := @parameter0: boolean;
+
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _webappMonitoring> = $z0;
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void updateListeningStatus()>();
+
+        return;
+    }
+
+    private static void startListening()
+    {
+        boolean $z0;
+
+        $z0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _listening>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _listening> = 1;
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void initConnectionStatus()>();
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityNetworkCallback: void register()>();
+
+        return;
+    }
+
+    public static void stopAll()
+    {
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: java.util.Set _listeners> = null;
+
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _webappMonitoring> = 0;
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void updateListeningStatus()>();
+
+        return;
+    }
+
+    private static void stopListening()
+    {
+        boolean $z0;
+
+        $z0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _listening>;
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _listening> = 0;
+
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityNetworkCallback: void unregister()>();
+
+        return;
+    }
+
+    private static void updateListeningStatus()
+    {
+        java.util.Set $r0;
+        boolean $z0;
+
+        $z0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: boolean _webappMonitoring>;
+
+        if $z0 != 0 goto label2;
+
+        $r0 = <com.unity3d.services.core.connectivity.ConnectivityMonitor: java.util.Set _listeners>;
+
+        if $r0 == null goto label1;
+
+        $z0 = interfaceinvoke $r0.<java.util.Set: boolean isEmpty()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void stopListening()>();
+
+        return;
+
+     label2:
+        staticinvoke <com.unity3d.services.core.connectivity.ConnectivityMonitor: void startListening()>();
+
+        return;
+    }
+}
