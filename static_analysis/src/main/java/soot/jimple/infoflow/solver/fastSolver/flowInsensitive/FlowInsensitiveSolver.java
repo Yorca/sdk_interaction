@@ -442,6 +442,7 @@ public class FlowInsensitiveSolver<N extends Unit, D extends FastSolverLinkedNod
 						final D d4 = d1d2entry.getKey();
 						final D predVal = d1d2entry.getValue();
 
+						if (targets != null && !targets.isEmpty()) {
 						for (D d5 : targets) {
 							if (memoryManager != null)
 								d5 = memoryManager.handleGeneratedMemoryObject(d2, d5);
@@ -456,6 +457,7 @@ public class FlowInsensitiveSolver<N extends Unit, D extends FastSolverLinkedNod
 							// chain
 							D d5p = shortenPredecessors(d5, predVal, d1, (N) n, (N) c);
 							propagate(d4, returnMeth, d5p, c, false);
+						}
 						}
 					}
 				}

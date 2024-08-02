@@ -60,7 +60,7 @@ public class MyAccessPathBasedSourceSinkManager extends AccessPathBasedSourceSin
 		if (this.stmtSourceSigs.containsKey(methodKey)) {
 			for (String stmtSig : this.stmtSourceSigs.get(methodKey)) {
 				if (sCallSite.toString().contains(stmtSig)) {
-					System.out.println("isStmtSource" + sCallSite);
+					System.out.println("isStmtSource: " + sCallSite);
 					return true;
 				}
 			}
