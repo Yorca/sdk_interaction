@@ -7,12 +7,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import soot.jimple.*;
 import soot.toolkits.graph.*;
+import soot.*;
+import soot.options.Options;
+import soot.jimple.toolkits.callgraph.*;
+import soot.util.*;
 
 import org.example.util.PrivacyAPISummary;
 import org.example.util.Utils;
 import org.example.util.DirectedGraph;
 import org.example.util.DirectedGraph.Node;
-import org.example.util.DirectedGraph.Edge;
 import org.example.xq.Globals;
 import org.example.xq.MySetupApplication;
 import org.json.JSONArray;
@@ -59,10 +62,10 @@ import static org.example.util.PrivacyAPISummary.*;
 public class PrivacyAPITracking {
 	private static final Logger LOGGER = Logger.getLogger(PrivacyAPITracking.class.getName());
 	private static final DirectedGraph forwardGraph = new DirectedGraph("forward.dummy.id", "forward.dummy.stmt", "forward.dummy.method");
-	private static final Set<String> forwardControlDeps = new HashSet<>();
+	private static final Set<Pair<Stmt, SootMethod>> forwardConditionals = new HashSet<>();
 	
 	private static final DirectedGraph backwardGraph = new DirectedGraph("backward.dummy.id", "backward.dummy.stmt", "backward.dummy.method");
-	private static final Set<String> backwardControlDeps = new HashSet<>();
+	private static final Set<Pair<Stmt, SootMethod>> backwardConditionals = new HashSet<>();
 	
 	public static MySetupApplication setupFlowdroid(Map<Pair<String, String>, Set<String>> stmtSourceSigs,
 			String sourceSinkFilePath, boolean isBackward) throws XmlPullParserException, IOException {
@@ -84,12 +87,13 @@ public class PrivacyAPITracking {
 
 		config.getAnalysisFileConfig().setSourceSinkFile(sourceSinkFilePath);
 		config.getCallbackConfig().setEnableCallbacks(true);
-		config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.CHA);
 		config.setDataFlowTimeout(5400);
 		// config.setCodeEliminationMode(CodeEliminationMode.NoCodeElimination);
 		// config.getAccessPathConfiguration().setAccessPathLength(5);
-		// config.getPathConfiguration().setMaxPathLength(25);
 
+		config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.VTA);
+		
+		
 		Options.v().set_output_format(Options.output_format_jimple);
 		Options.v().set_output_dir(Globals.JIMPLE_SUBDIR);
 		PackManager.v().writeOutput();
@@ -107,11 +111,11 @@ public class PrivacyAPITracking {
 		MySetupApplication app = new MySetupApplication(config, new HashSet<>(), new HashSet<>(), stmtSourceSigs);
 
 		try {
-			// SummaryTaintWrapper summaryWrapper = new SummaryTaintWrapper(new
-			// LazySummaryProvider("summariesManual"));
+			SummaryTaintWrapper summaryWrapper = new SummaryTaintWrapper(new
+			LazySummaryProvider("summariesManual"));
 			EasyTaintWrapper easyTaintWrapper = EasyTaintWrapper.getDefault();
-			// summaryWrapper.setFallbackTaintWrapper(easyTaintWrapper);
-			app.setTaintWrapper(easyTaintWrapper);
+			summaryWrapper.setFallbackTaintWrapper(easyTaintWrapper);
+			app.setTaintWrapper(summaryWrapper);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -279,10 +283,7 @@ public class PrivacyAPITracking {
 					}
 
 					if (stmt instanceof IfStmt || stmt instanceof SwitchStmt) {
-				        ExceptionalUnitGraph graph = new ExceptionalUnitGraph(method.retrieveActiveBody());
-						MHGPostDominatorsFinder<Unit> postdominatorFinder = new MHGPostDominatorsFinder<Unit>(graph);
-						Unit postdominator = postdominatorFinder.getImmediateDominator(stmt);
-				        traverseAndPrintStatements(graph, stmt, postdominator, false);
+						backwardConditionals.add(new Pair<>(stmt, method));
 					}
 				}
 				isOfInterest = isOfInterest || outgoing.stream().anyMatch(
@@ -318,8 +319,13 @@ public class PrivacyAPITracking {
 		});
 
 		app.runInfoflow();
-		
 		backwardGraph.printGraphFromRoot();
+		for (Pair<Stmt, SootMethod> pir : backwardConditionals) {
+	        ExceptionalUnitGraph graph = new ExceptionalUnitGraph(pir.getO2().retrieveActiveBody());
+			MHGPostDominatorsFinder<Unit> postdominatorFinder = new MHGPostDominatorsFinder<Unit>(graph);
+			Unit postdominator = postdominatorFinder.getImmediateDominator(pir.getO1());
+	        traverseAndPrintStatements(graph, pir.getO1(), postdominator, true);
+		}
 
 		LOGGER.info("runBackwardAnalysis ends!");
 
@@ -345,12 +351,26 @@ public class PrivacyAPITracking {
 			@Override
 			public void notifyFlowIn(Unit stmt, Abstraction taint, InfoflowManager manager, FlowFunctionType type) {
 			}
+			
+			protected Set<Abstraction> filterByPropagationPathLength(Set<Abstraction> outgoing) {
+				int MAX_PATH_LENGTH = 25;
+				Set<Abstraction> newOutgoing = new HashSet<>();
+				for (Abstraction abs : outgoing) {
+					if (abs.getPathLength() > MAX_PATH_LENGTH) {
+						continue;
+					}
+					newOutgoing.add(abs);
+				}
+				return newOutgoing;
+			}
 
 			@Override
 			public Set<Abstraction> notifyFlowOut(Unit unit, Abstraction d1, Abstraction incoming,
 					Set<Abstraction> outgoing, InfoflowManager manager, FlowFunctionType type) {
+				Set<Abstraction> newOutgoing = filterByPropagationPathLength(outgoing);
+				
 				if (!(unit instanceof Stmt)) {
-					return outgoing;
+					return newOutgoing;
 				}
 
 				boolean isOfInterest = false;
@@ -369,12 +389,23 @@ public class PrivacyAPITracking {
 				        traverseAndPrintStatements(graph, stmt, postdominator, true);
 					}
 				}
-				isOfInterest = isOfInterest || outgoing.stream().anyMatch(
+				isOfInterest = isOfInterest || newOutgoing.stream().anyMatch(
 						item -> !item.equals(incoming) && !item.getAccessPath().equals(incoming.getAccessPath()));
 
 				if (isOfInterest) {
+					/*
+					CallGraph cg = Scene.v().getCallGraph();
+					Iterator<Edge> edges = cg.edgesOutOf(method);
+                    while (edges.hasNext()) {
+                        Edge edge = edges.next();
+                        SootMethod src = edge.src();
+                        SootMethod tgt = edge.tgt();
+                        System.out.println("CallGraph Edge: " + src + " -> " + tgt);
+                    }
+                    */
+					
 					String parentNodeId = null;
-					Abstraction pd = incoming.getPredecessor();
+					Abstraction pd = incoming;
 					while (pd != null) {
 						Stmt pdStmt = pd.getCurrentStmt();
 						if (pdStmt != null && !pd.getAccessPath().isEmpty()) {
@@ -397,13 +428,12 @@ public class PrivacyAPITracking {
 					forwardGraph.addEdge(parentNodeId, currentNodeId, incoming.isImplicit());
 				}
 
-				return outgoing;
+				return newOutgoing;
 			}
 		});
 
 		app.runInfoflow();
 		forwardGraph.printGraphFromRoot();
-
 		LOGGER.info("runForwardAnalysis ends!");
 	}
 
@@ -437,12 +467,6 @@ public class PrivacyAPITracking {
             Unit current = queue.poll();
             if (!visited.add(current)) {
                 continue;
-            }
-            
-            if (isForward) {
-            	forwardControlDeps.add(current.toString());
-            } else {
-            	backwardControlDeps.add(current.toString());
             }
             
             System.out.println("ControlDeps: " + current);
