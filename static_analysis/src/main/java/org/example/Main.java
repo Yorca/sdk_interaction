@@ -69,7 +69,7 @@ public class Main {
 
 	private void runAnalysis() {
 		try {
-			new PrivacyAPITracking().runForwardAnalysis();
+			new PrivacyAPITracking().runBackwardAnalysis();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

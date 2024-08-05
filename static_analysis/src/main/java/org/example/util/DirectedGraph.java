@@ -28,6 +28,14 @@ public class DirectedGraph {
 			nodes.put(node.id, node);
 		}
 	}
+	
+	public String getRootId() {
+		return root.id;
+	}
+	
+	public boolean hasNode(String id) {
+		return nodes.containsKey(id);
+	}
 
 	// Method to add an edge to the graph
 	public void addEdge(String sourceId, String destinationId, Object property) {
