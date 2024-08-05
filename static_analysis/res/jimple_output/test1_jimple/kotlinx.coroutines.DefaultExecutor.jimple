@@ -1,0 +1,822 @@
+public final class kotlinx.coroutines.DefaultExecutor extends kotlinx.coroutines.EventLoopImplBase implements java.lang.Runnable
+{
+    private static final int ACTIVE;
+    private static final long DEFAULT_KEEP_ALIVE_MS;
+    private static final int FRESH;
+    public static final kotlinx.coroutines.DefaultExecutor INSTANCE;
+    private static final long KEEP_ALIVE_NANOS;
+    private static final int SHUTDOWN;
+    private static final int SHUTDOWN_ACK;
+    private static final int SHUTDOWN_REQ;
+    public static final java.lang.String THREAD_NAME;
+    private static volatile java.lang.Thread _thread;
+    private static volatile int debugStatus;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.TimeUnit $r2;
+        java.lang.Throwable r4;
+        kotlinx.coroutines.DefaultExecutor $r0;
+        java.lang.Long $r3;
+        long $l0;
+        kotlinx.coroutines.EventLoop $r1;
+
+        <kotlinx.coroutines.DefaultExecutor: java.lang.String THREAD_NAME> = "kotlinx.coroutines.DefaultExecutor";
+
+        <kotlinx.coroutines.DefaultExecutor: int SHUTDOWN_REQ> = 2;
+
+        <kotlinx.coroutines.DefaultExecutor: int SHUTDOWN_ACK> = 3;
+
+        <kotlinx.coroutines.DefaultExecutor: int SHUTDOWN> = 4;
+
+        <kotlinx.coroutines.DefaultExecutor: int FRESH> = 0;
+
+        <kotlinx.coroutines.DefaultExecutor: long DEFAULT_KEEP_ALIVE_MS> = 1000L;
+
+        <kotlinx.coroutines.DefaultExecutor: int ACTIVE> = 1;
+
+        $r0 = new kotlinx.coroutines.DefaultExecutor;
+
+        specialinvoke $r0.<kotlinx.coroutines.DefaultExecutor: void <init>()>();
+
+        <kotlinx.coroutines.DefaultExecutor: kotlinx.coroutines.DefaultExecutor INSTANCE> = $r0;
+
+        $r1 = (kotlinx.coroutines.EventLoop) $r0;
+
+        staticinvoke <kotlinx.coroutines.EventLoop: void incrementUseCount$default(kotlinx.coroutines.EventLoop,boolean,int,java.lang.Object)>($r1, 0, 1, null);
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+     label1:
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long getLong(java.lang.String,long)>("kotlinx.coroutines.DefaultExecutor.keepAlive", 1000L);
+
+     label2:
+        goto label4;
+
+     label3:
+        r4 := @caughtexception;
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(1000L);
+
+     label4:
+        $l0 = virtualinvoke $r3.<java.lang.Long: long longValue()>();
+
+        $l0 = virtualinvoke $r2.<java.util.concurrent.TimeUnit: long toNanos(long)>($l0);
+
+        <kotlinx.coroutines.DefaultExecutor: long KEEP_ALIVE_NANOS> = $l0;
+
+        return;
+
+        catch java.lang.SecurityException from label1 to label2 with label3;
+    }
+
+    private void <init>()
+    {
+        kotlinx.coroutines.DefaultExecutor r0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        specialinvoke r0.<kotlinx.coroutines.EventLoopImplBase: void <init>()>();
+
+        return;
+    }
+
+    private final void acknowledgeShutdownIfNeeded()
+    {
+        java.lang.Throwable $r2;
+        kotlinx.coroutines.DefaultExecutor r0;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: boolean isShutdownRequested()>();
+
+     label2:
+        if $z0 != 0 goto label3;
+
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        <kotlinx.coroutines.DefaultExecutor: int debugStatus> = 3;
+
+        virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: void resetAll()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>(r0, "null cannot be cast to non-null type java.lang.Object");
+
+        $r1 = (java.lang.Object) r0;
+
+        virtualinvoke $r1.<java.lang.Object: void notifyAll()>();
+
+     label4:
+        exitmonitor r0;
+
+        return;
+
+     label5:
+        $r2 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    private final java.lang.Thread createThreadSync()
+    {
+        java.lang.Throwable $r3;
+        kotlinx.coroutines.DefaultExecutor r0;
+        java.lang.Thread $r1;
+        java.lang.Runnable $r2;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread>;
+
+        if $r1 != null goto label2;
+
+        $r1 = new java.lang.Thread;
+
+        $r2 = (java.lang.Runnable) r0;
+
+        specialinvoke $r1.<java.lang.Thread: void <init>(java.lang.Runnable,java.lang.String)>($r2, "kotlinx.coroutines.DefaultExecutor");
+
+        <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread> = $r1;
+
+        virtualinvoke $r1.<java.lang.Thread: void setDaemon(boolean)>(1);
+
+        virtualinvoke $r1.<java.lang.Thread: void start()>();
+
+     label2:
+        exitmonitor r0;
+
+        return $r1;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    private static void get_thread$annotations()
+    {
+        return;
+    }
+
+    private final boolean isShutDown()
+    {
+        int $i0;
+        kotlinx.coroutines.DefaultExecutor r0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        $i0 = <kotlinx.coroutines.DefaultExecutor: int debugStatus>;
+
+        if $i0 != 4 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private final boolean isShutdownRequested()
+    {
+        int i0;
+        kotlinx.coroutines.DefaultExecutor r0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        i0 = <kotlinx.coroutines.DefaultExecutor: int debugStatus>;
+
+        if i0 == 2 goto label2;
+
+        if i0 != 3 goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    private final boolean notifyStartup()
+    {
+        java.lang.Throwable $r2;
+        kotlinx.coroutines.DefaultExecutor r0;
+        java.lang.Object $r1;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: boolean isShutdownRequested()>();
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        exitmonitor r0;
+
+        return 0;
+
+     label3:
+        <kotlinx.coroutines.DefaultExecutor: int debugStatus> = 1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>(r0, "null cannot be cast to non-null type java.lang.Object");
+
+        $r1 = (java.lang.Object) r0;
+
+        virtualinvoke $r1.<java.lang.Object: void notifyAll()>();
+
+     label4:
+        exitmonitor r0;
+
+        return 1;
+
+     label5:
+        $r2 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    private final void shutdownError()
+    {
+        java.util.concurrent.RejectedExecutionException $r1;
+        kotlinx.coroutines.DefaultExecutor r0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        $r1 = new java.util.concurrent.RejectedExecutionException;
+
+        specialinvoke $r1.<java.util.concurrent.RejectedExecutionException: void <init>(java.lang.String)>("DefaultExecutor was shut down. This error indicates that Dispatchers.shutdown() was invoked prior to completion of exiting coroutines, leaving coroutines in incomplete state. Please refer to Dispatchers.shutdown documentation for more details");
+
+        throw $r1;
+    }
+
+    public void enqueue(java.lang.Runnable)
+    {
+        kotlinx.coroutines.DefaultExecutor r0;
+        java.lang.Runnable $r1;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        $z0 = specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: boolean isShutDown()>();
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: void shutdownError()>();
+
+     label1:
+        specialinvoke r0.<kotlinx.coroutines.EventLoopImplBase: void enqueue(java.lang.Runnable)>($r1);
+
+        return;
+    }
+
+    public final void ensureStarted$kotlinx_coroutines_core()
+    {
+        java.lang.Throwable $r4;
+        java.lang.AssertionError $r2;
+        kotlinx.coroutines.DefaultExecutor r0;
+        java.lang.Thread $r1;
+        int $i0;
+        java.lang.Object $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        entermonitor r0;
+
+     label01:
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        $z1 = 1;
+
+        if $z0 == 0 goto label05;
+
+        $r1 = <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread>;
+
+        if $r1 != null goto label02;
+
+        $z0 = 1;
+
+        goto label03;
+
+     label02:
+        $z0 = 0;
+
+     label03:
+        if $z0 == 0 goto label04;
+
+        goto label05;
+
+     label04:
+        $r2 = new java.lang.AssertionError;
+
+        specialinvoke $r2.<java.lang.AssertionError: void <init>()>();
+
+        throw $r2;
+
+     label05:
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 == 0 goto label09;
+
+        $i0 = <kotlinx.coroutines.DefaultExecutor: int debugStatus>;
+
+        if $i0 == 0 goto label07;
+
+        $i0 = <kotlinx.coroutines.DefaultExecutor: int debugStatus>;
+
+        if $i0 != 3 goto label06;
+
+        goto label07;
+
+     label06:
+        $z1 = 0;
+
+     label07:
+        if $z1 == 0 goto label08;
+
+        goto label09;
+
+     label08:
+        $r2 = new java.lang.AssertionError;
+
+        specialinvoke $r2.<java.lang.AssertionError: void <init>()>();
+
+        throw $r2;
+
+     label09:
+        <kotlinx.coroutines.DefaultExecutor: int debugStatus> = 0;
+
+        specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: java.lang.Thread createThreadSync()>();
+
+     label10:
+        $i0 = <kotlinx.coroutines.DefaultExecutor: int debugStatus>;
+
+        if $i0 != 0 goto label12;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>(r0, "null cannot be cast to non-null type java.lang.Object");
+
+        $r3 = (java.lang.Object) r0;
+
+        virtualinvoke $r3.<java.lang.Object: void wait()>();
+
+     label11:
+        goto label10;
+
+     label12:
+        exitmonitor r0;
+
+        return;
+
+     label13:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label01 to label11 with label13;
+    }
+
+    protected java.lang.Thread getThread()
+    {
+        kotlinx.coroutines.DefaultExecutor r0;
+        java.lang.Thread $r1;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        $r1 = <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread>;
+
+        if $r1 != null goto label1;
+
+        $r1 = specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: java.lang.Thread createThreadSync()>();
+
+     label1:
+        return $r1;
+    }
+
+    public kotlinx.coroutines.DisposableHandle invokeOnTimeout(long, java.lang.Runnable, kotlin.coroutines.CoroutineContext)
+    {
+        kotlinx.coroutines.DisposableHandle $r3;
+        kotlinx.coroutines.DefaultExecutor r0;
+        long $l0;
+        java.lang.Runnable $r1;
+        kotlin.coroutines.CoroutineContext $r2;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        $r2 := @parameter2: kotlin.coroutines.CoroutineContext;
+
+        $r3 = virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: kotlinx.coroutines.DisposableHandle scheduleInvokeOnTimeout(long,java.lang.Runnable)>($l0, $r1);
+
+        return $r3;
+    }
+
+    public final boolean isThreadPresent$kotlinx_coroutines_core()
+    {
+        kotlinx.coroutines.DefaultExecutor r0;
+        java.lang.Thread $r1;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        $r1 = <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread>;
+
+        if $r1 == null goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    protected void reschedule(long, kotlinx.coroutines.EventLoopImplBase$DelayedTask)
+    {
+        long $l0;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r1;
+        kotlinx.coroutines.DefaultExecutor r0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: void shutdownError()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        java.lang.Throwable r5;
+        kotlinx.coroutines.ThreadLocalEventLoop r1;
+        long l0, $l1, l2;
+        kotlin.Unit r4;
+        byte $b3;
+        kotlinx.coroutines.DefaultExecutor r0;
+        int $i4;
+        kotlinx.coroutines.EventLoop $r2;
+        kotlinx.coroutines.AbstractTimeSource $r3;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        r1 = <kotlinx.coroutines.ThreadLocalEventLoop: kotlinx.coroutines.ThreadLocalEventLoop INSTANCE>;
+
+        $r2 = (kotlinx.coroutines.EventLoop) r0;
+
+        virtualinvoke r1.<kotlinx.coroutines.ThreadLocalEventLoop: void setEventLoop$kotlinx_coroutines_core(kotlinx.coroutines.EventLoop)>($r2);
+
+        $r3 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r3 == null goto label01;
+
+        virtualinvoke $r3.<kotlinx.coroutines.AbstractTimeSource: void registerTimeLoopThread()>();
+
+     label01:
+        l0 = 9223372036854775807L;
+
+     label02:
+        $z0 = specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: boolean notifyStartup()>();
+
+     label03:
+        if $z0 != 0 goto label05;
+
+        <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread> = null;
+
+        specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: void acknowledgeShutdownIfNeeded()>();
+
+        $r3 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r3 == null goto label04;
+
+        virtualinvoke $r3.<kotlinx.coroutines.AbstractTimeSource: void unregisterTimeLoopThread()>();
+
+     label04:
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: boolean isEmpty()>();
+
+        if $z0 != 0 goto label37;
+
+        virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: java.lang.Thread getThread()>();
+
+        return;
+
+     label05:
+        staticinvoke <java.lang.Thread: boolean interrupted()>();
+
+        $l1 = virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: long processNextEvent()>();
+
+     label06:
+        l2 = $l1;
+
+        $b3 = $l1 cmp 9223372036854775807L;
+
+        if $b3 != 0 goto label20;
+
+     label07:
+        $r3 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+     label08:
+        if $r3 == null goto label11;
+
+     label09:
+        l2 = virtualinvoke $r3.<kotlinx.coroutines.AbstractTimeSource: long nanoTime()>();
+
+     label10:
+        goto label12;
+
+     label11:
+        l2 = staticinvoke <java.lang.System: long nanoTime()>();
+
+     label12:
+        $b3 = l0 cmp 9223372036854775807L;
+
+        if $b3 != 0 goto label15;
+
+     label13:
+        l0 = <kotlinx.coroutines.DefaultExecutor: long KEEP_ALIVE_NANOS>;
+
+     label14:
+        l0 = l2 + l0;
+
+     label15:
+        l2 = l0 - l2;
+
+        $b3 = l2 cmp 0L;
+
+        $i4 = (int) $b3;
+
+        if $i4 > 0 goto label18;
+
+        <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread> = null;
+
+        specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: void acknowledgeShutdownIfNeeded()>();
+
+        $r3 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r3 == null goto label16;
+
+        virtualinvoke $r3.<kotlinx.coroutines.AbstractTimeSource: void unregisterTimeLoopThread()>();
+
+     label16:
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: boolean isEmpty()>();
+
+        if $z0 != 0 goto label17;
+
+        virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: java.lang.Thread getThread()>();
+
+     label17:
+        return;
+
+     label18:
+        $l1 = staticinvoke <kotlin.ranges.RangesKt: long coerceAtMost(long,long)>($l1, l2);
+
+     label19:
+        l2 = $l1;
+
+        goto label21;
+
+     label20:
+        l0 = 9223372036854775807L;
+
+     label21:
+        $b3 = l2 cmp 0L;
+
+        $i4 = (int) $b3;
+
+        if $i4 <= 0 goto label05;
+
+     label22:
+        $z0 = specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: boolean isShutdownRequested()>();
+
+     label23:
+        if $z0 == 0 goto label26;
+
+        <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread> = null;
+
+        specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: void acknowledgeShutdownIfNeeded()>();
+
+        $r3 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r3 == null goto label24;
+
+        virtualinvoke $r3.<kotlinx.coroutines.AbstractTimeSource: void unregisterTimeLoopThread()>();
+
+     label24:
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: boolean isEmpty()>();
+
+        if $z0 != 0 goto label25;
+
+        virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: java.lang.Thread getThread()>();
+
+     label25:
+        return;
+
+     label26:
+        $r3 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+     label27:
+        if $r3 == null goto label30;
+
+     label28:
+        virtualinvoke $r3.<kotlinx.coroutines.AbstractTimeSource: void parkNanos(java.lang.Object,long)>(r0, l2);
+
+        r4 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label29:
+        goto label31;
+
+     label30:
+        r4 = null;
+
+     label31:
+        if r4 != null goto label05;
+
+     label32:
+        staticinvoke <java.util.concurrent.locks.LockSupport: void parkNanos(java.lang.Object,long)>(r0, l2);
+
+     label33:
+        goto label05;
+
+     label34:
+        r5 := @caughtexception;
+
+        <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread> = null;
+
+        specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: void acknowledgeShutdownIfNeeded()>();
+
+        $r3 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r3 == null goto label35;
+
+        virtualinvoke $r3.<kotlinx.coroutines.AbstractTimeSource: void unregisterTimeLoopThread()>();
+
+     label35:
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: boolean isEmpty()>();
+
+        if $z0 != 0 goto label36;
+
+        virtualinvoke r0.<kotlinx.coroutines.DefaultExecutor: java.lang.Thread getThread()>();
+
+     label36:
+        throw r5;
+
+     label37:
+        return;
+
+        catch java.lang.Throwable from label02 to label03 with label34;
+        catch java.lang.Throwable from label05 to label06 with label34;
+        catch java.lang.Throwable from label07 to label08 with label34;
+        catch java.lang.Throwable from label09 to label10 with label34;
+        catch java.lang.Throwable from label11 to label12 with label34;
+        catch java.lang.Throwable from label13 to label14 with label34;
+        catch java.lang.Throwable from label18 to label19 with label34;
+        catch java.lang.Throwable from label22 to label23 with label34;
+        catch java.lang.Throwable from label26 to label27 with label34;
+        catch java.lang.Throwable from label28 to label29 with label34;
+        catch java.lang.Throwable from label32 to label33 with label34;
+    }
+
+    public void shutdown()
+    {
+        kotlinx.coroutines.DefaultExecutor r0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        <kotlinx.coroutines.DefaultExecutor: int debugStatus> = 4;
+
+        specialinvoke r0.<kotlinx.coroutines.EventLoopImplBase: void shutdown()>();
+
+        return;
+    }
+
+    public final void shutdownForTests(long)
+    {
+        java.lang.Throwable $r5;
+        long $l0, $l1, $l3;
+        kotlin.Unit $r3;
+        byte $b4;
+        kotlinx.coroutines.DefaultExecutor r0;
+        java.lang.Thread r1;
+        int i2;
+        java.lang.Object $r4;
+        kotlinx.coroutines.AbstractTimeSource $r2;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.DefaultExecutor;
+
+        $l0 := @parameter0: long;
+
+        entermonitor r0;
+
+     label1:
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l1 = $l1 + $l0;
+
+        $z0 = specialinvoke r0.<kotlinx.coroutines.DefaultExecutor: boolean isShutdownRequested()>();
+
+        if $z0 != 0 goto label2;
+
+        <kotlinx.coroutines.DefaultExecutor: int debugStatus> = 2;
+
+     label2:
+        i2 = <kotlinx.coroutines.DefaultExecutor: int debugStatus>;
+
+        if i2 == 3 goto label6;
+
+        r1 = <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread>;
+
+        if r1 == null goto label6;
+
+        r1 = <kotlinx.coroutines.DefaultExecutor: java.lang.Thread _thread>;
+
+        if r1 == null goto label5;
+
+        $r2 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r2 == null goto label3;
+
+        virtualinvoke $r2.<kotlinx.coroutines.AbstractTimeSource: void unpark(java.lang.Thread)>(r1);
+
+        $r3 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        goto label4;
+
+     label3:
+        $r3 = null;
+
+     label4:
+        if $r3 != null goto label5;
+
+        staticinvoke <java.util.concurrent.locks.LockSupport: void unpark(java.lang.Thread)>(r1);
+
+     label5:
+        $l3 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l3 = $l1 - $l3;
+
+        $b4 = $l3 cmp 0L;
+
+        i2 = (int) $b4;
+
+        if i2 <= 0 goto label6;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>(r0, "null cannot be cast to non-null type java.lang.Object");
+
+        $r4 = (java.lang.Object) r0;
+
+        virtualinvoke $r4.<java.lang.Object: void wait(long)>($l0);
+
+        goto label2;
+
+     label6:
+        <kotlinx.coroutines.DefaultExecutor: int debugStatus> = 0;
+
+     label7:
+        exitmonitor r0;
+
+        return;
+
+     label8:
+        $r5 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label7 with label8;
+    }
+}

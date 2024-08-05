@@ -1,0 +1,172 @@
+public abstract class kotlinx.coroutines.internal.Segment extends kotlinx.coroutines.internal.ConcurrentLinkedListNode implements kotlinx.coroutines.NotCompleted
+{
+    private static final java.util.concurrent.atomic.AtomicIntegerFieldUpdater cleanedAndPointers$FU;
+    private volatile int cleanedAndPointers;
+    public final long id;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r0;
+
+        $r0 = staticinvoke <java.util.concurrent.atomic.AtomicIntegerFieldUpdater: java.util.concurrent.atomic.AtomicIntegerFieldUpdater newUpdater(java.lang.Class,java.lang.String)>(class "Lkotlinx/coroutines/internal/Segment;", "cleanedAndPointers");
+
+        <kotlinx.coroutines.internal.Segment: java.util.concurrent.atomic.AtomicIntegerFieldUpdater cleanedAndPointers$FU> = $r0;
+
+        return;
+    }
+
+    public void <init>(long, kotlinx.coroutines.internal.Segment, int)
+    {
+        kotlinx.coroutines.internal.ConcurrentLinkedListNode $r2;
+        int $i1;
+        long $l0;
+        kotlinx.coroutines.internal.Segment r0, $r1;
+
+        r0 := @this: kotlinx.coroutines.internal.Segment;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: kotlinx.coroutines.internal.Segment;
+
+        $i1 := @parameter2: int;
+
+        $r2 = (kotlinx.coroutines.internal.ConcurrentLinkedListNode) $r1;
+
+        specialinvoke r0.<kotlinx.coroutines.internal.ConcurrentLinkedListNode: void <init>(kotlinx.coroutines.internal.ConcurrentLinkedListNode)>($r2);
+
+        r0.<kotlinx.coroutines.internal.Segment: long id> = $l0;
+
+        $i1 = $i1 << 16;
+
+        r0.<kotlinx.coroutines.internal.Segment: int cleanedAndPointers> = $i1;
+
+        return;
+    }
+
+    public final boolean decPointers$kotlinx_coroutines_core()
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r1;
+        int $i0, $i1;
+        kotlinx.coroutines.internal.Segment r0;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.internal.Segment;
+
+        $r1 = <kotlinx.coroutines.internal.Segment: java.util.concurrent.atomic.AtomicIntegerFieldUpdater cleanedAndPointers$FU>;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: int addAndGet(java.lang.Object,int)>(r0, -65536);
+
+        $i1 = virtualinvoke r0.<kotlinx.coroutines.internal.Segment: int getNumberOfSlots()>();
+
+        if $i0 != $i1 goto label1;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.internal.Segment: boolean isTail()>();
+
+        if $z0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public abstract int getNumberOfSlots();
+
+    public boolean isRemoved()
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r1;
+        int $i0, $i1;
+        kotlinx.coroutines.internal.Segment r0;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.internal.Segment;
+
+        $r1 = <kotlinx.coroutines.internal.Segment: java.util.concurrent.atomic.AtomicIntegerFieldUpdater cleanedAndPointers$FU>;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: int get(java.lang.Object)>(r0);
+
+        $i1 = virtualinvoke r0.<kotlinx.coroutines.internal.Segment: int getNumberOfSlots()>();
+
+        if $i0 != $i1 goto label1;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.internal.Segment: boolean isTail()>();
+
+        if $z0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public abstract void onCancellation(int, java.lang.Throwable, kotlin.coroutines.CoroutineContext);
+
+    public final void onSlotCleaned()
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r1;
+        int $i0, $i1;
+        kotlinx.coroutines.internal.Segment r0;
+
+        r0 := @this: kotlinx.coroutines.internal.Segment;
+
+        $r1 = <kotlinx.coroutines.internal.Segment: java.util.concurrent.atomic.AtomicIntegerFieldUpdater cleanedAndPointers$FU>;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: int incrementAndGet(java.lang.Object)>(r0);
+
+        $i1 = virtualinvoke r0.<kotlinx.coroutines.internal.Segment: int getNumberOfSlots()>();
+
+        if $i0 != $i1 goto label1;
+
+        virtualinvoke r0.<kotlinx.coroutines.internal.Segment: void remove()>();
+
+     label1:
+        return;
+    }
+
+    public final boolean tryIncPointers$kotlinx_coroutines_core()
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater r1;
+        int $i0, $i1;
+        kotlinx.coroutines.internal.Segment r0;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.internal.Segment;
+
+        r1 = <kotlinx.coroutines.internal.Segment: java.util.concurrent.atomic.AtomicIntegerFieldUpdater cleanedAndPointers$FU>;
+
+     label1:
+        $i0 = virtualinvoke r1.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: int get(java.lang.Object)>(r0);
+
+        $i1 = virtualinvoke r0.<kotlinx.coroutines.internal.Segment: int getNumberOfSlots()>();
+
+        if $i0 != $i1 goto label3;
+
+        $z0 = virtualinvoke r0.<kotlinx.coroutines.internal.Segment: boolean isTail()>();
+
+        if $z0 == 0 goto label2;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+        goto label4;
+
+     label3:
+        $z0 = 1;
+
+     label4:
+        if $z0 != 0 goto label5;
+
+        return 0;
+
+     label5:
+        $i1 = $i0 + 65536;
+
+        $z0 = virtualinvoke r1.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: boolean compareAndSet(java.lang.Object,int,int)>(r0, $i0, $i1);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+    }
+}

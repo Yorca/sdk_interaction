@@ -1,0 +1,905 @@
+public class kotlinx.coroutines.internal.ThreadSafeHeap extends java.lang.Object
+{
+    private static final java.util.concurrent.atomic.AtomicIntegerFieldUpdater _size$FU;
+    private volatile int _size;
+    private kotlinx.coroutines.internal.ThreadSafeHeapNode[] a;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r0;
+
+        $r0 = staticinvoke <java.util.concurrent.atomic.AtomicIntegerFieldUpdater: java.util.concurrent.atomic.AtomicIntegerFieldUpdater newUpdater(java.lang.Class,java.lang.String)>(class "Lkotlinx/coroutines/internal/ThreadSafeHeap;", "_size");
+
+        <kotlinx.coroutines.internal.ThreadSafeHeap: java.util.concurrent.atomic.AtomicIntegerFieldUpdater _size$FU> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private final kotlinx.coroutines.internal.ThreadSafeHeapNode[] realloc()
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeapNode[] r1;
+        java.lang.Object[] $r2;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        int $i0, i1;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        r1 = r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] a>;
+
+        if r1 != null goto label1;
+
+        r1 = newarray (kotlinx.coroutines.internal.ThreadSafeHeapNode)[4];
+
+        r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] a> = r1;
+
+        return r1;
+
+     label1:
+        $i0 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        i1 = lengthof r1;
+
+        if $i0 < i1 goto label2;
+
+        $i0 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        $i0 = $i0 * 2;
+
+        $r2 = staticinvoke <java.util.Arrays: java.lang.Object[] copyOf(java.lang.Object[],int)>(r1, $i0);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r2, "copyOf(this, newSize)");
+
+        r1 = (kotlinx.coroutines.internal.ThreadSafeHeapNode[]) $r2;
+
+        r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] a> = r1;
+
+        r1 = (kotlinx.coroutines.internal.ThreadSafeHeapNode[]) $r2;
+
+     label2:
+        return r1;
+    }
+
+    private final void setSize(int)
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        int $i0;
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r1;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $i0 := @parameter0: int;
+
+        $r1 = <kotlinx.coroutines.internal.ThreadSafeHeap: java.util.concurrent.atomic.AtomicIntegerFieldUpdater _size$FU>;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: void set(java.lang.Object,int)>(r0, $i0);
+
+        return;
+    }
+
+    private final void siftDownFrom(int)
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r2;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode[] r1;
+        int $i0, i1, $i2, $i3;
+        java.lang.Comparable $r3;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $i0 := @parameter0: int;
+
+     label1:
+        i1 = $i0 * 2;
+
+        i1 = i1 + 1;
+
+        $i2 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        if i1 < $i2 goto label2;
+
+        return;
+
+     label2:
+        r1 = r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] a>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>(r1);
+
+        $i2 = i1 + 1;
+
+        $i3 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        if $i2 >= $i3 goto label3;
+
+        $i2 = i1 + 1;
+
+        $r2 = r1[$i2];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $r3 = (java.lang.Comparable) $r2;
+
+        $r2 = r1[i1];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $i2 = interfaceinvoke $r3.<java.lang.Comparable: int compareTo(java.lang.Object)>($r2);
+
+        if $i2 >= 0 goto label3;
+
+        i1 = i1 + 1;
+
+     label3:
+        $r2 = r1[$i0];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $r3 = (java.lang.Comparable) $r2;
+
+        $r2 = r1[i1];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $i2 = interfaceinvoke $r3.<java.lang.Comparable: int compareTo(java.lang.Object)>($r2);
+
+        if $i2 > 0 goto label4;
+
+        return;
+
+     label4:
+        specialinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void swap(int,int)>($i0, i1);
+
+        $i0 = i1;
+
+        goto label1;
+    }
+
+    private final void siftUpFrom(int)
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r2;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode[] r1;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        int $i0, $i1, i2;
+        java.lang.Comparable $r3;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $i1 := @parameter0: int;
+
+     label1:
+        if $i1 > 0 goto label2;
+
+        return;
+
+     label2:
+        r1 = r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] a>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>(r1);
+
+        $i0 = $i1 + -1;
+
+        i2 = $i0 / 2;
+
+        $r2 = r1[i2];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $r3 = (java.lang.Comparable) $r2;
+
+        $r2 = r1[$i1];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $i0 = interfaceinvoke $r3.<java.lang.Comparable: int compareTo(java.lang.Object)>($r2);
+
+        if $i0 > 0 goto label3;
+
+        return;
+
+     label3:
+        specialinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void swap(int,int)>($i1, i2);
+
+        $i1 = i2;
+
+        goto label1;
+    }
+
+    private final void swap(int, int)
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeapNode r2, r3;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode[] r1;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        int $i0, $i1;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        r1 = r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] a>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>(r1);
+
+        r2 = r1[$i1];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>(r2);
+
+        r3 = r1[$i0];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>(r3);
+
+        r1[$i0] = r2;
+
+        r1[$i1] = r3;
+
+        interfaceinvoke r2.<kotlinx.coroutines.internal.ThreadSafeHeapNode: void setIndex(int)>($i0);
+
+        interfaceinvoke r3.<kotlinx.coroutines.internal.ThreadSafeHeapNode: void setIndex(int)>($i1);
+
+        return;
+    }
+
+    public final void addImpl(kotlinx.coroutines.internal.ThreadSafeHeapNode)
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r1;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0, $r2;
+        java.lang.AssertionError $r3;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode[] $r4;
+        int $i0, $i1;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $r1 := @parameter0: kotlinx.coroutines.internal.ThreadSafeHeapNode;
+
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 == 0 goto label4;
+
+        $r2 = interfaceinvoke $r1.<kotlinx.coroutines.internal.ThreadSafeHeapNode: kotlinx.coroutines.internal.ThreadSafeHeap getHeap()>();
+
+        if $r2 != null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        goto label4;
+
+     label3:
+        $r3 = new java.lang.AssertionError;
+
+        specialinvoke $r3.<java.lang.AssertionError: void <init>()>();
+
+        throw $r3;
+
+     label4:
+        interfaceinvoke $r1.<kotlinx.coroutines.internal.ThreadSafeHeapNode: void setHeap(kotlinx.coroutines.internal.ThreadSafeHeap)>(r0);
+
+        $r4 = specialinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] realloc()>();
+
+        $i1 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        $i0 = $i1 + 1;
+
+        specialinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void setSize(int)>($i0);
+
+        $r4[$i1] = $r1;
+
+        interfaceinvoke $r1.<kotlinx.coroutines.internal.ThreadSafeHeapNode: void setIndex(int)>($i1);
+
+        specialinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void siftUpFrom(int)>($i1);
+
+        return;
+    }
+
+    public final void addLast(kotlinx.coroutines.internal.ThreadSafeHeapNode)
+    {
+        java.lang.Throwable $r3;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r1;
+        kotlin.Unit $r2;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $r1 := @parameter0: kotlinx.coroutines.internal.ThreadSafeHeapNode;
+
+        entermonitor r0;
+
+     label1:
+        virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void addImpl(kotlinx.coroutines.internal.ThreadSafeHeapNode)>($r1);
+
+        $r2 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label2:
+        exitmonitor r0;
+
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final boolean addLastIf(kotlinx.coroutines.internal.ThreadSafeHeapNode, kotlin.jvm.functions.Function1)
+    {
+        java.lang.Throwable $r6;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r1, $r3;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        kotlin.jvm.functions.Function1 $r2;
+        java.lang.Boolean $r5;
+        java.lang.Object $r4;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $r1 := @parameter0: kotlinx.coroutines.internal.ThreadSafeHeapNode;
+
+        $r2 := @parameter1: kotlin.jvm.functions.Function1;
+
+        entermonitor r0;
+
+     label1:
+        $r3 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode firstImpl()>();
+
+        $r4 = interfaceinvoke $r2.<kotlin.jvm.functions.Function1: java.lang.Object invoke(java.lang.Object)>($r3);
+
+        $r5 = (java.lang.Boolean) $r4;
+
+        $z0 = virtualinvoke $r5.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label3;
+
+        virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void addImpl(kotlinx.coroutines.internal.ThreadSafeHeapNode)>($r1);
+
+     label2:
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyStart(int)>(1);
+
+        exitmonitor r0;
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyEnd(int)>(1);
+
+        return $z0;
+
+     label5:
+        $r6 := @caughtexception;
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyStart(int)>(1);
+
+        exitmonitor r0;
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyEnd(int)>(1);
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+    }
+
+    public final void clear()
+    {
+        java.lang.Throwable $r4;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode[] $r1;
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r2;
+        kotlin.Unit $r3;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] a>;
+
+        if $r1 == null goto label2;
+
+        staticinvoke <kotlin.collections.ArraysKt: void fill$default(java.lang.Object[],java.lang.Object,int,int,int,java.lang.Object)>($r1, null, 0, 0, 6, null);
+
+     label2:
+        $r2 = <kotlinx.coroutines.internal.ThreadSafeHeap: java.util.concurrent.atomic.AtomicIntegerFieldUpdater _size$FU>;
+
+        virtualinvoke $r2.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: void set(java.lang.Object,int)>(r0, 0);
+
+        $r3 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label3:
+        exitmonitor r0;
+
+        return;
+
+     label4:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+
+    public final kotlinx.coroutines.internal.ThreadSafeHeapNode find(kotlin.jvm.functions.Function1)
+    {
+        java.lang.Throwable $r6;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode r2;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        kotlin.jvm.functions.Function1 $r1;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode[] $r3;
+        int i0, $i1;
+        java.lang.Boolean $r5;
+        java.lang.Object $r4;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $r1 := @parameter0: kotlin.jvm.functions.Function1;
+
+        entermonitor r0;
+
+        i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+     label2:
+        r2 = null;
+
+        if i0 >= $i1 goto label6;
+
+        $r3 = r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] a>;
+
+        if $r3 == null goto label3;
+
+        r2 = $r3[i0];
+
+     label3:
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>(r2);
+
+        $r4 = interfaceinvoke $r1.<kotlin.jvm.functions.Function1: java.lang.Object invoke(java.lang.Object)>(r2);
+
+        $r5 = (java.lang.Boolean) $r4;
+
+        $z0 = virtualinvoke $r5.<java.lang.Boolean: boolean booleanValue()>();
+
+     label4:
+        if $z0 == 0 goto label5;
+
+        goto label6;
+
+     label5:
+        i0 = i0 + 1;
+
+        goto label2;
+
+     label6:
+        exitmonitor r0;
+
+        return r2;
+
+     label7:
+        $r6 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label4 with label7;
+    }
+
+    public final kotlinx.coroutines.internal.ThreadSafeHeapNode firstImpl()
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r2;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode[] $r1;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $r1 = r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] a>;
+
+        if $r1 == null goto label1;
+
+        $r2 = $r1[0];
+
+        return $r2;
+
+     label1:
+        return null;
+    }
+
+    public final int getSize()
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        int $i0;
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r1;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $r1 = <kotlinx.coroutines.internal.ThreadSafeHeap: java.util.concurrent.atomic.AtomicIntegerFieldUpdater _size$FU>;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: int get(java.lang.Object)>(r0);
+
+        return $i0;
+    }
+
+    public final boolean isEmpty()
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        int $i0;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $i0 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        if $i0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public final kotlinx.coroutines.internal.ThreadSafeHeapNode peek()
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        java.lang.Throwable $r2;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r1;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        entermonitor r0;
+
+     label1:
+        $r1 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode firstImpl()>();
+
+     label2:
+        exitmonitor r0;
+
+        return $r1;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public final boolean remove(kotlinx.coroutines.internal.ThreadSafeHeapNode)
+    {
+        java.lang.Throwable $r4;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode r1;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0, $r2;
+        java.lang.AssertionError $r3;
+        int $i0;
+        boolean $z0, $z1;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        r1 := @parameter0: kotlinx.coroutines.internal.ThreadSafeHeapNode;
+
+        entermonitor r0;
+
+     label1:
+        $r2 = interfaceinvoke r1.<kotlinx.coroutines.internal.ThreadSafeHeapNode: kotlinx.coroutines.internal.ThreadSafeHeap getHeap()>();
+
+        $z0 = 0;
+
+        if $r2 != null goto label2;
+
+        goto label7;
+
+     label2:
+        $i0 = interfaceinvoke r1.<kotlinx.coroutines.internal.ThreadSafeHeapNode: int getIndex()>();
+
+        $z1 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z1 == 0 goto label5;
+
+        if $i0 < 0 goto label3;
+
+        $z0 = 1;
+
+     label3:
+        if $z0 == 0 goto label4;
+
+        goto label5;
+
+     label4:
+        $r3 = new java.lang.AssertionError;
+
+        specialinvoke $r3.<java.lang.AssertionError: void <init>()>();
+
+        throw $r3;
+
+     label5:
+        virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode removeAtImpl(int)>($i0);
+
+     label6:
+        $z0 = 1;
+
+     label7:
+        exitmonitor r0;
+
+        return $z0;
+
+     label8:
+        $r4 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label6 with label8;
+    }
+
+    public final kotlinx.coroutines.internal.ThreadSafeHeapNode removeAtImpl(int)
+    {
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r2;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0, $r4;
+        java.lang.AssertionError $r5;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode[] $r1;
+        int $i0, $i1, $i2;
+        java.lang.Comparable $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $i0 := @parameter0: int;
+
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        $z1 = 0;
+
+        if $z0 == 0 goto label4;
+
+        $i1 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        if $i1 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        goto label4;
+
+     label3:
+        $r5 = new java.lang.AssertionError;
+
+        specialinvoke $r5.<java.lang.AssertionError: void <init>()>();
+
+        throw $r5;
+
+     label4:
+        $r1 = r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode[] a>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r1);
+
+        $i1 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        $i1 = $i1 + -1;
+
+        specialinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void setSize(int)>($i1);
+
+        $i1 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        if $i0 >= $i1 goto label6;
+
+        $i1 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        specialinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void swap(int,int)>($i0, $i1);
+
+        $i1 = $i0 + -1;
+
+        $i1 = $i1 / 2;
+
+        if $i0 <= 0 goto label5;
+
+        $r2 = $r1[$i0];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $r3 = (java.lang.Comparable) $r2;
+
+        $r2 = $r1[$i1];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $i2 = interfaceinvoke $r3.<java.lang.Comparable: int compareTo(java.lang.Object)>($r2);
+
+        if $i2 >= 0 goto label5;
+
+        specialinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void swap(int,int)>($i0, $i1);
+
+        specialinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void siftUpFrom(int)>($i1);
+
+        goto label6;
+
+     label5:
+        specialinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void siftDownFrom(int)>($i0);
+
+     label6:
+        $i0 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        $r2 = $r1[$i0];
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 == 0 goto label9;
+
+        $r4 = interfaceinvoke $r2.<kotlinx.coroutines.internal.ThreadSafeHeapNode: kotlinx.coroutines.internal.ThreadSafeHeap getHeap()>();
+
+        if $r4 != r0 goto label7;
+
+        $z1 = 1;
+
+     label7:
+        if $z1 == 0 goto label8;
+
+        goto label9;
+
+     label8:
+        $r5 = new java.lang.AssertionError;
+
+        specialinvoke $r5.<java.lang.AssertionError: void <init>()>();
+
+        throw $r5;
+
+     label9:
+        interfaceinvoke $r2.<kotlinx.coroutines.internal.ThreadSafeHeapNode: void setHeap(kotlinx.coroutines.internal.ThreadSafeHeap)>(null);
+
+        interfaceinvoke $r2.<kotlinx.coroutines.internal.ThreadSafeHeapNode: void setIndex(int)>(-1);
+
+        $i0 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        $r1[$i0] = null;
+
+        return $r2;
+    }
+
+    public final kotlinx.coroutines.internal.ThreadSafeHeapNode removeFirstIf(kotlin.jvm.functions.Function1)
+    {
+        java.lang.Throwable $r6;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r2, $r3;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        kotlin.jvm.functions.Function1 $r1;
+        java.lang.Boolean $r5;
+        java.lang.Object $r4;
+        boolean $z0;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $r1 := @parameter0: kotlin.jvm.functions.Function1;
+
+        entermonitor r0;
+
+     label1:
+        $r2 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode firstImpl()>();
+
+     label2:
+        $r3 = null;
+
+        if $r2 != null goto label3;
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyStart(int)>(2);
+
+        exitmonitor r0;
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyEnd(int)>(2);
+
+        return null;
+
+     label3:
+        $r4 = interfaceinvoke $r1.<kotlin.jvm.functions.Function1: java.lang.Object invoke(java.lang.Object)>($r2);
+
+        $r5 = (java.lang.Boolean) $r4;
+
+        $z0 = virtualinvoke $r5.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label5;
+
+        $r3 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode removeAtImpl(int)>(0);
+
+     label4:
+        goto label5;
+
+     label5:
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyStart(int)>(1);
+
+        exitmonitor r0;
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyEnd(int)>(1);
+
+        return $r3;
+
+     label6:
+        $r6 := @caughtexception;
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyStart(int)>(1);
+
+        exitmonitor r0;
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyEnd(int)>(1);
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label2 with label6;
+        catch java.lang.Throwable from label3 to label4 with label6;
+    }
+
+    public final kotlinx.coroutines.internal.ThreadSafeHeapNode removeFirstOrNull()
+    {
+        java.lang.Throwable $r2;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r1;
+        kotlinx.coroutines.internal.ThreadSafeHeap r0;
+        int $i0;
+
+        r0 := @this: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        entermonitor r0;
+
+     label1:
+        $i0 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: int getSize()>();
+
+        if $i0 <= 0 goto label3;
+
+        $r1 = virtualinvoke r0.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode removeAtImpl(int)>(0);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r1 = null;
+
+     label4:
+        exitmonitor r0;
+
+        return $r1;
+
+     label5:
+        $r2 := @caughtexception;
+
+        exitmonitor r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+    }
+}
