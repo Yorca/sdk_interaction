@@ -32,12 +32,9 @@ public class CustomSetupApplication extends SetupApplication {
 		this.fieldSourceSigs = fieldSourceSigs;
 		this.stmtSourceSigs = stmtSourceSigs;
 	}
-	
 
 	@Override
 	protected void constructCallgraphInternal() {
-		// add stmtSourceSigs as entry points in case they are not reachable in cg
-
 		// add dymmyMainMethod back
 		List<SootMethod> entryPoints = new ArrayList<SootMethod>();
 		entryPoints.addAll(Scene.v().getEntryPoints());
@@ -56,9 +53,13 @@ public class CustomSetupApplication extends SetupApplication {
 		}
 
 		Scene.v().setEntryPoints(entryPoints);
-		super.constructCallgraphInternal();
-	}
 
+		try {
+			super.constructCallgraphInternal();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	protected void parseAppResources() throws IOException, XmlPullParserException {
@@ -78,7 +79,8 @@ public class CustomSetupApplication extends SetupApplication {
 	}
 
 	@Override
-	protected ISourceSinkManager createSourceSinkManager(LayoutFileParser lfp, Set<AndroidCallbackDefinition> callbacks) {
+	protected ISourceSinkManager createSourceSinkManager(LayoutFileParser lfp,
+			Set<AndroidCallbackDefinition> callbacks) {
 
 		Map userControlsByID;
 		Collection sources = this.sourceSinkProvider.getSources();
@@ -90,8 +92,9 @@ public class CustomSetupApplication extends SetupApplication {
 			userControlsByID = lfp.getUserControlsByID();
 		}
 		AccessPathBasedSourceSinkManager sourceSinkManager2 = new MyAccessPathBasedSourceSinkManager(sources, sinks,
-				callbacks, infoflowAndroidConfiguration, userControlsByID, this.stringSourceSigs, this.fieldSourceSigs, this.stmtSourceSigs);
-		
+				callbacks, infoflowAndroidConfiguration, userControlsByID, this.stringSourceSigs, this.fieldSourceSigs,
+				this.stmtSourceSigs);
+
 		sourceSinkManager2.setAppPackageName(this.manifest.getPackageName());
 		sourceSinkManager2.setResourcePackages(this.resources.getPackages());
 		return sourceSinkManager2;

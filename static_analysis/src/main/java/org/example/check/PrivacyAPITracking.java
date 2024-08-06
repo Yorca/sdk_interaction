@@ -91,7 +91,7 @@ public class PrivacyAPITracking {
 		// config.setCodeEliminationMode(CodeEliminationMode.NoCodeElimination);
 		// config.getAccessPathConfiguration().setAccessPathLength(5);
 
-		config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.VTA);
+		config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.CHA);
 
 		Options.v().set_output_format(Options.output_format_jimple);
 		Options.v().set_output_dir(Globals.JIMPLE_SUBDIR);
