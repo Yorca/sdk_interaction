@@ -28,11 +28,11 @@ public class DirectedGraph {
 			nodes.put(node.id, node);
 		}
 	}
-	
+
 	public String getRootId() {
 		return root.id;
 	}
-	
+
 	public boolean hasNode(String id) {
 		return nodes.containsKey(id);
 	}
@@ -91,7 +91,10 @@ public class DirectedGraph {
 		}
 
 		visited.add(node);
-		System.out.println(indent + node + " " + property);
+
+		if (!node.id.contains("dummyMainClass")) {
+			System.out.println(indent + node + (Boolean.valueOf(true).equals(property) ? " implicit" : ""));
+		}
 
 		for (Edge edge : adjList.getOrDefault(node, Collections.emptySet())) {
 			Node neighbor = edge.destination;
@@ -112,7 +115,8 @@ public class DirectedGraph {
 
 		@Override
 		public String toString() {
-			//return "Node{" + "id='" + id + '\'' + ", property1=" + property1 + ", property2=" + property2 + '}';
+			// return "Node{" + "id='" + id + '\'' + ", property1=" + property1 + ",
+			// property2=" + property2 + '}';
 			return id;
 		}
 
@@ -153,21 +157,21 @@ public class DirectedGraph {
 				return false;
 
 			Edge edge = (Edge) o;
-			return source.equals(edge.source) && destination.equals(edge.destination)
-					&& property.equals(edge.property);
+			return source.equals(edge.source) && destination.equals(edge.destination) && property.equals(edge.property);
 		}
-		
+
 		@Override
 		public int hashCode() {
-		    int result = source.hashCode();
-		    result = 31 * result + destination.hashCode();
-		    result = 31 * result + property.hashCode();
-		    return result;
+			int result = source.hashCode();
+			result = 31 * result + destination.hashCode();
+			result = 31 * result + property.hashCode();
+			return result;
 		}
 
 		@Override
 		public String toString() {
-			//return "Edge{" + "source=" + source + ", destination=" + destination + ", property=" + property + '}';
+			// return "Edge{" + "source=" + source + ", destination=" + destination + ",
+			// property=" + property + '}';
 			return "-->" + destination + ", property=" + property;
 		}
 	}

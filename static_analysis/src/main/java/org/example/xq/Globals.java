@@ -69,6 +69,7 @@ public class Globals {
 	public static String JIMPLE_DIR;
 	public static String JIMPLE_SUBDIR;
 	public static String SRC_SINK_FILE;
+	public static String SRC_SINK_FILE_XML;
 	public static String LOG_FILE;
 	public static ExtraSourceFilter EXTRA_SOURCE_FILTER;
 	public static ExtraEntryPointFilter EXTRA_ENTRY_POINT_FILTER;
@@ -92,6 +93,7 @@ public class Globals {
 		String filename = APK_PATH.substring(APK_PATH.lastIndexOf(fileSeparator) + 1, APK_PATH.lastIndexOf(".apk"));
 		JIMPLE_SUBDIR = JIMPLE_DIR + fileSeparator + filename + "_jimple";
 		SRC_SINK_FILE = OUTPUT_DIR + filename + ".txt";
+		SRC_SINK_FILE_XML = OUTPUT_DIR + filename + ".xml";
 		LOG_FILE = OUTPUT_DIR + filename + ".log";
 
 		EXTRA_SOURCE_FILTER = new ExtraSourceFilter() {

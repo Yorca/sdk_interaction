@@ -7,14 +7,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import soot.jimple.*;
 import soot.toolkits.graph.*;
+import soot.*;
+import soot.options.Options;
+import soot.jimple.toolkits.callgraph.*;
+import soot.util.*;
 
 import org.example.util.PrivacyAPISummary;
 import org.example.util.Utils;
 import org.example.util.DirectedGraph;
 import org.example.util.DirectedGraph.Node;
-import org.example.util.DirectedGraph.Edge;
 import org.example.xq.Globals;
-import org.example.xq.MySetupApplication;
+import org.example.xq.CustomSetupApplication;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -50,6 +53,7 @@ import soot.jimple.infoflow.solver.cfg.IInfoflowCFG.UnitContainer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.concurrent.ConcurrentHashMap;
+import soot.jimple.infoflow.android.SetupApplication;
 
 import static org.example.util.PrivacyAPISummary.*;
 
@@ -58,13 +62,12 @@ import static org.example.util.PrivacyAPISummary.*;
  */
 public class PrivacyAPITracking {
 	private static final Logger LOGGER = Logger.getLogger(PrivacyAPITracking.class.getName());
-	private static final DirectedGraph forwardGraph = new DirectedGraph("forward.dummy.id", "forward.dummy.stmt", "forward.dummy.method");
-	private static final Set<String> forwardControlDeps = new HashSet<>();
-	
-	private static final DirectedGraph backwardGraph = new DirectedGraph("backward.dummy.id", "backward.dummy.stmt", "backward.dummy.method");
-	private static final Set<String> backwardControlDeps = new HashSet<>();
-	
-	public static MySetupApplication setupFlowdroid(Map<Pair<String, String>, Set<String>> stmtSourceSigs,
+	private static final DirectedGraph forwardGraph = new DirectedGraph("forward.dummy.id", "forward.dummy.stmt",
+			"forward.dummy.method");
+	private static final DirectedGraph backwardGraph = new DirectedGraph("backward.dummy.id", "backward.dummy.stmt",
+			"backward.dummy.method");
+
+	public static SetupApplication setupFlowdroid(Map<Pair<String, String>, Set<String>> stmtSourceSigs,
 			String sourceSinkFilePath, boolean isBackward) throws XmlPullParserException, IOException {
 		G.reset();
 
@@ -77,18 +80,18 @@ public class PrivacyAPITracking {
 		config.setMergeDexFiles(true);
 		config.setWriteOutputFiles(true);
 
-		// config.setImplicitFlowMode(ImplicitFlowMode.AllImplicitFlows);
+		config.setImplicitFlowMode(ImplicitFlowMode.AllImplicitFlows);
 		if (isBackward) {
 			config.setDataFlowDirection(DataFlowDirection.Backwards);
 		}
 
 		config.getAnalysisFileConfig().setSourceSinkFile(sourceSinkFilePath);
 		config.getCallbackConfig().setEnableCallbacks(true);
-		config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.CHA);
 		config.setDataFlowTimeout(5400);
 		// config.setCodeEliminationMode(CodeEliminationMode.NoCodeElimination);
 		// config.getAccessPathConfiguration().setAccessPathLength(5);
-		// config.getPathConfiguration().setMaxPathLength(25);
+
+		config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.VTA);
 
 		Options.v().set_output_format(Options.output_format_jimple);
 		Options.v().set_output_dir(Globals.JIMPLE_SUBDIR);
@@ -103,15 +106,13 @@ public class PrivacyAPITracking {
 		Options.v().set_no_bodies_for_excluded(true);
 		Scene.v().loadNecessaryClasses();
 
-		// Using the Source custom code here:
-		MySetupApplication app = new MySetupApplication(config, new HashSet<>(), new HashSet<>(), stmtSourceSigs);
+		SetupApplication app = new CustomSetupApplication(config, new HashSet<>(), new HashSet<>(), stmtSourceSigs);
 
 		try {
-			// SummaryTaintWrapper summaryWrapper = new SummaryTaintWrapper(new
-			// LazySummaryProvider("summariesManual"));
+			SummaryTaintWrapper summaryWrapper = new SummaryTaintWrapper(new LazySummaryProvider("summariesManual"));
 			EasyTaintWrapper easyTaintWrapper = EasyTaintWrapper.getDefault();
-			// summaryWrapper.setFallbackTaintWrapper(easyTaintWrapper);
-			app.setTaintWrapper(easyTaintWrapper);
+			summaryWrapper.setFallbackTaintWrapper(easyTaintWrapper);
+			app.setTaintWrapper(summaryWrapper);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -124,13 +125,11 @@ public class PrivacyAPITracking {
 	public static Map<Pair<String, String>, Set<String>> getSourceParamsMapForForward() {
 		Map<Pair<String, String>, Set<String>> stmtSourceSigs = new HashMap<>();
 		String parameter_str = ":= @parameter%d:"; // %d is a placeholder for the index of parameter.
-//		PrivacyAPISummary.initTestCases();
 		System.out.println(sdks);
 		// Looping through each sdk in the sdks
 		for (Map.Entry<String, List<APIDescriptor>> sdk : sdks.entrySet()) {
 			String sdk_name = sdk.getKey();
 			List<APIDescriptor> apiDescriptors = sdk.getValue();
-
 			Utils.LOGGER.info("SDK: " + sdk_name); // Printing the key (SDK name)
 
 			// Looping through each APIDescriptor in the list
@@ -202,31 +201,26 @@ public class PrivacyAPITracking {
 
 	public void runBackwardAnalysis() throws XmlPullParserException, IOException {
 		try {
-			FileWriter fileWriter = new FileWriter(Globals.SRC_SINK_FILE);
+			FileWriter fileWriter = new FileWriter(Globals.SRC_SINK_FILE_XML);
 			PrintWriter printWriter = new PrintWriter(fileWriter);
-			for (String sc : Utils.SP_APIS) {
-				printWriter.printf("%s -> _SOURCE_\n", sc);
-			}
-
-			for (String sc : Utils.NETWORK_APIS) {
-				printWriter.printf("%s -> _SOURCE_\n", sc);
+			printWriter.printf("%s\n", Utils.HEAD_XML);
+			for (String sc : Utils.DUMMY_SOURCE_XML) {
+				printWriter.printf("%s\n", sc);
 			}
 
 			for (Map.Entry<String, List<APIDescriptor>> sdk : sdks.entrySet()) {
+				String sdk_name = sdk.getKey();
 				List<APIDescriptor> apiDescriptors = sdk.getValue();
 
-				// Looping through each APIDescriptor in the list
 				for (APIDescriptor apiDescriptor : apiDescriptors) {
 					String clazzNm = apiDescriptor.apiClazzName;
 					String methodNm = apiDescriptor.apiMethodName;
-					// if current class name or method name is null, continue to next api.
 					if (null == clazzNm || null == methodNm || apiDescriptor.ppArgs == null) {
 						continue;
 					}
 
 					try {
 						List<SootMethod> methods = Utils.findMethod(clazzNm, methodNm);
-						// if current api can't be found in the apk, continue to next api
 						if (null == methods) {
 							continue;
 						}
@@ -242,7 +236,24 @@ public class PrivacyAPITracking {
 							if (notMatch)
 								continue;
 
-							printWriter.printf("%s -> _SINK_\n", method.getSignature());
+							Set<String> sourceParams = new HashSet<String>();
+							for (Integer paramIndex : apiDescriptor.ppArgs.keySet()) {
+								if (Utils.isInterestingTypes(method.getParameterType(paramIndex))) {
+									sourceParams.add(String.format("<param index=\"%d\" description=\"Value\">\n"
+											+ "        <accessPath isSource=\"false\" isSink=\"true\" />\n"
+											+ "    </param>", paramIndex));
+								}
+							}
+
+							if (sourceParams.size() < 1) {
+								continue;
+							}
+
+							printWriter.printf("<method signature=\"%s: %s\">\n", clazzNm, short_sig);
+							for (String param : sourceParams) {
+								printWriter.printf("%s\n", param);
+							}
+							printWriter.printf("%s", "</method>\n");
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -250,21 +261,63 @@ public class PrivacyAPITracking {
 				}
 			}
 
+			printWriter.printf("%s\n", Utils.END_XML);
 			printWriter.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		MySetupApplication app = setupFlowdroid(new HashMap<>(), Globals.SRC_SINK_FILE, true);
+		SetupApplication app = setupFlowdroid(new HashMap<>(), Globals.SRC_SINK_FILE_XML, true);
 
 		app.setTaintPropagationHandler(new TaintPropagationHandler() {
 			@Override
 			public void notifyFlowIn(Unit stmt, Abstraction taint, InfoflowManager manager, FlowFunctionType type) {
 			}
 
+			protected boolean isActivityContextType(Type type) {
+				if (type instanceof RefType) {
+					RefType refType = (RefType) type;
+					SootClass sootClass = refType.getSootClass();
+
+					while (sootClass != null) {
+						if (sootClass.getName().equals("android.content.Context")
+								|| sootClass.getName().equals("android.app.Activity")) {
+							return true;
+						}
+
+						if (sootClass.hasSuperclass()) {
+							sootClass = sootClass.getSuperclass();
+						} else {
+							sootClass = null;
+						}
+					}
+				}
+				return false;
+			}
+
+			protected Set<Abstraction> filterByPropagationPathLength(Set<Abstraction> outgoing) {
+				int MAX_PATH_LENGTH = 15;
+				Set<Abstraction> newOutgoing = new HashSet<>();
+				for (Abstraction abs : outgoing) {
+					if (abs.getPathLength() > MAX_PATH_LENGTH) {
+						continue;
+					}
+
+					if (isActivityContextType(abs.getAccessPath().getBaseType())) {
+						//System.out.println("Ignore Abs: " + abs + " BaseType:" + abs.getAccessPath().getBaseType());
+						continue;
+					}
+
+					newOutgoing.add(abs);
+				}
+				return newOutgoing;
+			}
+
 			@Override
 			public Set<Abstraction> notifyFlowOut(Unit unit, Abstraction d1, Abstraction incoming,
 					Set<Abstraction> outgoing, InfoflowManager manager, FlowFunctionType type) {
+				Set<Abstraction> newOutgoing = filterByPropagationPathLength(outgoing);
+
 				if (!(unit instanceof Stmt)) {
 					return outgoing;
 				}
@@ -272,25 +325,17 @@ public class PrivacyAPITracking {
 				boolean isOfInterest = false;
 				Stmt stmt = (Stmt) unit;
 				SootMethod method = manager.getICFG().getMethodOf(stmt);
-				if (isReadAt(stmt, incoming.getAccessPath())) {
-					if (stmt.containsInvokeExpr()
-							&& !stmt.getInvokeExpr().getMethod().getDeclaringClass().isApplicationClass()) {
-						isOfInterest = true;
-					}
 
-					if (stmt instanceof IfStmt || stmt instanceof SwitchStmt) {
-				        ExceptionalUnitGraph graph = new ExceptionalUnitGraph(method.retrieveActiveBody());
-						MHGPostDominatorsFinder<Unit> postdominatorFinder = new MHGPostDominatorsFinder<Unit>(graph);
-						Unit postdominator = postdominatorFinder.getImmediateDominator(stmt);
-				        traverseAndPrintStatements(graph, stmt, postdominator, false);
-					}
+				if (!incoming.getAccessPath().isEmpty() && isDefAt(stmt, incoming.getAccessPath())) {
+					isOfInterest = true;
 				}
-				isOfInterest = isOfInterest || outgoing.stream().anyMatch(
+
+				isOfInterest = isOfInterest || newOutgoing.stream().anyMatch(
 						item -> !item.equals(incoming) && !item.getAccessPath().equals(incoming.getAccessPath()));
 
 				if (isOfInterest) {
 					String parentNodeId = null;
-					Abstraction pd = incoming.getPredecessor();
+					Abstraction pd = incoming;
 					while (pd != null) {
 						Stmt pdStmt = pd.getCurrentStmt();
 						if (pdStmt != null && !pd.getAccessPath().isEmpty()) {
@@ -311,18 +356,17 @@ public class PrivacyAPITracking {
 					String currentNodeId = String.format("[%s] %s", method.getSignature(), stmt);
 					backwardGraph.addNode(currentNodeId, stmt.toString(), method.getSignature());
 					backwardGraph.addEdge(parentNodeId, currentNodeId, incoming.isImplicit());
+					//System.out.println("Edge: " + parentNodeId + " --> " + currentNodeId);
 				}
 
-				return outgoing;
+				return newOutgoing;
 			}
 		});
 
 		app.runInfoflow();
-		
 		backwardGraph.printGraphFromRoot();
 
 		LOGGER.info("runBackwardAnalysis ends!");
-
 	}
 
 	public void runForwardAnalysis() throws XmlPullParserException, IOException {
@@ -339,18 +383,59 @@ public class PrivacyAPITracking {
 			e.printStackTrace();
 		}
 
-		MySetupApplication app = setupFlowdroid(stmtSourceSigs, Globals.SRC_SINK_FILE, false);
+		SetupApplication app = setupFlowdroid(stmtSourceSigs, Globals.SRC_SINK_FILE, false);
 
 		app.setTaintPropagationHandler(new TaintPropagationHandler() {
 			@Override
 			public void notifyFlowIn(Unit stmt, Abstraction taint, InfoflowManager manager, FlowFunctionType type) {
 			}
+			
+			protected boolean isActivityContextType(Type type) {
+				if (type instanceof RefType) {
+					RefType refType = (RefType) type;
+					SootClass sootClass = refType.getSootClass();
+
+					while (sootClass != null) {
+						if (sootClass.getName().equals("android.content.Context")
+								|| sootClass.getName().equals("android.app.Activity")) {
+							return true;
+						}
+
+						if (sootClass.hasSuperclass()) {
+							sootClass = sootClass.getSuperclass();
+						} else {
+							sootClass = null;
+						}
+					}
+				}
+				return false;
+			}
+
+			protected Set<Abstraction> filterByPropagationPathLength(Set<Abstraction> outgoing) {
+				int MAX_PATH_LENGTH = 15;
+				Set<Abstraction> newOutgoing = new HashSet<>();
+				for (Abstraction abs : outgoing) {
+					if (abs.getPathLength() > MAX_PATH_LENGTH) {
+						continue;
+					}
+					
+					if (isActivityContextType(abs.getAccessPath().getBaseType())) {
+						//System.out.println("Ignore Abs: " + abs + " BaseType:" + abs.getAccessPath().getBaseType());
+						continue;
+					}
+					
+					newOutgoing.add(abs);
+				}
+				return newOutgoing;
+			}
 
 			@Override
 			public Set<Abstraction> notifyFlowOut(Unit unit, Abstraction d1, Abstraction incoming,
 					Set<Abstraction> outgoing, InfoflowManager manager, FlowFunctionType type) {
+				Set<Abstraction> newOutgoing = filterByPropagationPathLength(outgoing);
+
 				if (!(unit instanceof Stmt)) {
-					return outgoing;
+					return newOutgoing;
 				}
 
 				boolean isOfInterest = false;
@@ -361,20 +446,13 @@ public class PrivacyAPITracking {
 							&& !stmt.getInvokeExpr().getMethod().getDeclaringClass().isApplicationClass()) {
 						isOfInterest = true;
 					}
-
-					if (stmt instanceof IfStmt || stmt instanceof SwitchStmt) {
-				        ExceptionalUnitGraph graph = new ExceptionalUnitGraph(method.retrieveActiveBody());
-						MHGPostDominatorsFinder<Unit> postdominatorFinder = new MHGPostDominatorsFinder<Unit>(graph);
-						Unit postdominator = postdominatorFinder.getImmediateDominator(stmt);
-				        traverseAndPrintStatements(graph, stmt, postdominator, true);
-					}
 				}
-				isOfInterest = isOfInterest || outgoing.stream().anyMatch(
+				isOfInterest = isOfInterest || newOutgoing.stream().anyMatch(
 						item -> !item.equals(incoming) && !item.getAccessPath().equals(incoming.getAccessPath()));
 
 				if (isOfInterest) {
 					String parentNodeId = null;
-					Abstraction pd = incoming.getPredecessor();
+					Abstraction pd = incoming;
 					while (pd != null) {
 						Stmt pdStmt = pd.getCurrentStmt();
 						if (pdStmt != null && !pd.getAccessPath().isEmpty()) {
@@ -397,14 +475,28 @@ public class PrivacyAPITracking {
 					forwardGraph.addEdge(parentNodeId, currentNodeId, incoming.isImplicit());
 				}
 
-				return outgoing;
+				return newOutgoing;
 			}
 		});
 
 		app.runInfoflow();
 		forwardGraph.printGraphFromRoot();
-
 		LOGGER.info("runForwardAnalysis ends!");
+	}
+
+	/**
+	 * Check whether the access path is wrote at unit.
+	 *
+	 * @param unit unit
+	 * @param ap   access path
+	 * @return true if ap is wrote at unit
+	 */
+	protected boolean isDefAt(Stmt stmt, AccessPath ap) {
+		for (ValueBox box : stmt.getDefBoxes())
+			if (box.getValue() == ap.getPlainValue()) {
+				return true;
+			}
+		return false;
 	}
 
 	/**
@@ -427,35 +519,29 @@ public class PrivacyAPITracking {
 		}
 		return false;
 	}
-	
+
 	protected void traverseAndPrintStatements(UnitGraph graph, Unit start, Unit end, boolean isForward) {
-        Set<Unit> visited = new HashSet<>();
-        Queue<Unit> queue = new LinkedList<>();
-        queue.add(start);
+		Set<Unit> visited = new HashSet<>();
+		Queue<Unit> queue = new LinkedList<>();
+		queue.add(start);
 
-        while (!queue.isEmpty()) {
-            Unit current = queue.poll();
-            if (!visited.add(current)) {
-                continue;
-            }
-            
-            if (isForward) {
-            	forwardControlDeps.add(current.toString());
-            } else {
-            	backwardControlDeps.add(current.toString());
-            }
-            
-            System.out.println("ControlDeps: " + current);
+		while (!queue.isEmpty()) {
+			Unit current = queue.poll();
+			if (!visited.add(current)) {
+				continue;
+			}
 
-            if (current.equals(end)) {
-                break;
-            }
+			System.out.println("ControlDeps: " + current);
 
-            for (Unit succ : graph.getSuccsOf(current)) {
-                if (!visited.contains(succ)) {
-                    queue.add(succ);
-                }
-            }
-        }
-    }
+			if (current.equals(end)) {
+				break;
+			}
+
+			for (Unit succ : graph.getSuccsOf(current)) {
+				if (!visited.contains(succ)) {
+					queue.add(succ);
+				}
+			}
+		}
+	}
 }
