@@ -20,50 +20,54 @@ def read_and_parse_html(file_path):
 
 sys_prompt = """
 
-You will receive a documentation and a target API. Your task is to summarize the target API based on the document using the following format. 
+I will give you a document which may contain one or more privacy-related APIs, your task is to:
+1. Locate these APIs from the document
+2. Find all related (directly or indirectly) texts about the API. 
+3. Based on the texts, extract summaries of these privacy APIs using the provided format.
 
-Tips:
-1. Do not infer what is not in the documentation 
-2.Please strictly adhere to the format 
-3.If you cannot extract the corresponding information from the document, you may leave the item blank. 
-4. You can extend the format to cover important information or specifications if necessary. 
-5. The annotations after each item imply what should be filled in.
-6. value in list format([]) implies it may have one or multiple results.
-7. You have to include all important details related to the target API
+An API is considered a privacy API if it is clearly privacy-related, or if it meets any of the following criteria:
 
-format
-{
-    "SDK_name": "", // the name of the SDK
-    "API_name": "", // the name of the target API
-    "target_key_index": "", // for an API like set(key, value), and we only target the scenario when key == target_key_name
-    "target_key_name": "", // for an API like set(key, value), the index of the key parameter
-    "effects": [], // What functionalities does the API have (What happens after calling the API).
-    "preconditions": [], // pre condtions of the API
-    "postconditions": [], // postcondition of the API
-    "invariants": [], // invariants of the API
-    "requirements":[],// extra conditions or requirements of calling the API
-    "parameters": [ // summary of all parameters; if no parameters in the API, leave it blank
+1. Data Access and Handling:
+    1.1 Personal Data: Does the API access, collect, store, or process personal data such as names, addresses, email addresses, phone numbers, ID numbers, etc.?
+    1.2 Sensitive Information: Does the API handle sensitive information such as biometric data (fingerprints, facial recognition), health data, financial information, etc.?
+    1.3 Sensitive device permissions: Does the API collect or handle sensitive device data such as location, contacts, SMS, device identification information (device ID, Andorid ID, Adverstising ID, etc.), etc?
+2. Data Transmission and Storage:
+    2.1 Encryption: Does the API use encryption technologies (e.g., HTTPS, encryption libraries) to protect data during transmission and storage?
+    2.2 Data Storage Location: Does the API specify where data is stored and ensure compliance with relevant privacy laws and regulations?
+3. User Control and Consent:
+    3.1User Consent: Does the API obtain explicit user consent before collecting or processing data, and allow users to withdraw consent at any time?
+    3.2Data Access and Deletion: Does the API provide mechanisms for users to access their data and delete their personal information?
+4. Transparency and Policy:
+    4.1Privacy Policy: Is there a detailed privacy policy associated with the API, explaining how data is collected, used, and shared?
+    4.2 Data Sharing: Does the API involve sharing user data with third parties, and are users clearly informed about this sharing?
+5. Data Minimization and Purpose Limitation:
+   5.1 Data Minimization: Does the API collect and process only the minimum amount of data necessary to achieve its function?
+    5.2 Purpose Limitation: Is the use of the data clearly defined, ensuring that it is not used for unauthorized purposes?
+6. Privacy Law Compliance:
+     6.1 Is the API designed for compliance requirements of privacy regulations or laws?
+    
+
+Instructions for summarizing an API:
+
+1. Do not infer what is not included in the documentation, but you can use your prior knowledge to make the description more specific
+2. You have to include all important details related to the target API. 
+3. Descriptions of the API might be referenced in different parts of the documentation, not only in the API section, you need to find all related information.
+4. Please strictly adhere to the following format. The annotations after each item imply what should be filled in. If you cannot extract the corresponding information from the document, you may leave the item blank.
+
+Summary:
+[{
+    "SDK_name": "", // The name of the SDK
+    "API_name": "", // The name of the target API
+    "conditions": [], // The list of conditions required to call the API
+    "effects": [], // The list of effects and consequences of calling the API
+    "parameter_configuations": [ // Summary of all configurable parameters or parameter combinations; if no parameters in the API, leave it blank. 
       {
-        "index": 0, // the index of the parameter in the method
-        "rules": [{ // all possible values for the parameters, and the config rules
-          "value": "", // one value that can be assigned to the parameter
-          "effects": [], // If the parameter is assigned this value, what will happen
-          "preconditions": [], // pre condtions of setting the parameter to this value
-          "postconditions": [], // post condtions of setting the parameter to this value
-          "invariants": [], // invariants of setting the parameter to this value
-          "requirements":[]// extra requirements of setting the parameter to this value
-        },
-        {
-          "value": "", 
-          "effects": [],
-          "preconditions":[], 
-          "postconditions": [],
-          "invariants": [],
-          "requirements": []
-        }]
+	      parameter_values:[], // One of the parameter combinations that are mentioned in the document. If some parameter is not configuable or unknown, mark it "null" in the corresponding index in the list.
+	      conditions:[], // The list of conditions or requirements of setting parameters to parameter_values
+	      effects:[], // The list of effects or consequences of setting parameters to parameter_values 
       }
     ]
-  }
+  }]
 """
 
 # user_prompt = f"""
@@ -89,7 +93,7 @@ def analyze(user_prompt, sdk, api):
     for choice in completion.choices:
         res.append(str(choice.message.content))
 
-    with open(f"responses/{sdk}_{api}.json", 'w') as file:
+    with open(f"responses2/{sdk}_{api}.json", 'w') as file:
         json.dump(res, file, indent=4)
 
 def analzed_with_type(apis, type, analyzed_apis):
