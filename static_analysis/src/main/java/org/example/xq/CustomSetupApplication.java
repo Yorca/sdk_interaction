@@ -19,12 +19,12 @@ import soot.jimple.infoflow.android.source.AccessPathBasedSourceSinkManager;
 import soot.jimple.infoflow.sourcesSinks.manager.ISourceSinkManager;
 import soot.toolkits.scalar.Pair;
 
-public class MySetupApplication extends SetupApplication {
+public class CustomSetupApplication extends SetupApplication {
 	private Set<String> stringSourceSigs;
 	private Set<String> fieldSourceSigs;
 	private Map<Pair<String, String>, Set<String>> stmtSourceSigs;
 
-	public MySetupApplication(InfoflowAndroidConfiguration config, Set<String> stringSourceSigs,
+	public CustomSetupApplication(InfoflowAndroidConfiguration config, Set<String> stringSourceSigs,
 			Set<String> fieldSourceSigs, Map<Pair<String, String>, Set<String>> stmtSourceSigs) {
 		super(config);
 

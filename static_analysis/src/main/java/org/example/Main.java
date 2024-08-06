@@ -30,15 +30,13 @@ import org.example.util.PrivacyAPISummary.APIDescriptor;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
-//		if (args.length != 1) {
-//			System.err.println("Provide Params <APK_PATH>");
-//			System.exit(-1);
-//		}
-//
-//		String apkPath = args[0];
-		//new Main().run("./apks/air.jp.globalgear.ptomo2.apk");
-		new Main().run("./apks/test1.apk");
-		// new Main().runAnalysis();
+		if (args.length != 1) {
+			System.err.println("Provide Params <APK_PATH>");
+			System.exit(-1);
+		}
+
+		String apkPath = args[0];
+		new Main().run(apkPath);
 	}
 
 	private void run(String apkPath) {
@@ -49,7 +47,7 @@ public class Main {
 		long endTime = 0;
 		startTime = System.currentTimeMillis();
 		// Set up paths & privacy API string
-		PrivacyAPILoader.loadPrivacyAPIs("res/Priv_impl5.json");
+		PrivacyAPILoader.loadPrivacyAPIs("res/Priv_impl4.json");
 		AnalysisAPIs.runCustomPack("jtp",
 				new Transform[] { new Transform("jtp.emptyBodyTransformer", new BodyTransformer() {
 					@Override
@@ -69,7 +67,7 @@ public class Main {
 
 	private void runAnalysis() {
 		try {
-			new PrivacyAPITracking().runForwardAnalysis();
+			new PrivacyAPITracking().runBackwardAnalysis();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

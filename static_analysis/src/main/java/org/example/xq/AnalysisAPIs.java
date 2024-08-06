@@ -129,7 +129,7 @@ public class AnalysisAPIs {
 		config.setTaintAnalysisEnabled(false);
 
 		Set<String> unused = new HashSet<String>();
-		SetupApplication analyzer = new MySetupApplication(config, unused, unused, new HashMap<>());
+		SetupApplication analyzer = new CustomSetupApplication(config, unused, unused, new HashMap<>());
 
 		SootConfigForAndroid sootConf = new SootConfigForAndroid() {
 			@Override
@@ -458,7 +458,7 @@ public class AnalysisAPIs {
 			// config.setImplicitFlowMode(ImplicitFlowMode.AllImplicitFlows);
 			// config.getAccessPathConfiguration().setAccessPathLength(4);
 
-			SetupApplication analyzer = new MySetupApplication(config, stringSourcesSigs, fieldSourceSigs,
+			SetupApplication analyzer = new CustomSetupApplication(config, stringSourcesSigs, fieldSourceSigs,
 					new HashMap<>());
 
 			if (taintPropHandler != null) {

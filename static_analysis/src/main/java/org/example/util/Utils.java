@@ -33,9 +33,31 @@ public class Utils {
 			"<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>",
 			"<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putBoolean(java.lang.String,boolean)>" });
 
-	public static List<String> ONCREATE_APIS = Arrays.asList(new String[] {
-		"<android.app.Activity: void onCreate(android.os.Bundle)>"
-	});
+	public static List<String> ONCREATE_APIS = Arrays
+			.asList(new String[] { "<android.app.Activity: void onCreate(android.os.Bundle)>" });
+
+	public static List<String> DUMMY_SOURCE_XML = Arrays
+			.asList(new String[] {
+					"<method signature=\"android.app.Activity: boolean onKeyDown(int,android.view.KeyEvent)\">\n" +
+                    "    <return type=\"boolean\">\n" +
+                    "        <accessPath isSource=\"true\" isSink=\"false\" />\n" +
+                    "    </return>\n" +
+                    "</method>" });
+
+	public static List<String> DUMMY_SINK_XML = Arrays
+			.asList(new String[] {
+					"<method signature=\"android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)\">\n" +
+                    "    <param index=\"1\" description=\"Value\">\n" +
+                    "        <accessPath isSource=\"false\" isSink=\"true\" />\n" +
+                    "    </param>\n" +
+                    "</method>" });
+
+	public static String HEAD_XML = "<sinkSources>\n"
+			+ "	<category id=\"NO_CATEGORY\">";
+	public static String END_XML = "</category>\n"
+			+ "</sinkSources>";
+	
+
 
 	public static List<String> NETWORK_APIS = Arrays.asList(new String[] {
 			"<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putFloat(java.lang.String,float)>",
@@ -82,15 +104,17 @@ public class Utils {
 			"<java.io.Writer: java.io.Writer append(java.lang.CharSequence)>", "<java.io.Writer: void write(char[])>",
 			"<java.io.Writer: void write(char[],int,int)>", "<java.io.Writer: void write(int)>",
 			"<java.io.Writer: void write(java.lang.String)>", "<java.io.Writer: void write(java.lang.String,int,int)>",
-			"<java.net.DatagramSocket: void <init>(int)>", "<java.net.DatagramSocket: void send(java.net.DatagramPacket)>",
+			"<java.net.DatagramSocket: void <init>(int)>",
+			"<java.net.DatagramSocket: void send(java.net.DatagramPacket)>",
 			"<java.net.HttpURLConnection: java.io.OutputStream getOutputStream()>",
 			"<java.net.HttpURLConnection: void <init>(int)>", "<java.net.HttpURLConnection: void connect()>",
 			"<java.net.HttpURLConnection: void setDoOutput(boolean)>",
 			"<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>",
-			"<java.net.MulticastSocket: void <init>(int)>", "<java.net.MulticastSocket: void <init>(java.net.SocketAddress)>",
+			"<java.net.MulticastSocket: void <init>(int)>",
+			"<java.net.MulticastSocket: void <init>(java.net.SocketAddress)>",
 			"<java.net.MulticastSocket: void bind(java.net.SocketAddress)>",
-			"<java.net.MulticastSocket: void send(java.net.DatagramPacket)>", "<java.net.ServerSocket: void <init>(int)>",
-			"<java.net.ServerSocket: void bind(java.net.SocketAddress)>",
+			"<java.net.MulticastSocket: void send(java.net.DatagramPacket)>",
+			"<java.net.ServerSocket: void <init>(int)>", "<java.net.ServerSocket: void bind(java.net.SocketAddress)>",
 			"<java.net.Socket: java.io.OutputStream getOutputStream()>", "<java.net.Socket: void <init>(int)>",
 			"<java.net.Socket: void connect(java.net.SocketAddress)>",
 			"<java.net.Socket: void connect(java.net.SocketAddress,int)>",
