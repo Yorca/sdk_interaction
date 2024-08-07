@@ -92,7 +92,7 @@ public class DirectedGraph {
 
 		visited.add(node);
 
-		if (!node.id.contains("dummyMainClass")) {
+		if (!node.id.contains("dummyMainClass") && node.id.contains("invoke")) {
 			System.out.println(indent + node + (Boolean.valueOf(true).equals(property) ? " implicit" : ""));
 		}
 
