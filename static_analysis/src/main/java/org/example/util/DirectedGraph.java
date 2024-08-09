@@ -2,8 +2,11 @@ package org.example.util;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 public class DirectedGraph {
+	private static final Logger LOGGER = Logger.getLogger(DirectedGraph.class.getName());
+	
 	// Map to store the adjacency list for each node
 	private Map<Node, Set<Edge>> adjList;
 
@@ -76,7 +79,7 @@ public class DirectedGraph {
 	// Method to print the graph starting from the root node
 	public void printGraphFromRoot() {
 		if (root == null) {
-			System.out.println("Root is not set.");
+			LOGGER.info("Root is not set.");
 			return;
 		}
 
@@ -92,8 +95,8 @@ public class DirectedGraph {
 
 		visited.add(node);
 
-		if (!node.id.contains("dummyMainClass") && node.id.contains("invoke")) {
-			System.out.println(indent + node + (Boolean.valueOf(true).equals(property) ? " implicit" : ""));
+		if (!node.id.contains("dummyMainClass")/* && node.id.contains("invoke")*/) {
+			LOGGER.info("[DataFlowNode]" + indent + node + (Boolean.valueOf(true).equals(property) ? " implicit" : ""));
 		}
 
 		for (Edge edge : adjList.getOrDefault(node, Collections.emptySet())) {

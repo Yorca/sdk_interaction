@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.example.util.Utils;
-import org.example.xq.Globals;
+import org.example.custom.Globals;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

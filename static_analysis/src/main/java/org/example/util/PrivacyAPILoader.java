@@ -14,7 +14,7 @@ public class PrivacyAPILoader {
 		try {
 			JsonNode rootNode = mapper.readTree(new File(jsonFilePath));
 			Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
-			System.out.println("rootnode" + rootNode);
+			Utils.LOGGER.info("rootnode" + rootNode);
 
 			while (fields.hasNext()) {
 				Map.Entry<String, JsonNode> entry = fields.next();
@@ -37,7 +37,7 @@ public class PrivacyAPILoader {
 							JsonNode apiArrayNode = e.getValue();
 
 							if (apiArrayNode.isTextual() && apiArrayNode.asText().equalsIgnoreCase("No API Found")) {
-//                                System.out.println("No API found for type " + apiType + " in SDK " + sdkName);
+//                                Utils.LOGGER.info("No API found for type " + apiType + " in SDK " + sdkName);
 							} else if (apiArrayNode.isArray()) {
 								apiArrayNode.forEach(apiNode -> {
 									if (apiNode.isTextual() && apiNode.asText().equals("IAB Framework")) {
@@ -59,11 +59,11 @@ public class PrivacyAPILoader {
 													apiNode.get("consentArgsValue"));
 
 											// if (ppArgs != null) { // Only add the APIDescriptor if ppArgs is not null
-											// xw: doing my best guess: we might need to remove this condition since
+											// doing my best guess: we might need to remove this condition since
 											// "init" is excluded by this condition
 											PrivacyAPISummary.APIDescriptor descriptor = new PrivacyAPISummary.APIDescriptor(
 													apiType, apiClazzName, apiMethodName, qualifierArgs, ppArgs, false);
-//                                            System.out.println(descriptor.toString()); // Logging the APIDescriptor details to console
+//                                            Utils.LOGGER.info(descriptor.toString()); // Logging the APIDescriptor details to console
 											apis.add(descriptor);
 											// }
 										}

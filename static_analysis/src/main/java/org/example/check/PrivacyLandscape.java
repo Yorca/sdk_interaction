@@ -18,7 +18,7 @@ import org.example.util.PrivacyAPISummary;
 import org.example.util.Utils;
 import org.example.util.PrivacyAPISummary.APIDescriptor;
 import org.example.util.Utils.ValueError;
-import org.example.xq.Globals;
+import org.example.custom.Globals;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

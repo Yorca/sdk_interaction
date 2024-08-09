@@ -2,7 +2,7 @@ package org.example.check;
 
 import org.example.util.PrivacyAPISummary;
 import org.example.util.Utils;
-import org.example.xq.Globals;
+import org.example.custom.Globals;
 import org.json.JSONObject;
 
 import soot.Scene;

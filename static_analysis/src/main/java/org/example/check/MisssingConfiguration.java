@@ -12,7 +12,7 @@ import java.util.*;
 
 import org.example.util.PrivacyAPISummary;
 import org.example.util.Utils;
-import org.example.xq.Globals;
+import org.example.custom.Globals;
 import org.json.JSONObject;
 
 import static org.example.util.PrivacyAPISummary.sdks;

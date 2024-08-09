@@ -12,8 +12,8 @@ import org.example.check.MisssingConfiguration;
 import org.example.check.PrivacyAPITracking;
 import org.example.check.PrivacyLandscape;
 import org.example.check.UnevenPrivacySupport;
-import org.example.xq.AnalysisAPIs;
-import org.example.xq.Globals;
+import org.example.custom.AnalysisAPIs;
+import org.example.custom.Globals;
 
 import soot.Scene;
 import soot.Body;
@@ -27,6 +27,7 @@ import org.example.util.PrivacyAPILoader;
 import org.example.util.PrivacyAPISummary;
 import org.example.util.Utils;
 import org.example.util.PrivacyAPISummary.APIDescriptor;
+import java.util.logging.Logger;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
@@ -47,7 +48,7 @@ public class Main {
 		long endTime = 0;
 		startTime = System.currentTimeMillis();
 		// Set up paths & privacy API string
-		PrivacyAPILoader.loadPrivacyAPIs("res/Priv_impl4.json");
+		PrivacyAPILoader.loadPrivacyAPIs("res/Priv_impl5.json");
 		AnalysisAPIs.runCustomPack("jtp",
 				new Transform[] { new Transform("jtp.emptyBodyTransformer", new BodyTransformer() {
 					@Override
@@ -67,7 +68,7 @@ public class Main {
 
 	private void runAnalysis() {
 		try {
-			new PrivacyAPITracking().runForwardAnalysis();
+			new PrivacyAPITracking().runBackwardAnalysis();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

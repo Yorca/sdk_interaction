@@ -14,7 +14,7 @@ import soot.toolkits.scalar.Pair;
 import java.util.*;
 import java.util.logging.Logger;
 
-import org.example.xq.Globals;
+import org.example.custom.Globals;
 
 import com.google.common.collect.Iterators;
 
@@ -38,7 +38,7 @@ public class Utils {
 
 	public static List<String> DUMMY_SOURCE_XML = Arrays
 			.asList(new String[] {
-					"<method signature=\"android.app.Activity: boolean onKeyDown(int,android.view.KeyEvent)\">\n" +
+					"<method signature=\"android.content.SharedPreferences: boolean getBoolean(java.lang.String,boolean)\">\n" +
                     "    <return type=\"boolean\">\n" +
                     "        <accessPath isSource=\"true\" isSink=\"false\" />\n" +
                     "    </return>\n" +
@@ -205,6 +205,21 @@ public class Utils {
 
 		return false;
 	}
+	
+    public static boolean isObfuscated(String className) {
+        // Check for patterns commonly seen in obfuscated names
+        return className.length() <= 3;
+    }
+	
+	public static String extractFromFirstCapitalizedChar(String str) {
+        int length = str.length();
+        for (int i = 0; i < length; i++) {
+            if (Character.isUpperCase(str.charAt(i))) {
+                return str.substring(i);
+            }
+        }
+        return ""; // Return an empty string if no capitalized character is found
+    }
 
 	public static boolean isSamePackage(String package1, String package2) {
 		int dotCnt = 0;
