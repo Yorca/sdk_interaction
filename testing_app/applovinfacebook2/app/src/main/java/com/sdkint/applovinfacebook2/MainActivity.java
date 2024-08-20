@@ -22,6 +22,13 @@ import android.view.MenuItem;
 import com.applovin.sdk.AppLovinSdk;
 import com.applovin.sdk.AppLovinPrivacySettings;
 
+import android.util.Log;
+import com.sdkint.applovinfacebook2.testClass2;
+
+
+
+
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
@@ -30,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -50,9 +58,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         initApplovin();
+        Log.d("MainAct", "initApplovin");
     }
 
     private void initApplovin() {
+        testClass2.testFrida();
+        new testClass2().testFrida2();
         AppLovinPrivacySettings.setIsAgeRestrictedUser(true, this);
         AppLovinSdk.getInstance( this ).setMediationProvider( "max" );
         AppLovinSdk.initializeSdk( this, new AppLovinSdk.SdkInitializationListener() {
