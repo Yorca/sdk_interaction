@@ -24,7 +24,7 @@ public class ResourceUtils {
 		if (f.exists())
 			return new FileInputStream(f);
 
-		if (!filename.startsWith("/"))
+		if (!filename.startsWith("/") && !filename.startsWith("./"))
 			filename = "/" + filename;
 
 		InputStream inp = clazz.getResourceAsStream(filename);
