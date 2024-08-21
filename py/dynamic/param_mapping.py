@@ -2,50 +2,6 @@ import frida
 import subprocess
 import time
 
-# script = f"""
-#     Java.perform(function () {{
-#         cls_name = ""
-#         var clazz = Java.use(cls_name)
-#         if (!clazz) {{
-#             return
-#         }}
-#         var overloadCount = clazz[methodName]?.overloads?.length
-#         if (!overloadCount || overloadCount <= 0) {{
-#             return
-#         }}
-#
-#         for (var i = 0; i < overloadCount; i++) {{
-#             (function () {{
-#                 var originalMethod = clazz[methodName].overloads[i]
-#
-#                 var result = originalMethod.apply(this, arguments);
-#                 originalMethod.implementation = function () {{
-#                     send({{
-#                         type: 'log',
-#                         method: methodName,
-#                         package_name:pkg,
-#                         class_name:cls_name,
-#                         timestamp: new Date().getTime(),
-#                         ref: this + '',
-#                         arguments: JSON.stringify(arguments),
-#                         stack_trace: Java.use('android.util.Log').getStackTraceString(Java.use('java.lang.Exception').$new())
-#                     }});
-#
-#
-#
-#
-#
-#                    return result;
-#                    }};
-#                }})();
-#         }}
-#
-#
-#     }}
-#
-#
-# """
-
 
 
 # frida_script = f"""
@@ -72,38 +28,21 @@ import time
 frida_script = f"""
     Java.perform(function () {{
         Java.deoptimizeEverything()
-        var testClass2 = Java.use("com.sdkint.applovinfacebook2.testClass2");
-        console.log(testClass2.testFrida);
-        testClass2.testFrida.overload().implementation = function () {{
-            console.log("test");
-            testClass2.testFrida.call(this);
+        let AppLovinPrivacySettings = Java.use("com.applovin.sdk.AppLovinPrivacySettings");
+        AppLovinPrivacySettings["setIsAgeRestrictedUser"].implementation = function (z, context) {{
+            console.log("z = " + z);
+            console.log("setIsAgeResctictedUser to false");
+            this["setIsAgeRestrictedUser"](false, context);
+        }};
+        
+        let AdSettings = Java.use("com.facebook.ads.AdSettings");
+        AdSettings["setMixedAudience"].implementation = function (mixedAudience) {{
+            console.log("setMixedAudience is " + mixedAudience);
+            this["setMixedAudience"](mixedAudience);
         }};
     }});
 """
 
-
-# let AdSettings = Java.use("com.facebook.ads.AdSettings");
-# AdSettings["setMixedAudience"].implementation = function (mixedAudience) {
-#     console.log(`AdSettings.setMixedAudience is called: mixedAudience=${mixedAudience}`);
-#     this["setMixedAudience"](mixedAudience);
-# };
-
-
-
-# frida_script = f"""
-#     Java.perform(function () {{
-#         (function() {{
-#         let AppLovinPrivacySettings = Java.use("com.applovin.sdk.AppLovinPrivacySettings");
-#         var originalMethod = AppLovinPrivacySettings["setIsAgeRestrictedUser"].overloads[0];
-#         originalMethod.implementation = function () {{
-#             console.log("enter")
-#             send({{
-#                 type: 'log'}});
-#             var result = originalMethod.apply(this, arguments);
-#             return result;}};
-# }})();
-#     }});
-# """
 
 def on_message(message, data):
     if 'payload' in message:

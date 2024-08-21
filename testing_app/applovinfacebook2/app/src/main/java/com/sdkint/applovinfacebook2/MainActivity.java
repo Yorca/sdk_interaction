@@ -3,6 +3,7 @@ package com.sdkint.applovinfacebook2;
 import android.os.Bundle;
 
 import com.applovin.sdk.AppLovinSdkConfiguration;
+import com.facebook.ads.Ad;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +26,7 @@ import com.applovin.sdk.AppLovinPrivacySettings;
 import android.util.Log;
 import com.sdkint.applovinfacebook2.testClass2;
 
-
+import com.facebook.ads.AdSettings;
 
 
 
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         initApplovin();
+        AdSettings.setDataProcessingOptions( new String[] {} );
+        AdSettings.isMixedAudience();
         Log.d("MainAct", "initApplovin");
     }
 
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSdkInitialized(final AppLovinSdkConfiguration configuration)
             {
-                // AppLovin SDK is initialized, start loading ads
+                Log.d("onSdkInitialized", "onSdkInitialized");
             }
         } );
     }
