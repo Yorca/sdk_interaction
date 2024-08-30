@@ -1,0 +1,455 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Standalone SDK - Criteo App Developer Portal</title>
+
+    <link rel="icon" href="../../../app/images/favicon.ico">
+    <link href="../../../app/stylesheets/screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../../../app/stylesheets/print.css" rel="stylesheet" type="text/css" media="print" />
+    <link href="../../../app/stylesheets/default.css" rel="stylesheet" type="text/css" />
+    <link href="../../../app/stylesheets/custom.css" rel="stylesheet" type="text/css" />
+    <link href="../../../app/stylesheets/app.css" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../../../app/javascripts/all.js" type="text/javascript"></script>
+    <script src="../../../app/javascripts/app.js" type="text/javascript"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-148372248-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-148372248-1');
+    </script>
+
+    <script>
+      $(() => {
+        toc.setOptions({ scrollHistory : false, scrollTo: 30 });
+
+        var platform = otherPlatform = '';
+        if (window.location.href.indexOf('/ios/') >= 0) {
+          platform = 'ios';
+          otherPlatform = 'android';
+        } else if (window.location.href.indexOf('/android/') >= 0) {
+          platform = 'android';
+          otherPlatform = 'ios';
+        }
+        $('.os_select ul li').removeClass('selected');
+        if (platform) {
+          $('.os_select ul li.'+platform).addClass('selected');
+          var otherPlatformUrl = window.location.href.replace('/'+platform+'/', '/'+otherPlatform+'/');
+          $.ajax({
+              type: "HEAD",
+              async: true,
+              url: otherPlatformUrl
+          }).done(function(message,text,jqXHR){
+              if (jqXHR && jqXHR.status >= 200 && jqXHR.status < 300) {
+                $('.os_select ul li.'+otherPlatform+' a').attr('href', otherPlatformUrl);
+              }
+          });
+        }
+        
+      });
+    </script>
+
+    <script>
+      $(function() {
+        var langs = [];
+          langs.push("java");
+          langs.push("kotlin");
+        setupLanguages( langs );
+      });
+    </script>
+
+  </head>
+
+  <body class="index">
+    <div class="top-nav">
+      <div class="top-wrapper">
+        <img id="logo" src="../../../app/img/criteo-logo.svg" />
+        <h2 class="title orange">App Developer Portal</h2>
+        <div class="os_select">
+          <ul>
+            <li class="ios"><a href="../../../app/ios/get-started"><img src="../../../app/images/apple.png"></a></li>
+            <li class="android"><a href="../../../app/android/get-started"><img src="../../../app/images/android.png"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="../../../app/img/navbar.png" />
+      </span>
+    </a>
+    <div class="main-wrapper">
+      <div class="menu-wrapper">
+        <ul class="links">
+        
+          <li><h3><a href="../../../app/android/get-started">Get Started</a></h3></li>
+          <li><a href="../../../app/android/testing">Testing</a></li>
+        
+          <li>&nbsp;</li>
+        
+          <li><h3>App Bidding</h3></li>
+        
+          <li><a href="../../../app/android/app-bidding">Overview</a></li>
+          <li>
+            <a href="../../../app/android/app-bidding/google-ad-manager">Google Ad Manager</a>
+            <ul>
+              <li><a href="../../../app/android/app-bidding/google-ad-manager/native-styles">Native Styles</a></li>
+              <li><a href="../../../app/android/app-bidding/google-ad-manager/video">Video</a></li>
+            </ul>
+          </li>
+          <li><a href="../../../app/android/app-bidding/max">MAX Applovin</a></li>
+          <li><a href="../../../app/android/app-bidding/other-ad-servers">Other Ad Servers</a></li>
+          <li>
+            <a href="../../../app/android/app-bidding/inhouse">In-House Bidding</a>
+            <ul>
+              <li><a href="../../../app/android/app-bidding/inhouse/advanced-native">Advanced Native</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="../../../app/android/standalone">Standalone</a>
+            <ul>
+              <li><a href="../../../app/android/standalone/advanced-native">Advanced Native</a></li>
+            </ul>
+          </li>
+        
+          <li>&nbsp;</li>
+        
+          <li><h3>Mediation</h3></li>
+        
+          <!--<li><a href="../../../app/android/mediation">Overview</a></li>-->
+          <li><a href="../../../app/android/mediation/admob">Admob</a></li>
+        
+          <li>&nbsp;</li>
+        
+          <li><h3>Advanced</h3></li>
+        
+          <li><a href="../../../app/android/data-passing">Data Passing</a></li>
+          <li><a href="../../../app/android/privacy">Privacy Guidelines</a></li>
+          <li><a href="../../../app/android/release-notes">Release Notes</a></li>
+          <li><a href="../../../app/android/migration/4.0">Migrating to v4.0</a></li>
+        
+        </ul>
+      </div>
+      <div class="page-wrapper">
+          <div class="content">
+            <h1 id="standalone-sdk">Standalone SDK</h1>
+<p>This guide explains how to integrate Criteo Direct Bidding for App solution to your Android app as a Standalone Ads SDK.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><a href="../../../app/android/get-started">Criteo Publisher SDK</a></li>
+</ul>
+<h1 id="sdk-initialization">SDK Initialization</h1>
+<p>Initialize Criteo SDK in your <strong>Application</strong> class by using <code>Criteo.Builder()</code> method. This needs to be done only once. <code>Criteo.Builder()</code> method takes 2 parameters:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>application</td>
+<td><code>Application</code></td>
+<td>Application Object</td>
+</tr>
+<tr>
+<td>criteoPublisherId</td>
+<td><code>String</code></td>
+<td>Your Criteo Publisher ID.<br>Contact your Criteo representative to get your Criteo Publisher ID.</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>adUnits()</code> method on the builder and pass <code>List&lt;AdUnit&gt;</code> object to initialize all ad units that Criteo will monetize.</p>
+<pre><code class="highlight java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyApplication</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Application</span> </span>{
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">super</span>.onCreate();
+
+        String criteoPublisherId = <span class="hljs-string">"B-000000"</span>;
+
+        <span class="hljs-comment">// Define Criteo ad units</span>
+        BannerAdUnit bannerAdUnit = 
+            <span class="hljs-keyword">new</span> BannerAdUnit(<span class="hljs-string">"samplebanneradunitid"</span>, <span class="hljs-keyword">new</span> AdSize(<span class="hljs-number">320</span>, <span class="hljs-number">50</span>));
+        InterstitialAdUnit interstitialAdUnit = 
+            <span class="hljs-keyword">new</span> InterstitialAdUnit(<span class="hljs-string">"sampleinterstitialadunitid"</span>);
+        NativeAdUnit nativeAdUnit =
+            <span class="hljs-keyword">new</span> NativeAdUnit(<span class="hljs-string">"samplenativeadunitid"</span>);
+
+        List&lt;AdUnit&gt; adUnits = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+        adUnits.add(bannerAdUnit);
+        adUnits.add(interstitialAdUnit);
+        adUnits.add(nativeAdUnit);
+
+        <span class="hljs-comment">// Initialize Criteo SDK</span>
+        <span class="hljs-keyword">try</span> {
+            <span class="hljs-keyword">new</span> Criteo.Builder(<span class="hljs-keyword">this</span>, criteoPublisherId)
+                      .adUnits(adUnits)
+                      .debugLogsEnabled(<span class="hljs-keyword">true</span>)
+                      .init();
+        } <span class="hljs-keyword">catch</span> (CriteoInitException e) {
+
+        }
+    }
+
+}
+</code></pre>
+<pre><code class="highlight kotlin"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyApplication</span> : <span class="hljs-typename">Application</span></span>() {
+
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">()</span> {</span>
+        super.onCreate()
+
+        <span class="hljs-variable"><span class="hljs-keyword">val</span> criteoPublisherId</span> = <span class="hljs-string">"B-000000"</span>
+
+        <span class="hljs-comment">// Define Criteo ad units</span>
+        <span class="hljs-variable"><span class="hljs-keyword">val</span> bannerAdUnit</span> = BannerAdUnit(<span class="hljs-string">"samplebanneradunitid"</span>, AdSize(<span class="hljs-number">320</span>, <span class="hljs-number">50</span>))
+        <span class="hljs-variable"><span class="hljs-keyword">val</span> interstitialAdUnit</span> = InterstitialAdUnit(<span class="hljs-string">"sampleinterstitialadunitid"</span>)
+        <span class="hljs-variable"><span class="hljs-keyword">val</span> nativeAdUnit</span> = NativeAdUnit(<span class="hljs-string">"samplenativeadunitid"</span>)
+        <span class="hljs-variable"><span class="hljs-keyword">val</span> adUnits</span> = listOf(bannerAdUnit, interstitialAdUnit, nativeAdUnit)
+
+        <span class="hljs-comment">// Initialize Criteo SDK</span>
+        <span class="hljs-keyword">try</span> {
+            Criteo.Builder(this, criteoPublisherId)
+                .adUnits(adUnits)
+                .debugLogsEnabled(<span class="hljs-literal">true</span>)
+                .init()
+        } <span class="hljs-keyword">catch</span> (e: CriteoInitException) {
+
+        }
+    }
+}
+</code></pre>
+<h1 id="banner">Banner</h1>
+<h2 id="displaying-banner">Displaying Banner</h2>
+<p>Add <code>CriteoBannerView</code> into your XML layout, with the following attributes:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>app:criteoAdUnitId</code></td>
+<td><code>String</code></td>
+<td>Your Criteo banner Ad Unit ID</td>
+</tr>
+<tr>
+<td><code>app:criteoAdUnitHeight</code></td>
+<td><code>Integer</code></td>
+<td>Banner height</td>
+</tr>
+<tr>
+<td><code>app:criteoAdUnitWidth</code></td>
+<td><code>Integer</code></td>
+<td>Banner width</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="highlight xml"><span class="hljs-tag">&lt;<span class="hljs-title">com.criteo.publisher.CriteoBannerView</span>
+    <span class="hljs-attribute">android:id</span>=<span class="hljs-value">"@+id/criteoBannerView"</span>
+    <span class="hljs-attribute">android:layout_width</span>=<span class="hljs-value">"match_parent"</span>
+    <span class="hljs-attribute">android:layout_height</span>=<span class="hljs-value">"wrap_content"</span>
+    <span class="hljs-attribute">app:criteoAdUnitId</span>=<span class="hljs-value">"samplebanneradunitid"</span>
+    <span class="hljs-attribute">app:criteoAdUnitWidth</span>=<span class="hljs-value">"320"</span>
+    <span class="hljs-attribute">app:criteoAdUnitHeight</span>=<span class="hljs-value">"50"</span> /&gt;</span>
+</code></pre>
+<p>Then, call <code>loadAd()</code> in your code to display Criteo banner.</p>
+<pre><code class="highlight java">CriteoBannerView criteoBannerView = findViewById(R.id.criteoBannerView);
+criteoBannerView.loadAd();
+</code></pre>
+<pre><code class="highlight kotlin">criteoBannerView.loadAd()
+</code></pre>
+<p><br>
+Alternatively, create a <code>CriteoBannerView</code> object programatically, call <code>loadAd()</code> method, and add it as a subview in your layout.</p>
+<pre><code class="highlight java"><span class="hljs-comment">// Initialize bannerView with banner ad unit.</span>
+CriteoBannerView criteoBannerView = <span class="hljs-keyword">new</span> CriteoBannerView(context, bannerAdUnit);
+
+<span class="hljs-comment">// Load the bannerView with ad.</span>
+criteoBannerView.loadAd();
+
+<span class="hljs-comment">// Assuming adLayout is a LinearLayout in your Activity where you'd like Criteo Banner to be displayed</span>
+LinearLayout adLayout = findViewById(R.id.adLayout);
+adLayout.addView(criteoBannerView);
+</code></pre>
+<pre><code class="highlight kotlin"><span class="hljs-comment">// Initialize bannerView with banner ad unit.</span>
+<span class="hljs-variable"><span class="hljs-keyword">val</span> criteoBannerView</span> = CriteoBannerView(context, bannerAdUnit)
+
+<span class="hljs-comment">// Load the bannerView with ad.</span>
+criteoBannerView.loadAd()
+
+<span class="hljs-comment">// Assuming adLayout is a LinearLayout in your Activity where you'd like Criteo Banner to be displayed</span>
+adLayout.addView(criteoBannerView)
+</code></pre>
+<h2 id="destroying-banner-view">Destroying Banner View</h2>
+<p>Make sure to destroy <code>CriteoBannerView</code> object when your Activity is destroyed.</p>
+<pre><code class="highlight java"><span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onDestroy</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">super</span>.onDestroy();
+    bannerView.destroy();
+}
+</code></pre>
+<pre><code class="highlight kotlin"><span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onDestroy</span><span class="hljs-params">()</span> {</span>
+    super.onDestroy()
+    bannerView.destroy()
+}
+</code></pre>
+<h2 id="setting-ad-listener">Setting Ad Listener</h2>
+<p>You can optionally add an Ad Listener to your <code>CriteoBannerView</code> object in order to handle callbacks when banner view has loaded, failed to load, or there&#39;s a click resulting in the user leaving the application, by calling <code>setCriteoBannerAdListener()</code> with a <code>CriteoBannerAdListener</code> object as parameter, before loading the ad.</p>
+<pre><code class="highlight java">bannerView.setCriteoBannerAdListener(<span class="hljs-keyword">new</span> CriteoBannerAdListener() {
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAdReceived</span><span class="hljs-params">(CriteoBannerView criteoBannerView)</span> </span>{
+        <span class="hljs-comment">// called when Criteo Ad is received and ready to be displayed</span>
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAdFailedToReceive</span><span class="hljs-params">(CriteoErrorCode criteoErrorCode)</span> </span>{
+        <span class="hljs-comment">// called when Criteo returns no ad. The error description gives further details on the failure.</span>
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAdLeftApplication</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// called when clicking on Criteo ad result in user leaving your application</span>
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAdClicked</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// called when user clicks on Criteo ad</span>
+    }
+});
+</code></pre>
+<pre><code class="highlight kotlin">bannerView.setCriteoBannerAdListener(<span class="hljs-keyword">object</span> : CriteoBannerAdListener {
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onAdReceived</span><span class="hljs-params">(criteoBannerView: <span class="hljs-typename">CriteoBannerView</span>)</span> {</span>
+        <span class="hljs-comment">// called when Criteo Ad is received and ready to be displayed</span>
+    }
+
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onAdFailedToReceive</span><span class="hljs-params">(criteoErrorCode: <span class="hljs-typename">CriteoErrorCode</span>)</span> {</span>
+        <span class="hljs-comment">// called when Criteo returns no ad. The error description gives further details on the failure.</span>
+    }
+
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onAdLeftApplication</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-comment">// called when clicking on Criteo ad result in user leaving your application</span>
+    }
+
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onAdClicked</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-comment">// called when user clicks on Criteo ad</span>
+    }
+})
+</code></pre>
+<h1 id="interstitial">Interstitial</h1>
+<h2 id="loading-interstitial-ads">Loading Interstitial Ads</h2>
+<p>You can request for Interstitial Ad by creating a <code>CriteoInterstitial</code> object for your Interstitial Ad Unit, and call <code>loadAd()</code>. This will prefetch an Interstitial Ad that you can display later in your app.</p>
+<pre><code class="highlight java"><span class="hljs-comment">// Initialize interstitial with interstitial ad unit</span>
+CriteoInterstitial interstitial = <span class="hljs-keyword">new</span> CriteoInterstitial(interstitialAdUnit);
+
+<span class="hljs-comment">// Load the interstitial with ad.</span>
+interstitial.loadAd();
+</code></pre>
+<pre><code class="highlight kotlin"><span class="hljs-comment">// Initialize interstitial with interstitial ad unit</span>
+<span class="hljs-variable"><span class="hljs-keyword">val</span> interstitial</span> = CriteoInterstitial(interstitialAdUnit)
+
+<span class="hljs-comment">// Load the interstitial with ad.</span>
+interstitial.loadAd()
+</code></pre>
+<h2 id="displaying-interstitial-ads">Displaying Interstitial Ads</h2>
+<p>Display previously-loaded Interstitial ad by calling <code>show()</code> method. Make sure to always check whether the Interstitial ad has been loaded using <code>isAdLoaded()</code> before presenting Criteo Interstitial ad to the user.</p>
+<pre><code class="highlight java"><span class="hljs-keyword">if</span> (interstitial.isAdLoaded()) {
+    interstitial.show();
+}
+</code></pre>
+<pre><code class="highlight kotlin"><span class="hljs-keyword">if</span> (interstitial.isAdLoaded) {
+    interstitial.show()
+}
+</code></pre>
+<h2 id="setting-ad-listener">Setting Ad Listener</h2>
+<p>You can optionally add an Ad Listener to your <code>CriteoInterstitial</code> object in order to handle callbacks when Interstitial view has loaded, failed to load, opened, closed or there&#39;s a click resulting in the user leaving the application, by calling <code>setCriteoInterstitialAdListener()</code> with a <code>CriteoInterstitialAdListener</code> object as parameter, before loading the ad.</p>
+<pre><code class="highlight java">interstitial.setCriteoInterstitialAdListener(<span class="hljs-keyword">new</span> CriteoInterstitialAdListener() {
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAdReceived</span><span class="hljs-params">(CriteoInterstitial criteoInterstitial)</span> </span>{
+        <span class="hljs-comment">// called when Criteo Ad is received and ready to be displayed.</span>
+        <span class="hljs-comment">// at this point, CriteoInterstitial#isAdLoaded() always returns true and</span>
+        <span class="hljs-comment">// you are safe to call CriteoInterstitial#show()</span>
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAdFailedToReceive</span><span class="hljs-params">(CriteoErrorCode criteoErrorCode)</span> </span>{
+        <span class="hljs-comment">// called when Criteo returns no ad. The error description gives further details on the failure.</span>
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAdClicked</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// called when user clicks on an opened Criteo Interstitial ad</span>
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAdOpened</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// called when Criteo Interstitial ad is opened and covering the screen</span>
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAdClosed</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// called when Criteo Interstitial ad is closed and user is back on the application</span>
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAdLeftApplication</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// called when clicking on Criteo ad result in user leaving your application</span>
+    }
+});
+</code></pre>
+<pre><code class="highlight kotlin">interstitial.setCriteoInterstitialAdListener(<span class="hljs-keyword">object</span> : CriteoInterstitialAdListener {
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onAdReceived</span><span class="hljs-params">(criteoInterstitial: <span class="hljs-typename">CriteoInterstitial</span>)</span> {</span>
+        <span class="hljs-comment">// called when Criteo Ad is received and ready to be displayed.</span>
+        <span class="hljs-comment">// at this point, CriteoInterstitial#isAdLoaded() always returns true and</span>
+        <span class="hljs-comment">// you are safe to call CriteoInterstitial#show()</span>
+    }
+
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onAdFailedToReceive</span><span class="hljs-params">(criteoErrorCode: <span class="hljs-typename">CriteoErrorCode</span>)</span> {</span>
+        <span class="hljs-comment">// called when Criteo returns no ad. The error description gives further details on the failure.</span>
+    }
+
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onAdClicked</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-comment">// called when user clicks on an opened Criteo Interstitial ad</span>
+    }
+
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onAdOpened</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-comment">// called when Criteo Interstitial ad is opened and covering the screen</span>
+    }
+
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onAdClosed</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-comment">// called when Criteo Interstitial ad is closed and user is back on the application</span>
+    }
+
+    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onAdLeftApplication</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-comment">// called when clicking on Criteo ad result in user leaving your application</span>
+    }
+})
+</code></pre>
+<h1 id="sample-project">Sample Project</h1>
+<p>See sample implementation of Criteo Standalone integration in <a href="https://github.com/criteo/android-publisher-sdk-examples/tree/master/standalone" target="_blank" onclick="(function(){ gtag('event','sample_github', { 'event_category': 'android_standalone' }); })()">GitHub</a>.</p>
+
+          </div>
+      </div>
+      <div class="tocify-wrapper">
+          <div class="search">
+            <input type="text" class="search" id="input-search" placeholder="Search">
+          </div>
+          <ul class="search-results"></ul>
+        <div id="toc">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
