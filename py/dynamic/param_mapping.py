@@ -24,26 +24,32 @@ import time
 #     }});
 # """
 
-
+flag = "true"
 frida_script = f"""
     Java.perform(function () {{
         Java.deoptimizeEverything()
         let AppLovinPrivacySettings = Java.use("com.applovin.sdk.AppLovinPrivacySettings");
         AppLovinPrivacySettings["setIsAgeRestrictedUser"].implementation = function (z, context) {{
-            console.log("z = " + z);
-            console.log("setIsAgeResctictedUser to false");
-            this["setIsAgeRestrictedUser"](false, context);
+            console.log("original = " + z);
+            console.log("setIsAgeResctictedUser to {flag}");
+            this["setIsAgeRestrictedUser"]({flag}, context);
         }};
         
         let AdSettings = Java.use("com.facebook.ads.AdSettings");
         AdSettings["setMixedAudience"].implementation = function (mixedAudience) {{
             console.log("setMixedAudience is " + mixedAudience);
+            console.log("stack track: " + Java.use('android.util.Log').getStackTraceString(Java.use('java.lang.Exception').$new()));
             this["setMixedAudience"](mixedAudience);
+        }};
+        
+        
+        let AudienceNetworkAds = Java.use("com.facebook.ads.AudienceNetworkAds");
+        AudienceNetworkAds["initialize"].implementation = function (context)  {{
+            console.log("AudienceNetworkAds initialize");
+            this["initialize"](context);
         }};
     }});
 """
-
-
 def on_message(message, data):
     if 'payload' in message:
         payload = message['payload']
@@ -62,7 +68,8 @@ def on_message(message, data):
         #     txt_file.write(formatted_payload + '\n')
 
 device = frida.get_usb_device()
-pid = device.spawn(["com.sdkint.applovinfacebook2"])
+#pid = device.spawn(["com.applovin.enterprise.apps.demoapp"]) #
+pid = device.spawn(["com.lemon.lvoverseas"])
 session = device.attach(pid)
 print(frida_script)
 script = session.create_script(frida_script)
