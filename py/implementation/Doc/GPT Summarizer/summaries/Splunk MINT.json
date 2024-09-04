@@ -1,3 +1,109 @@
-[
-    "{\n    \"SDK\": \"Splunk MINT\",\n    \"privacy_APIs\": [\n        {\n            \"API_name\": \"transactionStart\",\n            \"conditions\": [\n                \"Identify transactions that you want to monitor, like registration, login, or a purchase\"],\n            \"effects\": [\n                \"Starts a transaction that can be monitored through the Splunk MINT Management Console\",\n                \"Returns a transaction ID for tracking purposes\"\n            ],\n            \"parameter_configurations\": [\n                {\n"
-]
+{
+    "SDK": "Splunk MINT",
+    "privacy_APIs": [
+        {
+            "API_name": "setUserIdentifier",
+            "conditions": [
+                "User identifier must not transmit personally-identifiable or sensitive data"
+            ],
+            "effects": [
+                "Allows tracking of user-specific data and issues for investigation"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "12345",
+                        "someone@domain.com"
+                    ],
+                    "conditions": [
+                        "User must have a corresponding identifier in the database"
+                    ],
+                    "effects": [
+                        "Links session data and crash analytics to a specific user"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setUserOptOut",
+            "conditions": [
+                "Called before initAndStartSession to prevent data submission"
+            ],
+            "effects": [
+                "Prevents Splunk MINT from saving or sending data for the user"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [
+                        "User opts out of data collection"
+                    ],
+                    "effects": [
+                        "No data will be sent or tracked for the opted-out user"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "transactionStart",
+            "conditions": [],
+            "effects": [
+                "Begins a new transaction and assigns a transaction ID"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "Test1"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Creates a transaction that can be stopped or canceled later"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "transactionStop",
+            "conditions": [],
+            "effects": [
+                "Ends a transaction using its ID"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "txID"
+                    ],
+                    "conditions": [
+                        "Transaction ID must be valid and initiated"
+                    ],
+                    "effects": [
+                        "Completes the transaction process which can be marked as SUCCESS, CANCEL, or FAIL"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "transactionCancel",
+            "conditions": [],
+            "effects": [
+                "Cancels a transaction providing a reason"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "txID",
+                        "This is the reason"
+                    ],
+                    "conditions": [
+                        "Transaction ID must be valid and initiated"
+                    ],
+                    "effects": [
+                        "Documents the cancellation of a transaction"
+                    ]
+                }
+            ]
+        }
+    ]
+}

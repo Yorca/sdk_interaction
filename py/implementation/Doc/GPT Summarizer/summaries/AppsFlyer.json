@@ -1,0 +1,114 @@
+{
+    "SDK": "AppsFlyer",
+    "privacy_APIs": [
+        {
+            "API_name": "send consent for DMA compliance",
+            "conditions": [
+                "User must provide explicit consent"
+            ],
+            "effects": [
+                "Ensures compliance with data protection regulations regarding user consent"
+            ],
+            "parameter_configurations": []
+        },
+        {
+            "API_name": "anonymizeUser",
+            "conditions": [
+                "Invoked after sending install and in-app events",
+                "Can be implemented without anonymizing install events"
+            ],
+            "effects": [
+                "All identifying information is deleted or hashed upon reaching AppsFlyer's servers"
+            ],
+            "parameter_configurations": []
+        },
+        {
+            "API_name": "setSharingFilterForPartners",
+            "conditions": [
+                "Must be called before start to exclude specific partners from receiving data"
+            ],
+            "effects": [
+                "Prevents sharing of install and in-app event information with excluded third parties"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "specific partners"
+                    ],
+                    "conditions": [
+                        "User changes app sharing settings during the session"
+                    ],
+                    "effects": [
+                        "Allows dynamic adjustment of sharing preferences"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setDisableAdvertisingIdentifiers",
+            "conditions": [
+                "Called with true before start"
+            ],
+            "effects": [
+                "Disables collection of various Advertising IDs (GAID, OAID, AAID)"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [
+                        "User opts out of advertising identifiers"
+                    ],
+                    "effects": [
+                        "Prevents SRN attribution"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setCollectOaid",
+            "conditions": [
+                "Called with false before start"
+            ],
+            "effects": [
+                "Disables the collection of OAID by the SDK"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [
+                        "User does not want to share the OAID"
+                    ],
+                    "effects": [
+                        "OAID collection is prevented"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "start",
+            "conditions": [
+                "Called to send install event information"
+            ],
+            "effects": [
+                "Triggers the logging of install events"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        null
+                    ],
+                    "conditions": [
+                        "If only install event is to be sent"
+                    ],
+                    "effects": [
+                        "If success, subsequent call to stop or anonymizeUser is made to cease further data transmission"
+                    ]
+                }
+            ]
+        }
+    ]
+}

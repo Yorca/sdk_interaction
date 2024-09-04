@@ -1,0 +1,99 @@
+{
+    "SDK": "mixpanel",
+    "privacy_APIs": [
+        {
+            "API_name": "EU Data Residency",
+            "conditions": [
+                "Route data to Mixpanel's EU servers"
+            ],
+            "effects": [
+                "Data is routed to Mixpanel's EU servers for compliance with EU data residency regulations."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "https://api-eu.mixpanel.com/track?ip=1",
+                        "https://api-eu.mixpanel.com/engage?ip=1",
+                        "https://api-eu.mixpanel.com/groups",
+                        "https://api-eu.mixpanel.com/decide"
+                    ],
+                    "conditions": [
+                        "Add meta-data entries under the <application> tag of the AndroidManifest.xml"
+                    ],
+                    "effects": [
+                        "Ensures compliance with EU data protection regulations by processing personal data in EU-based servers."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "Identify Users",
+            "conditions": [
+                "Call identify when you know the identity of the current user"
+            ],
+            "effects": [
+                "Connects events to the correct user, allowing for user profile creation and activity tracking across devices."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "user ID"
+                    ],
+                    "conditions": [
+                        "It's done after log-in or sign-up"
+                    ],
+                    "effects": [
+                        "All future events sent from the device will be associated with the specified user ID."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "Storing User Profiles",
+            "conditions": [
+                "At least one property should be sent for a profile to be created"
+            ],
+            "effects": [
+                "Profiles are persistent sets of properties that describe a user."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "User email",
+                        "User name"
+                    ],
+                    "conditions": [
+                        "identify() must be called at least once for each user"
+                    ],
+                    "effects": [
+                        "Creates or updates a user profile dependent on the distinct_id."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "Tracking Revenue",
+            "conditions": [
+                "Make getPeople() identify has been called before making revenue updates"
+            ],
+            "effects": [
+                "Tracks revenue for the user and updates user profiles accordingly."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        100,
+                        -50,
+                        25
+                    ],
+                    "conditions": [
+                        "Identified user must already exist"
+                    ],
+                    "effects": [
+                        "Updates revenue information in user profile."
+                    ]
+                }
+            ]
+        }
+    ]
+}

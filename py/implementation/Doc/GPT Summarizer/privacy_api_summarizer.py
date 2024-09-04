@@ -5,6 +5,7 @@ import json
 import email
 import email
 from html.parser import HTMLParser
+from goose3 import Goose
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
@@ -48,7 +49,7 @@ Instructions for Summarizing an API:
 1. Do not infer information that is not included in the documentation, but feel free to use your prior knowledge to make the description more precise.
 2. Include all significant details related to the target API.
 3. Reference all relevant sections: Descriptions of the API might be mentioned in different parts of the documentation, not only in the API section. Ensure you find all related information.
-4. Strictly follow the format provided below. The annotations after each item indicate what should be filled in. If you cannot extract the corresponding information from the document, leave the item blank.
+4. Strictly follow the JSON format provided below. The annotations after each item indicate what should be filled in. If you cannot extract the corresponding information from the document, leave the item blank.
 
 Summary Format:
 {
@@ -84,7 +85,7 @@ Summary Example:
             "parameter_configurations": [
                 {
                     "parameter_values": [
-                        true, context
+                        true, "context"
                     ],
                     "conditions": [
                         "The user is under the age of 16"
@@ -95,7 +96,7 @@ Summary Example:
                 },
                 {
                     "parameter_values": [
-                        false, context
+                        false, "context"
                     ],
                     "conditions": [
                         "The user is above the age of 16"
@@ -144,20 +145,29 @@ Summary Example:
 """
 
 def analyze(user_prompt, sdk):
-    completion = client.chat.completions.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": sys_prompt},
-            {"role": "user", "content": user_prompt}
-        ]
-    )
+    try:
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": sys_prompt},
+                {"role": "user", "content": user_prompt}
+            ]
+        )
 
-    res = []
-    for choice in completion.choices:
-        res.append(str(choice.message.content))
+        print(str(completion.choices[0].message.content))
+        actual_json_str = json.loads(str(completion.choices[0].message.content))
+        print(actual_json_str)
+        beautified_json = json.dumps(actual_json_str, indent=4)
+        with open(f"summaries/{sdk}.json", 'a') as file:
+            file.write(beautified_json)
+    except json.JSONDecodeError as e:
+        with open("error_log.txt", 'a') as errorlog:
+            errorlog.write(f"SDK:{sdk}, JSONDecodeError: {e} \n")
+    except Exception as e:
+        with open(f"error_log", 'a') as errorlog:
+            errorlog.write(f"SDK:{sdk}, Error:{e} \n")
 
-    with open(f"summaries/{sdk}.json", 'w') as file:
-        json.dump(res, file, indent=4)
+
 
 # def has_analyzed(sdk, api):
 #     folder = "responses"
@@ -166,26 +176,6 @@ def analyze(user_prompt, sdk):
 #             if sdk in file and api in file:
 #                 return True
 #     return False
-
-
-
-
-
-# with open(test_mhtml, 'r') as fp:
-#     message = email.message_from_file(fp)
-#     print(message)
-    # soup = BeautifulSoup(message, 'html.parser')
-    # text_content = soup.get_text(separator='\n', strip=True)
-    # print(text_content)
-    # parsed_data = soup.prettify()
-    # print(parsed_data)
-    # for part in message.walk():
-    #     if (part.get_content_type() == "text/html"):
-    #         soup = BeautifulSoup(part.get_payload(decode=False), 'html.parser')
-    #         soup = BeautifulSoup(html_content, 'html.parser')
-    #         text_content = soup.get_text(separator='\n', strip=True)
-    #         parsed_data = soup.prettify()
-    #         print(parsed_data)
 
 doc_source = "../web_archive/privacy_docs_group/"
 def analyzeSDK(SDK):
@@ -196,14 +186,14 @@ def analyzeSDK(SDK):
             message += read_and_parse_html(os.path.join(file_path, filename))
         elif filename.endswith(".mhtml"):
             message += read_and_parse_mhtml(os.path.join(file_path, filename))
-    message = message[:int(len(message) * 0.85)]
+    # message = message[:int(len(message) * 0.85)]
     analyze(message, SDK)
+
+#print(json.loads('{\n    "SDK": "Splunk MINT",\n    "privacy_APIs": [\n        {\n            "API_name": "transactionStart",\n            "conditions": [\n                "Used when a transaction begins"\n            ],\n            "effects": [\n                "Starts a transaction. Returns a transaction ID"\n            ],\n            "parameter_configurations": [\n                {\n                    "parameter_values": [\n                        "name"\n                    ],\n                    "conditions": [\n                        "Transaction name is provided"\n                    ],\n                   '))
 
 
 for directory in os.listdir(doc_source):
     analyzeSDK(directory)
-    if True:
-        break
 
 
 
