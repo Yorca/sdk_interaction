@@ -3,9 +3,7 @@ from bs4 import BeautifulSoup
 import os
 import json
 import email
-import email
 from html.parser import HTMLParser
-from goose3 import Goose
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
@@ -47,16 +45,16 @@ An API is considered a privacy API if it is explicitly privacy-related, or if it
 6. Privacy Law Compliance: 6.1 Legal Compliance: Is the API designed to meet compliance requirements of privacy regulations or laws?
 Instructions for Summarizing an API:
 1. Do not infer information that is not included in the documentation, but feel free to use your prior knowledge to make the description more precise.
-2. Include all significant details related to the target API.
+2. Include ALL details related to the target API.
 3. Reference all relevant sections: Descriptions of the API might be mentioned in different parts of the documentation, not only in the API section. Ensure you find all related information.
-4. Strictly follow the JSON format provided below. The annotations after each item indicate what should be filled in. If you cannot extract the corresponding information from the document, leave the item blank.
+4. Strictly follow the JSON format provided below, and refer to the output example provided. You need to output a properly formatted JSON data to allow us to successfully parse it, avoiding any content beyond the JSON. The annotations after each item indicate what should be filled in. If you cannot extract the corresponding information from the document, leave the item blank.
 
 Summary Format:
 {
     "SDK": "",
     "privacy_APIs": [
         {
-            "API_name": "", // The name of the target API
+            "API_name": "", // The name of the target method, which will be used to match the method in the code
             "conditions": [], // The list of conditions required to call the API
             "effects": [], // The list of effects and consequences of calling the API
             "parameter_configurations": [ // Summary of all configurable parameters or parameter combinations; if no parameters in the API, leave it blank.
@@ -70,7 +68,7 @@ Summary Format:
     ]
 }
 
-Summary Example:
+Output Example:
 {
     "SDK": "AppLovin",
     "privacy_APIs": [
@@ -144,6 +142,10 @@ Summary Example:
 }
 """
 
+def recordResponseAsPlainText(sdk, response):
+    with open(f"plaintext_summaries2.0/{sdk}.txt", 'a') as file:
+        file.write(response)
+
 def analyze(user_prompt, sdk):
     try:
         completion = client.chat.completions.create(
@@ -154,17 +156,20 @@ def analyze(user_prompt, sdk):
             ]
         )
 
-        print(str(completion.choices[0].message.content))
-        actual_json_str = json.loads(str(completion.choices[0].message.content))
-        print(actual_json_str)
-        beautified_json = json.dumps(actual_json_str, indent=4)
-        with open(f"summaries/{sdk}.json", 'a') as file:
-            file.write(beautified_json)
+        response = str(completion.choices[0].message.content)
+        try:
+            actual_json_str = json.loads(str(completion.choices[0].message.content))
+            beautified_json = json.dumps(actual_json_str, indent=4)
+            with open(f"summaries2.0/{sdk}.json", 'a') as file:
+                file.write(beautified_json)
+        except:
+            recordResponseAsPlainText(sdk, response)
+
     except json.JSONDecodeError as e:
-        with open("error_log.txt", 'a') as errorlog:
+        with open("error_log.log", 'a') as errorlog:
             errorlog.write(f"SDK:{sdk}, JSONDecodeError: {e} \n")
     except Exception as e:
-        with open(f"error_log", 'a') as errorlog:
+        with open(f"error_log.log", 'a') as errorlog:
             errorlog.write(f"SDK:{sdk}, Error:{e} \n")
 
 
@@ -175,9 +180,9 @@ def analyze(user_prompt, sdk):
 #         for file in files:
 #             if sdk in file and api in file:
 #                 return True
-#     return False
+#     return False Digital Turbine FairBid_privacy
 
-doc_source = "../web_archive/privacy_docs_group/"
+
 def analyzeSDK(SDK):
     message = f"SDK name: {SDK}\nDocumentation:\n"
     file_path = os.path.join(doc_source, SDK)
@@ -186,12 +191,9 @@ def analyzeSDK(SDK):
             message += read_and_parse_html(os.path.join(file_path, filename))
         elif filename.endswith(".mhtml"):
             message += read_and_parse_mhtml(os.path.join(file_path, filename))
-    # message = message[:int(len(message) * 0.85)]
     analyze(message, SDK)
 
-#print(json.loads('{\n    "SDK": "Splunk MINT",\n    "privacy_APIs": [\n        {\n            "API_name": "transactionStart",\n            "conditions": [\n                "Used when a transaction begins"\n            ],\n            "effects": [\n                "Starts a transaction. Returns a transaction ID"\n            ],\n            "parameter_configurations": [\n                {\n                    "parameter_values": [\n                        "name"\n                    ],\n                    "conditions": [\n                        "Transaction name is provided"\n                    ],\n                   '))
-
-
+doc_source = "../web_archive/privacy_docs_group/"
 for directory in os.listdir(doc_source):
     analyzeSDK(directory)
 
