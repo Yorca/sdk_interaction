@@ -1,0 +1,95 @@
+{
+    "SDK": "Startapp",
+    "privacy_APIs": [
+        {
+            "API_name": "setUserConsent",
+            "conditions": [
+                "Consent is required in countries covered by GDPR",
+                "Timestamp parameter should represent the specific time a consent was given by the user"
+            ],
+            "effects": [
+                "Indicates whether a user has provided consent for sharing their app data for the purpose of ads personalization"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "this",
+                        "pas",
+                        "System.currentTimeMillis()",
+                        true
+                    ],
+                    "conditions": [
+                        "User has consented"
+                    ],
+                    "effects": [
+                        "User's consent is recorded for ads personalization"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "this",
+                        "pas",
+                        "System.currentTimeMillis()",
+                        false
+                    ],
+                    "conditions": [
+                        "User has not consented"
+                    ],
+                    "effects": [
+                        "User's consent is not recorded, ensuring no personalized ads are shown"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "getExtras",
+            "conditions": [
+                "Applicable to users in California under CCPA"
+            ],
+            "effects": [
+                "Sets the IAB US Privacy String to manage user privacy preferences"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "this",
+                        "IABUSPrivacy_String",
+                        "1---"
+                    ],
+                    "conditions": [
+                        "When CCPA does not apply"
+                    ],
+                    "effects": [
+                        "Indicates no restrictions on advertising for users not in California"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "this",
+                        "IABUSPrivacy_String",
+                        "1YNN"
+                    ],
+                    "conditions": [
+                        "User chooses not to opt-out and is okay with ads"
+                    ],
+                    "effects": [
+                        "Indicates normal advertising for the user"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "this",
+                        "IABUSPrivacy_String",
+                        "1YYN"
+                    ],
+                    "conditions": [
+                        "User chooses to restrict advertising and opt-out"
+                    ],
+                    "effects": [
+                        "Indicates restricted advertising as per CCPA"
+                    ]
+                }
+            ]
+        }
+    ]
+}

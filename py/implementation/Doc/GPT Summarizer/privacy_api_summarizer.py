@@ -157,13 +157,12 @@ def analyze(user_prompt, sdk):
         )
 
         response = str(completion.choices[0].message.content)
-        try:
-            actual_json_str = json.loads(str(completion.choices[0].message.content))
-            beautified_json = json.dumps(actual_json_str, indent=4)
-            with open(f"summaries2.0/{sdk}.json", 'a') as file:
-                file.write(beautified_json)
-        except:
-            recordResponseAsPlainText(sdk, response)
+        recordResponseAsPlainText(sdk, response)
+        actual_json_str = json.loads(response)
+        beautified_json = json.dumps(actual_json_str, indent=4)
+        with open(f"summaries2.0/{sdk}.json", 'a') as file:
+            file.write(beautified_json)
+
 
     except json.JSONDecodeError as e:
         with open("error_log.log", 'a') as errorlog:

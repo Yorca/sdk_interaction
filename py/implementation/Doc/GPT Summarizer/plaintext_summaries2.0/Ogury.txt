@@ -1,0 +1,129 @@
+{
+    "SDK": "Ogury",
+    "privacy_APIs": [
+        {
+            "API_name": "setConsent",
+            "conditions": [
+                "User consent must be collected and the Ogury SDK must be initialized."
+            ],
+            "effects": [
+                "Transmits the user consent to the Ogury SDK for processing personalized ads."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "iabString", new Integer[0]
+                    ],
+                    "conditions": [
+                        "If the CMP generates a TCFv2 consent string compatible with the IAB GDPR Consent Framework."
+                    ],
+                    "effects": [
+                        "Synchronizes user's consent before each ad request."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        true, "CUSTOM"
+                    ],
+                    "conditions": [
+                        "If using a third-party CMP or an in-house solution for consent."
+                    ],
+                    "effects": [
+                        "Indicates that the user has consented to data processing."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false, "CUSTOM"
+                    ],
+                    "conditions": [
+                        "If user did not provide consent."
+                    ],
+                    "effects": [
+                        "Indicates that the user has not consented to data processing."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "ask",
+            "conditions": [
+                "Called at each launch of the application to retrieve up-to-date consent status."
+            ],
+            "effects": [
+                "Displays consent notices and synchronizes consent status."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "activity", "oguryConsentListener"
+                    ],
+                    "conditions": [
+                        "The current Activity is required for context."
+                    ],
+                    "effects": [
+                        "Asks the server for the current user's consent status."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "edit",
+            "conditions": [
+                "User must be allowed to edit their consent choices."
+            ],
+            "effects": [
+                "Enforces the display of consent editing options."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "activity", "oguryConsentListener"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Triggers the display for the user to edit their consent."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "applyChildPrivacy",
+            "conditions": [
+                "Must be called if the application is for mixed audience and when user status under COPPA or GDPR applies."
+            ],
+            "effects": [
+                "Indicates that the current user is a child, thereby applying necessary privacy treatments."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "OguryChildPrivacyTreatment.UNSPECIFIED"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Default treatment; no specific child privacy application."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "OguryChildPrivacyTreatment.CHILD_UNDER_COPPA_TREATMENT_TRUE"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Specifies that the current user should receive treatment for users under COPPA compliance."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "OguryChildPrivacyTreatment.UNDER_AGE_OF_GDPR_CONSENT_TREATMENT_TRUE"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Specifies that the user should receive treatment for those under the age of GDPR consent."
+                    ]
+                }
+            ]
+        }
+    ]
+}
