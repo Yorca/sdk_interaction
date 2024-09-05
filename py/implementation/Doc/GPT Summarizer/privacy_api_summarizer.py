@@ -47,7 +47,8 @@ Instructions for Summarizing an API:
 1. Do not infer information that is not included in the documentation, but feel free to use your prior knowledge to make the description more precise.
 2. Include ALL details related to the target API.
 3. Reference all relevant sections: Descriptions of the API might be mentioned in different parts of the documentation, not only in the API section. Ensure you find all related information.
-4. Strictly follow the JSON format provided below, and refer to the output example provided. You need to output a properly formatted JSON data to allow us to successfully parse it, avoiding any content beyond the JSON. The annotations after each item indicate what should be filled in. If you cannot extract the corresponding information from the document, leave the item blank.
+4. Follow the JSON format strictly as provided, and refer to the example output. Ensure that the JSON data is properly formatted to allow successful parsing, and avoid including any content beyond the JSON (e.g., do not add "json" at the beginning or "" at the end). Use quotation marks ("") to wrap any object that is invalid in JSON.
+5. The annotations after each item indicate what needs to be filled in, but do not include comments in your response. If specific information cannot be extracted from the document, leave the item blank.
 
 Summary Format:
 {
