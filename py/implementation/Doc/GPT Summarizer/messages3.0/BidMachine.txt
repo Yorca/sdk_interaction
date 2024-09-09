@@ -1,0 +1,1294 @@
+SDK name: BidMachine
+Documentation:
+In-House Mediation
+Jump to Content
+Documentation
+v1.9
+v2.0
+v3.0
+Log In
+Documentation
+Log In
+Moon (Dark Mode)
+Sun (Light Mode)
+v
+3.0
+Documentation
+In-House Mediation
+Search
+General
+Getting Started with BidMachine SDK
+Getting Started with BidMachine Exchange
+For Android
+AdMob Bidding
+Banner
+MREC
+Interstitial
+Rewarded
+Native
+Changelog
+Google Ad Manager Bidding
+Banner
+MREC
+Interstitial
+Rewarded
+Changelog
+Applovin MAX
+Ironsource Level Play
+IronSource LevelPlay Bidding Integration
+IronSource LevelPlay Waterfall integration
+Changelog
+In-House Mediation
+Banner / MREC
+Interstitial
+Rewarded
+Native
+RichMedia
+Changelog
+For iOS
+AdMob Bidding
+Banner
+MREC
+Interstitial
+Rewarded Video
+Native Ad
+Google Ad Manager Bidding
+Banner
+Interstitial
+Rewarded
+Applovin MAX
+Ironsource Level Play
+IronSource LevelPlay Bidding Integration
+IronSource LevelPlay Waterfall Integration
+In-House Mediation
+Request
+Ad object
+Header Bidding
+Troubleshooting
+Migration guide 1.9 -> 2.x
+Manual integration
+Changelog
+FOR UNITY
+IronSource LevelPlay Waterfall Integration
+Ad Ops
+Ad Ops - Google AdMob
+Ad Ops - Google Ad Manager
+Setting up static ads
+Setting up video ads
+SSP Integration
+OpenRTB Integration
+Bid Request Specification
+App
+Publisher
+Device
+Imp
+Banner
+Native
+Video
+Regs
+User
+Geo
+Enumerated Lists Specification
+Test Environment
+Request and Response Examples
+DSP Integration
+Bid Request Specification
+Requirements for MRAID Ads
+Imp Object
+Banner Object
+Native Object
+Video Object
+App Object
+Device Object
+User Object
+Data Object
+Segment Object
+Geo Object
+Publisher Object
+GDPR
+Regs Object
+Source Object
+Contextual data collected by BM SDK
+Bid Response Specification
+Seatbid Object
+Bid Object
+Bid Request Examples
+Bid Response Examples
+nURL and Impression Tracking Schemes
+Banner & Interstitial Scheme
+Video Ad Scheme
+Macros for Bid Response
+VAST Extensions
+iOS 14+ & SKAdNetwork Support
+SKAdNetwork Support
+Enumerated Lists Specification
+Bidmachine Dashboard
+Source & Blockings Rules
+Advanced Reporting
+Creatives Preview
+Payments
+Reporting APIs
+Reporting API
+BM SDK Data Collection Practices
+App privacy details on the App Store
+App privacy details on Google Play
+GDPR and Coppa Data Collection
+In-House Mediation
+Suggest Edits
+Integration
+🚧
+Requirements
+Min Android SDK version - 21 (5.0, Lollipop)
+Min Android Gradle Plugin - 7.1.0
+build.gradle
+repositories {
+    // Add BidMachine maven repository
+    maven {
+        url 'https://artifactory.bidmachine.io/bidmachine'
+    }
+}
+ 
+dependencies {
+    implementation "io.bidmachine:ads:3.0.0"
+}
+Set Java version to 8:
+build.gradle
+android {
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+Device Advertising ID
+In mobile apps, there are no cookies. Instead, Ad Manager uses user-resettable identifiers provided by the mobile device's operating system. Typical advertising IDs are AdID (Android) and IDFA (Apple). Mobile advertising IDs allow developers and marketers to track activity for advertising purposes. They're also used to enhance serving and targeting capabilities.
+Add Play Services Ads Identifier dependency:
+build.gradle
+implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
+Network security configuration
+Android 9.0 (API 28) blocks cleartext (non-HTTPS) traffic by default
+, which can prevent ads from being served correctly.
+❗️
+Failure to comply with this configuration may result in lower display rate, fill rate, rendering errors, and as a result - lower revenue
+Add a Network Security Configuration file to your
+AndroidManifest.xml
+:
+AndroidManifest.xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+    <application android:networkSecurityConfig="@xml/network_security_config" />
+</manifest>
+In your network_security_config.xml file, add base-config that sets
+cleartextTrafficPermitted
+to true:
+network_security_config.xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>
+Initialization
+Initialize SDK, and set your SourceId.
+📘
+To get your SOURCE_ID, visit
+our website
+or contact the support.
+Java
+Kotlin
+BidMachine.initialize(@NonNull Context, "<YOUR_SOURCE_ID>");
+
+// or with InitializationCallback
+BidMachine.initialize(@NonNull Context, "<YOUR_SOURCE_ID>", @Nullable InitializationCallback);
+BidMachine.initialize(Context, "<YOUR_SOURCE_ID>")
+
+// or with InitializationCallback
+BidMachine.initialize(Context, "<YOUR_SOURCE_ID>", InitializationCallback?)
+Enable logs if required:
+Java
+Kotlin
+BidMachine.setLoggingEnabled(boolean);
+BidMachine.setLoggingEnabled(Boolean)
+Enable test mode:
+Java
+Kotlin
+BidMachine.setTestMode(boolean);
+BidMachine.setTestMode(Boolean)
+Set your endpoint before initialization if required:
+Java
+Kotlin
+BidMachine.setEndpoint(@NonNull String);
+BidMachine.setEndpoint(String)
+SDK can automatically track user device location to serve better ads. To make it work for Android 6.0, you should request
+android.permission.ACCESS_COARSE_LOCATION
+and
+android.permission.ACCESS_FINE_LOCATION
+:
+Java
+Kotlin
+ActivityCompat.requestPermissions(@NonNull Activity, new String[]{
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
+}, REQ_CODE);
+ActivityCompat.requestPermissions(Activity, arrayOf<String>(
+    Manifest.permission.ACCESS_COARSE_LOCATION,
+    Manifest.permission.ACCESS_FINE_LOCATION
+), REQ_CODE)
+Request parameters
+User Restriction Parameters
+Param
+Type
+Description
+GDPR Consent String
+String
+GDPR consent string (if applicable), indicating the compliance with the IAB standard
+Consent String Format
+of the
+Transparency and ConsentFramework
+technical specifications.
+Subject to GDPR
+Boolean
+Flag indicating if GDPR regulations apply
+The General Data Protection Regulation (GDPR)
+is a regulation of the European Union.
+Coppa
+Boolean
+Flag indicating if COPPA regulations apply.
+The Children's Online Privacy Protection Act (COPPA)
+was established by the U.S. Federal Trade Commission.
+US Privacy String
+String
+CCPA string if applicable, compliant with the IAB standard
+CCPA String Format
+GPP String
+String
+GPP string if applicable, compliant with the IAB standard
+GPP String Format
+GPP Ids
+List<Integer>
+GPP ids
+Code Example:
+Java
+Kotlin
+// Set COPPA
+BidMachine.setCoppa(@Nullable Boolean);
+
+// Set subject to GDPR
+BidMachine.setSubjectToGDPR(@Nullable Boolean);
+
+// Set consent config
+BidMachine.setConsentConfig(boolean, @Nullable String);
+
+// Set CCPA
+BidMachine.setUSPrivacyString(@Nullable String);
+
+// Set GPP
+BidMachine.setGPP(@Nullable String, @Nullable List<Integer>);
+// Set COPPA
+BidMachine.setCoppa(Boolean?)
+
+// Set subject to GDPR
+BidMachine.setSubjectToGDPR(Boolean?)
+
+// Set consent config
+BidMachine.setConsentConfig(Boolean, String?)
+
+// Set CCPA
+BidMachine.setUSPrivacyString(String?)
+
+// Set GPP
+BidMachine.setGPP(String?, List<Int>?)
+COPPA
+To help ensure compliance with COPPA you must indicate whether a user falls within an age-restricted category. To pass COPPA to
+BidMachine
+, use:
+Java
+Kotlin
+BidMachine.setCoppa(@Nullable Boolean);
+BidMachine.setCoppa(Boolean?)
+GDPR
+The Publisher needs to send a boolean flag indicating if GDPR applies to the current user.
+If so, the Publisher also needs to collect user consent prior to requesting any ads from the Exchange server. More information about collecting consent is
+here
+.
+SDK has public methods to transfer GDPR data. Also, SDK automatically retrieves GDPR from
+SharedPreference
+. If you would like to pass GDPR according to IAB standards, please add it in
+SharedPreference
+.
+When using several methods of data transfer at once, priority is given to the SDK public method, then TCF 2.0, then TCF 1.0.
+Some adapters don't have a public API for the GDPR data to be passed to them. Such adapters will read GDPR from the
+SharedPreference
+.
+GDPR Applies
+SDK public method:
+Java
+Kotlin
+BidMachine.setSubjectToGDPR(@Nullable Boolean);
+BidMachine.setSubjectToGDPR(Boolean?)
+Example TFC 2.0:
+Java
+Kotlin
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit()
+        .putInt("IABTCF_gdprApplies", <GDPR APPLIES>)
+        .apply();
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit {
+            putInt("IABTCF_gdprApplies", <GDPR APPLIES>)
+        }
+Example TFC 1.0:
+Java
+Kotlin
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit()
+        .putString("IABConsent_SubjectToGDPR", "<GDPR APPLIES>")
+        .apply();
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit {
+            putString("IABConsent_SubjectToGDPR", "<GDPR APPLIES>")
+        }
+GDPR Consent String
+SDK public method
+Java
+Kotlin
+BidMachine.setConsentConfig(boolean, @Nullable String);
+BidMachine.setConsentConfig(Boolean, String?)
+Example TCF 2.0:
+Java
+Kotlin
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit()
+        .putString("IABTCF_TCString", "<GDPR CONSENT STRING>")
+        .apply();
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit {
+            putString("IABTCF_TCString", "<GDPR CONSENT STRING>")
+        }
+Example TCF 1.0:
+Java
+Kotlin
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit()
+        .putString("IABConsent_ConsentString", "<GDPR CONSENT STRING>")
+        .apply();
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit {
+            putString("IABConsent_ConsentString", "<GDPR CONSENT STRING>")
+        }
+CCPA
+To pass CCPA U.S. Privacy String to
+BidMachine
+, use:
+Java
+Kotlin
+BidMachine.setUSPrivacyString(@Nullable String);
+BidMachine.setUSPrivacyString(String?)
+Also, SDK automatically retrieves CCPA U.S. Privacy String from
+SharedPreference
+. If you would like to pass CCPA U.S. Privacy String according to IAB standards, please add it in
+SharedPreference
+. More information
+here
+and
+here
+.
+Java
+Kotlin
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit()
+        .putString("IABUSPrivacy_String", "<IAB CCPA U.S. PRIVACY STRING>")
+        .apply();
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit {
+            putString("IABUSPrivacy_String", "<IAB CCPA U.S. PRIVACY STRING>")
+        }
+Some adapters don't have a public API for the CCPA U.S. Privacy String to be passed to them. Such adapters will read this from the
+SharedPreference
+.
+GPP
+To pass GPP to
+BidMachine
+, use:
+Java
+Kotlin
+BidMachine.setGPP(@Nullable String, @Nullable List<Integer>);
+BidMachine.setGPP(String?, List<Int>?)
+Also, SDK automatically retrieves GPP from
+SharedPreference
+. If you would like to pass GPP according to IAB standards, please add it in
+SharedPreference
+. More information
+here
+and
+here
+Java
+Kotlin
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit()
+        .putString("IABGPP_HDR_GppString", "<IAB GPP STRING>")
+        .putString("IABGPP_GppSID", "<IAB GPP IDs STRING>")
+        .apply();
+PreferenceManager.getDefaultSharedPreferences(Context)
+        .edit {
+            putString("IABGPP_HDR_GppString", "<IAB GPP STRING>")
+            putString("IABGPP_GppSID", "<IAB GPP IDs STRING>")
+        }
+Publisher
+To pass information about the publisher, use the public method:
+Java
+Kotlin
+BidMachine.setPublisher(@Nullable Publisher);
+BidMachine.setPublisher(Publisher?)
+Param
+Type
+Description
+Id
+String
+Publisher ID
+Name
+String
+Publisher name
+Domain
+String
+Publisher domain
+Category
+String
+Publisher content category
+Code Example:
+Java
+Kotlin
+Publisher publisher = new Publisher.Builder()
+        .setId(@Nullable String)
+        .setName(@Nullable String)
+        .setDomain(@Nullable String)
+        .addCategory(@Nullable String)
+        .addCategories(@Nullable List<String>)
+        .build();
+
+// Sets publisher information
+BidMachine.setPublisher(publisher);
+val publisher = Publisher.Builder()
+        .setId(String?)
+        .setName(String?)
+        .setDomain(String?)
+        .addCategory(String?)
+        .addCategories(List<String>?)
+        .build()
+
+// Sets publisher information
+BidMachine.setPublisher(publisher)
+Targeting Parameters
+Param
+Type
+Description
+User Id
+String
+Vendor-specific ID for the user.
+Gender
+Enum
+Gender, one of the following:
+Female, Male, Omitted.
+Year of Birth
+Integer
+Year of birth as a 4-digit integer (e.g. - 1990).
+Keywords
+String[]
+List of keywords, interests, or intents (separated by comma if you use .xml).
+Device Location
+Location
+Location of the device. It may not be the location sent to the server, as it is compared to the current device location at the time, when it was received.
+Country
+String
+Country of the user's domicile (i.e. not necessarily their current location).
+City
+String
+City of the user's domicile (i.e. not necessarily their current location).
+Zip
+String
+Zip of the user's domicile (i.e. not necessarily their current location).
+Store Url
+String
+App store URL for an installed app; for
+IQG 2.1
+compliance.
+Store Category
+String
+Sets App store category definitions (e.g. - "games").
+Store Sub Category
+String[]
+Sets App Store Subcategory definitions. The array is always capped at 3 strings.
+Framework Name
+String
+Sets app framework definitions.
+Paid
+Boolean
+Determines, if the app version is free or paid version of the app.
+External User Ids
+List<ExternalUserId>
+Set external user ID list.
+Blocked Advertiser IAB Category
+String[]
+Block list of content categories by IDs.
+Blocked Advertiser Domain
+String[]
+Block list of advertisers by their domains (e.g., “example.com”).
+Blocked Application
+String[]
+Block list of apps where ads are disallowed. These should be bundle or package names (e.g., “com.foo.mygame”) and should NOT be app store IDs (e.g., not iTunes store IDs).
+Code Example:
+Java
+Kotlin
+TargetingParams targetingParams = new TargetingParams()
+        .setUserId(@Nullable String)
+        .setGender(@Nullable Gender)
+        .setBirthdayYear(@Nullable Integer)
+        .setKeywords(@Nullable String[])
+        .setDeviceLocation(@Nullable Location)
+        .setCountry(@Nullable String)
+        .setCity(@Nullable String)
+        .setZip(@Nullable String)
+        .setStoreUrl(@Nullable String)
+        .setStoreCategory(@Nullable String)
+        .setStoreSubCategories(@Nullable String[])
+        .setFramework(@Nullable String)
+        .setPaid(@Nullable Boolean)
+        .setExternalUserIds(@Nullable List<ExternalUserId>)
+        .addBlockedAdvertiserIABCategory(@NonNull String)
+        .addBlockedAdvertiserDomain(@NonNull String)
+        .addBlockedApplication(@NonNull String);
+val targetingParams = TargetingParams()
+        .setUserId(String?)
+        .setGender(Gender?)
+        .setBirthdayYear(Int?)
+        .setKeywords((vararg String)?)
+        .setDeviceLocation(Location?)
+        .setCountry(String?)
+        .setCity(String?)
+        .setZip(String?)
+        .setStoreUrl(String?)
+        .setStoreCategory(String?)
+        .setStoreSubCategories((vararg String)?)
+        .setFramework(String?
+        .setPaid(Boolean?)
+        .setExternalUserIds(List<ExternalUserId>?)
+        .addBlockedAdvertiserIABCategory(String)
+        .addBlockedAdvertiserDomain(String)
+        .addBlockedApplication(String)
+TargetingParams
+can be passed with 2 ways:
+Through global parameters:
+Java
+Kotlin
+BidMachine.setTargetingParams(targetingParams);
+BidMachine.setTargetingParams(targetingParams)
+Through ad request builder:
+Java
+Kotlin
+adRequestBuilder.setTargetingParams(targetingParams);
+adRequestBuilder.setTargetingParams(targetingParams)
+You can combine global parameters with regular. If you set Global
+TargetingParams
+using
+UserId
+, and then make a request using
+TargetingParams
+with
+Gender
+set, both requests will be merged and the resulting
+TargetingParams
+will include both
+UserId
+and
+Gender
+.
+📘
+Priority is given to the
+AdRequest
+parameters.
+Price Floor Parameters
+Parameter
+Type
+Description
+Id
+String
+Unique floor identifier.
+Price
+double
+Floor price
+If you use the method with only
+Price
+provided
+PriceFloorParams.addPriceFloor(Double)
+, the
+Id
+will be generated using
+UUID.randomUUID()
+.
+Code Example:
+Java
+Kotlin
+PriceFloorParams priceFloorParams = new PriceFloorParams()
+        // Set Bid Price, in this case id will be generated
+        .addPriceFloor(double)
+        // Set Bid Id and Price
+        .addPriceFloor(@NonNull String, double);
+val priceFloorParams = PriceFloorParams()
+        // Set Bid Price, in this case id will be generated
+        .addPriceFloor(Double)
+        // Set Bid Id and Price
+        .addPriceFloor(String, Double)
+To set up price floor parameters for ad request use
+setPriceFloorParams
+method from
+AdRequest
+builder according to ads type.
+Java
+Kotlin
+adRequestBuilder.setPriceFloorParams(priceFloorParams);
+adRequestBuilder.setPriceFloorParams(priceFloorParams)
+Session Ad Parameters
+Param
+Type
+Description
+Session Duration
+Integer
+The total duration of time a user has spent so far in a specific app session expressed in seconds.
+Impression Count
+Integer
+The count of impressions for a specific placement type in a given app session.
+Click Rate
+Float
+The percentage of clicks/impressions per user per placement type over a given number of impressions.
+Is User Clicked On Last Ad
+Boolean
+A boolean value indicating if the user clicked on the last impression in a given session per placement type.
+Completion Rate
+Float
+The percentage of successful completions/impressions per user per placement type for a given number of impressions.
+This only applies to Rewarded and Video placement types.
+Code Example:
+Java
+Kotlin
+SessionAdParams sessionAdParams = new SessionAdParams()
+        .setSessionDuration(@Nullable Integer)
+        .setImpressionCount(@Nullable Integer)
+        .setClickRate(@Nullable Float)
+        .setIsUserClickedOnLastAd(@Nullable Boolean)
+        .setCompletionRate(@Nullable Float);
+val sessionAdParams = SessionAdParams()
+        .setSessionDuration(Integer?)
+        .setImpressionCount(Integer?)
+        .setClickRate(Float?)
+        .setIsUserClickedOnLastAd(Boolean?)
+        .setCompletionRate(Float?)
+To set up session ad parameters for ad request use
+setSessionAdParams
+method from
+AdRequest
+builder according to ads type.
+Java
+Kotlin
+adRequestBuilder.setSessionAdParams(sessionAdParams);
+adRequestBuilder.setSessionAdParams(sessionAdParams)
+Custom Parameters
+Code Example:
+Java
+Kotlin
+CustomParams customParams = new CustomParams()
+        .addParam(@NonNull String, @NonNull String)
+        .addParams(@NonNull Map<String, String>);
+val customParams = CustomParams()
+        .addParam(String, String)
+        .addParams(Map<String, String>)
+To set up custom parameters for ad request use
+setCustomParams
+method from
+AdRequest
+builder according to ads type.
+Java
+Kotlin
+adRequestBuilder.setCustomParams(customParams);
+adRequestBuilder.setCustomParams(customParams)
+Placement Id
+To set up placement id for current impression use
+setPlacementId
+method from
+AdRequest
+builder according to ads type.
+Java
+Kotlin
+adRequestBuilder.setPlacementId(@Nullable String);
+adRequestBuilder.setPlacementId(String?)
+Bid Payload
+To set up bid payload for ad request use
+setBidPayload
+method from
+AdRequest
+builder according to ads type.
+Java
+Kotlin
+adRequestBuilder.setBidPayload(@Nullable String);
+adRequestBuilder.setBidPayload(String?)
+Example
+Auction result
+Parameter
+Type
+Description
+Sample
+Id
+String
+Winner bid ID provided in the request.
+"cc5bd14b-aaef-4037-b4f8-879913366e3c"
+Demand Source
+String
+Winner advertising source name.
+"BidMachine Test"
+Price
+double
+Winner price expressed as CPM.
+0.023
+Deal
+String
+Id of Price Floor.
+"d6f61bf9-11a8-4172-a77d-4b1ff85a727f"
+Creative Id
+String
+Winner creative id.
+"123.13579"
+CID
+String
+Winner Campaign ID or other similar grouping of brand-related ads.
+"123.13587"
+Ad Domain
+String[]
+Winner advertiser domain (top two levels only e.g., "ford.com").
+["sample1.com", "sample2.com"]
+Network Key
+String
+Winner network key. This network will be loaded.
+"mraid"
+Network Params
+Map<String, String>
+Client parameters of winner networks.
+Creative Format
+Enum
+CreativeFormat, one of the following:
+Banner, Video, Native.
+CreativeFormat.Video
+Custom Params
+Map<String, String>
+Map that contains additional information about the response.
+You can get
+AuctionResult
+in two ways:
+Through
+AdRequestListener
+. Use
+AuctionResult
+from
+onRequestSuccess
+callback
+Java
+Kotlin
+adRequestBuilder.setListener(new <AdRequestObject>.AdRequestListener() {
+    @Override
+    public void onRequestSuccess(@NonNull <AdRequestObject> adRequest,
+                                 @NonNull AuctionResult auctionResult) {
+        // Use AuctionResult from onRequestSuccess callback
+    }
+});
+adRequestBuilder.setListener(object : <AdRequestObject>.AdRequestListener {
+    override fun onRequestSuccess(adRequest: <AdRequestObject>,
+                                  auctionResult: AuctionResult) {
+        // Use AuctionResult from onRequestSuccess callback
+    }
+});
+Through getter. Each
+AdRequest
+has an option to retrieve auction result information after it has been loaded.
+Java
+Kotlin
+adRequest.getAuctionResult();
+adRequest.auctionResult;
+Win/Loss notifications
+Call notifyMediationWin/notifyMediationLoss on the AdRequest instance when BidMachine wins/loses the mediation among networks.
+Win notification:
+Java
+Kotlin
+adRequest.notifyMediationWin();
+adRequest.notifyMediationWin()
+Loss notification:
+Java
+Kotlin
+adRequest.notifyMediationLoss("<WINNER_NETWORK_NAME>", <WINNER_NETWORK_PRICE>);
+// or
+adRequest.notifyMediationLoss();
+adRequest.notifyMediationLoss("<WINNER_NETWORK_NAME>", <WINNER_NETWORK_PRICE>)
+// or
+adRequest.notifyMediationLoss()
+Bid Token
+With S2S integration, you will need a BidToken that you need to transfer in the request. To get a BidToken, you can use one of 2 methods:
+Java
+Kotlin
+// Must be run on background thread
+String bidToken = BidMachine.getBidToken(@NonNull Context, @Nullable AdsFormat);
+// Must be run on background thread
+val bidToken = BidMachine.getBidToken(Context, AdsFormat?)
+or
+Java
+Kotlin
+BidMachine.getBidToken(@NonNull Context, @Nullable AdsFormat, new BidTokenCallback() {
+    @Override
+    public void onCollected(@NonNull String bidToken) {
+        // The BidToken will be returned on a background thread
+    }
+});
+BidMachine.getBidToken(Context, AdsFormat?) { bidToken ->
+    // The BidToken will be returned on a background thread
+}
+Custom init server configuration parameters
+You can get the configuration from the BM server using a pre-agreed key
+Java
+Kotlin
+Object param = BidMachine.getExtrasParam(@NonNull Context, @NonNull String);
+val param: Any? = BidMachine.getExtrasParam(Context, String)
+3rd party SDK integration (Header-Bidding)
+You can find all integration code examples written in Java and Kotlin
+here
+🚧
+All 3rd party networks should be configured and registered before SDK initialization
+AdColony
+📘
+Supported ad types
+Interstitial
+Rewarded
+Add this to Module-level
+build.gradle
+before dependencies:
+build.gradle
+repositories {
+    google()
+    mavenCentral() 
+}
+Add the following dependency to you
+build.gradle
+:
+build.gradle
+dependencies {
+    implementation "io.bidmachine:ads.networks.adcolony:3.0.0.11"
+}
+Configure network:
+Java
+Kotlin
+BidMachine.registerNetworks(
+        new AdColonyConfig("YOUR_APP_ID")
+                .withMediationConfig(AdsFormat.InterstitialVideo, "YOUR_ZONE_ID")
+                .withMediationConfig(AdsFormat.RewardedVideo, "YOUR_ZONE_ID"));
+BidMachine.registerNetworks(
+    AdColonyConfig("YOUR_APP_ID")
+        .withMediationConfig(AdsFormat.InterstitialVideo, "YOUR_ZONE_ID")
+        .withMediationConfig(AdsFormat.RewardedVideo, "YOUR_ZONE_ID"))
+📘
+By default, we provide
+google
+as
+storeId
+parameter to AdColony network
+Amazon
+📘
+Supported ad types
+Banner
+Interstitial
+Rewarded
+Add this to Module-level
+build.gradle
+before dependencies:
+build.gradle
+repositories {
+    mavenCentral()
+}
+Add next dependency to you
+build.gradle
+:
+build.gradle
+dependencies {
+    implementation "io.bidmachine:ads.networks.amazon:3.0.0.13"
+}
+Configure network:
+Java
+Kotlin
+BidMachine.registerNetworks(
+        new AmazonConfig("YOUR_APP_KEY")
+               .withMediationConfig(AdsFormat.Banner_320x50, "YOUR_SLOT_UUID")
+               .withMediationConfig(AdsFormat.Banner_300x250, "YOUR_SLOT_UUID")
+               .withMediationConfig(AdsFormat.Banner_728x90, "YOUR_SLOT_UUID")
+               .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_SLOT_UUID")
+               .withMediationConfig(AdsFormat.InterstitialVideo, "YOUR_SLOT_UUID"));
+BidMachine.registerNetworks(
+    AmazonConfig("YOUR_APP_KEY")
+        .withMediationConfig(AdsFormat.Banner_320x50, "YOUR_SLOT_UUID")
+        .withMediationConfig(AdsFormat.Banner_300x250, "YOUR_SLOT_UUID")
+        .withMediationConfig(AdsFormat.Banner_728x90, "YOUR_SLOT_UUID")
+        .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_SLOT_UUID")
+        .withMediationConfig(AdsFormat.InterstitialVideo, "YOUR_SLOT_UUID"))
+🚧
+IAB TCFv2
+Amazon support only IAB TCFv2.
+IAB TCFv1 is not supported,
+see
+Criteo
+📘
+Supported ad types
+Banner
+Interstitial
+Add this to Module-level
+build.gradle
+before dependencies:
+build.gradle
+repositories {
+    google()
+    mavenCentral()
+}
+Add the following dependency to you
+build.gradle
+:
+Groovy
+dependencies {
+    implementation "io.bidmachine:ads.networks.criteo:3.0.0.12"
+}
+Configure network:
+Java
+Kotlin
+BidMachine.registerNetworks(
+        new CriteoConfig("YOUR_PUBLISHER_ID")
+        		.withMediationConfig(AdsFormat.Banner_320x50, "YOUR_AD_UNIT_ID")
+                .withMediationConfig(AdsFormat.Banner_300x250, "YOUR_AD_UNIT_ID")
+                .withMediationConfig(AdsFormat.Banner_728x90, "YOUR_AD_UNIT_ID")
+                .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_AD_UNIT_ID")
+                .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_AD_UNIT_ID", Orientation.Portrait)
+                .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_AD_UNIT_ID", Orientation.Landscape));
+BidMachine.registerNetworks(
+    CriteoConfig("YOUR_PUBLISHER_ID")
+        .withMediationConfig(AdsFormat.Banner_320x50, "YOUR_AD_UNIT_ID")
+        .withMediationConfig(AdsFormat.Banner_300x250, "YOUR_AD_UNIT_ID")
+        .withMediationConfig(AdsFormat.Banner_728x90, "YOUR_AD_UNIT_ID")
+        .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_AD_UNIT_ID")
+        .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_AD_UNIT_ID", Orientation.Portrait)
+        .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_AD_UNIT_ID", Orientation.Landscape))
+If orientation has been specified for an AdUnit, then that AdUnit will only be used for that particular orientation.
+If there is no AdUnit for the current orientation, an AdUnit without specific orientation will be taken.
+For example:
+Java
+Kotlin
+BidMachine.registerNetworks(
+        new CriteoConfig("YOUR_PUBLISHER_ID")
+                .withMediationConfig(AdsFormat.InterstitialStatic, "AD_UNIT_ID_1")
+                .withMediationConfig(AdsFormat.InterstitialStatic, "AD_UNIT_ID_2", Orientation.Landscape));
+BidMachine.registerNetworks(
+    CriteoConfig("YOUR_PUBLISHER_ID")
+        .withMediationConfig(AdsFormat.InterstitialStatic, "AD_UNIT_ID_1")
+        .withMediationConfig(AdsFormat.InterstitialStatic, "AD_UNIT_ID_2", Orientation.Landscape))
+With this configuration:
+AD_UNIT_ID_2 will be used, when in landscape orientation
+AD_UNIT_ID_1 will be used, when in portrait orientation
+Such AdUnits should be indicated at the end, as shown in the examples above.
+Google AdManager
+📘
+Supported ad types
+Banner
+Interstitial
+Rewarded
+Add this to Project-level build.gradle before dependencies:
+build.gradle
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+Add this to Module-level
+build.gradle
+before dependencies:
+build.gradle
+repositories {
+    google()
+    mavenCentral()
+}
+Add the following dependency to you build.gradle:
+build.gradle
+dependencies {
+    implementation "com.google.android.gms:play-services-ads:23.0.0"
+}
+📘
+Supported versions
+You can use any version from 21.0.0 to 23.0.0 for
+com.google.android.gms:play-services-ads
+dependency.
+Add
+APPLICATION_ID
+to
+AndroidManifest.xml
+:
+AndroidManifest.xml
+<manifest>
+    <application>
+        <!-- Sample Ad Manager app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"/>
+    </application>
+</manifest>
+📘
+If ANRs are observed when loading ad, then you can specify a special flag in
+AndroidManifest.xml
+that will move the loading of ad to the background thread.
+AndroidManifest.xml
+<manifest>
+    <application>
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
+            android:value="true"/>
+    </application>
+</manifest>
+Optimize initialization and ad loading
+MetaAudience
+📘
+Supported ad types
+Banner
+Interstitial
+Rewarded
+Native (Experimental)
+Add this to Module-level
+build.gradle
+before dependencies:
+build.gradle
+repositories {
+    mavenCentral() 
+}
+Add the following dependency to you
+build.gradle
+:
+build.gradle
+dependencies {
+    implementation "io.bidmachine:ads.networks.meta_audience:3.0.0.15"
+}
+Update your
+network_security_config.xml
+file, add domain-config that sets
+cleartextTrafficPermitted
+to true:
+network_security_config.xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">127.0.0.1</domain>
+    </domain-config>
+</network-security-config>
+Configure network:
+Java
+Kotlin
+BidMachine.registerNetworks(
+        new MetaAudienceConfig("YOUR_APP_ID")
+                .withMediationConfig(AdsFormat.Banner, "YOUR_PLACEMENT_ID")
+                .withMediationConfig(AdsFormat.Banner_300x250, "YOUR_PLACEMENT_ID")
+                .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_PLACEMENT_ID")
+                .withMediationConfig(AdsFormat.RewardedVideo, "YOUR_PLACEMENT_ID")
+                .withMediationConfig(AdsFormat.Native, "YOUR_PLACEMENT_ID"));
+BidMachine.registerNetworks(
+    MetaAudienceConfig("YOUR_APP_ID")
+        .withMediationConfig(AdsFormat.Banner, "YOUR_PLACEMENT_ID")
+        .withMediationConfig(AdsFormat.Banner_300x250, "YOUR_PLACEMENT_ID")
+        .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_PLACEMENT_ID")
+        .withMediationConfig(AdsFormat.RewardedVideo, "YOUR_PLACEMENT_ID")
+        .withMediationConfig(AdsFormat.Native, "YOUR_PLACEMENT_ID"))
+🚧
+Native (Experimental)
+MetaAudience native have two type:
+Native Banner Ads
+Native Ads
+Native ads may not work correctly if MetaAudience placements were submitted that did not match the selected MediaAssetType. For example, if you want use
+MediaAssetType.Icon
+, you need submit placements of
+Native Banner Ads
+type, otherwise you need submit placements of
+Native Ads
+type.
+Mintegral
+📘
+Supported ad types
+Banner
+Interstitial
+Rewarded
+Add the following dependency to you
+build.gradle
+:
+build.gradle
+dependencies {
+    implementation "io.bidmachine:ads.networks.mintegral:3.0.0.8"
+}
+Configure network:
+Java
+Kotlin
+BidMachine.registerNetworks(
+        new MintegralConfig("YOUR_APP_ID", "YOUR_APP_KEY")
+                .withMediationConfig(AdsFormat.Banner, "YOUR_AD_UNIT_ID")
+                .withMediationConfig(AdsFormat.Interstitial, "YOUR_AD_UNIT_ID")
+                .withMediationConfig(AdsFormat.Rewarded, "YOUR_AD_UNIT_ID"));
+BidMachine.registerNetworks(
+    MintegralConfig("YOUR_APP_ID", "YOUR_APP_KEY")
+        .withMediationConfig(AdsFormat.Banner, "YOUR_AD_UNIT_ID")
+        .withMediationConfig(AdsFormat.Interstitial, "YOUR_AD_UNIT_ID")
+        .withMediationConfig(AdsFormat.Rewarded, "YOUR_AD_UNIT_ID"))
+myTarget
+📘
+Supported ad types
+Banner
+Interstitial
+Rewarded
+Add the following dependency to you
+build.gradle
+:
+build.gradle
+dependencies {
+    implementation "io.bidmachine:ads.networks.my_target:3.0.0.15"
+}
+Configure network:
+Java
+Kotlin
+BidMachine.registerNetworks(
+        new MyTargetConfig()
+               .withMediationConfig(AdsFormat.Banner, "YOUR_SLOT_ID")
+               .withMediationConfig(AdsFormat.Banner_320x50, "YOUR_SLOT_ID")
+               .withMediationConfig(AdsFormat.Banner_300x250, "YOUR_SLOT_ID")
+               .withMediationConfig(AdsFormat.Banner_728x90, "YOUR_SLOT_ID")
+               .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_SLOT_ID")
+               .withMediationConfig(AdsFormat.RewardedVideo, "YOUR_SLOT_ID"));
+BidMachine.registerNetworks(
+    MyTargetConfig()
+        .withMediationConfig(AdsFormat.Banner, "YOUR_SLOT_ID")
+        .withMediationConfig(AdsFormat.Banner_320x50, "YOUR_SLOT_ID")
+        .withMediationConfig(AdsFormat.Banner_300x250, "YOUR_SLOT_ID")
+        .withMediationConfig(AdsFormat.Banner_728x90, "YOUR_SLOT_ID")
+        .withMediationConfig(AdsFormat.InterstitialStatic, "YOUR_SLOT_ID")
+        .withMediationConfig(AdsFormat.RewardedVideo, "YOUR_SLOT_ID"))
+Pangle
+📘
+Supported ad types
+Banner
+Interstitial
+Rewarded
+Add the following dependency to you
+build.gradle
+:
+build.gradle
+dependencies {
+    implementation "io.bidmachine:ads.networks.pangle:3.0.0.7"
+}
+Configure network:
+Java
+Kotlin
+BidMachine.registerNetworks(
+        new PangleConfig("YOUR_APP_ID")
+                .withMediationConfig(AdsFormat.Banner, "YOUR_SLOT_ID")
+                .withMediationConfig(AdsFormat.Interstitial, "YOUR_SLOT_ID")
+                .withMediationConfig(AdsFormat.Rewarded, "YOUR_SLOT_ID"));
+BidMachine.registerNetworks(
+    PangleConfig("YOUR_APP_ID")
+        .withMediationConfig(AdsFormat.Banner, "YOUR_SLOT_ID")
+        .withMediationConfig(AdsFormat.Interstitial, "YOUR_SLOT_ID")
+        .withMediationConfig(AdsFormat.Rewarded, "YOUR_SLOT_ID"))
+Tapjoy
+📘
+Supported ad types
+Interstitial
+Rewarded
+Add the following dependency to you
+build.gradle
+:
+build.gradle
+dependencies {
+    implementation "io.bidmachine:ads.networks.tapjoy:3.0.0.10"
+}
+Configure network:
+Java
+Kotlin
+BidMachine.registerNetworks(
+        new TapjoyConfig("YOUR_SDK_KEY")
+               .withMediationConfig(AdsFormat.InterstitialVideo, "YOUR_PLACEMENT_NAME")
+               .withMediationConfig(AdsFormat.RewardedVideo, "YOUR_PLACEMENT_NAME"));
+BidMachine.registerNetworks(
+    TapjoyConfig("YOUR_SDK_KEY")
+        .withMediationConfig(AdsFormat.InterstitialVideo, "YOUR_PLACEMENT_NAME")
+        .withMediationConfig(AdsFormat.RewardedVideo, "YOUR_PLACEMENT_NAME"))
+Vungle
+📘
+Supported ad types
+Banner
+Interstitial
+Rewarded
+Add this to Module-level
+build.gradle
+before dependencies:
+build.gradle
+repositories {
+    google()
+    mavenCentral()
+}
+Add the following dependency to you
+build.gradle
+:
+build.gradle
+dependencies {
+    implementation "io.bidmachine:ads.networks.vungle:3.0.0.5"
+}
+Configure network:
+Java
+Kotlin
+BidMachine.registerNetworks(
+        new VungleConfig("YOUR_APP_ID", "YOUR_PUBLISHER_ID")
+                .withMediationConfig(AdsFormat.InterstitialVideo, "YOUR_PLACEMENT_ID")
+                .withMediationConfig(AdsFormat.RewardedVideo, "YOUR_PLACEMENT_ID"));
+BidMachine.registerNetworks(
+    VungleConfig("YOUR_APP_ID", "YOUR_PUBLISHER_ID")
+        .withMediationConfig(AdsFormat.InterstitialVideo, "YOUR_PLACEMENT_ID")
+        .withMediationConfig(AdsFormat.RewardedVideo, "YOUR_PLACEMENT_ID"));
+Updated
+about 1 month ago
+Table of Contents
+Integration
+Initialization
+Request parameters
+User Restriction Parameters
+COPPA
+GDPR
+CCPA
+GPP
+Publisher
+Targeting Parameters
+Price Floor Parameters
+Session Ad Parameters
+Custom Parameters
+Placement Id
+Bid Payload
+Auction result
+Win/Loss notifications
+Bid Token
+Custom init server configuration parameters
+3rd party SDK integration (Header-Bidding)
+AdColony
+Amazon
+Criteo
+Google AdManager
+MetaAudience
+Mintegral
+myTarget
+Pangle
+Tapjoy
+Vungle

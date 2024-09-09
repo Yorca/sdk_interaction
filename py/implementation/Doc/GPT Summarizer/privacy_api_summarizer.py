@@ -7,6 +7,7 @@ from html.parser import HTMLParser
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
+summary_version = "3.0"
 
 def read_and_parse_html(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -17,13 +18,13 @@ def read_and_parse_html(file_path):
     return text_content
 
 def read_and_parse_mhtml(file_path):
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, 'r', encoding='iso-8859-1') as f:
         mhtml_content = f.read()
     msg = email.message_from_string(mhtml_content)
 
     for part in msg.walk():
         if part.get_content_type() == "text/html":
-            html_content = part.get_payload(decode=True).decode('utf-8')
+            html_content = part.get_payload(decode=True).decode('iso-8859-1')
 
     parser = HTMLParser()
     parser.feed(html_content)
@@ -49,6 +50,7 @@ Instructions for Summarizing an API:
 3. Reference all relevant sections: Descriptions of the API might be mentioned in different parts of the documentation, not only in the API section. Ensure you find all related information.
 4. Follow the JSON format strictly as provided, and refer to the example output. Ensure that the JSON data is properly formatted to allow successful parsing, and avoid including any content beyond the JSON (e.g., do not add "json" at the beginning or "" at the end). Use quotation marks ("") to wrap any object that is invalid in JSON.
 5. The annotations after each item indicate what needs to be filled in, but do not include comments in your response. If specific information cannot be extracted from the document, leave the item blank.
+6. UI-related APIs are not within the scope of our extraction, such as those that display a Privacy dialog.
 
 Summary Format:
 {
@@ -56,9 +58,10 @@ Summary Format:
     "privacy_APIs": [
         {
             "API_name": "", // The name of the target method, which will be used to match the method in the code
+            "class_name": "", // If the class name is provided in the documentation, record it; otherwise, leave the field blank. Typically, the class name can be identified in the format 'class_name.API_name' within the document.
             "conditions": [], // The list of conditions required to call the API
             "effects": [], // The list of effects and consequences of calling the API
-            "parameter_configurations": [ // Summary of all configurable parameters or parameter combinations; if no parameters in the API, leave it blank.
+            "parameter_configurations": [ // Summary of all configurable parameters or parameter combinations(Each element in the list represents one possible parameter combination);if no parameters in the API, leave it blank. 
                 {
                     "parameter_values": [], // One of the parameter combinations mentioned in the document. If some parameter is not configurable or unknown, mark it "null" in the corresponding index in the list.
                     "conditions": [], // The list of conditions or requirements for setting parameters to parameter_values
@@ -75,6 +78,7 @@ Output Example:
     "privacy_APIs": [
         {
             "API_name": "setIsAgeRestrictedUser",
+            "class_name": "AppLovinPrivacySettings",
             "conditions": [
                 "required to comply with COPPA"
             ],
@@ -108,6 +112,7 @@ Output Example:
         },
         {
             "API_name": "setDoNotSell",
+            "class_name": "AppLovinPrivacySettings",
             "conditions": [
                 "required to display a 'Do Not Sell or Share My Personal Information' link to users in those states, or to provide other options through which those users can opt out of interest-based advertising"
             ],
@@ -144,10 +149,11 @@ Output Example:
 """
 
 def recordResponseAsPlainText(sdk, response):
-    with open(f"plaintext_summaries2.0/{sdk}.txt", 'a') as file:
+    with open(f"plaintext_summaries{summary_version}/{sdk}.txt", 'a') as file:
         file.write(response)
 
 def analyze(user_prompt, sdk):
+    errorlog_name = f"log/error_log{summary_version}.log"
     try:
         completion = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -161,27 +167,16 @@ def analyze(user_prompt, sdk):
         recordResponseAsPlainText(sdk, response)
         actual_json_str = json.loads(response)
         beautified_json = json.dumps(actual_json_str, indent=4)
-        with open(f"summaries2.0/{sdk}.json", 'a') as file:
+        with open(f"summaries{summary_version}/{sdk}.json", 'a') as file:
             file.write(beautified_json)
 
 
     except json.JSONDecodeError as e:
-        with open("error_log.log", 'a') as errorlog:
+        with open(errorlog_name, 'a') as errorlog:
             errorlog.write(f"SDK:{sdk}, JSONDecodeError: {e} \n")
     except Exception as e:
-        with open(f"error_log.log", 'a') as errorlog:
+        with open(errorlog_name, 'a') as errorlog:
             errorlog.write(f"SDK:{sdk}, Error:{e} \n")
-
-
-
-# def has_analyzed(sdk, api):
-#     folder = "responses"
-#     for root, dirs, files in os.walk(folder):
-#         for file in files:
-#             if sdk in file and api in file:
-#                 return True
-#     return False Digital Turbine FairBid_privacy
-
 
 def analyzeSDK(SDK):
     message = f"SDK name: {SDK}\nDocumentation:\n"
@@ -191,10 +186,18 @@ def analyzeSDK(SDK):
             message += read_and_parse_html(os.path.join(file_path, filename))
         elif filename.endswith(".mhtml"):
             message += read_and_parse_mhtml(os.path.join(file_path, filename))
+    with open(f"messages{summary_version}/{SDK}.txt", "a") as file:
+        file.write(message)
     analyze(message, SDK)
 
-doc_source = "../web_archive/privacy_docs_group/"
+doc_source = f"../web_archive/privacy_docs_group{summary_version}/"
+summary_directory = f"plaintext_summaries{summary_version}"
+
 for directory in os.listdir(doc_source):
+    print(f"start: {directory}")
+    if f"{directory}.txt" in os.listdir(summary_directory):
+        print(f"has summary: {directory}")
+        continue
     analyzeSDK(directory)
 
 

@@ -22,7 +22,7 @@ def group_and_copy_files(source_dir, dest_dir):
 
 
 # Usage
-source_directory = 'privacy_docs'
-destination_directory = 'privacy_docs_group'
+source_directory = 'privacy_docs3.0'
+destination_directory = 'privacy_docs_group3.0'
 
 group_and_copy_files(source_directory, destination_directory)

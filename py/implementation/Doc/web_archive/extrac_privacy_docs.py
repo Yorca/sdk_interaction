@@ -3,7 +3,7 @@ import shutil
 
 
 def copy_privacy_files(source_directory):
-    destination_directory = 'privacy_docs'
+    destination_directory = 'web_archive'
 
     if not os.path.exists(destination_directory):
         os.makedirs(destination_directory)

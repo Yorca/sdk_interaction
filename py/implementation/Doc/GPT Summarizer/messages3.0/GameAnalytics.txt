@@ -1,0 +1,352 @@
+SDK name: GameAnalytics
+Documentation:
+SDK Features | Unity - GameAnalytics Documentation
+Skip to main content
+Setup
+Integrations
+Guides
+API
+Data Access
+Resources
+Feedback
+Contact
+Getting Started
+Platform Overview
+Metrics & Dimensions
+Event Types
+Advanced Tracking
+Data retention
+Service Level Agreement
+Integrations
+SDKs
+Unity
+Setup
+Event Tracking
+Game Ops
+SDK Features
+Advanced Setup
+Unreal
+Roblox
+Godot
+Cocos2D
+GameMaker
+Cordova
+Flutter
+Adobe Air
+Construct
+Defold
+Android
+iOS
+Meta Quest 2
+tvOS
+Javascript
+C++
+C#
+Collection API
+Attribution
+Advertising (ILRD)
+Monetization
+Features
+Dashboards
+Explore Tool
+Funnels
+Engagement
+Cohorts
+Health
+Monetization
+Remote Configs
+A/B Testing
+Portfolio overview
+Filter value selection
+Reporting
+Account Management
+Game Data Sharing
+Metrics API
+Legacy Tool
+DataSuite
+Overview
+Subscribe
+Data Warehouse
+Data Export
+GameIntel
+Overview
+Store Intelligence
+Benchmarks
+Purchasing and billing
+Organization API
+Overview
+API notes
+API specification
+Integrations
+SDKs
+Unity
+SDK Features
+On this page
+SDK Features
+Control Event Submission
+â
+You can manually turn off/on event submission for GA events. This is useful if you need, for GDPR purposes, to disable event submission.
+GameAnalytics
+.
+setEnabledEventSubmission
+(
+false
+)
+;
+info
+By default event submission is of course enabled. You will still receive configs if you have set any for your game even after disabling event submission.
+Custom Dimensions
+â
+GameAnalytics allows you to create up to 3 custom dimensions for your events. You will first have to set these up in your
+GA dashboard
+in
+Settings
+under the
+Setup
+tab.
+caution
+Any value which is not defined in the dashboard will be ignored!
+// set custom dimension number 1
+GameAnalytics
+.
+SetCustomDimension01
+(
+string
+customDimension
+)
+;
+// set custom dimension number 2
+GameAnalytics
+.
+SetCustomDimension02
+(
+string
+customDimension
+)
+// set custom dimension number 3
+GameAnalytics
+.
+SetCustomDimension03
+(
+string
+customDimension
+)
+Field
+Type
+Required
+Description
+customDimension
+string
+yes
+One of the available dimension values set in Settings (Setup tab). Will persist cross session. Set to null to remove again.
+tip
+Read more about custom dimensions
+here
+Custom Event Fields
+â
+caution
+Custom event fields
+will not
+be available in the GameAnalytics dashboards.
+Read more about how to use Custom Event Fields
+here
+.
+During the game it is possible to set global custom event fields that can be changed at any time.
+Custom event fields are a set of key-value pairs can be added to any of your events.
+It is also possible to overwrite the global custom event fields by using the optional custom event fields parameter for when sending individual events, please refer to the events documentation page for usage.
+Setting global custom event fields:
+Dictionary
+<
+string
+,
+object
+>
+customFields
+=
+new
+Dictionary
+<
+string
+,
+object
+>
+(
+)
+;
+customFields
+.
+Add
+(
+"test"
+,
+1000
+)
+;
+customFields
+.
+Add
+(
+"test_2"
+,
+"global_hello_world"
+)
+;
+GameAnalytics
+.
+SetGlobalCustomEventFields
+(
+customFields
+)
+;
+Field
+Type
+Description
+Example
+customFields
+dictionary
+A set of key-value pairs. Values can be strings or numbers
+{
+"test": 1000,
+"tests": "hello_world"
+}
+tip
+Read more about custom dimensions
+here
+.
+PlayMaker
+â
+GameAnalytics is set up to work with PlayMaker to make it as easy as possible for you to send events using the visual PlayMaker scripting tools.
+Activating the SDK for PlayMaker
+â
+You need to tell our SDK that it will be used with PlayMaker. To do so you need to toggle the SDK scripts by clicking
+Window -> GameAnalytics -> PlayMaker -> Toggle Scripts
+.
+caution
+Make sure at this stage PlayMaker is already added to Unity!
+Using the GA SDK with PlayerMaker
+â
+At this stage a new category for Actions named GameAnalytics should pop-up in the PlayMaker Actions list used for when adding an action to a state.
+When using GameAnalytics actions you may notice that some of the parameters are mandatory while others can be set to none. Follow closely our documentation about each event type (Business, Design, Progression, Resource and Error) before using the actions.
+info
+In order to better understand how to use GameAnalytics please read our guidelines about the implementation process and how the tool reads custom events.
+Disclaimers
+â
+caution
+Known issue:
+On Unity 2019.2 there is an issue with importing âAssets/GameAnalytics/Plugins/GameAnalytics.dllâ which makes the importing of the GameAnalytics Unity SDK package freeze and does not complete. A quick fix for this is to delete âAssets/GameAnalytics/Plugins/GameAnalytics.dllâ. This of course means you will not be able to build for desktop platforms (Windows, Mac or Linux). We are sorry for the inconvenience and we trying to fix this issue as soon as possible.
+Note: There is a fix now in v5.1.11
+caution
+FPS metrics change from v5.1.7:
+In v5.1.7 we fixed our FPS event script where it will use Time.unscaledTime instead of Time.time to get a more accurate FPS metrics if your game frequently changes the time scale in the game. So after updating the SDK to v5.1.7 or a later version you might see a big change in the FPS metrics if you frequently changing the time scale in your game.
+caution
+caution
+Important Announcement
+From v3.11.0 and onwards you need to manually initialize the SDK by calling GameAnalytics.Initialize() from your own GameObject (with script execution order coming after GameAnalytics scriptâs order if your object is in the same scene as the GameAnalytics object as some code is called on Awake event which needs to be called before initializing the sdk). Read more about it in the Initialization section
+here
+.
+Session Handling
+â
+By default the SDK will handle session start/end automatically, but it is also possible to manually control this yourself.
+caution
+Be aware that the initialization will always automatically start the first session even with manual session handling.
+Automatic Session Handling
+â
+The automatic session handling will track the focused time the user is spending in your game â from game launch to the user leaving the game.
+session start
+â
+On Android a new session will start once the game is launched or when the app is resuming if there is no current session.
+session end
+â
+A session will end once the game is going to home-screen (or is not visible anymore).
+It will end the session at once if the application received the onStop event from the game activity. It can also end the session if onPause event was received and 90 seconds have passed (sometimes only the onPause will trigger even though the user left the app).
+Manual Session Handling
+â
+The automatic session handling only works if the game is contained in one activity.
+It will then handle session end and start based on the events on that single activity. This behavior is common (having one activity) but some games define multiple activities and this automatic session handling will not work in an optimal way.
+If your game does have multiple activities (or you just want to be in control when to start and end sessions) you can enable/disable manual session handling by calling this at any given time:
+GameAnalytics
+.
+setEnabledManualSessionHandling
+(
+true
+)
+;
+You will then need to call
+endSession
+and
+startSession
+at the appropriate times.
+tip
+With manual session handling it is recommended to also call endSession when the game activity event onStop is fired. This will ensure a correct session close when users click the home or on/off button.
+startSession()
+â
+This will start a new session if:
+manual session handling is enabled
+SDK is initialized (initialize will start a session automatically)
+GameAnalytics
+.
+startSession
+(
+)
+;
+endSession()
+â
+This will end a session if:
+manual session handling is enabled
+a session is active
+SDK is initialized (initialize will start a session automatically)
+GameAnalytics
+.
+endSession
+(
+)
+;
+caution
+If a current session is active then it will
+end the current session and start a new one
+.
+Behind the Scenes
+â
+This is what happens when the session is starting or ending.
+Session start
+â
+Generate new session.
+Add a
+session_start
+event (a âuserâ event).
+Start the periodic activation of submitting queued events.
+Next event submits will fix potential missing
+session_end
+from earlier sessions.
+Session end
+â
+Stop the periodic activation of submitting queued events.
+Add a
+session_end
+event.
+Submit queued events.
+Previous
+Game Ops
+Next
+Advanced Setup
+On this page
+Control Event Submission
+Custom Dimensions
+Custom Event Fields
+PlayMaker
+Activating the SDK for PlayMaker
+Using the GA SDK with PlayerMaker
+Disclaimers
+Session Handling
+Automatic Session Handling
+Manual Session Handling
+Behind the Scenes
+Copyright
+2024
+GameAnalytics
+-
+Terms
+|
+Privacy
+|
+Cookies

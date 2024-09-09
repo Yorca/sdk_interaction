@@ -1,0 +1,286 @@
+SDK name: Tapjoy
+Documentation:
+User Privacy - Android | Tapjoy
+ENG
+Platform:
+iOS
+Android
+Unity
+React Native
+Web SDK
+Reporting API
+GraphQL Reporting API
+Legal Resources
+Platform Guide
+iOS
+Android
+Unity
+React Native
+GraphQL Reporting API
+Legal Resources
+Platform Guide
+view all platforms
+Log In
+Create Account
+INTRODUCTION
+Quickstart
+Manual Integration
+Changelog
+Update Guide
+SDK Reference
+Offerwall Migration Checklist
+PLACEMENTS
+Virtual Currency
+SDK
+Offerwall Migration Guide
+TESTING
+Test Devices
+Debug Mode
+Examples
+ADVANCED
+User Privacy
+Reducing Total Method Count
+Proguard
+User Properties
+COCOS2DX
+C++ Library
+C++ API Reference
+iOS
+Integration
+Quickstart
+Manual Integration
+Changelog
+Update Guide
+SDK Reference
+Offerwall Migration Checklist
+Placements
+Virtual Currency
+SDK
+Offerwall Migration Guide
+Testing
+Test Devices
+Debug Mode
+Examples
+Advanced
+User Privacy
+User Properties
+Cocos2dx
+C++ Library
+C++ API Reference
+Android
+Introduction
+Quickstart
+Manual Integration
+Changelog
+Update Guide
+SDK Reference
+Offerwall Migration Checklist
+Placements
+Virtual Currency
+SDK
+Offerwall Migration Guide
+Testing
+Test Devices
+Debug Mode
+Examples
+Advanced
+User Privacy
+Reducing Total Method Count
+Proguard
+User Properties
+Cocos2dx
+C++ Library
+C++ API Reference
+Unity
+Introduction
+Quickstart
+Changelog
+Update Guide
+SDK Reference
+Offerwall Migration Checklist
+Placements
+Virtual Currency
+SDK
+Offerwall Migration Guide
+Testing
+Test Devices
+Debug Mode
+Examples
+Advanced
+User Properties
+User Privacy
+Integrating PPE
+React Native
+Introduction
+Quickstart
+Changelog
+Update Guide
+Placements
+Virtual Currency
+SDK
+Testing
+Test Devices
+Debug Mode
+Examples
+Advanced
+User Privacy
+User Properties
+Proguard
+GraphQL Reporting API
+Getting Started
+Quickstart
+Authentication
+Limitations
+Upgrading
+Interactive Explorer
+API Reference
+Marketing API
+Advertiser Examples
+Publisher API
+Publisher Examples
+Legal Resources
+Legal
+Privacy Policy
+Data Protection Addendum
+Publisher Terms Of Service
+Platform Guide
+Advertiser
+CPE Bid Management
+MMP Setup for ROAS
+Payment Security
+Publisher
+AB Testing
+Ad Behavioural Targeting
+Currency Sales
+Custom Exchange Rates
+Getting Started
+Message To Earn
+Offerwall Cards
+Placements
+Publisher Customer Service Tool
+Tiered Currency Exchange
+User Cohorts
+User Tags
+Virtual Currency
+Virtual Currency Overview
+Self-Managed Currency
+Tapjoy-Managed Currency
+Privacy
+App Privacy - iOS
+Data Safety - Android
+Device Identifiers
+Google CMP
+SDK Privacy Flags
+API's
+API Authentication
+Audience API Overview
+User Level Revenue API Overview
+Other
+FAQ
+How to migrate the Tapjoy SDK from mediation
+Open Source Software
+User Roles and Permissions
+User Privacy
+1. GDPR
+Publishers using the Tapjoy Offerwall and associated Unity Technologies SF services, including the Unity Rewards offerwall, should ensure their consent mechanisms gather consent for these services and data processing where required. These measures must be reflective of any relevant legal requirements, and comply with the applicable Data Protection Addendum with Tapjoy.
+Publishers using the Unity Rewards offerwall, should specifically ensure that their consent mechanisms collect consent for such services and the processing of data in accordance with Unity's
+Game Player and App User Privacy Policy
+.
+2. CCPA
+Tapjoy has features that help publishers comply with the California Consumer Privacy Act (CCPA). The “TJPrivacyPolicy” class allows you to manage all privacy flags (GDPR, user consent, below consent age, and US privacy).
+NB:
+If you are updating from a previous version of the Tapjoy SDK and have set privacy values using the old method don’t worry – the new SDK will still read the previously set values and you do not need to manually set them again. However, we would recommend eventually migrating your code to use this new method.
+3. Android Advertising ID Opt Out
+To comply with the Google Families Program rules, where apps targetting children should not access the advertising id, Tapjoy SDK 12.10.0 has added a new privacy flag you can choose to implement.
+This flag can be set any time, before or after connect, and can be changed at any time during the session.
+Tapjoy.optOutAdvertisingID(
+this
+,
+true
+);
+4. Implementation
+To set your privacy flags first create an instance of TJPrivacyPolicy:
+TJPrivacyPolicy tjPrivacyPolicy = Tapjoy.getPrivacyPolicy();
+A setUserConsent function takes a
+TJStatus
+value of either
+TJStatus.FALSE
+(user does not consent) or
+TJStatus.TRUE
+(user does consent). The default value is
+TJStatus.UNKNOWN
+.
+An optional "subject to GDPR" flag takes a
+TJStatus
+value  of either
+TJStatus.TRUE
+(if the user is subject to GDPR rules) or
+TJStatus.FALSE
+(if the user is not subject to GDPR rules) The default value is
+TJStatus.UNKNOWN
+. This function should only be called if the application has made its own determination as to whether GDPR is applicable to the user or not.  If this function is not called, Tapjoy assumes the application has not made such a determination, and therefore Tapjoy makes its own determination of GDPR applicability.
+A belowConsentAge flag takes a
+TJStatus
+value of either
+TJStatus.TRUE
+,
+TJStatus.FALSE
+, with the default value being
+TJStatus.UNKNOWN
+. This flag can be used to inform us of COPPA compliance and/or other applicable laws (e.g. the GDPR age compliance). It will also inform Tapjoy’s ad tracking policy.
+Finally is the USPrivacy flag. This flag takes a string value. The string that this flag takes is derived from the IAB’s US Privacy String Format and encodes the string in an enum.
+1YNN
+where 1 is char in string for the version, Y = YES, N = No, – = Not Applicable
+See:
+IAB suggested US Privacy String Format
+This example shows the setting of all privacy flags:
+TJPrivacyPolicy tjPrivacyPolicy = Tapjoy.getPrivacyPolicy();
+tjPrivacyPolicy.setSubjectToGDPR(TJStatus.TRUE);
+tjPrivacyPolicy.setUserConsent(TJStatus.FALSE);
+tjPrivacyPolicy.setBelowConsentAge(TJStatus.TRUE);
+tjPrivacyPolicy.setUSPrivacy(
+"1YYY"
+);
+You can also get the current values of privacy flags like so:
+TJStatus subjectToGDPR = privacyPolicy.getSubjectToGDPR();
+TJStatus userConsent = privacyPolicy.getUserConsent();
+TJStatus belowConsentAge = privacyPolicy.getBelowConsentAge();
+String usPrivacy = privacyPolicy.getUSPrivacy();
+5. GDPR FAQ
+If a user does not consent or withdraws existing consent, will the Tapjoy SDK still send advertising identifiers to Tapjoy?
+Yes. The functions listed above are designed for interest-based advertising, and they send the user consent status for interest-based advertising to Tapjoy. Therefore, the status of the consent does not disable Tapjoy SDK from sending advertising identifier at SDK initialization or during ad requests.
+Tapjoy’s legal basis for compliance is ‘legitimate interest’. However, the publisher’s legal basis for compliance, and consequently their requirement for advertiser identifier collection, could be different than Tapjoy’s.
+It is left to application to determine if the Tapjoy SDK should be initialized or not, depending on the application’s compliance need. For example, if an application’s legitimate basis for collection of advertising identifier is consent, and user has not consented, then the Tapjoy SDK should not be initialized for such users.
+If a user from a country that is not covered by GDPR does not consent or withdraws consent, would Tapjoy limit advertising to non-interest-based ads for such a user?
+The Tapjoy SDK  provides flexibility to handle different types applications, including applications that have no in-app method for determining whether the user is subject to GDPR or not.
+Therefore, when an Application does not make any determination (i.e. the subjectToGDPR function is not called), Tapjoy servers determine whether the user is subject to GDPR. Then, Tapjoy honors the user’s consent preferences only for ad requests that Tapjoy determines are coming from GDPR-covered users.
+If the intent is to allow users from any country to withdraw consent as if they were governed by GDPR, this can be done by calling the subjectToGDPR method with TRUE for all non-consenting users. In this case, Tapjoy’s servers will honor the content of the subjectToGDPR method call, and will not make its own determination as to whether or not the user is covered by GDPR. The publisher may also contact support@tapjoy.com and request that Tapjoy honor the consent preferences of all users of their application, regardless of whether they are covered by GDPR or not.
+Contents
+User Privacy
+1. GDPR
+2. CCPA
+3. Android Advertising ID Opt Out
+4. Implementation
+5. GDPR FAQ
+Menu
+WORK WITH US
+Advertise
+Monetize
+Offerwall
+About Us
+LEARN MORE
+Contact Us
+Customer Support
+Tapjoy Careers
+CONTACT
+Resources Blog
+Press & News
+Ad Specs
+Documentation
+TERMS
+Terms & Conditions
+Privacy Policy
+©
+2024
+tapjoy.com
+All Rights Reserved

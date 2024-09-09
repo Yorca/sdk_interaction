@@ -1,0 +1,212 @@
+SDK name: PubNative(verve)
+Documentation:
+HyBid Android SDK - HyBid Configuration
+Jump to Content
+API Reference
+v
+3.0
+Log In
+API Reference
+Log In
+Moon (Dark Mode)
+Sun (Light Mode)
+v
+3.0
+API Reference
+HyBid Android SDK - HyBid Configuration
+Search
+JUMP TO
+[PUBLISHER] Before Getting Started
+Getting Started
+App-ads.txt for Verve
+[PUBLISHER] API Documentation
+OpenRTB API
+VAST API
+get
+Reporting API
+[PUBLISHER] HyBid Cloud
+HyBid Cloud | Documentation
+[PUBLISHER] HyBid SDK
+HyBid Android SDK - standalone
+HyBid iOS SDK - standalone
+iOS 14+ and SKAdNetwork
+Google Play Data Safety Guidance
+Publisher | ATOM via HyBid
+Ad Experience
+SKOverlay
+Autostorekit
+Custom End Card
+Custom Call-to-Action (CTA)
+[PUBLISHER] Mediation
+GAD / Admob (Android)
+GAD / AdMob (iOS)
+Google Ad Manager (iOS & Android)
+IronSource LevelPlay iOS
+IronSource LevelPlay Android
+[PUBLISHER] Header Bidding
+AppLovin MAX (Android) Bidding
+AppLovin MAX (iOS) Bidding
+Prebid - Adding Verve as bidder
+Google Ad Manager Header Bidding (iOS & Android)
+[PUBLISHER] Advanced Setup
+GDPR  Configurations
+CCPA Configurations
+Contextual App Targeting
+[DSP] Open RTB 2.6
+Overall Integration Process
+Technical Integration Guide
+Demand Reporting API
+Bid Loss Notification
+Win Notification & Minimum Bid To Win
+DSP | ATOM via HyBid
+Powered by
+JUMP TO
+[PUBLISHER] Before Getting Started
+Getting Started
+App-ads.txt for Verve
+[PUBLISHER] API Documentation
+OpenRTB API
+VAST API
+get
+Reporting API
+[PUBLISHER] HyBid Cloud
+HyBid Cloud | Documentation
+[PUBLISHER] HyBid SDK
+HyBid Android SDK - standalone
+HyBid iOS SDK - standalone
+iOS 14+ and SKAdNetwork
+Google Play Data Safety Guidance
+Publisher | ATOM via HyBid
+Ad Experience
+SKOverlay
+Autostorekit
+Custom End Card
+Custom Call-to-Action (CTA)
+[PUBLISHER] Mediation
+GAD / Admob (Android)
+GAD / AdMob (iOS)
+Google Ad Manager (iOS & Android)
+IronSource LevelPlay iOS
+IronSource LevelPlay Android
+[PUBLISHER] Header Bidding
+AppLovin MAX (Android) Bidding
+AppLovin MAX (iOS) Bidding
+Prebid - Adding Verve as bidder
+Google Ad Manager Header Bidding (iOS & Android)
+[PUBLISHER] Advanced Setup
+GDPR  Configurations
+CCPA Configurations
+Contextual App Targeting
+[DSP] Open RTB 2.6
+Overall Integration Process
+Technical Integration Guide
+Demand Reporting API
+Bid Loss Notification
+Win Notification & Minimum Bid To Win
+DSP | ATOM via HyBid
+Powered by
+HyBid Android SDK - HyBid Configuration
+Requirements:
+PubNative
+App Token
+from the PubNative Publisher Dashboard
+Install using Gradle
+Add PubNative Maven repo to your project level
+build.gradle
+file:
+Groovy
+buildscript {
+    repositories {
+        // Other dependencies
+        maven { url 'https://verve.jfrog.io/artifactory/verve-gradle-release' }
+    }
+    dependencies {
+        // ...
+    }
+}
+
+allprojects {
+    repositories {
+        // Other dependencies
+        maven { url 'https://verve.jfrog.io/artifactory/verve-gradle-release' }
+    }
+}
+Add HyBid SDK dependency to the module level
+build.gradle
+file:
+Groovy
+implementation 'net.pubnative:hybid.sdk:3.0.2'
+implementation 'net.pubnative:hybid.adapters.dfp:3.0.2'
+implementation 'net.pubnative:hybid.adapters.admob:3.0.2'
+Manifest Permissions
+To enable the basic features of the PN Lite SDK, the following permissions must be added in the
+AndroidManifest.xml
+file:
+XML
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+For improved targeting and therefore higher eCPMs you can add this other permissions but keep in mind that the user needs to approve them explicitly on Android versions 6 or higher.
+XML
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+<!-- For location use one of the following permissions -->
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<!-- or -->
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+SDK initialisation
+On your main Activity or your Application class
+onCreate
+method you should initialise the SDK using the app token that was provided to you in the PubNative Publisher Dashboard.
+Java
+HyBid.initialize("APP_TOKEN", this);
+Advanced configurations
+Proguard
+If you are using Proguard in your gradle build, you should add these lines to your proguard file:
+Java
+-keepattributes Signature
+-keep class net.pubnative.** { *; }
+-keep class com.iab.omid.library.pubnativenet.** { *; }
+Test mode
+During development and testing of the SDK integration it is recommended to enable test mode. This will make the impressions and click not count on the PubNative side. Testing without enabling this mode could result in your account getting blocked because the traffic will be considered fraudulent.
+Test mode is disabled by default. To enable test mode, you should use this line in the same location where you initialise the SDK:
+Java
+HyBid.setTestMode(true);
+Location tracking
+If the user has given location permissions, HyBid SDK will use the available user location to provide better targeted ads.
+This feature is enabled by default, but can be disabled by setting the
+setLocationTrackingEnabled
+on the HyBid class:
+Java
+HyBid.setLocationTrackingEnabled(false);
+Location updates
+The SDK refreshes the user location after every ad request if the user has given permission for location tracking. This is done to keep the best accuracy possible. However if the app will do many requests in a short time it might display location updates very often which can be intrusive for some users.
+You can disable this behaviour by setting the
+setLocationUpdatesEnabled
+on the HyBid class:
+Java
+HyBid.setLocationUpdatesEnabled(false);
+Keep in mind that if location tracking is disabled, anything you set in here will have no effect since location tracking will be disabled globally for HyBid SDK
+Enable COPPA compliance
+If your app is intended for children you should enable the
+COPPA
+compatibility in order to protect the privacy of the information in their devices. It is disabled by default.
+Java
+HyBid.setCoppaEnabled(true);
+Targeting parameters
+You can add extra information to the requests the SDK makes to the ad server. This can result in higher eCPMs and more accurate ads for the users.
+You can set the age, gender and some related keywords that can help improve the audience targeting in the delivered ads.
+Java
+HyBid.setAge("30");
+HyBid.setGender("female");
+HyBid.setKeywords("sports,racket,tennis");
+Table of Contents
+Install using Gradle
+Manifest Permissions
+SDK initialisation
+Advanced configurations
+Proguard
+Test mode
+Location tracking
+Location updates
+Enable COPPA compliance
+Targeting parameters
