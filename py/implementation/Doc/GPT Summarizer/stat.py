@@ -19,10 +19,11 @@ total_APIs = 0
 found_APIs = 0
 FP_count = 0
 correct_found_APIs = 0
-sum_df = pd.DataFrame(columns=["SDK", "API", "summary"])
+sum_df = pd.DataFrame(columns=["SDK", "API", "summary", "links"])
 sum_index = 0
 for index, item in data.iterrows():
     found = item[4]
+    links = item[1]
     if pd.notna(found) and not isinstance(found, str):
         found = found.strftime("%m/%d")
     correct_found_APIs += int(found.split('/')[0])
@@ -39,7 +40,7 @@ for index, item in data.iterrows():
         for sum_api in sdk_summary["privacy_APIs"]:
             if sum_api["API_name"] == api:
                 summary_text += str(sum_api)
-        sum_df.loc[sum_index] = [sdk, api, summary_text]
+        sum_df.loc[sum_index] = [sdk, api, summary_text, links]
         sum_index += 1
 
 
