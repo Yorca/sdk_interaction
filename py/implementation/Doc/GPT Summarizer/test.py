@@ -1,16 +1,27 @@
-import chardet
+import pandas as pd
 
-def get_file_encoding(file_path):
-    with open(file_path, 'rb') as f:
-        raw_data = f.read()
-        result = chardet.detect(raw_data)
-        encoding = result['encoding']
-        confidence = result['confidence']
-        print(f"Detected encoding: {encoding} with {confidence*100}% confidence")
-        return encoding
+data = pd.read_csv("/Users/yorca/projects/sdk_interaction/google play scraper/app_metadata_topfree.csv")
 
-file_path = '/Users/yorca/projects/sdk_interaction/py/implementation/Doc/web_archive/privacy_docs3.0/AerServ_privacy.mhtml'
-encoding = get_file_encoding(file_path)
+packge_set = set()
+for index, row in data.iterrows():
+    packge_set.add(row[0])
+print(len(packge_set))
+
+
+
+# import chardet
+#
+# def get_file_encoding(file_path):
+#     with open(file_path, 'rb') as f:
+#         raw_data = f.read()
+#         result = chardet.detect(raw_data)
+#         encoding = result['encoding']
+#         confidence = result['confidence']
+#         print(f"Detected encoding: {encoding} with {confidence*100}% confidence")
+#         return encoding
+#
+# file_path = '/Users/yorca/projects/sdk_interaction/py/implementation/Doc/web_archive/privacy_docs3.0/AerServ_privacy.mhtml'
+# encoding = get_file_encoding(file_path)
 #
 # def convert_mhtml_ascii_to_utf8(input_file, output_file):
 #     # Step 1: Open the MHTML file in ASCII encoding (as bytes).
