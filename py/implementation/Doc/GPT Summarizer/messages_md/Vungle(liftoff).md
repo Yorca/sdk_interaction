@@ -1,0 +1,588 @@
+SDK name: Vungle(liftoff)
+Documentation:
+[ ![Logo](/hc/theming_assets/01HZPNNS7PX61X5DFNE2TNSXMS) ](/hc/en-us "Home")
+
+  * [Home](/hc/en-us "Home")
+
+English (US)  [ Deutsch
+](/hc/change_language/de?return_to=%2Fhc%2Fde%2Farticles%2F360047780372-Erweiterte-
+Einstellungen) [ Español (México) ](/hc/change_language/es-
+mx?return_to=%2Fhc%2Fes-
+mx%2Farticles%2F360047780372-Configuraci%25C3%25B3n-avanzada) [ Français
+(France) ](/hc/change_language/fr-fr?return_to=%2Fhc%2Ffr-
+fr%2Farticles%2F360047780372-Param%25C3%25A8tres-avanc%25C3%25A9s) [ 日本語
+](/hc/change_language/ja?return_to=%2Fhc%2Fja%2Farticles%2F360047780372-%25E8%25A9%25B3%25E7%25B4%25B0%25E8%25A8%25AD%25E5%25AE%259A)
+[ 한국어
+](/hc/change_language/ko?return_to=%2Fhc%2Fko%2Farticles%2F360047780372-%25EA%25B3%25A0%25EA%25B8%2589-%25EC%2584%25A4%25EC%25A0%2595)
+[ Português do Brasil ](/hc/change_language/pt-br?return_to=%2Fhc%2Fpt-
+br%2Farticles%2F360047780372-Configura%25C3%25A7%25C3%25B5es-
+avan%25C3%25A7adas) [ Русский
+](/hc/change_language/ru?return_to=%2Fhc%2Fru%2Farticles%2F360047780372-%25D0%2594%25D0%25BE%25D0%25BF%25D0%25BE%25D0%25BB%25D0%25BD%25D0%25B8%25D1%2582%25D0%25B5%25D0%25BB%25D1%258C%25D0%25BD%25D1%258B%25D0%25B5-%25D0%25BF%25D0%25B0%25D1%2580%25D0%25B0%25D0%25BC%25D0%25B5%25D1%2582%25D1%2580%25D1%258B)
+[ 简体中文 ](/hc/change_language/zh-cn?return_to=%2Fhc%2Fzh-
+cn%2Farticles%2F360047780372-%25E9%25AB%2598%25E7%25BA%25A7%25E8%25AE%25BE%25E7%25BD%25AE)
+
+[ Platform  ](https://vungle.com/login/)
+
+[ Early Access SDK ](https://support.vungle.com/hc/en-us/articles/203610124) [
+Platform  ](https://vungle.com/signup/)
+
+  1. [Help Center](/hc/en-us)
+  2. [Vungle SDK](/hc/en-us/categories/200269670-Vungle-SDK)
+  3. [Android and Amazon](/hc/en-us/sections/115000243451-Android-and-Amazon)
+
+#  Advanced Settings
+
+![Avatar](https://support.vungle.com/system/photos/420191068/Profile_Picture.jpg)
+
+**David Kim**
+
+June 26, 2024 03:56
+
+[Follow](/hc/en-us/articles/360047780372-Advanced-Settings/subscription.html
+"Opens a sign-in dialog")
+
+Begin by following the instructions in the [basic integration](/hc/en-
+us/articles/360002922871) article, and then the instructions for any of the ad
+formats you want to integrate (interstitial ads, rewarded ads, banner ads,
+native ads). This article contains supplementary information and assumes you
+have completed basic integration.
+
+## Google Play Store Privacy Questionnaire
+
+Google has published details about their [privacy
+requirements](https://support.google.com/googleplay/android-
+developer/answer/10787469?hl=en#zippy=%2Cdata-types%2Cwhat-users-will-
+see%2Cdata-collection%2Cpurposes%2Coptional-format-for-sdks%2Cdata-
+sharing%2Cdata-handling%2Cother-app-and-data-disclosures%2Ccommitted-to-
+follow-the-families-policy-available-soon-to-applicable-apps%2Cam-i-required-
+to-provide-a-deletion-mechanism-must-it-be-for-any-and-all-user-data%2Chow-
+should-i-treat-the-collection-and-use-of-ip-addresses) for their Google Play
+store. According to Google’s announcement, app developers must define which
+data are collected by their apps and any SDKs they have integrated.
+
+To help you answer Google’s data safety questionnaire with respect to your
+integration of the Vungle SDK, refer to the following table:
+
+A couple of disclaimers:
+
+  * This list is only applicable to Google data safety questionnaires, and it does not address data or privacy questions that may be raised by other parties. Refer to our [Privacy Policy](https://vungle.com/privacy/) for more detailed information.
+  * This list only describes Vungle's SDK data collection. This list does not describe a developer’s overall app data collection and use, or that of any other SDK for 3rd-party networks.
+
+**Category** | **Data Type** | **Collected?** | **Shared With Other 3rd Parties?** | **Purpose**  
+---|---|---|---|---  
+App information and performance | Diagnostics | Yes |  Yes |  {Battery information, network information, storage space information, locale information, audio information} to improve users' ad experience  
+Device identifiers |  Advertising ID,  
+Android ID (when GPS is not available),  
+[App Set ID](https://developer.android.com/training/articles/app-set-id) |  Yes |  Yes |  Device identifiers are collected for attribution and targeting purposes, in compliance with [Google's privacy policy](https://support.google.com/googleplay/android-developer/answer/6048248)  
+Ad Interactions |  Interactions with ad creative |  Yes |  Yes |  Used for measuring ad performance  
+  
+## GDPR Recommended Implementation Instructions
+
+As of May 25, 2019, the General Data Protection Regulation (GDPR) will be
+enforced in the European Union. To comply with GDPR, developers have two
+options.
+
+  * **Option 1 (recommended):** Publisher controls the GDPR consent process at the user level, then communicates the user’s choice to Vungle. To do this, developers can collect the user’s consent using their own mechanism, and then use Vungle APIs to update or query the user’s consent status. Refer to the sample code below for details.
+  * **Option 2:** Allow Vungle to handle the requirements. Vungle will display a consent dialog before playing an ad for a European user, and will remember the user’s consent or rejection for subsequent ads.
+
+The `setGDPRStatus` method (recommended in **Option 1**) takes the user's
+consent status and the consent message version as its parameters.
+
+    
+    
+    fun setGDPRStatus(optIn: Boolean, consentMessageVersion: String?)
+    
+
+The consent status will specify whether the user has `OPTED_IN` or `OPTED_OUT`
+for the message version you displayed. The `consentMessageVersion` specifies
+the publisher-controlled consent policy version; this enables you to pool your
+users by the message version and seek consent again when the GDPR policy
+changes. `getGDPRStatus` may return null until `setGDPRStatus` has been called
+or users make their consent using Vungle consent dialog.
+
+KotlinJava
+
+    
+    
+    // Usage example of GDPR API
+    // To set the user's consent status to opted in:
+    VunglePrivacySettings.setGDPRStatus(true, "1.0.0")
+    
+    
+    // To set the user's consent status to opted out:
+    VunglePrivacySettings.setGDPRStatus(false, "1.0.0")
+    
+    
+    // To find out what the user's current consent status is:
+    // This will return unknown if the GDPR Consent status has not been set
+    // Otherwise, it will return "opted_out" or "opted_in" 
+    val currentGDPRStatus = VunglePrivacySettings.getGDPRStatus()
+    val consentMessageVersion = VunglePrivacySettings.getGDPRMessageVersion()
+    
+    
+    // Usage example of GDPR API
+    // To set the user's consent status to opted in:
+    VunglePrivacySettings.setGDPRStatus(true, "1.0.0");
+    
+    // To set the user's consent status to opted out:
+    VunglePrivacySettings.setGDPRStatus(false, "1.0.0");
+    
+    // To find out what the user's current consent status is:
+    // This will return unknown if the GDPR Consent status has not been set
+    // Otherwise, it will return "opted_out" or "opted_in" 
+    String currentGDPRStatus = VunglePrivacySettings.getGDPRStatus();
+    String consentMessageVersion = VunglePrivacySettings.getGDPRMessageVersion();
+
+## COPPA Implementation
+
+Generally speaking, the [Children’s Online Privacy Protection Act
+(COPPA)](https://www.ftc.gov/enforcement/rules/rulemaking-regulatory-reform-
+proceedings/childrens-online-privacy-protection-rule) regulates the
+collection, use, and disclosure of personal information for children under the
+age of 13 by certain websites and online services (including mobile apps).
+Compliance with COPPA is a legal issue and we suggest you seek the advice of
+an attorney in determining compliance. Additionally, for more information on
+COPPA, please refer to the Federal Trade Commission's [COPPA
+FAQ](https://www.ftc.gov/tips-advice/business-center/guidance/complying-coppa-
+frequently-asked-questions-0).
+
+Liftoff has tools to assist publishers with COPPA compliance. In addition to
+use of settings on the [Monetize
+Dashboard](https://publisher.vungle.com/placements/create/application),
+Liftoff offers features within the Vungle SDK using the COPPA API.
+
+### COPPA Compliance at the App Level
+
+Vungle provides tooling in the Publisher Dashboard to indicate COPPA
+compliance for each app. When defining your app in the [Monetize
+Dashboard](https://publisher.vungle.com/placements/create/application), you
+must indicate to Vungle whether your app is directed toward children under age
+13. Depending on your setting, Vungle will globally treat all traffic for the
+app as subject to COPPA or not. If you indicate that your app is not directed
+toward children under 13, COPPA settings will not apply at the app level, and
+can then be indicated at a more granular level (see COPPA Compliance at the
+Device Level).
+
+### COPPA Compliance at the Device Level
+
+Starting with SDK v.6.10.3, Vungle provides an optional method for you to
+indicate at the device level whether the user within the given mobile app is
+under or over the age of 13 by using the SDK COPPA API. The SDK COPPA API is
+most appropriate in cases of apps that legally can implement an age screen or
+age gate in accordance with COPPA, rather than treating all users as under 13.
+If you believe your app as a whole is primarily directed to children under the
+age of 13 as set forth in COPPA and related guidance, the [COPPA Dashboard
+settings](https://publisher.vungle.com/placements/create/application) are more
+appropriate for you.
+
+### Recommendations for Using Vungle's COPPA Compliance Tools
+
+Pursuant to the Vungle SDK License and Publisher Terms, it is the publisher’s
+responsibility to ensure compliance with applicable laws, including COPPA.
+Liftoff is not liable for COPPA violations resulting from incorrect settings
+communicated via the SDK COPPA API. Consider the following recommendations to
+help you ensure COPPA compliance.
+
+#### For Google Privacy Compliance, Upgrade to Vungle SDK v.6.10.4 or Higher
+
+Once you upgrade to Vungle SDK v.6.10.4 or higher:
+
+  * **Use the SDK COPPA API for mixed-audience apps:** Use the SDK COPPA API if:
+
+    * You have confirmed you are a “mixed-audience app” under COPPA
+
+    * You have implemented an age gate or age screen
+
+    * You have stated that for your app “COPPA settings will NOT apply” in the Publisher Dashboard (otherwise, a COPPA-compliant setting in your Dashboard will override any API settings to the contrary)
+
+  * **Use the Dashboard for apps directed towards children under 13:** In cases where it is clear that your app is primarily directed to children under the age of 13, use the [COPPA settings section in the Publisher Dashboard](https://support.vungle.com/hc/en-us/articles/115000493152#step-2-set-your-app-details-0-2) instead of the SDK COPPA API.
+
+  * **Conflicting settings between API and Dashboard:** As noted above, you can establish COPPA settings at the app level (but not at the user level) on the [Publisher Dashboard](https://support.vungle.com/hc/en-us/articles/115000493152#step-2-set-your-app-details-0-2), and at the device/user level by using the SDK COPPA API. Under the current release of SDK COPPA API functionality, in the event of a conflict between the settings in Publisher Dashboard and those passed via the SDK COPPA API, the COPPA-compliant setting takes precedence.  
+  
+For example, if your app setting on the Publisher Dashboard is COPPA-
+compliant, and that same app also enables use of the SDK COPPA API and
+identifies a given user as over 13, Vungle will defer to the Dashboard
+setting, which states that all the users in this app are protected by COPPA
+regulations. If, on the other hand, your app setting on the Publisher
+Dashboard states that your app is not directed toward users under the age of
+13, but a call to the SDK COPPA API identifies a given user as under age 13,
+Vungle will override the dashboard setting and treat that user as being
+protected by COPPA regulations.
+
+#### Alternative (Not Recommended): Continue with SDK v.6.10.3 Using the SDK
+COPPA API
+
+If you cannot upgrade to Vungle SDK v.6.10.4 or higher, you can still comply
+with Google’s Privacy Policy by using Vungle SDK v.6.10.3. In this case, you
+must take these measures:
+
+  * For child-directed apps or family apps, call the SDK COPPA API with COPPA status set to ‘true’ for every device/user to prevent the SDK from collecting the Google Advertising ID
+  * For mixed-audience apps, call the SDK COPPA API with COPPA status set to ‘true’ when the user in question is known to be under the age of 13
+
+For example, if COPPA settings on the Publisher Dashboard are enabled for a
+given app, but then the same app also enables use of the SDK COPPA API and
+identifies a given user as over 13, Vungle SDK 6.10.3 will treat this user as
+not protected by COPPA. We therefore recommend using the SDK COPPA API to
+indicate that a user is under the age of 13, because this setting will
+override the app-level setting from the Dashboard.
+
+### COPPA API
+
+To update Vungle about a user’s COPPA status:
+
+  1. Use `VunglePrivacySettings.setCOPPAStatus` to set the `isUserCoppa` parameter to ‘true’ for a user who is under the age of 13 and falls under COPPA regulations; ‘false’ for a user known to be over the age of 13.
+  2. Then call `VungleAds.init`, as shown.
+
+    
+    
+    /**
+         * Use to update Vungle on a user’s COPPA status. Indicate ‘true’ if user is known to fall under COPPA regulations.
+         * Call this before initialization the Vungle SDK
+         *
+         * i.e.,
+         * Vungle.updateUserCoppaStatus(true)
+         * Vungle.init(...)
+         *
+         * @param isUserCoppa - ‘true’ if user is known to be 13 and under to comply with COPPA regulations
+         */
+    
+        public static void updateUserCoppaStatus(boolean isUserCoppa)
+    
+
+Usage example:
+
+KotlinJava
+
+    
+    
+    // To treat the user as under age 13
+    // and under COPPA regulations:
+    VunglePrivacySettings.setCOPPAStatus(true)
+    
+    
+    //OR
+    
+    // If user is known to be over age 13 and 
+    // does NOT fall under COPPA regulations:
+    VunglePrivacySettings.setCOPPAStatus(false)
+    
+    // Initialize SDK after setting COPPA Status
+    VungleAds.init(context, APP_ID, initCallback)
+    
+    
+    
+    // To treat the user as under age 13
+    // and under COPPA regulations:
+    VunglePrivacySettings.setCOPPAStatus(true);
+    
+    //OR
+    
+    // If user is known to be over age 13 and 
+    // does NOT fall under COPPA regulations:
+    VunglePrivacySettings.setCOPPAStatus(false);
+    
+    // Initialize SDK after setting COPPA Status
+    VungleAds.init(context, APP_ID, initCallback);
+    
+
+## CCPA Implementation
+
+As of July 1, 2020, California Consumer Privacy Act (CCPA) will be enforced
+and publishers must update to Android SDK 6.7.0 to comply with CCPA.
+
+The `setCCPAStatus` method takes the user's consent status to specify whether
+user has `OPTED_IN` or `OPTED_OUT` and the `getCCPAStatus` method returns
+current CCPA status for the user.
+
+In accordance with CCPA, the consent status is opted in by default unless
+`updateCCPAStatus` has been explicitly called to set it as opted out.
+`getCCPAStatus` may return null if not set but will be treated as opted-in.
+
+    
+    
+    fun setCCPAStatus(optIn: Boolean)
+    
+    
+    fun getCCPAStatus(): String  
+    
+
+KotlinJava
+
+    
+    
+    // Usage example of CCPA API
+    // To set the user's CCPA status to opted in:
+    VunglePrivacySettings.setCCPAStatus(true)
+    
+    // To set the user's CCPA status to opted out:
+    VunglePrivacySettings.setCCPAStatus(false)
+    
+    // To find out what the user's current consent status is:
+    val ccpaStatus = VunglePrivacySettings.getCCPAStatus()
+    
+    
+    // Usage example of CCPA API
+    // To set the user's CCPA status to opted in:
+    VunglePrivacySettings.setCCPAStatus(true);
+    
+    // To set the user's CCPA status to opted out:
+    VunglePrivacySettings.setCCPAStatus(false);
+    
+    // To find out what the user's current consent status is:
+    String ccpaStatus = VunglePrivacySettings.getCCPAStatus();
+
+## Restrict Use of Device ID
+
+Starting with Vungle Android SDK v6.4.11, you can now restrict the
+transmission of the Android ID used when the Google Advertising ID is not
+available.
+
+KotlinJava
+
+    
+    
+    // Set false to opt out for Android ID collection by SDK or true (default) to opt in
+    VunglePrivacySettings.setPublishAndroidId(true)
+        
+    VungleAds.init(context, APP_ID, initCallback)
+    
+    
+    // Set false to opt out for Android ID collection by SDK or true (default) to opt in
+    VunglePrivacySettings.setPublishAndroidId(true);
+        
+    VungleAds.init(context, APP_ID, initCallback);
+
+## Include Google Play Services
+
+Including Google Play Services with your project is optional, but recommended.
+It enables Vungle to provide a more customized ad experience to your end user.
+We recommend that you include basement and ads-identifier APIs, and that you
+use version Google Play Services v11.0.1 or higher.
+
+To include Google Play Services, refer to [Google's setup
+guide](http://developer.android.com/google/play-services/setup.html#Setup). In
+your app, ensure that the device has a sufficiently updated version of Google
+Play Services. The Vungle SDK optionally uses the location and ads API from
+Google Play Services.
+
+  * `google.android.gms:play-services-basement:17.6.0` (Recommended)
+  * `google.android.gms:play-services-ads-identifier:17.0.0` (Required for AAID)
+
+## Method Count Reduction
+
+Adding Vungle Android SDK v6 to your project adds approximately 700 core
+Vungle methods, excluding any transitive dependencies. A full integration
+including third-party libraries is expected to add less than 4000 methods on
+average. Consider the following suggestions to reduce the total number of
+methods added to your project:
+
+  * **ProGuard:** You can enable ProGuard to shrink your project code. It will discard any unused classes at the time of compilation to make the total method count as small as possible. You can enable it by setting [`minifyEnabled` to `true`](https://developer.android.com/studio/build/shrink-code.html) in `build.gradle` for the appropriate build type, and by providing the rules to keep the classes required by your project.
+  * **MultiDex:** If you are still above a 65K method count, enabling MultiDex may be the only solution provided by Google. You must only configure your project to MultiDex one time, but it will have an impact on build and app startup time.
+
+## ProGuard
+
+If you are using ProGuard, add the following rules to your ProGuard
+configuration file:
+
+    
+    
+    # Vungle
+    -dontwarn com.vungle.ads.**
+    -keepclassmembers class com.vungle.ads.** {
+      *;
+    }
+    
+    
+    
+    
+    # Google
+    -keep class com.google.android.gms.** { *; }
+    -dontwarn com.google.android.gms.**
+    
+    
+    
+    
+    # START OkHttp + Okio
+    # JSR 305 annotations are for embedding nullability information.
+    -dontwarn javax.annotation.**
+    
+    
+    # A resource is loaded with a relative path so the package of this class must be preserved.
+    -adaptresourcefilenames okhttp3/internal/publicsuffix/PublicSuffixDatabase.gz
+    
+    
+    # Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
+    -dontwarn org.codehaus.mojo.animal_sniffer.*
+    
+    
+    # OkHttp platform used only on JVM and when Conscrypt and other security providers are available.
+    -dontwarn okhttp3.internal.platform.**
+    -dontwarn org.conscrypt.**
+    -dontwarn org.bouncycastle.**
+    -dontwarn org.openjsse.**
+    
+    
+    # Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
+    -dontwarn org.codehaus.mojo.animal_sniffer.*
+    
+    
+    # END OkHttp + Okio
+    
+    
+    # START Protobuf
+    -dontwarn com.google.protobuf.**
+    -keepclassmembers class com.google.protobuf.** {
+     *;
+    }
+    -keep class * extends com.google.protobuf.GeneratedMessageLite { *; }
+    
+    
+    # END Protobuf
+    
+
+## Hardware Acceleration
+
+[Hardware
+acceleration](https://developer.android.com/guide/topics/graphics/hardware-
+accel#controlling) is enabled by default for your application if your target
+API level is set to 14 or above. This option must be enabled for the SDK to
+properly show Dynamic Template and MREC ads. Make sure this option is set to
+'true' at the application level of your project:
+
+    
+    
+    <application android:hardwareAccelerated="true" ...>
+
+## Retrieve the SDK Version Number
+
+To programmatically retrieve the SDK version number at runtime (this useful in
+internal mediation), Vungle provides the following String:
+
+    
+    
+    VungleAds.getSdkVersion()
+
+## Exception Codes for Debugging
+
+`InitializationListener`, `InterstitialAdListener`, `RewardedAdListener`,
+`BannerAdListener`, and `NativeAdListener` will have a `VungleError` code when
+the `onError` callback fires. You can use the code to debug or take actions to
+correct the issue programmatically.
+
+    
+    
+    if (exception.code == VungleException.VUNGLE_NOT_INTIALIZED) {  
+    // Call the routine to initialize Vungle SDK
+
+**Exception Code** | **Description**  
+---|---  
+`CONFIGURATION_ERROR` | A configuration error occurred. Check your app ID and placement reference IDs, and try again when network connectivity is available.  
+`INVALID_APP_ID` | App ID is invalid.  
+`NO_SERVE` | Ad server found no advertisements for your current bid. Please try again later. This exception is expected behavior.  
+`UNKNOWN_ERROR` | An unknown error occurred. This exception should be rare.  
+`AD_EXPIRED` | The advertisement in the cache has expired and can no longer be played. Please load another ad.  
+`MISSING_REQUIRED_ARGUMENTS_FOR_INIT` | Please ensure all parameters for `Vungle.init()` marked as NonNull are provided, as they are essential for the SDK to function.  
+`APPLICATION_CONTEXT_REQUIRED` | Please provide the application `Context` so that our SDK can continue to support our API beyond the `Activity` lifecycle.  
+`OPERATION_ONGOING` | There is already an ongoing operation for the action you requested. Please wait until the operation completes before starting another.  
+`VUNGLE_NOT_INTIALIZED` | Vungle is not initialized, or no longer initialized. Please call `Vungle.init()` to reinitialize.  
+`AD_UNABLE_TO_PLAY` | Unable to play advertisement.  
+`AD_FAILED_TO_DOWNLOAD` | Advertisement failed to download.  
+`PLACEMENT_NOT_FOUND` | Placement is not valid.  
+`SERVER_RETRY_ERROR` | Remote server responded with HTTP Retry-After, the SDK will retry this request.  
+`ALREADY_PLAYING_ANOTHER_AD` | Vungle is already playing a different ad.  
+`NO_SPACE_TO_DOWNLOAD_ASSETS` | The file system size on the device in insufficient to download assets for an ad.  
+`NETWORK_ERROR` | Network error. Try again later.  
+`ASSET_DOWNLOAD_ERROR` | Assets download failed.  
+`INVALID_SIZE` | Ad size is invalid.  
+`WEB_CRASH` | Android web view has crashed.  
+`WEBVIEW_RENDER_UNRESPONSIVE` | Android web view render became unresponsive. Please clean up your Webview process.  
+`NETWORK_UNREACHABLE` | Network error. Please check that network is available and that permission for network access is granted.  
+`NETWORK_PERMISSIONS_NOT_GRANTED` | Network permissions not granted. Please check manifest for `android.permission.INTERNET` and `android.permission.ACCESS_NETWORK_STATE`.  
+`SDK_VERSION_BELOW_REQUIRED_VERSION` | The SDK minimum version should not be overridden. Will not work as expected.  
+`AD_RENDER_NETWORK_ERROR` | Ad rendering failed due to network connectivity issue.  
+`OUT_OF_MEMORY` | Out of memory.  
+`AD_MARKUP_INVALID` | Invalid ad markup.  
+`CREATIVE_ERROR` | Creative error occurred.  
+`HEARTBEAT_ERROR` | Heartbeat not received within a valid time window.  
+`TYPE_NOT_MATCH` | Ad type does not match with placement type.  
+`CONCURRENT_PLAYBACK_UNSUPPORTED` | Concurrent playback not supported.  
+`NETWORK_TIMEOUT` | Request timeout.  
+`MRAID_DOWNLOAD_JS_ERROR` | Failed to download MRAID JS.  
+`ASSET_RESPONSE_DATA_ERROR` | Server returned an unexpected response object or failed to load the downloaded data.  
+  
+## Creative Tracking
+
+You can find `creativeId` as a string property available in each ad instance.
+This value can be used for debugging, or can be shared if issues are
+identified with specific creatives. In the provided example, the creative Id
+is used to output details of the loaded interstitial ad when the app is
+notified of load success.
+
+KotlinJava
+
+    
+    
+    override fun onAdLoaded(baseAd: BaseAd) {
+       Log.d(TAG, "adLoaded, creative id is ${baseAd.creativeId}")
+    }
+    
+    
+    
+    @Override
+    public void onAdLoaded(@NonNull BaseAd baseAd) {
+       Log.d(TAG, "adLoaded, creative id is " + baseAd.getCreativeId());
+    }
+
+## Customize Rewarded Ads
+
+For [rewarded ads](/hc/en-us/articles/360048262131), you can set some optional
+parameters before loading and playing the ad.
+
+  * You can set the user ID to identify the user that is interacting with the ad.
+  * You can also customize texts used to incentivize the user to finish the ad experience and receive the reward (these texts are shown in an alert that would be presented if the user attempts to close the ad before completion).
+
+Sample code:
+
+KotlinJava
+
+    
+    
+      rewardedAd.setUserId(userId: "YOUR USER ID")
+      rewardedAd.setAlertTitleText("Custom Alert Title")
+      rewardedAd.setAlertBodyText("Custom Alert Body")
+      rewardedAd.setAlertCloseButtonText("Custom Alert Close")
+      rewardedAd.setAlertContinueButtonText("Custom Alert Continue")
+    
+    
+    
+      rewardedAd.setUserId(userId: "YOUR USER ID");
+      rewardedAd.setAlertTitleText("Custom Alert Title");
+      rewardedAd.setAlertBodyText("Custom Alert Body");
+      rewardedAd.setAlertCloseButtonText("Custom Alert Close");
+      rewardedAd.setAlertContinueButtonText("CustomAlert Continue");
+    
+
+## Questions?
+
+Need further assistance, feel free to reach out to us, we’re here to help!
+
+[Submit a request](/hc/en-us/requests/new)
+
+Was this article helpful?
+
+[](/hc/en-us/signin?return_to=https%3A%2F%2Fsupport.vungle.com%2Fhc%2Fen-
+us%2Farticles%2F360047780372-Advanced-Settings "Yes") [](/hc/en-
+us/signin?return_to=https%3A%2F%2Fsupport.vungle.com%2Fhc%2Fen-
+us%2Farticles%2F360047780372-Advanced-Settings "No")
+
+(C) 2020 Vungle. All rights reserved.
+
+  * [About](https://vungle.com/about-us/)
+  * [Products](https://vungle.com/login/)
+  * [Contact us](https://vungle.com/contact-us/)
+
+  * [](https://www.facebook.com/vungle/)
+  * [](https://twitter.com/vungle)
+  * [](https://www.linkedin.com/company/vungle)
+  * [](https://www.instagram.com/vungle/)
+

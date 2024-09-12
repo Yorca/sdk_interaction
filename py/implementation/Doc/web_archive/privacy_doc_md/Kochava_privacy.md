@@ -1,0 +1,2758 @@
+[![Kochava Support](https://s34036.pcdn.co/wp-
+content/themes/kochavasupport/images/kochavasupportlogo2019.png)](https://support.kochava.com)
+
+  * [Kochava Support](https://support.kochava.com/ "Kochava Support")
+  * Create and Manage Apps __
+    * [App Overview](https://support.kochava.com/create-manage-apps/app-overview/ "App Overview")
+    * [Create/Edit an App](https://support.kochava.com/create-manage-apps/create-edit-apps/ "Create/Edit an App")
+    * [Creating and Editing App Groups](https://support.kochava.com/create-manage-apps/creating-and-editing-app-groups/ "Creating and Editing App Groups")
+  * SDK Integration __
+    * [All SDKs](https://support.kochava.com/sdk-integration/ "All SDKs")
+    * [iOS – SDK Integration](https://support.kochava.com/sdk-integration/ios-sdk-integration/ "iOS – SDK Integration")
+    * [Android – SDK Integration](https://support.kochava.com/sdk-integration/android-sdk-integration/ "Android – SDK Integration")
+    * [Windows – SDK Integration](https://support.kochava.com/sdk-integration/windows-sdk-integration/ "Windows – SDK Integration")
+    * [Roku – SDK Integration](https://support.kochava.com/sdk-integration/roku-sdk-integration/ "Roku – SDK Integration")
+    * [Unity – SDK Integration](https://support.kochava.com/sdk-integration/unity-sdk-integration/ "Unity – SDK Integration")
+    * [ReactNative – SDK Integration](https://support.kochava.com/sdk-integration/reactnative-sdk-integration/ "ReactNative – SDK Integration")
+    * [Cordova – SDK Integration](https://support.kochava.com/sdk-integration/cordova-sdk-integration/ "Cordova – SDK Integration")
+    * [Adobe AIR – SDK Integration](https://support.kochava.com/sdk-integration/adobe-air-sdk-integration/ "Adobe AIR – SDK Integration")
+    * [.NET MAUI – SDK Integration](https://support.kochava.com/sdk-integration/maui-sdk-integration/ ".NET MAUI – SDK Integration")
+    * [Adobe Digital Publishing Suite SDK](https://support.kochava.com/sdk-integration/adobe-digital-publishing-suite-integration/ "Adobe Digital Publishing Suite SDK")
+    * [Adobe Analytics SDK](https://support.kochava.com/sdk-integration/adobe-analytics-integration/ "Adobe Analytics SDK")
+    * [Testing an Integration with Kochava](https://support.kochava.com/sdk-integration/testing-the-integration-with-kochava/ "Testing an Integration with Kochava")
+    * [SDK – Intelligent Consent Management](https://support.kochava.com/sdk-integration/sdk-intelligent-consent-management/ "SDK – Intelligent Consent Management")
+    * [Kochava SDK and Consent Handling](https://support.kochava.com/sdk-integration/sdk-intelligent-consent-management/kochava-sdk-and-consent-handling/ "Kochava SDK and Consent Handling")
+    * [Consent SDK – Handling Consent](https://support.kochava.com/sdk-integration/consent-sdk-handling-consent/ "Consent SDK – Handling Consent")
+    * [Consent SDK – Using the SDK](https://support.kochava.com/sdk-integration/consent-sdk-using-the-sdk/ "Consent SDK – Using the SDK")
+  * Web SDK Integration __
+    * [JavaScript Web SDK Integration](https://support.kochava.com/web-sdk-integration/javascript-web-sdk-integration/ "JavaScript Web SDK Integration")
+    * [Angular Web SDK Integration](https://support.kochava.com/web-sdk-integration/angular-web-sdk-integration/ "Angular Web SDK Integration")
+    * [NodeJS Web SDK Integration](https://support.kochava.com/web-sdk-integration/nodejs-web-sdk-integration/ "NodeJS Web SDK Integration")
+    * [React Web SDK Integration](https://support.kochava.com/web-sdk-integration/react-web-sdk-integration/ "React Web SDK Integration")
+    * [Vue Web SDK Integration](https://support.kochava.com/web-sdk-integration/vue-web-sdk-integration/ "Vue Web SDK Integration")
+    * [Web – Using the SDK](https://support.kochava.com/web-sdk-integration/web-using-the-sdk/ "Web – Using the SDK")
+  * Server-to-Server Integration __
+    * [Segment Integration](https://support.kochava.com/server-to-server-integration/segment-integration/ "Segment Integration")
+    * [Server-to-Server Integration Overview](https://support.kochava.com/server-to-server-integration/server-to-server-integration-overview/ "Server-to-Server Integration Overview")
+    * [Bot Integration](https://support.kochava.com/server-to-server-integration/bot-integration/ "Bot Integration")
+    * [IdentityLink™ Setup](https://support.kochava.com/server-to-server-integration/identitylink-setup/ "IdentityLink™ Setup")
+    * [Urban Airship Integration](https://support.kochava.com/server-to-server-integration/urban-airship-integration/ "Urban Airship Integration")
+    * [Install Notification Setup](https://support.kochava.com/server-to-server-integration/install-notification-setup/ "Install Notification Setup")
+    * [Post-Install Event Setup](https://support.kochava.com/server-to-server-integration/post-install-event-setup/ "Post-Install Event Setup")
+    * [Track Client Apps with a 3rd Party Tracking Solution](https://support.kochava.com/server-to-server-integration/track-client-apps-with-a-3rd-party-tracking-solution/ "Track Client Apps with a 3rd Party Tracking Solution")
+  * Campaign Management __
+    * [10-Minute Guide to Your 1st Campaign](https://support.kochava.com/campaign-management/10-minute-guide-to-your-1st-campaign/ "10-Minute Guide to Your 1st Campaign")
+    * [Create an Install Campaign](https://support.kochava.com/campaign-management/create-an-install-campaign/ "Create an Install Campaign")
+    * [Create a Reengagement Campaign](https://support.kochava.com/campaign-management/create-a-reengagement-campaign/ "Create a Reengagement Campaign")
+    * [Create a View-Through Attribution Campaign](https://support.kochava.com/campaign-management/create-a-view-through-campaign/ "Create a View-Through Attribution Campaign")
+    * [Create a Kochava-Certified Postback](https://support.kochava.com/campaign-management/create-a-kochava-certified-postback/ "Create a Kochava-Certified Postback")
+    * [Create a Custom Postback](https://support.kochava.com/campaign-management/create-a-custom-postback/ "Create a Custom Postback")
+    * [Post-Install Event Creation and Configuration](https://support.kochava.com/campaign-management/post-install-event-creation-and-configuration/ "Post-Install Event Creation and Configuration")
+    * [Tracker Override Settings](https://support.kochava.com/campaign-management/tracker-override-settings/ "Tracker Override Settings")
+    * [Create a Facebook Campaign](https://support.kochava.com/campaign-management/create-a-facebook-campaign/ "Create a Facebook Campaign")
+    * [Create a FMP Reengagement Campaign](https://support.kochava.com/campaign-management/create-a-fmp-reengagement-campaign/ "Create a FMP Reengagement Campaign")
+    * [Facebook FMP Naming Conventions](https://support.kochava.com/campaign-management/create-a-facebook-campaign/facebook-fmp-naming-conventions/ "Facebook FMP Naming Conventions")
+    * [Create a Roku Campaign](https://support.kochava.com/campaign-management/create-a-roku-campaign/ "Create a Roku Campaign")
+    * [Create a Snapchat Campaign](https://support.kochava.com/campaign-management/create-a-snapchat-campaign/ "Create a Snapchat Campaign")
+    * [Create a Snapchat Reengagement Campaign](https://support.kochava.com/campaign-management/create-a-snapchat-campaign/create-a-snapchat-reengagement-campaign/ "Create a Snapchat Reengagement Campaign")
+    * [Create a Snapchat Partner Campaign](https://support.kochava.com/campaign-management/create-a-snapchat-campaign/create-a-snapchat-partner-campaign/ "Create a Snapchat Partner Campaign")
+    * [Create a Twitter Campaign](https://support.kochava.com/campaign-management/create-a-twitter-campaign/ "Create a Twitter Campaign")
+    * [Google Ads](https://support.kochava.com/campaign-management/google-ads/ "Google Ads")
+    * [Create a Google Reengagement Campaign](https://support.kochava.com/campaign-management/google-ads/google-reengagement/ "Create a Google Reengagement Campaign")
+    * [Google Marketing Platform – DV360 & CM360](https://support.kochava.com/campaign-management/google-marketing-platform-dv360-cm360/ "Google Marketing Platform – DV360 & CM360")
+    * [Google Tag Manager Integration](https://support.kochava.com/campaign-management/google-ads/google-tag-manager-integration/ "Google Tag Manager Integration")
+    * [Create an Apple Search Ads Campaign](https://support.kochava.com/campaign-management/create-an-apple-search-ads-campaign/ "Create an Apple Search Ads Campaign")
+    * [Kochava for Agencies](https://support.kochava.com/campaign-management/kochava-for-agencies/ "Kochava for Agencies")
+    * [Traffic Verifier®](https://support.kochava.com/campaign-management/traffic-verifier/ "Traffic Verifier®")
+    * [Create a Web Conversion Tracking Campaign](https://support.kochava.com/campaign-management/create-a-web-conversion-tracking-campaign/ "Create a Web Conversion Tracking Campaign")
+    * [Create a Private Network](https://support.kochava.com/campaign-management/create-a-private-network/ "Create a Private Network")
+    * [Default Reconciliation Settings](https://support.kochava.com/campaign-management/default-reconciliation-settings/ "Default Reconciliation Settings")
+    * [Partner Reconciliation Settings](https://support.kochava.com/campaign-management/partner-reconciliation-settings/ "Partner Reconciliation Settings")
+  * Analytics, Reports & API __
+    * [Analytics Overview](https://support.kochava.com/analytics-reports-api/analytics-overview/ "Analytics Overview")
+    * [Analytics Overview Detail](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-overview-detail/ "Analytics Overview Detail")
+    * [Analytics Footprint](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-footprint/ "Analytics Footprint")
+    * [Analytics Events Volume](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-event-volume/ "Analytics Events Volume")
+    * [Analytics Event Detail](https://support.kochava.com/analytics-reports-api/analytics-overview/event-detail/ "Analytics Event Detail")
+    * [Analytics Daily Active Users](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-daily-active-users/ "Analytics Daily Active Users")
+    * [Analytics Monthly Active Users](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-monthly-active-users/ "Analytics Monthly Active Users")
+    * [Analytics Revenue Per User](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-revenue-per-user/ "Analytics Revenue Per User")
+    * [Analytics Facebook Insights](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-facebook-insights/ "Analytics Facebook Insights")
+    * [Analytics SKAdNetwork Insights](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-skadnetwork-insights/ "Analytics SKAdNetwork Insights")
+    * [Analytics Lifetime Value](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-lifetime-value/ "Analytics Lifetime Value")
+    * [Analytics Retention](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-retention/ "Analytics Retention")
+    * [Analytics Retention (Advanced)](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-retention-advanced/ "Analytics Retention \(Advanced\)")
+    * [Analytics Funnel](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-funnel/ "Analytics Funnel")
+    * [Analytics Explorer](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-explorer/ "Analytics Explorer")
+    * [Analytics Page Tools](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-page-tools/ "Analytics Page Tools")
+    * [Analytics Metrics](https://support.kochava.com/analytics-reports-api/analytics-overview/analytics-metrics/ "Analytics Metrics")
+    * [Pulling Reports](https://support.kochava.com/analytics-reports-api/pulling-reports/ "Pulling Reports")
+    * [Reports Overview](https://support.kochava.com/analytics-reports-api/reports-overview/ "Reports Overview")
+    * [Audiences](https://support.kochava.com/analytics-reports-api/audiences/ "Audiences")
+    * [Exports](https://support.kochava.com/analytics-reports-api/exports/ "Exports")
+    * [SAN Campaign Data Mapping](https://support.kochava.com/analytics-reports-api/san-campaign-data-mapping/ "SAN Campaign Data Mapping")
+    * [API v1.4 – Call Structure](https://support.kochava.com/analytics-reports-api/api-v1-4-call-structure/ "API v1.4 – Call Structure")
+    * [API v1.4 – Querying API](https://support.kochava.com/analytics-reports-api/api-v1-4-querying-api/ "API v1.4 – Querying API")
+    * [API v1.4 – Requesting and Scheduling Reports](https://support.kochava.com/analytics-reports-api/api-v1-4-requesting-and-scheduling-reports/ "API v1.4 – Requesting and Scheduling Reports")
+    * [Create and Manage API Key](https://support.kochava.com/analytics-reports-api/create-and-manage-application-programming-interface-key/ "Create and Manage API Key")
+    * [App Management API](https://support.kochava.com/analytics-reports-api/app-management-api/ "App Management API")
+    * [Introduction to the Premium Publisher API](https://support.kochava.com/analytics-reports-api/introduction-to-the-premium-publisher-application-program-interface/ "Introduction to the Premium Publisher API")
+    * [Premium Publisher API Campaign Management](https://support.kochava.com/analytics-reports-api/premium-publisher-api-campaign-management/ "Premium Publisher API Campaign Management")
+    * [Premium Publisher API Postback Triggers](https://support.kochava.com/analytics-reports-api/premium-publisher-api-postback-triggers/ "Premium Publisher API Postback Triggers")
+  * Reference Information __
+    * [Integrate with Kochava](https://support.kochava.com/reference-information/integrate-with-kochava-as-a-networkpublisher/ "Integrate with Kochava")
+    * [SKAdNetwork Partner Certification](https://support.kochava.com/reference-information/integrate-with-kochava-as-a-networkpublisher/skad-network-integration/ "SKAdNetwork Partner Certification")
+    * [Attribution Overview](https://support.kochava.com/reference-information/attribution-overview/ "Attribution Overview")
+    * [Kochava Media Index](https://support.kochava.com/reference-information/kochava-media-index/ "Kochava Media Index")
+    * [Test a Campaign](https://support.kochava.com/reference-information/test-a-campaign/ "Test a Campaign")
+    * [Postback Configuration: Recent Install Feed](https://support.kochava.com/reference-information/postback-configuration-recent-install-feed/ "Postback Configuration: Recent Install Feed")
+    * [Post-Install Event Examples](https://support.kochava.com/reference-information/post-install-event-examples/ "Post-Install Event Examples")
+    * [Traffic Import Tool](https://support.kochava.com/reference-information/traffic-import-tool/ "Traffic Import Tool")
+    * [Locating an App GUID](https://support.kochava.com/reference-information/locating-an-app-guid/ "Locating an App GUID")
+    * [Locating the Apple Bundle ID](https://support.kochava.com/reference-information/locating-the-apple-bundle-id/ "Locating the Apple Bundle ID")
+    * [Deep Linking](https://support.kochava.com/reference-information/deep-linking/ "Deep Linking")
+    * [Scrubbing a Device ID](https://support.kochava.com/reference-information/scrubbing-a-device-id/ "Scrubbing a Device ID")
+    * [Users Overview](https://support.kochava.com/reference-information/users-overview/ "Users Overview")
+    * [Groups Overview](https://support.kochava.com/reference-information/groups-overview/ "Groups Overview")
+    * [Roles Overview](https://support.kochava.com/reference-information/roles-overview/ "Roles Overview")
+    * [Glossary](https://support.kochava.com/reference-information/glossary/ "Glossary")
+  * Cost __
+    * [Creating and Editing Cost Configurations](https://support.kochava.com/cost/creating-and-editing-cost-configurations/ "Creating and Editing Cost Configurations")
+    * [Cost Overview](https://support.kochava.com/cost/cost-overview/ "Cost Overview")
+    * [Cost Explorer](https://support.kochava.com/cost/cost-explorer/ "Cost Explorer")
+    * [Measurement Explorer](https://support.kochava.com/cost/measurement-explorer/ "Measurement Explorer")
+    * [SKAdNetwork Explorer](https://support.kochava.com/cost/skad-explorer/ "SKAdNetwork Explorer")
+    * [Cost Media Partner List](https://support.kochava.com/cost/cost-media-partner-list/ "Cost Media Partner List")
+  * Fraud Console __
+    * [Click Flooding](https://support.kochava.com/fraud-console/click-flooding/ "Click Flooding")
+    * [Ad Stacking Clicks](https://support.kochava.com/fraud-console/ad-stacking-clicks/ "Ad Stacking Clicks")
+    * [Anonymous Installs](https://support.kochava.com/fraud-console/anonymous-installs/ "Anonymous Installs")
+    * [Geographic Outliers](https://support.kochava.com/fraud-console/geographic-outliers/ "Geographic Outliers")
+    * [High Click Volume Devices](https://support.kochava.com/fraud-console/high-click-volume-devices/ "High Click Volume Devices")
+    * [High Click Volume IP Addresses](https://support.kochava.com/fraud-console/high-click-volume-ip-addresses/ "High Click Volume IP Addresses")
+    * [Manage Account Blocklist](https://support.kochava.com/fraud-console/manage-account-blocklist/ "Manage Account Blocklist")
+    * [Mean-Time-to-Install Outliers](https://support.kochava.com/fraud-console/mean-time-to-install-outliers/ "Mean-Time-to-Install Outliers")
+    * [Time-to-Install Outliers](https://support.kochava.com/fraud-console/time-to-install-outliers/ "Time-to-Install Outliers")
+    * [Time-to-Install Distribution](https://support.kochava.com/fraud-console/time-to-install-distribution/ "Time-to-Install Distribution")
+    * [Platform Click/Install Mismatch](https://support.kochava.com/fraud-console/platform-clickinstall-mismatch/ "Platform Click/Install Mismatch")
+    * [Non-Verified Install Receipts](https://support.kochava.com/fraud-console/non-verified-install-receipts/ "Non-Verified Install Receipts")
+    * [Non-Verified Purchase Receipts](https://support.kochava.com/fraud-console/non-verified-purchase-receipts/ "Non-Verified Purchase Receipts")
+  * Links __
+    * [Creating and Editing SmartLinks™](https://support.kochava.com/links-overview/creating-and-editing-smartlinks/ "Creating and Editing SmartLinks™")
+    * [Adding Universal Link or App Link Support](https://support.kochava.com/links-overview/adding-universal-link-or-app-link-support/ "Adding Universal Link or App Link Support")
+    * [Destinations Creation and Maintenance](https://support.kochava.com/links-overview/destinations-creation-and-maintenance/ "Destinations Creation and Maintenance")
+    * [Landing Page Creation and Maintenance](https://support.kochava.com/links-overview/landing-page-creation-and-maintenance/ "Landing Page Creation and Maintenance")
+    * [App Clip Setup](https://support.kochava.com/links-overview/app-clip-setup/ "App Clip Setup")
+    * [Instant App Setup](https://support.kochava.com/links-overview/instant-app-setup/ "Instant App Setup")
+  * Advanced Tools __
+    * [Alerting](https://support.kochava.com/advanced-tools/alerting/ "Alerting")
+    * [Audit Report](https://support.kochava.com/advanced-tools/audit-report/ "Audit Report")
+    * [Global Fraud Blocklist](https://support.kochava.com/advanced-tools/global-fraud-blocklist/ "Global Fraud Blocklist")
+    * [Power Editor](https://support.kochava.com/advanced-tools/power-editor/ "Power Editor")
+    * [Custom Query](https://support.kochava.com/advanced-tools/custom-query/ "Custom Query")
+    * [Audience Query](https://support.kochava.com/advanced-tools/custom-query/audience-query/ "Audience Query")
+    * [Query Reference](https://support.kochava.com/advanced-tools/query-reference/ "Query Reference")
+
+Kochava SupportCreate and Manage AppsApp OverviewCreate/Edit an AppCreating
+and Editing App GroupsSDK IntegrationAll SDKsiOS – SDK IntegrationAndroid –
+SDK IntegrationWindows – SDK IntegrationRoku – SDK IntegrationUnity – SDK
+IntegrationReactNative – SDK IntegrationCordova – SDK IntegrationAdobe AIR –
+SDK Integration.NET MAUI – SDK IntegrationAdobe Digital Publishing Suite
+SDKAdobe Analytics SDKTesting an Integration with KochavaSDK – Intelligent
+Consent ManagementKochava SDK and Consent HandlingConsent SDK – Handling
+ConsentConsent SDK – Using the SDKWeb SDK IntegrationJavaScript Web SDK
+IntegrationAngular Web SDK IntegrationNodeJS Web SDK IntegrationReact Web SDK
+IntegrationVue Web SDK IntegrationWeb – Using the SDKServer-to-Server
+IntegrationSegment IntegrationServer-to-Server Integration OverviewBot
+IntegrationIdentityLink™ SetupUrban Airship IntegrationInstall Notification
+SetupPost-Install Event SetupTrack Client Apps with a 3rd Party Tracking
+SolutionCampaign Management10-Minute Guide to Your 1st CampaignCreate an
+Install CampaignCreate a Reengagement CampaignCreate a View-Through
+Attribution CampaignCreate a Kochava-Certified PostbackCreate a Custom
+PostbackPost-Install Event Creation and ConfigurationTracker Override
+SettingsCreate a Facebook CampaignCreate a FMP Reengagement CampaignFacebook
+FMP Naming ConventionsCreate a Roku CampaignCreate a Snapchat CampaignCreate a
+Snapchat Reengagement CampaignCreate a Snapchat Partner CampaignCreate a
+Twitter CampaignGoogle AdsCreate a Google Reengagement CampaignGoogle
+Marketing Platform – DV360 & CM360Google Tag Manager IntegrationCreate an
+Apple Search Ads CampaignKochava for AgenciesTraffic Verifier®Create a Web
+Conversion Tracking CampaignCreate a Private NetworkDefault Reconciliation
+SettingsPartner Reconciliation SettingsAnalytics, Reports & APIAnalytics
+OverviewAnalytics Overview DetailAnalytics FootprintAnalytics Events
+VolumeAnalytics Event DetailAnalytics Daily Active UsersAnalytics Monthly
+Active UsersAnalytics Revenue Per UserAnalytics Facebook InsightsAnalytics
+SKAdNetwork InsightsAnalytics Lifetime ValueAnalytics RetentionAnalytics
+Retention (Advanced)Analytics FunnelAnalytics ExplorerAnalytics Page
+ToolsAnalytics MetricsPulling ReportsReports OverviewAudiencesExportsSAN
+Campaign Data MappingAPI v1.4 – Call StructureAPI v1.4 – Querying APIAPI v1.4
+– Requesting and Scheduling ReportsCreate and Manage API KeyApp Management
+APIIntroduction to the Premium Publisher APIPremium Publisher API Campaign
+ManagementPremium Publisher API Postback TriggersReference
+InformationIntegrate with KochavaSKAdNetwork Partner CertificationAttribution
+OverviewKochava Media IndexTest a CampaignPostback Configuration: Recent
+Install FeedPost-Install Event ExamplesTraffic Import ToolLocating an App
+GUIDLocating the Apple Bundle IDDeep LinkingScrubbing a Device IDUsers
+OverviewGroups OverviewRoles OverviewGlossaryCostCreating and Editing Cost
+ConfigurationsCost OverviewCost ExplorerMeasurement ExplorerSKAdNetwork
+ExplorerCost Media Partner ListFraud ConsoleClick FloodingAd Stacking
+ClicksAnonymous InstallsGeographic OutliersHigh Click Volume DevicesHigh Click
+Volume IP AddressesManage Account BlocklistMean-Time-to-Install OutliersTime-
+to-Install OutliersTime-to-Install DistributionPlatform Click/Install
+MismatchNon-Verified Install ReceiptsNon-Verified Purchase
+ReceiptsLinksCreating and Editing SmartLinks™Adding Universal Link or App Link
+SupportDestinations Creation and MaintenanceLanding Page Creation and
+MaintenanceApp Clip SetupInstant App SetupAdvanced ToolsAlertingAudit
+ReportGlobal Fraud BlocklistPower EditorCustom QueryAudience QueryQuery
+Reference
+
+**[Support Home](https://support.kochava.com)** > [SDK
+Integration](https://support.kochava.com/sdk-integration/) > [Android - SDK
+Integration](https://support.kochava.com/sdk-integration/android-sdk-
+integration/) > Android - Using the SDK
+
+# Android - Using the SDK
+
+The following document describes the common use cases for the Kochava SDK
+after integration is complete. For information on integrating the SDK or
+configuring and starting the Tracker, refer to our [Android SDK
+Integration](https://support.kochava.com/sdk-integration/android-sdk-
+integration) support documentation.
+
+* * *
+
+##  
+Confirming the SDK Integration:
+
+* * *
+
+  
+
+Ensure the SDK has been properly integrated.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration5Minutes_20180815.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**5 Minutes**
+
+After integrating the SDK or creating a new App GUID, we suggest performing
+these tests to ensure the SDK has been integrated successfully and is
+functioning as expected within your app.
+
+
+
+## Validate the Install:
+
+The SDK will send an install for the app once, after a fresh install. This
+test ensures the SDK was configured properly and successfully sent the install
+to Kochava.
+
+  1. Double check the SDK configuration in code, ensuring the correct App GUID.
+  2. Run the app for approximately 30 seconds, which will allow more than enough time for the SDK to start and send an install to Kochava under typical conditions.
+  3. Wait a minute or two and visit the Install Feed Validation page for your app within the Kochava dashboard, under **Apps & Assets > Install Feed Validation**. Within that page, look for the **Integration Success!** message which indicates integration was successful and that Kochava did receive an install from the SDK. At this point you have confirmed a successful SDK integration and can move ahead to Validate Post Install Events below.
+  4. If instead you see a **Integration Not Complete!** message, wait a few more minutes and refresh the page. After refreshing, if the **Integration Not Complete!** message persists, double check the following, then repeat this test:
+     * Correct App GUID is used within SDK code configuration.
+     * Ensure the SDK configuration and startup code is being reached.
+     * Ensure the network connection from the test device is not limited behind a firewall or otherwise.
+
+* * *
+
+## Validate Event Measurement:
+
+If you are measuring user events, you can use this test to ensure the SDK was
+configured properly and is successfully sending these events to Kochava.
+
+  1. Double check the SDK configuration in code, ensuring the correct App GUID.
+  2. Double check your event measurement code and ensure it is reachable.
+  3. Launch the app and perform necessary actions within the app to trigger the event(s) you wish to test. After performing these actions, wait 60 seconds to allow more than enough time for the SDK to send these events.
+  4. Wait a minute or two and visit the Event Manager page for your app within the Kochava dashboard, under **Apps & Assets > Event Manager**. Within that page, ensure the tested event names are displayed here, in which case you have confirmed the SDK is successfully measuring these events.
+  5. If your event names are not displayed here after waiting a few minutes, double check the following, then repeat this test:
+     * Correct App GUID is used within SDK code configuration.
+     * Ensure the SDK configuration and startup code is being reached prior to any event code.
+     * Ensure the SDK event code is being reached.
+     * Ensure the network connection from the test device is not limited behind a firewall or otherwise.
+
+  
+Collapse  
+
+##  
+Supporting Instant Apps:
+
+* * *
+
+  
+
+Additional steps to properly support instant apps.
+
+![15 Minutes](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration15Minutes_20180828.gif)![15
+Minutes](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**15 Minutes**
+
+
+
+**SDK VERSION NOTE:** This feature requires Kochava Android SDK Version 3.9.0
+or higher.
+
+
+
+The standard SDK is used within your instant app (no special variant of the
+SDK is needed for an instant app).
+
+In order to properly support user and attribution flow between the instant app
+and full app, the following steps must be taken.
+
+
+
+### Create two App GUIDs:
+
+The instant app and full app should not use the same App GUID. For the instant
+app, create or use a Kochava app of platform type Android - Instant App. For
+the full app, create or use a Kochava app of platform type Android.
+
+
+
+### Configure the SDK:
+
+You will need to provide the Instant App GUID to both the instant app and the
+full app. This must be done prior to starting the SDK. The SDK will
+automatically choose the correct app GUID to use.
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().enableInstantApps("YOUR_ANDROID_INSTANT_APP_GUID")
+    Tracker.getInstance().startWithAppGuid(context, "YOUR_ANDROID_APP_GUID")
+    
+
+  *     Tracker.getInstance().enableInstantApps("YOUR_ANDROID_INSTANT_APP_GUID");
+    Tracker.getInstance().startWithAppGuid(context, "YOUR_ANDROID_APP_GUID");
+    
+
+  *     Tracker.configure(Tracker.Configuration(context)
+            .setInstantAppGuid("YOUR_ANDROID_INSTANT_APP_GUID")
+            .setAppGuid("YOUR_ANDROID_APP_GUID")
+    )
+    
+
+  *     Tracker.configure(new Tracker.Configuration(context)
+            .setInstantAppGuid("YOUR_ANDROID_INSTANT_APP_GUID")
+            .setAppGuid("YOUR_ANDROID_APP_GUID")
+    );
+    
+
+
+
+### Process the Deeplink:
+
+When the instant app is launched, pass the invocation URL to the SDK’s Process
+Deeplink API as soon as possible, just as you would any other deeplink. See
+the topic Enhanced Deeplinking for complete instructions on how to use the
+Process Deeplink API.
+
+By taking these steps, all functionality related to attribution, analytics,
+and measurement will be properly implemented between the instant app and full
+app.
+
+
+
+### Supporting Older Android Versions:
+
+Instant Apps are natively supported on Android 8 (API 26) and higher with data
+being automatically migrated from the instant app to the full app. If
+supporting Android 7 or lower you are responsible for migrating the SDK's data
+prior to starting the SDK. See the [documentation on transferring
+data](https://developer.android.com/topic/google-play-instant/getting-
+started/instant-enabled-app-bundle#transfer-data-to-installed).
+
+  
+Collapse  
+
+##  
+Tracking Events:
+
+* * *
+
+  
+
+Track user behavior and actions beyond the install.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration15Minutes_20180828.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**15 Minutes**
+
+Examples include in-app purchases, level completions, or other noteworthy user
+activity you wish to measure. Events can be instrumented either by using the
+standard format provided by the SDK or using your own custom event name and
+data.
+
+
+
+**BEST PRACTICES:** Use a standard event type whenever possible.
+
+
+
+### Standard Events:
+
+Standard events are built by first selecting a standard event type and then
+setting any applicable standard parameters you wish to include with the event.
+For example, you might choose a **Purchase** standard event type and set
+values for the **Price** and **Name** parameters. There are a variety of
+standard event types to choose from and dozens of standard parameters
+available. When creating a standard event, you only need to set values for the
+parameters you wish to measure. A maximum of 16 parameters can be set.
+
+  1. Create an event object using the desired standard event type.
+  2. Set the desired parameter value(s) within the event object.
+  3. Send the event.
+
+
+
+#### Example (Standard Event with Standard Parameters) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Event.buildWithEventType(EventType.PURCHASE)
+        .setName("Gold Token")
+        .setPrice(0.99)
+        .send()
+    
+
+  *     Event.buildWithEventType(EventType.PURCHASE)
+        .setName("Gold Token")
+        .setPrice(0.99)
+        .send();
+    
+
+  *     Tracker.sendEvent(Tracker.Event(Tracker.EVENT_TYPE_PURCHASE)
+        .setName("Gold Token")
+        .setPrice(0.99)
+    )
+    
+
+  *     Tracker.sendEvent(new Tracker.Event(Tracker.EVENT_TYPE_PURCHASE)
+            .setName("Gold Token")
+            .setPrice(0.99)
+    );
+    
+
+
+
+Custom event parameters (which can also be serialized JSON) may also be set
+within a standard event.
+
+
+
+#### Example (Standard Event with Standard and Custom Parameters) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Event.buildWithEventType(EventType.LEVEL_COMPLETE)
+        .setName("The Deep Dark Forest")
+        .setCustomNumberValue("attempts", 3.0)
+        .setCustomNumberValue("score", 12000.0)
+        .send()
+    
+
+  *     Event.buildWithEventType(EventType.LEVEL_COMPLETE)
+        .setName("The Deep Dark Forest")
+        .setCustomNumberValue("attempts", 3)
+        .setCustomNumberValue("score", 12000)
+        .send();
+    
+
+  *     Tracker.sendEvent(Tracker.Event(Tracker.EVENT_TYPE_LEVEL_COMPLETE)
+        .setName("The Deep Dark Forest")
+        .addCustom("attempts", 3)
+        .addCustom("score", 12000)
+    )
+    
+
+  *     Tracker.sendEvent(new Tracker.Event(Tracker.EVENT_TYPE_LEVEL_COMPLETE)
+            .setName("The Deep Dark Forest")
+            .addCustom("attempts", 3)
+            .addCustom("score", 12000)
+    );
+    
+
+
+
+If you wish to use a custom event type with standard parameters, use a custom
+event name string within your event constructor in place of a standard event
+type.
+
+
+
+For a detailed list of standard event types and parameters, see: [Post Install
+Event Examples](https://support.kochava.com/reference-information/post-
+install-event-examples)
+
+* * *
+
+### Custom Events:
+
+For scenarios where the standard event types and standard parameters do not
+meet your needs, custom events can be used. To instrument a custom event, pass
+the event’s name and data (which can also be serialized JSON) to the method to
+send the custom event.
+
+
+
+#### Example (Custom Event with Custom Parameters) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Event.buildWithEventName("Enemy Defeated")
+        .setCustomStringValue("enemy", "The Angry Ogre")
+        .setCustomStringValue("reward", "Gold Token")
+        .send()
+    
+
+  *     Event.buildWithEventName("Enemy Defeated")
+        .setCustomStringValue("enemy", "The Angry Ogre")
+        .setCustomStringValue("reward", "Gold Token")
+        .send();
+    
+
+  *     Tracker.sendEvent(Tracker.Event("Enemy Defeated")
+        .addCustom("enemy", "The Angry Ogre")
+        .addCustom("reward", "Gold Token")
+    )
+    
+
+  *     Tracker.sendEvent(new Tracker.Event("Enemy Defeated")
+            .addCustom("enemy", "The Angry Ogre")
+            .addCustom("reward", "Gold Token")
+    );
+    
+
+
+
+#### Example (Send a Custom Event with Only a Name, no Event Data) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Events.getInstance().send("Player Defeated")
+
+  *     Events.getInstance().send("Player Defeated");
+
+  *     Tracker.sendEvent("Player Defeated", "")
+
+  *     Tracker.sendEvent("Player Defeated", "");
+
+
+
+#### Example (Send a Custom Event with Event Data) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Events.getInstance().sendWithString("Player Defeated", "Angry Ogre")
+
+  *     Events.getInstance().sendWithString("Player Defeated", "Angry Ogre");
+
+  *     Tracker.sendEvent("Player Defeated", "Angry Ogre")
+
+  *     Tracker.sendEvent("Player Defeated", "Angry Ogre");
+
+
+
+#### Example (Send a Custom Event with Additional Data) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Events.getInstance().sendWithDictionary("Player Defeated", JSONObject().apply {
+        put("enemy", "Angry Ogre")
+    })
+    
+
+  *     JSONObject dictionary = new JSONObject();
+    dictionary.put("enemy", "Angry Ogre");
+    Events.getInstance().sendWithDictionary("Player Defeated", dictionary);
+    
+
+  *     Tracker.sendEvent("Player Defeated", "{\"enemy\":\"Angry Ogre\"}")
+
+  *     Tracker.sendEvent("Player Defeated", "{\"enemy\":\"Angry Ogre\"}");
+
+
+
+**NOTE:** No custom event name pre-registration is required. However, a
+maximum of 100 unique event names can be measured within the Kochava dashboard
+(including any standard event types also used), so keep this in mind as you
+create new custom event names.
+
+  
+Collapse  
+
+* * *
+
+##  
+Default Event Parameters:
+
+* * *
+
+  
+
+Set parameters that are included with every event.
+
+![10 Minutes](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration10Minutes_20180815.gif)![10
+Minutes](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**10 Minutes**
+
+
+
+Kochava events can include a variety of parameters that are typically set when
+instrumenting the event. It is sometimes desirable to have parameters included
+on every event in order to better link multiple events. A common use case for
+this is to set a User ID for the currently logged in user. The default event
+parameters support provides this capability by allowing default parameters to
+be registered that will be included on every future event and be persisted
+across app launches.
+
+
+
+**SDK Note:** This feature requires Kochava SDK Version 5.0.0 or higher.
+
+
+
+### Example (Register a Default User ID):
+
+The default User ID can be set or updated by calling the register method with
+the desired value.
+
+  * Kotlin
+  * Java
+
+  *     Events.getInstance().registerDefaultUserId("6327adba-a9eb-4bcf-a4ec-b2c8ef1d3fe3")
+
+  *     Events.getInstance().registerDefaultUserId("6327adba-a9eb-4bcf-a4ec-b2c8ef1d3fe3");
+
+
+
+### Example (Remove a Default User ID):
+
+The default User ID can be removed by calling the register method with a value
+of null/nil.
+
+  * Kotlin
+  * Java
+
+  *     Events.getInstance().registerDefaultUserId(null)
+
+  *     Events.getInstance().registerDefaultUserId(null);
+
+
+
+### Example (Register a Default Parameter):
+
+A default parameter can be set or updated by calling the register method with
+the key name to set and the desired value. The basic types String, Number, and
+Bool are supported.
+
+  * Kotlin
+  * Java
+
+  *     Events.getInstance().registerDefaultStringParameter("key", "value")
+    Events.getInstance().registerDefaultNumberParameter("key", 1234.0)
+    Events.getInstance().registerDefaultBoolParameter("key", true)
+
+  *     Events.getInstance().registerDefaultStringParameter("key", "value");
+    Events.getInstance().registerDefaultNumberParameter("key", 1234.0);
+    Events.getInstance().registerDefaultBoolParameter("key", true);
+
+
+
+### Example (Remove a Default Parameter):
+
+A default parameter can be removed by calling the register method with the key
+to remove and a value of null/nil.
+
+  * Kotlin
+  * Java
+
+  *     Events.getInstance().registerDefaultStringParameter("key", null)
+    Events.getInstance().registerDefaultNumberParameter("key", null)
+    Events.getInstance().registerDefaultBoolParameter("key", null)
+
+  *     Events.getInstance().registerDefaultStringParameter("key", null);
+    Events.getInstance().registerDefaultNumberParameter("key", null);
+    Events.getInstance().registerDefaultBoolParameter("key", null);
+
+**NOTE:** If the same key name exists as a default parameter and was also
+directly set on the event, the value set on the event will take precedence
+over the default value.
+
+  
+Collapse  
+
+* * *
+
+##  
+Tracking Purchases:
+
+* * *
+
+  
+
+Track in-app purchases and revenue.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration10Minutes_20180815.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**10 Minutes**
+
+In-app purchases and subscription can be easily measured and attributed by
+creating a purchase event. To accomplish this, simply create an event of type
+**Purchase** and include the total amount of revenue as the **price** value
+within the event data parameters.
+
+
+
+**BEST PRACTICES:** Include the **name** parameter, so that you can easily
+identify the SKU from the analytics side. It is also highly recommended to set
+a currency.
+
+Google Play receipts can also be optionally included with your purchase event
+to be validated server-side by Kochava. If desired, include the receipt in
+your event using the standard parameter setGooglePlayReceipt.
+
+**NOTE:** The Google Private Key needs to be entered into Google Adwords
+Credentials, also a posback needs to be created for Google Ads. If additional
+informaiton is needed, please contact your Client Success Management team.
+
+
+
+### Example (Standard Purchase Event):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Event.buildWithEventType(EventType.PURCHASE)
+        .setPrice(4.99)
+        .setName("Loot Box")
+        .setCurrency("usd")
+        .setGooglePlayReceipt(purchase.originalJson, purchase.signature)
+        .send()
+    
+
+  *     Event.buildWithEventType(EventType.PURCHASE)
+        .setPrice(4.99)
+        .setName("Loot Box")
+        .setCurrency("usd")
+        .setGooglePlayReceipt(purchase.getOriginalJson(), purchase.getSignature())
+        .send();
+    
+
+  *     Tracker.sendEvent(Tracker.Event(Tracker.EVENT_TYPE_PURCHASE)
+        .setPrice(4.99)
+        .setName("Loot Box")
+        .setCurrency("usd")
+        .setGooglePlayReceipt(purchase.originalJson, purchase.signature)
+    )
+    
+
+  *     Tracker.sendEvent(new Tracker.Event(Tracker.EVENT_TYPE_PURCHASE)
+            .setPrice(4.99)
+            .setName("Loot Box")
+            .setCurrency("usd")
+            .setGooglePlayReceipt(purchase.getOriginalJson(), purchase.getSignature())
+    );
+    
+
+
+
+### Example (Custom Purchase Event with Additional JSON Data):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Events.getInstance().sendWithString("Purchase", "{\"price\":4.99,\"name\":\"Loot Box\"}")
+
+  *     Events.getInstance().sendWithString("Purchase", "{\"price\":4.99,\"name\":\"Loot Box\"}");
+
+  *     Tracker.sendEvent("Purchase", "{\"price\":4.99,\"name\":\"Loot Box\"}")
+
+  *     Tracker.sendEvent("Purchase","{\"price\":4.99,\"name\":\"Loot Box\"}");
+
+  
+Collapse  
+
+* * *
+
+##  
+Tracking Subscriptions and Trials:
+
+* * *
+
+  
+
+Track user subscriptions and tree trials.
+
+![10 Minutes](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration10Minutes_20180815.gif)![10
+Minutes](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**10 Minutes**
+
+In order to effectively track user subscriptions and free trials, an event
+should be instrumented at the time of the subscription purchase or start of
+the free trial along with an accompanying identity link.
+
+When a subscription or free trial begins, first set an identity link for this
+subscriber and then instrument a standard Subscription or Trial event
+populated with the following values:
+
+  * Price
+  * Currency
+  * Product Name
+  * User or Subscriber ID (hash suggested)
+  * Receipt (if available)
+
+
+
+**BEST PRACTICES:** When registering an identity link, register the identity
+link prior to sending the event, otherwise the event will not be properly
+associated with the user's identity.
+
+
+
+### Example (Identity Link with Subscription):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     // first set an identity link for this user
+    Tracker.getInstance().registerIdentityLink("Subscriber ID", "ABCDEF123456789")
+    
+    // next, instrument the subscription event
+    Event.buildWithEventType(EventType.SUBSCRIBE)
+        .setPrice(9.99)
+        .setCurrency("usd")
+        .setName("Monthly Subscription")
+        .setUserId("ABCDEF123456789")
+        .setGooglePlayReceipt(purchase.originalJson, purchase.signature)
+        .send()
+    
+
+  *     // first set an identity link for this user
+    Tracker.getInstance().registerIdentityLink("Subscriber ID", "ABCDEF123456789");
+    
+    // next, instrument the subscription event
+    Event.buildWithEventType(EventType.SUBSCRIBE)
+            .setPrice(9.99)
+            .setCurrency("usd")
+            .setName("Monthly Subscription")
+            .setUserId("ABCDEF123456789")
+            .setGooglePlayReceipt(purchase.getOriginalJson(), purchase.getSignature())
+            .send();
+    
+
+  *     // first set an identity link for this user
+    Tracker.setIdentityLink(IdentityLink()
+        .add("Subscriber ID", "ABCDEF123456789")
+    )
+    
+    // next, instrument the subscription event
+    Tracker.sendEvent(Tracker.Event(Tracker.EVENT_TYPE_SUBSCRIBE)
+        .setPrice(9.99)
+        .setCurrency("usd")
+        .setName("Monthly Subscription")
+        .setUserId("ABCDEF123456789")
+        .setGooglePlayReceipt(purchase.originalJson, purchase.signature)
+    )
+    
+
+  *     // first set an identity link for this user
+    Tracker.setIdentityLink(new Tracker.IdentityLink()
+            .add("Subscriber ID","ABCDEF123456789")
+    );
+    
+    // next, instrument the subscription event
+    Tracker.sendEvent(new Tracker.Event(Tracker.EVENT_TYPE_SUBSCRIBE)
+            .setPrice(9.99)
+            .setCurrency("usd")
+            .setName("Monthly Subscription")
+            .setUserId("ABCDEF123456789")
+            .setGooglePlayReceipt(purchase.getOriginalJson(), purchase.getSignature())
+    );
+    
+
+
+
+A free trial is handled in a similar way, although the price should be set to
+0 and the event type should indicate Trial rather than Subscription. The
+product name should remain the same, as the event type indicates whether this
+was free trial or subscription.
+
+
+
+### Example (Identity Link with Free Trial):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     // first set an identity link for this user
+    Tracker.getInstance().registerIdentityLink("Subscriber ID", "ABCDEF123456789")
+    
+    // next, instrument the trial event
+    Event.buildWithEventType(EventType.START_TRIAL)
+        .setPrice(0.0)
+        .setCurrency("usd")
+        .setName("Monthly Subscription")
+        .setUserId("ABCDEF123456789")
+        .setGooglePlayReceipt(purchase.originalJson, purchase.signature)
+        .send()
+    
+
+  *     // first set an identity link for this user
+    Tracker.getInstance().registerIdentityLink("Subscriber ID", "ABCDEF123456789");
+    
+    // next, instrument the trial event
+    Event.buildWithEventType(EventType.START_TRIAL)
+            .setPrice(0.0)
+            .setCurrency("usd")
+            .setName("Monthly Subscription")
+            .setUserId("ABCDEF123456789")
+            .setGooglePlayReceipt(purchase.getOriginalJson(), purchase.getSignature())
+            .send();
+    
+
+  *     // first set an identity link for this user
+    Tracker.setIdentityLink(IdentityLink()
+        .add("Subscriber ID", "ABCDEF123456789")
+    )
+    
+    // next, instrument the trial event
+    Tracker.sendEvent(Tracker.Event(Tracker.EVENT_TYPE_START_TRIAL)
+        .setPrice(0.0)
+        .setCurrency("usd")
+        .setName("Monthly Subscription")
+        .setUserId("ABCDEF123456789")
+        .setGooglePlayReceipt(purchase.originalJson, purchase.signature)
+    )
+    
+
+  *     // first set an identity link for this user
+    Tracker.setIdentityLink(new Tracker.IdentityLink()
+            .add("Subscriber ID","ABCDEF123456789")
+    );
+    
+    // next, instrument the trial event
+    Tracker.sendEvent(new Tracker.Event(Tracker.EVENT_TYPE_START_TRIAL)
+            .setPrice(0.0)
+            .setCurrency("usd")
+            .setName("Monthly Subscription")
+            .setUserId("ABCDEF123456789")
+            .setGooglePlayReceipt(purchase.getOriginalJson(), purchase.getSignature())
+    );
+    
+
+
+
+  
+Collapse  
+
+* * *
+
+##  
+Deeplinking:
+
+* * *
+
+  
+
+Track deeplink related actions and user activity.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration5Minutes_20180815.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**5 Minutes**
+
+Measuring deeplinks is accomplished similar to any other type of event. In
+order to measure a deeplink event, create a standard event of type
+**Deeplink** and set the **URI** parameter along with any other relevant
+parameters to the values provided when the deeplink occurred.
+
+
+
+### Example (Standard Deeplink Event):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Event.buildWithEventType(EventType.DEEPLINK)
+        .setUri("some_deeplink_uri")
+        .send()
+    
+
+  *     Event.buildWithEventType(EventType.DEEPLINK)
+            .setUri("some_deeplink_uri")
+            .send();
+    
+
+  *     Tracker.sendEvent(Tracker.Event(Tracker.EVENT_TYPE_DEEP_LINK)
+        .setUri("some_deeplink_uri")
+    )
+    
+
+  *     Tracker.sendEvent(new Tracker.Event(Tracker.EVENT_TYPE_DEEP_LINK)
+            .setUri("some_deeplink_uri")
+    );
+    
+
+
+
+### Example (Custom Deeplink Event with Additional Data):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     val dictionary = JSONObject()
+    dictionary.put("uri", "some_deeplink_uri")
+    Events.getInstance().sendWithDictionary("_Deeplink", dictionary)
+    
+
+  *     JSONObject dictionary = new JSONObject();
+    dictionary.put("uri", "some_deeplink_uri");
+    Events.getInstance().sendWithDictionary("_Deeplink", dictionary);
+    
+
+  *     Tracker.sendEvent("_Deeplink", "{\"uri\":\"some_deeplink_uri\"}")
+
+  *     Tracker.sendEvent("_Deeplink", "{\"uri\":\"some_deeplink_uri\"}");
+
+  
+Collapse  
+
+* * *
+
+##  
+Enhanced Deeplinking:
+
+* * *
+
+  
+
+Universal click deeplinking and re-engagement attribution.
+
+![10 Minutes](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration10Minutes_20180815-300x300.gif)![10
+Minutes](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**10 Minutes**
+
+
+
+**SDK VERSION NOTE:** Enhanced Deeplinking is available as of Android native
+SDK version 3.7.0 or higher.
+
+
+
+Enhanced Deeplinking facilitates the routing of users who are deeplinked into
+the app, whether through a standard deeplink or deferred deeplink. Re-
+engagement attribution is also supported for those users.
+
+
+
+Use of this feature consists of these steps:
+
+  1. Complete the steps within [Adding Universal Link or App Link Support](/links-overview/adding-universal-link-or-app-link-support/) documentation.
+  2. Implement support for [Integrating Links with an Email Service Provider](/reference-information/integrating-links-with-an-email-service-provider/). (Optional)
+  3. Acquire a deeplink and Pass it to the SDK.
+  4. Wait for the callback and Route the user.
+
+
+
+## Terminology:
+
+Standard Deeplink: A deeplink into an app which is already installed. The app
+opens (or is already open) and the deeplink is immediately available.
+
+Deferred Deeplink: A deeplink into an app which is not yet installed. In this
+case, a deeplink-enabled Kochava SmartLink is clicked, but the user must first
+install and then launch the app. The deeplink would have been lost during the
+installation, but Kochava is able to provide you with the original deeplink.
+
+
+
+## Optionally implement Email Service Provider URL Unwrapping:
+
+
+
+**SDK Version Note:** This feature requires Kochava SDK Version 5.5.0 or
+higher.
+
+  
+If using an Email Service Provider (ESP) or another configuration where the
+Kochava Smartlink may be wrapped (redirected to) by another deeplink you will
+need to configure that within the SDK in addition to configuring your domain
+with the ESP.
+
+**NOTE:** This is an advanced use case which should be discussed with your
+Client Success Manager prior to implementation.
+
+
+
+#### Example (Register the Wrapper Domain) —
+
+  * Kotlin
+  * Java
+
+  *     Tracker.getInstance().registerDeeplinkWrapperDomain("wrapper.branddomain.com")
+    
+
+  *     Tracker.getInstance().registerDeeplinkWrapperDomain("wrapper.branddomain.com");
+    
+
+
+
+## Acquire the Deeplink and Pass it to the SDK:
+
+As a first step, acquire any incoming deeplink on launch or at runtime. If no
+deeplink exists on launch, pass in an empty string to indicate a deferred
+deeplink may be present. Remember, you do not need to check whether the
+deeplink is from Kochava or not; the SDK will do this for you.
+
+A timeout, in seconds, may also be specified with the deeplink, which
+indicates the maximum amount of time to allow the SDK to attempt to process
+the deeplink. Typical standard deeplink processing should complete in less
+than 1 second, but if network connectivity is poor the timeout could be
+reached. Deferred deeplinking typically completes in 3-7 seconds, but could
+take longer depending on network connection and attribution processing time.
+We suggest setting a timeout of at least 10 seconds for standard deeplinks and
+15 seconds for deferred deeplinks.
+
+**NOTE:** Ensure you have started the measurement client before using this
+feature.
+
+
+
+#### Example (Acquire the Deeplink) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     // Deeplink routing should be performed in a dedicated routing activity that launches the destination activity.
+    override fun onStart() {
+        super.onStart()
+    
+        // acquire a deeplink whenever one is available and pass it to the SDK.
+        Tracker.getInstance().processDeeplink(intent?.dataString) { deeplink ->
+            // Handle the callback
+        }
+    }
+    
+
+  *     // Deeplink routing should be performed in a dedicated routing activity that launches the destination activity.
+    public void onStart() {
+        super.onStart();
+    
+        // acquire a deeplink whenever one is available and pass it to the SDK.
+        final Intent intent = getIntent();
+        final String deeplinkUrl = intent != null ? intent.getDataString() : null;
+        Tracker.getInstance().processDeeplink(deeplinkUrl, deeplink -> {
+            // Handle the callback
+        });
+    }
+    
+
+  *     // Deeplink routing should be performed in a dedicated routing activity that launches the destination activity.
+    override fun onStart() {
+        super.onStart()
+    
+        // acquire a deeplink whenever one is available and pass it to the SDK.
+        Tracker.processDeeplink(intent?.dataString) { deeplink ->
+            // Handle the callback
+        }
+    }
+    
+
+  *     // Deeplink routing should be performed in a dedicated routing activity that launches the destination activity.
+    public void onStart() {
+        super.onStart();
+    
+        // acquire a deeplink whenever one is available and pass it to the SDK.
+        final Intent intent = getIntent();
+        final String deeplinkUrl = intent != null ? intent.getDataString() : null;
+        Tracker.processDeeplink(deeplinkUrl, deeplink -> {
+            // Handle the callback
+        });
+    }
+    
+
+
+
+## Wait for the Callback and Route the User:
+
+Once the SDK finishes processing the deeplink, a callback will fire which will
+include the final routing destination for this user. This destination may or
+may not differ from the original deeplink passed in, but it's been validated
+and is now ready to be used. Please note that if the timeout is reached the
+callback will fire with the unchanged deeplink originally passed in.
+
+If no deeplink was present, an empty string will be returned as the
+destination.
+
+It is important to understand that if the SDK does not recognize the deeplink
+as a Kochava deeplink, the deeplink passed in will be returned via the
+callback unchanged. Because of this, you don't need to add code to determine
+whether or not the deeplink is from Kochava before passing it to the SDK;
+simply pass all deeplinks to the SDK and wait for the callback each time.
+
+
+
+#### Example (Wait for the Callback) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().processDeeplink(intent?.dataString) { deeplink ->
+        if (deeplink.destination.isNotEmpty()) {
+            // deeplink exists, parse the destination as you see fit and route the user
+            val uri = Uri.parse(deeplink.destination)
+            // … route the user to the destination accordingly
+        } else {
+            // no deeplink to act upon, route to a default destination or take no action
+        }
+    }
+    
+
+  *     Tracker.getInstance().processDeeplink(deeplinkUrl, deeplink -> {
+        if(!deeplink.getDestination().isEmpty()) {
+            // deeplink exists, parse the destination as you see fit and route the user
+            final Uri uri = Uri.parse(deeplink.getDestination());
+            // … route the user to the destination accordingly
+        } else {
+            // no deeplink to act upon, route to a default destination or take no action
+        }
+    });
+    
+
+  *     Tracker.processDeeplink(intent?.dataString) { deeplink ->
+        if (deeplink.destination.isNotEmpty()) {
+            // deeplink exists, parse the destination as you see fit and route the user
+            val uri = Uri.parse(deeplink.destination)
+            // … route the user to the destination accordingly
+        } else {
+            // no deeplink to act upon, route to a default destination or take no action
+        }
+    }
+    
+
+  *     Tracker.processDeeplink(deeplinkUrl, deeplink -> {
+        if(!deeplink.destination.isEmpty()) {
+            // deeplink exists, parse the destination as you see fit and route the user
+            final Uri uri = Uri.parse(deeplink.destination);
+            // … route the user to the destination accordingly
+        } else {
+            // no deeplink to act upon, route to a default destination or take no action
+        }
+    });
+    
+
+
+
+## About Deferred Deeplinking:
+
+By providing no link to the deeplink process method, as described in the first
+example above, the SDK will automatically look for any deferred deeplink from
+the attribution results and surface it within the callback no differently than
+a standard deeplink.
+
+This means you do not need to care about where a deeplink is coming from or
+whether it is deferred or standard. Just pass in the deeplink if it exists or
+pass in an empty string if it does not, then wait for the callback and route
+the user.
+
+
+
+## Enhanced Deeplinking vs. Attribution Retrieval:
+
+If you choose to use this Enhanced Deeplinking functionality for deferred
+deeplinking, you should not also need to use the SDK's attribution retrieval
+feature for deferred deeplinking, unless you want to parse the attribution
+results for another reason. If you do not want Enhanced Deeplinking checking
+for a deferred deeplink, do not pass an empty string to the SDK when no
+deeplink exists. Choose one method or the other, but don't rely on both for
+deferred deeplinking as you could end up routing the user twice.
+
+One important difference between these two approaches is that Attribution
+Retrieval has no timeout and will eventually complete, no matter how much time
+it takes. If, for example, the network connection is bad and attribution
+results are not able to be retrieved, they would eventually be retrieved once
+the network connection was restored or even on a future launch. By contrast,
+Enhanced Deeplinking is designed with user experience in mind, and will only
+attempt to retrieve a deferred deeplink on the first launch of the first
+install, and only up to the timeout you specify. If the SDK is able to detect
+a reinstall, any deferred deeplink from the original install will be ignored.
+This is because a user would not expect to be routed to a deeplink destination
+long after the relevant time window had expired or on a future app launch.
+Imagine clicking a deeplink on a Monday, and being routed on Friday; it would
+be a confusing experience.
+
+In summary, if you want to parse the raw attribution results yourself, or you
+do not care about receiving a deferred deeplink after the relevant time window
+expires, you may use the Attribution Retrieval (within this page)
+functionality for deferred deeplinking. If you do not care to parse the raw
+attribution results and you want to receive a deferred deeplink only when
+relevant, use the Enhanced Deeplinking functionality described here.
+
+  
+Collapse  
+
+##  
+Identity Linking:
+
+* * *
+
+  
+
+Link existing user identities with Kochava devices.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration10Minutes_20180815.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**10 Minutes**
+
+Setting an Identity Link provides the opportunity to link different identities
+together in the form of key and value pairs. For example, you may have
+assigned each user of your app an internal ID which you want to connect to a
+user’s service identifier. Using this feature, you can send both your internal
+ID and their service identifier to connect them in the Kochava database.
+
+In order to link identities, you will need to register this identity link
+information in the form of unique key and value pair(s) as early as possible.
+This can be done during the initial configuration of the measurement client if
+the identity link information is already known, or it can be done after
+starting the client.
+
+
+
+**BEST PRACTICES:** Keep from sending Personal Identifiable Information (PII)
+such as email addresses or deprecated platform identifiers such as IMEI to
+Kochava..
+
+
+
+### Example (Register an Identity Link During Tracker Configuration):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().registerIdentityLink("User ID", "123456789")
+    Tracker.getInstance().registerIdentityLink("Login", "username")
+    
+    Tracker.getInstance().startWithAppGuid(context, "YOUR_ANDROID_APP_GUID")
+    
+
+  *     Tracker.getInstance().registerIdentityLink("User ID", "123456789");
+    Tracker.getInstance().registerIdentityLink("Login", "username");
+    
+    Tracker.getInstance().startWithAppGuid(context, "YOUR_ANDROID_APP_GUID");
+    
+
+  *     Tracker.configure(Tracker.Configuration(context)
+        .setAppGuid("YOUR_ANDROID_APP_GUID")
+        .setIdentityLink(Tracker.IdentityLink()
+            .add("User ID", "123456789")
+            .add("Login", "username")
+        )
+    )
+    
+
+  *     Tracker.configure(new Tracker.Configuration(context)
+            .setAppGuid("YOUR_ANDROID_APP_GUID")
+            .setIdentityLink(new Tracker.IdentityLink()
+                    .add("User ID","123456789")
+                    .add("Login","username")
+            )
+    );
+    
+
+
+
+### Example (Register an Identity Link After Starting the Tracker):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().registerIdentityLink("User ID", "123456789")
+    Tracker.getInstance().registerIdentityLink("Login", "username")
+    
+
+  *     Tracker.getInstance().registerIdentityLink("User ID", "123456789");
+    Tracker.getInstance().registerIdentityLink("Login", "username");
+    
+
+  *     Tracker.setIdentityLink(Tracker.IdentityLink()
+        .add("User ID", "123456789")
+        .add("Login", "username")
+    )
+    
+
+  *     Tracker.setIdentityLink(new Tracker.IdentityLink()
+            .add("User ID","123456789")
+            .add("Login","username")
+    );
+    
+
+  
+Collapse  
+
+* * *
+
+##  
+Retrieving Attribution:
+
+* * *
+
+  
+
+Access the attribution results within the app.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration15Minutes_20180828.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**15 Minutes**
+
+Install attribution results can be retrieved from Kochava servers if you wish
+to use these results within your app. Be aware that attribution results are
+always determined by Kochava servers; this feature simply provides the app
+with a copy of whatever the results were.
+
+For example, you may wish to present a user with a different path if you have
+determined they installed the app from a certain advertising network or
+source.
+
+Attribution results are fetched by the measurement client when requested and
+returned to the app asynchronously via a callback. This process usually takes
+about 3-4 seconds but can take longer depending on network latency and other
+factors. Once attribution results have been retrieved for the first time, they
+are not retrieved again and the results are persisted. From that point on they
+can be queried synchronously by calling the attribution data getter which
+always provides the persisted attribution results from the original retrieval.
+
+**NOTE:** For purposes of deferred deeplinking, care should be taken to act
+upon the attribution results only once, as the original results will continue
+to be reported after the first retrieval, and are not refreshed on a per-
+launch basis.
+
+
+
+**BEST PRACTICES:** Attribution retrieval does not affect attribution and
+should only be used if there is a clearly defined use within your app for
+knowing the attribution results; otherwise this causes needless network
+activity.
+
+
+
+### Example (Requesting Attribution Results):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     // This callback handler will fire once for every request.
+    Tracker.getInstance().retrieveInstallAttribution { installAttribution ->
+        // do something with the attribution result
+    }
+    
+    
+
+  *     // This callback handler will fire once for every request.
+    Tracker.getInstance().retrieveInstallAttribution(installAttributionApi -> {
+        // do something with the attribution result
+    });
+    
+
+  *     Tracker.configure(Tracker.Configuration(context)
+        .setAppGuid("YOUR_ANDROID_APP_GUID")
+        .setAttributionUpdateListener { attribution ->
+            // got the attribution results, now we need to parse it
+            try {
+                val attributionObject = JSONObject(attribution)
+                if ("false" == attributionObject.optString("attribution", "false")) {
+                    // Install is not attributed.
+                } else {
+                    // Install is attributed. Retrieve the values we care about.
+                    val attributedNetworkId = attributionObject.optString("network_id")
+                    // ...
+                }
+                // do something with attributionObject...
+            } catch (exception: JSONException) {
+            }
+        }
+    )
+    
+
+  *     Tracker.configure(new Tracker.Configuration(context)
+            .setAppGuid("YOUR_ANDROID_APP_GUID")
+            .setAttributionUpdateListener(new AttributionUpdateListener() {
+                @Override
+                public void onAttributionUpdated(@NonNull String attribution) {
+                    // got the attribution results, now we need to parse it
+                    try {
+                        JSONObject attributionObject = new JSONObject(attribution);
+                        if("false".equals(attributionObject.optString("attribution", ""))) {
+                            // Install is not attributed.
+                        } else {
+                            // Install is attributed. Retrieve the values we care about.
+                            final String attributedNetworkId = attributionObject.optString("network_id");
+                            // ...
+                        }
+                    } catch (JSONException exception) {
+                    }
+                }
+            })
+    );
+    
+
+
+
+### Example (Using the Getter After Attribution Results Have Been Retrieved):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     val installAttribution = Tracker.getInstance().installAttribution
+
+  *     InstallAttributionApi installAttribution = Tracker.getInstance().getInstallAttribution();
+
+  *     val attribution = Tracker.getAttribution()
+    if (!attribution.isEmpty()) {
+        // got the attribution results, now we need to parse it
+        try {
+            val attributionObject = JSONObject(attribution)
+            if ("false" == attributionObject.optString("attribution", "false")) {
+                // Install is not attributed.
+            } else {
+                // Install is attributed. Retrieve the values we care about.
+                val attributedNetworkId = attributionObject.optString("network_id")
+                // ...
+            }
+            // do something with attributionObject...
+        } catch (exception: JSONException) {
+        }
+    }
+    
+
+  *     String attribution = Tracker.getAttribution();
+    if(!attribution.isEmpty()) {
+        // got the attribution results, now we need to parse it
+        try {
+            JSONObject attributionObject = new JSONObject(attribution);
+            if("false".equals(attributionObject.optString("attribution", ""))) {
+                // Install is not attributed.
+            } else {
+                // Install is attributed. Retrieve the values we care about.
+                final String attributedNetworkId = attributionObject.optString("network_id");
+                // ...
+            }
+        } catch (JSONException exception) {
+        }
+    }
+    
+
+Once you have the attribution results, you will need to parse and handle them
+in some meaningful way. A variety of data exists within this json object and
+you will need to determine which data is meaningful for your purposes. For an
+overview of the attribution dictionary contents, see: [Attribution Response
+Examples](https://support.kochava.com/reference-information/attribution-
+response-examples).
+
+**NOTE:** If you wish to send attribution results to your own server, this
+should be done directly through Kochava's postback system, rather than
+retrieving attribution in the app and then sending the results to your own
+server.
+
+  
+Collapse  
+
+* * *
+
+##  
+Getting The Kochava Device ID:
+
+* * *
+
+  
+
+Obtain the unique device identifier assigned by Kochava.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration1Minute_20180815.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**1 Minute**
+
+If at any time after starting the measurement client you would like to get the
+universally unique identifier assigned to this install by Kochava, this
+identifier can be obtained by calling the retrieve function.
+
+
+
+### Example (Getting the Kochava Device ID):
+
+  * Kotlin v5.2
+  * Java v5.2
+  * Kotlin v4
+  * Java v4
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().retrieveDeviceId { deviceId ->
+        // Do something with the Kochava Device ID
+    }
+    
+
+  *     Tracker.getInstance().retrieveDeviceId(deviceId -> {
+        // Do something with the Kochava Device ID
+    });
+    
+
+  *     val deviceId = Tracker.getInstance().deviceId
+
+  *     String deviceId = Tracker.getInstance().getDeviceId();
+
+  *     val deviceId = Tracker.getDeviceId()
+
+  *     String deviceId = Tracker.getDeviceId();
+
+  
+Collapse  
+
+* * *
+
+##  
+Enabling App Limit Ad Tracking:
+
+* * *
+
+  
+
+Limit the ad tracking at the application level.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration1Minute_20180815.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**1 Minute**
+
+If you wish to limit ad tracking at the application level, with respect to
+Kochava conversions, you can set this value during or after configuration. By
+default the limit ad tracking state is not enabled (false).
+
+For example, you might provide an option for a user to indicate whether or not
+they wish to allow this app to use their advertising identifier for tracking
+purposes. If they do not wish to be tracked, this value would be set to true.
+
+
+
+### Example (Enabling App Limit Ad Tracking During Tracker Configuration):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().setAppLimitAdTracking(true)
+    
+    Tracker.getInstance().startWithAppGuid(context, "YOUR_ANDROID_APP_GUID")
+    
+
+  *     Tracker.getInstance().setAppLimitAdTracking(true);
+    
+    Tracker.getInstance().startWithAppGuid(context, "YOUR_ANDROID_APP_GUID");
+    
+
+  *     Tracker.configure(Tracker.Configuration(context)
+        .setAppGuid("YOUR_ANDROID_APP_GUID")
+        .setAppLimitAdTracking(true)
+    )
+    
+
+  *     Tracker.configure(new Tracker.Configuration(context)
+            .setAppGuid("YOUR_ANDROID_APP_GUID")
+            .setAppLimitAdTracking(true)
+    );
+    
+
+
+
+### Example (Enable App Limit Ad Tracking After Starting the Tracker):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().setAppLimitAdTracking(true)
+
+  *     Tracker.getInstance().setAppLimitAdTracking(true);
+
+  *     Tracker.setAppLimitAdTracking(true)
+
+  *     Tracker.setAppLimitAdTracking(true);
+
+  
+Collapse  
+
+* * *
+
+##  
+Enabling Logging:
+
+* * *
+
+  
+
+Enable logging output from the SDK.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration5Minutes_20180815.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**5 Minutes**
+
+Logging provides a text-based log of the SDK's behavior at runtime, for
+purposes of debugging.
+
+For example, while testing you may wish to see the contents of certain
+payloads being sent to Kochava servers, in which case you would enable logging
+at a debug (or higher) level.
+
+Six different log levels are available, each of which include all log levels
+beneath them. Info log level is set by default, although trace log level
+should be used when debugging so that all possible log messages are generated.
+
+
+
+**Log Level: none** No logging messages are generated.  
+---  
+**Log Level: error** Errors which are usually fatal to the tracker.  
+**Log Level: warn** Warnings which are not fatal to the tracker.  
+**Log Level: info** Minimal detail, such as tracker initialization.  
+**Log Level: debug** Granular detail, including network transaction payloads.  
+**Log Level: trace** Very granular detail, including low level behavior.  
+  
+
+
+To enable logging, set the desired log level during tracker configuration.
+When the tracker runs, each log message will be printed to your console log.
+In this example we're setting a higher log level only when a debug build is
+detected, which is suggested but is not required.
+
+
+
+### Example (Enabling trace logging in a non-production build):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     if (BuildConfig.DEBUG) {
+        Tracker.getInstance().setLogLevel(LogLevel.TRACE)
+    } else {
+        Tracker.getInstance().setLogLevel(LogLevel.INFO)
+    }
+    Tracker.getInstance().startWithAppGuid(context, "YOUR_ANDROID_APP_GUID")
+    
+
+  *     if(BuildConfig.DEBUG) {
+        Tracker.getInstance().setLogLevel(LogLevel.TRACE);
+    } else {
+        Tracker.getInstance().setLogLevel(LogLevel.INFO);
+    }
+    Tracker.getInstance().startWithAppGuid(context, "YOUR_ANDROID_APP_GUID");
+    
+
+  *     Tracker.configure(Tracker.Configuration(context)
+        .setAppGuid("YOUR_ANDROID_APP_GUID")
+        .setLogLevel(if (BuildConfig.DEBUG) Tracker.LOG_LEVEL_TRACE else Tracker.LOG_LEVEL_INFO)
+    )
+    
+
+  *     Tracker.configure(new Tracker.Configuration(context)
+            .setAppGuid("YOUR_ANDROID_APP_GUID")
+            .setLogLevel(BuildConfig.DEBUG ? Tracker.LOG_LEVEL_TRACE : Tracker.LOG_LEVEL_INFO)
+    );
+    
+
+
+
+**BEST PRACTICES:** Logging should be set to info log level or lower for
+production builds. This will limit the log messages generated by the SDK to
+errors, warnings, and basic information messages which contain no sensitive
+information.
+
+  
+Collapse  
+
+* * *
+
+##  
+Sleeping the Tracker:
+
+* * *
+
+  
+
+Delay the start of the tracker.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration10Minutes_20180815.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**10 Minutes**
+
+Placing the measurement client into sleep mode, the client will enter a state
+where all non-essential network transactions will be held and persisted until
+the client is woken up. This can be useful if you wish to start the client
+early but need the measurement client to wait before sending install data or
+events to Kochava servers.
+
+For example, if you wanted the measurement startup process to wait for
+permission prompts, you might start the measurement client in sleep mode
+during the app launch but wait while the user provides input. Once ready, the
+measurement client can be woken and will continue with its own startup process
+without losing any events that may have been queued beforehand.
+
+
+
+### Example (Enabling Sleep Mode During Tracker Configuration):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().setSleep(true)
+    Tracker.getInstance().startWithAppGuid(context, "YOUR_ANDROID_APP_GUID")
+    
+
+  *     Tracker.getInstance().setSleep(true);
+    Tracker.getInstance().startWithAppGuid(context, "YOUR_ANDROID_APP_GUID");
+    
+
+  *     Tracker.configure(Tracker.Configuration(context)
+        .setAppGuid("YOUR_ANDROID_APP_GUID")
+        .setSleep(true)
+    )
+    
+
+  *     Tracker.configure(new Tracker.Configuration(context)
+            .setAppGuid("YOUR_ANDROID_APP_GUID")
+            .setSleep(true)
+    );
+    
+
+
+
+### Example (Enabling Sleep Mode After Starting the Tracker):
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().setSleep(true)
+
+  *     Tracker.getInstance().setSleep(true);
+
+  *     Tracker.setSleep(true)
+
+  *     Tracker.setSleep(true);
+
+
+
+Once you are ready to wake the measurement client simply set the sleep state
+to false. At that point the client will wake up and continue as normal,
+sending any waiting install data or queued events.
+
+
+
+#### Example (Waking the Tracker from Sleep Mode) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().setSleep(false)
+
+  *     Tracker.getInstance().setSleep(false);
+
+  *     Tracker.setSleep(false)
+
+  *     Tracker.setSleep(false);
+
+
+
+**NOTE:** For every call to set sleep to true, there should be a matching call
+at some point setting sleep to false. While these calls do not necessarily
+have to be balanced, care should be taken to not inadvertently leave the
+measurement client sleeping permanently. This allows the client to wake up and
+continue with necessary logic and processing of data. Any events or other
+activity queued while sleeping will be held but not sent until sleep mode is
+set to false. This means that if the client is never woken from sleep mode,
+events and other activity will continue to build up in the queue, causing
+undesirable results.
+
+  
+Collapse  
+
+* * *
+
+##  
+Shutting Down the Measurement Client:
+
+* * *
+
+  
+
+Shutting down the SDK after starting.
+
+![5 Minutes](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration5Minutes_20180815.gif)![5
+Minutes](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**5 Minutes**
+
+The SDK can be shut down after starting, which will completely disable the SDK
+and stop all tracking from continuing.
+
+The SDK should not be shutdown in typical scenarios, but this may be useful
+during consent-applicable instances when consent has been declined or revoked
+after starting the SDK and you wish to completely stop tracking the user.
+
+After shutting down, all network communication with Kochava will cease, events
+will no longer queue, and any API calls will fail just as if the SDK had never
+been started. The SDK must be configured and started again if you wish for
+tracking to resume.
+
+**NOTE:** Shutting down and restarting the SDK should not be done frequently
+during the same app launch without an explicit reason for doing so. While it
+is thread safe, frequent shutdown and restart could cause contention between
+storage and background tasks in-flight, resulting in incomplete or unintended
+task completion. If you would like additional guidance for your specific
+implementation please contact our support team.
+
+
+
+#### Example (Shut Down the SDK) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     Tracker.getInstance().shutdown(context, false)
+
+  *     Tracker.getInstance().shutdown(context, false);
+
+  *     Tracker.unConfigure(false)
+
+  *     Tracker.unConfigure(false);
+
+
+
+### Clearing SDK Data:
+
+The shutdown() method accepts a boolean indicating whether you wish to also
+clear all persisted SDK data from disk when shutting down. This should always
+be set to false and should never be set to true without a complete
+understanding of the ramifications of clearing this data, as it could create
+duplicate user metrics or worse.
+
+
+
+#### Example (Shut Down the SDK and Clear Data) —
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     // WARNING: This is a destructive action, ensure you understand the ramifications of deleting data before using.
+    Tracker.getInstance().shutdown(context, true)
+
+  *     // WARNING: This is a destructive action, ensure you understand the ramifications of deleting data before using.
+    Tracker.getInstance().shutdown(context, true);
+
+  *     // WARNING: This is a destructive action, ensure you understand the ramifications of deleting data before using.
+    // Note: In order to delete data the SDK must be started prior to this call.
+    Tracker.unConfigure(true)
+
+  *     // WARNING: This is a destructive action, ensure you understand the ramifications of deleting data before using.
+    // Note: In order to delete data the SDK must be started prior to this call.
+    Tracker.unConfigure(true);
+
+
+
+## Shutdown vs. Sleep:
+
+The SDK’s Sleep() functionality can also be used to temporarily prevent the
+SDK from sending data to Kochava. However, Sleep() will continue to queue
+events and track the user, but will simply not send that data to Kochava until
+awoken. For this reason, Sleep() should not be used as a solution for consent-
+applicable situations because tracking is still queuing locally and may be
+sent on the next app launch.
+
+Shutting down the SDK, on the other hand, completely stops the SDK from
+functioning and no tracking will occur until it is configured and started
+again.
+
+  
+Collapse  
+
+* * *
+
+##  
+Consent:
+
+* * *
+
+  
+
+Kochava's Intelligent Consent Manager and self-managed consent solutions.
+
+![30 Minutes](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration30Minutes_20180827.gif)![30
+Minutes](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**30 Minutes**
+
+
+
+**DISCLAIMER:** Kochava does not offer legal advice for businesses in relation
+to CCPA and/or GDPR compliance. Information herein is for reference only and
+businesses are encouraged to seek their own legal counsel regarding CCPA
+and/or GDPR compliance efforts and obligations.
+
+
+
+The Kochava SDK deals with potentially sensitive data such as device
+identifiers, care should be taken to ensure that your use of the Kochava SDK
+remains compliant with any applicable laws and regulations.
+
+* * *
+
+## CCPA
+
+For purposes of CCPA, the Kochava SDK follows [IAB’s CCPA Compliance
+Framework](https://iabtechlab.com/standards/ccpa/) by reading the U.S. Privacy
+String from local storage, when present. You do not need to take any action in
+the Kochava Measurement SDK for this functionality. However, it is your
+responsibility to ensure the U.S. Privacy String has been set within local
+storage when appropriate. The SDK will look for the U.S. Privacy String in
+local app storage under the key ‘IABUSPrivacy_String’ within default shared
+preferences on Android and default NSUserDefaults on iOS. As long as the value
+is present, the SDK will pick it up.
+
+* * *
+
+## GDPR
+
+GDPR applies to users within the EU and requires users to opt-in to data
+collection. By using this feature, the Kochava SDK will handle determining
+when consent is required for any user. It is your responsibility to use that
+information to determine if and when to prompt for consent and to report the
+results back to the SDK. The SDK will automatically restrict the sending of
+data to Kochava's servers unless consent is not required or has been granted.
+
+
+
+## Configure Dashboard Settings:
+
+Within the Kochava dashboard, enable Intelligent Consent Management GDPR for
+this app and adjust other related settings. The SDK's consent related features
+and API calls will only have any effect if the feature is enabled on the
+Kochava dashboard.
+
+
+
+##  
+(Current):
+
+* * *
+
+  
+
+#### Subscribe to Consent Changes —
+
+Subscribe to updates from the SDK on when the user is in an applicable consent
+region. This will be called once shortly after starting the SDK and may be
+called periodically thereafter. This listener is dependent on an active
+internet connection and may get delayed if it is not available.
+
+Use this information to inform your consent logic on if the user should be
+prompted. Exact timing and location of prompting is application specific and
+left up to your implementation. If your consent logic already handles the if
+and when of prompting this listener can be omitted.
+
+
+
+#### Example (Init Completed Handler) —
+
+  * Kotlin
+  * Java
+
+  *     // Subscribe prior to starting the SDK.
+    Tracker.getInstance().setCompletedInitListener { init ->
+        val consentGdprApplies = init.isConsentGdprApplies
+    }
+    
+
+  *     // Subscribe prior to starting the SDK.
+    Tracker.getInstance().setCompletedInitListener(new CompletedInitListener() {
+        @Override
+        public void onCompletedInit(@NonNull InitApi init) {
+            boolean consentGdprApplies = init.isConsentGdprApplies();
+        }
+    });
+    
+
+
+
+#### Reporting Consent Results —
+
+When the user responds to your consent prompt dialog or if the user otherwise
+grants or declines consent, the Kochava SDK must be notified of the result. If
+the user dismisses or ignores the dialog and does not provide a response no
+action should be taken.
+
+
+
+#### Example (User Granted Consent) —
+
+  * Kotlin
+  * Java
+
+  *     Tracker.getInstance().setIntelligentConsentGranted(true)
+
+  *     Tracker.getInstance().setIntelligentConsentGranted(true);
+
+
+
+#### Example (User Declined Consent) —
+
+  * Kotlin
+  * Java
+
+  *     Tracker.getInstance().setIntelligentConsentGranted(false)
+
+  *     Tracker.getInstance().setIntelligentConsentGranted(false);
+
+##  
+V3 (Legacy):
+
+* * *
+
+  
+
+For complete details on how this feature works, refer to our Intelligent
+Consent Manager topic within this support documentation.
+
+* * *
+
+## Self-Managed
+
+If you choose not to use our Intelligent Consent Management feature and you
+are handling consent on your own or using a 3rd party tool, startup and use of
+the SDK (when integrated with an Tracking features) should not occur until
+after you have determined consent is not required or consent has been granted.
+Any calls to the SDK should be wrapped in this check, so that if a user
+revokes consent later calls to the SDK will stop. Ensure that you have started
+the SDK when moving forward to make any API calls when going this route.
+
+
+
+#### Example (Starting the Tracker Only When Consent Allows) —
+
+Do not start the SDK unless consent is allowed.  
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     if (!consentRequired || consentGranted) {
+        // we will not initialize Kochava unless consent requirements are met
+        Tracker.getInstance().startWithAppGuid(context, "YOUR_APP_GUID")
+    }
+    
+
+  *     if(!consentRequired || consentGranted) {
+        // we will not initialize Kochava unless consent requirements are met
+        Tracker.getInstance().startWithAppGuid(context, "YOUR_APP_GUID");
+    }
+    
+
+  *     if (!consentRequired || consentGranted) {
+        // we will not initialize Kochava unless consent requirements are met
+        Tracker.configure(Tracker.Configuration(context)
+                .setAppGuid("YOUR_APP_GUID")
+        )
+    }
+    
+
+  *     if(!consentRequired || consentGranted) {
+        // we will not initialize Kochava unless consent requirements are met
+        Tracker.configure(new Tracker.Configuration(context)
+                .setAppGuid("YOUR_APP_GUID")
+        );
+    }
+    
+
+
+
+#### Example (Calling Tracker Methods Only When Consent Allows) —
+
+Do not send events or otherwise attempt any tracking with the SDK unless
+consent is allowed.  
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     if (!consentRequired || consentGranted) {
+        // we will not call Kochava methods unless consent requirements are met
+        // and we will make sure the tracker has been started.
+        if (Tracker.getInstance().isStarted) {
+            Events.getInstance().send("My Event")
+        }
+    }
+    
+
+  *     if(!consentRequired || consentGranted) {
+        // we will not call Kochava methods unless consent requirements are met
+        // and we will make sure the tracker has been started.
+        if(Tracker.getInstance().isStarted()) {
+            Events.getInstance().send("My Event");
+        }
+    }
+    
+
+  *     if (!consentRequired || consentGranted) {
+        // we will not call Kochava methods unless consent requirements are met
+        // and we will make sure the tracker has been started.
+        if (Tracker.isConfigured()) {
+            Tracker.sendEvent("My Event", "")
+        }
+    }
+    
+
+  *     if (!consentRequired || consentGranted) {
+        // we will not call Kochava methods unless consent requirements are met
+        // and we will make sure the tracker has been started.
+        if (Tracker.isConfigured()) {
+            Tracker.sendEvent("My Event", "");
+        }
+    }
+    
+
+
+
+#### Example (Shutdown the Tracker if Consent is Revoked) —
+
+Shutdown the SDK and optionally delete data if consent requirements are no
+longer met.  
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     // Shutdown the tracker and optionally delete data if consent requirements are no longer met.
+    if (consentRequired && !consentGranted) {
+        Tracker.getInstance().shutdown(context,  /*delete data*/true)
+    }
+    
+
+  *     // Shutdown the tracker and optionally delete data if consent requirements are no longer met.
+    if(consentRequired && !consentGranted) {
+        Tracker.getInstance().shutdown(context, /*delete data*/ true);
+    }
+    
+
+  *     // Shutdown the tracker and optionally delete data if consent requirements are no longer met.
+    if (consentRequired && !consentGranted) {
+        Tracker.unConfigure(/*delete data*/true)
+    }
+    
+
+  *     // Shutdown the tracker and optionally delete data if consent requirements are no longer met.
+    if(consentRequired && !consentGranted) {
+        Tracker.unConfigure(/*delete data*/ true);
+    }
+    
+
+
+
+**NOTE:** All consent-related API calls (such as granting or declining
+consent) will have no effect unless the Intelligent Consent Manager feature
+has been enabled in your Kochava dashboard. Do not use these methods if you
+are handling consent on your own or through a 3rd party tool.
+
+  
+Collapse  
+
+* * *
+
+##  
+Privacy and Restricting Data Collection:
+
+* * *
+
+  
+
+How to prevent transmission of certain data from the device.
+
+![10 Minutes](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration10Minutes_20180815.gif)![10
+Minutes](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**10 Minutes**
+
+
+
+**SDK Version Note:** This feature requires Kochava SDK Version 4.0.0 or
+higher.
+
+
+
+This topic describes how to restrict data egress from the device and is
+considered an advanced feature which is unnecessary for a typical SDK
+integration. Improper usage could detrimentally impact measurement and
+attribution and should be avoided unless you have a specific need.
+
+For purposes of measurement and attribution, the SDK automatically transmits
+certain device information and device identifiers which are commonly referred
+to as ‘datapoints’. For privacy reasons or otherwise, there may be times you
+wish to restrict these datapoints from egressing from the device. For more
+information around what datapoints the SDK transmits, view the [Data Privacy
+and Safety](https://support.kochava.com/reference-information/sdk-data-
+privacy-and-safety/) document.
+
+Restricting the egress of a datapoint can be done one of two ways and is
+dependent on whether you want the restriction to apply to all users of the app
+or conditionally on a per-user basis.
+
+
+
+## App Wide Restriction
+
+If you wish to unconditionally prevent the collection and egress of a
+datapoint for all users of your app, this can be done by disabling the desired
+datapoint within the Advanced section of the edit app page in your Kochava
+dashboard. Disabling a datapoint in this manner will automatically instruct
+the SDK not to collect or allow egress of said datapoint from the device for
+all users. No code is required for this approach and if this satisfies your
+requirements there is no need to read any further.
+
+
+
+## Conditional Restriction
+
+If you wish to conditionally restrict datapoint egress on a per-user basis, or
+you wish to restrict egress of a datapoint not available in your Kochava
+dashboard, follow the steps below. For example, you may wish to restrict the
+egress of the device identifiers only for child users or only for users who do
+not meet other criteria.
+
+Conditionally restricting datapoint egress requires two steps in code:
+
+  1. Create a privacy profile with a list of datapoint key names to restrict.
+  2. Enable the privacy profile if restrictions should apply to this user.
+
+
+
+### Create a Privacy Profile:
+
+A privacy profile is a named collection of datapoints which may be restricted
+for the current user. Privacy profiles must be both created and then enabled
+before datapoint restriction will take place. Typically, you will create all
+possible privacy profiles when starting the SDK, and then enable only those
+which apply to the current user.
+
+You may create multiple privacy profiles, one for each category of restriction
+you would like to apply. For example, you might create a privacy profile named
+“child” which includes datapoints you would like to restrict for children. Or,
+you might create a privacy profile named “always” which includes datapoints
+you’d like to always restrict for all users. The name of the privacy profile
+may not begin with an underscore “_” and must be a non-empty string, but is
+otherwise arbitrary and may be anything you like.
+
+
+
+### Enable a Privacy Profile:
+
+Privacy profiles are not enabled by default, and datapoint egress is not
+restricted until the privacy profile is enabled. Once you have created a
+privacy profile, at some point you must also enable it in order to restrict
+datapoint egress for the current user. A privacy profile is enabled or
+disabled through a single API call by referencing its name.
+
+Once a privacy profile is enabled, from that moment on its datapoints will no
+longer egress from the device. Restrictions are enforced from the moment a
+privacy profile is enabled and are not applied retroactively; it is your
+responsibility to ensure applicable privacy profiles are enabled prior to the
+moment when datapoint egress would take place. For example, if you queue an
+event but do not enable a privacy profile until after queuing the event, the
+event will egress with all datapoints intact because the privacy profile was
+not enabled at the time of egress.
+
+If necessary, a privacy profile may be disabled via the same API call used to
+enable it.
+
+**NOTE:** The lifecycle of a privacy profile and its enabled status is limited
+to the current tracker instance and does not persist between app launches or
+SDK tracker instances. Privacy profiles must be created and enabled each time
+the SDK is started.
+
+
+
+#### Example (Always Restrict Device Identifier Egress) —
+
+In this example, we want to prevent the device identifiers from being
+transmitted from the device for all users. Start the tracker and then
+immediately create and enable a privacy profile named “restrict ids” with the
+datapoint keys for your platform's device identifiers.
+
+  * Kotlin
+  * Java
+
+  *     // create the privacy profile
+    Tracker.getInstance().registerPrivacyProfile("restrict ids", arrayOf("adid", "android_id"))
+    
+    // enable the privacy profile for this user
+    Tracker.getInstance().setPrivacyProfileEnabled("restrict ids", true)
+    
+    // start the tracker
+    Tracker.getInstance().startWithAppGuid(context, "_YOUR_APP_GUID_")
+    
+    // ...for the remainder of this app launch, measurement signal from the SDK will not include the ADID or Android ID
+    
+
+  *     // create the privacy profile
+    Tracker.getInstance().registerPrivacyProfile("restrict ids", new String[]{"adid", "android_id"});
+    
+    // enable the privacy profile for this user
+    Tracker.getInstance().setPrivacyProfileEnabled("restrict ids", true);
+    
+    // start the tracker
+    Tracker.getInstance().startWithAppGuid(context, "_YOUR_APP_GUID_");
+    
+    // ...for the remainder of this app launch, measurement signal from the SDK will not include the ADID or Android ID
+    
+
+
+
+#### Example (Restrict Device Identifier Egress for Children) —
+
+In this example, we want to prevent the device identifiers from being
+transmitted from the device only for children. This concept works for any
+scenario where conditional restriction is necessary.
+
+In order to accomplish this, the SDK must not be started until we know whether
+the user is a child. Once we know that, we start the SDK and then enable our
+“child” privacy profile only if the user was determined to be a child. For
+this scenario, it’s important not to start the tracker until child status is
+known, because the SDK would otherwise immediately begin transmitting
+measurement signal including datapoints you may wish to restrict.
+
+  * Kotlin
+  * Java
+
+  *     val isChild: Boolean = isChild()
+    
+    // create a privacy profile for children
+    Tracker.getInstance().registerPrivacyProfile("child", arrayOf("adid", "android_id"))
+    
+    // enable the privacy profile only if this user is a child
+    Tracker.getInstance().setPrivacyProfileEnabled("child", isChild)
+    
+    // start the tracker
+    Tracker.getInstance().startWithAppGuid(context, "_YOUR_APP_GUID_")
+    
+
+  *     boolean isChild = isChild();
+    
+    // create a privacy profile for children
+    Tracker.getInstance().registerPrivacyProfile("child", new String[]{"adid", "android_id"});
+    
+    // enable the privacy profile only if this user is a child
+    Tracker.getInstance().setPrivacyProfileEnabled("child", isChild);
+    
+    // start the tracker
+    Tracker.getInstance().startWithAppGuid(context, "_YOUR_APP_GUID_");
+    
+
+  
+Collapse  
+
+* * *
+
+##  
+Setting Up a Test Environment:
+
+* * *
+
+  
+
+Create a test environment to ensure the integration is working properly.
+
+![](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration5Minutes_20180815.gif)![](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**5 Minutes**
+
+During testing, debugging, and non-production app development, the following
+steps will help you get the most out of your test environment and help to
+ensure your integration is working properly.
+
+  1. Use an alternate testing App GUID so that your testing activities do not have an impact on your live app analytics.
+  2. Enable Logging, if helpful, to gain insight into the SDK's behavior during runtime.
+  3. If you would like the SDK to behave as it would during a new install, be sure to un-install the app before each test.
+  4. Test your Kochava integration. For more information see: [Testing the Integration](https://support.kochava.com/sdk-integration/testing-the-integration-with-kochava/).
+
+Keep in mind that you should always add logic to ensure that you do not
+accidentally release to production a build with a development configuration
+used. Below is an example of how this type of configuration might look.
+
+  * Kotlin
+  * Java
+  * Kotlin v3 (Legacy)
+  * Java v3 (Legacy)
+
+  *     if (BuildConfig.DEBUG) {
+        Tracker.getInstance().setLogLevel(LogLevel.TRACE)
+        Tracker.getInstance().startWithAppGuid(context, "YOUR_TEST_ANDROID_APP_GUID")
+    } else {
+        Tracker.getInstance().setLogLevel(LogLevel.INFO)
+        Tracker.getInstance().startWithAppGuid(context, "YOUR_PRODUCTION_ANDROID_APP_GUID")
+    }
+    
+
+  *     if(BuildConfig.DEBUG) {
+        Tracker.getInstance().setLogLevel(LogLevel.TRACE);
+        Tracker.getInstance().startWithAppGuid(context, "YOUR_TEST_ANDROID_APP_GUID");
+    } else {
+        Tracker.getInstance().setLogLevel(LogLevel.INFO);
+        Tracker.getInstance().startWithAppGuid(context, "YOUR_PRODUCTION_ANDROID_APP_GUID");
+    }
+    
+
+  *     Tracker.configure(Tracker.Configuration(context)
+        .setLogLevel(if (BuildConfig.DEBUG) Tracker.LOG_LEVEL_TRACE else Tracker.LOG_LEVEL_INFO)
+        .setAppGuid(if (BuildConfig.DEBUG) "YOUR_TEST_ANDROID_APP_GUID" else "YOUR_PRODUCTION_ANDROID_APP_GUID")
+    )
+    
+
+  *     Tracker.configure(new Tracker.Configuration(context)
+            .setLogLevel(BuildConfig.DEBUG ? Tracker.LOG_LEVEL_TRACE : Tracker.LOG_LEVEL_INFO)
+            .setAppGuid(BuildConfig.DEBUG ? "YOUR_TEST_ANDROID_APP_GUID" : "YOUR_PRODUCTION_ANDROID_APP_GUID")
+    );
+    
+
+
+
+### Analyzing SDK Behavior:
+
+While testing your integration, it is important to understand the measurement
+client's basic flow of operations. When the client is started the following
+sequence of events occur:
+
+  1. A handshake with Kochava may be made to determine dynamic settings for this app.
+  2. If this is the first launch, the install data is sent to Kochava (this only happens once).
+  3. At this point the SDK is idle and awaits requests from the app.
+  4. If a request is made to the SDK by the app, the request is moved to a background thread for processing. After processing the request and performing any necessary network calls the SDK returns to an idle state.
+  5. When the app is terminated or suspended, a session-end payload may be sent to Kochava.
+  6. When the app is resumed or relaunched, a session-begin payload may be sent to Kochava.
+
+**NOTE:** While testing, keep in mind that data sent from the SDK may
+sometimes be delayed up to a few minutes before being displayed within the
+Kochava analytics dashboard.
+
+  
+Collapse  
+
+* * *
+
+##  
+Utilization from a Web View:
+
+* * *
+
+  
+
+Interact with the Kochava SDK from within a native WebView.
+
+![30 Minutes](https://s34036.pcdn.co/wp-
+content/uploads/2018/08/SDKIntegration30Minutes_20180827.gif)![30
+Minutes](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2055%2055%22%3E%3C/svg%3E)
+
+**Estimated Time to Complete**
+
+**30 Minutes**
+
+In order to call methods and interact with the Kochava SDK from within a
+native WebView, see: [SDK Utilization from a Web
+View](https://support.kochava.com/reference-information/sdk-utilization-from-
+a-webview/).
+
+  
+
+
+###### Last Modified: Jun 7, 2024 at 7:22 am
+
+#### In This Guide:
+
+  * Introduction
+  * Confirming the SDK Integration
+  * Supporting Instant Apps
+  * Tracking Events
+  * Default Event Parameters
+  * Tracking Purchases
+  * Tracking Subscriptions and Trials
+  * Deeplinking
+  * Enhanced Deeplinking
+  * Identity Linking
+  * Retrieving Attribution
+  * Getting The Kochava Device ID
+  * Enabling App Limit Ad Tracking
+  * Enabling Logging
+  * Sleeping the Tracker
+  * Shutting Down the Measurement Client
+  * Consent
+  * Privacy/Restricting Data Collection
+  * Setting Up a Test Environment
+  * Utilization from a Web View
+  * Return To Top
+
+#### Related Pages:
+
+  * [SDK Integration](https://support.kochava.com/sdk-integration/ "SDK Integration")
+  * [Android - SDK Integration](https://support.kochava.com/sdk-integration/android-sdk-integration/ "Android – SDK Integration")
+
+#### In This Guide:
+
+  * Introduction
+  * Confirming the SDK Integration
+  * Supporting Instant Apps
+  * Tracking Events
+  * Default Event Parameters
+  * Tracking Purchases
+  * Tracking Subscriptions and Trials
+  * Deeplinking
+  * Enhanced Deeplinking
+  * Identity Linking
+  * Retrieving Attribution
+  * Getting The Kochava Device ID
+  * Enabling App Limit Ad Tracking
+  * Enabling Logging
+  * Sleeping the Tracker
+  * Shutting Down the Measurement Client
+  * Consent
+  * Privacy/Restricting Data Collection
+  * Setting Up a Test Environment
+  * Utilization from a Web View
+  * Return To Top
+
+  * [Kochava.com](https://kochava.com "Kochava.com")
+
+  * [![Twitter](https://s34036.pcdn.co/wp-content/themes/kochavasupport/images/icon_twitter.png)![Twitter](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20210%20140%22%3E%3C/svg%3E)](https://twitter.com/kochavaofficial?lang=en)
+  * [![Facebook](https://s34036.pcdn.co/wp-content/themes/kochavasupport/images/icon_facebook.png)![Facebook](data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20210%20140%22%3E%3C/svg%3E)](https://www.facebook.com/kochavaofficial/)
+
+(C) 2008-2024 Kochava, Inc All rights reserved.
+
+__
+
+IntroductionConfirming the SDK IntegrationSupporting Instant AppsTracking
+EventsDefault Event ParametersTracking PurchasesTracking Subscriptions and
+TrialsDeeplinkingEnhanced DeeplinkingIdentity LinkingRetrieving
+AttributionGetting The Kochava Device IDEnabling App Limit Ad TrackingEnabling
+LoggingSleeping the TrackerShutting Down the Measurement
+ClientConsentPrivacy/Restricting Data CollectionSetting Up a Test
+EnvironmentUtilization from a Web ViewReturn To Top
+

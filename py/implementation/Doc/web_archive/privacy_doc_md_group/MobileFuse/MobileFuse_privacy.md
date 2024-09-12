@@ -1,0 +1,190 @@
+Jump to Content
+
+[![MobileFuse
+Documentation](https://files.readme.io/4a360f4-mf_logo.svg)](/docs)
+
+[ __Home](/)[ __Guides](/docs)[ __API Reference](/reference)[
+__Changelog](/changelog)
+
+* * *
+
+[Log In](/login?redirect_uri=/docs/android-sdk-data-privacy)[![MobileFuse
+Documentation](https://files.readme.io/4a360f4-mf_logo.svg)](/docs)
+
+ __Guides
+
+[Log In](/login?redirect_uri=/docs/android-sdk-data-privacy)
+
+[ __Home](/)[ __Guides](/docs)[ __API Reference](/reference)[
+__Changelog](/changelog) Data Privacy
+
+Search
+
+## Getting Started
+
+  * [Getting Started with MobileFuse](/docs/getting-started)
+  * [Integration Types](/docs/integration-types)
+
+## SDK Integration
+
+  * [MobileFuse SDK](/docs/mobilefuse-sdk)
+  * [ __iOS](/docs/ios)
+    * [ Data Privacy](/docs/ios-sdk-data-privacy)
+    * [Interstitial Ads](/docs/ios-interstitial-ads)
+    * [Banner Ads](/docs/ios-banner-ads)
+    * [Rewarded Ads](/docs/ios-rewarded-ads)
+    * [Omni Unit Ads](/docs/ios-omni-ads)
+    * [Native Ads](/docs/ios-native-ads)
+  * [ __Android](/docs/android)
+    * [ Data Privacy](/docs/android-sdk-data-privacy)
+    * [Interstitial Ads](/docs/android-interstitial-ads)
+    * [Banner Ads](/docs/android-banner-ads)
+    * [Rewarded Ads](/docs/android-rewarded-ads)
+    * [Omni Unit Ads](/docs/android-omni-ads)
+    * [Native Ads](/docs/android-native-ads)
+    * [Android Location Privacy](/docs/android-location-privacy)
+  * [Testing SDK Integrations](/docs/testing-sdk-integrations)
+  * [Advanced SDK Configuration](/docs/advanced-configuration)
+  * [SDK Error Codes](/docs/error-codes)
+  * [RampID and UID2](/docs/sdk-rampid-and-uid2)
+  * [SDK Bidding](/docs/sdk-bidding)
+
+## Applovin MAX Integration
+
+  * [Overview](/docs/applovin-max)
+  * [MAX Console Setup](/docs/max-console-setup)
+  * [MAX Ad Units (Bidding)](/docs/max-ad-units-bidding)
+  * [MAX Ad Units (Waterfall)](/docs/max-ad-units)
+  * [Android](/docs/android-max-adapter)
+  * [iOS](/docs/ios-max-adapter)
+  * [Unity](/docs/unity-max-adapter)
+
+## Chartboost Mediation Integration
+
+  * [Overview](/docs/chartboost-mediation)
+
+## AdMob/GAM Integration
+
+  * [AdMob Mediation/GAM](/docs/admob-mediation)
+  * [AdMob/GAM Console Setup](/docs/admob-console-setup)
+  * [Android](/docs/android-admob-adapter)
+  * [iOS](/docs/ios-admob-adapter)
+
+## OpenRTB Integration
+
+  * [Overview](/docs/openrtb)
+  * [Bid Requests](/docs/bid-requests)
+  * [Bid Responses](/docs/bid-responses)
+
+## Prebid Integration
+
+  * [Overview](/docs/prebid)
+
+## VAST Tag Integration
+
+  * [Client Side VAST Tags](/docs/client-side-vast-tags)
+  * [Server Side VAST Tags](/docs/server-side-vast-tags)
+
+## Additional Information
+
+  * [Inventory Policies](/docs/inventory-policies)
+  * [Privacy & Compliance](/docs/privacy-compliance)
+  * [Leveraging Unique IDs: RampID, UID2, and CoreID](/docs/leveraging-rampid-and-uid2)
+  * [app-ads.txt lines](/docs/app-adstxt)
+  * [Apple SKAdNetwork IDs](/docs/apple-skadnetwork-ids)
+  * [Supported Countries](/docs/supported-countries)
+  * [Metric Glossary](/docs/metric-glossary)
+  * [Impression TTL](/docs/impression-ttl)
+  * [Impression Counting Methodology](/docs/impression-counting-methodology)
+  * [Platform Macros](/docs/platform-macros)
+
+Powered by [ __](https://readme.com?ref_src=hub&project=mobilefuse)
+
+# Data Privacy
+
+[ __Suggest Edits](/edit/android-sdk-data-privacy)
+
+The MobileFuse SDK supports privacy configurations that can be managed using
+an IAB compatible [GPP Consent String](https://iabtechlab.com/blog/global-
+privacy-platform-explained/) and [US Privacy
+Strings](https://github.com/InteractiveAdvertisingBureau/USPrivacy/blob/master/CCPA/US%20Privacy%20String.md).
+You can also tell the SDK whether your user is subject to COPPA, due to them
+being under 13 years of age.
+
+The following snippet demonstrates configuration of a GPP String:
+
+JavaKotlin
+
+    
+    
+    MobileFusePrivacyPreferences privacyPrefs = new MobileFusePrivacyPreferences.Builder()
+        .setGppConsentString("DBACNYA~CPXxRfAPXxRfAAfKABENB-CgAAAAAAAAAAYgAAAAAAAA~1YNN")
+        .build();
+    
+    MobileFuse.setPrivacyPreferences(privacyPrefs);
+    
+    
+    
+    val privacyPrefs = MobileFusePrivacyPreferences.Builder()
+        .setGppConsentString("DBACNYA~CPXxRfAPXxRfAAfKABENB-CgAAAAAAAAAAYgAAAAAAAA~1YNN")
+        .build()
+    
+    MobileFuse.setPrivacyPreferences(privacyPrefs)
+    
+
+The following snippet demonstrates configuration for the US privacy and COPPA
+compliance:
+
+JavaKotlin
+
+    
+    
+    MobileFusePrivacyPreferences privacyPrefs = new MobileFusePrivacyPreferences.Builder()
+        .setSubjectToCoppa(false) // should be true if user is under 13 years of age
+        .setUsPrivacyConsentString("<US Privacy String>") // e.g. 1YNN
+        .build();
+    
+    MobileFuse.setPrivacyPreferences(privacyPrefs);
+    
+    
+    
+    val privacyPrefs = MobileFusePrivacyPreferences.Builder()
+        .setDoNotTrack(true) // With "do not track" set, the user is opted out!
+        .build()
+    
+    MobileFuse.setPrivacyPreferences(privacyPrefs)
+    
+
+The following snippet demonstrates setting the "do not track" option as an
+alternative to providing specific privacy strings:
+
+JavaKotlin
+
+    
+    
+    MobileFusePrivacyPreferences privacyPrefs = new MobileFusePrivacyPreferences.Builder()
+        .setDoNotTrack(true) // With "do not track" set, the user is opted out!
+        .build();
+    
+    MobileFuse.setPrivacyPreferences(privacyPrefs);
+    
+    
+    
+    val privacyPrefs = MobileFusePrivacyPreferences.Builder()
+        .setDoNotTrack(true) // With "do not track" set, the user is opted out!
+        .build()
+    
+    MobileFuse.setPrivacyPreferences(privacyPrefs)
+    
+
+> ## ℹ️
+>
+> Note
+>
+> To ensure that you get reliable ad fill and the best CPMs, please ensure
+> that you implement the data privacy methods that are relevant to your user.
+
+__Updated 10 months ago
+
+* * *
+
