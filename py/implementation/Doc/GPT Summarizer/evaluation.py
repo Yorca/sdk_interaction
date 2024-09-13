@@ -1,11 +1,11 @@
 import pandas as pd
 import json
-summary_version = "3.0"
-data = pd.read_excel(f'Summary Evaluation{summary_version}.xlsx')
+summary_version = "md"
+data = pd.read_excel(f'Summary Evaluation3.0.xlsx')
 sum = 0
 for index, row in data.iterrows():
     sdk_name = row[0]
-    with open(f"summaries{summary_version}/{sdk_name}.json") as file:
+    with open(f"summaries_{summary_version}/{sdk_name}.json") as file:
         file_data = file.read()
         summary = json.loads(file_data)
     apis = []

@@ -4,11 +4,12 @@ import os
 import json
 import email
 from html.parser import HTMLParser
+from datetime import datetime
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 summary_version = "md"
-
+errorlog_name = f"log/error_log_md.log"
 sys_prompt = """
 You are a Privacy API Summarizer. You will be provided with a document that may contain one or more privacy-related APIs. Your task is to:
 1. Identify these privacy APIs within the document.
@@ -131,7 +132,7 @@ def recordResponseAsPlainText(sdk, response):
         file.write(response)
 
 def analyze(user_prompt, sdk):
-    errorlog_name = f"log/error_log_md.log"
+
     try:
         completion = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -162,23 +163,22 @@ def analyzeSDK(SDK):
     for filename in os.listdir(file_path):
         with open(os.path.join(file_path, filename), 'r') as file:
             message += file.read()
-            markdown_content = file.read()
-        # if filename.endswith(".html"):
-        #     message += read_and_parse_html(os.path.join(file_path, filename))
-        # elif filename.endswith(".mhtml"):
-        #     message += read_and_parse_mhtml(os.path.join(file_path, filename))
     with open(f"messages_md/{SDK}.md", 'w', encoding='utf-8') as file:
         file.write(message)
     analyze(message, SDK)
 
 doc_source = f"../web_archive/privacy_doc_md_group/"
-summary_directory = f"plaintext_summaries_md"
+summary_directory = f"summaries_md"
 
+with open(errorlog_name, 'a') as errorlog:
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    errorlog.write(f"{current_time} ----------------------------- \n")
 for directory in os.listdir(doc_source):
-    print(f"start: {directory}")
-    if f"{directory}.txt" in os.listdir(summary_directory):
+    if f"{directory}.json" in os.listdir(summary_directory):
         print(f"has summary: {directory}")
         continue
+    print(f"start: {directory}")
+
     analyzeSDK(directory)
 
 
