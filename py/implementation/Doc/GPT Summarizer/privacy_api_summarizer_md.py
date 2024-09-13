@@ -11,25 +11,25 @@ client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 summary_version = "md"
 errorlog_name = f"log/error_log_md.log"
 sys_prompt = """
-You are a Privacy API Summarizer. You will be provided with a document that may contain one or more privacy-related APIs. Your task is to:
-1. Identify these privacy APIs within the document.
-2. Gather all relevant inforamtion concerning the identified API(s).
+You are a Privacy API Summarizer. You will be provided with a document that may contain one or several privacy-related APIs. Your task is to:
+1. Identify all privacy-related APIs within the document.
+2. Gather all relevant inforamtion about these privacy API(s).
 3. Extract and Summarize the information regarding these privacy APIs using the provided format.
 Definition of a Privacy API:
-An API is considered a privacy API if it is explicitly privacy-related, or if it meets any of the following criteria:
-1. Data Access and Handling: 1.1 Personal Data: Does the API access, collect, store, or process personal data such as names, addresses, email addresses, phone numbers, ID numbers, etc.? 1.2 Sensitive Information: Does the API handle sensitive information such as biometric data (fingerprints, facial recognition), health data, financial information, etc.? 1.3 Sensitive Device Permissions: Does the API collect or handle sensitive device data such as location, contacts, SMS, device identification information (device ID, Android ID, Advertising ID, etc.)?
-2. Data Transmission and Storage: 2.1 Encryption: Does the API use encryption technologies (e.g., HTTPS, encryption libraries) to protect data during transmission and storage? 2.2 Data Storage Location: Does the API specify where data is stored and ensure compliance with relevant privacy laws and regulations?
-3. User Control and Consent: 3.1 User Consent: Does the API obtain explicit user consent before collecting or processing data, and allow users to withdraw consent at any time? 3.2 Data Access and Deletion: Does the API provide mechanisms for users to access their data and delete their personal information?
-4. Transparency and Policy: 4.1 Privacy Policy: Is there a detailed privacy policy associated with the API, explaining how data is collected, used, and shared? 4.2 Data Sharing: Does the API involve sharing user data with third parties, and are users clearly informed about this sharing?
-5. Data Minimization and Purpose Limitation: 5.1 Data Minimization: Does the API collect and process only the minimum amount of data necessary to achieve its function? 5.2 Purpose Limitation: Is the use of the data clearly defined, ensuring that it is not used for unauthorized purposes?
-6. Privacy Law Compliance: 6.1 Legal Compliance: Is the API designed to meet compliance requirements of privacy regulations or laws?
+An API is considered a privacy API if it is explicitly privacy-related, or if it involves:
+1. Data Access and Handling: 1.1 Personal Data: The API accessese, collects, stores, or processes personal data such as names, addresses, email addresses, phone numbers, ID numbers, etc. 1.2 Sensitive Information: The API handles sensitive information such as biometric data (fingerprints, facial recognition), health data, financial information, etc. 1.3 Sensitive Device Permissions: The API collects or handles sensitive device data such as location, contacts, SMS, device identification information (device ID, Android ID, Advertising ID, etc.)
+2. Data Transmission and Storage: 2.1 Encryption: The API uses encryption technologies (e.g., HTTPS, encryption libraries) to protect data during transmission and storage 2.2 Data Storage Location: The API specifies where data is stored and ensures compliance with relevant privacy laws and regulations.
+3. User Control and Consent: 3.1 User Consent: The API obtains explicit user consent before collecting or processing data, and allow users to withdraw consent at any time. 3.2 Data Access and Deletion: The API provides mechanisms for users to access their data and delete their personal information.
+4. Transparency and Policy: 4.1 Privacy Policy: There is a detailed privacy policy associated with the API, explaining how data is collected, used, and shared. 4.2 Data Sharing: The API involves sharing user data with third parties.
+5. Data Minimization and Purpose Limitation: 5.1 Data Minimization: The API collects and processes  only the minimum amount of data necessary to achieve its function 5.2 Purpose Limitation: The use of the data is clearly defined, ensuring that it is not used for unauthorized purpose.
+6. Privacy Law Compliance: 6.1 Legal Compliance: The API is designed to meet compliance requirements of privacy regulations or laws.
 Instructions for Summarizing an API:
 1. Do not infer information that is not included in the documentation, but feel free to use your prior knowledge to make the description more precise.
-2. Include ALL information related to the target API, and output them. Be detailed.
-3. Descriptions of the API might be mentioned in different parts of the documentation, not only in the API section. Ensure you find all related information.
+2. Be as detailed as possible: include and output ALL information related to the target API. When summarizing each API, also include any relevant conditions, laws, or external factors mentioned in the surrounding context. The conditions/precondtions of a law or policy should also be regarded as the condtions of its corresponding API. For example, The defination of COPPA in the document "COPPA is a federal law that imposes specific requirements on websites and online service operators to protect the privacy of children under 13" should also be regards as a condtion/effect of COPPA API. 
+3. Descriptions of the API might be mentioned in different parts of the documentation, not only in the API section. You need to go throught the whole document to extract every description about the API.Ensure you find all related information. 
 4. Follow the JSON format strictly as provided, and refer to the example output. Ensure that the JSON data is properly formatted to allow successful parsing, and avoid including any content beyond the JSON (e.g., do not add "json" at the beginning or "" at the end). Use quotation marks ("") to wrap any object that is invalid in JSON.
 5. The annotations after each item indicate what needs to be filled in, but do not include comments in your response. If specific information cannot be extracted from the document, leave the item blank.
-6. UI-related APIs are not within the scope of our extraction, such as those that display a Privacy dialog.
+6. UI-related APIs are not within the scope of our extraction, such as those that display a dialog.
 
 Summary Format:
 {
@@ -101,7 +101,7 @@ Output Example:
             "parameter_configurations": [
                 {
                     "parameter_values": [
-                        true, context
+                        true, "context"
                     ],
                     "conditions": [
                         "user opts out of interest-based advertising"
@@ -112,7 +112,7 @@ Output Example:
                 },
                 {
                     "parameter_values": [
-                        false, context
+                        false, "context"
                     ],
                     "conditions": [
                         "user does not opt out of interest-based advertising"
@@ -128,7 +128,7 @@ Output Example:
 """
 
 def recordResponseAsPlainText(sdk, response):
-    with open(f"plaintext_summaries_md/{sdk}.txt", 'a') as file:
+    with open(f"plaintext_summaries_md2/{sdk}.txt", 'a') as file:
         file.write(response)
 
 def analyze(user_prompt, sdk):
@@ -146,7 +146,7 @@ def analyze(user_prompt, sdk):
         recordResponseAsPlainText(sdk, response)
         actual_json_str = json.loads(response)
         beautified_json = json.dumps(actual_json_str, indent=4)
-        with open(f"summaries_md/{sdk}.json", 'a') as file:
+        with open(f"summaries_md2/{sdk}.json", 'a') as file:
             file.write(beautified_json)
 
 
@@ -163,12 +163,12 @@ def analyzeSDK(SDK):
     for filename in os.listdir(file_path):
         with open(os.path.join(file_path, filename), 'r') as file:
             message += file.read()
-    with open(f"messages_md/{SDK}.md", 'w', encoding='utf-8') as file:
+    with open(f"messages_md2/{SDK}.md", 'w', encoding='utf-8') as file:
         file.write(message)
     analyze(message, SDK)
 
 doc_source = f"../web_archive/privacy_doc_md_group/"
-summary_directory = f"summaries_md"
+summary_directory = f"summaries_md2"
 
 with open(errorlog_name, 'a') as errorlog:
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

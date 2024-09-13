@@ -1,0 +1,145 @@
+{
+    "SDK": "Kochava",
+    "privacy_APIs": [
+        {
+            "API_name": "setIntelligentConsentGranted",
+            "class_name": "Tracker",
+            "conditions": [
+                "Used when the user responds to the consent prompt dialog."
+            ],
+            "effects": [
+                "Notifies the Kochava SDK whether consent has been granted."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [
+                        "User grants consent"
+                    ],
+                    "effects": [
+                        "Portable data collection is allowed."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [
+                        "User declines consent"
+                    ],
+                    "effects": [
+                        "Stops data collection related to tracking."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "shutdown",
+            "class_name": "Tracker",
+            "conditions": [
+                "Must be called if consent has been declined or revoked."
+            ],
+            "effects": [
+                "Disables all tracking and ceases network communication with Kochava."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [
+                        "If data should be cleared upon shut down"
+                    ],
+                    "effects": [
+                        "All persisted SDK data is deleted."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [
+                        "If data should not be cleared upon shut down"
+                    ],
+                    "effects": [
+                        "All persisted SDK data is retained."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "registerPrivacyProfile",
+            "class_name": "Tracker",
+            "conditions": [
+                "Called to create privacy profiles for conditional restrictions."
+            ],
+            "effects": [
+                "Defines which datapoints will be restricted."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "child",
+                        [
+                            "adid",
+                            "android_id"
+                        ]
+                    ],
+                    "conditions": [
+                        "User is a child"
+                    ],
+                    "effects": [
+                        "Restricts the egress of sensitive device identifiers."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "restrict ids",
+                        [
+                            "adid",
+                            "android_id"
+                        ]
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Restricts the egress of device identifiers for all users."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setPrivacyProfileEnabled",
+            "class_name": "Tracker",
+            "conditions": [
+                "Must be called after creating the privacy profile."
+            ],
+            "effects": [
+                "Enables or disables the previously registered privacy profile for the current user."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "restrict ids",
+                        true
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Datapoints defined in 'restrict ids' profile will not egress."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "child",
+                        false
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Datapoints defined in 'child' profile will egress normally."
+                    ]
+                }
+            ]
+        }
+    ]
+}
