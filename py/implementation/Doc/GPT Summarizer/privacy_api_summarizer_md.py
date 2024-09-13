@@ -11,8 +11,8 @@ summary_version = "md"
 
 sys_prompt = """
 You are a Privacy API Summarizer. You will be provided with a document that may contain one or more privacy-related APIs. Your task is to:
-1. Identify these APIs within the document.
-2. Gather all relevant texts (directly or indirectly related) concerning the identified API(s).
+1. Identify these privacy APIs within the document.
+2. Gather all relevant inforamtion concerning the identified API(s).
 3. Extract and Summarize the information regarding these privacy APIs using the provided format.
 Definition of a Privacy API:
 An API is considered a privacy API if it is explicitly privacy-related, or if it meets any of the following criteria:
@@ -24,8 +24,8 @@ An API is considered a privacy API if it is explicitly privacy-related, or if it
 6. Privacy Law Compliance: 6.1 Legal Compliance: Is the API designed to meet compliance requirements of privacy regulations or laws?
 Instructions for Summarizing an API:
 1. Do not infer information that is not included in the documentation, but feel free to use your prior knowledge to make the description more precise.
-2. Include ALL details related to the target API.
-3. Reference all relevant sections: Descriptions of the API might be mentioned in different parts of the documentation, not only in the API section. Ensure you find all related information.
+2. Include ALL information related to the target API, and output them. Be detailed.
+3. Descriptions of the API might be mentioned in different parts of the documentation, not only in the API section. Ensure you find all related information.
 4. Follow the JSON format strictly as provided, and refer to the example output. Ensure that the JSON data is properly formatted to allow successful parsing, and avoid including any content beyond the JSON (e.g., do not add "json" at the beginning or "" at the end). Use quotation marks ("") to wrap any object that is invalid in JSON.
 5. The annotations after each item indicate what needs to be filled in, but do not include comments in your response. If specific information cannot be extracted from the document, leave the item blank.
 6. UI-related APIs are not within the scope of our extraction, such as those that display a Privacy dialog.
@@ -37,12 +37,12 @@ Summary Format:
         {
             "API_name": "", // The name of the target method, which will be used to match the method in the code
             "class_name": "", // If the class name is provided in the documentation, record it; otherwise, leave the field blank. Typically, the class name can be identified in the format 'class_name.API_name' within the document.
-            "conditions": [], // The list of conditions required to call the API
+            "conditions": [], // The list of conditions/precondtions required to call the API
             "effects": [], // The list of effects and consequences of calling the API
             "parameter_configurations": [ // Summary of all configurable parameters or parameter combinations(Each element in the list represents one possible parameter combination);if no parameters in the API, leave it blank. 
                 {
-                    "parameter_values": [], // One of the parameter combinations mentioned in the document. If some parameter is not configurable or unknown, mark it "null" in the corresponding index in the list.
-                    "conditions": [], // The list of conditions or requirements for setting parameters to parameter_values
+                    "parameter_values": [], // one of the parameter combinations mentioned in the document. If some parameter is not configurable or unknown, mark it "null" in the corresponding index in the list.
+                    "conditions": [], // The list of conditions/preconditions for setting parameters to parameter_values
                     "effects": [] // The list of effects or consequences of setting parameters to parameter_values
                 }
             ]
@@ -169,7 +169,7 @@ def analyzeSDK(SDK):
         #     message += read_and_parse_mhtml(os.path.join(file_path, filename))
     with open(f"messages_md/{SDK}.md", 'w', encoding='utf-8') as file:
         file.write(message)
-    #analyze(message, SDK)
+    analyze(message, SDK)
 
 doc_source = f"../web_archive/privacy_doc_md_group/"
 summary_directory = f"plaintext_summaries_md"
