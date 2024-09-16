@@ -1,0 +1,113 @@
+{
+    "SDK": "Kochava",
+    "privacy_APIs": [
+        {
+            "API_name": "setIntelligentConsentGranted",
+            "class_name": "Tracker",
+            "conditions": [
+                "user must respond to consent prompt",
+                "if the user dismisses or ignores the dialog no action should be taken"
+            ],
+            "effects": [
+                "notifies the SDK of the user's consent decision",
+                "restricts data transmission based on consent"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [
+                        "user granted consent"
+                    ],
+                    "effects": [
+                        "allows tracking and data collection"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [
+                        "user denied consent"
+                    ],
+                    "effects": [
+                        "prevents tracking and data collection, can trigger shutdown if required"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "registerPrivacyProfile",
+            "class_name": "Tracker",
+            "conditions": [],
+            "effects": [
+                "creates a named collection of datapoints which may be restricted for the current user"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "child",
+                        [
+                            "adid",
+                            "android_id"
+                        ]
+                    ],
+                    "conditions": [
+                        "used when specific conditions apply to restrict data collection"
+                    ],
+                    "effects": [
+                        "enables restricted tracking for users identified as children"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "restrict ids",
+                        [
+                            "adid",
+                            "android_id"
+                        ]
+                    ],
+                    "conditions": [
+                        "set to restrict data egress for all users"
+                    ],
+                    "effects": [
+                        "prevents transmission of device identifiers for all users"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setPrivacyProfileEnabled",
+            "class_name": "Tracker",
+            "conditions": [
+                "must invoke this function after defining privacy profiles to apply restrictions"
+            ],
+            "effects": [
+                "applies the created privacy profile, restricting specified datapoints"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "restrict ids",
+                        true
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "restricts the egress of specified datapoints for the user"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "child",
+                        false
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "removes restrictions on datapoint egress for the child privacy profile"
+                    ]
+                }
+            ]
+        }
+    ]
+}

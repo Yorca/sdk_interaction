@@ -1,0 +1,130 @@
+{
+    "SDK": "Kochava",
+    "privacy_APIs": [
+        {
+            "API_name": "setIntelligentConsentGranted",
+            "class_name": "Tracker",
+            "conditions": [
+                "user must respond to consent prompt"
+            ],
+            "effects": [
+                "notifies SDK of consent result, impacts data transmission"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [
+                        "User grants consent"
+                    ],
+                    "effects": [
+                        "enables data collection and transmission to Kochava"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [
+                        "User declines consent"
+                    ],
+                    "effects": [
+                        "stops data collection and transmission to Kochava"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "registerPrivacyProfile",
+            "class_name": "Tracker",
+            "conditions": [
+                "privacy profiles must be created prior to enabling"
+            ],
+            "effects": [
+                "defines a named collection of data points for user data restriction"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "restrict ids", ["adid", "android_id"]
+                    ],
+                    "conditions": [
+                        "create profile to restrict identifiers"
+                    ],
+                    "effects": [
+                        "disables egress of certain device identifiers for the app"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "child", ["adid", "android_id"]
+                    ],
+                    "conditions": [
+                        "create profile for conditional restriction based on user type"
+                    ],
+                    "effects": [
+                        "conditionally restrict egress of identifiers for child users"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setPrivacyProfileEnabled",
+            "class_name": "Tracker",
+            "conditions": [
+                "privacy profile must be created and called before enabling"
+            ],
+            "effects": [
+                "applies data point restrictions for the specified user"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "restrict ids", true
+                    ],
+                    "conditions": [
+                        "enable profile to restrict all users"
+                    ],
+                    "effects": [
+                        "starts restricting transmission of specified data points"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "child", true
+                    ],
+                    "conditions": [
+                        "enable profile only if user is identified as a child"
+                    ],
+                    "effects": [
+                        "restricts transmission of identifiers specifically for child users"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "shutdown",
+            "class_name": "Tracker",
+            "conditions": [
+                "shutdown during instances when consent is declined or when stopping all tracking"
+            ],
+            "effects": [
+                "ceases SDK operation, stops tracking and transmission of events"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        null, true
+                    ],
+                    "conditions": [
+                        "shutdown function is called with true flag"
+                    ],
+                    "effects": [
+                        "clears all accumulated data when shutting down"
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,152 @@
+{
+    "SDK": "TopOn",
+    "privacy_APIs": [
+        {
+            "API_name": "deniedUploadDeviceInfo",
+            "class_name": "ATSDK",
+            "conditions": [
+                "Called before initializing the SDK to limit reporting of device privacy data"
+            ],
+            "effects": [
+                "Restricts certain device data from being reported, which may impact ad functions"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "DeviceDataInfo.DEVICE_SCREEN_SIZE",
+                        "DeviceDataInfo.ANDROID_ID",
+                        "DeviceDataInfo.APP_PACKAGE_NAME",
+                        "DeviceDataInfo.APP_VERSION_CODE",
+                        "DeviceDataInfo.APP_VERSION_NAME",
+                        "DeviceDataInfo.BRAND",
+                        "DeviceDataInfo.GAID",
+                        "DeviceDataInfo.LANGUAGE",
+                        "DeviceDataInfo.MCC",
+                        "DeviceDataInfo.MNC",
+                        "DeviceDataInfo.MODEL",
+                        "DeviceDataInfo.ORIENTATION",
+                        "DeviceDataInfo.OS_VERSION_CODE",
+                        "DeviceDataInfo.OS_VERSION_NAME",
+                        "DeviceDataInfo.TIMEZONE",
+                        "DeviceDataInfo.USER_AGENT",
+                        "DeviceDataInfo.NETWORK_TYPE",
+                        "DeviceDataInfo.INSTALLER",
+                        "ChinaDeviceDataInfo.MAC",
+                        "ChinaDeviceDataInfo.IMEI",
+                        "ChinaDeviceDataInfo.OAID",
+                        "ChinaDeviceDataInfo.SSID",
+                        "ChinaDeviceDataInfo.IMSI"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Limits reporting of device data to TopOn SDK"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setATPrivacyConfig",
+            "class_name": "ATSDK",
+            "conditions": [],
+            "effects": [
+                "Allows passing existing device IDs (GAID, IMEI, OAID) to the TopOn SDK for privacy management"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "null", // for GAID
+                        "null", // for IMEI
+                        "null" // for OAID
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "No device ID is provided to TopOn SDK"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setGDPRUploadDataLevel",
+            "class_name": "ATSDK",
+            "conditions": [
+                "Set after determining the GDPR level, either through user input or programmatically"
+            ],
+            "effects": [
+                "Sets the level of data reporting based on GDPR compliance"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "ATSDK.PERSONALIZED"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Enables device data reporting"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "ATSDK.NONPERSONALIZED"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Disables device data reporting"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "ATSDK.UNKNOWN"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Sets GDPR reporting level to unknown, retrieved via getGDPRDataLevel"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "showGdprAuth",
+            "class_name": "ATSDK",
+            "conditions": [
+                "Required to be called to set the GDPR level according to user consent"
+            ],
+            "effects": [
+                "Displays an authorization dialog to the user for consent regarding data collection under GDPR"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "activity", // context for the dialog
+                        "new ATGDPRAuthCallback() {...}" // callback handling the result
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "User's choice is used to set the GDPR data reporting level"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "checkIsEuTraffic",
+            "class_name": "ATSDK",
+            "conditions": [
+                "Called to determine if the user is in the EU to adjust GDPR settings accordingly"
+            ],
+            "effects": [
+                "Provides information about EU traffic for compliant data handling"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "this", // context
+                        "new NetTrafficeCallback() {...}" // callback processing result
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Identifies EU users to apply GDPR requirements"
+                    ]
+                }
+            ]
+        }
+    ]
+}

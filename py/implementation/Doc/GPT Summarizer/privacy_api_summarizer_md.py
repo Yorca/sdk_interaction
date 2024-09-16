@@ -1,3 +1,5 @@
+import time
+
 from openai import OpenAI
 from bs4 import BeautifulSoup
 import os
@@ -8,7 +10,6 @@ from datetime import datetime
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-summary_version = "md"
 errorlog_name = f"log/error_log_md.log"
 sys_prompt = """
 You are a Privacy API Summarizer. You will be provided with a document that may contain one or several privacy-related APIs. Your task is to:
@@ -127,11 +128,11 @@ Output Example:
 }
 """
 
-def recordResponseAsPlainText(sdk, response):
-    with open(f"plaintext_summaries_md2/{sdk}.txt", 'a') as file:
+def recordResponseAsPlainText(sdk, response,index):
+    with open(f"plaintext/pt{index}/{sdk}.txt", 'a') as file:
         file.write(response)
 
-def analyze(user_prompt, sdk):
+def analyze(user_prompt, sdk, index):
 
     try:
         completion = client.chat.completions.create(
@@ -143,10 +144,10 @@ def analyze(user_prompt, sdk):
         )
 
         response = str(completion.choices[0].message.content)
-        recordResponseAsPlainText(sdk, response)
+        recordResponseAsPlainText(sdk, response, index)
         actual_json_str = json.loads(response)
         beautified_json = json.dumps(actual_json_str, indent=4)
-        with open(f"summaries_md2/{sdk}.json", 'a') as file:
+        with open(f"summary/sum{index}/{sdk}.json", 'a') as file:
             file.write(beautified_json)
 
 
@@ -157,29 +158,52 @@ def analyze(user_prompt, sdk):
         with open(errorlog_name, 'a') as errorlog:
             errorlog.write(f"SDK:{sdk}, Error:{e} \n")
 
-def analyzeSDK(SDK):
+def read_and_parse_mhtml(file_path):
+    with open(file_path, 'r', encoding='iso-8859-1') as f:
+        mhtml_content = f.read()
+    msg = email.message_from_string(mhtml_content)
+
+    for part in msg.walk():
+        if part.get_content_type() == "text/html":
+            html_content = part.get_payload(decode=True).decode('iso-8859-1')
+
+    parser = HTMLParser()
+    parser.feed(html_content)
+
+    return html_content
+
+def analyzeSDK(SDK, index):
     message = f"SDK name: {SDK}\nDocumentation:\n"
     file_path = os.path.join(doc_source, SDK)
     for filename in os.listdir(file_path):
-        with open(os.path.join(file_path, filename), 'r') as file:
-            message += file.read()
-    with open(f"messages_md2/{SDK}.md", 'w', encoding='utf-8') as file:
+        if filename.endswith('.md'):
+            with open(os.path.join(file_path, filename), 'r') as file:
+                message += file.read()
+        elif filename.endswith('.mhtml'):
+            message += read_and_parse_mhtml(os.path.join(file_path, filename))
+
+    with open(f"message/msg{index}/{SDK}.md", 'w', encoding='utf-8') as file:
         file.write(message)
-    analyze(message, SDK)
+    analyze(message, SDK, index)
 
-doc_source = f"../web_archive/privacy_doc_md_group/"
-summary_directory = f"summaries_md2"
 
-with open(errorlog_name, 'a') as errorlog:
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    errorlog.write(f"{current_time} ----------------------------- \n")
-for directory in os.listdir(doc_source):
-    if f"{directory}.json" in os.listdir(summary_directory):
-        print(f"has summary: {directory}")
-        continue
-    print(f"start: {directory}")
 
-    analyzeSDK(directory)
+for i in range(2,6):
+    doc_source = f"../web_archive/privacy_doc_md_final/"
+    summary_directory = f"summary/sum{i}"
+
+    with open(errorlog_name, 'a') as errorlog:
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        errorlog.write(f"{current_time} ----------------------------- index:{i}\n")
+    for sdk in os.listdir(doc_source):
+        if f"{sdk}.json" in os.listdir(summary_directory):
+            print(f"has summary: {sdk}")
+            continue
+        print(f"start: {sdk}")
+
+        analyzeSDK(sdk, i)
+    time.sleep(600)
+
 
 
 

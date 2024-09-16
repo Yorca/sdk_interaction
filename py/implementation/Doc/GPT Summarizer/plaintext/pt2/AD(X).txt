@@ -1,0 +1,116 @@
+{
+    "SDK": "AD(X)",
+    "privacy_APIs": [
+        {
+            "API_name": "initialize",
+            "class_name": "ADXSdk",
+            "conditions": [
+                "GDPR compliance is required for services targeting EU users",
+                "Initialization must occur once when the app launches",
+                "Ad requests must occur after initialization is complete"
+            ],
+            "effects": [
+                "Enables the AD(X) SDK and provides functionality to obtain GDPR consent"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "<ADX_APP_ID>", "ADXConfiguration.GdprType.POPUP_LOCATION", "testDeviceIds"
+                    ],
+                    "conditions": [
+                        "User is from the European Economic Area (EEA)",
+                        "Consent UI must use the context of an Activity"
+                    ],
+                    "effects": [
+                        "Displays a consent UI for GDPR compliance based on the user's location"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "<ADX_APP_ID>", "ADXConfiguration.GdprType.POPUP_DEBUG", "testDeviceIds"
+                    ],
+                    "conditions": [
+                        "For testing purposes regardless of user location"
+                    ],
+                    "effects": [
+                        "Enables testing of the GDPR consent UI"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "<ADX_APP_ID>", "ADXConfiguration.GdprType.DIRECT_NOT_REQUIRED", "null"
+                    ],
+                    "conditions": [
+                        "User location does not require consent (EU outside)"
+                    ],
+                    "effects": [
+                        "Allows personalized ads to be shown without user consent"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "<ADX_APP_ID>", "ADXConfiguration.GdprType.DIRECT_CONFIRM", "null"
+                    ],
+                    "conditions": [
+                        "Directly obtained user consent in EU region"
+                    ],
+                    "effects": [
+                        "Allows personalized ads to be shown based on user consent"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "<ADX_APP_ID>", "ADXConfiguration.GdprType.DIRECT_DENIED", "null"
+                    ],
+                    "conditions": [
+                        "User has denied consent in the EU region"
+                    ],
+                    "effects": [
+                        "Prevents personalized ads from being displayed"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "getPrivacyURL",
+            "class_name": "ADXGDPR",
+            "conditions": [],
+            "effects": [
+                "Retrieves the URL of the AD(X) privacy policy"
+            ],
+            "parameter_configurations": []
+        },
+        {
+            "API_name": "saveResultGDPR",
+            "class_name": "ADXGdprManager",
+            "conditions": [
+                "Direct user consent must be gathered outside of the GDPR consent UI"
+            ],
+            "effects": [
+                "Updates the stored consent status of the user"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "ADXConsentState"
+                    ],
+                    "conditions": [
+                        "User consent state is determined"
+                    ],
+                    "effects": [
+                        "Changes the consent status accordingly"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "getResultGDPR",
+            "class_name": "ADXGdprManager",
+            "conditions": [],
+            "effects": [
+                "Retrieves the current GDPR consent status of the user"
+            ],
+            "parameter_configurations": []
+        }
+    ]
+}

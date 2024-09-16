@@ -1,0 +1,119 @@
+{
+    "SDK": "Batch.com",
+    "privacy_APIs": [
+        {
+            "API_name": "updateAutomaticDataCollection",
+            "class_name": "Batch",
+            "conditions": [
+                "User consent is required to enable automatic data collection for certain parameters"
+            ],
+            "effects": [
+                "Allows toggling the collection of device-related data such as device brand, device model, and GeoIP."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true  // for GeoIP, device brand, device model
+                    ],
+                    "conditions": [
+                        "The user has provided consent to collect this data"
+                    ],
+                    "effects": [
+                        "GeoIP resolution on server side is enabled, automatic collection of the device brand and model information is turned on"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false  // for GeoIP, device brand, device model
+                    ],
+                    "conditions": [
+                        "The user has not provided consent to collect this data"
+                    ],
+                    "effects": [
+                        "GeoIP resolution on server side is disabled, automatic collection of the device brand and model information is turned off"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "optOut",
+            "class_name": "Batch",
+            "conditions": [
+                "The SDK must have started prior to calling this method"
+            ],
+            "effects": [
+                "Prevents any operations from the SDK, including data collection and In-App campaigns"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "context"
+                    ],
+                    "conditions": [
+                        "The user opts out of using the Batch SDK"
+                    ],
+                    "effects": [
+                        "All SDK functionalities are disabled, including event tracking and access to Inbox"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "optOutAndWipeData",
+            "class_name": "Batch",
+            "conditions": [
+                "The SDK must have started before this method can be called"
+            ],
+            "effects": [
+                "Removes local data and requests remote deletion of user data associated with the Installation ID, although Custom User ID remains unaffected."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "context"
+                    ],
+                    "conditions": [
+                        "The user chooses to completely opt out and wipe data"
+                    ],
+                    "effects": [
+                        "User's installation data is deleted, user is logged out from their previous custom identifier association"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "optIn",
+            "class_name": "Batch",
+            "conditions": [
+                "User must have previously opted out"
+            ],
+            "effects": [
+                "Re-enables the SDK for the user after opting out"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "context"
+                    ],
+                    "conditions": [
+                        "The user has decided to re-enable the SDK"
+                    ],
+                    "effects": [
+                        "All SDK functionalities are restored after the user opts back in."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "activity"
+                    ],
+                    "conditions": [
+                        "The user must call Batch.onStart() after opting in"
+                    ],
+                    "effects": [
+                        "Enables the Batch SDK to work correctly."
+                    ]
+                }
+            ]
+        }
+    ]
+}
