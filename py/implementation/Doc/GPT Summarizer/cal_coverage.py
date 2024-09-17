@@ -48,8 +48,12 @@ for item in gt_apis:
     with open(f"summary/merged/{sdk}.json", "r") as file:
         data = file.read()
     js = json.loads(data)
+    has_sum = False
     for sum in js["privacy_APIs"]:
         if sum["API_name"] == api:
             df.loc[len(df)] = [sdk, api, sum, link[sdk]]
+            has_sum = True
             break
+    if not has_sum:
+        df.loc[len(df)] = [sdk, api, "null", link[sdk]]
 df.to_excel("data/summary_set_merged.xlsx", index=False)
