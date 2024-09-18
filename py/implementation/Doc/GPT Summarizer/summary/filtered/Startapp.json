@@ -1,0 +1,197 @@
+{
+    "SDK": "Startapp",
+    "privacy_APIs": [
+        {
+            "API_name": "setUserConsent",
+            "class_name": [
+                "StartAppSDK"
+            ],
+            "conditions": [
+                "In case of any consent change during the user activity, it needs to be re-submitted",
+                "The consent flag with the correct timestamp is generated",
+                "User must provide consent for sharing their data, especially in countries covered by GDPR.",
+                "Consent needs to be reported after initializing the SDK",
+                "GDPR applies to the user"
+            ],
+            "effects": [
+                "If consent is not provided, personalized ads will not be shown to this user",
+                "Indicates whether user has consented for personal data processing for ads personalization",
+                "Indicates whether a user based in the EU has provided consent for sharing their app data for personalized ads"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "this",
+                        "pas",
+                        "timestamp",
+                        true
+                    ],
+                    "conditions": [
+                        "User has consented",
+                        "The user has consented to share personal data."
+                    ],
+                    "effects": [
+                        "User ad data can be processed for personalized advertising."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "this",
+                        "pas",
+                        "timestamp",
+                        false
+                    ],
+                    "conditions": [
+                        "The user has not consented to share personal data."
+                    ],
+                    "effects": [
+                        "No personalized ads will be shown to the user.",
+                        "User data will not be used for personalized advertising"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "this",
+                        "pas",
+                        "System.currentTimeMillis()",
+                        true
+                    ],
+                    "conditions": [
+                        "User has consented to share personal data",
+                        "User has consented"
+                    ],
+                    "effects": [
+                        "User's consent is registered, allowing personalized ads to be displayed",
+                        "Personalized ads will be shown to the user."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "this",
+                        "pas",
+                        "System.currentTimeMillis()",
+                        false
+                    ],
+                    "conditions": [
+                        "User has not consented to share personal data"
+                    ],
+                    "effects": [
+                        "Personalized ads will not be shown to the user.",
+                        "User's consent is registered as false, preventing personalized ads from being shown"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "putString",
+            "class_name": [
+                "StartAppSDK"
+            ],
+            "conditions": [
+                "User is located in California",
+                "CCPA applies to the user"
+            ],
+            "effects": [
+                "Sets the privacy string for CCPA compliance"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "this",
+                        "IABUSPrivacy_String",
+                        "1YNN"
+                    ],
+                    "conditions": [
+                        "User chooses NOT to opt-out"
+                    ],
+                    "effects": [
+                        "User's data will be used for advertising"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "this",
+                        "IABUSPrivacy_String",
+                        "1YYN"
+                    ],
+                    "conditions": [
+                        "User chooses to restrict advertising and opt-out"
+                    ],
+                    "effects": [
+                        "User's data will NOT be used for advertising"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "this",
+                        "IABUSPrivacy_String",
+                        "1---"
+                    ],
+                    "conditions": [
+                        "CCPA does not apply"
+                    ],
+                    "effects": [
+                        "String is set but no specific action taken"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "getExtras",
+            "class_name": [
+                "StartAppSDK"
+            ],
+            "conditions": [
+                "The user is located in California",
+                "To restrict the sale of personal information under CCPA.",
+                "Users must be located in California to apply the CCPA opt-out provisions."
+            ],
+            "effects": [
+                "Allows the application to set the IAB US privacy string for CCPA compliance.",
+                "Allows publishers to restrict the sale of end users\u2019 personal information under CCPA",
+                "Allows the setting of the IAB US privacy string for opt-out purposes"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "this"
+                    ],
+                    "conditions": [
+                        "User chooses to opt-out of advertising"
+                    ],
+                    "effects": [
+                        "User's personal information is not sold",
+                        "Returns extras allowing the developer to set the IAB US Privacy String",
+                        "Sets up the extras needed for CCPA compliance."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setAutoInterstitialPreferences",
+            "class_name": [
+                "StartAppAd"
+            ],
+            "conditions": [
+                "Must be called after initializing the SDK."
+            ],
+            "effects": [
+                "Configures ad preferences to control the frequency of Auto Interstitial ads."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        {
+                            "secondsBetweenAds": 60,
+                            "activitiesBetweenAds": 3
+                        }
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Sets a minimum of 60 seconds between consecutive Auto Interstitial ads and shows an ad after every 3 activities."
+                    ]
+                }
+            ]
+        }
+    ]
+}

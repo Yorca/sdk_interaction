@@ -1,0 +1,240 @@
+{
+    "SDK": "Nimbus",
+    "privacy_APIs": [
+        {
+            "API_name": "setGdprConsent",
+            "class_name": [
+                "RequestManager",
+                "NimbusAdManager",
+                "NimbusAdManager / RequestManager"
+            ],
+            "conditions": [
+                "Consent string must be created and valid",
+                "Must be called after setting up a Consent Management Platform",
+                "User must provide a valid consent string according to GDPR regulations"
+            ],
+            "effects": [
+                "Sets the GDPR consent string to manage user consent for data protection",
+                "Sets the GDPR consent string which will override any values set in SharedPreferences"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "consentString"
+                    ],
+                    "conditions": [
+                        "The app is required to manage user consent according to GDPR standards",
+                        "The consentString is properly formatted as per GDPR requirements",
+                        "The consent string must be in accordance with the IAB TCFv2 framework",
+                        "User's consent string must be defined",
+                        "Called before initializing any Demand Providers"
+                    ],
+                    "effects": [
+                        "The consent string is now applied for all requests made by the Nimbus SDK",
+                        "Enables the Nimbus SDK to append the GDPR consent details to outbound requests",
+                        "User's consent status for data protection is updated according to the consent string provided",
+                        "The consent string is used for GDPR compliance in outbound requests",
+                        "Overwrites existing values in SharedPreferences"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setUser",
+            "class_name": [
+                "RequestManager",
+                "NimbusAdManager",
+                "NimbusAdManager / RequestManager"
+            ],
+            "conditions": [
+                "User must provide a User object with a consent string",
+                "Must be called after setGdprConsent if you want the new user values to overwrite previous consents",
+                "Must be called after setGdprConsent to apply the consent globally",
+                "Can be called after setGdprConsent to overwrite values"
+            ],
+            "effects": [
+                "Sets user information including GDPR consent, affecting all subsequent requests",
+                "Overwrites the values set from setGdprConsent if called after",
+                "Overwrites previously set GDPR consent values with values from provided User object",
+                "Sets the user object which can include overridden consent values",
+                "Sets or updates the user data for all requests"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "User(ext = User.Extension(consent = consentString))"
+                    ],
+                    "conditions": [
+                        "User object must be instantiated with consentString",
+                        "User consent must be valid and appropriately formatted",
+                        "Called after setGdprConsent to modify user data"
+                    ],
+                    "effects": [
+                        "Overrides the values set from setGdprConsent for user data",
+                        "Updates the user consent information globally for all requests"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "user"
+                    ],
+                    "conditions": [
+                        "User object is instantiated with the necessary consent information"
+                    ],
+                    "effects": [
+                        "All subsequent requests will include the updated user consent settings"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        {
+                            "ext": {
+                                "consent": "consentString"
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        "Requires a user object containing the consent string"
+                    ],
+                    "effects": [
+                        "Sets the user information along with the consent for all requests"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "COPPA",
+            "class_name": [
+                "Nimbus"
+            ],
+            "conditions": [
+                "Must be called after initialization of the SDK",
+                "App must be governed by COPPA regulations"
+            ],
+            "effects": [
+                "Configures SDK to send information to demand partners for compliance with COPPA"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [
+                        "The app is directed towards children under the age of 13",
+                        "Call this function after SDK initialization"
+                    ],
+                    "effects": [
+                        "Enables COPPA compliance for data collection",
+                        "Enables the SDK to comply with COPPA requirements"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setUsPrivacyString",
+            "class_name": [
+                "",
+                "Nimbus"
+            ],
+            "conditions": [
+                "Required for managing user consent for CCPA",
+                "The privacy string must conform to CCPA regulations and be set before initializing any Demand Providers"
+            ],
+            "effects": [
+                "Configures the app to comply with CCPA regulations by setting the privacy string"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "privacyString"
+                    ],
+                    "conditions": [
+                        "Privacy string must be set before initializing demand providers",
+                        "The privacyString is within the required 4-character format"
+                    ],
+                    "effects": [
+                        "The privacy string is used for CCPA compliance in outbound requests",
+                        "User's consent status under CCPA is communicated to demand partners"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setCOPPA",
+            "class_name": [
+                "Nimbus"
+            ],
+            "conditions": [
+                "Necessary to comply with COPPA regulations if the app is governed by them",
+                "Must be called after SDK initialization"
+            ],
+            "effects": [
+                "Configures the SDK to send information to demand partners as required by COPPA"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [
+                        "The app is governed by COPPA regulations"
+                    ],
+                    "effects": [
+                        "Indicates to demand partners that the app complies with COPPA",
+                        "Indicates that the app is intended for children and requires specific handling of personal data"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setCcpaPrivacyString",
+            "class_name": [
+                "Nimbus"
+            ],
+            "conditions": [
+                "Must create a 4 character privacy string in accordance with CCPA"
+            ],
+            "effects": [
+                "Allows the SDK to manage user privacy preferences under CCPA"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "privacyString"
+                    ],
+                    "conditions": [
+                        "The privacy string must be initialized before any demand providers"
+                    ],
+                    "effects": [
+                        "Enables the Nimbus SDK to apply the CCPA privacy settings"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "usPrivacyString",
+            "class_name": [
+                "Nimbus"
+            ],
+            "conditions": [
+                "User must determine if they fall within a US Privacy jurisdiction"
+            ],
+            "effects": [
+                "Sets the privacy string used for compliance with CCPA"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "privacyString"
+                    ],
+                    "conditions": [
+                        "Should be set before initializing any Demand Providers"
+                    ],
+                    "effects": [
+                        "The CCPA privacy string is utilized for managing user consent"
+                    ]
+                }
+            ]
+        }
+    ]
+}

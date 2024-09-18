@@ -1,0 +1,306 @@
+{
+    "SDK": "Taboola",
+    "privacy_APIs": [
+        {
+            "API_name": "cdns",
+            "class_name": [
+                ""
+            ],
+            "conditions": [
+                "The end-user is subject to CCPA regulations"
+            ],
+            "effects": [
+                "Indicates whether the end-user has provided agreement to use personal data per CCPA regulations"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "true"
+                    ],
+                    "conditions": [
+                        "The end-user didn't provide agreement to use the personal data per CCPA regulations"
+                    ],
+                    "effects": [
+                        "Do not sell is considered true, so user data should not be sold"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "false"
+                    ],
+                    "conditions": [
+                        "The end-user has provided agreement to use the personal data per CCPA regulations"
+                    ],
+                    "effects": [
+                        "Do not sell is considered false, allowing user data to be sold"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "none"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "CCPA does not apply, allowing Taboola to use the user's data"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "cex",
+            "class_name": [
+                ""
+            ],
+            "conditions": [
+                "The end-user is a GDPR subject"
+            ],
+            "effects": [
+                "Indicates whether the user has provided consent for data usage"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "true"
+                    ],
+                    "conditions": [
+                        "User provided consent"
+                    ],
+                    "effects": [
+                        "Taboola can use the user's personal data for personalized recommendations"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "false"
+                    ],
+                    "conditions": [
+                        "User didn't provide consent"
+                    ],
+                    "effects": [
+                        "Taboola will serve only contextual recommendations without using personal data"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setExtraProperties",
+            "class_name": [
+                "taboolaWidget"
+            ],
+            "conditions": [
+                "User must be a CCPA subject to pass the Do Not Sell status",
+                "The end-user is subject to GDPR when passing the consent status",
+                "The end-user is subject to CCPA when passing the dns status"
+            ],
+            "effects": [
+                "Passes the CCPA Do Not Sell status to the Taboola SDK for data handling",
+                "Sets the CCPA Do Not Sell status for users",
+                "Sets the GDPR consent status for users",
+                "Passes the user's consent status to the Taboola SDK for data handling",
+                "Enables or disables the sale of personal data based on user consent"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        {
+                            "cdns": "false"
+                        },
+                        {
+                            "cdns": "true"
+                        },
+                        {
+                            "cdns": "none"
+                        }
+                    ],
+                    "conditions": [
+                        "The CCPA applies to the user"
+                    ],
+                    "effects": [
+                        "When cdns is true, Taboola must not use the user's data as the user did not consent",
+                        "When cdns is none, CCPA does not apply and data usage is allowed"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        {
+                            "cex": "true"
+                        },
+                        {
+                            "cex": "false"
+                        }
+                    ],
+                    "conditions": [
+                        "The user is subject to GDPR",
+                        "GDPR applies"
+                    ],
+                    "effects": [
+                        "When cex is false, Taboola must not use the user's data as the user did not provide consent",
+                        "Indicates whether Taboola is allowed to process personal data based on user consent"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        {
+                            "cdns": "true"
+                        },
+                        {
+                            "cdns": "false"
+                        },
+                        {
+                            "cdns": "none"
+                        }
+                    ],
+                    "conditions": [
+                        "CCPA applies"
+                    ],
+                    "effects": [
+                        "Indicates whether Taboola is allowed to sell personal data or not, based on user consent"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "Passing CCPA status",
+            "class_name": [
+                ""
+            ],
+            "conditions": [
+                "Using SDK version 2.4.0 or above",
+                "The widget/feed is initialized using the Taboola SDK",
+                "CCPA applies"
+            ],
+            "effects": [
+                "Provides a way to forward the CCPA 'Do Not Sell' status to Taboola SDK",
+                "Changes the ability of Taboola to use the user's data based on consent",
+                "Determines whether user data is sold based on user consent"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "true"
+                    ],
+                    "conditions": [
+                        "End-user hasn't provided agreement to use personal data per CCPA regulations"
+                    ],
+                    "effects": [
+                        "Taboola will not sell the user's personal data"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "false"
+                    ],
+                    "conditions": [
+                        "End-user provided agreement to use personal data per CCPA regulations"
+                    ],
+                    "effects": [
+                        "Taboola is allowed to use the user's personal data"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "none"
+                    ],
+                    "conditions": [
+                        "CCPA does not apply"
+                    ],
+                    "effects": [
+                        "Taboola can use the user's data by default"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "cdns: true"
+                    ],
+                    "conditions": [
+                        "End-user didn't provide agreement to use personal data (Do not sell is true)"
+                    ],
+                    "effects": [
+                        "Taboola cannot sell or use user's personal data"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "cdns: false"
+                    ],
+                    "conditions": [
+                        "End-user provided agreement to use personal data (Do not sell is false)"
+                    ],
+                    "effects": [
+                        "Taboola can sell or use user's personal data"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "cdns: none"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "The default status where CCPA does not apply, allowing Taboola to use user's data"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "Passing consent status",
+            "class_name": [
+                ""
+            ],
+            "conditions": [
+                "End-user is a GDPR subject",
+                "The widget/feed is initialized using the Taboola SDK",
+                "Using SDK version 2.x or above"
+            ],
+            "effects": [
+                "If no valid consent signal is received, only contextual recommendations will be served",
+                "Enables Taboola to use personal data for recommendations based on user consent"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "true"
+                    ],
+                    "conditions": [
+                        "User provided consent to use their personal data"
+                    ],
+                    "effects": [
+                        "Taboola can serve personalized recommendations"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "false"
+                    ],
+                    "conditions": [
+                        "User did not provide consent to use their personal data"
+                    ],
+                    "effects": [
+                        "Taboola will serve only contextual recommendations without using personal data"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "cex: true"
+                    ],
+                    "conditions": [
+                        "User provided consent"
+                    ],
+                    "effects": [
+                        "Taboola can use user's personal data for personalized recommendations"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "cex: false"
+                    ],
+                    "conditions": [
+                        "User did not provide consent"
+                    ],
+                    "effects": [
+                        "Taboola cannot use user's personal data"
+                    ]
+                }
+            ]
+        }
+    ]
+}

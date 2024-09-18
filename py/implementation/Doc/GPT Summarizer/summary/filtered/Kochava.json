@@ -1,0 +1,249 @@
+{
+    "SDK": "Kochava",
+    "privacy_APIs": [
+        {
+            "API_name": "setIntelligentConsentGranted",
+            "class_name": [
+                "Tracker"
+            ],
+            "conditions": [
+                "if the user dismisses or ignores the dialog no action should be taken",
+                "The user has responded to the consent prompt"
+            ],
+            "effects": [
+                "Enables data collection and tracking",
+                "notifies SDK of consent result, impacts data transmission",
+                "notifies the SDK of the user's consent decision",
+                "SDK will track data if consent is granted",
+                "restricts data transmission based on consent",
+                "The system will start or stop tracking based on user consent"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [
+                        "User has granted consent"
+                    ],
+                    "effects": [
+                        "Allows data collection as user granted consent",
+                        "Tracking data can be sent to Kochava",
+                        "enables data collection and transmission to Kochava",
+                        "Enables tracking for the user",
+                        "allows tracking and data collection"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [
+                        "User has declined consent"
+                    ],
+                    "effects": [
+                        "Disables data collection as user declined consent",
+                        "prevents tracking and data collection, can trigger shutdown if required",
+                        "Disables tracking for the user",
+                        "stops data collection and transmission to Kochava",
+                        "Tracking immediately stops and does not send any data to Kochava"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "registerPrivacyProfile",
+            "class_name": [
+                "Tracker"
+            ],
+            "conditions": [
+                "Need to restrict data for certain user types",
+                "privacy profiles must be created prior to enabling",
+                "The SDK must be initialized before creating a privacy profile"
+            ],
+            "effects": [
+                "creates a named collection of datapoints which may be restricted for the current user",
+                "Creates a profile that groups specific datapoints for privacy restrictions"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "restrict ids",
+                        [
+                            "adid",
+                            "android_id"
+                        ]
+                    ],
+                    "conditions": [
+                        "create profile to restrict identifiers",
+                        "set to restrict data egress for all users"
+                    ],
+                    "effects": [
+                        "disables egress of certain device identifiers for the app",
+                        "Prevents transmission of device identifiers from the device for all users",
+                        "Restricts egress of device identifiers from the SDK for all users",
+                        "Sets up a privacy profile that restricts device identifiers"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "child",
+                        [
+                            "adid",
+                            "android_id"
+                        ]
+                    ],
+                    "conditions": [
+                        "used when specific conditions apply to restrict data collection",
+                        "create profile for conditional restriction based on user type",
+                        "User is identified as a child"
+                    ],
+                    "effects": [
+                        "enables restricted tracking for users identified as children",
+                        "conditionally restrict egress of identifiers for child users",
+                        "Prevents transmission of device identifiers from the device only for children"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setPrivacyProfileEnabled",
+            "class_name": [
+                "Tracker"
+            ],
+            "conditions": [
+                "must invoke this function after defining privacy profiles to apply restrictions",
+                "The privacy profile must be created before it can be enabled"
+            ],
+            "effects": [
+                "Enables or disables a privacy profile for the current user",
+                "Restricts data transmission based on the profile",
+                "applies the created privacy profile, restricting specified datapoints",
+                "applies data point restrictions for the specified user",
+                "Enables or disables the specified privacy profile to restrict data egress"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "restrict ids",
+                        true
+                    ],
+                    "conditions": [
+                        "enable profile to restrict all users",
+                        "Must have previously registered the privacy profile"
+                    ],
+                    "effects": [
+                        "starts restricting transmission of specified data points",
+                        "restricts the egress of specified datapoints for the user",
+                        "Stops egress of specified datapoints",
+                        "Device identifiers will no longer egress from the device",
+                        "Prevents the specified data points from being transmitted from the device"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "child",
+                        true
+                    ],
+                    "conditions": [
+                        "User is determined to be a child",
+                        "enable profile only if user is identified as a child"
+                    ],
+                    "effects": [
+                        "Restricts device identifiers from being transmitted for child users"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "child",
+                        false
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Resumes egress of specified datapoints for children",
+                        "removes restrictions on datapoint egress for the child privacy profile"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setAppLimitAdTracking",
+            "class_name": [
+                "Tracker"
+            ],
+            "conditions": [
+                "Application-level control to limit ad tracking"
+            ],
+            "effects": [
+                "Limits ad tracking at the application level",
+                "Limits the use of the advertising identifier for tracking purposes"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Ad tracking is limited",
+                        "Ad tracking is disabled for the application"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Ad tracking is enabled for the application"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "retrieveDeviceId",
+            "class_name": [
+                "Tracker"
+            ],
+            "conditions": [
+                "SDK must be initialized and running"
+            ],
+            "effects": [
+                "Returns the Kochava Device ID associated with this install"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [],
+                    "conditions": [],
+                    "effects": []
+                }
+            ]
+        },
+        {
+            "API_name": "shutdown",
+            "class_name": [
+                "Tracker"
+            ],
+            "conditions": [
+                "shutdown during instances when consent is declined or when stopping all tracking"
+            ],
+            "effects": [
+                "ceases SDK operation, stops tracking and transmission of events"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        null,
+                        true
+                    ],
+                    "conditions": [
+                        "shutdown function is called with true flag"
+                    ],
+                    "effects": [
+                        "clears all accumulated data when shutting down"
+                    ]
+                }
+            ]
+        }
+    ]
+}
