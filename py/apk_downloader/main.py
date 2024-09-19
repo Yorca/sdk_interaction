@@ -9,6 +9,7 @@ import cloudscraper
 from bs4 import BeautifulSoup
 import pandas as pd
 import traceback
+from datetime import datetime
 
 # code ref: https://github.com/anishomsy/apkpure
 
@@ -17,8 +18,10 @@ headers = {
 }
 
 def log_error(TAG, info):
+    current_time = datetime.now()
+    formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
     with open("download.log", "a") as file:
-        file.write(f"---------------------------------\nTAG: {TAG}, error: {info}\n")
+        file.write(f"---------------------------------{formatted_time}\nTAG: {TAG}, error: {info}\n")
 
 def get_response(url: str, **kwargs) -> requests.Response | None:
     response = requests.get(url, headers)
