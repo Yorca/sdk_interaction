@@ -21,7 +21,7 @@ headers = {
 def log_error(TAG, info):
     current_time = datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-    with open(f"./download.log", "a") as file:
+    with open(f"{server_path}download.log", "a") as file:
         file.write(f"---------------------------------{formatted_time}\nTAG: {TAG}, error: {info}\n")
 
 def get_response(url: str, **kwargs) -> requests.Response | None:
@@ -73,7 +73,7 @@ def download_apk(package_name, version_code, apk_type):
     d = response.headers.get("content-disposition")
     fname = re.findall("filename=(.+)", d)[0].strip('"')
 
-    fname = os.path.join(os.getcwd(), f"./apks/{package_name}_{fname}")
+    fname = os.path.join(os.getcwd(), f"{server_path}apks/{package_name}_{fname}")
 
     os.makedirs(os.path.dirname(fname), exist_ok=True)
 
@@ -115,7 +115,7 @@ def process_apk(apk):
         stack_trace = traceback.format_exc()
         log_error(apk, f"{error_message}\nStack trace:\n{stack_trace}")
 
-apk_data = pd.read_csv(f"./app_metadata_topfree_merged.csv")
+apk_data = pd.read_csv(f"{server_path}app_metadata_topfree_merged.csv")
 apk_list = []
 for index, row in apk_data.iterrows():
     apk_list.append(row[0])
