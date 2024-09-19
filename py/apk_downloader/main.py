@@ -13,6 +13,7 @@ from datetime import datetime
 
 # code ref: https://github.com/anishomsy/apkpure
 
+server_path = "/home/zh844971/sdk_interaction/sdk_interaction/py/apk_downloader/"
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
 }
@@ -20,7 +21,7 @@ headers = {
 def log_error(TAG, info):
     current_time = datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-    with open("download.log", "a") as file:
+    with open(f"{server_path}download.log", "a") as file:
         file.write(f"---------------------------------{formatted_time}\nTAG: {TAG}, error: {info}\n")
 
 def get_response(url: str, **kwargs) -> requests.Response | None:
@@ -114,7 +115,7 @@ def process_apk(apk):
         stack_trace = traceback.format_exc()
         log_error(apk, f"{error_message}\nStack trace:\n{stack_trace}")
 
-apk_data = pd.read_csv("app_metadata_topfree_merged.csv")
+apk_data = pd.read_csv(f"{server_path}app_metadata_topfree_merged.csv")
 apk_list = []
 for index, row in apk_data.iterrows():
     apk_list.append(row[0])
