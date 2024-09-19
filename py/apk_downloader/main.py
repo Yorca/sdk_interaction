@@ -13,7 +13,7 @@ from datetime import datetime
 
 # code ref: https://github.com/anishomsy/apkpure
 
-server_path = "/home/zh844971/sdk_interaction/sdk_interaction/py/apk_downloader/"
+server_path = ""
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
 }
