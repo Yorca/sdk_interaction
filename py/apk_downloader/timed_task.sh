@@ -4,4 +4,4 @@
 pkill -f "main.py"
 
 # Run the script
-python main.py &
+python3 main.py &
