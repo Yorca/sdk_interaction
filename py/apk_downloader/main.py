@@ -13,16 +13,21 @@ from datetime import datetime
 
 # code ref: https://github.com/anishomsy/apkpure
 
-server_path = ""
+server_path = "/home/zh844971/sdk_interaction/sdk_interaction/py/apk_downloader/"
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
 }
+
+execute_apk_list = []
+for filename in os.listdir(f"{server_path}apks"):
+    execute_apk_list.append(filename.split('_')[0])
 
 def log_error(TAG, info):
     current_time = datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
     with open(f"{server_path}download.log", "a") as file:
         file.write(f"---------------------------------{formatted_time}\nTAG: {TAG}, error: {info}\n")
+    print(f"ERROR - TAG: {TAG}  info: {info}")
 
 def get_response(url: str, **kwargs) -> requests.Response | None:
     response = requests.get(url, headers)
@@ -43,7 +48,6 @@ def extract_apk_info_from_url(url):
     soup = BeautifulSoup(response.content, 'html.parser')
     # Find all elements under 'download-btn-box' and extract 'data-dt-version_code' and 'data-dt-apkid'
     download_btn_box = soup.find_all('div', {'class': 'download-btn-box'})
-    print(download_btn_box)
     result = []
 
     for box in download_btn_box:
@@ -92,6 +96,7 @@ def download_apk(package_name, version_code, apk_type):
         for chunk in response.iter_content(chunk_size=4 * 1024):
             if chunk:
                 file.write(chunk)
+        execute_apk_list.append(package_name)
 
     return os.path.realpath(fname)
 
@@ -126,6 +131,9 @@ for index, row in apk_data.iterrows():
 with ThreadPoolExecutor(max_workers=10000) as executor:
     futures = []
     for apk in apk_list:
+        if apk in execute_apk_list:
+            print(f"has download: {apk}")
+            continue
         futures.append(executor.submit(process_apk, apk))
         time.sleep(3)
 
