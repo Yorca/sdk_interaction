@@ -127,7 +127,7 @@ with ThreadPoolExecutor(max_workers=10000) as executor:
     futures = []
     for apk in apk_list:
         futures.append(executor.submit(process_apk, apk))
-        # time.sleep(5)
+        time.sleep(3)
 
     for future in as_completed(futures):
         future.result()
