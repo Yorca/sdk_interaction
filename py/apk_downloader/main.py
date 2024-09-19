@@ -19,7 +19,10 @@ headers = {
 }
 
 execute_apk_list = []
-for filename in os.listdir(f"{server_path}apks"):
+apk_path = f"{server_path}apks"
+if not os.path.exists(apk_path):
+    os.makedirs(apk_path)
+for filename in os.listdir(apk_path):
     execute_apk_list.append(filename.split('_')[0])
 
 def log_error(TAG, info):
@@ -77,7 +80,7 @@ def download_apk(package_name, version_code, apk_type):
     d = response.headers.get("content-disposition")
     fname = re.findall("filename=(.+)", d)[0].strip('"')
 
-    fname = os.path.join(os.getcwd(), f"{server_path}apks/{package_name}_{fname}")
+    fname = os.path.join(os.getcwd(), f"{apk_path}/{package_name}_{fname}")
 
     os.makedirs(os.path.dirname(fname), exist_ok=True)
 
