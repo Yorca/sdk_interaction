@@ -69,7 +69,7 @@ def download_apk(package_name, version_code, apk_type):
     d = response.headers.get("content-disposition")
     fname = re.findall("filename=(.+)", d)[0].strip('"')
 
-    fname = os.path.join(os.getcwd(), f"apks/{fname}")
+    fname = os.path.join(os.getcwd(), f"apks/{package_name}_{fname}")
 
     os.makedirs(os.path.dirname(fname), exist_ok=True)
 
