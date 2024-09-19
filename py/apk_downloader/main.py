@@ -18,6 +18,8 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
 }
 
+last_download_time = datetime.now()
+
 execute_apk_list = []
 apk_path = f"{server_path}apks"
 if not os.path.exists(apk_path):
@@ -84,6 +86,8 @@ def download_apk(package_name, version_code, apk_type):
 
     os.makedirs(os.path.dirname(fname), exist_ok=True)
 
+    global last_download_time
+    last_download_time = datetime.now()
     if os.path.exists(fname) and int(
             response.headers.get("content-length", 0)
     ) == os.path.getsize(fname):
@@ -137,6 +141,12 @@ with ThreadPoolExecutor(max_workers=10000) as executor:
         if apk in execute_apk_list:
             print(f"has download: {apk}")
             continue
+        current_time = datetime.now()
+        time_difference = current_time - last_download_time
+        minutes_difference = time_difference.total_seconds() / 60
+        if minutes_difference > 5:
+            log_error("Exceed max failed time", "no download over 5 minutes, stop, wait next timed task")
+            break
         futures.append(executor.submit(process_apk, apk))
         time.sleep(3)
 
