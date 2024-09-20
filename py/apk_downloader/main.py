@@ -80,6 +80,7 @@ def download_apk(package_name, version_code, apk_type):
     )
 
     d = response.headers.get("content-disposition")
+    print(f"d = {str(d)}")
     fname = re.findall("filename=(.+)", d)[0].strip('"')
 
     fname = os.path.join(os.getcwd(), f"{apk_path}/{package_name}_{fname}")
