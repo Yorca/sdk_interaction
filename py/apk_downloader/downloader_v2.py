@@ -149,10 +149,14 @@ def process_apk(apk):
         download_apk(apk, "APK")
     except Exception as e:
         try:
-            log_error("Download Failed", f"{apk}: {str(e)}")
+            error_message = str(e)
+            stack_trace = traceback.format_exc()
+            log_error(apk, f"Download Failed {error_message}\nStack trace:\n{stack_trace}")
             download_apk(apk, "XAPK")
         except Exception as e:
-            log_error("Download Failed", f"{apk}: {str(e)}")
+            error_message = str(e)
+            stack_trace = traceback.format_exc()
+            log_error(apk, f"Download Failed {error_message}\nStack trace:\n{stack_trace}")
 
 
     # try:
