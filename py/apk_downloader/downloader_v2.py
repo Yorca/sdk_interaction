@@ -10,27 +10,49 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import traceback
 from datetime import datetime
+import paramiko
 
 # code ref: https://github.com/anishomsy/apkpure
 
-server_path = "/home/zh844971/sdk_interaction/sdk_interaction/py/apk_downloader/"
+# server
+hostname = 'brooks.cs.ucf.edu'
+username = 'zh844971'
+password = '!Qwert825215'
+server_dir = '/home/zh844971/sdk_interaction/apks3'
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect(hostname=hostname, username=username, password=password)
+sftp = ssh.open_sftp()
+
+project_path = "/Users/yorca/projects/sdk_interaction/py/apk_downloader/"
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
 }
 
 last_download_time = datetime.now()
+apk_path = f"{project_path}apks"
 
-execute_apk_list = []
-apk_path = f"{server_path}apks"
-if not os.path.exists(apk_path):
-    os.makedirs(apk_path)
-for filename in os.listdir(apk_path):
-    execute_apk_list.append(filename.split('---')[0])
+upload_record = f"{project_path}uploaded_apks.txt"
+if not os.path.exists(upload_record):
+    with open(upload_record, 'w') as file:
+        file.write('')
+with open(upload_record, "r") as file:
+    execute_apk_list = file.readlines()
+execute_apk_list = [apk.replace("\n", "") for apk in execute_apk_list]
+print(f"execute_apk_list = {execute_apk_list}")
+# if not os.path.exists(apk_path):
+#     os.makedirs(apk_path)
+# for filename in os.listdir(apk_path):
+#     execute_apk_list.append(filename.split('---')[0])
+
+
+
+
 
 def log_error(TAG, info):
     current_time = datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-    with open(f"{server_path}download.log", "a") as file:
+    with open(f"{project_path}download.log", "a") as file:
         file.write(f"---------------------------------{formatted_time}\nTAG: {TAG}, error: {info}\n")
     print(f"ERROR - TAG: {TAG}  info: {info}")
 
@@ -86,8 +108,8 @@ def download_apk(package_name, apk_type):
     # fname = f".{apk_type.lower()}"
     fname = re.findall("filename=(.+)", d)[0].strip('"')
 
-
-    fname = os.path.join(os.getcwd(), f"{apk_path}/{package_name}---{fname}")
+    base_name = f"{package_name}---{fname}"
+    fname = os.path.join(os.getcwd(), f"{apk_path}/{base_name}")
 
     os.makedirs(os.path.dirname(fname), exist_ok=True)
 
@@ -108,7 +130,16 @@ def download_apk(package_name, apk_type):
         for chunk in response.iter_content(chunk_size=4 * 1024):
             if chunk:
                 file.write(chunk)
-        execute_apk_list.append(package_name)
+
+    execute_apk_list.append(package_name)
+    try:
+        sftp.put(fname, f"{server_dir}/{base_name}")
+        os.remove(fname)
+    except:
+        log_error("upload_failed", package_name)
+
+    with open(upload_record, "a") as file:
+        file.write(f"{package_name}\n")
 
     return os.path.realpath(fname)
 
@@ -142,7 +173,7 @@ def process_apk(apk):
     #     stack_trace = traceback.format_exc()
     #     log_error(apk, f"{error_message}\nStack trace:\n{stack_trace}")
 
-apk_data = pd.read_csv(f"{server_path}app_metadata_topfree_merged.csv")
+apk_data = pd.read_csv(f"{project_path}app_metadata_topfree_merged.csv")
 apk_list = []
 for index, row in apk_data.iterrows():
     apk_list.append(row[0])
@@ -152,18 +183,24 @@ for index, row in apk_data.iterrows():
 
 with ThreadPoolExecutor(max_workers=10000) as executor:
     futures = []
-    for apk in apk_list:
+    for apk in apk_list[7000:]:
         if apk in execute_apk_list:
             print(f"has download: {apk}")
             continue
         current_time = datetime.now()
         time_difference = current_time - last_download_time
         minutes_difference = time_difference.total_seconds() / 60
-        if minutes_difference > 5:
-            log_error("Exceed max failed time", "no download over 5 minutes, stop, wait next timed task")
+        if minutes_difference > 8:
+            log_error("Exceed max failed time", "no download over 8 minutes, stop, wait next timed task")
+            sftp.close()
+            ssh.close()
             break
         futures.append(executor.submit(process_apk, apk))
         time.sleep(3)
 
+
     for future in as_completed(futures):
         future.result()
+
+    sftp.close()
+    ssh.close()
