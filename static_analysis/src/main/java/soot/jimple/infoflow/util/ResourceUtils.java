@@ -21,6 +21,7 @@ public class ResourceUtils {
 	 */
 	public static InputStream getResourceStream(Class<?> clazz, String filename) throws IOException {
 		File f = new File(filename);
+		System.out.println("filename = " + filename);
 		if (f.exists())
 			return new FileInputStream(f);
 

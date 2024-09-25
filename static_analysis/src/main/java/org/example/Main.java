@@ -31,12 +31,13 @@ import java.util.logging.Logger;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
-		if (args.length != 1) {
-			System.err.println("Provide Params <APK_PATH>");
-			System.exit(-1);
-		}
-
-		String apkPath = args[0];
+//		if (args.length != 1) {
+//			System.err.println("Provide Params <APK_PATH>");
+//			System.exit(-1);
+//		}
+//
+//		String apkPath = args[0];
+		String apkPath = "/Users/yorca/projects/sdk_interaction/testing_app/APKs/Applovin2MetaAudience.apk";
 		new Main().run(apkPath);
 	}
 
@@ -68,7 +69,7 @@ public class Main {
 
 	private void runAnalysis() {
 		try {
-			new PrivacyAPITracking().runBackwardAnalysis();
+			new PrivacyAPITracking().runForwardAnalysis();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
