@@ -84,25 +84,39 @@ public class DirectedGraph {
 		}
 
 		Set<Node> visited = new HashSet<>();
-		printGraphFromNode(root, visited, "", null);
+		List<Node> currentPath = new ArrayList<>();
+		List<List<Node>> allPaths = new ArrayList<>();
+		printGraphFromNode(root, visited, "", null, currentPath, allPaths);
+		for (List<Node> path : allPaths) {
+			System.out.println("Path: " + path);
+		}
 	}
 
 	// Helper method to print the graph starting from a given node
-	private void printGraphFromNode(Node node, Set<Node> visited, String indent, Object property) {
+	private void printGraphFromNode(Node node, Set<Node> visited, String indent, Object property, List<Node> currentPath, List<List<Node>> allPaths) {
 		if (visited.contains(node)) {
 			return;
 		}
 
 		visited.add(node);
+		currentPath.add(node);
+
 
 		if (!node.id.contains("dummyMainClass")/* && node.id.contains("invoke")*/) {
 			LOGGER.info("[DataFlowNode]" + indent + node + (Boolean.valueOf(true).equals(property) ? " implicit" : ""));
 		}
 
-		for (Edge edge : adjList.getOrDefault(node, Collections.emptySet())) {
-			Node neighbor = edge.destination;
-			printGraphFromNode(neighbor, visited, indent + " ", edge.property);
+		if (!adjList.containsKey(node) || adjList.get(node).isEmpty()) {
+			allPaths.add(new ArrayList<>(currentPath));
+		} else {
+			for (Edge edge : adjList.getOrDefault(node, Collections.emptySet())) {
+				Node neighbor = edge.destination;
+				printGraphFromNode(neighbor, visited, indent + " ", edge.property, currentPath, allPaths);
+			}
 		}
+
+		currentPath.remove(currentPath.size() - 1);
+		visited.remove(node);
 	}
 
 	public class Node {
