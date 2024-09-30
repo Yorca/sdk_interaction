@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class PrivacyAPILoader {
 
 	public static void loadPrivacyAPIs(String jsonFilePath) {
@@ -21,9 +24,9 @@ public class PrivacyAPILoader {
 				String sdkName = entry.getKey();
 				JsonNode sdkNode = entry.getValue();
 
-				if ("Startapp" == sdkName || "HyprMX" == sdkName) {
-					continue;
-				}
+//				if ("Startapp" == sdkName || "HyprMX" == sdkName) {
+//					continue;
+//				}
 
 				List<PrivacyAPISummary.APIDescriptor> apis = new ArrayList<>();
 
@@ -44,8 +47,24 @@ public class PrivacyAPILoader {
 										apis.add(new PrivacyAPISummary.APIDescriptor(apiType, null, null, null, null,
 												true));
 									} else if (apiNode.isObject()) {
-										String apiClazzName = apiNode.get("apiClazzName").asText();
-										String apiMethodName = apiNode.get("apiMethodName").asText();
+
+										String apiSignature = apiNode.get("apiSignature").asText();
+										String regex = "<([\\w\\.]+):\\s+\\w+\\s+(\\w+)\\(.*\\)>";
+
+										Pattern pattern = Pattern.compile(regex);
+										Matcher matcher = pattern.matcher(apiSignature);
+
+//										String apiClazzName = apiNode.get("apiClazzName").asText();
+//										String apiMethodName = apiNode.get("apiMethodName").asText();
+
+										String apiClazzName = "";
+										String apiMethodName = "";
+
+										if (matcher.find()) {
+											apiClazzName = matcher.group(1);
+											apiMethodName = matcher.group(2);
+
+										}
 
 										// jimple uses <init> as method name for instance constructors.
 										if (apiMethodName.equals("$init")) {

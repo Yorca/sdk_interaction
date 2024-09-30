@@ -19,12 +19,15 @@ headers = {
 }
 
 last_download_time = datetime.now()
-
 execute_apk_list = []
 apk_path = f"{server_path}apks_new"
 if not os.path.exists(apk_path):
     os.makedirs(apk_path)
-with open(os.path.join(server_path, "downloaded_pkg.txt"), "r") as file:
+
+if os.path.exists(f"{server_path}downloaded_pkg.txt"):
+    with open(f"{server_path}downloaded_pkg.txt", "a") as file:
+        file.write("")
+with open(os.path.join(server_path, f"{server_path}downloaded_pkg.txt"), "r") as file:
     execute_apk_list = file.readlines()
 execute_apk_list = [apk.replace("\n", "") for apk in execute_apk_list]
 
@@ -111,6 +114,8 @@ def download_apk(package_name, apk_type):
                 file.write(chunk)
 
     execute_apk_list.append(package_name)
+    with open(f"{server_path}downloaded_pkg.txt", "a") as file:
+        file.write(f"{package_name}\n")
     global last_download_time
     last_download_time = datetime.now()
     return os.path.realpath(fname)
@@ -126,16 +131,11 @@ def process_apk(apk):
         except Exception as e:
             log_error("Download Failed", f"{apk}: {str(e)}")
 
-apk_data = pd.read_csv(f"{server_path}app_metadata_topfree_merged.csv")
-apk_list = []
-for index, row in apk_data.iterrows():
-    apk_list.append(row[0])
+with open(f"{server_path}download_tasks.txt", "r") as file:
+    apk_list = file.readlines()
+    apk_list = [apk.replace("\n", "") for apk in apk_list]
 
-# with open("/home/zh844971/sdk_interaction/downloaded.txt", "r") as file:
-#     downloaded_apks = file.readlines()
-#     downloaded_apks = [apk.replace("\n", "") for apk in downloaded_apks]
-apk_list.reverse()
-for apk in apk_list:
+for apk in apk_list[2500:3500]:
     if apk in execute_apk_list:
         print(f"has download: {apk}")
         continue
