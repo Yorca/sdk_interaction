@@ -1,7 +1,27 @@
+import json
 import subprocess
 import os
 import re
+import pandas as pd
 
+api_set_data = pd.read_excel("apis_set.xlsx")
+apis = []
+for _, row in api_set_data.iterrows():
+    apis.append(row[1])
+apis = list(set(apis))
+
+apis.remove("init")
+apis.remove("reset")
+apis.remove("initialize")
+apis.remove("setParam")
+apis.remove("start")
+apis.remove("pause")
+apis.remove("resume")
+apis.remove("ask")
+apis.remove("edit")
+apis.remove("GPP")
+apis.remove("CMP")
+apis.remove("block")
 
 def decompile_apk(apk_path):
     output_dir = apk_path + "_decompiled"
@@ -11,8 +31,7 @@ def decompile_apk(apk_path):
     return output_dir
 
 
-def search_method_in_files(method_name, class_name, root_dir):
-    method_name_pattern = rf'\.method.*?\b{re.escape(method_name)}\b.*?\n(.*?)\.end method'
+def search_method_in_files(root_dir, filename):
     for root, dirs, files in os.walk(root_dir):
         for file in files:
             if file.endswith(".smali"):
@@ -27,37 +46,34 @@ def search_method_in_files(method_name, class_name, root_dir):
                             cls_name = cls_name.replace('/', '.')
                         elif line.startswith('.method'):
                             mtd = line.split('(')[0].split(' ')[-1]
-                            if mtd == method_name:
-                                yield cls_name
+                            if mtd in apis:
+                                with open(f"res/{mtd}.json", "r") as f:
+                                    api_data = f.read()
+                                    print(api_data)
+                                    js_data = json.loads(api_data)
+                                    if cls_name not in js_data.keys():
+                                        js_data[cls_name] = [filename]
+                                    elif filename not in js_data[cls_name]:
+                                        js_data[cls_name].append(filename)
+                                with open(f"res/{mtd}.json", "w") as f:
+                                    f.write(json.dumps(js_data, indent=4))
 
-                    # if re.search(method_name_pattern, content, re.DOTALL):
-                    #     class_pattern = r'L(.*?);'  # Matches class definitions in smali files
-                    #     class_matches = re.findall(class_pattern, content)
-                    #     if class_matches:
-                    #         class_full_name = class_matches[0].replace('/', '.')
-                    #         class_last_element = class_full_name.split('.')[-1]
-                    #         # Check if class_name matches the last element or is empty
-                    #         if not class_name or class_last_element == class_name:
-                    #             print(content)
-                    #             yield class_full_name
+def configApis(apis):
+    for api in apis:
+        with open(f"res/{api}.json", "w") as file:
+            file.write(json.dumps({}, indent=4))
 
 
 
-def main(apk_path, method_name, class_name=""):
+def main(apk_path, filename):
     decompiled_dir = decompile_apk(apk_path)
-    print(f"Searching for method '{method_name}' in decompiled files...")
-    matched_classes = set(search_method_in_files(method_name, class_name, decompiled_dir))
+    search_method_in_files(decompiled_dir, filename)
 
-    if matched_classes:
-        print("Matched class names:")
-        for class_name in matched_classes:
-            print(class_name)
-    else:
-        print("No matching classes found.")
+apk_dir = "/Volumes/YorcaDisk/class_apks"
+configApis(apis)
+for filename in os.listdir(apk_dir):
+    if not filename.lower().endswith(".apk") and not filename.lower().endswith(".xapk"):
+        continue
+    apk_path = os.path.join(apk_dir, filename)
+    main(apk_path,filename)
 
-
-if __name__ == "__main__":
-    apk_path = "/Users/yorca/Downloads/Braindom_BrainGamesTest_2.3.2_Apkpure.apk"
-    method_name = "setIsAgeRestrictedUser"
-    class_name = ""
-    main(apk_path, method_name, class_name)

@@ -16,7 +16,7 @@ def search_keyword_in_files(keyword, root_dir):
             if file.endswith(".smali"):
                 file_path = os.path.join(root, file)
                 with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read().lower()
+                    content = f.read()
                     if keyword in content:
                         print(content)
                         for match in re.finditer(rf'\.method.*?{keyword}.*?\n(.*?)\.end method', content, re.DOTALL):

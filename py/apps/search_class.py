@@ -1,6 +1,19 @@
+import json
 import subprocess
 import os
 import re
+import pandas as pd
+import threading
+
+# Initialize a lock object
+file_lock = threading.Lock()
+
+# Load API data
+api_set_data = pd.read_excel("apis_set.xlsx")
+apis = list(set(api_set_data.iloc[:, 1]))
+apis = [api for api in apis if
+        api not in ["init", "reset", "initialize", "setParam", "start", "pause", "resume", "ask", "edit", "GPP", "CMP",
+                    "block"]]
 
 
 def decompile_apk(apk_path):
@@ -11,42 +24,66 @@ def decompile_apk(apk_path):
     return output_dir
 
 
-def search_method_in_files(method_name, class_name, root_dir):
-    method_name_pattern = rf'\.method.*?\b{re.escape(method_name)}\b.*?\n(.*?)\.end method'
+def search_method_in_files(root_dir, filename):
     for root, dirs, files in os.walk(root_dir):
         for file in files:
             if file.endswith(".smali"):
                 file_path = os.path.join(root, file)
                 with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                    if re.search(method_name_pattern, content, re.DOTALL):
-                        class_pattern = r'L(.*?);'  # Matches class definitions in smali files
-                        class_matches = re.findall(class_pattern, content)
-                        if class_matches:
-                            class_full_name = class_matches[0].replace('/', '.')
-                            class_last_element = class_full_name.split('.')[-1]
-                            # Check if class_name matches the last element or is empty
-                            if not class_name or class_last_element == class_name:
-                                print(content)
-                                yield class_full_name
+                    lines = f.readlines()
+                    cls_name = ""
+                    for line in lines:
+                        if line.startswith(".class"):
+                            cls_name = line.split(" ")[-1][1:-2].replace('/', '.')
+                        elif line.startswith('.method'):
+                            mtd = line.split('(')[0].split(' ')[-1]
+                            if mtd in apis:
+                                with file_lock:  # Lock for thread-safe file reading and writing
+                                    with open(f"res/{mtd}.json", "r") as f:
+                                        api_data = f.read()
+                                    js_data = json.loads(api_data)
+
+                                    if cls_name not in js_data:
+                                        js_data[cls_name] = [filename]
+                                    elif filename not in js_data[cls_name]:
+                                        js_data[cls_name].append(filename)
+
+                                    with open(f"res/{mtd}.json", "w") as f:
+                                        f.write(json.dumps(js_data, indent=4))
 
 
+def configApis(apis):
+    with file_lock:
+        for api in apis:
+            with open(f"res/{api}.json", "w") as file:
+                file.write(json.dumps({}, indent=4))
 
-def main(apk_path, method_name, class_name=""):
+
+def process_apk(apk_path, filename):
     decompiled_dir = decompile_apk(apk_path)
-    print(f"Searching for method '{method_name}' in decompiled files...")
-    matched_classes = set(search_method_in_files(method_name, class_name, decompiled_dir))
+    search_method_in_files(decompiled_dir, filename)
 
-    if matched_classes:
-        print("Matched class names:")
-        for class_name in matched_classes:
-            print(class_name)
-    else:
-        print("No matching classes found.")
+
+def main():
+    apk_dir = "/Volumes/YorcaDisk/class_apks"
+    configApis(apis)
+
+    threads = []
+
+    for filename in os.listdir(apk_dir):
+        if not filename.lower().endswith((".apk", ".xapk")):
+            continue
+        apk_path = os.path.join(apk_dir, filename)
+
+        # Create a new thread for each APK processing task
+        thread = threading.Thread(target=process_apk, args=(apk_path, filename))
+        threads.append(thread)
+        thread.start()
+
+    # Wait for all threads to finish
+    for thread in threads:
+        thread.join()
 
 
 if __name__ == "__main__":
-    apk_path = "/Users/yorca/Downloads/Braindom_BrainGamesTest_2.3.2_Apkpure.apk"
-    method_name = "setIsAgeRestrictedUser"
-    class_name = ""
-    main(apk_path, method_name, class_name)
+    main()

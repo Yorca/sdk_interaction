@@ -1,3 +1,5 @@
+import os
+
 import paramiko
 
 # Server details
@@ -7,27 +9,51 @@ password = '!Qwert825215'  # Your password (if using password authentication)
 # Alternatively, use key_filename for SSH key authentication, e.g., key_filename='/path/to/your/private/key'
 
 # File details
-local_file_path = '/Users/yorca/projects/sdk_interaction/py/apk_downloader/apks/ac.voicenote.voicerecorder.audio---Voice Recorder_6.1_APKPure.xapk'  # The file on your local machine
-remote_file_path = '/home/zh844971/sdk_interaction/apks3/ac.voicenote.voicerecorder.audio---Voice Recorder_6.1_APKPure.xapk'  # The path where the file will be saved on the server
+# local_file_path = '/Users/yorca/projects/sdk_interaction/py/apk_downloader/apks/ac.voicenote.voicerecorder.audio---Voice Recorder_6.1_APKPure.xapk'  # The file on your local machine
+# remote_file_path = '/home/zh844971/sdk_interaction/apks3/ac.voicenote.voicerecorder.audio---Voice Recorder_6.1_APKPure.xapk'  # The path where the file will be saved on the server
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect(hostname=hostname, username=username, password=password)
+sftp = ssh.open_sftp()
+source_dir = "/Volumes/YorcaDisk/apk_downloader_2"
+remote_dir = "/home/zh844971/sdk_interaction/apks_macpro"
+for filename in os.listdir(source_dir):
+    if not filename.lower().endswith("apk") and not filename.lower().endswith("xapk"):
+        continue
+    # if not filename == "ai.kanghealth---K Health | 24":
+    #     continue
+    print(filename)
+    local_file_path = os.path.join(source_dir, filename)
+    remote_file_path = os.path.join(remote_dir, filename)
+    with open("uploaded_apks.txt", "a") as file:
+        file.write(f"{filename.split('---')[0]}\n")
+    try:
+        sftp.put(local_file_path, remote_file_path)
+        os.remove(local_file_path)
+    except:
+        print(f"failed: {filename}")
 
-try:
-    # Create an SSH client
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+sftp.close()
+ssh.close()
 
-    # Connect to the server
-    ssh.connect(hostname=hostname, username=username, password=password)
-
-    # Open an SFTP session
-    sftp = ssh.open_sftp()
-
-    # Upload the file
-    sftp.put(local_file_path, remote_file_path)
-    print(f'File uploaded successfully to {remote_file_path}')
-
-    # Close the SFTP session and SSH connection
-    sftp.close()
-    ssh.close()
-
-except Exception as e:
-    print(f'Failed to upload file: {e}')
+# try:
+#     # Create an SSH client
+#     ssh = paramiko.SSHClient()
+#     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+#
+#     # Connect to the server
+#     ssh.connect(hostname=hostname, username=username, password=password)
+#
+#     # Open an SFTP session
+#     sftp = ssh.open_sftp()
+#
+#     # Upload the file
+#     sftp.put(local_file_path, remote_file_path)
+#     print(f'File uploaded successfully to {remote_file_path}')
+#
+#     # Close the SFTP session and SSH connection
+#     sftp.close()
+#     ssh.close()
+#
+# except Exception as e:
+#     print(f'Failed to upload file: {e}')

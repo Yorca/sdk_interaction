@@ -10,39 +10,31 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import traceback
 from datetime import datetime
-import paramiko
 
 # code ref: https://github.com/anishomsy/apkpure
 
-project_path = "/Users/yorca/projects/sdk_interaction/py/apk_downloader/"
+server_path = "/Users/yorca/projects/sdk_interaction/py/apk_downloader/"
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
 }
 
 last_download_time = datetime.now()
-apk_path = f"{project_path}apks"
 
-upload_record = f"{project_path}uploaded_apks.txt"
-if not os.path.exists(upload_record):
-    with open(upload_record, 'w') as file:
-        file.write('')
-with open(upload_record, "r") as file:
-    execute_apk_list = file.readlines()
-execute_apk_list = [apk.replace("\n", "") for apk in execute_apk_list]
-print(f"execute_apk_list = {execute_apk_list}")
+execute_apk_list = []
+apk_path = f"{server_path}apks_new"
 if not os.path.exists(apk_path):
     os.makedirs(apk_path)
-# for filename in os.listdir(apk_path):
-#     execute_apk_list.append(filename.split('---')[0])
+with open(os.path.join(server_path, "downloaded_pkg.txt"), "r") as file:
+    execute_apk_list = file.readlines()
+execute_apk_list = [apk.replace("\n", "") for apk in execute_apk_list]
 
-
-
-
+for filename in os.listdir(apk_path):
+    execute_apk_list.append(filename.split('---')[0])
 
 def log_error(TAG, info):
     current_time = datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-    with open(f"{project_path}download.log", "a") as file:
+    with open(f"{server_path}download.log", "a") as file:
         file.write(f"---------------------------------{formatted_time}\nTAG: {TAG}, error: {info}\n")
     print(f"ERROR - TAG: {TAG}  info: {info}")
 
@@ -79,13 +71,13 @@ def extract_apk_info_from_url(url):
         result.append({
             'version_code': version_code,
             'apk_type': apk_type
-        })
+       })
 
     return result[0]
 
 
-def download_apk(package_name, version_code,apk_type):
-    url = f"https://d.apkpure.com/b/{apk_type}/{package_name}?versionCode={version_code}"
+def download_apk(package_name, apk_type):
+    url = f"https://d.apkpure.com/b/{apk_type}/{package_name}?version=latest"
     print(f"url = {url}")
     response = get_response(
         url=url, stream=True, allow_redirects=True, headers=headers
@@ -98,12 +90,10 @@ def download_apk(package_name, version_code,apk_type):
     # fname = f".{apk_type.lower()}"
     fname = re.findall("filename=(.+)", d)[0].strip('"')
 
-    base_name = f"{package_name}---{fname}"
-    fname = os.path.join(os.getcwd(), f"{apk_path}/{base_name}")
+
+    fname = os.path.join(os.getcwd(), f"{apk_path}/{package_name}---{fname}")
 
     os.makedirs(os.path.dirname(fname), exist_ok=True)
-
-
     if os.path.exists(fname) and int(
             response.headers.get("content-length", 0)
     ) == os.path.getsize(fname):
@@ -119,87 +109,40 @@ def download_apk(package_name, version_code,apk_type):
         for chunk in response.iter_content(chunk_size=4 * 1024):
             if chunk:
                 file.write(chunk)
+
+    execute_apk_list.append(package_name)
     global last_download_time
     last_download_time = datetime.now()
-    execute_apk_list.append(package_name)
-    # try:
-    #     sftp.put(fname, f"{server_dir}/{base_name}")
-    #     os.remove(fname)
-    # except:
-    #     log_error("upload_failed", package_name)
-
-    # with open(upload_record, "a") as file:
-    #     file.write(f"{package_name}\n")
-
     return os.path.realpath(fname)
 
 
 def process_apk(apk):
     try:
-        apk_info = extract_apk_info_from_url(f"https://apkpure.com/apk/{apk}")
-        version_code = apk_info["version_code"]
-        apk_type = apk_info["apk_type"]
-
-        if version_code is None:
-            log_error(apk, "empty version code")
-            return
-        if apk_type is None:
-            log_error(apk, "empty apk type")
-            apk_type = 'APK'  # use APK to try
-
-        download_apk(apk, version_code, apk_type)
+        download_apk(apk, "APK")
     except Exception as e:
-        error_message = str(e)
-        stack_trace = traceback.format_exc()
-        log_error(apk, f"{error_message}\nStack trace:\n{stack_trace}")
-    # try:
-    #     download_apk(apk, "APK")
-    # except Exception as e:
-    #     try:
-    #         error_message = str(e)
-    #         stack_trace = traceback.format_exc()
-    #         log_error(apk, f"Download Failed {error_message}\nStack trace:\n{stack_trace}")
-    #         download_apk(apk, "XAPK")
-    #     except Exception as e:
-    #         error_message = str(e)
-    #         stack_trace = traceback.format_exc()
-    #         log_error(apk, f"Download Failed {error_message}\nStack trace:\n{stack_trace}")
+        try:
+            log_error("Download Failed", f"{apk}: {str(e)}")
+            download_apk(apk, "XAPK")
+        except Exception as e:
+            log_error("Download Failed", f"{apk}: {str(e)}")
 
-
-    # try:
-    #     apk_info = extract_apk_info_from_url(f"https://apkpure.com/apk/{apk}")
-    #     version_code = apk_info["version_code"]
-    #     apk_type = apk_info["apk_type"]
-    #
-    #     if version_code is None:
-    #         log_error(apk, "empty version code")
-    #         return
-    #     if apk_type is None:
-    #         log_error(apk, "empty apk type")
-    #         apk_type = 'APK'  # use APK to try
-    #
-    #     download_apk(apk, version_code, apk_type)
-    # except Exception as e:
-    #     error_message = str(e)
-    #     stack_trace = traceback.format_exc()
-    #     log_error(apk, f"{error_message}\nStack trace:\n{stack_trace}")
-
-apk_data = pd.read_csv(f"{project_path}app_metadata_topfree_merged.csv")
+apk_data = pd.read_csv(f"{server_path}app_metadata_topfree_merged.csv")
 apk_list = []
 for index, row in apk_data.iterrows():
     apk_list.append(row[0])
 
-
-# apk_list = ["com.stuzo.chevron", "com.facebook.katana"]
-
-for apk in apk_list[:3364]:
+# with open("/home/zh844971/sdk_interaction/downloaded.txt", "r") as file:
+#     downloaded_apks = file.readlines()
+#     downloaded_apks = [apk.replace("\n", "") for apk in downloaded_apks]
+apk_list.reverse()
+for apk in apk_list:
     if apk in execute_apk_list:
         print(f"has download: {apk}")
         continue
     current_time = datetime.now()
     time_difference = current_time - last_download_time
     minutes_difference = time_difference.total_seconds() / 60
-    if minutes_difference > 8:
-        log_error("Exceed max failed time", "no download over 8 minutes, stop, wait next timed task")
+    if minutes_difference > 10:
+        log_error("Exceed max failed time", "no download over 10 minutes, stop, wait next timed task")
         break
     process_apk(apk)
