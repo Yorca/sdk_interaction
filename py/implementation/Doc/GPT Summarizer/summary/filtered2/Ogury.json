@@ -1,0 +1,217 @@
+{
+    "SDK": "Ogury",
+    "privacy_APIs": [
+        {
+            "API_name": "setConsent",
+            "class_name": [
+                "OguryChoiceManagerExternal",
+                "OguryChoiceManagerExternal.TcfV2"
+            ],
+            "conditions": [
+                "Must be compliant with last GDPR requirements",
+                "CMP must be initialized before doing any ad request",
+                "Ogury SDK must be initialized before calling this method",
+                "Third-party CMP must be initialized before calling this method",
+                "The consent notice is registered in the IAB CMP list and produces IAB-specified consent string",
+                "Your CMP generates a TCFv2 consent string"
+            ],
+            "effects": [
+                "The consent must be valid to avoid being ignored",
+                "Transmits the user consent to the Ogury SDK",
+                "Indicates whether the user has consented or not",
+                "Transmits the consent of the vendors registered inside the IAB Global Vendor List",
+                "Call must be made again if user consent changes"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "iabString",
+                        "new Integer[0]"
+                    ],
+                    "conditions": [
+                        "The CMP generates a TCFv2 consent string and is not leveraging the IAB GDPR Consent Framework",
+                        "CMP is listed in the IAB CMP list and produces an IAB-specified consent string",
+                        "User consent needs to be collected before calling",
+                        "User has provided a valid IAB-specified consent string"
+                    ],
+                    "effects": [
+                        "Consent for vendors registered in the IAB Global Vendor List is transmitted to the Ogury SDK",
+                        "User consent is synchronized for ad requests",
+                        "The consent is synchronized with Ogury SDK"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "consentBoolean",
+                        "CUSTOM"
+                    ],
+                    "conditions": [
+                        "Consent from a CMP that is not compatible with TCFv2"
+                    ],
+                    "effects": [
+                        "Sets the consent status for the Ogury SDK"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "consentBoolean",
+                        "consentManagerName"
+                    ],
+                    "conditions": [
+                        "Using a third-party CMP that is not compatible with TCFv2"
+                    ],
+                    "effects": [
+                        "Sets the user consent to Ogury SDK"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "applyChildPrivacy",
+            "class_name": [
+                "",
+                "Ogury"
+            ],
+            "conditions": [],
+            "effects": [
+                "Indicates that the current user is a child for privacy treatment under COPPA and GDPR"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "OguryChildPrivacyTreatment.UNSPECIFIED"
+                    ],
+                    "conditions": [],
+                    "effects": []
+                },
+                {
+                    "parameter_values": [
+                        "OguryChildPrivacyTreatment.CHILD_UNDER_COPPA_TREATMENT_FALSE"
+                    ],
+                    "conditions": [],
+                    "effects": []
+                },
+                {
+                    "parameter_values": [
+                        "OguryChildPrivacyTreatment.CHILD_UNDER_COPPA_TREATMENT_TRUE"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "User receives treatment for users under COPPA"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "OguryChildPrivacyTreatment.UNDER_AGE_OF_GDPR_CONSENT_TREATMENT_FALSE"
+                    ],
+                    "conditions": [],
+                    "effects": []
+                },
+                {
+                    "parameter_values": [
+                        "OguryChildPrivacyTreatment.UNDER_AGE_OF_GDPR_CONSENT_TREATMENT_TRUE"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "User receives treatment for users under the age of GDPR consent"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setAdContentThreshold",
+            "class_name": [
+                "OguryAdRequests"
+            ],
+            "conditions": [],
+            "effects": [
+                "Filters ad content based on the specified threshold",
+                "Sets the ad content filtering level for Ogury ad requests"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "OguryAdRequests.AD_CONTENT_THRESHOLD_G"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Only ads suitable for general audiences, including families, are displayed"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "OguryAdRequests.AD_CONTENT_THRESHOLD_PG"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Ads suitable for most audiences with parental guidance are displayed"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "OguryAdRequests.AD_CONTENT_THRESHOLD_T"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Ads suitable for teen and older audiences are displayed"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "OguryAdRequests.AD_CONTENT_THRESHOLD_MA"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Only mature audience ads are displayed"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "ask",
+            "class_name": [
+                "OguryChoiceManager"
+            ],
+            "conditions": [
+                "Must be called at the launch of the application to ensure up-to-date consent",
+                "Must call ask method at each launch of the application"
+            ],
+            "effects": [
+                "Synchronizes consent status or displays the consent notice if needed"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "activity",
+                        "oguryConsentListener"
+                    ],
+                    "conditions": [],
+                    "effects": []
+                }
+            ]
+        },
+        {
+            "API_name": "edit",
+            "class_name": [
+                "OguryChoiceManager"
+            ],
+            "conditions": [
+                "Users need to be in a location where GDPR applies",
+                "Publishers need to ensure users can access and edit their consent choices"
+            ],
+            "effects": [
+                "Allows users to edit their previously given consent"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "activity",
+                        "oguryConsentListener"
+                    ],
+                    "conditions": [],
+                    "effects": []
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,248 @@
+{
+    "SDK": "Localytics",
+    "privacy_APIs": [
+        {
+            "API_name": "setOptedOut",
+            "class_name": [
+                "",
+                "Localytics"
+            ],
+            "conditions": [
+                "The user has requested to opt out of data collection.",
+                "Call this method to stop the Localytics SDK from collecting any additional data."
+            ],
+            "effects": [
+                "Prevents any future data from being collected, closes current session, and tags an opt out event.",
+                "Immediately closes the current session and tags an opt-out event indicating that the device is no longer reporting any further data.",
+                "stops the Localytics SDK from collecting any additional data, closes the current session, and tags an opt out event"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "any subsequent calls that would generate a datapoint (e.g., tagEvent) will be dropped",
+                        "All data collection is ceased; no further datapoints are generated.",
+                        "Subsequent data collection methods such as tagEvent and setProfileAttribute will be dropped.",
+                        "Triggers an opt-out event indicating that the device is no longer reporting any future data"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [
+                        "The user wants to opt back into data collection"
+                    ],
+                    "effects": [
+                        "Resumes data collection for the user."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setPrivacyOptedOut",
+            "class_name": [
+                "",
+                "Localytics"
+            ],
+            "conditions": [
+                "Triggered by an end user request to be forgotten under GDPR.",
+                "Call this method to delete all of the end user's data in accordance with GDPR."
+            ],
+            "effects": [
+                "Prevents future data collection and triggers the user's Right To Be Forgotten request.",
+                "deletes all of the end user's data and prevents any further data from being collected, as well as triggering a user's Right To Be Forgotten request"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Triggers the user's Right To Be Forgotten request, deleting historical data",
+                        "an indication that the user is no longer being tracked and all historical data will be deleted",
+                        "Deletes all historical data of the user and stops all data collection immediately.",
+                        "Trigers a user's Right To Be Forgotten request and clears all historical data."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [
+                        "The user wishes to resume data collection"
+                    ],
+                    "effects": [
+                        "Resumes normal data collection.",
+                        "the Localytics SDK may continue to collect and process data for the user",
+                        "Restores the state for data collection under a new customer ID"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "pauseDataUploading",
+            "class_name": [
+                "",
+                "Localytics"
+            ],
+            "conditions": [
+                "Should be called during the application's user consent journey.",
+                "Call this to pause data uploading while checking a user's opt-out status.",
+                "User's data collection opt-in status is not determined.",
+                "When determining the end user's opt-out status"
+            ],
+            "effects": [
+                "Pauses all data uploads while still collecting information.",
+                "pauses any data uploading to Localytics while still collecting information about the end user",
+                "Pauses data uploads and prevents data from being sent to Localytics"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Prevents data from being uploaded while consent is being verified",
+                        "Prevents any data from being uploaded until uploading is resumed."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [
+                        "Consent has been verified"
+                    ],
+                    "effects": [
+                        "Resumes the data upload process.",
+                        "Resumes normal data uploading to Localytics."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setCustomerIdWithPrivacyOptedOut",
+            "class_name": [
+                "",
+                "Localytics"
+            ],
+            "conditions": [
+                "user logs into the application and their privacy opt-out status is determined",
+                "User logs in or settings change that may affect data collection status.",
+                "The user is logging in and consent verification is performed",
+                "Called during the login process to manage customer ID and privacy opt-out status."
+            ],
+            "effects": [
+                "Updates the customer's ID and adjusts the data collection opt-out status."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "customerId",
+                        true
+                    ],
+                    "conditions": [
+                        "when verifying consent via your back-end"
+                    ],
+                    "effects": [
+                        "allow the application to adjust data collection according to the user's preferences"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "customerId",
+                        false
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "resumes collecting user data"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "CID",
+                        true
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Sets the customer's ID and marks the user as opted out of data collection."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "CID",
+                        false
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Restores the user's data collection status."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "newCustomerId",
+                        true
+                    ],
+                    "conditions": [
+                        "The user has opted out"
+                    ],
+                    "effects": [
+                        "The user ID is updated, and the opt-out status is recorded"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "newCustomerId",
+                        false
+                    ],
+                    "conditions": [
+                        "The user is opting back into data collection"
+                    ],
+                    "effects": [
+                        "Begins new data collection while ensuring previous data remains forgotten"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setLocationMonitoringEnabled",
+            "class_name": [
+                "",
+                "Localytics"
+            ],
+            "conditions": [
+                "Required to enable location services after the Localytics SDK is integrated.",
+                "Application requests to monitor user location, provided user consent is obtained."
+            ],
+            "effects": [
+                "Enables the monitoring of user location for geofencing features."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        true
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "User location monitoring is enabled."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        false
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "User location monitoring is disabled."
+                    ]
+                }
+            ]
+        }
+    ]
+}

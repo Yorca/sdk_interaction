@@ -1,0 +1,298 @@
+{
+    "SDK": "Adobe App Measurement for Android",
+    "privacy_APIs": [
+        {
+            "API_name": "getConsents",
+            "class_name": [
+                "Consent"
+            ],
+            "conditions": [],
+            "effects": [
+                "obtain the current collect consent preferences status",
+                "invoked with the current consents of the extension"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "callback"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "if an `AdobeCallbackWithError` is provided, an `AdobeError` can be returned in the eventuality of any error that occurred while getting the user consents"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "updateConsents",
+            "class_name": [
+                "Consent"
+            ],
+            "conditions": [
+                "User consents must be updated as per user input or policy."
+            ],
+            "effects": [
+                "programmatically update the consent collect for the application user",
+                "Updates the consent status for data collection based on user preferences."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "{consents}"
+                    ],
+                    "conditions": [
+                        "The consent values must be in the expected structure"
+                    ],
+                    "effects": [
+                        "updates the user consent status"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "consents"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Changes the consent state for personal data processing."
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        {
+                            "collect": {
+                                "val": "y"
+                            }
+                        },
+                        {
+                            "collect": {
+                                "val": "n"
+                            }
+                        }
+                    ],
+                    "conditions": [],
+                    "effects": []
+                }
+            ]
+        },
+        {
+            "API_name": "setPrivacyStatus",
+            "class_name": [
+                "MobileCore"
+            ],
+            "conditions": [
+                "The user must have provided consent before setting the privacy status."
+            ],
+            "effects": [
+                "Sets the privacy status, affecting how data is collected and processed.",
+                "set the privacy status for the user",
+                "sets the privacy status to either opted in, opted out, or unknown"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "MobilePrivacyStatus.OPT_IN",
+                        "MobilePrivacyStatus.OPT_OUT",
+                        "MobilePrivacyStatus.UNKNOWN"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "determines whether hits are sent or not based on the user's privacy status"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "MobilePrivacyStatus.OPT_IN"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "hits are sent for data collection",
+                        "User data is collected and sent.",
+                        "Hits are sent"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "MobilePrivacyStatus.OPT_OUT"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "User data is not collected or sent.",
+                        "Hits are not sent",
+                        "hits are not sent for data collection"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "MobilePrivacyStatus.UNKNOWN"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Data collection is queued until the status is clarified.",
+                        "hits are queued until status is known"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "getPrivacyStatus",
+            "class_name": [
+                "MobileCore"
+            ],
+            "conditions": [
+                "The privacy status must be set previously."
+            ],
+            "effects": [
+                "invoked with the current privacy status",
+                "Retrieves the current privacy status of the user."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "callback"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "provides the current privacy status as an output"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "getSdkIdentities",
+            "class_name": [
+                "MobileCore"
+            ],
+            "conditions": [
+                "must be called before the user opts out",
+                "User must not opt out before calling this function."
+            ],
+            "effects": [
+                "retrieve all the identifier data stored locally by the SDK as a JSON string",
+                "retrieve all identity data stored locally as a JSON string"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "callback"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "invoked with the SDK identities as a JSON string"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "AdobeCallback<String>"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "callback is invoked with the SDK identities as a JSON string"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "resetIdentities",
+            "class_name": [
+                "MobileCore"
+            ],
+            "conditions": [],
+            "effects": [
+                "resets all identities owned by each extension",
+                "Requests each extension to clear/reset the identities it holds."
+            ],
+            "parameter_configurations": []
+        },
+        {
+            "API_name": "setPushIdentifier",
+            "class_name": [
+                "MobileCore"
+            ],
+            "conditions": [
+                "if the current SDK privacy status is opted out, the push identifier is not set",
+                "should be called if the current SDK privacy status is not opted out"
+            ],
+            "effects": [
+                "Sets the device token for push notifications in the SDK."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "deviceToken"
+                    ],
+                    "conditions": [
+                        "deviceToken must not be null."
+                    ],
+                    "effects": [
+                        "The token is saved and used for push notifications.",
+                        "ensures the most up-to-date device token is set"
+                    ]
+                },
+                {
+                    "parameter_values": [
+                        "token"
+                    ],
+                    "conditions": [],
+                    "effects": []
+                },
+                {
+                    "parameter_values": [
+                        "pullDeviceToken"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "updates SDK with the new push identifier"
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "collectPii",
+            "class_name": [
+                "MobileCore"
+            ],
+            "conditions": [
+                "The privacy status must be set to allow collection."
+            ],
+            "effects": [
+                "Collects personally identifiable information (PII) but does not send it until a specific postback rule is activated."
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "data"
+                    ],
+                    "conditions": [],
+                    "effects": [
+                        "Allows the application to collect and store potentially sensitive data locally."
+                    ]
+                }
+            ]
+        },
+        {
+            "API_name": "setAppGroup",
+            "class_name": [
+                "MobileCore"
+            ],
+            "conditions": [
+                "only supported on iOS versions of Mobile Core"
+            ],
+            "effects": [
+                "sets the app group for sharing user defaults and files"
+            ],
+            "parameter_configurations": [
+                {
+                    "parameter_values": [
+                        "appGroupId"
+                    ],
+                    "conditions": [
+                        "must be called in AppDidFinishLaunching"
+                    ],
+                    "effects": [
+                        "First call will have effect on setting the app group"
+                    ]
+                }
+            ]
+        }
+    ]
+}
