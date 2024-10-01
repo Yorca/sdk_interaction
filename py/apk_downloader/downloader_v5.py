@@ -34,6 +34,12 @@ execute_apk_list = [apk.replace("\n", "") for apk in execute_apk_list]
 for filename in os.listdir(apk_path):
     execute_apk_list.append(filename.split('---')[0])
 
+def remove_failded_pkg(apk):
+    for filename in os.listdir(apk_path):
+        if filename.startswith(f"{apk}---"):
+            file_path = os.path.join(apk_path, filename)
+            os.remove(file_path)
+
 def log_error(TAG, info):
     current_time = datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -127,9 +133,11 @@ def process_apk(apk):
     except Exception as e:
         try:
             log_error("Download Failed", f"{apk}: {str(e)}")
+            remove_failded_pkg(apk)
             download_apk(apk, "XAPK")
         except Exception as e:
             log_error("Download Failed", f"{apk}: {str(e)}")
+            remove_failded_pkg(apk)
 
 with open(f"{server_path}download_tasks.txt", "r") as file:
     apk_list = file.readlines()
@@ -139,10 +147,25 @@ for apk in apk_list[2500:3500]:
     if apk in execute_apk_list:
         print(f"has download: {apk}")
         continue
+    last_stop_time_file = f"{server_path}last_stop_time.txt"
+
     current_time = datetime.now()
+    if os.path.exists(last_stop_time_file):
+        with open(last_stop_time_file, "r") as file:
+            time_str = file.read().strip()
+        if len(time_str) > 0:
+            time_format = "%Y-%m-%d %H:%M:%S.%f"
+            last_stop_time = datetime.strptime(time_str, time_format)
+            diff = (current_time - last_stop_time).total_seconds() / 60
+            print(diff)
+            if diff < 65:
+                break
+
     time_difference = current_time - last_download_time
     minutes_difference = time_difference.total_seconds() / 60
     if minutes_difference > 10:
         log_error("Exceed max failed time", "no download over 10 minutes, stop, wait next timed task")
+        with open(last_stop_time_file, "w") as file:
+            file.write(str(current_time))
         break
     process_apk(apk)
