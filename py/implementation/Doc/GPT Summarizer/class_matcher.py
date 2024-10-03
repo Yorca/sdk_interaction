@@ -22,15 +22,19 @@ def parse_class_info(filepath):
 class_matched_info = parse_class_info("data/class_match/method_class_match.txt")
 class_only_info = parse_class_info("data/class_match/method_only_match.txt")
 
-pri_gt = pd.read_excel("data/API_GT.xlsx")
+pri_gt = pd.read_excel("data/API_GT_NEW.xlsx")
 apis_info = {}
 
 for index, row in pri_gt.iterrows():
-    apis = row[2].split(",")
-    if "，" in row[2] or "；" in row[2] or ";" in row[2]:
-        print(row[2])
+    apis = row[1].split("/")
+    print(apis)
+    # if "，" in row[2] or "；" in row[2] or ";" in row[2]:
+    #     print(row[2])
     apis = [api.strip() for api in apis]
-    apis_info[row[0]] = apis
+    if row[0] in apis_info:
+        apis_info[row[0]] += apis
+    else:
+        apis_info[row[0]] = apis
 
 def append_matched_class(df, class_info):
     for index, row in df.iterrows():
@@ -60,6 +64,6 @@ for index, row in api_data.iterrows():
             founded_count += 1
 
 print(f"found {founded_count}/{apis_count}")
-api_data.to_csv("data/api_class_match.csv", index=False)
+api_data.to_csv("data/api_class_match3.csv", index=False)
 
 
