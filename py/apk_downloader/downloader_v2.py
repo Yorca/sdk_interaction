@@ -18,7 +18,7 @@ import paramiko
 hostname = 'brooks.cs.ucf.edu'
 username = 'zh844971'
 password = '!Qwert825215'
-server_dir = '/home/zh844971/sdk_interaction/apks3'
+server_dir = '/home/zh844971/sdk_interaction/apks1'
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect(hostname=hostname, username=username, password=password)
@@ -40,8 +40,8 @@ with open(upload_record, "r") as file:
     execute_apk_list = file.readlines()
 execute_apk_list = [apk.replace("\n", "") for apk in execute_apk_list]
 print(f"execute_apk_list = {execute_apk_list}")
-# if not os.path.exists(apk_path):
-#     os.makedirs(apk_path)
+if not os.path.exists(apk_path):
+    os.makedirs(apk_path)
 # for filename in os.listdir(apk_path):
 #     execute_apk_list.append(filename.split('---')[0])
 
@@ -94,8 +94,8 @@ def extract_apk_info_from_url(url):
     return result[0]
 
 
-def download_apk(package_name, apk_type):
-    url = f"https://d.apkpure.com/b/{apk_type}/{package_name}?version=latest"
+def download_apk(package_name, version_code,apk_type):
+    url = f"https://d.apkpure.com/b/{apk_type}/{package_name}?versionCode={version_code}"
     print(f"url = {url}")
     response = get_response(
         url=url, stream=True, allow_redirects=True, headers=headers
@@ -146,17 +146,34 @@ def download_apk(package_name, apk_type):
 
 def process_apk(apk):
     try:
-        download_apk(apk, "APK")
+        apk_info = extract_apk_info_from_url(f"https://apkpure.com/apk/{apk}")
+        version_code = apk_info["version_code"]
+        apk_type = apk_info["apk_type"]
+
+        if version_code is None:
+            log_error(apk, "empty version code")
+            return
+        if apk_type is None:
+            log_error(apk, "empty apk type")
+            apk_type = 'APK'  # use APK to try
+
+        download_apk(apk, version_code, apk_type)
     except Exception as e:
-        try:
-            error_message = str(e)
-            stack_trace = traceback.format_exc()
-            log_error(apk, f"Download Failed {error_message}\nStack trace:\n{stack_trace}")
-            download_apk(apk, "XAPK")
-        except Exception as e:
-            error_message = str(e)
-            stack_trace = traceback.format_exc()
-            log_error(apk, f"Download Failed {error_message}\nStack trace:\n{stack_trace}")
+        error_message = str(e)
+        stack_trace = traceback.format_exc()
+        log_error(apk, f"{error_message}\nStack trace:\n{stack_trace}")
+    # try:
+    #     download_apk(apk, "APK")
+    # except Exception as e:
+    #     try:
+    #         error_message = str(e)
+    #         stack_trace = traceback.format_exc()
+    #         log_error(apk, f"Download Failed {error_message}\nStack trace:\n{stack_trace}")
+    #         download_apk(apk, "XAPK")
+    #     except Exception as e:
+    #         error_message = str(e)
+    #         stack_trace = traceback.format_exc()
+    #         log_error(apk, f"Download Failed {error_message}\nStack trace:\n{stack_trace}")
 
 
     # try:
@@ -187,7 +204,7 @@ for index, row in apk_data.iterrows():
 
 with ThreadPoolExecutor(max_workers=10000) as executor:
     futures = []
-    for apk in apk_list[7000:]:
+    for apk in apk_list[:3364]:
         if apk in execute_apk_list:
             print(f"has download: {apk}")
             continue

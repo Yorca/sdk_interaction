@@ -106,7 +106,8 @@ def get_script_code(package_name):
     class_list = loadAllClasses()
     overload = f"""
     Java.perform(function () {{
-        function hookMethod(cls_name, methodName, pkg) {{
+        Java.deoptimizeEverything()
+        function hookMethod(cls_name, methodName, pkg, source) {{
             try {{
                 var clazz = Java.use(cls_name);
                 if (!clazz) {{
@@ -122,6 +123,7 @@ def get_script_code(package_name):
                         originalMethod.implementation = function () {{
                             send({{
                                 type: 'log',
+                                source: source,
                                 method: methodName,
                                 package_name: pkg,
                                 class_name: cls_name,
@@ -152,34 +154,35 @@ def get_script_code(package_name):
         cls_name = hook_method["Class"].strip()
         mtd_name = hook_method["API"].strip()
         overload += f"""
-        hookMethod("{cls_name}", "{mtd_name}", "{package_name}");
+        hookMethod("{cls_name}", "{mtd_name}", "{package_name}", "method");
         """
 
     for cls in class_list:
         cls = cls.strip()
 
-        # overload += f"""
-        #             try {{
-        #                 var clazz = Java.use("{cls}");
-        #                 for (var methodName in clazz) {{
-        #                     console.log("class name = " + cls + "method name = " + methodName)
-        #                     if (methodName === "$new") {{
-        #                     methodName = "$init";
-        #                     }}
-        #                     else if (methodName.startsWith("$")) {{
-        #                         continue;
-        #                     }}
-        #                     hookMethod("{cls}", methodName, "{package_name}");
-        #                 }}
-        #             }} catch (e) {{
-        #                 send({{
-        #                     type: 'error',
-        #                     package_name: "{package_name}",
-        #                     class_name: "{cls}",
-        #                     error: "" + e
-        #                 }});
-        #             }}
-        #             """
+        overload += f"""
+                    try {{
+                        var clazz = Java.use("{cls}");
+                        for (var methodName in clazz) {{
+                            console.log("class name = " + cls + "method name = " + methodName)
+                            if (methodName === "$new") {{
+                            methodName = "$init";
+                            }}
+                            else if (methodName.startsWith("$")) {{
+                                continue;
+                            }}
+                            hookMethod("{cls}", methodName, "{package_name}", "class");
+                        }}
+                    }} catch (e) {{
+                        send({{
+                            type: 'error',
+                            extra: "hook all methods error",
+                            package_name: "{package_name}",
+                            class_name: "{cls}",
+                            error: "" + e
+                        }});
+                    }}
+                    """
 
     overload += """
     });
@@ -193,7 +196,7 @@ def start_app(package_name):
         device = frida.get_usb_device()
         pid = device.spawn([package_name])
         session = device.attach(pid)
-        script = session.create_script(test_script)#(get_script_code(package_name))
+        script = session.create_script(get_script_code(package_name))
         with open("script.txt", "a") as file:
             file.write(get_script_code(package_name))
         script.on('message', on_message)
@@ -204,17 +207,18 @@ def start_app(package_name):
     except Exception as e:
         log_error("Running Error", f"pkg:{package_name}, {str(e)}")
 
-test_script = """
-     Java.perform(function () {{
-         let AppLovinPrivacySettings = Java.use("com.applovin.sdk.AppLovinPrivacySettings");
-         AppLovinPrivacySettings["setDoNotSell"].overload('boolean', 'android.content.Context').implementation = function (z, context) {{
-             console.log("enter");
-             console.log("AppLovinPrivacySettings.setDoNotSell is called: z=" + z + ", context=" + context);
-             this.setDoNotSell(z, context);
-         }};
-         
-        }});
-"""
+# test_script = """
+#      Java.perform(function () {{
+#          Java.deoptimizeEverything()
+#          let AppLovinPrivacySettings = Java.use("com.applovin.sdk.AppLovinPrivacySettings");
+#          AppLovinPrivacySettings["setDoNotSell"].overload('boolean', 'android.content.Context').implementation = function (z, context) {{
+#              console.log("enter");
+#              console.log("AppLovinPrivacySettings.setDoNotSell is called: z=" + z + ", context=" + context);
+#              this.setDoNotSell(z, context);
+#          }};
+#
+#         }});
+# """
 
 def run_monkey_taps(package_name):
     # Simulate taps using Monkey
@@ -226,12 +230,14 @@ def on_message(message, data):
         formatted_payload = json.dumps(payload, indent=4)
         type = payload.get('type')
         pkg = payload.get('package_name')
+
         if type == 'log':
+            print(formatted_payload)
             with open(f"log/apk_log/{pkg}.log", "a") as file:
-                file.write(formatted_payload + "\n")
+                file.write(formatted_payload + ",\n")
         elif type == "error":
             with open(f"log/apk_error/{pkg}.log", "a") as file:
-                file.write(formatted_payload +  "\n")
+                file.write(formatted_payload +  ",\n")
 
 def loadAllMethods():
     with open("data/apis.json", "r") as file:
@@ -246,7 +252,7 @@ def loadAllClasses():
 
 if __name__ == '__main__':
     device_path = "/data/local/tmp/"
-    path_list = ["test"]#["/Users/yorca/projects/sdk_interaction/testing_app/APKs"]
+    path_list = ["/Volumes/YorcaDisk/class_apks"]#["/Users/yorca/projects/sdk_interaction/testing_app/APKs"]
     for path in path_list:
         try:
             for filename in os.listdir(path):
@@ -276,7 +282,10 @@ if __name__ == '__main__':
                 device_file_path = f'{device_path}{filename}'
                 # if filename.endswith("xapk"):
                 #     extract_xapk()
-                subprocess.run(['adb', 'shell', 'pm', 'install', '-t', '-r', device_file_path])
+                result = subprocess.run(['adb', 'shell', 'pm', 'install', '-t', '-r', device_file_path])
+                if result.returncode != 0:
+                    log_error("Install Error", filename)
+                    continue
                 start_app(pkg_name)
                 subprocess.run(['adb', 'uninstall', pkg_name])
                 subprocess.run(['adb', 'shell', 'rm', device_file_path])

@@ -20,11 +20,11 @@ headers = {
 
 last_download_time = datetime.now()
 execute_apk_list = []
-apk_path = f"{server_path}apks_new"
+apk_path = "/Volumes/Yorca_T7/apks_new_2" #  f"{server_path}apks_new"
 if not os.path.exists(apk_path):
     os.makedirs(apk_path)
 
-if os.path.exists(f"{server_path}downloaded_pkg.txt"):
+if not os.path.exists(f"{server_path}downloaded_pkg.txt"):
     with open(f"{server_path}downloaded_pkg.txt", "a") as file:
         file.write("")
 with open(os.path.join(server_path, f"{server_path}downloaded_pkg.txt"), "r") as file:
@@ -143,29 +143,36 @@ with open(f"{server_path}download_tasks.txt", "r") as file:
     apk_list = file.readlines()
     apk_list = [apk.replace("\n", "") for apk in apk_list]
 
-for apk in apk_list[2500:3500]:
-    if apk in execute_apk_list:
-        print(f"has download: {apk}")
-        continue
-    last_stop_time_file = f"{server_path}last_stop_time.txt"
 
-    current_time = datetime.now()
-    if os.path.exists(last_stop_time_file):
-        with open(last_stop_time_file, "r") as file:
-            time_str = file.read().strip()
-        if len(time_str) > 0:
-            time_format = "%Y-%m-%d %H:%M:%S.%f"
-            last_stop_time = datetime.strptime(time_str, time_format)
-            diff = (current_time - last_stop_time).total_seconds() / 60
-            print(diff)
-            if diff < 65:
-                break
+with ThreadPoolExecutor(max_workers=10000) as executor:
+    futures = []
+    for apk in apk_list:
+        if apk in execute_apk_list:
+            print(f"has download: {apk}")
+            continue
+        last_stop_time_file = f"{server_path}last_stop_time.txt"
 
-    time_difference = current_time - last_download_time
-    minutes_difference = time_difference.total_seconds() / 60
-    if minutes_difference > 10:
-        log_error("Exceed max failed time", "no download over 10 minutes, stop, wait next timed task")
-        with open(last_stop_time_file, "w") as file:
-            file.write(str(current_time))
-        break
-    process_apk(apk)
+        current_time = datetime.now()
+        if os.path.exists(last_stop_time_file):
+            with open(last_stop_time_file, "r") as file:
+                time_str = file.read().strip()
+            if len(time_str) > 0:
+                time_format = "%Y-%m-%d %H:%M:%S.%f"
+                last_stop_time = datetime.strptime(time_str, time_format)
+                diff = (current_time - last_stop_time).total_seconds() / 60
+                # print(diff)
+                # if diff < 65:
+                #     break
+
+        time_difference = current_time - last_download_time
+        minutes_difference = time_difference.total_seconds() / 60
+        if minutes_difference > 10:
+            log_error("Exceed max failed time", "no download over 10 minutes, stop, wait next timed task")
+            with open(last_stop_time_file, "w") as file:
+                file.write(str(current_time))
+            break
+        futures.append(executor.submit(process_apk, apk))
+        time.sleep(3)
+
+    for future in as_completed(futures):
+        future.result()

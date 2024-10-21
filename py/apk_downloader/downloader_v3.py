@@ -113,8 +113,7 @@ def download_apk(package_name, version_code,apk_type):
 
     os.makedirs(os.path.dirname(fname), exist_ok=True)
 
-    global last_download_time
-    last_download_time = datetime.now()
+
     if os.path.exists(fname) and int(
             response.headers.get("content-length", 0)
     ) == os.path.getsize(fname):
@@ -130,7 +129,8 @@ def download_apk(package_name, version_code,apk_type):
         for chunk in response.iter_content(chunk_size=4 * 1024):
             if chunk:
                 file.write(chunk)
-
+    global last_download_time
+    last_download_time = datetime.now()
     execute_apk_list.append(package_name)
     try:
         sftp.put(fname, f"{server_dir}/{base_name}")
@@ -202,26 +202,18 @@ for index, row in apk_data.iterrows():
 
 # apk_list = ["com.stuzo.chevron", "com.facebook.katana"]
 
-with ThreadPoolExecutor(max_workers=10000) as executor:
-    futures = []
-    for apk in apk_list[:3364]:
-        if apk in execute_apk_list:
-            print(f"has download: {apk}")
-            continue
-        current_time = datetime.now()
-        time_difference = current_time - last_download_time
-        minutes_difference = time_difference.total_seconds() / 60
-        if minutes_difference > 8:
-            log_error("Exceed max failed time", "no download over 8 minutes, stop, wait next timed task")
-            sftp.close()
-            ssh.close()
-            break
-        futures.append(executor.submit(process_apk, apk))
-        time.sleep(3)
-
-
-    for future in as_completed(futures):
-        future.result()
-
-    sftp.close()
-    ssh.close()
+for apk in apk_list[:3364]:
+    if apk in execute_apk_list:
+        print(f"has download: {apk}")
+        continue
+    current_time = datetime.now()
+    time_difference = current_time - last_download_time
+    minutes_difference = time_difference.total_seconds() / 60
+    if minutes_difference > 8:
+        log_error("Exceed max failed time", "no download over 8 minutes, stop, wait next timed task")
+        sftp.close()
+        ssh.close()
+        break
+    process_apk(apk)
+sftp.close()
+ssh.close()

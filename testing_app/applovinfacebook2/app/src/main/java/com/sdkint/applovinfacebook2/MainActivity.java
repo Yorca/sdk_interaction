@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private void initApplovin() {
         testClass2.testFrida();
         new testClass2().testFrida2();
-        AppLovinPrivacySettings.setIsAgeRestrictedUser(true, this);
+        AppLovinPrivacySettings.setDoNotSell(true, this);
+        AppLovinPrivacySettings.setHasUserConsent(true, this);
         AppLovinSdk.getInstance( this ).setMediationProvider( "max" );
         AppLovinSdk.initializeSdk( this, new AppLovinSdk.SdkInitializationListener() {
             @Override

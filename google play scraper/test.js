@@ -1,4 +1,4 @@
 import gplay from "google-play-scraper";
 
-gplay.app({appId: 'com.facebook.katana'})
+gplay.app({appId: 'com.nianticlabs.pokemongo'})
     .then(console.log, console.log);
