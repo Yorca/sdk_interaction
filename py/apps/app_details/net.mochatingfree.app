@@ -1,0 +1,61 @@
+{
+    "title": "\u0627\u064a\u0645\u0648 \u062a\u062d\u062f\u064a\u062b 2024",
+    "description": "Through dating chats, you will get to know many friends in many different countries, whether inside or outside the country. You will also be able to send and receive many messages in private chat.\r\n\r\nChat for girls and boys is considered one of the best applications in the field of instant chat, and through it you will enjoy many advantages that any other chat application lacks.\r\n\r\nArabic Chat is one of the best messaging applications through which you can have many conversations with family and friends at the same time and add a wonderful group conversation.\r\n\r\nThrough the Dating Friends application, you can send and receive friend requests in chat and talk to anyone one-on-one easily. You can also send and receive media and exchange conversations in private.\r\n\r\nOne of the best applications that maintain privacy, as the application contains dozens of supervisors present at the same time to monitor any violation that may occur.",
+    "descriptionHTML": "Through dating chats, you will get to know many friends in many different countries, whether inside or outside the country. You will also be able to send and receive many messages in private chat.<br><br>Chat for girls and boys is considered one of the best applications in the field of instant chat, and through it you will enjoy many advantages that any other chat application lacks.<br><br>Arabic Chat is one of the best messaging applications through which you can have many conversations with family and friends at the same time and add a wonderful group conversation.<br><br>Through the Dating Friends application, you can send and receive friend requests in chat and talk to anyone one-on-one easily. You can also send and receive media and exchange conversations in private.<br><br>One of the best applications that maintain privacy, as the application contains dozens of supervisors present at the same time to monitor any violation that may occur.",
+    "summary": "Chat and talk to a lot of friends",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 106786,
+    "score": 3.8,
+    "ratings": 145,
+    "reviews": 15,
+    "histogram": [
+        37,
+        0,
+        8,
+        8,
+        91
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Blue APPS",
+    "developerId": "Blue+APPS",
+    "developerEmail": "maherhassanein4@gmail.com",
+    "developerWebsite": "https://x93cd6061.app-ads-txt.com/app-ads.txt",
+    "developerAddress": null,
+    "privacyPolicy": "https://sites.google.com/view/net-mochatingfree-app",
+    "genre": "Dating",
+    "genreId": "DATING",
+    "categories": [
+        {
+            "name": "Dating",
+            "id": "DATING"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/5ZuepqXnXfjv0qFfH_xlJfvsGdE8rtf4sWJnAQhbVRAbtnXEq-pHAdCVr_5LKY_0HA",
+    "headerImage": "https://play-lh.googleusercontent.com/30fEPfZSrTds5eHVI-IiZQgtrC7vk5kZXD2bHoOUZqeJ1EY5_8hXxk_lazrz73YHfun6",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/4XmRZFhpNn-cK4QHzzhVv3b1upy0dmgYF2TnUr1hXBd089zeLRU8HkQMlEGstNfsaNg",
+        "https://play-lh.googleusercontent.com/65uzCbtCcaW4Q-tD1Za8B8dMFKEJrzyp4tc0s0W2PI7OXVJdOUYQDjSCYFnH6T4f5Jp8"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Mature 17+",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "May 10, 2023",
+    "lastUpdatedOn": "Sep 23, 2024",
+    "updated": 1727155562,
+    "version": "3.0",
+    "comments": [],
+    "appId": "net.mochatingfree.app",
+    "url": "https://play.google.com/store/apps/details?id=net.mochatingfree.app&hl=en&gl=us"
+}

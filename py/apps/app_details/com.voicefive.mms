@@ -1,0 +1,63 @@
+{
+    "title": "My Mobile Secure VPN",
+    "description": "<b>VPN technology</b> prevents unwanted eyes from seeing what you are doing on your phone. This is especially helpful if you use your phone on public Wi-Fi hotspots like those found at coffee shops, hotels, parks and other locations. <font color=\"red\">Using public Wi-Fi without a VPN makes your phone vulnerable to hackers who could compromise your security by stealing your passwords, banking information, and even your identity.</font>   \r\n\r\n<b>No VPN Limits or In-App Advertising</b>\r\nMost VPNs cap the amount of data you can use or show you ads in the app, which impacts your experience. MyMobileSecure\u2019s VPN is always on and has <b>no usage limits, no ads, and unlimited bandwidth</b> at no cost to you.\r\n\r\n <b>Benefits of MyMobileSecure VPN</b>\r\n\ud83d\udd75\ufe0f <b>Helps prevent hacking.</b> MyMobileSecure uses advanced VPN technology to scramble your network traffic which helps to make it indecipherable to hackers.\r\n\r\n\ud83d\udd11<b>Unlocks your entertainment.</b> Binge on your favorite shows while travelling. MyMobileSecure routes your connection back to your home country letting you access home content while abroad. \r\n\r\n\ud83d\udd10 <b>Secures your information.</b> MyMobileSecure helps to keep the personal information you send and receive private wherever you want to log on, even when you\u2019re connected to a questionable public Wi-Fi hotspot. \r\n\r\n\ud83d\udca1 <b>Easy.</b> MyMobileSecure is always on. Simply flip a switch once and forget about it.\r\n\r\nMyMobileSecure is made available for participants in the MobileXpression research community run by Comscore, one of the world\u2019s largest research organizations. Sign up is easy and there is no cost to join. To make this possible, MobileXpression makes use of several technologies on your Android device to collect information about the mobile browsing, app use, and purchasing behavior of all device user(s), video streaming behavior (including secure sessions) and call and message frequency.\r\n\r\nAs part of our data collection, participants are asked to enable Accessibility Services during installation. Accessibility Services is used to collect the URLs visited on your browser(s), along with which apps are active on your device.  We collect this information to produce a variety of reports about internet and app usage trends by mobile device consumers. We share this information with third parties interested in mobile consumers.\r\n\r\nMyMobileSecure does not support the use of our VPN for illegally sharing copyrighted content. Users found to violate this policy will have their account terminated.\r\n\r\nFor full details on our privacy practices relating to the collection, use, and disclosure of information, we encourage you to read our <a href=\"https://www.google.com/url?q=https%3A%2F%2Fwww.mobilexpression.com%2Fprivacy.aspx&sa=D&sntz=1&usg=AOvVaw3UtxnMDSh2dZO0U1zmAyIr\">Privacy Policy and Terms of Service.</a>\r\n\r\n<font color=\"red\">Please note that VPN services like MyMobileSecure are not able to detect or prevent viruses. We recommend that you use a reliable antivirus program alongside MyMobileSecure.</font>",
+    "descriptionHTML": "<b>VPN technology</b> prevents unwanted eyes from seeing what you are doing on your phone. This is especially helpful if you use your phone on public Wi-Fi hotspots like those found at coffee shops, hotels, parks and other locations. <font color=\"red\">Using public Wi-Fi without a VPN makes your phone vulnerable to hackers who could compromise your security by stealing your passwords, banking information, and even your identity.</font>   <br><br><b>No VPN Limits or In-App Advertising</b><br>Most VPNs cap the amount of data you can use or show you ads in the app, which impacts your experience. MyMobileSecure\u2019s VPN is always on and has <b>no usage limits, no ads, and unlimited bandwidth</b> at no cost to you.<br><br> <b>Benefits of MyMobileSecure VPN</b><br>\ud83d\udd75\ufe0f <b>Helps prevent hacking.</b> MyMobileSecure uses advanced VPN technology to scramble your network traffic which helps to make it indecipherable to hackers.<br><br>\ud83d\udd11<b>Unlocks your entertainment.</b> Binge on your favorite shows while travelling. MyMobileSecure routes your connection back to your home country letting you access home content while abroad. <br><br>\ud83d\udd10 <b>Secures your information.</b> MyMobileSecure helps to keep the personal information you send and receive private wherever you want to log on, even when you\u2019re connected to a questionable public Wi-Fi hotspot. <br><br>\ud83d\udca1 <b>Easy.</b> MyMobileSecure is always on. Simply flip a switch once and forget about it.<br><br>MyMobileSecure is made available for participants in the MobileXpression research community run by Comscore, one of the world\u2019s largest research organizations. Sign up is easy and there is no cost to join. To make this possible, MobileXpression makes use of several technologies on your Android device to collect information about the mobile browsing, app use, and purchasing behavior of all device user(s), video streaming behavior (including secure sessions) and call and message frequency.<br><br>As part of our data collection, participants are asked to enable Accessibility Services during installation. Accessibility Services is used to collect the URLs visited on your browser(s), along with which apps are active on your device.  We collect this information to produce a variety of reports about internet and app usage trends by mobile device consumers. We share this information with third parties interested in mobile consumers.<br><br>MyMobileSecure does not support the use of our VPN for illegally sharing copyrighted content. Users found to violate this policy will have their account terminated.<br><br>For full details on our privacy practices relating to the collection, use, and disclosure of information, we encourage you to read our <a href=\"https://www.google.com/url?q=https%3A%2F%2Fwww.mobilexpression.com%2Fprivacy.aspx&amp;sa=D&amp;sntz=1&amp;usg=AOvVaw3UtxnMDSh2dZO0U1zmAyIr\">Privacy Policy and Terms of Service.</a><br><br><font color=\"red\">Please note that VPN services like MyMobileSecure are not able to detect or prevent viruses. We recommend that you use a reliable antivirus program alongside MyMobileSecure.</font>",
+    "summary": "Cutting-edge encryption and unthrottled speeds! Other VPNs don't compare.",
+    "installs": "5,000,000+",
+    "minInstalls": 5000000,
+    "realInstalls": 8159651,
+    "score": 3.528777,
+    "ratings": 19860,
+    "reviews": 2191,
+    "histogram": [
+        5748,
+        604,
+        1141,
+        2106,
+        10248
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "VoiceFive, Inc.",
+    "developerId": "VoiceFive,+Inc.",
+    "developerEmail": "support-team@mymobilesecure.com",
+    "developerWebsite": "http://www.mymobilesecure.com",
+    "developerAddress": "11950 Democracy Drive, Ste 600\nReston, VA 20190",
+    "privacyPolicy": "http://www.mobilexpression.com/privacy.aspx",
+    "genre": "Tools",
+    "genreId": "TOOLS",
+    "categories": [
+        {
+            "name": "Tools",
+            "id": "TOOLS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/p-g91WUy_D9fmjDJSIFzmsQsfLIO9hD2yoa5ZB1wuttJfsuDEvch654HQsCN5Zitn5Lo",
+    "headerImage": "https://play-lh.googleusercontent.com/uHZckGSwayBEuM3yabX7-iDNnUAi7wlZS8NgEoWovR5HctQXtKQBooEy37mnuAiuv-GM",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/_gCYLNy9fqeY5xG7r6Lrrg3XFLmjZG8MCL1TSVAyNNLJuMnA3giaLV1gzjyEEmpjZw",
+        "https://play-lh.googleusercontent.com/r6DhFeSYNacQhKexOTGkqm9Km--ncM0ZwxhW3pb1JRhtLeqEZdTMUr7h2v2RHSpFAg",
+        "https://play-lh.googleusercontent.com/uRTsN199JYT2DNLB9NQn_I07LnVI1zbWPu7M9Fsrhy3GW1Bb3HGUhgjgWozUFkPU_Q",
+        "https://play-lh.googleusercontent.com/_fqJ1E3bgFChIUVZKKhGrx0b4zHKB8tt3sNJ87I9EVjo_PQD5B8OxZXwBSvFjfzmtw"
+    ],
+    "video": "https://www.youtube.com/embed/2l8sqaIDdsk?ps=play&vq=large&rel=0&autohide=1&showinfo=0",
+    "videoImage": "https://play-lh.googleusercontent.com/uHZckGSwayBEuM3yabX7-iDNnUAi7wlZS8NgEoWovR5HctQXtKQBooEy37mnuAiuv-GM",
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Apr 26, 2018",
+    "lastUpdatedOn": "Oct 10, 2023",
+    "updated": 1696954721,
+    "version": "1.1.43.14",
+    "comments": [],
+    "appId": "com.voicefive.mms",
+    "url": "https://play.google.com/store/apps/details?id=com.voicefive.mms&hl=en&gl=us"
+}

@@ -1,0 +1,63 @@
+{
+    "title": "Wonder Tile",
+    "description": "Dive into the fun of block elimination! Combine 3 identical blocks to remove them, challenge your high score, and unleash endless fun. Come showcase your elimination skills and become the king of eliminations!",
+    "descriptionHTML": "Dive into the fun of block elimination! Combine 3 identical blocks to remove them, challenge your high score, and unleash endless fun. Come showcase your elimination skills and become the king of eliminations!",
+    "summary": "Come showcase your elimination skills, become the king of elimination!",
+    "installs": "500,000+",
+    "minInstalls": 500000,
+    "realInstalls": 833994,
+    "score": 2.94,
+    "ratings": 1713,
+    "reviews": 109,
+    "histogram": [
+        746,
+        95,
+        47,
+        95,
+        698
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "drmedia4u",
+    "developerId": "drmedia4u",
+    "developerEmail": "ma463ma463@gmail.com",
+    "developerWebsite": "https://keithley.excuseroad.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://docs.google.com/document/d/1ad37dih57EKhoVRfcd-hpplteNSb1VviPJpH0oUYAHg/edit?usp=sharing",
+    "genre": "Trivia",
+    "genreId": "GAME_TRIVIA",
+    "categories": [
+        {
+            "name": "Trivia",
+            "id": "GAME_TRIVIA"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/MKDC0AULcOYee9vbflJPmCO0dCpeNNyoIDmJn8tn-6ee0odLyp1mKYPyUEci7WHrQl0",
+    "headerImage": "https://play-lh.googleusercontent.com/6x8pZCWvK5oBTfUYnHPEwO49tKdviVC706wm2DzLsMpRb4eOu-hz7KoSxQJrVpWfEds",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/CXjq0XB3j3kVGrQl4tiglL8CW-3YFa1sB7Y5WnD4H_q3ePRbr5Om2lxRQ2GaZjDkmw",
+        "https://play-lh.googleusercontent.com/47YosoYwlCF1p-yeuC6Jx-Lhop3o33-GTm6fE15QKE-2rN5aEycppfHO3H7P2tL3N_t5",
+        "https://play-lh.googleusercontent.com/St0JEC52DQ_33cimQTv3bKbRYLKqrz-5PM9TwdtBR4bRDKqcIVe0qNlvpi9BTyUiIk4",
+        "https://play-lh.googleusercontent.com/KsIs1Osyqlyq0bOqLLIaN51D_L3_np71fvMQM30xFao30kwwCZMx143e1S56Lf8rDvk"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Mature 17+",
+    "contentRatingDescription": "Cash Prizes",
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Apr 14, 2024",
+    "lastUpdatedOn": "Apr 25, 2024",
+    "updated": 1714037657,
+    "version": "1.0.5",
+    "comments": [],
+    "appId": "topgame.wondertile.com",
+    "url": "https://play.google.com/store/apps/details?id=topgame.wondertile.com&hl=en&gl=us"
+}

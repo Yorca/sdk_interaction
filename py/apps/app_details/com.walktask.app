@@ -1,0 +1,63 @@
+{
+    "title": "WalkTask-Walking Step Counter",
+    "description": "WalkTask is a walking work app that allows you to redeem your steps for gift cards for walking and running, helping you to develop good fitness and exercise habits.\r\n\r\nPurchase goods, services and experiences with our partner brands on the Marketplace, earn coins through sweat, health is the prerequisite for everything, only when you get healthier can you get richer, make walking, exercise and fitness worthwhile!\r\n\r\nDownload WalkTask and you can redeem your favorite gift cards or products and services for free through the marketplace. Whether you're looking to lose weight, get in shape, or improve your health, WalkTask is the perfect app to keep you healthy.\r\n\r\nIf you think it's a great app for you, recommend us to your family and friends.\r\n\r\nECO-FRIENDLY: WalkTask will run in the background and does not waste power, we will count your steps for you by taking your movement and exercise distance.\r\n\r\nTOTAL PRIVACY: WalkTask doesn't get your location information, so you don't need to worry about any privacy leakage, and we don't share any information with any third party!\r\n\r\nCompletely Free: WalkTask is completely free and offers you to redeem goods and services.\r\n\r\nWe hope our app can make become a better and healthier you:\r\n\r\nSuggestions for questions: walktask@hotmail.com\r\n\r\nUser Agreement: https://utopian-phosphrus-8a1.notion.site/WalkTask-Terms-of-Use-b1f2d445f6694868824e4c025243b2f7\r\n\r\nPrivacy Agreement: https://utopian-phosphrus-8a1.notion.site/WalkTask-Privacy-Policy-222e38d0471042f4b32626379c585360\r\n\r\nDelete account: https://utopian-phosphrus-8a1.notion.site/How-to-delete-your-account-3176a26f820c436bbed241831462d0e7",
+    "descriptionHTML": "WalkTask is a walking work app that allows you to redeem your steps for gift cards for walking and running, helping you to develop good fitness and exercise habits.<br><br>Purchase goods, services and experiences with our partner brands on the Marketplace, earn coins through sweat, health is the prerequisite for everything, only when you get healthier can you get richer, make walking, exercise and fitness worthwhile!<br><br>Download WalkTask and you can redeem your favorite gift cards or products and services for free through the marketplace. Whether you&#39;re looking to lose weight, get in shape, or improve your health, WalkTask is the perfect app to keep you healthy.<br><br>If you think it&#39;s a great app for you, recommend us to your family and friends.<br><br>ECO-FRIENDLY: WalkTask will run in the background and does not waste power, we will count your steps for you by taking your movement and exercise distance.<br><br>TOTAL PRIVACY: WalkTask doesn&#39;t get your location information, so you don&#39;t need to worry about any privacy leakage, and we don&#39;t share any information with any third party!<br><br>Completely Free: WalkTask is completely free and offers you to redeem goods and services.<br><br>We hope our app can make become a better and healthier you:<br><br>Suggestions for questions: walktask@hotmail.com<br><br>User Agreement: https://utopian-phosphrus-8a1.notion.site/WalkTask-Terms-of-Use-b1f2d445f6694868824e4c025243b2f7<br><br>Privacy Agreement: https://utopian-phosphrus-8a1.notion.site/WalkTask-Privacy-Policy-222e38d0471042f4b32626379c585360<br><br>Delete account: https://utopian-phosphrus-8a1.notion.site/How-to-delete-your-account-3176a26f820c436bbed241831462d0e7",
+    "summary": "Redeem your steps for gift cards and walk for health and rewards for good habits",
+    "installs": "500,000+",
+    "minInstalls": 500000,
+    "realInstalls": 950989,
+    "score": 4.3142858,
+    "ratings": 37731,
+    "reviews": 101,
+    "histogram": [
+        3927,
+        1386,
+        1078,
+        3542,
+        27643
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "WalkTask",
+    "developerId": "WalkTask",
+    "developerEmail": "walktask@hotmail.com",
+    "developerWebsite": "https://www.walktask.com/",
+    "developerAddress": null,
+    "privacyPolicy": "https://utopian-phosphorus-8a1.notion.site/WalkTask-Privacy-Policy-222e38d0471042f4b32626379c585360",
+    "genre": "Health & Fitness",
+    "genreId": "HEALTH_AND_FITNESS",
+    "categories": [
+        {
+            "name": "Health & Fitness",
+            "id": "HEALTH_AND_FITNESS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/J14MdfCnQA_S1ivRpKLgQq2akmMX3yjHxSNVkcOxALh2D8Zr-C-UJaa8Qqc26_AsRQ",
+    "headerImage": "https://play-lh.googleusercontent.com/g_MDXjp9-6rIMOMW68ONoP-aA76mLTilL1JKCVjvLd2Y0DCOAAhh-eHjqxoEUuVxrw",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/3V0KN1TCVWM7Ll_YuJS3_UgG4w7-LTSihA_v0SP-W_EpxRtHUvcaZgxQAXitDqL4lQ",
+        "https://play-lh.googleusercontent.com/s5wqSRV2-p_0E_1GpiHc1JTlFD2al3ITSNXZRzvkWIII2nyRJTQNr_jFnZKNrK0HHl8",
+        "https://play-lh.googleusercontent.com/7gmlqfIbO9SO7Ft_kXzefZWFI28OzOpe0BsSwPjwozDrUOw8v2LKdtwoA9iWwb3mEOE",
+        "https://play-lh.googleusercontent.com/rMdb2eH3dSlMaqfmdYS7xH1IHn6B9Z4TwYi5RW6M4rrQn35Rs9CNDa1lxmvPtzEGjOQ"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Mature 17+",
+    "contentRatingDescription": "Cash Rewards",
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Aug 21, 2024",
+    "lastUpdatedOn": "Oct 17, 2024",
+    "updated": 1729178774,
+    "version": "1.0.11",
+    "comments": [],
+    "appId": "com.walktask.app",
+    "url": "https://play.google.com/store/apps/details?id=com.walktask.app&hl=en&gl=us"
+}

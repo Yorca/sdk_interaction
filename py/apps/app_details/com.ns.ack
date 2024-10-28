@@ -1,0 +1,63 @@
+{
+    "title": "ACK Comics",
+    "description": "The ACK Comics app, the digital storefront of Amar Chitra Katha, is now available for Android Tablets and Mobiles. This free app brings alive glorious stories from India. The riveting tales of India\u2019s myths and legends, kings and queens, thinkers and philosophers, explorers and adventurers are told with the help of spellbinding illustrations.\r\n\r\nWith the ACK Comics app you can now instantly purchase single titles or subscribe to read hundreds of Amar Chitra Katha digital comics. Our brand new subscription feature gives you access to your favourite comics at less than quarter the price. You can enjoy our subscription plans that start as low as $30 or INR  1999 for full access of 300+ titles!\r\n\r\nThe app is also available on all leading platforms, giving you access to all your purchased comics across multiple devices with a single user account. The \u2018Help\u2019 feature makes the app user friendly and easy to navigate. You can also access our official Facebook page \u2018The Amar Chitra Katha Studio\u2019 and get a sneak-peek into behind-the-scenes action!\r\n\r\nDiscover the Route to your Roots.\r\n\r\n* Features:\r\n\r\n\u2022 300+ Amar Chitra Katha Comics\r\n\u2022 Best in class reading experience\r\n\u2022 All-new subscription plans\r\n\u2022 Digitally remastered comics\r\n\u2022 Dedicated customer support \r\n\r\nWe are always happy to receive feedback about our app. If you have any thoughts about how we could make it better, or if you are facing any problems with it, please get in touch with us at appsupport@ack-media.com",
+    "descriptionHTML": "The ACK Comics app, the digital storefront of Amar Chitra Katha, is now available for Android Tablets and Mobiles. This free app brings alive glorious stories from India. The riveting tales of India\u2019s myths and legends, kings and queens, thinkers and philosophers, explorers and adventurers are told with the help of spellbinding illustrations.<br><br>With the ACK Comics app you can now instantly purchase single titles or subscribe to read hundreds of Amar Chitra Katha digital comics. Our brand new subscription feature gives you access to your favourite comics at less than quarter the price. You can enjoy our subscription plans that start as low as $30 or INR  1999 for full access of 300+ titles!<br><br>The app is also available on all leading platforms, giving you access to all your purchased comics across multiple devices with a single user account. The \u2018Help\u2019 feature makes the app user friendly and easy to navigate. You can also access our official Facebook page \u2018The Amar Chitra Katha Studio\u2019 and get a sneak-peek into behind-the-scenes action!<br><br>Discover the Route to your Roots.<br><br>* Features:<br><br>\u2022 300+ Amar Chitra Katha Comics<br>\u2022 Best in class reading experience<br>\u2022 All-new subscription plans<br>\u2022 Digitally remastered comics<br>\u2022 Dedicated customer support <br><br>We are always happy to receive feedback about our app. If you have any thoughts about how we could make it better, or if you are facing any problems with it, please get in touch with us at appsupport@ack-media.com",
+    "summary": "The ACK Comics app, is now available on Android Tablets and Android Mobiles.",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 276876,
+    "score": 3.1666667,
+    "ratings": 1675,
+    "reviews": 50,
+    "histogram": [
+        460,
+        268,
+        89,
+        179,
+        639
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$0.49 - $70.00 per item",
+    "developer": "AMAR CHITRA KATHA PRIVATE LIMITED",
+    "developerId": "AMAR+CHITRA+KATHA+PRIVATE+LIMITED",
+    "developerEmail": "digital@amarchitrakatha.in",
+    "developerWebsite": "http://digital.amarchitrakatha.com/",
+    "developerAddress": "2ND FLOOR, 204, DHANTAK PLAZA, MAKWANA ROAD,\nGAMDEVI MAROL, ANDHERI, Mumbai, Maharashtra,400059",
+    "privacyPolicy": "https://digital.amarchitrakatha.com/privacy",
+    "genre": "Comics",
+    "genreId": "COMICS",
+    "categories": [
+        {
+            "name": "Comics",
+            "id": "COMICS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/RUIdjsN1h23kPMEBs3HPX1mcbR4G_GoZe-c1m2R8thD7oDDgEouyNrO4frdlRP48_w",
+    "headerImage": "https://play-lh.googleusercontent.com/j-Hw4_TwHOcG6Ts1_el_2ck-LpDj13E9LbQQ057spI_xdJxdjcL6F5DzsZS4yt7FonsW",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/NsSmaxCgE608FEQ9Q0PYK5VndGFAjHMFvCR7JYrfKtdH9n9MZKVazTZrRQVBUaHS9ZQ",
+        "https://play-lh.googleusercontent.com/f8rHM-0GLgvK_XR4g6AA2bn9oLvYoNkPhF5PyZxbjD7QfJ11PokGUqbT0tpaMotufJG3",
+        "https://play-lh.googleusercontent.com/xq-nZCc6nPA8tssNdyPHUOegYrQqPX4NL67IhD8Q48MAzHcTDYvH5Dgn6EXfZN6ZFw",
+        "https://play-lh.googleusercontent.com/uwSxTZ4L7uyW0UeozMM6qPiYouIsw5fs8MA6w94rEDdWr9bsTAsWoyZLkL9T2Z-7iPhQ"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Feb 6, 2014",
+    "lastUpdatedOn": "Sep 21, 2023",
+    "updated": 1695289821,
+    "version": "2.3.8",
+    "comments": [],
+    "appId": "com.ns.ack",
+    "url": "https://play.google.com/store/apps/details?id=com.ns.ack&hl=en&gl=us"
+}

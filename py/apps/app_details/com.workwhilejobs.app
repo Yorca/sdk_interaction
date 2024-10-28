@@ -1,0 +1,63 @@
+{
+    "title": "WorkWhile",
+    "description": "WorkWhile matches you to jobs that fit your skills, schedule, and location.  You\u2019ll get access to full-time and on-demand jobs. Get paid the next day after every shift you work. \r\n\r\nJoin our workforce, choose the work that fits into your life, and earn more today!\r\n\r\nHow it works:\r\n- Use our app to sign up for a WorkWhile account\r\n- Complete our short virtual Orientation\r\n- Choose from a wide variety of jobs: Warehouse associate, Delivery driver, General labor, and more\r\n- Get paid the next day \r\n- Get support when you need it - from a real person on our team\r\n\r\nWorkWhile relies on your location in the background to make sure you're on the job site and help you get paid quickly.",
+    "descriptionHTML": "WorkWhile matches you to jobs that fit your skills, schedule, and location.  You\u2019ll get access to full-time and on-demand jobs. Get paid the next day after every shift you work. <br><br>Join our workforce, choose the work that fits into your life, and earn more today!<br><br>How it works:<br>- Use our app to sign up for a WorkWhile account<br>- Complete our short virtual Orientation<br>- Choose from a wide variety of jobs: Warehouse associate, Delivery driver, General labor, and more<br>- Get paid the next day <br>- Get support when you need it - from a real person on our team<br><br>WorkWhile relies on your location in the background to make sure you&#39;re on the job site and help you get paid quickly.",
+    "summary": "Find jobs in your area",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 344009,
+    "score": 4.147177,
+    "ratings": 4949,
+    "reviews": 1134,
+    "histogram": [
+        767,
+        159,
+        189,
+        289,
+        3541
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "WorkWhile",
+    "developerId": "WorkWhile",
+    "developerEmail": "hello@workwhilejobs.com",
+    "developerWebsite": "https://workwhilejobs.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://workwhilejobs.com/privacy_policy",
+    "genre": "Business",
+    "genreId": "BUSINESS",
+    "categories": [
+        {
+            "name": "Business",
+            "id": "BUSINESS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/jDfD8FggqZ1uPgIZXWtfws7afx8638-dTaewpuVO9ww1ZaWd83EeRo2iU9zlUEqqiA",
+    "headerImage": "https://play-lh.googleusercontent.com/4sx0T0VEL3P7AWX3Zo61YCsBwBRLMUhtAKxL111eLI8pPbBbVRB8FqI9cm_Cyx2jmY0",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/kxIFrnlQNEeZqx0B8mcdxE47tzfRGrtFmGG4d2yI7Mn_LdKoK7kGFjeWIYfu_jtqNw",
+        "https://play-lh.googleusercontent.com/V3H7nN_Eogec5-skBEC_N-6bSuhPPNdYe4I70HgEzJX54d4Rw0HXifi0stR5QpHHtEZj",
+        "https://play-lh.googleusercontent.com/yNR2qS-TZtCaAuH_r_-bsJ36TxXY_3VbrAQInpfeU09X_NNCwZ-Ij5AaevvQ_6QqZKOl",
+        "https://play-lh.googleusercontent.com/NcQLWdNLzRf4--BDJvx-kf76CqerBlM7XzhWeFbIy3uM03o66SRwE24_tySj1DuTdiST"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Oct 16, 2019",
+    "lastUpdatedOn": "Oct 18, 2024",
+    "updated": 1729287046,
+    "version": "2.47.0",
+    "comments": [],
+    "appId": "com.workwhilejobs.app",
+    "url": "https://play.google.com/store/apps/details?id=com.workwhilejobs.app&hl=en&gl=us"
+}

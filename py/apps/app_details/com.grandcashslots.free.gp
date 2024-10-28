@@ -1,0 +1,101 @@
+{
+    "title": "Grand Cash Casino Slots Games",
+    "description": "\ud83d\udd25<b>Start your slot journey with 10,000,000 WELCOME BONUS!</b>Experience the real casino machines, WIN BIG with Grand Jackpot\uff01Enjoy the endless fun from GRAND CASH SLOTS\uff01\ud83d\udd25\r\n\r\n\ud83c\udf89 Splendid and magnification machine, Incredibly novel Slots you have ever seen so far! Chance to get 10,000,000,000+ of world free casino slot games Jackpots!\ud83c\udf89\r\n\r\n\ud83d\udc8e<b>More details of Grand Cash Slots game\uff01</b> \ud83d\udc8e \r\n\ud83c\udfb0[Zeus] Collect temple symbols then face the LIGHTNING STORM! \r\n\ud83c\udfb0[EGYPT SCARAB]Find mysterious EGYPT SCARAB TOGETHER. \r\n\ud83c\udfb0[PIRATE CAPTAIN]Explore the unknown, Discover HUGE TREASURE! \r\n\ud83c\udfb0[Golden Piggy] Old school cash casino slot + brand new gameplay! More PIGGIES! More FREE SPINS! More JACKPOTS! \r\n\ud83c\udfb0[Fortune Dragon] FORTUNE or FREE GAMES? Choose your own way to WIN! Dragon will bring you GOOD LUCK! \r\n\ud83c\udfb0[Little Hot Devil] Collect wild symbols and play PICK BONUS to win JACKPOT!\r\n\ud83c\udfb0[FRANKENSTEIN MONSTER] Fill the collection progress to trigger the SUPPER FREE SPINS! \r\n\ud83c\udfb0[PANDA MAGIC] Ancient and Lovely Panda is waiting for you! Feed them bamboo to get FULL-SCREEN Wilds! \r\n...\r\n\r\n\ud83d\ude00<b>Get ready for fantastic JOURNEY?</b>\ud83d\ude00 \r\n\ud83c\udf1fEasy to HIT JACKPOT! \r\n\ud83c\udf1fHuge payouts, incredible HUGE WIN, MASSIVE WIN, and APOCALYPTIC WIN!\r\n\ud83c\udf1fUnlimited FREE COINS! \r\n\ud83c\udf1fUpgrade FANCY machine WEEKLY!\r\n\ud83c\udf1fMake friends in the WORLDWIDE during GAME TIMES! \r\n...\r\n\r\n\ud83e\udd29<b>Beyond your imagination! </b> \ud83e\udd29\r\n\ud83d\uddbcExquisite ALBUM COLLECTION: Gather grand beauty cards in course of SPIN and huge BONUSES at the same time! \r\n\ud83d\uddffBraver quest: Challenge different quests in your journey, Bravest won the PRIZE! \r\n\ud83c\udf9fBingo Ball: Make superposition of huge PRIZE with Bingo Ball! \r\n\r\nIf you want to know about Grand Cash Slots, Please visit our Fans Page, We are always excited to get your feedback. \r\n\ud83d\udd87Like us on facebook:https://www.facebook.com/Grand-Cash-Slots-103766325136143 \r\n\ud83d\udd87Email: slotsservice1@gmail.com \r\n\ud83d\udd87Privacy Notice:  https://d28w1kh1yrgkq0.cloudfront.net/policy/policy-slotsservice1.html\r\n\r\nThis game is intended for an adult audience (18+) for amusement purposes only and does not offer 'real money' gambling, or an opportunity to win real money or prizes based on gameplay.",
+    "descriptionHTML": "\ud83d\udd25<b>Start your slot journey with 10,000,000 WELCOME BONUS!</b>Experience the real casino machines, WIN BIG with Grand Jackpot\uff01Enjoy the endless fun from GRAND CASH SLOTS\uff01\ud83d\udd25<br><br>\ud83c\udf89 Splendid and magnification machine, Incredibly novel Slots you have ever seen so far! Chance to get 10,000,000,000+ of world free casino slot games Jackpots!\ud83c\udf89<br><br>\ud83d\udc8e<b>More details of Grand Cash Slots game\uff01</b> \ud83d\udc8e <br>\ud83c\udfb0[Zeus] Collect temple symbols then face the LIGHTNING STORM! <br>\ud83c\udfb0[EGYPT SCARAB]Find mysterious EGYPT SCARAB TOGETHER. <br>\ud83c\udfb0[PIRATE CAPTAIN]Explore the unknown, Discover HUGE TREASURE! <br>\ud83c\udfb0[Golden Piggy] Old school cash casino slot + brand new gameplay! More PIGGIES! More FREE SPINS! More JACKPOTS! <br>\ud83c\udfb0[Fortune Dragon] FORTUNE or FREE GAMES? Choose your own way to WIN! Dragon will bring you GOOD LUCK! <br>\ud83c\udfb0[Little Hot Devil] Collect wild symbols and play PICK BONUS to win JACKPOT!<br>\ud83c\udfb0[FRANKENSTEIN MONSTER] Fill the collection progress to trigger the SUPPER FREE SPINS! <br>\ud83c\udfb0[PANDA MAGIC] Ancient and Lovely Panda is waiting for you! Feed them bamboo to get FULL-SCREEN Wilds! <br>...<br><br>\ud83d\ude00<b>Get ready for fantastic JOURNEY?</b>\ud83d\ude00 <br>\ud83c\udf1fEasy to HIT JACKPOT! <br>\ud83c\udf1fHuge payouts, incredible HUGE WIN, MASSIVE WIN, and APOCALYPTIC WIN!<br>\ud83c\udf1fUnlimited FREE COINS! <br>\ud83c\udf1fUpgrade FANCY machine WEEKLY!<br>\ud83c\udf1fMake friends in the WORLDWIDE during GAME TIMES! <br>...<br><br>\ud83e\udd29<b>Beyond your imagination! </b> \ud83e\udd29<br>\ud83d\uddbcExquisite ALBUM COLLECTION: Gather grand beauty cards in course of SPIN and huge BONUSES at the same time! <br>\ud83d\uddffBraver quest: Challenge different quests in your journey, Bravest won the PRIZE! <br>\ud83c\udf9fBingo Ball: Make superposition of huge PRIZE with Bingo Ball! <br><br>If you want to know about Grand Cash Slots, Please visit our Fans Page, We are always excited to get your feedback. <br>\ud83d\udd87Like us on facebook:https://www.facebook.com/Grand-Cash-Slots-103766325136143 <br>\ud83d\udd87Email: slotsservice1@gmail.com <br>\ud83d\udd87Privacy Notice:  https://d28w1kh1yrgkq0.cloudfront.net/policy/policy-slotsservice1.html<br><br>This game is intended for an adult audience (18+) for amusement purposes only and does not offer &#39;real money&#39; gambling, or an opportunity to win real money or prizes based on gameplay.",
+    "summary": "Play Lotsa Vegas Slots Machine Games Online and Spin to Win Frenzy Jackpots!",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 3635872,
+    "score": 4.7742248,
+    "ratings": 327021,
+    "reviews": 20382,
+    "histogram": [
+        3407,
+        1538,
+        7693,
+        40191,
+        274185
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$0.99 - $219.99 per item",
+    "developer": "Gamehaus Network",
+    "developerId": "Gamehaus+Network",
+    "developerEmail": "slotsservice1@gmail.com",
+    "developerWebsite": "https://www.gamehaus.com/",
+    "developerAddress": "SUCCESS COMM BLDG 245-251 HENNESSY ROAD HK",
+    "privacyPolicy": "https://d28w1kh1yrgkq0.cloudfront.net/policy/policy-slotsservice1.html",
+    "genre": "Casino",
+    "genreId": "GAME_CASINO",
+    "categories": [
+        {
+            "name": "Casino",
+            "id": "GAME_CASINO"
+        },
+        {
+            "name": "Slots",
+            "id": null
+        },
+        {
+            "name": "Casual",
+            "id": "GAME_CASUAL"
+        },
+        {
+            "name": "Single player",
+            "id": null
+        },
+        {
+            "name": "Stylized",
+            "id": null
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/OWxUtxwZj4RBVpNkHciPUn4dsAYsjAO4ZCZpXvyT0JIf-uUjf1dSk07upiKcbrDeXQ",
+    "headerImage": "https://play-lh.googleusercontent.com/C5wKCjP9uMSaIlielKFd8K58iF6egEzrM2LVMVLykCH-7ZLKpCXbvvX49lX4bbMMKfs",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/EjEmzLxNTGWzxoP1xKkMXugOKMfz48Nz53lats9Cy_67ZloNOaj1Q7kxpf-H0K9JHA",
+        "https://play-lh.googleusercontent.com/cggk3OWSGDAOjaGiJY-ljbV6uIoNHIFtCKsBVF-RbLRTLYgk6p3Th-ROB1kfaqPouiQ",
+        "https://play-lh.googleusercontent.com/nd9_TOuRK0Y6IesXcfzbp4nGcjVQ8vckiLHUm9nVRV2BSSFcHT3GwKThHhil97k9gDg",
+        "https://play-lh.googleusercontent.com/Rd5lDfqcRgWB5EF4ENPhtJT6KvOyZ_A2Y7v-c-uxtJ3GcX2bmDj8o9DRiLytWMGV7jw",
+        "https://play-lh.googleusercontent.com/Rp_8mcQjYwkR31GtYn3x4XcFWZhV55zKmO22HOQrmjX7F2E3wX5E9HmHgLfmbRNaAoMa",
+        "https://play-lh.googleusercontent.com/fe9n3HdIz9Ri7CY3EnleuXNqoG7bHaptYMxwLrKuiqhCUyaog-51vV95TKZG-Ls5Lbk",
+        "https://play-lh.googleusercontent.com/h-ou0At8dDT96PBaIQ5-4dY3JEaBOQlIdOyhi55s9YlnqriEEj-TX1LsDa7R3nJZwEQ",
+        "https://play-lh.googleusercontent.com/Cl_Z_ICeUwjckdK8aKPxlKW-e1gBuxogwjZwqhOxnC8SzfraZdpKcmjerbg2hf9cmYc",
+        "https://play-lh.googleusercontent.com/_mZAjdi2MaXvso1P51HaVsQjTt3S391DIzGwsW6xA9eOnYqorAmx4YQHTK4fPvuSQw",
+        "https://play-lh.googleusercontent.com/s8iiMxPJwsjBxsGdNFNf9bBv-dQi7viUZ7Wovmd7LYSfiMbAAzZZ33nzgbvR8jsEpi8",
+        "https://play-lh.googleusercontent.com/-2yOWeRt1Ru-hL0BMJHLJCf4IgRwa0n2Z-1AYebn3ewfvpfVu1BdaNzMdiPHsGUMXcs",
+        "https://play-lh.googleusercontent.com/w1BHBcNXq3rst7C78eN-CrbWWE3EEBqH9sgWu3hBNfcXPQ3hUB-RXTgpGJc7yrdN9-0",
+        "https://play-lh.googleusercontent.com/4IwASTKbKhT5y8xiJxeyW_jnwrsXtK7Of5G_0VN2cBuMVZbfEnJAcXNS82XeWDLVXw",
+        "https://play-lh.googleusercontent.com/xMTUJzDd1EYFz__fpJcP0ZKGWc2wPdxzNppX7fiN-f3u9wdWDlJYJ-z8oxWoCQo_mA",
+        "https://play-lh.googleusercontent.com/UX5afeo3ZxsGH4QLsee0120FpcSiXp34xK-TwuqJ6_GJ5PgbWf1FSb-PyT_SWVQlAODs",
+        "https://play-lh.googleusercontent.com/eHO3MD68g8BINMWHfyPAL3_mCbyr68Rg33rKxroX3zNShBaRIw4eI80xlULopfIxdA",
+        "https://play-lh.googleusercontent.com/cEaIqa_GC5Chx93bgskwiuspjI3xzlMWKNDsRUnhZgq1oARKDx61KH74aDsWCcgHVK4",
+        "https://play-lh.googleusercontent.com/FqNQFbDbRFTJvO1sUjErlL__oWkBtMonj5prjsx0u-fSNKAv3iuVhTZF4Ahhmwa0cVo",
+        "https://play-lh.googleusercontent.com/iTjSd2EhjR1DKKVPs9K40v4fUR99IURUOvMJU6qjXBpQn7z0ZHzOJ8I_i3ur9MI5STA",
+        "https://play-lh.googleusercontent.com/5bGSGsnH7u3YfmYMLu7st6M8HwUmyxzg1Ev5qYTngCUQfxjJAH9Njbfct1VOU_Znw8E",
+        "https://play-lh.googleusercontent.com/H83Gc3cKmc5Ub_b959L-2bjIokCV0m8wIgopcxw3eBB_3VQ0UmnAmzC3n4aItXIwpkA",
+        "https://play-lh.googleusercontent.com/7YGgAnpwA2hoBAJF9b6TXEatZa0n_ROpy9sfOVyIvTV4swSbhhLQQGVF_NuQB7GviA",
+        "https://play-lh.googleusercontent.com/-BdUskCPtDeCpywd5L5acQitAnIxFWRYUMfRWRd6EcPCGYxRTaQ-ZNoqUYHl58VQZOE",
+        "https://play-lh.googleusercontent.com/mpHFLm4afYPBD4xNC4lUY5yXYbn8wG206iMJ68gzlqv4JeYgZ_WD0beaVFkn6T7OqMJ0",
+        "https://play-lh.googleusercontent.com/tjiMjL3Kg9mDTCmJRZxRejKQIyLYrRu9jEas5D1vijcOqkLn-qq0_X1O00xLgRghvxK9",
+        "https://play-lh.googleusercontent.com/JCP_m2schr6hxWJIvvAn04XuaW1TXdChuoDJHHT74X4SIsksgQg62Bk2zkSQMlQus_w"
+    ],
+    "video": "https://www.youtube.com/embed/PbdWQ6SZp-U?ps=play&vq=large&rel=0&autohide=1&showinfo=0",
+    "videoImage": "https://play-lh.googleusercontent.com/C5wKCjP9uMSaIlielKFd8K58iF6egEzrM2LVMVLykCH-7ZLKpCXbvvX49lX4bbMMKfs",
+    "contentRating": "Teen",
+    "contentRatingDescription": "Suggestive Themes, Simulated Gambling",
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Sep 4, 2021",
+    "lastUpdatedOn": "Oct 9, 2024",
+    "updated": 1728473270,
+    "version": "6.0.8",
+    "comments": [],
+    "appId": "com.grandcashslots.free.gp",
+    "url": "https://play.google.com/store/apps/details?id=com.grandcashslots.free.gp&hl=en&gl=us"
+}

@@ -1,0 +1,62 @@
+{
+    "title": "GigU",
+    "description": "Boost profits and hit your goals faster with GigU's amazing tools for gigworkers!\r\n\r\nThe #1 smart assistant to increase your earnings on Uber, Lyft and other ridesharing platforms arrives in the US!\r\n\r\n**Currently in Beta testing for Android users. Apply in: www.gigu.co**\r\n\r\nUse GigU's Cherry Pick feature to know instantly if a trip offer is worth accepting or not. You'll spend less, earn more and hit your goals faster!\r\n\r\n- Live Smart Indicators\r\nInstantly view trip valuable information like earnings per mile, hour & minute.\r\n\r\n- Colored Grading System\r\nTrips are rated by colors based on your settings, ensuring speed and simplicity.\r\n\r\n- Quick Maps Shortcut\r\nBetter evaluate the destination of a trip before accepting a ride.\r\n\r\nWe prioritize your security and don't ask for Uber, Lyft or any ridesharing platforms passwords.\r\n\r\nThe GigU app is soon launching more features to empower the Gig community and enhance your safety. Stay tuned!\r\n\r\nThis App Uses Accessibility Services:\r\nOnce the GigU's Cherry Picker feature is optionally activated, we use Accessibility Services to detect if an Uber/Lyft Trip Offer is on screen. This allows us to calculate and display valuable information, helping you make the best decision on whether to accept a ride.\r\n\r\nWe value your privacy and It's important to note that the AcessibilityService API is used exclusively for the Cherry Picker feature, only while It's activated. No personal information is collected, stored, or shared.",
+    "descriptionHTML": "Boost profits and hit your goals faster with GigU&#39;s amazing tools for gigworkers!<br><br>The #1 smart assistant to increase your earnings on Uber, Lyft and other ridesharing platforms arrives in the US!<br><br>**Currently in Beta testing for Android users. Apply in: www.gigu.co**<br><br>Use GigU&#39;s Cherry Pick feature to know instantly if a trip offer is worth accepting or not. You&#39;ll spend less, earn more and hit your goals faster!<br><br>- Live Smart Indicators<br>Instantly view trip valuable information like earnings per mile, hour &amp; minute.<br><br>- Colored Grading System<br>Trips are rated by colors based on your settings, ensuring speed and simplicity.<br><br>- Quick Maps Shortcut<br>Better evaluate the destination of a trip before accepting a ride.<br><br>We prioritize your security and don&#39;t ask for Uber, Lyft or any ridesharing platforms passwords.<br><br>The GigU app is soon launching more features to empower the Gig community and enhance your safety. Stay tuned!<br><br>This App Uses Accessibility Services:<br>Once the GigU&#39;s Cherry Picker feature is optionally activated, we use Accessibility Services to detect if an Uber/Lyft Trip Offer is on screen. This allows us to calculate and display valuable information, helping you make the best decision on whether to accept a ride.<br><br>We value your privacy and It&#39;s important to note that the AcessibilityService API is used exclusively for the Cherry Picker feature, only while It&#39;s activated. No personal information is collected, stored, or shared.",
+    "summary": "Boost profits and hit your goals faster with GigU's amazing tools for gigworkers",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 172361,
+    "score": 0,
+    "ratings": 0,
+    "reviews": 0,
+    "histogram": [
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$7.90 per item",
+    "developer": "StopClub",
+    "developerId": "StopClub",
+    "developerEmail": "contact@gigu.co",
+    "developerWebsite": "https://www.gigu.co",
+    "developerAddress": null,
+    "privacyPolicy": "https://www.gigu.co/terms",
+    "genre": "Auto & Vehicles",
+    "genreId": "AUTO_AND_VEHICLES",
+    "categories": [
+        {
+            "name": "Auto & Vehicles",
+            "id": "AUTO_AND_VEHICLES"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/mbj8SHodc83n1USCFo2CfolGi6HvLOdTwqgvEt2aE1JDWKPB8nI8pDcRxpV73JVSpl8J",
+    "headerImage": "https://play-lh.googleusercontent.com/xHKWiWxT-YYN9gEZBNzElmJz3Ot_SHa4x-amiaxpCXOLd6FQ5tP2woG4y_6AoCicKVu2",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/UKq5FA72OAIcRcA7kmRDwpr-szjYhRwobz181wh6csGVxL682TrS8Ykdz7Txouhi1w",
+        "https://play-lh.googleusercontent.com/EJ3Z1RvfMno4dg9bXkuLzNt_HDZqSErjSp_Ygdd3QLvOiTvtswApvZa1raMRMLWXxg",
+        "https://play-lh.googleusercontent.com/f8tstkHM6VZqN-05tHKpz7wUjlsP3KbEdEJ-2OwbHhNL1gVXeQo_onPY7fnQv4mqAGY"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Aug 18, 2024",
+    "lastUpdatedOn": "Oct 20, 2024",
+    "updated": 1729443038,
+    "version": "1.0.55",
+    "comments": [],
+    "appId": "co.gigu.app",
+    "url": "https://play.google.com/store/apps/details?id=co.gigu.app&hl=en&gl=us"
+}

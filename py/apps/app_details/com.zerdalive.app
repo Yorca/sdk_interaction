@@ -1,0 +1,62 @@
+{
+    "title": "Zerda Live | Video Player",
+    "description": "Zerda TV Player Video\r\nCARACT\u00c9RISTIQUES:\r\n* Lecteur vid\u00e9o, audio, en direct, VOD, IPTV\r\n* Jouez plusieurs flux simultan\u00e9ment\r\n* Chat public et priv\u00e9 tout en regardant.\r\n* Lecteur vid\u00e9o et IPTV rapide int\u00e9gr\u00e9 avec des capacit\u00e9s \u00e9lev\u00e9es.\r\n* La possibilit\u00e9 de choisir la qualit\u00e9 vid\u00e9o par d\u00e9faut.\r\n* Prise en charge de la qualit\u00e9 multiple pour un canal (SD HD FHD 4K)\r\n* Prise en charge de plusieurs serveurs pour un canal.\r\n* Choix automatique du serveur si un serveur ne fonctionne pas.\r\n* Reconnexion automatique du flux en direct.\r\n* S\u00e9lection de la piste audio.\r\n* Lecture en arri\u00e8re-plan.\r\n* Lecture en mode audio uniquement.\r\n* La possibilit\u00e9 de cr\u00e9er et d'organiser la liste des cha\u00eenes pr\u00e9f\u00e9r\u00e9es.\r\n* Commencez \u00e0 lire la cha\u00eene s\u00e9lectionn\u00e9e au lancement.\r\n* Conception conviviale.\r\n* Affichage en grille ou en liste des cha\u00eenes.\r\n* Regarder IPTV avec des groupes de cha\u00eenes et des logos.\r\n* Prise en charge des en-t\u00eates de requ\u00eate du fichier m3u\r\n* Recherchez rapidement des cha\u00eenes dans les listes de lecture.\r\n\r\nSources prises en charge :\r\n* Codes FG.\r\n* Codes Xtream.\r\n* Fichiers M3u.\r\n\r\nQu'est-ce que le code FG ?\r\nLe code FG est un service gratuit qui vous permet d'organiser et de regrouper vos liens de contenu dans une liste de lecture repr\u00e9sent\u00e9e par un code simple, puis de regarder votre contenu en saisissant simplement le code FG dans n'importe quel lecteur pris en charge.\r\nVous pouvez cr\u00e9er un code FG en :\r\n1- Allez sur le site https://fgcode.store\r\n2- Cliquez sur 'Cr\u00e9er un code FG' et choisissez un code et un mot de passe.\r\n3- Commencez \u00e0 ajouter vos liens de contenu.\r\n4- Vous pouvez maintenant regarder votre contenu sur Drama Live en entrant votre code dans le champ FG Code.\r\n5- Chaque fois que vous ajoutez ou supprimez du contenu de votre playlist sur 'https://fgcode.store', les modifications appara\u00eetront automatiquement sur l'application.\r\nLe code FG est un service de gestion de contenu uniquement et n'inclut aucun contenu, diffusion ou rediffusion.\r\n\r\nQu'est-ce que l'URL M3u ?\r\nL'URL M3U est un format de fichier pour une liste de lecture multim\u00e9dia.\r\nIl est couramment utilis\u00e9 pour diriger les lecteurs multim\u00e9dias vers des sources audio et vid\u00e9o, y compris des sources en ligne.\r\nVous pouvez cr\u00e9er un fichier M3U contenant des liens vers des sources multim\u00e9dias et le lire sur Drama Live.\r\n\r\nP\u00e9riph\u00e9riques compatibles:\r\n* T\u00e9l\u00e9phone Android.\r\n* Onglet Android.\r\n* TV Android.\r\n* Bo\u00eete de t\u00e9l\u00e9vision Android.\r\nREMARQUE IMPORTANTE :\r\nNous ne fournissons aucun type de services IPTV tels que les abonnements IPTV, les \u00e9missions ou les codes de cha\u00eene.\r\nCette application n'a aucune affiliation avec un fournisseur tiers.\r\nCette application ne fournit ni n'inclut aucun m\u00e9dia ou contenu, et les utilisateurs doivent fournir leur propre contenu en fournissant des codes FG, des codes Xtream ou des liens de fichiers M3u.\r\nNous n'approuvons pas l'utilisation de mat\u00e9riel prot\u00e9g\u00e9 par le droit d'auteur sans l'autorisation du d\u00e9tenteur du droit d'auteur.\r\nL'application n'h\u00e9berge aucun fichier vid\u00e9o ou diffusion en direct sur ses serveurs.\r\nL'application ne s'est pas d\u00e9clar\u00e9e propri\u00e9taire ou responsable du contenu que l'utilisateur ex\u00e9cute sur l'application, et l'application lors de son d\u00e9marrage est totalement libre de tout contenu \u00e0 moins que l'utilisateur n'entre son propre contenu.\r\nPour autant que nous sachions qu'un lecteur de liens ne viole pas directement le droit d'auteur car aucune copie n'est effectu\u00e9e sur les serveurs de l'application, ce n'est donc pas une raison valable pour envoyer un avis DMCA. Pour supprimer ce contenu du Web, le propri\u00e9taire du contenu doit contacter l'h\u00e9bergeur qui h\u00e9berge r\u00e9ellement le contenu (et non les responsables de cette application).\r\nChez Drama Live, nous sommes pr\u00eats \u00e0 interdire toute adresse de serveur si nous recevons une plainte indiquant qu'il diffuse du contenu ill\u00e9gal \u00e0 \r\nsupport@zerda-tv.com",
+    "descriptionHTML": "Zerda TV Player Video<br>CARACT\u00c9RISTIQUES:<br>* Lecteur vid\u00e9o, audio, en direct, VOD, IPTV<br>* Jouez plusieurs flux simultan\u00e9ment<br>* Chat public et priv\u00e9 tout en regardant.<br>* Lecteur vid\u00e9o et IPTV rapide int\u00e9gr\u00e9 avec des capacit\u00e9s \u00e9lev\u00e9es.<br>* La possibilit\u00e9 de choisir la qualit\u00e9 vid\u00e9o par d\u00e9faut.<br>* Prise en charge de la qualit\u00e9 multiple pour un canal (SD HD FHD 4K)<br>* Prise en charge de plusieurs serveurs pour un canal.<br>* Choix automatique du serveur si un serveur ne fonctionne pas.<br>* Reconnexion automatique du flux en direct.<br>* S\u00e9lection de la piste audio.<br>* Lecture en arri\u00e8re-plan.<br>* Lecture en mode audio uniquement.<br>* La possibilit\u00e9 de cr\u00e9er et d&#39;organiser la liste des cha\u00eenes pr\u00e9f\u00e9r\u00e9es.<br>* Commencez \u00e0 lire la cha\u00eene s\u00e9lectionn\u00e9e au lancement.<br>* Conception conviviale.<br>* Affichage en grille ou en liste des cha\u00eenes.<br>* Regarder IPTV avec des groupes de cha\u00eenes et des logos.<br>* Prise en charge des en-t\u00eates de requ\u00eate du fichier m3u<br>* Recherchez rapidement des cha\u00eenes dans les listes de lecture.<br><br>Sources prises en charge :<br>* Codes FG.<br>* Codes Xtream.<br>* Fichiers M3u.<br><br>Qu&#39;est-ce que le code FG ?<br>Le code FG est un service gratuit qui vous permet d&#39;organiser et de regrouper vos liens de contenu dans une liste de lecture repr\u00e9sent\u00e9e par un code simple, puis de regarder votre contenu en saisissant simplement le code FG dans n&#39;importe quel lecteur pris en charge.<br>Vous pouvez cr\u00e9er un code FG en :<br>1- Allez sur le site https://fgcode.store<br>2- Cliquez sur &#39;Cr\u00e9er un code FG&#39; et choisissez un code et un mot de passe.<br>3- Commencez \u00e0 ajouter vos liens de contenu.<br>4- Vous pouvez maintenant regarder votre contenu sur Drama Live en entrant votre code dans le champ FG Code.<br>5- Chaque fois que vous ajoutez ou supprimez du contenu de votre playlist sur &#39;https://fgcode.store&#39;, les modifications appara\u00eetront automatiquement sur l&#39;application.<br>Le code FG est un service de gestion de contenu uniquement et n&#39;inclut aucun contenu, diffusion ou rediffusion.<br><br>Qu&#39;est-ce que l&#39;URL M3u ?<br>L&#39;URL M3U est un format de fichier pour une liste de lecture multim\u00e9dia.<br>Il est couramment utilis\u00e9 pour diriger les lecteurs multim\u00e9dias vers des sources audio et vid\u00e9o, y compris des sources en ligne.<br>Vous pouvez cr\u00e9er un fichier M3U contenant des liens vers des sources multim\u00e9dias et le lire sur Drama Live.<br><br>P\u00e9riph\u00e9riques compatibles:<br>* T\u00e9l\u00e9phone Android.<br>* Onglet Android.<br>* TV Android.<br>* Bo\u00eete de t\u00e9l\u00e9vision Android.<br>REMARQUE IMPORTANTE :<br>Nous ne fournissons aucun type de services IPTV tels que les abonnements IPTV, les \u00e9missions ou les codes de cha\u00eene.<br>Cette application n&#39;a aucune affiliation avec un fournisseur tiers.<br>Cette application ne fournit ni n&#39;inclut aucun m\u00e9dia ou contenu, et les utilisateurs doivent fournir leur propre contenu en fournissant des codes FG, des codes Xtream ou des liens de fichiers M3u.<br>Nous n&#39;approuvons pas l&#39;utilisation de mat\u00e9riel prot\u00e9g\u00e9 par le droit d&#39;auteur sans l&#39;autorisation du d\u00e9tenteur du droit d&#39;auteur.<br>L&#39;application n&#39;h\u00e9berge aucun fichier vid\u00e9o ou diffusion en direct sur ses serveurs.<br>L&#39;application ne s&#39;est pas d\u00e9clar\u00e9e propri\u00e9taire ou responsable du contenu que l&#39;utilisateur ex\u00e9cute sur l&#39;application, et l&#39;application lors de son d\u00e9marrage est totalement libre de tout contenu \u00e0 moins que l&#39;utilisateur n&#39;entre son propre contenu.<br>Pour autant que nous sachions qu&#39;un lecteur de liens ne viole pas directement le droit d&#39;auteur car aucune copie n&#39;est effectu\u00e9e sur les serveurs de l&#39;application, ce n&#39;est donc pas une raison valable pour envoyer un avis DMCA. Pour supprimer ce contenu du Web, le propri\u00e9taire du contenu doit contacter l&#39;h\u00e9bergeur qui h\u00e9berge r\u00e9ellement le contenu (et non les responsables de cette application).<br>Chez Drama Live, nous sommes pr\u00eats \u00e0 interdire toute adresse de serveur si nous recevons une plainte indiquant qu&#39;il diffuse du contenu ill\u00e9gal \u00e0 <br>support@zerda-tv.com",
+    "summary": "Lecteur vid\u00e9o et audio prenant en charge les codes FG, Xtream",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 123517,
+    "score": 4.574468,
+    "ratings": 509,
+    "reviews": 16,
+    "histogram": [
+        32,
+        0,
+        10,
+        64,
+        400
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Abdullah Yahya Alian",
+    "developerId": "Abdullah+Yahya+Alian",
+    "developerEmail": "tasnimski21dz@gmail.com",
+    "developerWebsite": null,
+    "developerAddress": null,
+    "privacyPolicy": "https://www.termsfeed.com/live/f0f3c59b-6e94-44ce-a736-47b4beff109d",
+    "genre": "Video Players & Editors",
+    "genreId": "VIDEO_PLAYERS",
+    "categories": [
+        {
+            "name": "Video Players & Editors",
+            "id": "VIDEO_PLAYERS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/WYeBjt9nW0VkoEFtWtCBkclWsDr4WYz5HIktWrSrqIc9g0UZsrI0T7wvh2gEVue7w20",
+    "headerImage": "https://play-lh.googleusercontent.com/A-6hb35TtoO4HLTbxVmGQ9YRzsrGdaatx7hfK4SsTz3McRDcQ2NjUdXuMAtfswEVHIg",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/XeRHD594Kz6XvmkYXkUsdbKoWRuxzFXnoqXAPNlwW1pvyUdZOCBKkDWEGiaoJyHLZGg",
+        "https://play-lh.googleusercontent.com/18w_C1p6BwCsEj1Gc7TrwU_LU48pR7fnGMN78-HWKII8hn637skGlDvRHEQ9bcIngw",
+        "https://play-lh.googleusercontent.com/oRmZY26kmyFOxSe6am-zZtp_pXrv84P2UDnQfdtLirfWt07rH-R-PT8bHr0CZeG8I6MK"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Mar 25, 2024",
+    "lastUpdatedOn": "Sep 23, 2024",
+    "updated": 1727131197,
+    "version": "1.4",
+    "comments": [],
+    "appId": "com.zerdalive.app",
+    "url": "https://play.google.com/store/apps/details?id=com.zerdalive.app&hl=en&gl=us"
+}

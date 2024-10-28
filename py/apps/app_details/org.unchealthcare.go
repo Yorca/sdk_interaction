@@ -1,0 +1,63 @@
+{
+    "title": "UNC Health",
+    "description": "At UNC Health, we are always looking for ways to improve the experience of our patients and visitors. We want to be there to help you at every step of your health care journey, including finding your way through our facilities. That is why we created the UNC Health app. This wayfinding app will make it easier for those visiting UNC Medical Center and UNC REX Healthcare by providing turn-by-turn navigation from your front door to our front desk, parking support and real time indoor guidance.  The app also brings together resources to help you access care easily, whether that\u2019s seeing the urgent care location nearest you with the shortest wait times, or helping you find a provider anywhere in our system.\r\n\r\n\r\n\r\nSpecial features include:\r\n\r\n\u2022 GPS enabled turn-by-turn navigation to UNC Health Care locations\r\n\u2022 Find a convenient parking spot and set a parking reminder at UNC Medical Center and UNC REX Healthcare\r\n\u2022 Real-time indoor step-by-step directions to get you to where you need to go at UNC Medical Center and UNC REX Healthcare\r\n\u2022 Sign up or connect with My UNC Chart to make an appointment and for appointment reminders\r\n\u2022 Get in line for an on demand Virtual Care Now video visit with a UNC Health primary care provider 6 a.m. \u2013 10 p.m 7 days per week, 365 days per year, without leaving your home or office. NOTE:  This will not be your own primary care or specialist provider.\r\n\u2022 Find a Doctor: find information about more than 3000 UNC Health Care providers\r\n\u2022 Pay your bill online\r\n\u2022 Subscribe to UNC Health Talk to get free health tips and patient stories once a month",
+    "descriptionHTML": "At UNC Health, we are always looking for ways to improve the experience of our patients and visitors. We want to be there to help you at every step of your health care journey, including finding your way through our facilities. That is why we created the UNC Health app. This wayfinding app will make it easier for those visiting UNC Medical Center and UNC REX Healthcare by providing turn-by-turn navigation from your front door to our front desk, parking support and real time indoor guidance.  The app also brings together resources to help you access care easily, whether that\u2019s seeing the urgent care location nearest you with the shortest wait times, or helping you find a provider anywhere in our system.<br><br><br><br>Special features include:<br><br>\u2022 GPS enabled turn-by-turn navigation to UNC Health Care locations<br>\u2022 Find a convenient parking spot and set a parking reminder at UNC Medical Center and UNC REX Healthcare<br>\u2022 Real-time indoor step-by-step directions to get you to where you need to go at UNC Medical Center and UNC REX Healthcare<br>\u2022 Sign up or connect with My UNC Chart to make an appointment and for appointment reminders<br>\u2022 Get in line for an on demand Virtual Care Now video visit with a UNC Health primary care provider 6 a.m. \u2013 10 p.m 7 days per week, 365 days per year, without leaving your home or office. NOTE:  This will not be your own primary care or specialist provider.<br>\u2022 Find a Doctor: find information about more than 3000 UNC Health Care providers<br>\u2022 Pay your bill online<br>\u2022 Subscribe to UNC Health Talk to get free health tips and patient stories once a month",
+    "summary": "Wayfinding, scheduling, virtual urgent care & more",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 117655,
+    "score": 4.12,
+    "ratings": 203,
+    "reviews": 60,
+    "histogram": [
+        28,
+        4,
+        12,
+        28,
+        129
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "UNC Health Care",
+    "developerId": "UNC+Health+Care",
+    "developerEmail": "unchc.news@gmail.com",
+    "developerWebsite": null,
+    "developerAddress": "101 Manning Drive\nChapel Hill, NC 27514",
+    "privacyPolicy": "https://unc.goziohealth.com/microsites/legal/privacy.html",
+    "genre": "Medical",
+    "genreId": "MEDICAL",
+    "categories": [
+        {
+            "name": "Medical",
+            "id": "MEDICAL"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/8Tqp__vL9ek6U_j5dV4gMadiKws5LvcSgPOF12nmQN4k2SaYj8x0ZUbRVSnD_odw4B0",
+    "headerImage": "https://play-lh.googleusercontent.com/V6AYxsy-mAW0Wq6s1D9ClS7HxkVz8SSbqRMOr175vDHhrKurjxgThOsURdaTV1fVIYk",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/u1uKlU4B_5mGUXnfOoP86WySuFFG4Twph3KvVNeA7KTAvr80u3_2DJC1SgRWRwgTErA",
+        "https://play-lh.googleusercontent.com/jI_s2S0Mfz8ElPRK0e7MV04m70YGEjnAcA3KAZh8OtXkA6ZbTvSfpJ8Hs5qMmKTsYg",
+        "https://play-lh.googleusercontent.com/DDpTUIYtDSrMWGt4VuqNEILkjHYrP-6B2Ar-QkBq_QRyVNyzrf82aSykuKaACxnH6RE",
+        "https://play-lh.googleusercontent.com/5Q4zm5s8dz76_AHYZ_3FDSbqKOkxpsaJuIuLS8A7HtpPsM72GBkz2zJj-4y4_458"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Sep 10, 2019",
+    "lastUpdatedOn": "Jul 10, 2024",
+    "updated": 1720641570,
+    "version": "3.6.0",
+    "comments": [],
+    "appId": "org.unchealthcare.go",
+    "url": "https://play.google.com/store/apps/details?id=org.unchealthcare.go&hl=en&gl=us"
+}

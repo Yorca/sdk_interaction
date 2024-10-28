@@ -1,0 +1,61 @@
+{
+    "title": "Jason's Deli",
+    "description": "Family-owned and community focused, Jason's Deli serves guests at 275+ delis in 28 states and growing. Around here, a lot of thought goes into what we put in our food, and what we take out of it. Now, that same great food is available on the go. Skip the line and order on the Jason's Deli App for delivery and take-out! \r\n\r\nWe've recently updated our app to be compatible with our new online ordering site. You\u2019ll need to reset your password upon opening after the update. Click on \u201cForgot Password\u201d to generate a new password.\r\n\r\nYou'll continue to earn new Deli Dollars while we keep your existing Deli Dollars safe in our Deli Dollar vault. Your existing Deli Dollars will be carried over during our upcoming releases.",
+    "descriptionHTML": "Family-owned and community focused, Jason&#39;s Deli serves guests at 275+ delis in 28 states and growing. Around here, a lot of thought goes into what we put in our food, and what we take out of it. Now, that same great food is available on the go. Skip the line and order on the Jason&#39;s Deli App for delivery and take-out! <br><br>We&#39;ve recently updated our app to be compatible with our new online ordering site. You\u2019ll need to reset your password upon opening after the update. Click on \u201cForgot Password\u201d to generate a new password.<br><br>You&#39;ll continue to earn new Deli Dollars while we keep your existing Deli Dollars safe in our Deli Dollar vault. Your existing Deli Dollars will be carried over during our upcoming releases.",
+    "summary": "Skip the line and order on the Jason\u2019s Deli App for delivery or take-out!",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 492645,
+    "score": 3.7642858,
+    "ratings": 1402,
+    "reviews": 715,
+    "histogram": [
+        340,
+        20,
+        60,
+        190,
+        790
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Jason's Deli",
+    "developerId": "Jason's+Deli",
+    "developerEmail": "customer.service@jasonsdeli.com",
+    "developerWebsite": "http://www.jasonsdeli.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://www.jasonsdeli.com/privacy-policy",
+    "genre": "Food & Drink",
+    "genreId": "FOOD_AND_DRINK",
+    "categories": [
+        {
+            "name": "Food & Drink",
+            "id": "FOOD_AND_DRINK"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/FRPFULeAqJZIFS7K0jkUggAjJukMVd9D6ehxJtcnN6Tjk4G6ns4SliXPepjkt4Feqtg",
+    "headerImage": "https://play-lh.googleusercontent.com/F5D7cxpFXa4QuV2f00OIY3VSBMU0HhoSWNbv_-FHi4Mq5ih8Y-Cb8S747FkYUBAFbg",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/L_biwSkwl2zpN9NKUAuEefCskKBcpeUWKmx1n3GdITAmGkt0OaanAuVyrjFTt9GJFzK4",
+        "https://play-lh.googleusercontent.com/p6x9JcBaExQn5Fd3foBAsDc0tFWQ8AyZth4IeTJ95vFc2CDRzyNX3i7Mau8_VuM3BGs"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Apr 30, 2017",
+    "lastUpdatedOn": "Sep 5, 2024",
+    "updated": 1725571781,
+    "version": "4.0.2",
+    "comments": [],
+    "appId": "com.jasonsdeli.app",
+    "url": "https://play.google.com/store/apps/details?id=com.jasonsdeli.app&hl=en&gl=us"
+}

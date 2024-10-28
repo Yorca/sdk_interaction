@@ -1,0 +1,63 @@
+{
+    "title": "X PhotoKit",
+    "description": "Photo Editor\r\nPhoto editor allows you to add a variety of cool aesthetic effects to your photos. Not only can you choose effects carefully designed for you, but you can also use a variety of tools to flexibly adjust them. If you're keen on tweaking the aesthetics of your photos, this photo editor is worth a try.\r\n\r\nDSLR effect\r\nThe photo editor has advanced blur image brush functionality. It can be used to blur certain parts of a photo to get a DSLR blur effect. You can also use the eraser function to unblur an image and adjust its blur intensity.\r\n\r\nCollage Tool\r\nJust select a few pictures and the collage maker will rearrange them into a cool photo collage. You can switch effects or adjust the layout to choose your favorite layout. Use filters, backgrounds, stickers, text, etc. to edit and Beautify your collage.\r\n\r\nTemplates \r\nWe provide a wide range of templates. Simply select and replace photos to create a beautiful poster-like creation. You can also replace and adjust text, stickers, and filters as needed to get more satisfying results.\r\n\r\nStitch Long/Wide Images\r\nYou can select multiple photos to create an extra-wide or extra-long stunning image\r\n\r\nX PhotoKit deserves your try right away. It is the simplest but the most useful photo effects editor. With X PhotoKit, your moment will be as brilliant as an artwork. If you have any problems or suggestions, feel free to let us know.",
+    "descriptionHTML": "Photo Editor<br>Photo editor allows you to add a variety of cool aesthetic effects to your photos. Not only can you choose effects carefully designed for you, but you can also use a variety of tools to flexibly adjust them. If you&#39;re keen on tweaking the aesthetics of your photos, this photo editor is worth a try.<br><br>DSLR effect<br>The photo editor has advanced blur image brush functionality. It can be used to blur certain parts of a photo to get a DSLR blur effect. You can also use the eraser function to unblur an image and adjust its blur intensity.<br><br>Collage Tool<br>Just select a few pictures and the collage maker will rearrange them into a cool photo collage. You can switch effects or adjust the layout to choose your favorite layout. Use filters, backgrounds, stickers, text, etc. to edit and Beautify your collage.<br><br>Templates <br>We provide a wide range of templates. Simply select and replace photos to create a beautiful poster-like creation. You can also replace and adjust text, stickers, and filters as needed to get more satisfying results.<br><br>Stitch Long/Wide Images<br>You can select multiple photos to create an extra-wide or extra-long stunning image<br><br>X PhotoKit deserves your try right away. It is the simplest but the most useful photo effects editor. With X PhotoKit, your moment will be as brilliant as an artwork. If you have any problems or suggestions, feel free to let us know.",
+    "summary": "X PhotoKit provides many powerful photo editing toolkits",
+    "installs": "10,000,000+",
+    "minInstalls": 10000000,
+    "realInstalls": 25944151,
+    "score": 4.3624454,
+    "ratings": 38138,
+    "reviews": 616,
+    "histogram": [
+        3493,
+        1494,
+        822,
+        4147,
+        28129
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$7.99 - $15.99 per item",
+    "developer": "X PhotoKit",
+    "developerId": "5339581751559250424",
+    "developerEmail": "team@xphotokit.com",
+    "developerWebsite": "https://xphotokit.com/",
+    "developerAddress": null,
+    "privacyPolicy": "https://sites.google.com/view/x-photokit/privacy",
+    "genre": "Photography",
+    "genreId": "PHOTOGRAPHY",
+    "categories": [
+        {
+            "name": "Photography",
+            "id": "PHOTOGRAPHY"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/J8k8c_Ehi-LjqnWhHhIR8FaDiZT4v1i9fmh9nvOYrjia9tqpkp0RqVnOjNn6r0gKQ75X",
+    "headerImage": "https://play-lh.googleusercontent.com/kNPknZqw-mpRM33ZxpGGIpxFtFYbPSVe4FSOXx8G5CpIGKvBnnNy5yQvRVjb4vTWg7U",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/tOkUs0G-ToEvphjAr54rSh3fC7cHppq60WRuHR7dVT5RwTAifJUDcs7u-8C_1rp-0Q",
+        "https://play-lh.googleusercontent.com/nnDy9hU_V-MBUDCs4IANLjzEWRegeYAmarlMHyZjBkQj8qBdd7gH1pw5cOaFQ4c_h0cc",
+        "https://play-lh.googleusercontent.com/Z9rePBbax5HYi0e213M-ZpjXB0vuPl5ZN2DafJZtYUt2FtRnr92uLOrrZNYg_TJu7IbG",
+        "https://play-lh.googleusercontent.com/2_-QcHdPzjJlYj_h0fyQnQnfwRTIYBJBvMAl4AD2F4nDGI0rQKgYtWk44Qnm073seiM"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Aug 24, 2021",
+    "lastUpdatedOn": "Oct 14, 2024",
+    "updated": 1728962537,
+    "version": "4.1.3",
+    "comments": [],
+    "appId": "com.xphotokit.app",
+    "url": "https://play.google.com/store/apps/details?id=com.xphotokit.app&hl=en&gl=us"
+}

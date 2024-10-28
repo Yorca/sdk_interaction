@@ -1,0 +1,63 @@
+{
+    "title": "SwiftAccess VPN",
+    "description": "Welcome to SwiftAccess VPN \u2013 Your personal escort to the global internet! SwiftAccess VPN not only provides fast and stable connections but also features unique smart optimization technology, delivering you an exceptional network experience.\r\n\r\n**Unique Features:**\r\n- **Smart Connection Optimization**: Our AI algorithms optimize your connection in real-time, ensuring you always enjoy the fastest network speeds.\r\n- **Stealth Mode**: Ensuring you can freely access the internet in any network environment.\r\n- **Multi-layer Encryption**: Combining multiple layers of encryption technology, offering unprecedented privacy protection.\r\n- **Dedicated IP Address**: Provides dedicated IP services, avoiding risks and limitations associated with shared IPs.\r\n\r\n**Important Note:**\r\nSwiftAccess VPN is dedicated to providing legal internet services. Please comply with the laws and regulations of your country or region and use our services responsibly.",
+    "descriptionHTML": "Welcome to SwiftAccess VPN \u2013 Your personal escort to the global internet! SwiftAccess VPN not only provides fast and stable connections but also features unique smart optimization technology, delivering you an exceptional network experience.<br><br>**Unique Features:**<br>- **Smart Connection Optimization**: Our AI algorithms optimize your connection in real-time, ensuring you always enjoy the fastest network speeds.<br>- **Stealth Mode**: Ensuring you can freely access the internet in any network environment.<br>- **Multi-layer Encryption**: Combining multiple layers of encryption technology, offering unprecedented privacy protection.<br>- **Dedicated IP Address**: Provides dedicated IP services, avoiding risks and limitations associated with shared IPs.<br><br>**Important Note:**<br>SwiftAccess VPN is dedicated to providing legal internet services. Please comply with the laws and regulations of your country or region and use our services responsibly.",
+    "summary": "Experience unparalleled speed",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 2057230,
+    "score": 4.46,
+    "ratings": 531,
+    "reviews": 43,
+    "histogram": [
+        33,
+        8,
+        21,
+        63,
+        396
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "SELWYN S",
+    "developerId": "5654774737752902253",
+    "developerEmail": "selwyn1993sage@gmail.com",
+    "developerWebsite": "https://swiftaccesses.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://www.swiftaccesses.com/privacy_policy.html?p=1",
+    "genre": "Productivity",
+    "genreId": "PRODUCTIVITY",
+    "categories": [
+        {
+            "name": "Productivity",
+            "id": "PRODUCTIVITY"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/TVniShH8hJ7rl-y-kOIVMAO35-cJGH1tSPVAaC7iNQVyG-RB-pbG2uHCVmup6CmfJQU",
+    "headerImage": "https://play-lh.googleusercontent.com/cfSbxXv2iLrf0eT_Xq5UOnMyZhUwx3NI_ikqEu8tEz485kP9wvHZUMlk2JzqQfzyxC8",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/BS51quGgVFzoMLvO5-lkqaRd0r6venicS6Fp8viNBn2AF1Qo9_KesiaeD8Ce6yGrVDw",
+        "https://play-lh.googleusercontent.com/RyanWkZXt-O1lk4l5dq7fY9ccowYY4I-fStP-B3uAWc_ANozOC-73g8x4TqLsVzBwA",
+        "https://play-lh.googleusercontent.com/58Q-FgwURz_kd7KJiioNiRcf3s0mLypv8AmDhbfungX0YviOoTg8SallpV9AH-KeVqc",
+        "https://play-lh.googleusercontent.com/3xGZALEx0kq4_wOhsrRbttxzHhh6NkIB01oVp17Pj7_fXGSOv57K9agmPMkAYhRXukw"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "May 16, 2024",
+    "lastUpdatedOn": "Aug 23, 2024",
+    "updated": 1724478622,
+    "version": "1.1.3",
+    "comments": [],
+    "appId": "com.sat.swiftaccessvpn.app",
+    "url": "https://play.google.com/store/apps/details?id=com.sat.swiftaccessvpn.app&hl=en&gl=us"
+}

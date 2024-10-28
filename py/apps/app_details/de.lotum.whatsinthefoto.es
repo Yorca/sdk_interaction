@@ -1,0 +1,82 @@
+{
+    "title": "4 Fotos 1 Palabra",
+    "description": "THE NUMBER 1 HIT WITH MORE THAN 400,000,000 PLAYERS WORLDWIDE!\r\nFour photos with one word in common - which one is it?\r\nFind out why everyone plays \"4 Pics 1 Word\" and PARTICIPATE!\r\n\r\n\u2605THE OFFICIAL SPANISH VERSION OF THE N\u00b01 GAME IN THE WORLD \"4 PICS 1 WORD\"!\u2605\r\nPuzzles in Spanish made to measure for you!\r\n\r\n\u2605ENDLESS FUN WITH NEW PUZZLES!\u2605\r\nCan you guess the hidden words and pass all the levels? Millions of puzzles of different difficulty await you! And we continually add puzzles so the fun never ends!\r\n\r\n\u2605PURE INSTANT FUN\u2605\r\nNo complicated accounts or rules. Just start playing and have a great time!\r\n\r\n\u2605AN EASY AND VERY ADDICTIVE GAME\u2605\r\nWhat word are we looking for? Look at all four photos, find what they have in common and win.\r\n\r\n\u2605THE HOBBY YOU WON'T BE ABLE TO STOP PLAYING!\u2605\r\nThere are already more than 250,000,000 \"4 Pics 1 Word\" enthusiasts in the world enjoying this game in 9 different languages. Join them!\r\n\r\n\u2605LET YOUR FRIENDS HELP YOU!\u2605\r\nMore possibilities to exchange with your friends and receive hints - Facebook, WhatsApp, Facebook Messenger and much more!",
+    "descriptionHTML": "THE NUMBER 1 HIT WITH MORE THAN 400,000,000 PLAYERS WORLDWIDE!<br>Four photos with one word in common - which one is it?<br>Find out why everyone plays &quot;4 Pics 1 Word&quot; and PARTICIPATE!<br><br>\u2605THE OFFICIAL SPANISH VERSION OF THE N\u00b01 GAME IN THE WORLD &quot;4 PICS 1 WORD&quot;!\u2605<br>Puzzles in Spanish made to measure for you!<br><br>\u2605ENDLESS FUN WITH NEW PUZZLES!\u2605<br>Can you guess the hidden words and pass all the levels? Millions of puzzles of different difficulty await you! And we continually add puzzles so the fun never ends!<br><br>\u2605PURE INSTANT FUN\u2605<br>No complicated accounts or rules. Just start playing and have a great time!<br><br>\u2605AN EASY AND VERY ADDICTIVE GAME\u2605<br>What word are we looking for? Look at all four photos, find what they have in common and win.<br><br>\u2605THE HOBBY YOU WON&#39;T BE ABLE TO STOP PLAYING!\u2605<br>There are already more than 250,000,000 &quot;4 Pics 1 Word&quot; enthusiasts in the world enjoying this game in 9 different languages. Join them!<br><br>\u2605LET YOUR FRIENDS HELP YOU!\u2605<br>More possibilities to exchange with your friends and receive hints - Facebook, WhatsApp, Facebook Messenger and much more!",
+    "summary": "Four photos with one word in common - what is it?",
+    "installs": "50,000,000+",
+    "minInstalls": 50000000,
+    "realInstalls": 64504080,
+    "score": 4.6969805,
+    "ratings": 1356422,
+    "reviews": 90531,
+    "histogram": [
+        30004,
+        16667,
+        46197,
+        148594,
+        1114949
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$0.99 - $42.99 per item",
+    "developer": "Lotum GmbH",
+    "developerId": "7848396439597711856",
+    "developerEmail": "games@lotum.de",
+    "developerWebsite": "https://lotum.com",
+    "developerAddress": "Am Goldstein 1, 61231 Bad Nauheim, Germany",
+    "privacyPolicy": "https://lotum.com/privacy-policy.html",
+    "genre": "Word",
+    "genreId": "GAME_WORD",
+    "categories": [
+        {
+            "name": "Word",
+            "id": "GAME_WORD"
+        },
+        {
+            "name": "Single player",
+            "id": null
+        },
+        {
+            "name": "Offline",
+            "id": null
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/bVaiDMVjhL_FQLV4GR4La0S9ObswwNU6mV2Mv51wmZahDSQHQSvHiQlJD-WPxztLe-c",
+    "headerImage": "https://play-lh.googleusercontent.com/xleU4NSlG4VU7HQgEuHKLwVoUtN0Zok6hkNxpED_yogKepT96cCCIYVsSnmTD1jxwg",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/bg8eEmpQ9qQnzHBRERUyrM6JMYUJrDfj_MHSLbHs0stPzUx2gDlY3h9BxIic6QrKSnc",
+        "https://play-lh.googleusercontent.com/XTpLQLRNguGW9UnP5Op8tByc32A4nQ0tiSGUSg1LE3jZn_KLso7QVKl0mLLQND-KKSY",
+        "https://play-lh.googleusercontent.com/L6C2zjtGH5HVnuaEbZQ_FBpCzx36hQXoariWsHkqsSYTQgpd5RPj2cj8paLMkuVJwPI",
+        "https://play-lh.googleusercontent.com/nRDaqRH2kzsqUSndS-ZY2YlEGo8jPN61EBc6pu3fsuTPMBIK34S1efuf5LCC8DtfvAdP",
+        "https://play-lh.googleusercontent.com/gIno0IvN4n4UaSb1iT-_x8p5HVD6XRYrV7gIiGUmyllX8WjE6QQ9ZGNXAFXT1xrqZKQ",
+        "https://play-lh.googleusercontent.com/uwK0AIay2tTm2q-HZ6JpXTf7b-K05X_SX7qHy_sXTA7RgAmukmlj8UIgS0KfRgichH8",
+        "https://play-lh.googleusercontent.com/y9D7GFdnPLsyl7OhJu9Ny6p185RNycskh8_BFvY57xtwuQoaAhODHzzJijfYVR9ys2M",
+        "https://play-lh.googleusercontent.com/v29U0g1YJ2_r8--7Vy8GVdrnYOVcDKPsGFltaFFyCjyc1n33A9RO7TQ1PMikthFTOCuy",
+        "https://play-lh.googleusercontent.com/sXZf9Vy7QPk-w_1PQi6JCY83HEvrcVPVJtdHHxqwOF_oMu3DFy5Gz_a6j7cRfv794fA",
+        "https://play-lh.googleusercontent.com/DFv8BrDkeUtCqxCJHKg-HQZCqBSY4NgNETD4rFUH1_XDfN1mRCpUNmdnnawFkmcu2Q0",
+        "https://play-lh.googleusercontent.com/OSYIQsNU5RY1eHGBZOwxpEXaticym2Df9SW_i8fPsPSTG7mxgkrfGmzxARCaXoBqTCk",
+        "https://play-lh.googleusercontent.com/-un-dELFCyxn5-D1wqzUCsZsHTGjjJp_Bar3IPWKRRw79IZbiJEEAVVF1aaXfWe07w",
+        "https://play-lh.googleusercontent.com/Y5aBNogD9Vf9tqBDoc19Z_BYAwS7rmgdO5kMvvs0nwP3scSwvM5xSS5DQlbIrd90ew",
+        "https://play-lh.googleusercontent.com/fR3xT2Cw2rzfGTjhb2t40wJ9-neogd70ST7pPJ1oZdKmMCeqGEqeTvwbpo8N8dt8hTs",
+        "https://play-lh.googleusercontent.com/QmkinhQgqBwZ29mb07Q3xlCl9t9bImNRXbXyvHZvXBCpdwwQRN8g348zEvbBvg63_Tg"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Jan 22, 2014",
+    "lastUpdatedOn": "Oct 22, 2024",
+    "updated": 1729600691,
+    "version": "62.40.1",
+    "comments": [],
+    "appId": "de.lotum.whatsinthefoto.es",
+    "url": "https://play.google.com/store/apps/details?id=de.lotum.whatsinthefoto.es&hl=en&gl=us"
+}

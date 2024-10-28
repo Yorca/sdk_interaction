@@ -1,0 +1,5 @@
+apk_log_folder = ""
+fastbot_log_path = ""
+app_detail_path = ""
+summary_ground_truth = "../Dynamic/data/api_summary_groundtruth.json"
+runtime_environment = "IP: Euro"

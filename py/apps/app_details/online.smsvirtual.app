@@ -1,0 +1,63 @@
+{
+    "title": "SMS Virtual - Receive SMS",
+    "description": "We provide virtual numbers for receiving SMS messages.\r\n\r\nWith our service, you can create an account for any service and application. If you have not received an SMS, we will refund your activations to the balance automatically.\r\n\r\nGet verification SMS messages for any online service without exposing your personal phone number and protect your privacy.\r\n\r\nWhat can you do?\r\n- Get disposable second number instantly\r\n- Receive SMS online\r\n- Easy accounts verification\r\n- Protect your real number\r\n- Fair and transparent pricing\r\n\r\nHow to use the app?\r\n\r\nStep 1: Enter the country and name of the service you need. If there is no service in the list, choose the \u201cany other\u201d option.\r\n\r\nStep 2: After selecting country and service, you will see the price per activation and can get the number ( in case you have no funds, you should add credits to your balance)\r\n\r\nStep 3: Copy the number and paste it on the service, website, or app you have selected.\r\n\r\nStep 4: As soon as the service sends you the SMS, it will be available inside the app. You will usually have up to 20 minutes to get the SMS. No message received until the number expires? - No payment will be made.\r\n\r\nThe time of using a one-time number is limited to 20 minutes.",
+    "descriptionHTML": "We provide virtual numbers for receiving SMS messages.<br><br>With our service, you can create an account for any service and application. If you have not received an SMS, we will refund your activations to the balance automatically.<br><br>Get verification SMS messages for any online service without exposing your personal phone number and protect your privacy.<br><br>What can you do?<br>- Get disposable second number instantly<br>- Receive SMS online<br>- Easy accounts verification<br>- Protect your real number<br>- Fair and transparent pricing<br><br>How to use the app?<br><br>Step 1: Enter the country and name of the service you need. If there is no service in the list, choose the \u201cany other\u201d option.<br><br>Step 2: After selecting country and service, you will see the price per activation and can get the number ( in case you have no funds, you should add credits to your balance)<br><br>Step 3: Copy the number and paste it on the service, website, or app you have selected.<br><br>Step 4: As soon as the service sends you the SMS, it will be available inside the app. You will usually have up to 20 minutes to get the SMS. No message received until the number expires? - No payment will be made.<br><br>The time of using a one-time number is limited to 20 minutes.",
+    "summary": "SMS verification online",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 1143721,
+    "score": 4.453552,
+    "ratings": 20429,
+    "reviews": 738,
+    "histogram": [
+        1441,
+        0,
+        1553,
+        2223,
+        15176
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$0.49 - $2.99 per item",
+    "developer": "Privacy Tec",
+    "developerId": "Privacy+Tec",
+    "developerEmail": "smsvirtualapp@gmail.com",
+    "developerWebsite": "https://smsvirtual.ru/",
+    "developerAddress": null,
+    "privacyPolicy": "https://www.privacypolicygenerator.info/live.php?token=u3ierK4u69BdHWQmCsW2YdNdQDJvt8Eg",
+    "genre": "Communication",
+    "genreId": "COMMUNICATION",
+    "categories": [
+        {
+            "name": "Communication",
+            "id": "COMMUNICATION"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/NYnf7V5ygCiT9cOzxQcCEKIJCNG988Pdu5JuXR_sgCBQ0-xgTmXmaJpEIT6nxSIktw",
+    "headerImage": "https://play-lh.googleusercontent.com/aASJXw5S0NPEikPcAgA4KTKkx72vCtBXaS-9FMedu3uO5-S6hCnmrPUOv1YO07AmLMU",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/WSkitO6Af_F-mcctWUxwMuSVyLJiufeRiFfvyfbkpCwANJGY8ghuHGHAiQdNDKO3Qig",
+        "https://play-lh.googleusercontent.com/y0guRr3LVPKjZz5Et1lSe7qWL8WqM8BqgHICAkhJhGEinc_qi7I8zvOVnUM4rBQAJfY",
+        "https://play-lh.googleusercontent.com/TcedNVUjt4D3BvnlbdAbwJ1m9UZM3e22tH0lkXanEKDANK_tZM5d8cYonu-mggKLPHg",
+        "https://play-lh.googleusercontent.com/QOYYy55JiG3SAlvzqfeqJHltPbqq4xlQp9dkiZoHX2Lx7_dMF5NoFn4pJn_-uvnJ9w"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Apr 20, 2023",
+    "lastUpdatedOn": "Feb 28, 2024",
+    "updated": 1709166311,
+    "version": "1.2.7",
+    "comments": [],
+    "appId": "online.smsvirtual.app",
+    "url": "https://play.google.com/store/apps/details?id=online.smsvirtual.app&hl=en&gl=us"
+}

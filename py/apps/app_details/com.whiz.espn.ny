@@ -1,0 +1,61 @@
+{
+    "title": "ESPN New York",
+    "description": "ESPN New York 98.7FM. Your City, Your Teams, Your Station. Seated at the intersection of life and sports, our knowledgeable and entertaining personalities take you through your day. They don\u2019t just talk about the game \u2026 they\u2019re in the game! It all goes down in the greatest sports city in the world. ESPN New York is your radio home of the Jets, Knicks, Rangers, Islanders, NBA Finals, and the World Series.",
+    "descriptionHTML": "ESPN New York 98.7FM. Your City, Your Teams, Your Station. Seated at the intersection of life and sports, our knowledgeable and entertaining personalities take you through your day. They don\u2019t just talk about the game \u2026 they\u2019re in the game! It all goes down in the greatest sports city in the world. ESPN New York is your radio home of the Jets, Knicks, Rangers, Islanders, NBA Finals, and the World Series.",
+    "summary": "Your radio home of Jets, Knicks, Rangers, Islanders, NBA Finals & World Series",
+    "installs": "10,000+",
+    "minInstalls": 10000,
+    "realInstalls": 20374,
+    "score": 2.8910892,
+    "ratings": 116,
+    "reviews": 75,
+    "histogram": [
+        40,
+        13,
+        16,
+        10,
+        35
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Good Karma Brands- WTMJ",
+    "developerId": "Good+Karma+Brands-+WTMJ",
+    "developerEmail": "ppatel@goodkarmabrands.com",
+    "developerWebsite": "https://goodkarmabrands.com/",
+    "developerAddress": "310 W Wisconsin Ave, Suite 100\nMilwaukee WI, 53203\n",
+    "privacyPolicy": "https://goodkarmabrands.com/privacy-policy/",
+    "genre": "News & Magazines",
+    "genreId": "NEWS_AND_MAGAZINES",
+    "categories": [
+        {
+            "name": "News & Magazines",
+            "id": "NEWS_AND_MAGAZINES"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/ZiGwjdGJl1sQQH1zE2NyXyWidQjjfO2HKVwAQenAmzm503Gp6M3l7XtMUec0nHA-Yg",
+    "headerImage": "https://play-lh.googleusercontent.com/_XWVdB97rQJ8BdKP5wRm79pz4miXHSB8H8mftlkcBX78gT5yd261henGvjzbDBYf7w",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/19ZjB4TIv3cZ_l0z67ibj3xWIpJmMNaVlShCxcwiOz-I_Z4KygQoYJy6xO59chCsxDmR",
+        "https://play-lh.googleusercontent.com/4km-x7pJIcEYGENnicLC-GRTYGwbT14sPF80CD4-cFkIzK8bnaz9LRU5xhZyUVsgSA"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Mar 31, 2022",
+    "lastUpdatedOn": "Aug 30, 2024",
+    "updated": 1725027436,
+    "version": "1.0.480",
+    "comments": [],
+    "appId": "com.whiz.espn.ny",
+    "url": "https://play.google.com/store/apps/details?id=com.whiz.espn.ny&hl=en&gl=us"
+}

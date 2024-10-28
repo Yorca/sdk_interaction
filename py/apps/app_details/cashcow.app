@@ -1,0 +1,63 @@
+{
+    "title": "Cash Cow",
+    "description": "Have you ever wanted to earn money or gift cards while playing games?\r\n\r\nIt\u2019s time to get lucky and get the money you deserve for playing! \ud83c\udf40\r\n\r\nOnce you start playing, we track your active time in the game. Throughout the games, you will collect coins that you can <b>exchange for gift cards</b>. \ud83c\udf81\r\n\r\nAll you have to do is play one of our games and pick up your rewards: gift cards and discounts from top brands as well as money payouts.\r\n\r\nLast but not least, enjoy a smooth game experience with <b>no advertising</b> in the games.\r\n\r\n\ud83d\udc69\u200d\ud83c\udfeb Here\u2019s how it works:\r\n\r\n\ud83d\ude42 First thing, get our completely free app: no in-app purchases, no deposits and no advertising.\r\n\r\n\ud83d\ude0a Once you open Cash Cow, you can <b>select a game</b> from our offer wall: <b>arcade</b>, <b>adventure</b>, <b>casual</b>, <b>strategic games</b>, and more. New games will appear regularly in the app and give you the opportunity to discover something new every day.\r\n\r\n\ud83d\ude03 As soon as you start playing, our app will track your time. <b>The more you play, the more money you make</b>. Check your score on Cash Cow anytime to see your progress. To get a gift card, you will have to collect a certain amount of coins depending on the brand.\r\n\r\n\ud83e\udd11 <b>Fetch your gift card<b></b> as soon as you have reached enough coins. You can also <b>cash out on your Paypal account</b> and get your money in less than 2 days.\r\n\r\nSounds like an easy way to make some money, right? \ud83e\udd2f\r\n\r\nDon\u2019t miss out on our tips to win your gift card faster \ud83d\udcc8\r\n\ud83e\udd1d Invite your friends or family and get extra coins\r\n\ud83d\udcb8 Each game gives a different amount of coins per minute, be smart and select the games where you earn coins faster \r\n\r\nLet\u2019s play and get lucky!\r\n\r\nOffers and rewards are subject to availability.</b>",
+    "descriptionHTML": "Have you ever wanted to earn money or gift cards while playing games?<br><br>It\u2019s time to get lucky and get the money you deserve for playing! \ud83c\udf40<br><br>Once you start playing, we track your active time in the game. Throughout the games, you will collect coins that you can <b>exchange for gift cards</b>. \ud83c\udf81<br><br>All you have to do is play one of our games and pick up your rewards: gift cards and discounts from top brands as well as money payouts.<br><br>Last but not least, enjoy a smooth game experience with <b>no advertising</b> in the games.<br><br>\ud83d\udc69\u200d\ud83c\udfeb Here\u2019s how it works:<br><br>\ud83d\ude42 First thing, get our completely free app: no in-app purchases, no deposits and no advertising.<br><br>\ud83d\ude0a Once you open Cash Cow, you can <b>select a game</b> from our offer wall: <b>arcade</b>, <b>adventure</b>, <b>casual</b>, <b>strategic games</b>, and more. New games will appear regularly in the app and give you the opportunity to discover something new every day.<br><br>\ud83d\ude03 As soon as you start playing, our app will track your time. <b>The more you play, the more money you make</b>. Check your score on Cash Cow anytime to see your progress. To get a gift card, you will have to collect a certain amount of coins depending on the brand.<br><br>\ud83e\udd11 <b>Fetch your gift card<b></b> as soon as you have reached enough coins. You can also <b>cash out on your Paypal account</b> and get your money in less than 2 days.<br><br>Sounds like an easy way to make some money, right? \ud83e\udd2f<br><br>Don\u2019t miss out on our tips to win your gift card faster \ud83d\udcc8<br>\ud83e\udd1d Invite your friends or family and get extra coins<br>\ud83d\udcb8 Each game gives a different amount of coins per minute, be smart and select the games where you earn coins faster <br><br>Let\u2019s play and get lucky!<br><br>Offers and rewards are subject to availability.</b>",
+    "summary": "Play games to earn cash and gift cards. Fast money and fun!",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 2155499,
+    "score": 4.3859797,
+    "ratings": 44401,
+    "reviews": 2958,
+    "histogram": [
+        2530,
+        1105,
+        3692,
+        6430,
+        30636
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Cash-Cow",
+    "developerId": "Cash-Cow",
+    "developerEmail": "contact@appstation.online",
+    "developerWebsite": "https://appstation.online",
+    "developerAddress": null,
+    "privacyPolicy": "https://appstation.online/legal/privacy/cashcow.app",
+    "genre": "Entertainment",
+    "genreId": "ENTERTAINMENT",
+    "categories": [
+        {
+            "name": "Entertainment",
+            "id": "ENTERTAINMENT"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/5XuJ_JbqeEtall0snpMRX4KdyN1xTfzPg59q6VE4FtxU2v9DywoDf2BQyEFbsyifvoug",
+    "headerImage": "https://play-lh.googleusercontent.com/GQWn67f503GR5n_AqENzM_8gpahTaEVrD6X4rPSVelzoGi5AJD0fPHshdWeUfY0ZDFEP",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/t3DadxOF3aOgt_L6HQDjjeJTV-kMbVteGxC4WtoWz6FJNnkBdZo3_7rN7ZTwJWucig0",
+        "https://play-lh.googleusercontent.com/r8guDioy_nkAdxb_kKDWqMQZugdnGo83ZpO6-RNBR6LEUF1WAfo2XgMEdMQp00UChmk",
+        "https://play-lh.googleusercontent.com/itB2phikKTO2SrwG44YHGs_98cdohx021neFE0rnzBSlgozxwiLok9h_ECX9QKiO6yQ",
+        "https://play-lh.googleusercontent.com/z9Eb8l1h4E_g0lbcT4B7j7kb_kA4ndXugQSuyNCZB2b4FhoC3F9AXo5euCTQLdkmghs"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Jan 6, 2023",
+    "lastUpdatedOn": "Oct 16, 2024",
+    "updated": 1729088638,
+    "version": "5.1.2-CashCow",
+    "comments": [],
+    "appId": "cashcow.app",
+    "url": "https://play.google.com/store/apps/details?id=cashcow.app&hl=en&gl=us"
+}

@@ -1,0 +1,63 @@
+{
+    "title": "Luma AI: 3D Capture",
+    "description": "Show your world in spectacular quality 3D, and share anywhere on the web. Brought to you by Luma, the 3D AI Company.\r\n\r\nLuma is a new way to create incredible lifelike 3D with AI using just your phone. Easily capture memories, products, landscapes and people wherever you are. Share these spectacular Interactive Scenes with anyone and anywhere on the web.\r\n\r\nNo depth sensor or fancy capture equipment necessary, all you need to create is your phone!\r\n\r\n- Capture 3D scenes with intricate details, reflections, and lighting and share with everyone. Bring people where you are!\r\n\r\n- Capture products in 3D and embed them on your website exactly how they appear in real life. No more \"fake 3D\".\r\n\r\n- Capture 3D mesh game assets in unmatched quality and bring them to Blender, Unity or your 3D engine of choice.\r\n\r\n- Export lifelike NeRFs and Gaussian Splats to Unreal, Unity, and other supported tools.\r\n\r\nWe are excited to see what you create with this brand new AI medium! If you find Luma useful, fun, or interesting, or need help please join us on Luma's Discord. When you share, please tag us on Twitter (@LumaLabsAI), LinkedIn, Instagram, or TikTok.",
+    "descriptionHTML": "Show your world in spectacular quality 3D, and share anywhere on the web. Brought to you by Luma, the 3D AI Company.<br><br>Luma is a new way to create incredible lifelike 3D with AI using just your phone. Easily capture memories, products, landscapes and people wherever you are. Share these spectacular Interactive Scenes with anyone and anywhere on the web.<br><br>No depth sensor or fancy capture equipment necessary, all you need to create is your phone!<br><br>- Capture 3D scenes with intricate details, reflections, and lighting and share with everyone. Bring people where you are!<br><br>- Capture products in 3D and embed them on your website exactly how they appear in real life. No more &quot;fake 3D&quot;.<br><br>- Capture 3D mesh game assets in unmatched quality and bring them to Blender, Unity or your 3D engine of choice.<br><br>- Export lifelike NeRFs and Gaussian Splats to Unreal, Unity, and other supported tools.<br><br>We are excited to see what you create with this brand new AI medium! If you find Luma useful, fun, or interesting, or need help please join us on Luma&#39;s Discord. When you share, please tag us on Twitter (@LumaLabsAI), LinkedIn, Instagram, or TikTok.",
+    "summary": "AI for gorgeous 3D capture",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 1989855,
+    "score": 3.55,
+    "ratings": 3337,
+    "reviews": 75,
+    "histogram": [
+        931,
+        152,
+        152,
+        254,
+        1795
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Luma AI",
+    "developerId": "8889266027444065964",
+    "developerEmail": "hello@lumalabs.ai",
+    "developerWebsite": "https://lumalabs.ai",
+    "developerAddress": null,
+    "privacyPolicy": "https://lumalabs.ai/legal/privacy",
+    "genre": "Photography",
+    "genreId": "PHOTOGRAPHY",
+    "categories": [
+        {
+            "name": "Photography",
+            "id": "PHOTOGRAPHY"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/AQybb5Ro1vvBtYOWKxxdgrvalnLFIsx7dh50DDAQFpPtmrZ1A-5CKTTO2xAr_A-EZ_CX",
+    "headerImage": "https://play-lh.googleusercontent.com/NzWHX6Ndw3eoStP4tJVJ9m0vxeVAbz2AvndqAowdA6LaADFa42iBfkuFPoBtRYyeYmke",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/GbCStNCCvWFJRXcmF0xBCslSQabD9ja2xiCRMuQfWRlTeZ5eYOSr0JLA0-rSoAslTvTq",
+        "https://play-lh.googleusercontent.com/ro2dPRemTZMeYXTcNdANRhB2xRctYxVmJdlTsoLCiOHJHtRfu4P5Sr79YpHT4dkiMFAf",
+        "https://play-lh.googleusercontent.com/kDKf6RricGjMZ6ii4JTjomKCdjH7ZIbJcVm6EFk32px90ZVpXCPmlERIBqy48ZI1e9E",
+        "https://play-lh.googleusercontent.com/yyVkqO8SPL7o5yrvyiMnjOoJrC2epfdeftI3CRPhc6onbjEWFIa44C4bJJ2MO_vhDg"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Apr 9, 2024",
+    "lastUpdatedOn": "Jul 15, 2024",
+    "updated": 1721106552,
+    "version": "0.5.7",
+    "comments": [],
+    "appId": "ai.lumalabs.polar",
+    "url": "https://play.google.com/store/apps/details?id=ai.lumalabs.polar&hl=en&gl=us"
+}

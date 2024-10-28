@@ -1,0 +1,63 @@
+{
+    "title": "Cool VPN Pro: Secure VPN Proxy",
+    "description": "Cool VPN Pro is a fast and unlimited VPN (Virtual Private Network) proxy, offering you thousands of VPN servers.\r\n\r\n\u2714Reasons to choose Cool VPN Pro:\r\n\r\n\u2b50 100% Secure free VPN\r\nThe best secured free VPN clients for Android. You can enjoy unlimited VPN service and VPN proxy servers anytime, anywhere on any networks.\r\n\r\n\u2b50 Access websites with secure Cool VPN Pro\r\nAccess apps and sites with super stable and fast VPN speed. No worry about the network unavailable problem, because when the network condition is unsatisfying, you can connect to Cool VPN Pro proxy servers or dedicated servers to access the web resources, forum, news, social network, shopping websites or the streaming services with stable and fast speed.\r\n\r\n\u2b50No logs kept\r\nCool VPN Pro does not track or keep any logs of users\u2019 activities. Your security and privacy are guaranteed!\r\n\r\n\u2b50 Simple, one tap connects to VPN\r\nGo online safely and anonymously in just one tap.\r\n\r\n\u2b50Connect automatically\r\nSet Cool VPN Pro to auto-connect on Wi-Fi, on cellular data, or stay connected to VPN online at all times.\r\n\r\n\u2b50 Unparalleled VPN Performance\r\nOur proprietary servers ensure the fastest VPN speed, most stable and secured connections.\r\n\r\n\u2b50 Secure public Wi-Fi\r\nSecure your connection with high safe encryption algorithm on public Wi-Fi hotspots. Protect your data and keep online activity more private with our VPN encryption.\r\n\r\n\u2b50 Streaming and gaming\r\nStreaming and gaming with super fast VPN, stream videos, live sports and TV shows without buffering. Listen to popular songs from anywhere on any music player. Improve your gaming experience by connecting to the fastest VPN game server.\r\n\r\n\u2b50 Apps specific Settings\r\nYou can allow specific apps to use the VPN service and other apps to use your original network.\r\n\r\nStay with us! Stay free, secure, and anonymous while surfing the Internet with Cool VPN Pro.",
+    "descriptionHTML": "Cool VPN Pro is a fast and unlimited VPN (Virtual Private Network) proxy, offering you thousands of VPN servers.<br><br>\u2714Reasons to choose Cool VPN Pro:<br><br>\u2b50 100% Secure free VPN<br>The best secured free VPN clients for Android. You can enjoy unlimited VPN service and VPN proxy servers anytime, anywhere on any networks.<br><br>\u2b50 Access websites with secure Cool VPN Pro<br>Access apps and sites with super stable and fast VPN speed. No worry about the network unavailable problem, because when the network condition is unsatisfying, you can connect to Cool VPN Pro proxy servers or dedicated servers to access the web resources, forum, news, social network, shopping websites or the streaming services with stable and fast speed.<br><br>\u2b50No logs kept<br>Cool VPN Pro does not track or keep any logs of users\u2019 activities. Your security and privacy are guaranteed!<br><br>\u2b50 Simple, one tap connects to VPN<br>Go online safely and anonymously in just one tap.<br><br>\u2b50Connect automatically<br>Set Cool VPN Pro to auto-connect on Wi-Fi, on cellular data, or stay connected to VPN online at all times.<br><br>\u2b50 Unparalleled VPN Performance<br>Our proprietary servers ensure the fastest VPN speed, most stable and secured connections.<br><br>\u2b50 Secure public Wi-Fi<br>Secure your connection with high safe encryption algorithm on public Wi-Fi hotspots. Protect your data and keep online activity more private with our VPN encryption.<br><br>\u2b50 Streaming and gaming<br>Streaming and gaming with super fast VPN, stream videos, live sports and TV shows without buffering. Listen to popular songs from anywhere on any music player. Improve your gaming experience by connecting to the fastest VPN game server.<br><br>\u2b50 Apps specific Settings<br>You can allow specific apps to use the VPN service and other apps to use your original network.<br><br>Stay with us! Stay free, secure, and anonymous while surfing the Internet with Cool VPN Pro.",
+    "summary": "Super fast and unlimited VPN proxy. Secure proxy for Chat, Video and Gaming.",
+    "installs": "10,000,000+",
+    "minInstalls": 10000000,
+    "realInstalls": 23556983,
+    "score": 4.68596,
+    "ratings": 295729,
+    "reviews": 9043,
+    "histogram": [
+        11585,
+        3973,
+        8716,
+        17110,
+        254309
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$0.99 - $94.99 per item",
+    "developer": "Cool VPN Team",
+    "developerId": "4954296450775707621",
+    "developerEmail": "foxecomp@gmail.com",
+    "developerWebsite": "https://coolvpn.cc",
+    "developerAddress": "51 Ayer Rajah Crescent #07-09, Singapore",
+    "privacyPolicy": "https://www.coolvpn.cc/privacy_policy.html",
+    "genre": "Tools",
+    "genreId": "TOOLS",
+    "categories": [
+        {
+            "name": "Tools",
+            "id": "TOOLS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/tZqE3xaq0U-VbYRipfOw3ti4Xyv9t_NAEz6T_oS8WPNILUuFdTi63H4EvunMUGYNTw",
+    "headerImage": "https://play-lh.googleusercontent.com/UeK9c0kIfG8zk-f8QmHXKp-HJIwGZ0fuDJ4qy6ToZt9-eETtqC-eQeL16OpUHO0-vuXm",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/DKxCTF4c4iQ8iN1pBJwvmoF2FOtFr2DoMc8vJpZBCdIi7LifWgdxd0i4-zA6EA8KDGHb",
+        "https://play-lh.googleusercontent.com/cYashzcDgCGoj9L_N81EP42hz1Ak8-7fCuR8KLIXlNWNUREsl5EvCqpd3QmrjhaSZlA",
+        "https://play-lh.googleusercontent.com/wsR3OYXNnvgeOpnpBzZ5PywEbWrZbhJXuodiQVtKMgzoTe_3DH84EQHTAjChSkxyY1NL",
+        "https://play-lh.googleusercontent.com/cCrndCBsaxHHxsi0BYxru4MZ0Le92Bg88SiHJW_LkacL5sExP0mWWHj2mUwr_3fZbrE"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Apr 30, 2021",
+    "lastUpdatedOn": "Oct 23, 2024",
+    "updated": 1729676460,
+    "version": "1.0.344",
+    "comments": [],
+    "appId": "cc.coolline.client.pro",
+    "url": "https://play.google.com/store/apps/details?id=cc.coolline.client.pro&hl=en&gl=us"
+}

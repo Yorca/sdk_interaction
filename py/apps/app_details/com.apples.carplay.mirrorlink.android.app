@@ -1,0 +1,62 @@
+{
+    "title": "Carplay: Android Auto Sync",
+    "description": "Carplay: android auto sync lets you link your phone to the car screen in a simple way without using any cable.Carplay android auto sync allows connecting your android phone to your car screen by granting access to your phone's apps while driving. Apply auto carplay and apply carplay for android auto allows you to safely share your phone screen with your car and other devices.\r\n\r\nCarplay android and carplay for android auto is designed to be simple and user-friendly for your convenience. Bid farewell to boredom on long drives! Now watch videos, view photos and play music on your car big screen using the carplay android auto sync app. The connection is automatically hassle-free and makes linking your smartphone to your car screen easy.\r\n\r\nMirror link your phone screen to your car display with car enhancing your safe driving experience. Stay hands-free while driving and easily manage your tasks during your commute or long trips.\r\n\r\n<b>Main Features</b>\r\nImmediate connectivity\r\nQuickly and reliably link your android phone to car screen eliminating the need for manual setup.\r\n\r\nAdvance control\r\nUtilize hands-free voice control to handle calls, send messages and manage applications seamlessly while keeping your hands on the wheel.\r\n\r\nEasy custom\r\nSelect and organize your preferred apps for swift access, customizing your carplay for android auto experience to suit your preferences.\r\n\r\nCar Ringtones & Wallpapers\r\nOur Carplay or android auto  provides lots of car ringtones and beautiful car wallpapers for your lock screen & home screen.\r\n\r\n<b>Other features</b>\r\n-Simple connect phone with car screen \r\n-Mirror your phone screen with just one tap\r\n-Watch videos, see photos and enjoy songs on android auto\r\n-Auto carplay allows you to listen to music from apps\r\n-User-friendly apple carplay for android auto ensures safe screen sharing with cars and devices\r\n\r\nOur Car Play or android auto sync makes managing multiple vehicles easy. Access all your cars in this single app. Regardless of whether you own a Mercedes Bez, Audi, GMC, BMW, Acura, Bugatti, Ferrari, Honda, Hyundai, Jaguar, Jeep, KIA, Lamborghini, Land Rover, Lotus, Nissan, Rolls Royce, Tesla and Toyota manage then all through the apple carplay.\r\n\r\nDownload Carplay: android auto sync to easily connect your screen with a simple and user-friendly experience. Bid farewell to boredom drives and enjoy a safe journey.\r\nThank you!",
+    "descriptionHTML": "Carplay: android auto sync lets you link your phone to the car screen in a simple way without using any cable.Carplay android auto sync allows connecting your android phone to your car screen by granting access to your phone&#39;s apps while driving. Apply auto carplay and apply carplay for android auto allows you to safely share your phone screen with your car and other devices.<br><br>Carplay android and carplay for android auto is designed to be simple and user-friendly for your convenience. Bid farewell to boredom on long drives! Now watch videos, view photos and play music on your car big screen using the carplay android auto sync app. The connection is automatically hassle-free and makes linking your smartphone to your car screen easy.<br><br>Mirror link your phone screen to your car display with car enhancing your safe driving experience. Stay hands-free while driving and easily manage your tasks during your commute or long trips.<br><br><b>Main Features</b><br>Immediate connectivity<br>Quickly and reliably link your android phone to car screen eliminating the need for manual setup.<br><br>Advance control<br>Utilize hands-free voice control to handle calls, send messages and manage applications seamlessly while keeping your hands on the wheel.<br><br>Easy custom<br>Select and organize your preferred apps for swift access, customizing your carplay for android auto experience to suit your preferences.<br><br>Car Ringtones &amp; Wallpapers<br>Our Carplay or android auto  provides lots of car ringtones and beautiful car wallpapers for your lock screen &amp; home screen.<br><br><b>Other features</b><br>-Simple connect phone with car screen <br>-Mirror your phone screen with just one tap<br>-Watch videos, see photos and enjoy songs on android auto<br>-Auto carplay allows you to listen to music from apps<br>-User-friendly apple carplay for android auto ensures safe screen sharing with cars and devices<br><br>Our Car Play or android auto sync makes managing multiple vehicles easy. Access all your cars in this single app. Regardless of whether you own a Mercedes Bez, Audi, GMC, BMW, Acura, Bugatti, Ferrari, Honda, Hyundai, Jaguar, Jeep, KIA, Lamborghini, Land Rover, Lotus, Nissan, Rolls Royce, Tesla and Toyota manage then all through the apple carplay.<br><br>Download Carplay: android auto sync to easily connect your screen with a simple and user-friendly experience. Bid farewell to boredom drives and enjoy a safe journey.<br>Thank you!",
+    "summary": "Carplay android auto sync a mirror link app with a Carplay interface style",
+    "installs": "10,000+",
+    "minInstalls": 10000,
+    "realInstalls": 15796,
+    "score": null,
+    "ratings": null,
+    "reviews": null,
+    "histogram": [
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Sayyara apps & games",
+    "developerId": "9147795173074283755",
+    "developerEmail": "sayyaragames@gmail.com",
+    "developerWebsite": "https://allvideodownloaderplaystore.blogspot.com/ads.txt",
+    "developerAddress": "India",
+    "privacyPolicy": "https://allvideodownloaderplaystore.blogspot.com/2024/02/policy-last-updated-february-12-2024.html",
+    "genre": "Libraries & Demo",
+    "genreId": "LIBRARIES_AND_DEMO",
+    "categories": [
+        {
+            "name": "Libraries & Demo",
+            "id": "LIBRARIES_AND_DEMO"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/eNwzTsj0EMp5GLh6Uif32V1WIcqYeJN5_HeS90frNVGj8ORCZG2xkZMphtpR4Jh_5h0",
+    "headerImage": "https://play-lh.googleusercontent.com/YHoxEHpNGhmMAZyVPXpQKuKqf8VffI01J9Ht5-bq16-PgdsHcb5XUi3Fgw69anUy5qw",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/-7t2lJh3WniQV3-NnNngnD-i7nhISzcL2bldilfgSunx8MwDpWAWLNxL4DYb7rB2pw",
+        "https://play-lh.googleusercontent.com/-7yP62Jl5WiQHQXpdHvqZ3IRIARpWA7T4mCXdEDa3sMX5WHgqMez2X3Pax1Cl0K_c64D",
+        "https://play-lh.googleusercontent.com/27UbFW3G-XcdVoDV2DjZ_Mcz32oJPJwKq6bMqR3Yv_eiLwy69smaU_-izdqf8jv2qw"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Feb 15, 2024",
+    "lastUpdatedOn": "Aug 16, 2024",
+    "updated": 1723845065,
+    "version": "1.3",
+    "comments": [],
+    "appId": "com.apples.carplay.mirrorlink.android.app",
+    "url": "https://play.google.com/store/apps/details?id=com.apples.carplay.mirrorlink.android.app&hl=en&gl=us"
+}

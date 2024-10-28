@@ -1,0 +1,63 @@
+{
+    "title": "Prisma Health GO",
+    "description": "Prisma Health GO app helps you navigate each step of a visit to Prisma Health facilities. Prisma Health GO allows you to locate a provider practice, patient room, department, or amenity using your smartphone, then provides turn-by-turn guidance from your current location all the way to your destination- including indoors. Prisma Health GO will direct you to the closest parking area and then save where you\u2019ve parked to navigate you back when it\u2019s time to go home. Other features of the app allow you to look up a Prisma Health provider, make an appointment, access patient information using a patient portal, pay your bill, and see waiting times for our emergency rooms as well as our convenient urgent care.\r\n\r\nWhether you are a patient or visiting a loved one, Prisma Health GO allows you to focus on what truly matters. Give Prisma Health GO a try today!\r\n\r\nUse Prisma Health GO to:\r\n\r\nNavigation\r\n\r\n\u00a0 \u00a0 \u2022 Get directions to hospital or practice location\r\n\u00a0 \u00a0 \u2022 Get step-by-step indoor guide to patient\u2019s room, department, or amenity\r\n\u00a0 \u00a0 \u2022 Find the nearest Emergency Department with wait times\r\n\u00a0 \u00a0 \u2022 Find the nearest Convenient Care (Urgent Care) with wait times\r\n\u00a0 \u00a0 \u2022 Find the Mobile Clinic\r\n\r\nSchedule Appointments\r\n\r\n\u00a0 \u00a0 \u2022 Locate Prisma Health provider near you\r\n\u00a0 \u00a0 \u2022 Schedule your appointment with Prisma Health provider\r\n\u00a0 \u00a0 \u2022 Schedule a spot at one of our Convenient Care locations\r\n\r\nPatient Portals\r\n\r\n\u00a0 \u00a0 \u2022 Access MyChart, OneChart, or MyHealth\r\n\u00a0 \u00a0 \u2022 Access billing information and pay your bill\r\n\u00a0 \u00a0 \u2022 Chat with your provider\r\n\u00a0 \u00a0 \u2022 Manage your health information",
+    "descriptionHTML": "Prisma Health GO app helps you navigate each step of a visit to Prisma Health facilities. Prisma Health GO allows you to locate a provider practice, patient room, department, or amenity using your smartphone, then provides turn-by-turn guidance from your current location all the way to your destination- including indoors. Prisma Health GO will direct you to the closest parking area and then save where you\u2019ve parked to navigate you back when it\u2019s time to go home. Other features of the app allow you to look up a Prisma Health provider, make an appointment, access patient information using a patient portal, pay your bill, and see waiting times for our emergency rooms as well as our convenient urgent care.<br><br>Whether you are a patient or visiting a loved one, Prisma Health GO allows you to focus on what truly matters. Give Prisma Health GO a try today!<br><br>Use Prisma Health GO to:<br><br>Navigation<br><br>\u00a0 \u00a0 \u2022 Get directions to hospital or practice location<br>\u00a0 \u00a0 \u2022 Get step-by-step indoor guide to patient\u2019s room, department, or amenity<br>\u00a0 \u00a0 \u2022 Find the nearest Emergency Department with wait times<br>\u00a0 \u00a0 \u2022 Find the nearest Convenient Care (Urgent Care) with wait times<br>\u00a0 \u00a0 \u2022 Find the Mobile Clinic<br><br>Schedule Appointments<br><br>\u00a0 \u00a0 \u2022 Locate Prisma Health provider near you<br>\u00a0 \u00a0 \u2022 Schedule your appointment with Prisma Health provider<br>\u00a0 \u00a0 \u2022 Schedule a spot at one of our Convenient Care locations<br><br>Patient Portals<br><br>\u00a0 \u00a0 \u2022 Access MyChart, OneChart, or MyHealth<br>\u00a0 \u00a0 \u2022 Access billing information and pay your bill<br>\u00a0 \u00a0 \u2022 Chat with your provider<br>\u00a0 \u00a0 \u2022 Manage your health information",
+    "summary": "Never get lost again - Step-by-step hospital navigation",
+    "installs": "10,000+",
+    "minInstalls": 10000,
+    "realInstalls": 39492,
+    "score": 4.0789475,
+    "ratings": 76,
+    "reviews": 21,
+    "histogram": [
+        9,
+        3,
+        8,
+        9,
+        47
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Prisma Health",
+    "developerId": "Prisma+Health",
+    "developerEmail": "MobileDev@PrismaHealth.org",
+    "developerWebsite": null,
+    "developerAddress": "525 Grove Road\nGreenville, SC 29605",
+    "privacyPolicy": "https://prisma.goziohealth.com/microsites/legal/privacy.html",
+    "genre": "Medical",
+    "genreId": "MEDICAL",
+    "categories": [
+        {
+            "name": "Medical",
+            "id": "MEDICAL"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/x8qnTgiBPMNkOJSMnf9nvJcPr96OHMymgH9thmtUvZUAKBn2SWYyN2ma1c_1s3W3wVU",
+    "headerImage": "https://play-lh.googleusercontent.com/BPhyWzeziF7fuYMkEBWLB8Vs27C3NwVinrJhwnToAHk60iiu-TbekVof-ND4_UN6Tdg",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/C7djPv4AYD1Hurna5XwD8S9-KsTncKuTIqolFW7yilsDnRU3YHOMb7_TAXCs60-T1FQ",
+        "https://play-lh.googleusercontent.com/wkgONVagbAaNw0wj7N6-r3T64DwOJPtrW_KT88KSADrwY7p_rdhQKFfu2e6WOmIuVAQt",
+        "https://play-lh.googleusercontent.com/peE6derfHFm2xW3H5QewqmiBwxFZvd70IzrnAjp5YcEYc9YMAACcPYGInDXyi_QO4_0",
+        "https://play-lh.googleusercontent.com/42TSMqJ24fIfaX1AalLett0X8JhmBoDFFIbGFN_4H5NGfLO8Ps5DlKsSQw1IpVZpxj0o"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Apr 12, 2019",
+    "lastUpdatedOn": "Jul 10, 2024",
+    "updated": 1720640459,
+    "version": "3.4.0",
+    "comments": [],
+    "appId": "org.prismahealth.go",
+    "url": "https://play.google.com/store/apps/details?id=org.prismahealth.go&hl=en&gl=us"
+}

@@ -1,0 +1,63 @@
+{
+    "title": "Starynovel: Read Novel & Story",
+    "description": "Starynovel, an reading app makes you relax and immerse yourself into great stories and good novels! \r\nReading exclusive and original stories in your own language\r\nAn exploration social storytelling platform that connects a global community of fiction-loving readers and writers through the power of story.\r\n\r\nDownload Starynovel today to start reading novels and stories\r\nJoin Starynovel and become part of an international community of story lovers. Connect with other passionate readers and writers, comment directly on stories as you read them, and support writers as they create and share original works. You can even read together and share your private library, or create reading lists so your book friends know what you're reading.\r\n\r\nFeatures of Starynovel, an excellent reading app that you can\u2019t miss\r\n- After paying a monthly subscription, you can enjoy all the books on the entire platform, whether it is the most popular or currently best-selling book.\r\n- Readers can browse popular fiction genres including romance, fantasy, mystery, comedy, young adult fiction, and more, or explore other thrilling genres like werewolf, mafia, dark romance, and billionaires.\r\n- Build your own private library and save your favorite stories to take with you wherever you go, share your reviews and get instant alerts when new chapters are added or when you get a reply.\r\n- Hooked on a story? Just sync your accounts and easily pick up where you left off, whether you're reading on your computer, phone, or tablet.\r\n\r\nAbout Us:\r\nExplore all popular stories on our book reading app, Starynovel, offered by Dreame Media, it has the same original book volume and large group of authors. With the monthly subscription fee, you can enjoy all the novels that previously required money to unlock each chapter.\r\n\r\nAbout the Service:\r\nWelcome to Starynovel, the ultimate destination for online novel lovers! While providing a large number of wonderful novels, we also pay great attention to service quality. The new subscription model will open a new era of novel unlocking. If you encounter any problems, please feel free to contact us in the app.",
+    "descriptionHTML": "Starynovel, an reading app makes you relax and immerse yourself into great stories and good novels! <br>Reading exclusive and original stories in your own language<br>An exploration social storytelling platform that connects a global community of fiction-loving readers and writers through the power of story.<br><br>Download Starynovel today to start reading novels and stories<br>Join Starynovel and become part of an international community of story lovers. Connect with other passionate readers and writers, comment directly on stories as you read them, and support writers as they create and share original works. You can even read together and share your private library, or create reading lists so your book friends know what you&#39;re reading.<br><br>Features of Starynovel, an excellent reading app that you can\u2019t miss<br>- After paying a monthly subscription, you can enjoy all the books on the entire platform, whether it is the most popular or currently best-selling book.<br>- Readers can browse popular fiction genres including romance, fantasy, mystery, comedy, young adult fiction, and more, or explore other thrilling genres like werewolf, mafia, dark romance, and billionaires.<br>- Build your own private library and save your favorite stories to take with you wherever you go, share your reviews and get instant alerts when new chapters are added or when you get a reply.<br>- Hooked on a story? Just sync your accounts and easily pick up where you left off, whether you&#39;re reading on your computer, phone, or tablet.<br><br>About Us:<br>Explore all popular stories on our book reading app, Starynovel, offered by Dreame Media, it has the same original book volume and large group of authors. With the monthly subscription fee, you can enjoy all the novels that previously required money to unlock each chapter.<br><br>About the Service:<br>Welcome to Starynovel, the ultimate destination for online novel lovers! While providing a large number of wonderful novels, we also pay great attention to service quality. The new subscription model will open a new era of novel unlocking. If you encounter any problems, please feel free to contact us in the app.",
+    "summary": "Starynovel: Your Personal Reading App & Online Book Library",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 318262,
+    "score": 4.4,
+    "ratings": 1254,
+    "reviews": 121,
+    "histogram": [
+        86,
+        61,
+        37,
+        136,
+        927
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$0.99 - $175.99 per item",
+    "developer": "Dreame Media",
+    "developerId": "Dreame+Media",
+    "developerEmail": "dreameworks2018@gmail.com",
+    "developerWebsite": "https://m.starynovel.com/",
+    "developerAddress": "545 ORCHARD ROAD #16-09 FAR EAST SHOPPING CENTRE SINGAPORE (238882)",
+    "privacyPolicy": "https://h5.dreame.com/page/privacyPolicy?originProduct=26",
+    "genre": "Books & Reference",
+    "genreId": "BOOKS_AND_REFERENCE",
+    "categories": [
+        {
+            "name": "Books & Reference",
+            "id": "BOOKS_AND_REFERENCE"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/s3GZYw9YZ3TcUFo7iMvas1y4qQ_JLwLo5OyWRtfPVyT6qv0KW0qo0Wf_QpTdgieSznjV",
+    "headerImage": "https://play-lh.googleusercontent.com/XJZ5y5CLjCGIdfeLKeFWGxV9C9Q-_iYnpmA8bdTAspUcymKcOz8yqzqDitZZ1PU70g",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/iENq4KTXQagFzbiQ-W8ywWX3Ht97yRrs6XyHr_7VUpzI8975n4jVGFFnG2Z_YNP2fX4",
+        "https://play-lh.googleusercontent.com/VW5q7eoaqLRtMlsOLcPJklhMm_iNzT47iKXI1UW5ZOHhkG3fCiUfOVIPvmIpsAAeJxU",
+        "https://play-lh.googleusercontent.com/tZoT0iSo61SvN5RiCwSDGT5qQ-pQKPALrOLYBlOWb8Dh_nScwq8HXgpCsF5RwlgSKTLa",
+        "https://play-lh.googleusercontent.com/GCQq2sxt5BjPrhOeZZ8-7meYvik1wPNZdkhlxARWSWSgYQAsF5NYhULxFXU-bWL8bZU"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Teen",
+    "contentRatingDescription": "Diverse Content: Discretion Advised",
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Aug 12, 2021",
+    "lastUpdatedOn": "Sep 24, 2024",
+    "updated": 1727177997,
+    "version": "2.20.0",
+    "comments": [],
+    "appId": "com.dreame.unlimited.gp",
+    "url": "https://play.google.com/store/apps/details?id=com.dreame.unlimited.gp&hl=en&gl=us"
+}

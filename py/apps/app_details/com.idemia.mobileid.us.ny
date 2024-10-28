@@ -1,0 +1,61 @@
+{
+    "title": "New York Mobile ID",
+    "description": "In today's connected world, Mobile ID offers a private, secure, contactless way to verify identity, either at home or on-the-go. Everything is on your phone \u2013 now your ID is, too!\r\n\r\nIntuitive, easy-to-use and highly convenient, New York Mobile ID can be used anywhere it\u2019s accepted, in any context a physical ID would be used \u2013 with enhanced privacy features. Only your Face ID, TouchID or six-digit pin will unlock the app and access your Mobile ID.\r\n\r\nIn five simple steps, you can create your New York MiD:\r\n\r\n1. Download the app and set permissions\r\n2. Verify access to your phone number \r\n3. Use your device camera to scan the front and back of your driver license or ID card\r\n4. Follow the steps to capture a selfie \r\n5. Set up app security and you\u2019re good to go! \r\n\r\nPlease note: \r\nNew York Mobile ID is an official state-issued ID, serving as a companion to your physical ID. As not all entities are able to verify Mobile ID, you should continue to carry your physical ID. \r\n\r\nFor more information, please visit https://dmv.ny.gov/mobileid",
+    "descriptionHTML": "In today&#39;s connected world, Mobile ID offers a private, secure, contactless way to verify identity, either at home or on-the-go. Everything is on your phone \u2013 now your ID is, too!<br><br>Intuitive, easy-to-use and highly convenient, New York Mobile ID can be used anywhere it\u2019s accepted, in any context a physical ID would be used \u2013 with enhanced privacy features. Only your Face ID, TouchID or six-digit pin will unlock the app and access your Mobile ID.<br><br>In five simple steps, you can create your New York MiD:<br><br>1. Download the app and set permissions<br>2. Verify access to your phone number <br>3. Use your device camera to scan the front and back of your driver license or ID card<br>4. Follow the steps to capture a selfie <br>5. Set up app security and you\u2019re good to go! <br><br>Please note: <br>New York Mobile ID is an official state-issued ID, serving as a companion to your physical ID. As not all entities are able to verify Mobile ID, you should continue to carry your physical ID. <br><br>For more information, please visit https://dmv.ny.gov/mobileid",
+    "summary": "NY official digital ID",
+    "installs": "50,000+",
+    "minInstalls": 50000,
+    "realInstalls": 68606,
+    "score": 4.192,
+    "ratings": 1246,
+    "reviews": 746,
+    "histogram": [
+        209,
+        19,
+        9,
+        89,
+        917
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Idemia R&D",
+    "developerId": "Idemia+R%26D",
+    "developerEmail": "MobileIDHelp@us.idemia.com",
+    "developerWebsite": "https://dmv.ny.gov/mobileid",
+    "developerAddress": null,
+    "privacyPolicy": "https://na.idemia.com/mid/user-privacy/",
+    "genre": "Travel & Local",
+    "genreId": "TRAVEL_AND_LOCAL",
+    "categories": [
+        {
+            "name": "Travel & Local",
+            "id": "TRAVEL_AND_LOCAL"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/qZx0LnmqwRjvaS4c1UU6bXbLWMqGgVN67OYTZD4ZtKJgw8CC8l686dK91iZO7hRT1A",
+    "headerImage": "https://play-lh.googleusercontent.com/vWq4urJGfXlMAjQYz99XF74M3L13XmNKk9cTg1nnLn3yJHNAxDzSbYKoQnEckTwwgI0",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/XzxBOAxQ19UjBD5mXEn8w_gkJ4hDk1DCvvFUFV-oweY1TZxwPg-tZ5TTOUVFXVVe9yM",
+        "https://play-lh.googleusercontent.com/YefanevRxfYB9OVBFPkMHtlScCpHzO6wmrz-w7QjYBeoU8q5WrqVQHKhZz3mvbfiXU4"
+    ],
+    "video": "https://www.youtube.com/embed/ODhuLwquBsk?ps=play&vq=large&rel=0&autohide=1&showinfo=0",
+    "videoImage": "https://play-lh.googleusercontent.com/vWq4urJGfXlMAjQYz99XF74M3L13XmNKk9cTg1nnLn3yJHNAxDzSbYKoQnEckTwwgI0",
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Oct 13, 2023",
+    "lastUpdatedOn": "Aug 19, 2024",
+    "updated": 1724090781,
+    "version": "4.15.5",
+    "comments": [],
+    "appId": "com.idemia.mobileid.us.ny",
+    "url": "https://play.google.com/store/apps/details?id=com.idemia.mobileid.us.ny&hl=en&gl=us"
+}

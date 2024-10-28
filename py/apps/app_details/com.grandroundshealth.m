@@ -1,0 +1,63 @@
+{
+    "title": "Included Health",
+    "description": "You don\u2019t have to manage your health alone, you\u2019ve got Included Health (formerly Grand Rounds). Say hello to your own personal care team of fully licensed doctors, nurses and care coordinators, on staff and on call to get you the highest-quality care. Connect with in-network doctors in a flash, expert second opinions, and answers to all your health and benefits questions.",
+    "descriptionHTML": "You don\u2019t have to manage your health alone, you\u2019ve got Included Health (formerly Grand Rounds). Say hello to your own personal care team of fully licensed doctors, nurses and care coordinators, on staff and on call to get you the highest-quality care. Connect with in-network doctors in a flash, expert second opinions, and answers to all your health and benefits questions.",
+    "summary": "It's time you were seen. Formerly Grand Rounds.",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 260030,
+    "score": 4.753721,
+    "ratings": 7436,
+    "reviews": 871,
+    "histogram": [
+        372,
+        30,
+        20,
+        211,
+        6801
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Included Health",
+    "developerId": "9024206761627651750",
+    "developerEmail": "support@grandrounds.com",
+    "developerWebsite": "https://www.grandrounds.com",
+    "developerAddress": "1 California Street, Suite 2300\nSan Francisco, CA 94111",
+    "privacyPolicy": "http://www.grandrounds.com/privacy/",
+    "genre": "Medical",
+    "genreId": "MEDICAL",
+    "categories": [
+        {
+            "name": "Medical",
+            "id": "MEDICAL"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/qYCWG6w5ldhvDPKBgfNfpF3l-pBT8E-Ir5tPos6LWpunJ6ChMo3Edi4mJL7C00EzpSUB",
+    "headerImage": "https://play-lh.googleusercontent.com/92HQUQEAGq6kJN5h-ZzLMaq9ltkJNzta1-RSBWY_ONakXYOdmJMG2KWIVeck4ha2Zas",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/UzxaoC9MDaM_G2cAV8bHDuhUx2KZIxrVx-zXz1UNCHYPVrqfUMOaQEEVCzLrSxeafEg",
+        "https://play-lh.googleusercontent.com/JQuf65qeCIJelm9TljFpwFI0KONLIOF--qdajFH-dgiASKABHgRAsQpXc1IratabCDNq",
+        "https://play-lh.googleusercontent.com/dX_D91Bjz7HUukxuZQtPNET2r33m-ijVPG83gcNs_tt-b9Db3W4sQyg3PXY-i88vzNM",
+        "https://play-lh.googleusercontent.com/kM2T5D_0gCBjhNgYx1scxiv-tYNNXYAwxsN6JjHlTsvMR4Vb-gHqf64auUzjDq-DY_ME"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Aug 25, 2014",
+    "lastUpdatedOn": "Oct 22, 2024",
+    "updated": 1729618391,
+    "version": "2024.42.3",
+    "comments": [],
+    "appId": "com.grandroundshealth.m",
+    "url": "https://play.google.com/store/apps/details?id=com.grandroundshealth.m&hl=en&gl=us"
+}

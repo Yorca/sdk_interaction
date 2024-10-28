@@ -1,23 +1,58 @@
-import requests
-from bs4 import BeautifulSoup
+from operator import itemgetter
 
-# Replace with the URL you want to scrape
-url = 'https://play.google.com/store/apps/datasafety?id=com.iz.coloring.games.kids.drawing.book.color.by.number&hl=en&gl=us'
+from langchain_core.prompts import ChatPromptTemplate, PromptTemplate, format_document
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda
+from langchain_community.chat_models import ChatOllama
+from langchain_community.embeddings import OllamaEmbeddings
+from langchain_community.vectorstores.faiss import FAISS
 
-# Send a GET request to the webpage
-response = requests.get(url)
+from langchain_community.document_loaders import ArxivLoader, JSONLoader
 
-# Check if the request was successful
-if response.status_code == 200:
-    # Parse the HTML content of the page
-    soup = BeautifulSoup(response.content, 'html.parser')
-    print(soup)
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-    # Extract specific information (for example, all headings)
-    headings = soup.find_all('h1')  # You can change 'h1' to other tags like 'p', 'a', etc.
+loader = JSONLoader(
+    file_path='data/api_summary_groundtruth.json',
+    jq_schema='.LIBS[]',
+    text_content=False)
+docs = loader.load()
 
-    # Print the extracted information
-    for heading in headings:
-        print(heading.get_text())
-else:
-    print(f"Failed to retrieve the page. Status code: {response.status_code}")
+# loader = JSONLoader()
+
+# 把文本分割成 200 字一组的切片
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
+chunks = text_splitter.split_documents(docs)
+
+# 构建 FAISS 向量存储和对应的 retriever
+vs = FAISS.from_documents(chunks[:10], OllamaEmbeddings(model="llama2-chinese:13b"))
+# vs.similarity_search("What is ReAct")
+retriever = vs.as_retriever()
+
+# 构建 Document 转文本段落的工具函数
+DEFAULT_DOCUMENT_PROMPT = PromptTemplate.from_template(template="{page_content}")
+def _combine_documents(
+    docs, document_prompt=DEFAULT_DOCUMENT_PROMPT, document_separator="\n\n"
+):
+    doc_strings = [format_document(doc, document_prompt) for doc in docs]
+    return document_separator.join(doc_strings)
+
+# 准备 Model I/O 三元组
+template = """Answer the question based only on the following context:
+{context}
+
+Question: {question}
+"""
+prompt = ChatPromptTemplate.from_template(template)
+model = ChatOllama(model="llama2-chinese:13b")
+
+# 构建 RAG 链
+chain = (
+    {
+        "context": retriever | _combine_documents,
+        "question": RunnablePassthrough()
+    }
+    | prompt
+    | model
+    | StrOutputParser()
+)
+chain.invoke("How many sdks in the doc")

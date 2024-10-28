@@ -1,0 +1,92 @@
+{
+    "title": "Cat Fantasy: Isekai Adventure",
+    "description": "Follow us and get more informations and rewards:\r\nTwitter: https://x.com/catfantasyen\r\nTikTok: https://www.tiktok.com/@catfantasyen\r\nDiscord: https://discord.gg/catfantasyen\r\nFacebook: https://www.facebook.com/catfantasyglobal/\r\n\r\nWelcome to Cat Fantasy, an enchanting cyberpunk, anime-style 3D turn-based RPG. Immerse yourself in a world where cats transform into captivating anime girls and beloved waifus. Dive into an Isekai adventure as an Inspector, leading a diverse group of anime cat girl combatants to unravel mysteries and save a world on the brink of destruction.\r\n\r\n**FEATURE HIGHLIGHTS:**\r\n- Free Pulls: Up to 1,000 free summons!\r\n- Anime Girls & Waifu Collection: Collect and interact with a diverse cast of characters.\r\n- Gacha: Experience the thrill of summoning new anime waifus and upgrading your team.\r\n- Turn-Based RPG Mechanics: Enjoy a blend of classic RPG elements and innovative card fusion tactics.\r\n- Isekai Adventure: Immerse yourself in a captivating storyline that transports you to a cyberpunk world.\r\n- Simulation & Management: Balance your time between battling evil forces and running a cozy caf\u00e9.\r\n\r\n**GENEROUS FREE PULLS**\r\nEarn up to 1,000 free summons by logging in, completing missions, and attending events\u2014more generous than other gacha games.\r\n\r\n**UNIQUE ANIME CAT GIRL SETTING**\r\nCat girls seamlessly shift between feline and humanoid forms, harnessing Pathos Particles to maintain their abilities, evoking the charm of NEKOPARA characters. Immerse yourself in a captivating world where anime girls and feline humanoids intertwine, creating a unique and engaging experience.\r\n\r\n**DEEP INTERACTION WITH BELOVED CAT WAIFUS**\r\nForge intimate connections with your beloved anime girl through private scenes and unlock interactive actions that deepen your bond, crafting an immersive ACG experience. Each anime girl possesses a unique personality and backstory, making your interactions all the more engaging and personal.\r\n\r\n**UNIQUE CARD FUSION TURN-BASED COMBAT**\r\nThis anime turn-based RPG features an innovative combat style\u2014fuse skill cards to unlock powerful effects. The card fusion system adds depth to the combat, ensuring each encounter is exciting and dynamic.\r\n- Take full control of character turn order, number of actions, and allocation of Ultimate energy within a single turn.\r\n- Customize your lineups with counter-attack, curse-based, or follow-up attack strategies, blending them freely to suit your playstyle.\r\n\r\n**STUNNING GRAPHICS**\r\nExperience breathtaking visuals that bring the world to life. Detailed character designs and vibrant environments are sure to captivate fans of anime and cat girls alike.\r\n\r\n**SIMULATION ELEMENTS: MANAGING A CAFE**\r\nEmbrace a harmonious blend of thrilling battles and tranquility as you manage a charming caf\u00e9. Delight customers with delectable cuisine while lending an ear to their stories, providing a comforting sanctuary amidst chaos in this free simulator.\r\n\r\nImmerse yourself in Cat Fantasy, where adventure, love, and mystery intertwine in a unique turn-based RPG. Explore a captivating realm filled with charming neko characters and embark on a journey that will enthrall your heart and imagination. Cat Fantasy offers an engaging experience for anime and cat girl enthusiasts. An unforgettable Isekai adventure awaits!\r\n\r\nMinimum Device Requirements:\r\nAndroid 8.0 or above\r\nProcessor: Snapdragon 660 / Kirin 710A or above\r\nRAM: 4GB or more\r\nRemaining Storage Space: 10 GB\r\n\r\nSupport email: CatFantasyCS@elex-game.com",
+    "descriptionHTML": "Follow us and get more informations and rewards:<br>Twitter: https://x.com/catfantasyen<br>TikTok: https://www.tiktok.com/@catfantasyen<br>Discord: https://discord.gg/catfantasyen<br>Facebook: https://www.facebook.com/catfantasyglobal/<br><br>Welcome to Cat Fantasy, an enchanting cyberpunk, anime-style 3D turn-based RPG. Immerse yourself in a world where cats transform into captivating anime girls and beloved waifus. Dive into an Isekai adventure as an Inspector, leading a diverse group of anime cat girl combatants to unravel mysteries and save a world on the brink of destruction.<br><br>**FEATURE HIGHLIGHTS:**<br>- Free Pulls: Up to 1,000 free summons!<br>- Anime Girls &amp; Waifu Collection: Collect and interact with a diverse cast of characters.<br>- Gacha: Experience the thrill of summoning new anime waifus and upgrading your team.<br>- Turn-Based RPG Mechanics: Enjoy a blend of classic RPG elements and innovative card fusion tactics.<br>- Isekai Adventure: Immerse yourself in a captivating storyline that transports you to a cyberpunk world.<br>- Simulation &amp; Management: Balance your time between battling evil forces and running a cozy caf\u00e9.<br><br>**GENEROUS FREE PULLS**<br>Earn up to 1,000 free summons by logging in, completing missions, and attending events\u2014more generous than other gacha games.<br><br>**UNIQUE ANIME CAT GIRL SETTING**<br>Cat girls seamlessly shift between feline and humanoid forms, harnessing Pathos Particles to maintain their abilities, evoking the charm of NEKOPARA characters. Immerse yourself in a captivating world where anime girls and feline humanoids intertwine, creating a unique and engaging experience.<br><br>**DEEP INTERACTION WITH BELOVED CAT WAIFUS**<br>Forge intimate connections with your beloved anime girl through private scenes and unlock interactive actions that deepen your bond, crafting an immersive ACG experience. Each anime girl possesses a unique personality and backstory, making your interactions all the more engaging and personal.<br><br>**UNIQUE CARD FUSION TURN-BASED COMBAT**<br>This anime turn-based RPG features an innovative combat style\u2014fuse skill cards to unlock powerful effects. The card fusion system adds depth to the combat, ensuring each encounter is exciting and dynamic.<br>- Take full control of character turn order, number of actions, and allocation of Ultimate energy within a single turn.<br>- Customize your lineups with counter-attack, curse-based, or follow-up attack strategies, blending them freely to suit your playstyle.<br><br>**STUNNING GRAPHICS**<br>Experience breathtaking visuals that bring the world to life. Detailed character designs and vibrant environments are sure to captivate fans of anime and cat girls alike.<br><br>**SIMULATION ELEMENTS: MANAGING A CAFE**<br>Embrace a harmonious blend of thrilling battles and tranquility as you manage a charming caf\u00e9. Delight customers with delectable cuisine while lending an ear to their stories, providing a comforting sanctuary amidst chaos in this free simulator.<br><br>Immerse yourself in Cat Fantasy, where adventure, love, and mystery intertwine in a unique turn-based RPG. Explore a captivating realm filled with charming neko characters and embark on a journey that will enthrall your heart and imagination. Cat Fantasy offers an engaging experience for anime and cat girl enthusiasts. An unforgettable Isekai adventure awaits!<br><br>Minimum Device Requirements:<br>Android 8.0 or above<br>Processor: Snapdragon 660 / Kirin 710A or above<br>RAM: 4GB or more<br>Remaining Storage Space: 10 GB<br><br>Support email: CatFantasyCS@elex-game.com",
+    "summary": "Anime-style 3D turn-based RPG featuring a captivating feline humanoid theme",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 354985,
+    "score": 4.654804,
+    "ratings": 12310,
+    "reviews": 943,
+    "histogram": [
+        306,
+        129,
+        348,
+        1927,
+        9593
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$0.99 - $99.99 per item",
+    "developer": "Elex",
+    "developerId": "Elex",
+    "developerEmail": "CatFantasyCS@elex-game.com",
+    "developerWebsite": "https://cat.elex.com/",
+    "developerAddress": "Flat/RM 603 6/F, Laws Commercial Plaza, 788 Cheung Sha Wan Road, Cheung Sha Wan, Hong Kong",
+    "privacyPolicy": "http://www.marsinfinitewars.com/catFantasy/privacy.php",
+    "genre": "Role Playing",
+    "genreId": "GAME_ROLE_PLAYING",
+    "categories": [
+        {
+            "name": "Role Playing",
+            "id": "GAME_ROLE_PLAYING"
+        },
+        {
+            "name": "Turn-based RPG",
+            "id": null
+        },
+        {
+            "name": "Stylized",
+            "id": null
+        },
+        {
+            "name": "Anime",
+            "id": null
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/n2hIRgk0J7eQZXpxLMXVXwDWYB3f2yfGoW-scIxKekmYaL4eWjWSitZMxcOIsV4XpJc",
+    "headerImage": "https://play-lh.googleusercontent.com/PyJpDc19wVtPcBRS1L_NvJnO2zwgPMOM_Mt-G6Ca-kwwog2njPGoAZ2g31Cqh7TKXHUP",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/WGtBwHtjNPc9Vvkn3R3F4zx1zCe8IohiX6bT2MhaIHUJjMqA26g3EG8UIlnXRL5saXcC",
+        "https://play-lh.googleusercontent.com/AaYYfJ9kS4NZ-91zBc75vJxG8pmDf-xTcnZ3L0H2WQVOeq2GOL5M8DFP8GXprrjyaQ",
+        "https://play-lh.googleusercontent.com/b5CCmy7OdSmXPGJAWajx5xfAb4i9NspU5AFozBOIX9ImnzMm4ZoUs9anqk3ioNcdJw",
+        "https://play-lh.googleusercontent.com/RhYWCZRQ9nMIQ_iHv25mslK0v8AnOO7yg2bNhjmCG6bbANfv5bCA3TVW7CsJrfN_ng",
+        "https://play-lh.googleusercontent.com/QeWAar_-1wx_nmtKBKoW_Y9vfpN1eyii1Gj5o4t2iaTzcYbFPwKPiJRo3h3dhifwNwDO",
+        "https://play-lh.googleusercontent.com/tYrffZfsbO-reAKXkRZ2cHbUVh6cnQXB2C_feayqE-b1BLTUwuZhdD-oycT1VQmXIg",
+        "https://play-lh.googleusercontent.com/6u5Gw-X24DdfKwKpTPbvmGBZnLcfcQwGKsNJcpFxwtGBo64J-X1Q6xCekcrw20dT_A",
+        "https://play-lh.googleusercontent.com/fTPQ4am4wWcbhWCfR0LKTcdAaIfN42s91ZNDb6TCSa7TImgqZClX8bfnVNlE5cF1Xms",
+        "https://play-lh.googleusercontent.com/x-j0qJBeLm6eFtHNUO2EdFXoyuRBa-fz6jXnTxmAfYlSRnj3HtmRrKooTWiMgcLy9Q",
+        "https://play-lh.googleusercontent.com/uobo7NvwJEysvyGLh_L_QG4jvb2dyvO7eR03OtLlMc8z_epoiam7nOapYa77lC7SPw",
+        "https://play-lh.googleusercontent.com/xG4mLoiNr1zkrUj6ELvewIMfvqTUKJp9qSv2PvPW_od0VtW4efUbJ_DL-EtYe4zLwxGY",
+        "https://play-lh.googleusercontent.com/A25iHUpHGCBJvoYy4XAh4LYemgGUvfK1PjjeP-FRDoo0RXXzYyXuQGAqXpUJRtlI5Q",
+        "https://play-lh.googleusercontent.com/1C7lJw0geXKwKlNk5XEud4ceMqUkWGUfXrAYf3IdUjiFEkk2kPmBPT4PfqZc3N104g",
+        "https://play-lh.googleusercontent.com/AHvukEhf6gajkjN9jeMgsDDrSZ83IvVFczyQxSHxjBAW71BWCt3vNdtQJJgiM9Uv_9s",
+        "https://play-lh.googleusercontent.com/HUUHWWJ6eVhRNGvpo7lKnvCkNrny6uVgMh2pDoU3oU0HCHlX4GqR5Eil9fn0XiMoRw",
+        "https://play-lh.googleusercontent.com/UMomK9prJlaR0rlltrhSh0d1W_GPcNcqvDEmcWSTFV4CrSPa0UO0_Gy45GKRHRpHC3E",
+        "https://play-lh.googleusercontent.com/-hKvRsLDu6VV52z-wGsOKH4NChhUQxPeS--7f3g1NX03Syk4X1b3CNdKR17ofmKi1WA",
+        "https://play-lh.googleusercontent.com/zRyiEOEu7vXk0lGBjO40sIQLuXuxVjSYpLANwIY1aJJjN5ldbUWijvB8zsHwPlKbPqvf",
+        "https://play-lh.googleusercontent.com/BP9dKjqeXmC1SWVuAI9sy3hrQPpjLIcZuXnKMlDrIj0fbDoLNC3-YUA6NxCcaMw5WA",
+        "https://play-lh.googleusercontent.com/SANL2nMdq4yFlDotpNZh3p94-ZaS29AHosufkXwZPuzan-W6h6KecnAWNwQ_7tZl4g",
+        "https://play-lh.googleusercontent.com/zNwZLDY-beR0NtfbMf1_NirjxN17SyYc6laBZWys92cJwd67gQ_KEMIUArwo00L4y30"
+    ],
+    "video": "https://www.youtube.com/embed/VbUBOxJSysw?ps=play&vq=large&rel=0&autohide=1&showinfo=0",
+    "videoImage": "https://play-lh.googleusercontent.com/PyJpDc19wVtPcBRS1L_NvJnO2zwgPMOM_Mt-G6Ca-kwwog2njPGoAZ2g31Cqh7TKXHUP",
+    "contentRating": "Teen",
+    "contentRatingDescription": "Violence, Blood, Suggestive Themes",
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Aug 20, 2024",
+    "lastUpdatedOn": "Sep 27, 2024",
+    "updated": 1727426183,
+    "version": "1.0.26",
+    "comments": [],
+    "appId": "com.elex.catfantasy.gp",
+    "url": "https://play.google.com/store/apps/details?id=com.elex.catfantasy.gp&hl=en&gl=us"
+}

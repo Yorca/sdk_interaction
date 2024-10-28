@@ -1,0 +1,63 @@
+{
+    "title": "TMAD APP",
+    "description": "Teriyaki may be the single most important technological advance in eating since rice. Until now.\r\n \r\nYour phone will actually feed you. That\u2019s right. With the Teriyaki Madness app, you can have delicious, made-to-order bowls of teriyaki for pickup or delivery (delivery available in most markets).\r\n \r\nJust to show you we\u2019re serious, get a free bowl with purchase of a 2nd bowl & two fountain drinks just for downloading and signing up!\r\n \r\nAnd, you can earn points and redeem them for free bowls of awesomeness (or an appetizer or drink, etc.). We\u2019ll even do the math for you so you don\u2019t have to add up your points. See? We\u2019re saving you time and headaches of mathing!\r\n \r\nFind your favorite location, hours and directions, Browse the menu to your heart\u2019s content and start fantasizing about your favorite bowl.\r\n \r\nWe\u2019ll even send you offers in your app so you can teriyaki more often!",
+    "descriptionHTML": "Teriyaki may be the single most important technological advance in eating since rice. Until now.<br> <br>Your phone will actually feed you. That\u2019s right. With the Teriyaki Madness app, you can have delicious, made-to-order bowls of teriyaki for pickup or delivery (delivery available in most markets).<br> <br>Just to show you we\u2019re serious, get a free bowl with purchase of a 2nd bowl &amp; two fountain drinks just for downloading and signing up!<br> <br>And, you can earn points and redeem them for free bowls of awesomeness (or an appetizer or drink, etc.). We\u2019ll even do the math for you so you don\u2019t have to add up your points. See? We\u2019re saving you time and headaches of mathing!<br> <br>Find your favorite location, hours and directions, Browse the menu to your heart\u2019s content and start fantasizing about your favorite bowl.<br> <br>We\u2019ll even send you offers in your app so you can teriyaki more often!",
+    "summary": "Welcome to our new Teriyaki Madness app!",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 174656,
+    "score": 4.787879,
+    "ratings": 2318,
+    "reviews": 459,
+    "histogram": [
+        59,
+        0,
+        49,
+        149,
+        2056
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Teriyaki Madness",
+    "developerId": "Teriyaki+Madness",
+    "developerEmail": "nathan@teriyakimadness.com",
+    "developerWebsite": "http://teriyakimadness.com",
+    "developerAddress": "950 S. Cherry St. STE 850\nDenver, CO 80246",
+    "privacyPolicy": "https://teriyakimadness.com/termsconditions/",
+    "genre": "Food & Drink",
+    "genreId": "FOOD_AND_DRINK",
+    "categories": [
+        {
+            "name": "Food & Drink",
+            "id": "FOOD_AND_DRINK"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/lZSNDo8Cvpvr_zDi11nUCJtTQJhJIGpy-N1yvjVSwZOX5CuNB25rrtX3TNKn3SApWw",
+    "headerImage": "https://play-lh.googleusercontent.com/pd8IL34u1tpXyHsE6QkZ2pUswv4H01lTebl4qyt51iidDzYmG9y1udiUTL4sFtInSD0",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/asSihlThvWOHxa0rFPVNBrGDfcXI2QhdBktS2wV7Ig45-NkRKzFu-xhhW3byYs41Xnfk",
+        "https://play-lh.googleusercontent.com/W8zaPDZfm_6Y0kO162DpK80_jaNQajh-fDgYxfjX1fXEMgjOjIDqkl0cECtLiM7CZ9EW",
+        "https://play-lh.googleusercontent.com/IrqW1VDJb4ZrPtSqxHNIpboTt_h-a1PDy0PKF6iK51N5b0lSSWGTQVI9s8xtwMeh4tc",
+        "https://play-lh.googleusercontent.com/C7NLhVqPvwpT2Cw0FSCMeZHIuLmxockMbd-mu92FXRIPZr1wgNskRarK6xFsUnjgUA"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Jun 7, 2018",
+    "lastUpdatedOn": "Oct 18, 2024",
+    "updated": 1729268678,
+    "version": "4.0",
+    "comments": [],
+    "appId": "com.teriyaki.app",
+    "url": "https://play.google.com/store/apps/details?id=com.teriyaki.app&hl=en&gl=us"
+}

@@ -1,0 +1,63 @@
+{
+    "title": "QR Manager",
+    "description": "QR Manager is a convenient and practical QR code and barcode scanning tool that integrates modern technology and aims to provide users with a convenient information acquisition and sharing experience. In this era of information explosion, QR Manager makes QR code scanning smarter and more efficient.\r\nCore features:\r\n1.Instant Scanning: QR Manager can quickly recognize QR codes and provide detailed information in real-time, saving users' time.\r\n2. Multi-format support: Whether it's a classic 1D barcode or a complex QR code, QR Manager can handle it easily.\r\n\r\n3. History Management: QR Manager provides a detailed scanning history, making it easy to trace past information exchanges.",
+    "descriptionHTML": "QR Manager is a convenient and practical QR code and barcode scanning tool that integrates modern technology and aims to provide users with a convenient information acquisition and sharing experience. In this era of information explosion, QR Manager makes QR code scanning smarter and more efficient.<br>Core features:<br>1.Instant Scanning: QR Manager can quickly recognize QR codes and provide detailed information in real-time, saving users&#39; time.<br>2. Multi-format support: Whether it&#39;s a classic 1D barcode or a complex QR code, QR Manager can handle it easily.<br><br>3. History Management: QR Manager provides a detailed scanning history, making it easy to trace past information exchanges.",
+    "summary": "QR Manager is a handy and useful tool for scanning QR codes and barcodes.",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 2409677,
+    "score": 4.195402,
+    "ratings": 1282,
+    "reviews": 21,
+    "histogram": [
+        176,
+        44,
+        44,
+        103,
+        913
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Dongstar.dev",
+    "developerId": "Dongstar.dev",
+    "developerEmail": "wilona88541@gmail.com",
+    "developerWebsite": "https://qrcdns.managerqr.com/",
+    "developerAddress": null,
+    "privacyPolicy": "https://qrcdns.managerqr.com/privacyPolicy.html",
+    "genre": "Tools",
+    "genreId": "TOOLS",
+    "categories": [
+        {
+            "name": "Tools",
+            "id": "TOOLS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/RfuZK56XsGVSymtAYS2NtmtI6h_IbIU_Uk6VvjFUWEa2ynREoGURGUCo_KOxvITG8lLW",
+    "headerImage": "https://play-lh.googleusercontent.com/EGTi8OMoQ6XfWFZ6XA4T9lkkGVDvb2Q_tO3H5z0ZzO9TgT5lHWAGdobJfuBIByhnr6AE",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/PX5CgdvENLkz0txsMk4CWtsV3QdWZtj7YiUOx8-TGKJNvtl10v3mKDXj8reicIClXg",
+        "https://play-lh.googleusercontent.com/r4Y2f8evay37uUmrjaklC6vZQMxedpFfE2Po5hqMcHs5yikyZJuJ1ktYFEs05o2BcWg",
+        "https://play-lh.googleusercontent.com/BCjhOaaNIWJV8aPfT3DLzae_flzO_9lwoeRI4uTF0xJZ1ROKBOoeHbch_4UyiOsIUz0",
+        "https://play-lh.googleusercontent.com/lkQKMsB0tOANvgvD-Tz3uJXNwdqxU8KKnHlRONb2P00zqcDM48JI1iMsffA-2haEbQU"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Dec 13, 2023",
+    "lastUpdatedOn": "Jul 11, 2024",
+    "updated": 1720755508,
+    "version": "1.1.8",
+    "comments": [],
+    "appId": "com.qrmanager.android.qrcode.app",
+    "url": "https://play.google.com/store/apps/details?id=com.qrmanager.android.qrcode.app&hl=en&gl=us"
+}

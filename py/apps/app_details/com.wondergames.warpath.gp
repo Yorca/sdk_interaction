@@ -1,0 +1,92 @@
+{
+    "title": "Warpath: Ace Shooter",
+    "description": "Experience the new maritime map! Crush the Raven Fleet and fight for Strategic Places at sea!\r\n\r\nYour mission: Coordinate your forces and defeat the Ravens at air, land, and sea. Use your powerful modern arsenal to defend your Base and break through the Raven blockade. Meet the Ravens head-on, outmaneuver their fleets, and become master of the seas!\r\n\r\n\u25b6 FEATURES\u25c0\r\n\r\nEXCITING SNIPER ACTION\r\nControl the battlefield, destroy your enemies\r\n\u25cf Hone your skills in over a hundred missions, set in diverse battlefields both on the ground and in the air.\r\n\u25cf Collect powerful assault rifles, sniper rifles, and more. Modify your guns with new parts to create the world's most potent arsenal.\r\n\u25cf Smooth controls, lush graphics and sound design, and slow-mo camera angles will leave your heart racing.\r\n\r\nREAL-TIME STRATEGY \r\nPlan out your attack and in engage in epic Real-time battles on iconic maps.\r\n\u25cf Use skill and strategy to battle to the top. \r\n\u25cf Target your enemies and expand your territory with calculated maneuvers. \r\n\u25cf Reign supreme on the battlefield to gain strength and mount more forces against hostile targets. \r\n\r\nDEEPLY CUSTOMIZABLE MILITARY UNITS \r\nMax out your loadout! \r\n\u25cf Lock and load with the biggest and baddest guns, tanks and aircraft; and establish an army ready to wage war on the global battlefield. \r\n\u25cf Customize your units by assembling, disassembling, modifying and upgrading. \r\n\u25cf Then test your loadout in the thrill of real war as you shoot down your enemies. \r\n\r\nURBAN CONSTRUCTION\r\n\u25cf Various construction options and editable buildings! \r\n\u25cf Build your own military base with ultra-high degree of freedom.\r\n\u25cf Collect marble memorial, statue and latest festival decorations to show off your unique mansion. \r\n\r\nUNBEATABLE ALLIANCE COMRADERY\t\r\n\u25cf Work with loyal Allies to increase your Power and gain control of Cities and Nations around the World.\r\n\u25cf Contend with other Alliances to determine who is stronger. Band together with your comrades to achieve the unachievable and write your name in the annals of history.\r\n\r\nEPIC STORYLINE \r\nAuthentic campaigns brought to life! \r\n\u25cf Command your units through rugged terrain and urban landscapes to track down and defeat your enemies. \r\n\u25cf Along your Warpath you\u2019ll meet allies who make the missions more dynamic as you complete objectives and move on to more challenging stages. \r\n\r\nSTUNNING MOBILE EXPERIENCE \r\nTop quality HD gaming on your phone, with thrilling graphics and sound. \r\n\u25cf Experience the thrill of commanding war, in the palm of your hand. \r\n\u25cf Zoom freely and teleport to different cities around the world with your allies. \r\n\u25cf Each chapter takes a different direction, coupled with a hard-hitting plot and cinematic gameplay. Explore the terrain by plane and use this to your advantage. \r\n\r\nJoin global alliances around the world in the fight for glory. Have you got what it takes to crush the enemy and liberate nations around the world? Will your tactics play off? \r\n\r\nStay up to date with the latest news by joining the Warpath community.\r\nFacebook: https://www.facebook.com/PlayWarpath/ \r\nDiscord: https://discord.com/invite/playwarpath \r\nReddit: https://www.reddit.com/r/PlayWarpath/ \r\nYouTube: https://www.youtube.com/channel/UCHX2nNL33q24VrJdGFwjTgw\r\n\r\nPrivacy policy: http://www.wondergames.sg/privacy",
+    "descriptionHTML": "Experience the new maritime map! Crush the Raven Fleet and fight for Strategic Places at sea!<br><br>Your mission: Coordinate your forces and defeat the Ravens at air, land, and sea. Use your powerful modern arsenal to defend your Base and break through the Raven blockade. Meet the Ravens head-on, outmaneuver their fleets, and become master of the seas!<br><br>\u25b6 FEATURES\u25c0<br><br>EXCITING SNIPER ACTION<br>Control the battlefield, destroy your enemies<br>\u25cf Hone your skills in over a hundred missions, set in diverse battlefields both on the ground and in the air.<br>\u25cf Collect powerful assault rifles, sniper rifles, and more. Modify your guns with new parts to create the world&#39;s most potent arsenal.<br>\u25cf Smooth controls, lush graphics and sound design, and slow-mo camera angles will leave your heart racing.<br><br>REAL-TIME STRATEGY <br>Plan out your attack and in engage in epic Real-time battles on iconic maps.<br>\u25cf Use skill and strategy to battle to the top. <br>\u25cf Target your enemies and expand your territory with calculated maneuvers. <br>\u25cf Reign supreme on the battlefield to gain strength and mount more forces against hostile targets. <br><br>DEEPLY CUSTOMIZABLE MILITARY UNITS <br>Max out your loadout! <br>\u25cf Lock and load with the biggest and baddest guns, tanks and aircraft; and establish an army ready to wage war on the global battlefield. <br>\u25cf Customize your units by assembling, disassembling, modifying and upgrading. <br>\u25cf Then test your loadout in the thrill of real war as you shoot down your enemies. <br><br>URBAN CONSTRUCTION<br>\u25cf Various construction options and editable buildings! <br>\u25cf Build your own military base with ultra-high degree of freedom.<br>\u25cf Collect marble memorial, statue and latest festival decorations to show off your unique mansion. <br><br>UNBEATABLE ALLIANCE COMRADERY\t<br>\u25cf Work with loyal Allies to increase your Power and gain control of Cities and Nations around the World.<br>\u25cf Contend with other Alliances to determine who is stronger. Band together with your comrades to achieve the unachievable and write your name in the annals of history.<br><br>EPIC STORYLINE <br>Authentic campaigns brought to life! <br>\u25cf Command your units through rugged terrain and urban landscapes to track down and defeat your enemies. <br>\u25cf Along your Warpath you\u2019ll meet allies who make the missions more dynamic as you complete objectives and move on to more challenging stages. <br><br>STUNNING MOBILE EXPERIENCE <br>Top quality HD gaming on your phone, with thrilling graphics and sound. <br>\u25cf Experience the thrill of commanding war, in the palm of your hand. <br>\u25cf Zoom freely and teleport to different cities around the world with your allies. <br>\u25cf Each chapter takes a different direction, coupled with a hard-hitting plot and cinematic gameplay. Explore the terrain by plane and use this to your advantage. <br><br>Join global alliances around the world in the fight for glory. Have you got what it takes to crush the enemy and liberate nations around the world? Will your tactics play off? <br><br>Stay up to date with the latest news by joining the Warpath community.<br>Facebook: https://www.facebook.com/PlayWarpath/ <br>Discord: https://discord.com/invite/playwarpath <br>Reddit: https://www.reddit.com/r/PlayWarpath/ <br>YouTube: https://www.youtube.com/channel/UCHX2nNL33q24VrJdGFwjTgw<br><br>Privacy policy: http://www.wondergames.sg/privacy",
+    "summary": "A Stage for Master Tacticians",
+    "installs": "10,000,000+",
+    "minInstalls": 10000000,
+    "realInstalls": 21732810,
+    "score": 4.1360884,
+    "ratings": 460197,
+    "reviews": 11475,
+    "histogram": [
+        56374,
+        14689,
+        28619,
+        70689,
+        289794
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$0.99 - $99.99 per item",
+    "developer": "LilithGames",
+    "developerId": "6526849192653249949",
+    "developerEmail": "WARPATH-service@lilithgames.com",
+    "developerWebsite": "https://warpath.lilith.com/",
+    "developerAddress": "Unit 417, 4/F,Lippo Centre, Tower Two, No. 89 Queensway, Admiralty,Hong Kong.",
+    "privacyPolicy": "https://www.lilith.com/privacy?locale=en-US",
+    "genre": "Strategy",
+    "genreId": "GAME_STRATEGY",
+    "categories": [
+        {
+            "name": "Strategy",
+            "id": "GAME_STRATEGY"
+        },
+        {
+            "name": "4X",
+            "id": null
+        },
+        {
+            "name": "Stylized",
+            "id": null
+        },
+        {
+            "name": "Stylized-realistic",
+            "id": null
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/465BsOlWjHpbOCUBbpdsjp662QUQm7OyvgHCkyGsK-oCEu4wU6K5XAwn-gAve3oM4a1R",
+    "headerImage": "https://play-lh.googleusercontent.com/bwCfKRfKRoYutNuLNOR-BOUd-rm_krqGT4R-IelmdwzmmI3j8OzYD9T3_Wlbl5FScV02",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/AHUvMIBQJ41kkNkABEfG_4I8CQkAlussDcZxdLnpBfMQtmZ_TL5-MeXCDQF9gzS2QxE1",
+        "https://play-lh.googleusercontent.com/ijA4rSCxPbENrMIZgc2vqRw2M3wvs1FuFqOCZaGdmIs7XhZZI-032wxtRFpjNLwRZbJs",
+        "https://play-lh.googleusercontent.com/mXX9mSma82AQ3V0Rim5SCRGcDdIoOrR03s_ZGJds9dItElNSJBr5b011oeKbx7UmVg",
+        "https://play-lh.googleusercontent.com/aDYy60bSa042hhF0gVYJ6zqwtFU1Gbb1MDXL7Vzfc5LmD-S1PUwSe1SfuRIqFWI3zjM",
+        "https://play-lh.googleusercontent.com/nZmkUGjgj9StGV2tZTNi2dQicdPgvtrhnkNkNuCnOd2nWSFDfOl25OjRjy5ckAb497FA",
+        "https://play-lh.googleusercontent.com/DLz69dsnEmuF4qieewm9gR1f2_CKbDH8dofLfGEoLJKlPen_Jsbkry4Bnu_LoxV2o9zc",
+        "https://play-lh.googleusercontent.com/Ozx-Jijj_nk1W1P8Us7CJYk2ftjN7RzV1bWL7nB267aQ16rI-mZ1FcKix7AOf4oZZqA",
+        "https://play-lh.googleusercontent.com/id5HpfqSnr25aMV5o8y-iXjDCkCh4JHQckbtkjLochiKFFFUs8WmJ4HySOyG3qBXi3E",
+        "https://play-lh.googleusercontent.com/NjhG1rXvJ0Y-xsTlh9TlDAd0NYrfnG-AaEsHaTdEYF-yfvQH71jV4ju1-F6pzWCMDWM",
+        "https://play-lh.googleusercontent.com/VKijGOzNWoTqWc6xJOFVRXxEGkU54lsud6UohhyYtzs2lqWzakKJr91IDZbuSvrwf1g",
+        "https://play-lh.googleusercontent.com/xzB3-GwjtwMjsLlrrMheQIb3orHQ2YCyKho7-I_67Sz0yUG2GRH8QO0IUKx_c51bukQ6",
+        "https://play-lh.googleusercontent.com/MCfmFl4X55LdAPwfGlWPHklLz86710PjVpsMvUblH8qf2peusuwOiaXo2ZdY1RUudrae",
+        "https://play-lh.googleusercontent.com/W9cNtVabz_h74JEW81wh_FGPAYV6_M_oP1Y5nEIKKub-qVW7oY_sQ9sqVHFhi3lsOWCM",
+        "https://play-lh.googleusercontent.com/v6CvvGtmuRo32O2GNFhlIbdcYZfvLISJU4is2bWeAX3XIVrZV_7paYi__Xh4c5pjHA",
+        "https://play-lh.googleusercontent.com/WH8epoTbxpvsJnJXW-cVsmSk4WVmsiLWMAo5XX7G487-LBJUwYpkMeLbwBOwLvtqsKY",
+        "https://play-lh.googleusercontent.com/_A2kkcRSSJBWJmVw8Bi6Zk2cyFf6s70ed_PThpHDCHANJ0_eH5qElsChun1U11jnev0",
+        "https://play-lh.googleusercontent.com/WfCu0AMakNDATOqY9DSM-V5u51CMlrtrCJHX62TD-etAQTQTWCR_9S3IdttDhhiAUZ0",
+        "https://play-lh.googleusercontent.com/d0Awir21svUEgec6WxkREfdvjpB-aNEx8ZPArnAkAM8aXteKwDCUhD-z1WPIhTC_eAk",
+        "https://play-lh.googleusercontent.com/M7Qa02f3vguM1iHRNveWzVgKoj4t-xKdmz156GOfU6V2nxdZKrUAOcuOYwgoOMUgfw",
+        "https://play-lh.googleusercontent.com/RpIt1NB7Zs_5snbDb_Y7sK7Pb5U3yBl2Nxbl88d9MKS16wzo8BE1oFL7Gb--DvgW52w",
+        "https://play-lh.googleusercontent.com/4pLcN6H5lcxo9c0h2_nFLE6W17AjxA7mreLnxWtp8Azkn_Vxuz7sktr20UL32D4BbyNN"
+    ],
+    "video": "https://www.youtube.com/embed/M0Ddz3k79Fw?ps=play&vq=large&rel=0&autohide=1&showinfo=0",
+    "videoImage": "https://play-lh.googleusercontent.com/bwCfKRfKRoYutNuLNOR-BOUd-rm_krqGT4R-IelmdwzmmI3j8OzYD9T3_Wlbl5FScV02",
+    "contentRating": "Teen",
+    "contentRatingDescription": "Violence, Blood",
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Nov 9, 2020",
+    "lastUpdatedOn": "Oct 20, 2024",
+    "updated": 1729479137,
+    "version": "11.00.30",
+    "comments": [],
+    "appId": "com.wondergames.warpath.gp",
+    "url": "https://play.google.com/store/apps/details?id=com.wondergames.warpath.gp&hl=en&gl=us"
+}

@@ -1,0 +1,61 @@
+{
+    "title": "Chuck E. Cheese",
+    "description": "Chuck E. Cheese is the number one family entertainment venue, and now we are bringing all that fun and entertainment to your mobile device with our brand new app!\r\n\r\nWith the new Chuck E. Cheese app, you'll be able to...\r\n\r\n\u2022 Join Chuck E. Cheese Rewards to get special offers, unlock exciting prizes and more. You'll even get special birthday treats for you and your family!\r\n\u2022 Order delicious handmade pizzas, yummy appetizers, tasty desserts, drinks and more for takeout or delivery right to your house!\r\n\u2022 Get updates about our special events and immersive experiences to help you create special moments all year long.\r\n\u2022 Reserve a birthday party! Now booking the perfect party is in the palm of your hands!\r\n\u2022 Keep track of your Play Pass cards, check Play Point and E-Ticket balances!\r\n\u2022 Celebrate your graduate or birthday child with a Chuck E. Cheese gift card. Choose from a variety of designs that fit any occasion to be mailed to your home or delivered instantly via email.\r\n\u2022 ...and much more!\r\n\r\nDownload the Chuck E. Cheese app and create your Chuck E. Cheese Rewards account today! Visit www.chuckecheese.com/Rewards for more details.",
+    "descriptionHTML": "Chuck E. Cheese is the number one family entertainment venue, and now we are bringing all that fun and entertainment to your mobile device with our brand new app!<br><br>With the new Chuck E. Cheese app, you&#39;ll be able to...<br><br>\u2022 Join Chuck E. Cheese Rewards to get special offers, unlock exciting prizes and more. You&#39;ll even get special birthday treats for you and your family!<br>\u2022 Order delicious handmade pizzas, yummy appetizers, tasty desserts, drinks and more for takeout or delivery right to your house!<br>\u2022 Get updates about our special events and immersive experiences to help you create special moments all year long.<br>\u2022 Reserve a birthday party! Now booking the perfect party is in the palm of your hands!<br>\u2022 Keep track of your Play Pass cards, check Play Point and E-Ticket balances!<br>\u2022 Celebrate your graduate or birthday child with a Chuck E. Cheese gift card. Choose from a variety of designs that fit any occasion to be mailed to your home or delivered instantly via email.<br>\u2022 ...and much more!<br><br>Download the Chuck E. Cheese app and create your Chuck E. Cheese Rewards account today! Visit www.chuckecheese.com/Rewards for more details.",
+    "summary": "Earn Rewards Points on every visit and unlock exclusive offers!",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 1348088,
+    "score": 4.7372265,
+    "ratings": 12578,
+    "reviews": 3337,
+    "histogram": [
+        284,
+        111,
+        387,
+        1049,
+        10741
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Chuck E. Cheese",
+    "developerId": "8581794605065481540",
+    "developerEmail": "guestrelations@chuckecheese.com",
+    "developerWebsite": "https://www.chuckecheese.com/",
+    "developerAddress": "1707 Market Place Blvd #200\nIrving, TX 75063",
+    "privacyPolicy": "https://www.chuckecheese.com/company/terms-privacy/",
+    "genre": "Food & Drink",
+    "genreId": "FOOD_AND_DRINK",
+    "categories": [
+        {
+            "name": "Food & Drink",
+            "id": "FOOD_AND_DRINK"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/l4JEjU0LP-MLVa6oX2VJV9palVu0qIx3L7zvZNvIg146P0Fw09rvCCltaMBqfAurkmTC",
+    "headerImage": "https://play-lh.googleusercontent.com/dWtb5bCrnRzwmH-JVeRPq-XWtJyRWqM90RhMddT6qRq04VM-VqtP9V1yoaCSb_hINwMZ",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/vyORzEaH33cYA9sR0buzwEa9hl2MxcEvsXZ1J_R1T-wq4C7RvH4_D67Ix8oy5blfzLc",
+        "https://play-lh.googleusercontent.com/4sk_r3EnmlnESs8ExOS5lEBJD5ARwjNnXd6lxEH6U5kSz9j87dbUTmxX_oWzdsPMyQ"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "May 7, 2021",
+    "lastUpdatedOn": "Aug 28, 2024",
+    "updated": 1724874410,
+    "version": "2.2",
+    "comments": [],
+    "appId": "com.chuckecheese.app",
+    "url": "https://play.google.com/store/apps/details?id=com.chuckecheese.app&hl=en&gl=us"
+}

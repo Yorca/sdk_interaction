@@ -1,0 +1,63 @@
+{
+    "title": "Genral Tv | Video Player",
+    "description": "Genral video player supports all qualities, all small, fast, and has a multi-quality feature. It plays mp4, mp3, m3u8, flv files of all formats.",
+    "descriptionHTML": "Genral video player supports all qualities, all small, fast, and has a multi-quality feature. It plays mp4, mp3, m3u8, flv files of all formats.",
+    "summary": "Genral video player supports all qualities and all formats",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 1279326,
+    "score": 4.238532,
+    "ratings": 2831,
+    "reviews": 87,
+    "histogram": [
+        381,
+        40,
+        149,
+        122,
+        2096
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "elmahdy apps",
+    "developerId": "elmahdy+apps",
+    "developerEmail": "mrmemo2021@gmail.com",
+    "developerWebsite": null,
+    "developerAddress": null,
+    "privacyPolicy": "https://sites.google.com/view/kpplayer/%D8%A7%D9%84%D8%B5%D9%81%D8%AD%D8%A9-%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9",
+    "genre": "Video Players & Editors",
+    "genreId": "VIDEO_PLAYERS",
+    "categories": [
+        {
+            "name": "Video Players & Editors",
+            "id": "VIDEO_PLAYERS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/a2NHUOQTQjW2GXFR-cIV8_6igkT1Y5RAMEbVgkD95RN4OqyZlSQgD1BjduUwrv6Q1iHz",
+    "headerImage": "https://play-lh.googleusercontent.com/WLupZ23V42ENqPt3Ka_kamo0xmASDBonfBubqaol962mqcWam_Qt_BElfu-xIFkAcw",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/mgFj_4G-53FIxsRaRvAE4L3VSpTaUTmcfIU0IaiANhs_DgiFUhH2AmVQa5fma4CS2Aw",
+        "https://play-lh.googleusercontent.com/TviX2fFFjJwl5V0cw_z9SAf27RgoKiY5pdmot70_jUP0LzgSg6HAkuJIL1gg3a1_DWk",
+        "https://play-lh.googleusercontent.com/NOYCU77G2wiKSEExmYxgngNMJpS9QrTBin_CSJu8IrImcPku2RHOmg3NirA_PmqgfFQ",
+        "https://play-lh.googleusercontent.com/jZGh4pyglZjSH8EMTi5mcQwphGHiVuhsC4G93x0WZuL2fdhivFaa4LBuIj9XzZi2DA"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Nov 6, 2023",
+    "lastUpdatedOn": "Aug 14, 2024",
+    "updated": 1723673485,
+    "version": "1.7",
+    "comments": [],
+    "appId": "com.genraltv.app",
+    "url": "https://play.google.com/store/apps/details?id=com.genraltv.app&hl=en&gl=us"
+}

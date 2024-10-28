@@ -1,0 +1,63 @@
+{
+    "title": "DW Player",
+    "description": "Stream and play videos directly from any URL with our lightweight and fast video player (DW Player). Enjoy seamless playback, intuitive controls, and support for various video formats.\r\nFearures:\r\n- Play vides from any URL\r\n- Support for multiple formats (MP4, M3U8, etc.)\r\n- Simple and user-friendly interface\r\n- Bookmark and save your URLs inside the app\r\n- Multiple controls (Volume & Brightness + Audio and Video tracks.. and more)",
+    "descriptionHTML": "Stream and play videos directly from any URL with our lightweight and fast video player (DW Player). Enjoy seamless playback, intuitive controls, and support for various video formats.<br>Fearures:<br>- Play vides from any URL<br>- Support for multiple formats (MP4, M3U8, etc.)<br>- Simple and user-friendly interface<br>- Bookmark and save your URLs inside the app<br>- Multiple controls (Volume &amp; Brightness + Audio and Video tracks.. and more)",
+    "summary": "Fast URL video player",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 130430,
+    "score": 3.3,
+    "ratings": 141,
+    "reviews": 6,
+    "histogram": [
+        56,
+        0,
+        0,
+        14,
+        70
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "TitisoApps",
+    "developerId": "TitisoApps",
+    "developerEmail": "johnysarjeo@gmail.com",
+    "developerWebsite": null,
+    "developerAddress": null,
+    "privacyPolicy": "https://sites.google.com/view/dwplayer/privacypolicy",
+    "genre": "Video Players & Editors",
+    "genreId": "VIDEO_PLAYERS",
+    "categories": [
+        {
+            "name": "Video Players & Editors",
+            "id": "VIDEO_PLAYERS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/-0uUVk5RB9DbNXHhc0dC2d751mwpbRHxnD_SC4vlocu4UhOjXNbQo3-RxFYT4ABF5Nw",
+    "headerImage": "https://play-lh.googleusercontent.com/4NSKOVtSMY8_lATVHmr-mG1VUYqcCSFmWH2HoikIagBsVnWqURxbZF91f4m1UiLkdCM",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/PuDNpLHUZGsNFwdNI8P0bA9EM6oKocDvWlR7SNP6vmzCHOvtHLD2pegSSfUqQiv8g_w",
+        "https://play-lh.googleusercontent.com/BBkLIxuQcCDak7ccxeKFqKv633RywnjmTmIiwYfq06J-uG4RCSySYmpaa2Qs68cC6Oo",
+        "https://play-lh.googleusercontent.com/lImhfStHuk9T3DDs_cq7YR-lzvnZsS18vWPY1_AtxGWVf7X94TqMDIkYbbGLZmqIAiA",
+        "https://play-lh.googleusercontent.com/-Y0zlK_k-6yJ-LjcnuUb_Us_m8YwXGGiBhv1rm9zEqTzmnHcZ1pIXtIfjf1CeusLPTs"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Sep 1, 2024",
+    "lastUpdatedOn": "Sep 14, 2024",
+    "updated": 1726363702,
+    "version": "1.2",
+    "comments": [],
+    "appId": "com.dwplayer.app",
+    "url": "https://play.google.com/store/apps/details?id=com.dwplayer.app&hl=en&gl=us"
+}

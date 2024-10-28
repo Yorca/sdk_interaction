@@ -1,0 +1,63 @@
+{
+    "title": "The 616 Comics",
+    "description": "We offer limited print exclusive variants and hard-to-find ratio variants at some of the best prices in the industry. We ship your comics in sturdy Comic Shields and boxes with weather and drop protection. All comic books are treated like they are going into our own private collection!\u00a0",
+    "descriptionHTML": "We offer limited print exclusive variants and hard-to-find ratio variants at some of the best prices in the industry. We ship your comics in sturdy Comic Shields and boxes with weather and drop protection. All comic books are treated like they are going into our own private collection!\u00a0",
+    "summary": "Comic Book Retailer",
+    "installs": "1,000+",
+    "minInstalls": 1000,
+    "realInstalls": 1433,
+    "score": 4.9534883,
+    "ratings": 45,
+    "reviews": 16,
+    "histogram": [
+        0,
+        0,
+        0,
+        2,
+        42
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "The 616 Comics",
+    "developerId": "The+616+Comics",
+    "developerEmail": "info@the616comics.com",
+    "developerWebsite": "https://www.the616comics.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://the616comics.com/pages/mobile-app-privacy-policy",
+    "genre": "Comics",
+    "genreId": "COMICS",
+    "categories": [
+        {
+            "name": "Comics",
+            "id": "COMICS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/Wpvp5xW_wfEIlgGPASPpVNoQPj17KMNjlb-lzUz4yM2ScGx-bngaqv7_X99YaU-0kK5r",
+    "headerImage": "https://play-lh.googleusercontent.com/q0V-E4H7VmhqxVjO5fcZwpG4OIoV3mnjAvDgiOqBvXtcMnH2OuU0pNS7fKMn_uVWhA",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/wuihPGvSozqLA-EOenHIWVJgOkh_tVZs7MOn3IE2ElcFmCn2fHDsP5ioIGTn_rGoNJXx",
+        "https://play-lh.googleusercontent.com/pvstAqZRF5YGdxrs9RQS3onjmXycmIE9xOKQArfk6DCK-dofm3JeCGBB_NB5D-NMnvwz",
+        "https://play-lh.googleusercontent.com/zHsUDQApSXeN3tb9WCRt5edw_lkX1WwPyTkQ9NvI1r1LCjwtMw-qqcWuckhRaEOJ2-h3",
+        "https://play-lh.googleusercontent.com/xNM17RIoeOqffTxGFfiR4C4DZAXkBFKGAPVqv-SMLQ1fM_Y-DEmL6o7rczQFuh1m1g0"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Mature 17+",
+    "contentRatingDescription": "Violence, Sexual Themes",
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Jan 14, 2022",
+    "lastUpdatedOn": "Oct 23, 2024",
+    "updated": 1729683340,
+    "version": "1.6",
+    "comments": [],
+    "appId": "com.the616comics.app",
+    "url": "https://play.google.com/store/apps/details?id=com.the616comics.app&hl=en&gl=us"
+}

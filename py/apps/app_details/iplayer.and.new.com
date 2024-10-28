@@ -1,0 +1,63 @@
+{
+    "title": "lPlayer - Offline Video Player",
+    "description": "lPlayer is a powerful offline video player.\r\nSupports 4K/Ultra HD video files and enjoys high-definition playback experience.\r\n\r\n1. Powerful video player\r\nAlmost all formats of video players are in this one application: mkv, mp4, avi, flv, mpg, wmv, 4k video...\r\n\r\n2. Control suggestions\r\nEasy-to-understand controls and the ability to change playback speed, brightness, and volume with simple gesture controls.\r\n\r\nSUBSCRIPTION:\r\nYou can subscribe to upgrade to premium features\r\n- Premium version offers:\r\nNo Ads: No interruptions to music and videos (no ads)\r\n- Purchasable items: Weekly, Yearly, \"Lifetime\" (non-subscription)\r\nThe specific price is subject to the ipa price, such as the Yearly Premium: 6.99 USD\r\n- Your payment will be charged to your Google Play Account at confirmation of purchase\r\n- Subscription automatically renews unless auto-renew is turned off at least 24-hours before the end of the current period\r\n- Accounts will be charged for renewal within 24 hours prior to the end of the current period and the renewal fee will be determined\r\n- Subscriptions may be managed by the user and auto-renewal may be turned off by going to the user's Account Settings after purchase\r\n- When you cancel your subscription, your subscription will remain active until the end of the subscription period. Auto-renewal will be disabled, but current subscriptions will not be refunded.\r\n- Any unused portion of a free trial period (if offered) will be forfeited when the user purchases a subscription to that publication (if applicable)\r\n\r\nRead our Privacy Policy:https://lplayerapp.com/privacy/\r\nRead our Terms of Use: https://lplayerapp.com/terms/",
+    "descriptionHTML": "lPlayer is a powerful offline video player.<br>Supports 4K/Ultra HD video files and enjoys high-definition playback experience.<br><br>1. Powerful video player<br>Almost all formats of video players are in this one application: mkv, mp4, avi, flv, mpg, wmv, 4k video...<br><br>2. Control suggestions<br>Easy-to-understand controls and the ability to change playback speed, brightness, and volume with simple gesture controls.<br><br>SUBSCRIPTION:<br>You can subscribe to upgrade to premium features<br>- Premium version offers:<br>No Ads: No interruptions to music and videos (no ads)<br>- Purchasable items: Weekly, Yearly, &quot;Lifetime&quot; (non-subscription)<br>The specific price is subject to the ipa price, such as the Yearly Premium: 6.99 USD<br>- Your payment will be charged to your Google Play Account at confirmation of purchase<br>- Subscription automatically renews unless auto-renew is turned off at least 24-hours before the end of the current period<br>- Accounts will be charged for renewal within 24 hours prior to the end of the current period and the renewal fee will be determined<br>- Subscriptions may be managed by the user and auto-renewal may be turned off by going to the user&#39;s Account Settings after purchase<br>- When you cancel your subscription, your subscription will remain active until the end of the subscription period. Auto-renewal will be disabled, but current subscriptions will not be refunded.<br>- Any unused portion of a free trial period (if offered) will be forfeited when the user purchases a subscription to that publication (if applicable)<br><br>Read our Privacy Policy:https://lplayerapp.com/privacy/<br>Read our Terms of Use: https://lplayerapp.com/terms/",
+    "summary": "Unlimited play your Videos files.",
+    "installs": "5,000,000+",
+    "minInstalls": 5000000,
+    "realInstalls": 6489538,
+    "score": 3.9473684,
+    "ratings": 24574,
+    "reviews": 503,
+    "histogram": [
+        5164,
+        641,
+        954,
+        1282,
+        16481
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$1.99 - $29.99 per item",
+    "developer": "snap game team",
+    "developerId": "snap+game+team",
+    "developerEmail": "yiuchichungjerry@gmail.com",
+    "developerWebsite": "https://lplayerapp.com/",
+    "developerAddress": null,
+    "privacyPolicy": "https://lplayerapp.com/privacy/",
+    "genre": "Video Players & Editors",
+    "genreId": "VIDEO_PLAYERS",
+    "categories": [
+        {
+            "name": "Video Players & Editors",
+            "id": "VIDEO_PLAYERS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/x35uzBlOUGqRyiNMM-xDEiphZvXRrvhTkCswRonDgSRjS1T35nijMFBNpbbuEgB00A8",
+    "headerImage": "https://play-lh.googleusercontent.com/4e6JqU71UuZnwkfvhR3tpib6hmQnegzwoViFtOz_vQ9QZ_LrRw94tZj7NJR-8YkT1g",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/ruHbOk_4RNEFnK-PFT3rVqmsrZkviTjuDl87yx_264FU0nNvYc4JsImWlZarj3JKqw",
+        "https://play-lh.googleusercontent.com/iZV52aVYcWuPAP-su3i0bEH2VY74sSYr0LTWNdSv4GqXJJdCB9OJMpCnW78iCBQVlQ",
+        "https://play-lh.googleusercontent.com/3zNXHjQVQyGQUh_rEZu_aLP-CxW4RyueEj8EtXpOoZFHTfOQJK-vZoVk-LK1IhXi2u-3",
+        "https://play-lh.googleusercontent.com/1rYsWOeO7-uz1RudZDdIYsp3ppdiwsTZSmPcdJKqV3mIrx1lJ883qW3AD1FZ2M2uU6k"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Jan 19, 2024",
+    "lastUpdatedOn": "Sep 24, 2024",
+    "updated": 1727167400,
+    "version": "2.1.0",
+    "comments": [],
+    "appId": "iplayer.and.new.com",
+    "url": "https://play.google.com/store/apps/details?id=iplayer.and.new.com&hl=en&gl=us"
+}

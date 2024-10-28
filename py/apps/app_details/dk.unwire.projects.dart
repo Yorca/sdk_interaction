@@ -1,0 +1,63 @@
+{
+    "title": "GoPass \u00ae",
+    "description": "A better way to pay and ride.\r\n\r\nGoPass is the all-in-one travel tool that is like having a travel-sized tour guide at your side. GoPass is the easy way to buy transit passes for DART, Trinity Metro, Tulsa Transit, Star Transit, CitiBus, DCTA and CCRTA \u2013 right on your phone! GoPass is so easy to setup and use \u2013 you\u2019ll never buy a paper ticket again!\r\n\r\nFeatures include:\r\n- Mobile ticketing which allows you to purchase passes and store them for up to 60 days.\r\n- Real-time trip planning with step-by-step navigation.\r\n- Digital GoPass Wallet allowing you to store multiple credit cards or utilize Apple Pay for convenient purchasing.\r\n- Cash to mobile option allowing you to load cash to your GoPass Wallet at retail locations.\r\n- Personalize the app by saving your favorite routes, stops and pass types.\r\n- Ability to send feedback directly from the app.",
+    "descriptionHTML": "A better way to pay and ride.<br><br>GoPass is the all-in-one travel tool that is like having a travel-sized tour guide at your side. GoPass is the easy way to buy transit passes for DART, Trinity Metro, Tulsa Transit, Star Transit, CitiBus, DCTA and CCRTA \u2013 right on your phone! GoPass is so easy to setup and use \u2013 you\u2019ll never buy a paper ticket again!<br><br>Features include:<br>- Mobile ticketing which allows you to purchase passes and store them for up to 60 days.<br>- Real-time trip planning with step-by-step navigation.<br>- Digital GoPass Wallet allowing you to store multiple credit cards or utilize Apple Pay for convenient purchasing.<br>- Cash to mobile option allowing you to load cash to your GoPass Wallet at retail locations.<br>- Personalize the app by saving your favorite routes, stops and pass types.<br>- Ability to send feedback directly from the app.",
+    "summary": "A better way to pay and ride.",
+    "installs": "500,000+",
+    "minInstalls": 500000,
+    "realInstalls": 751381,
+    "score": 4.7161145,
+    "ratings": 28293,
+    "reviews": 3457,
+    "histogram": [
+        894,
+        212,
+        830,
+        2151,
+        24202
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "GoPass App",
+    "developerId": "GoPass+App",
+    "developerEmail": "GoPass@dart.org",
+    "developerWebsite": "https://www.gopass.org",
+    "developerAddress": null,
+    "privacyPolicy": "https://pass.dart.org/privacy-policy",
+    "genre": "Maps & Navigation",
+    "genreId": "MAPS_AND_NAVIGATION",
+    "categories": [
+        {
+            "name": "Maps & Navigation",
+            "id": "MAPS_AND_NAVIGATION"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/bcPOnDp2XXRvNZCgGuiWc0KVB-R8nEqf7BvtUrDylzF2WXPLTabo_h4qLZxViHjnAg",
+    "headerImage": "https://play-lh.googleusercontent.com/PozhlSXotNiODdKxPDk83U_jecm0eiemkL29rJybVK9cFUOwJjEyVZ0SlEYsL-3JqGU",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/ljYW8Y9YSlJelVd9WK8Fo8PPFnFPmVCeECe4tjJG9J6hSQT_7QtFPNqZivXvfwJVOQ",
+        "https://play-lh.googleusercontent.com/_TJQfrClNv__wz6_VNS8UQgz6-OU4w07TLmcb6PWiqjuQ2GmXWVYkavM5B8tFoei6f9i",
+        "https://play-lh.googleusercontent.com/HL6f1cAbkqusfXcqmSmeHNS28_BJC2rDj3yMhtOB_74XU7wZ0_NbOD4sFIlgBbBO_qxi",
+        "https://play-lh.googleusercontent.com/aLxKgxttLpJ_ogW6Dzou0y74eUmZNFN0HSdnXJyut68K59Nv_G31ERKk4rP-Xe2SFB0e"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Sep 9, 2013",
+    "lastUpdatedOn": "Aug 19, 2024",
+    "updated": 1724074516,
+    "version": "4.6.0",
+    "comments": [],
+    "appId": "dk.unwire.projects.dart",
+    "url": "https://play.google.com/store/apps/details?id=dk.unwire.projects.dart&hl=en&gl=us"
+}

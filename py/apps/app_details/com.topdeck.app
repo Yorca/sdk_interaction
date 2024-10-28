@@ -1,0 +1,62 @@
+{
+    "title": "TopDeck.gg",
+    "description": "Stay ahead of the game with the TopDeck.gg app, your companion for all things TCG. Whether you're a seasoned pro or just getting started, our app is designed to enhance your tournament experience every step of the way.\r\n\r\nStay Updated on Your Tournaments: Never miss a beat with real-time updates on all the tournaments you're participating in. Track your progress, view standings, and stay informed with the latest developments, all in one place.\r\n\r\nDiscover New Events: Looking for your next challenge? Easily find upcoming events and tournaments tailored to your preferences. From local gatherings to major competitions, TopDeck.gg has you covered.\r\n\r\nSeamless Match Reporting: Reporting your match results has never been easier. Submit your scores directly through the app and ensure accurate, up-to-date standings for all participants.\r\n\r\nInstant Notifications: Stay informed with instant notifications for crucial updates like round times, seating assignments, and match reporting. Never miss an important detail with timely alerts keeping you on track.\r\n\r\nJoin the TopDeck.gg community and elevate your game. Download the app today and take your tournament experience to the next level!",
+    "descriptionHTML": "Stay ahead of the game with the TopDeck.gg app, your companion for all things TCG. Whether you&#39;re a seasoned pro or just getting started, our app is designed to enhance your tournament experience every step of the way.<br><br>Stay Updated on Your Tournaments: Never miss a beat with real-time updates on all the tournaments you&#39;re participating in. Track your progress, view standings, and stay informed with the latest developments, all in one place.<br><br>Discover New Events: Looking for your next challenge? Easily find upcoming events and tournaments tailored to your preferences. From local gatherings to major competitions, TopDeck.gg has you covered.<br><br>Seamless Match Reporting: Reporting your match results has never been easier. Submit your scores directly through the app and ensure accurate, up-to-date standings for all participants.<br><br>Instant Notifications: Stay informed with instant notifications for crucial updates like round times, seating assignments, and match reporting. Never miss an important detail with timely alerts keeping you on track.<br><br>Join the TopDeck.gg community and elevate your game. Download the app today and take your tournament experience to the next level!",
+    "summary": "The Ultimate Tournament Hub",
+    "installs": "1,000+",
+    "minInstalls": 1000,
+    "realInstalls": 1988,
+    "score": 0,
+    "ratings": 0,
+    "reviews": 0,
+    "histogram": [
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "TopDeck.gg",
+    "developerId": "TopDeck.gg",
+    "developerEmail": "contact@topdeck.gg",
+    "developerWebsite": "https://topdeck.gg/",
+    "developerAddress": null,
+    "privacyPolicy": "https://topdeck.gg/privacy-policy",
+    "genre": "Events",
+    "genreId": "EVENTS",
+    "categories": [
+        {
+            "name": "Events",
+            "id": "EVENTS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/-1_UOi7X2wWvqogKG0-IBQuqbWKzCftu1zttg8U31CmXpgLDxRAN9mMpvNsLaCHJIg",
+    "headerImage": "https://play-lh.googleusercontent.com/PZEpwcY7RCSHyeTaRPS0wHWiOoUQV9skKTQEjSqaDv5zNgmhQiUHB-Y-w5DDpmCgnZQ",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/QMhhWYp09AUw_Rus4sWB_zOW-okYcmsoL7WbeOiJeuq5CC3jJ5pzQJEE9BygWBtCnw",
+        "https://play-lh.googleusercontent.com/QKCDty0AJQN9PxXkSNKDqWgisn_zWvyXt-NunLhqqfs8x_22B5A-Upnbjx7qzW_ZbzTZ",
+        "https://play-lh.googleusercontent.com/yd3TNwmQnw4-bTS7NIXr16E-7R_RzvW48fcURBhIizi5pPtcyeJaoQBEakThX_VytDMR"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Aug 5, 2024",
+    "lastUpdatedOn": "Aug 12, 2024",
+    "updated": 1723494896,
+    "version": "1.0.1",
+    "comments": [],
+    "appId": "com.topdeck.app",
+    "url": "https://play.google.com/store/apps/details?id=com.topdeck.app&hl=en&gl=us"
+}

@@ -1,0 +1,63 @@
+{
+    "title": "Hyatt Inclusive Collection",
+    "description": "We invite you to discover the Inclusive Collection \u2013 part of the World of Hyatt, with our unique resort brands designed for every lifestyle and stage of life. Whether you\u2019re seeking a dream vacation, a flawlessly executed meeting or the ultimate destination wedding, we offer the perfect places to create lifetime memories. Choose your travel style, indulge during your stay and Celebrate Every Moment\u2122.",
+    "descriptionHTML": "We invite you to discover the Inclusive Collection \u2013 part of the World of Hyatt, with our unique resort brands designed for every lifestyle and stage of life. Whether you\u2019re seeking a dream vacation, a flawlessly executed meeting or the ultimate destination wedding, we offer the perfect places to create lifetime memories. Choose your travel style, indulge during your stay and Celebrate Every Moment\u2122.",
+    "summary": "Elevating your all-inclusive vacation experience with services as mobile as you.",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 489282,
+    "score": 4.696,
+    "ratings": 4589,
+    "reviews": 119,
+    "histogram": [
+        91,
+        73,
+        146,
+        513,
+        3761
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "STAY App",
+    "developerId": "STAY+App",
+    "developerEmail": "mobilesupport@applelg.net",
+    "developerWebsite": null,
+    "developerAddress": null,
+    "privacyPolicy": "http://www.amresorts.com/privacy",
+    "genre": "Travel & Local",
+    "genreId": "TRAVEL_AND_LOCAL",
+    "categories": [
+        {
+            "name": "Travel & Local",
+            "id": "TRAVEL_AND_LOCAL"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/AnFpvFrSbb95UTjO46HWcPKFZt4u1bRmFBIX16RSFhKinmeORbXUqKI0Mbgf6C5y9xv5",
+    "headerImage": "https://play-lh.googleusercontent.com/WFWiyn8kmXb_oZjgBCtDyuUhKf7IKXCUiacTxedqMVZCMaSXy1saXB9WXg7H3BfUpHs",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/ysUqeAvKyFYprmRGlbSiYDszXBBlQ7E6342muY_8YsQfgSKi205YVYprxfh07IzntQ",
+        "https://play-lh.googleusercontent.com/c0W4EYLf97SWFnLdlGlx9qUfVefq43ENosh4mAPxAd9zI5la15PNkYJVJjpiT8I6Xg",
+        "https://play-lh.googleusercontent.com/-AS-8pMgbvWyEDtVomOx8TQlyeJpupBmruUiw4DHlcgTESqmeRdcAFY6y2OMdLd2hCU",
+        "https://play-lh.googleusercontent.com/KN2fMfFME9iJpnB87UcrdY_t8Pa9UPAQ6vt5n5hVFEpmy97MoL9YNyIi6OAFVtlSEyI"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Apr 14, 2021",
+    "lastUpdatedOn": "Mar 5, 2024",
+    "updated": 1709637356,
+    "version": "1.5.3",
+    "comments": [],
+    "appId": "amresorts.app",
+    "url": "https://play.google.com/store/apps/details?id=amresorts.app&hl=en&gl=us"
+}

@@ -1,0 +1,63 @@
+{
+    "title": "The Human Bean",
+    "description": "Download the App that\u2019s Cool Beans! \r\n\r\nEasy to pay & earn Beanefits \r\nWe at The Human Bean believe in making every exchange memorable, kind and sincere and ensuring every customer has their day brightened as they drive thru or walk away.  \r\nThis same philosophy applies to our convenient and rewarding app, which we feel is the best thing to have\u2026next to you -- other than one of our Lattes, Granitas, Snowy Mochas or Muddy Mochas, of course.  \r\n\r\nAnd that\u2019s just a small sampling of what you can find on our menu. At The Human Bean, you can also enjoy a wide range of teas, smoothies, chai, energy drinks and delicious food items. \r\nWith The Human Bean app, you can easily explore our menu and pay for your favorite drink. Earn and redeem rewards points \u2013 we call them Beanefits -- faster and take advantage of reward perks that you can customize.  All this, and more convenience and value, are in store for you with The Human Bean app.  \r\n\r\nThe App With Beanefits:  \r\n     \u2022 With our Beanefits Rewards program you\u2019ll earn Beans for every dollar \r\n     spent (see below) that you can redeem for free drinks and more\r\n     \u2022 Enjoy exclusive access to special offers and promotions available only \r\n     through our app  \r\n     \u2022 Load funds or The Human Bean Gift Cards into the App for fast and easy \r\n     transactions \r\n \r\nRewards Levels \r\n     \u2022 100 Beans = $1 off reward \r\n     \u2022 250 Beans = Free any size tea, brewed coffee. \r\n     \u2022 350 Beans = Free any size drink \r\n \r\nEven More Beanefits \r\n     \u2022 250 free beans when you sign up for The Human Bean app \r\n     \u2022 Free birthday drink \r\n     \u2022 VIP rewards and promotions \r\n \r\nBe the First to Know \r\n     \u2022 Get the inside scoop before anyone else about the latest additions to The \r\n     Human Bean's menu and other fresh-brewed news",
+    "descriptionHTML": "Download the App that\u2019s Cool Beans! <br><br>Easy to pay &amp; earn Beanefits <br>We at The Human Bean believe in making every exchange memorable, kind and sincere and ensuring every customer has their day brightened as they drive thru or walk away.  <br>This same philosophy applies to our convenient and rewarding app, which we feel is the best thing to have\u2026next to you -- other than one of our Lattes, Granitas, Snowy Mochas or Muddy Mochas, of course.  <br><br>And that\u2019s just a small sampling of what you can find on our menu. At The Human Bean, you can also enjoy a wide range of teas, smoothies, chai, energy drinks and delicious food items. <br>With The Human Bean app, you can easily explore our menu and pay for your favorite drink. Earn and redeem rewards points \u2013 we call them Beanefits -- faster and take advantage of reward perks that you can customize.  All this, and more convenience and value, are in store for you with The Human Bean app.  <br><br>The App With Beanefits:  <br>     \u2022 With our Beanefits Rewards program you\u2019ll earn Beans for every dollar <br>     spent (see below) that you can redeem for free drinks and more<br>     \u2022 Enjoy exclusive access to special offers and promotions available only <br>     through our app  <br>     \u2022 Load funds or The Human Bean Gift Cards into the App for fast and easy <br>     transactions <br> <br>Rewards Levels <br>     \u2022 100 Beans = $1 off reward <br>     \u2022 250 Beans = Free any size tea, brewed coffee. <br>     \u2022 350 Beans = Free any size drink <br> <br>Even More Beanefits <br>     \u2022 250 free beans when you sign up for The Human Bean app <br>     \u2022 Free birthday drink <br>     \u2022 VIP rewards and promotions <br> <br>Be the First to Know <br>     \u2022 Get the inside scoop before anyone else about the latest additions to The <br>     Human Bean&#39;s menu and other fresh-brewed news",
+    "summary": "Your convenient coffee companion for paying, earning and redeeming rewards.",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 278472,
+    "score": 3.439759,
+    "ratings": 1671,
+    "reviews": 997,
+    "histogram": [
+        502,
+        130,
+        60,
+        80,
+        895
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "The Human Bean",
+    "developerId": "The+Human+Bean",
+    "developerEmail": "support@incentivio.com",
+    "developerWebsite": "https://incentivio.com/",
+    "developerAddress": null,
+    "privacyPolicy": "https://order.incentivio.com/termsofuse_thb_android.html",
+    "genre": "Food & Drink",
+    "genreId": "FOOD_AND_DRINK",
+    "categories": [
+        {
+            "name": "Food & Drink",
+            "id": "FOOD_AND_DRINK"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/PQkNblKxe1C8gN9xdpy44Gpn9eVpvMIZ4mcjbOW5iY5979XCJ7zuXW4VAtaheCuKx2M",
+    "headerImage": "https://play-lh.googleusercontent.com/sdwejSQyqMazBPifefKOjKx5RihAis1xnIImNCIwe79WKW42YbqSPZgxK0CpKW18P9Jm",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/sw4ygyBRBRZM77p6HR_YFXPq_4x5n7MyVKeosmMV8URPEznS4DqKcsslTS186lDKu9M",
+        "https://play-lh.googleusercontent.com/CWxd3SHuz1d0Z3ZrynhJ6JZPJ_sU1Tpohvu4ufyHGyWIcl0NvoXtvb01e3oJWuHhTw",
+        "https://play-lh.googleusercontent.com/hEfN-5t1Ou3yA8zeXoeUtQf9FnSUZf5nNpN713vX0eTN_YnjMy5dUtiZIqP7sEvdkw",
+        "https://play-lh.googleusercontent.com/5mvvYmc4EexeR9Y0W-ljOBKSPx_vQm7GwRsN_GkixdduPlKk_BpFfzjlGhdi8sok6Qw"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Jan 15, 2018",
+    "lastUpdatedOn": "Jul 22, 2024",
+    "updated": 1721713756,
+    "version": "3.2.6",
+    "comments": [],
+    "appId": "com.thehumanbean.thehumanbean.android.app",
+    "url": "https://play.google.com/store/apps/details?id=com.thehumanbean.thehumanbean.android.app&hl=en&gl=us"
+}

@@ -1,0 +1,62 @@
+{
+    "title": "Autolink Pro",
+    "description": "The mobile phone connects the vehicle through the USB line or WIfi using the mirror method,the mobile phone's screen will be show on the vehicle . Then mobile phone can be operated by touch vehice's screen. When driving on the road, autolink pro is both convenient and safe for operate your mobile phone. At the same time, the vehicle multimedia can also enjoy all the functions of the mobile phone.",
+    "descriptionHTML": "The mobile phone connects the vehicle through the USB line or WIfi using the mirror method,the mobile phone&#39;s screen will be show on the vehicle . Then mobile phone can be operated by touch vehice&#39;s screen. When driving on the road, autolink pro is both convenient and safe for operate your mobile phone. At the same time, the vehicle multimedia can also enjoy all the functions of the mobile phone.",
+    "summary": "Autolink Pro combination of vehicle and mobile phones.",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 233420,
+    "score": 2.98,
+    "ratings": 496,
+    "reviews": 43,
+    "histogram": [
+        198,
+        39,
+        24,
+        39,
+        193
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "\u51cc\u9633\u6210\u82af\u79d1\u6280\uff08\u6210\u90fd\uff09\u6709\u9650\u516c\u53f8",
+    "developerId": "%E5%87%8C%E9%98%B3%E6%88%90%E8%8A%AF%E7%A7%91%E6%8A%80%EF%BC%88%E6%88%90%E9%83%BD%EF%BC%89%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8",
+    "developerEmail": "support@sunmedia.com.cn",
+    "developerWebsite": null,
+    "developerAddress": "\u56db\u5ddd\u7701\u6210\u90fd\u5e02\u9ad8\u65b0\u533a\u5929\u5e9c\u56db\u8857153\u53f7",
+    "privacyPolicy": "http://support.autolink.top/privacy/privacy.html",
+    "genre": "Auto & Vehicles",
+    "genreId": "AUTO_AND_VEHICLES",
+    "categories": [
+        {
+            "name": "Auto & Vehicles",
+            "id": "AUTO_AND_VEHICLES"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/ho9x1Nmoa-ETIfzwoDG-qdnIX5IPd5SyqueFgwy_B58MuDcAM9C1GXE4upX5Jhhix-Y",
+    "headerImage": "https://play-lh.googleusercontent.com/vFWJBfWpitKq3SUmyyq6ZxaFHpuZRISXxhh0L3otFkSCmd_dq0maWKvmnR5v4U9Iws4",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/gibtJPLIq4FL8zg5bfMnZp30zuf-ShlIZSNQETSCOHJG-SOseeKXGHHoRUcfN5nmgaY",
+        "https://play-lh.googleusercontent.com/BsYmDxsmQVmOQYfDfkUqV2zj-s1ayHH4t8YdGDqp-SLGstJmq3f2uQCBkdHud1pie5A",
+        "https://play-lh.googleusercontent.com/xQGqrCoJsKXMihxF_tQaeSO2eGstrvug_6ckTGvTZwkIwpar0Ogv5R6prWc3wAuE4js"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Sep 9, 2020",
+    "lastUpdatedOn": "Apr 2, 2024",
+    "updated": 1712108142,
+    "version": "1.0.31",
+    "comments": [],
+    "appId": "com.link.autolink.pro",
+    "url": "https://play.google.com/store/apps/details?id=com.link.autolink.pro&hl=en&gl=us"
+}

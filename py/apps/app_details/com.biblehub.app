@@ -1,0 +1,63 @@
+{
+    "title": "Bible Hub",
+    "description": "Official Bible Hub app with quick access to the Bible Hub search, offline Berean Bible, online Bibles, commentaries, devotions, topics, and interlinear. You will need an internet connection to use all the features of this app.",
+    "descriptionHTML": "Official Bible Hub app with quick access to the Bible Hub search, offline Berean Bible, online Bibles, commentaries, devotions, topics, and interlinear. You will need an internet connection to use all the features of this app.",
+    "summary": "Official Bible Hub app with quick access to the Bible Hub site.",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 473070,
+    "score": 4.39,
+    "ratings": 1768,
+    "reviews": 339,
+    "histogram": [
+        156,
+        16,
+        69,
+        246,
+        1272
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "BibleHub",
+    "developerId": "BibleHub",
+    "developerEmail": "biblehub@aol.com",
+    "developerWebsite": "https://biblehub.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://biblehub.com/privacy.htm",
+    "genre": "Books & Reference",
+    "genreId": "BOOKS_AND_REFERENCE",
+    "categories": [
+        {
+            "name": "Books & Reference",
+            "id": "BOOKS_AND_REFERENCE"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/cdHjFcgO6g1DbbbEzFGmtbT_lC6a62uC1FJxCBAAZuEujFhy__4MHaQMIGKdzfcYVA",
+    "headerImage": "https://play-lh.googleusercontent.com/Y7CO9YUdrSf-WhIpZRRLscUGTuhW0l7hNrubtB_hjOEkrnRfpSW0Qob81DIHiiH9Cw",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/Ee_51RLB80YrwSlGyWZJO22GUtuQFhZhFIMncig8B_v00Np9QQkYA516ccd-y-ds4b8j",
+        "https://play-lh.googleusercontent.com/AbxphLLD8u3sJn0QhlGwzWZQMCoULCsrh5riBjCydaquDYXxXVsKp_v9AN9JmgbWtEE",
+        "https://play-lh.googleusercontent.com/JfWGp36SwkfWXONW79CW4fBsUw-cMkQW-Zj5Tiqylc1rK1DY_Bb8S1JjEE1Bm1LHOrqY",
+        "https://play-lh.googleusercontent.com/KPZcD7jL3lCh2S9rPNRjfQXjunPwwptLWhJmsnvi7BbAozovWzY4ZIsN9y8liHHpwg"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Nov 20, 2020",
+    "lastUpdatedOn": "Sep 24, 2023",
+    "updated": 1695564765,
+    "version": "2.2.0",
+    "comments": [],
+    "appId": "com.biblehub.app",
+    "url": "https://play.google.com/store/apps/details?id=com.biblehub.app&hl=en&gl=us"
+}

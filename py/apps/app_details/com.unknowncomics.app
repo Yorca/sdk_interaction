@@ -1,0 +1,63 @@
+{
+    "title": "Unknown Comics",
+    "description": "Unknown Comics is the exclusive comic book dealer. With more than 1000 exclusive titles in our ever growing library of books. We offer top discount for weekly comic books as well as great prices for many table top games.\u00a0\u00a0",
+    "descriptionHTML": "Unknown Comics is the exclusive comic book dealer. With more than 1000 exclusive titles in our ever growing library of books. We offer top discount for weekly comic books as well as great prices for many table top games.\u00a0\u00a0",
+    "summary": "The Exclusive Comic Book Dealer",
+    "installs": "10,000+",
+    "minInstalls": 10000,
+    "realInstalls": 15192,
+    "score": 4.68,
+    "ratings": 204,
+    "reviews": 79,
+    "histogram": [
+        7,
+        1,
+        5,
+        14,
+        173
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Unknown Comics LLC",
+    "developerId": "Unknown+Comics+LLC",
+    "developerEmail": "orders@unknowncomicbooks.com",
+    "developerWebsite": "https://www.unknowncomicbooks.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://unknowncomicbooks.com/pages/mobile-app-privacy-policy",
+    "genre": "Comics",
+    "genreId": "COMICS",
+    "categories": [
+        {
+            "name": "Comics",
+            "id": "COMICS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/vvbAKjyktlHzalcQpYn802lNsiQ_4ml0R6M9GxcOaRqjv3NZVbN9ei3j2jDm8ufYrSI",
+    "headerImage": "https://play-lh.googleusercontent.com/rg5GhrJ-KQ6WwIMZqT3-LtBnIJtzpjCTUSXakezvUsm3TMu6RAKZDLH0nxwXp-OY66A",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/O9dholuV32uQ_PVIQgKyxuPSuBt1gku5E5NpaqeOtRJy6C4JB9uh6wjs9WJJo4vo1_c",
+        "https://play-lh.googleusercontent.com/vXH_D1uA7nduDbqDthfCkSYN5hkpQbkg1tRvIeB8qA-ddkbvR7tNUcghpoZNPm1hBvc",
+        "https://play-lh.googleusercontent.com/IfZvVyFhOdpuEj5kiSOJLoKS6sC3skZ0y1xE3GFxksSSaCHs_WME9JdjY9c_JAr_1W4",
+        "https://play-lh.googleusercontent.com/D8p-RtwlZTnOeGueugbrhbprIQJVr-JyoxnqYt_1a2_lbrYMy9XXbUIe8XkGZg8BkzI"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Mature 17+",
+    "contentRatingDescription": "Suggestive Themes, Partial Nudity",
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Jan 10, 2020",
+    "lastUpdatedOn": "Oct 23, 2024",
+    "updated": 1729686987,
+    "version": "2.4",
+    "comments": [],
+    "appId": "com.unknowncomics.app",
+    "url": "https://play.google.com/store/apps/details?id=com.unknowncomics.app&hl=en&gl=us"
+}

@@ -1,0 +1,63 @@
+{
+    "title": "Million Trivia",
+    "description": "The Million Trivia is a stimulating global game that challenges your intellect. In the game, you'll be greeted by a group of charming cartoon characters, embarking on a journey of knowledge together. Through a variety of interesting and challenging questions, you'll test your intelligence and elevate your knowledge. Compete with players worldwide and experience the joy of cross-cultural exchange. The game fosters learning in a relaxed and enjoyable manner, turning each quiz into a delightful adventure. Join us now to exercise your intellect and discover the wonders of the world!",
+    "descriptionHTML": "The Million Trivia is a stimulating global game that challenges your intellect. In the game, you&#39;ll be greeted by a group of charming cartoon characters, embarking on a journey of knowledge together. Through a variety of interesting and challenging questions, you&#39;ll test your intelligence and elevate your knowledge. Compete with players worldwide and experience the joy of cross-cultural exchange. The game fosters learning in a relaxed and enjoyable manner, turning each quiz into a delightful adventure. Join us now to exercise your intellect and discover the wonders of the world!",
+    "summary": "TheMillion Trivia is a stimulating global game that challenges your intellect",
+    "installs": "500,000+",
+    "minInstalls": 500000,
+    "realInstalls": 559549,
+    "score": 3.089109,
+    "ratings": 1441,
+    "reviews": 63,
+    "histogram": [
+        569,
+        69,
+        69,
+        104,
+        604
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Darma D. Studio",
+    "developerId": "Darma+D.+Studio",
+    "developerEmail": "tritiodarm@gmail.com",
+    "developerWebsite": "https://bootreat.throughexc.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://docs.google.com/document/d/18YyGGKrqlEEouDz6z0xLOyatHax95vnACdvsJ1Nd-kg/edit?usp=sharing",
+    "genre": "Trivia",
+    "genreId": "GAME_TRIVIA",
+    "categories": [
+        {
+            "name": "Trivia",
+            "id": "GAME_TRIVIA"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/q6Iud-nveMG3TpOMXVJAZLvHwMEpf09e8uznQjx15TUfRgpi7Wid7uJYjhJlPRIqPkMf",
+    "headerImage": "https://play-lh.googleusercontent.com/snfkYKEzEh98_WA1wER1TG8AVPqFKNfzrd01S0zeDdrcuatKEU0Ttrq9k5CZ0611l3g",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/yDeaMmf8weYxXQiuKLWrePUaG1MvLjTG3ZAhACPMgD0L3saewChNk8SmCxpZ7dhkWA",
+        "https://play-lh.googleusercontent.com/lweUY9xoyUiuFKAXu8XceKvCxP0DP7x_WPtYDjg2TN8EkvEmUncwaXe4rTXf4ZJ_MlLP",
+        "https://play-lh.googleusercontent.com/yGA8mUyCXpsLLkL2xjZNhdsmMi6uN1D2qaho5-nFkziZO6_ef4-tvP0n-g49OQlLIthc",
+        "https://play-lh.googleusercontent.com/oE7B4lhMvSFNHcYhc9rZ4Il-ZWZ2SZWqHbYKnLpW0Ga_pxL3ZlzJj72iZVXzG7syT9gF"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Mature 17+",
+    "contentRatingDescription": "Cash Prizes",
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Apr 18, 2024",
+    "lastUpdatedOn": "May 23, 2024",
+    "updated": 1716449991,
+    "version": "1.0.3",
+    "comments": [],
+    "appId": "game.million.trivia.top.com",
+    "url": "https://play.google.com/store/apps/details?id=game.million.trivia.top.com&hl=en&gl=us"
+}

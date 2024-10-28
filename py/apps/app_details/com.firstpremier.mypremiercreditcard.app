@@ -1,0 +1,62 @@
+{
+    "title": "PREMIER Credit Card",
+    "description": "Our app gives you secure access to your account so you can check in anytime 24/7. It\u2019s the best way to stay on top of your account while you work to build your credit. And it\u2019s free.\r\n\r\nA convenient way to:\r\n\u2022 Check your account balances\r\n\u2022 Make your monthly payments\r\n\u2022 Monitor recent transactions\r\n\u2022 Lock or unlock your card \r\n\u2022 Go paperless to view statements and letters\r\n\u2022 Update your profile\r\n\r\nTo access your account, use your existing MyPremierCreditCard.com username and password. Don\u2019t have one yet? No problem. Just create one with the app.",
+    "descriptionHTML": "Our app gives you secure access to your account so you can check in anytime 24/7. It\u2019s the best way to stay on top of your account while you work to build your credit. And it\u2019s free.<br><br>A convenient way to:<br>\u2022 Check your account balances<br>\u2022 Make your monthly payments<br>\u2022 Monitor recent transactions<br>\u2022 Lock or unlock your card <br>\u2022 Go paperless to view statements and letters<br>\u2022 Update your profile<br><br>To access your account, use your existing MyPremierCreditCard.com username and password. Don\u2019t have one yet? No problem. Just create one with the app.",
+    "summary": "Manage your PREMIER Bankcard Credit Card whenever and wherever you are.",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 2461136,
+    "score": 4.6388903,
+    "ratings": 223340,
+    "reviews": 14590,
+    "histogram": [
+        8958,
+        2319,
+        8114,
+        21623,
+        182321
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "PREMIER Bankcard",
+    "developerId": "PREMIER+Bankcard",
+    "developerEmail": "mobileappsupport@premierbankcard.com",
+    "developerWebsite": "https://www.mypremiercreditcard.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://www.mypremiercreditcard.com/Home/Privacy",
+    "genre": "Finance",
+    "genreId": "FINANCE",
+    "categories": [
+        {
+            "name": "Finance",
+            "id": "FINANCE"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/mbNIsX5hvBy6XQTA53T9GqD1J1sIJYW2jbH9f1iIVGkrqRtvdrlDCDB2bxwcT01Whw",
+    "headerImage": "https://play-lh.googleusercontent.com/xhfzB8OlK-HxZ7mWPH8_ZTg3QPuX9L1onP9_HgL0jMTDTjDHIGz9NrHrBEMMkIEcYfE",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/Nh3ZaYup5fTePaGyo9jkl7M5TsmMqxf1i5KLS2oxZ297gIg6IJt_TAz11bO10EGqi7U",
+        "https://play-lh.googleusercontent.com/sYTuPpRGq3qaUTFWQxhY8YZzv35SZ7rPbM88ZK8x2UKgFj_2UEACKhhHHluXdgCeAAs",
+        "https://play-lh.googleusercontent.com/NagHmdfLyd0nTn4unQEu9EOxOcC1h8IHtbzN8c4PV7VtHCnRrYjq9N1sjMbAwDYM_g"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Sep 16, 2019",
+    "lastUpdatedOn": "Sep 4, 2024",
+    "updated": 1725474915,
+    "version": "3.11.0",
+    "comments": [],
+    "appId": "com.firstpremier.mypremiercreditcard.app",
+    "url": "https://play.google.com/store/apps/details?id=com.firstpremier.mypremiercreditcard.app&hl=en&gl=us"
+}

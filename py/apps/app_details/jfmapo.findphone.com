@@ -1,0 +1,63 @@
+{
+    "title": "Find My Phone",
+    "description": "Are you currently trying to locate your phone?\r\nI can't seem to find my phone. Do you know where it is?\r\nYou can use an application that helps you find your phone by detecting clapping sounds.\r\nBy turning on the \"Find My Phone\" feature, you can locate your lost phone by clapping your hands or whistling.\r\nThe app will react to the sound and start ringing, flashing, or vibrating, making it quick for you to find your phone.\r\n\r\nHere's how to use the \"Find My Phone\" app:\r\n1. Open the application.\r\n2. Click on the [Tap to Active] button.\r\n3. The app will listen for clapping sounds.\r\n4. Once it detects the clapping or whistling sound, it will trigger your phone to ring, flash, or vibrate.\r\n\r\nNOTE:\r\n1. Recording permission: only used to listen to the sound of clapping, which triggers an alarm to help users find the phone.\r\n2. Camera permission: only for flash function to help users find the phone in dark environment.",
+    "descriptionHTML": "Are you currently trying to locate your phone?<br>I can&#39;t seem to find my phone. Do you know where it is?<br>You can use an application that helps you find your phone by detecting clapping sounds.<br>By turning on the &quot;Find My Phone&quot; feature, you can locate your lost phone by clapping your hands or whistling.<br>The app will react to the sound and start ringing, flashing, or vibrating, making it quick for you to find your phone.<br><br>Here&#39;s how to use the &quot;Find My Phone&quot; app:<br>1. Open the application.<br>2. Click on the [Tap to Active] button.<br>3. The app will listen for clapping sounds.<br>4. Once it detects the clapping or whistling sound, it will trigger your phone to ring, flash, or vibrate.<br><br>NOTE:<br>1. Recording permission: only used to listen to the sound of clapping, which triggers an alarm to help users find the phone.<br>2. Camera permission: only for flash function to help users find the phone in dark environment.",
+    "summary": "Find Phone By Clap and Whistle",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 3333189,
+    "score": 3.857143,
+    "ratings": 1681,
+    "reviews": 17,
+    "histogram": [
+        346,
+        106,
+        0,
+        213,
+        1013
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Darian Gray",
+    "developerId": "5421200364975996163",
+    "developerEmail": "luofree789@gmail.com",
+    "developerWebsite": "https://findmyphones.net",
+    "developerAddress": null,
+    "privacyPolicy": "https://findmyphones.net/Policy/",
+    "genre": "Lifestyle",
+    "genreId": "LIFESTYLE",
+    "categories": [
+        {
+            "name": "Lifestyle",
+            "id": "LIFESTYLE"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/C3txFuKFQ1xbMjQReh7LImzLjq-do-uwnvbQNybAsudWqNSpw2KEXqi-c-THsxozVjw",
+    "headerImage": "https://play-lh.googleusercontent.com/v5ejtv85wK9eC2PkjMRcGpoAFNfY8NqE-j-TcOJH19hUm4ap7U-MR2MO4lctKlPOX6zn",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/DPSjoYqL0Q0JbkzWcTJeysEKkbqEAKQ5qdm_NdGPwtPe7DDYZNcxGJ88In2iXpTcgDI",
+        "https://play-lh.googleusercontent.com/JLqaHbMeHrrBaKk2clOVjjKtLZPiDfaiE9KKopm2MoYHOOBqaWFRgIjx7-5CqPvVTmg",
+        "https://play-lh.googleusercontent.com/6c9nM4snTR1ic8qAANc3a_coZaFfS32nvx9wqOZMlm55sya_91v4Jbk56NEJCEMZTlM",
+        "https://play-lh.googleusercontent.com/Kkrg-uJirIBw3q_fmWFNm5plc-6swpS37ye1HSRXAd4tSax6QSguGrENw4HXK4uSDEg_"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Nov 30, 2023",
+    "lastUpdatedOn": "Oct 8, 2024",
+    "updated": 1728379021,
+    "version": "5.0.4",
+    "comments": [],
+    "appId": "jfmapo.findphone.com",
+    "url": "https://play.google.com/store/apps/details?id=jfmapo.findphone.com&hl=en&gl=us"
+}
