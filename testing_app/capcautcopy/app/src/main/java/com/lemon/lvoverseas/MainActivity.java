@@ -1,7 +1,6 @@
 package com.lemon.lvoverseas;
 
 import android.os.Bundle;
-
 import com.applovin.sdk.AppLovinSdkConfiguration;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -26,6 +25,9 @@ import com.facebook.ads.AdSettings;
 
 import android.util.Log;
 import com.facebook.ads.AudienceNetworkAds;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
 //        AudienceNetworkAds.initialize(this);
 //        Log.d("AudienceNetworkAds.initialize", "" + AudienceNetworkAds.isInitialized(this));
 
-        AppLovinPrivacySettings.setIsAgeRestrictedUser(true, this);
+//        AppLovinPrivacySettings.setIsAgeRestrictedUser(true, this);
+        AppLovinPrivacySettings.setHasUserConsent(true, this);
+        AppLovinPrivacySettings.setDoNotSell(true,this);
         AppLovinSdk.getInstance( this ).setMediationProvider( "max" );
         AppLovinSdk.initializeSdk( this, new AppLovinSdk.SdkInitializationListener() {
             @Override
@@ -74,7 +78,22 @@ public class MainActivity extends AppCompatActivity {
 
         } );
 
+//        HashMap<String, String > map = new HashMap<String, String >();
+//        map.put("test", "1");
 
+        HashSet<String> map = new HashSet<String>();
+        map.add("new item");
+
+
+        testHook();
+        map.add("new item 2");
+        testHook();
+
+
+    }
+
+    public void testHook() {
+        System.out.println("ree");
     }
 
     @Override

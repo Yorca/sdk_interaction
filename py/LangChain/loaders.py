@@ -5,7 +5,6 @@ from langchain_community.document_loaders import TextLoader, UnstructuredXMLLoad
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 import tools
-from agent import get_agent
 import env
 from langchain.llms import OpenAI
 from langchain.chains import LLMChain

@@ -2,9 +2,9 @@ import gplay from "google-play-scraper";
 import fs from "fs"
 import Parser from "json2csv"
 
-const csvFilePath = 'app_metadata_topfree.csv';
+const csvFilePath = 'app_metadata_topfree-100.csv';
 if (!fs.existsSync(csvFilePath)) {
-    fs.writeFileSync(csvFilePath, 'appId,title，type\n');
+    fs.writeFileSync(csvFilePath, 'appId,title,type\n');
     //fs.writeFileSync(csvFilePath, 'appId,type,title,installs,minInstalls,maxInstalls,androidVersion,androidMaxVersion,developerEmail,privacyPolicy,available,genreId,categories,contentRating,adSupported,updated,url\n');
 }
 
@@ -23,8 +23,8 @@ async function downloadAppData() {
 
         const promise = gplay.list({
             category: categoryValue,
-            collection: gplay.collection.z,
-            num: 3000,
+            collection: gplay.collection.TOP_FREE,
+            num: 100,
             lang: "en",
             fullDetail: false
         }).then(result => {

@@ -19,6 +19,17 @@ def is_privacy_api(cls, mtd):
             return "it is a privacy API"
     return "it is not a privacy API"
 
+def get_summary(class_name, mtd_name):
+    with open(summary_ground_truth, "r") as file:
+        data = json.loads(file.read())
+    for sdk in data["LIBS"]:
+        for api in sdk["privacy_APIs"]:
+            for cls in api["class_name"]:
+                if cls == class_name and (not mtd_name or mtd_name == api['API_name']):
+                    return api
+    return None
+
+
 privacy_api_checker = Tool (
     func=is_privacy_api,
     description="This tool checks whether the method in the class is a privacy API in our database.",

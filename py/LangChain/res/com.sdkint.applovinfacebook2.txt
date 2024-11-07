@@ -1,0 +1,69 @@
+```json
+[
+    {
+        "involved_APIs": [
+            {
+                "class_name": "com.applovin.sdk.AppLovinPrivacySettings",
+                "method_name": "setDoNotSell"
+            },
+            {
+                "class_name": "com.applovin.sdk.AppLovinPrivacySettings",
+                "method_name": "setHasUserConsent"
+            }
+        ],
+        "issues": [
+            {
+                "description": "Inconsistent handling of user consent and opt-out preferences.",
+                "reason": "The method 'setDoNotSell' is called to opt-out of the sale of personal information, but it does not ensure that the user's consent for data collection is also revoked, which is required by the API summary.",
+                "impact": "This could lead to a situation where user data is still collected and used for advertising despite the user opting out, violating privacy regulations."
+            }
+        ]
+    },
+    {
+        "involved_APIs": [
+            {
+                "class_name": "com.adxcorp.ads.common.ADXGdprManager",
+                "method_name": "saveResultGDPR"
+            },
+            {
+                "class_name": "com.unity3d.ads.metadata.MetaData",
+                "method_name": "SetMetaData"
+            }
+        ],
+        "issues": [
+            {
+                "description": "Potential conflict in GDPR consent state management.",
+                "reason": "The 'saveResultGDPR' method updates the consent status, while 'SetMetaData' relies on the user's consent for targeted advertising. If these states are not synchronized, it could lead to inconsistent user experiences.",
+                "impact": "Users may receive targeted ads despite opting out, leading to non-compliance with GDPR regulations."
+            }
+        ]
+    }
+]
+``````json
+[
+    {
+        "involved_APIs": [
+            {
+                "class_name": "com.applovin.sdk.AppLovinPrivacySettings",
+                "method_name": "setDoNotSell"
+            },
+            {
+                "class_name": "com.applovin.sdk.AppLovinPrivacySettings",
+                "method_name": "setHasUserConsent"
+            }
+        ],
+        "issues": [
+            {
+                "description": "The method 'setDoNotSell' is called without confirming whether the user has opted out of the sale of their personal information.",
+                "reason": "The API summary states that the 'do not sell' flag must be set according to the user's choice, which implies that user consent should be verified before setting this flag.",
+                "impact": "If the user's choice is not verified, it could lead to unauthorized selling of personal information, violating user privacy rights."
+            },
+            {
+                "description": "The method 'setHasUserConsent' is called without ensuring that the user has provided consent for collecting and using personal data.",
+                "reason": "The API summary specifies that user consent must be collected before initializing the SDK, which is not reflected in the runtime traces.",
+                "impact": "This could result in the app processing personal data without proper consent, leading to potential legal issues and loss of user trust."
+            }
+        ]
+    }
+]
+```

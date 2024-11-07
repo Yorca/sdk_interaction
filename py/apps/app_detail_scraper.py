@@ -4,7 +4,7 @@ from google_play_scraper import app
 import pandas as pd
 import json
 
-pkg_data = pd.read_csv("../apk_downloader/app_metadata_topfree_merged.csv")
+pkg_data = pd.read_csv("../apk_downloader/data/app_metadata_topfree_merged.csv")
 details_path = "app_details"
 for _, row in pkg_data.iterrows():
     pkg_name = row[0]
