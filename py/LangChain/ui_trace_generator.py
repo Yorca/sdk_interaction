@@ -27,8 +27,6 @@ def extract_text_from_image(file_path):
     Extracts the main content from the PNG file using OCR.
     """
     try:
-        # loader = UnstructuredImageLoader(file_path)
-        # return loader.load()
         image = Image.open(file_path)
         text = pytesseract.image_to_string(image)
         return text.strip()
@@ -48,16 +46,7 @@ def summarize_content(content):
     document = Document(page_content=str(content))
     split_content = text_splitter.split_documents([document])
     print(len(split_content))
-    # Create a summarization chain
     summarize_chain = load_summarize_chain(llm, chain_type="stuff")
-    # , prompt = """"
-    #         Please summarize the content field, and output in original format:
-    #         [{
-    #             "step": step,
-    #             "timestamp": timestamp,
-    #             "content": content
-    #         }]
-    #     """
     summary = summarize_chain.run(split_content)
 
     return summary
