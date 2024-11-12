@@ -82,8 +82,10 @@ def load_api_summary():
     summary = summary_loader.load()
     return summary
 
+
 def load_web(url):
     loader = WebBaseLoader(url)
     docs = loader.load()
     return docs
+
 

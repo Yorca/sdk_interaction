@@ -1,6 +1,8 @@
-apk_log_folder = "test_data/api_log"
-fastbot_log_path = "test_data/ui_trace"
-app_detail_path = "/Users/yorca/projects/sdk_interaction/py/apps/app_details"
-click_event_log_path = "test_data/click_event"
+apk_log_folder = "../Dynamic/log/apk_log"
+fastbot_log_path = "../Dynamic/res/fastbot_log"
+app_detail_path = "../apps/app_details"
+click_event_log_path = "../Dynamic/res/UI trace"
 summary_ground_truth = "../Dynamic/data/api_summary_groundtruth.json"
-runtime_environment = "IP: Euro"
+runtime_environment = {
+    "IP" : "Paris, France, Euro"
+}

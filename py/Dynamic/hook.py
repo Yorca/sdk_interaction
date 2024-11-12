@@ -21,6 +21,11 @@ def sensitive_api_class():
             "android.app.admin.DevicePolicyManager", # Device Administration
             "android.net.ConnectivityManager" # Network Information
             ]
+def get_sensitive_apis():
+    with open("data/sensitive_apis.json", "r") as file:
+        apis = json.loads(file)
+
+    return apis
 
 def extract_xapk(xapk_file, output_dir):
     """Extracts the XAPK file and returns the extracted file name."""
@@ -92,9 +97,6 @@ def hook_classes(class_list, package_name, source):
 
 
 def get_script_code(package_name, filename):
-    # hook_methods = loadAllMethods()
-    # class_list = get_classes(filename)
-    # print(class_list)
     overload = f"""
     Java.perform(function () {{
         Java.deoptimizeEverything()
@@ -148,15 +150,15 @@ def get_script_code(package_name, filename):
         }}
     """
 
-    # for hook_method in hook_methods:
-    #     cls_name = hook_method["Class"].strip()
-    #     mtd_name = hook_method["API"].strip()
-    #     overload += f"""
-    #     hookMethod("{cls_name}", "{mtd_name}", "{package_name}", "method");
-    #     """
+    for hook_method in get_sensitive_apis():
+        cls_name = hook_method["class"].strip()
+        mtd_name = hook_method["method"].strip()
+        overload += f"""
+        hookMethod("{cls_name}", "{mtd_name}", "{package_name}", "sensitive");
+        """
 
     overload += hook_classes(get_classes(filename), package_name, "normal")
-    overload += hook_classes(sensitive_api_class(), package_name, "sensitive")
+    # overload += hook_classes(sensitive_api_class(), package_name, "sensitive")
 
     overload += """
     });
@@ -321,7 +323,7 @@ for path in path_list:
                 continue
             with open("log/executed_apks.log", "a") as file:
                 file.write(f"{file_path}\n")
-            pkg_name = filename.rstrip('.apk').rstrip('.xapk')
+            pkg_name = filename.removesuffix('.apk').removesuffix('.xapk')
             print("pkg:" + pkg_name)
             if not pkg_name:
                 continue

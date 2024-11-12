@@ -1,3 +1,5 @@
+import os
+
 import paramiko
 import sqlite3
 # SSH connection setup
@@ -21,7 +23,7 @@ try:
     print(call_map)
 
 
-    ssh.connect('brooks.cs.ucf.edu', username='zh844971', password='!Qwert825215')
+    ssh.connect('brooks.cs.ucf.edu', username='zh844971', password=os.getenv('BROOK_PASSWORD'))
 
     # Use SFTP for file transfers
     with ssh.open_sftp() as sftp:

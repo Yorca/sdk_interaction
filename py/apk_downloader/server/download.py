@@ -4,8 +4,8 @@ import paramiko
 
 # Server details
 hostname = 'brooks.cs.ucf.edu'
-username = 'zh844971'  # Your username
-password = '!Qwert825215'  # Your password (if using password authentication)
+username = 'zh844971'
+password = os.getenv('BROOK_PASSWORD')
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect(hostname=hostname, username=username, password=password)

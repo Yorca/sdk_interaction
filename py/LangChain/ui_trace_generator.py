@@ -3,12 +3,12 @@ import os
 import json
 from PIL import Image
 import pytesseract
-from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.summarize import load_summarize_chain
 from langchain.docstore.document import Document
 import env
-llm = OpenAI(api_key=os.getenv('OPENAI_API_KEY')) #model_name="gpt-4o-mini",
+llm = ChatOpenAI(model_name="gpt-4o-mini", api_key=os.getenv('OPENAI_API_KEY')) #model_name="gpt-4o-mini",
 
 def extract_step_and_timestamp(filename):
     """
@@ -84,17 +84,39 @@ def process_file(file_path):
         return None
 
 def get_ui_display_summary(pkg_name):
-    folder = os.path.join(env.fastbot_log_path, pkg_name)
+    folder = os.path.join(env.fastbot_log_path, pkg_name, "fastbot_log")
     png_files = [os.path.join(folder, filename) for filename in os.listdir(folder) if filename.endswith(".png")]
     results = []
-    print(png_files)
     for png_file in png_files:
         result = process_file(png_file) # TODO: add prompt to make the summary more accurate
         if result:
             results.append(result)
     return results
+
 def get_click_event_summary(pkg_name):
-    file_path = os.path.join(env.click_event_log_path, pkg_name)
-    with open(file_path, "r") as file:
-        data = json.loads(file.read())
-    return data
+    file_path = os.path.join(env.click_event_log_path, pkg_name + ".log")
+    if not os.path.exists(file_path):
+        return None
+    with open(file_path, 'r') as file:
+        log_data = file.read()
+    pattern = re.compile(
+        r"Found Node Start ---.*?Clicked Node:\s*(.*?)Page XML:\s*(.*?)timestamp:\s*(\d+).*?Found Node End ---",
+        re.DOTALL)
+    matches = pattern.findall(log_data)
+
+    result = []
+    for match in matches:
+        clicked_node, page_xml, timestamp = match
+        if "[Fastbot]*** WARNING ***" in clicked_node or "[Fastbot]*** WARNING ***" in page_xml:
+            continue
+        result.append({
+            "timestamp": int(timestamp),
+            "click": clicked_node.strip(),
+            "in": page_xml.strip()
+        })
+
+
+
+    with open(f"res/ui/{pkg_name}.json", "a") as file:
+        file.write(json.dumps(result, indent=4))
+    return result

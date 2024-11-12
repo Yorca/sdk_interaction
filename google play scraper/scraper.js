@@ -2,7 +2,7 @@ import gplay from "google-play-scraper";
 import fs from "fs"
 import Parser from "json2csv"
 
-const csvFilePath = 'app_metadata_topfree-100.csv';
+const csvFilePath = 'app_metadata_topfree-200.csv';
 if (!fs.existsSync(csvFilePath)) {
     fs.writeFileSync(csvFilePath, 'appId,title,type\n');
     //fs.writeFileSync(csvFilePath, 'appId,type,title,installs,minInstalls,maxInstalls,androidVersion,androidMaxVersion,developerEmail,privacyPolicy,available,genreId,categories,contentRating,adSupported,updated,url\n');
@@ -24,7 +24,7 @@ async function downloadAppData() {
         const promise = gplay.list({
             category: categoryValue,
             collection: gplay.collection.TOP_FREE,
-            num: 100,
+            num: 200,
             lang: "en",
             fullDetail: false
         }).then(result => {
@@ -32,7 +32,7 @@ async function downloadAppData() {
                 const {appId, title}  = app
                 //const {appId, title, installs, minInstalls, maxInstalls, androidVersion, androidMaxVersion, developerEmail, privacyPolicy, available, genreId, categories, contentRating, adSupported, updated, url}  = app
                 //const csvRow = `"${appId}","${categoryValue}","${title}","${installs}","${minInstalls}","${maxInstalls}","${androidVersion}","${androidMaxVersion}","${developerEmail}","${privacyPolicy}","${available}","${genreId}","${categories}","${contentRating}","${adSupported}","${updated}","${url}"\n"`;
-                const csvRow = `"${appId}","${title}","${categoryValue}"\n"`;
+                const csvRow = `${appId},${title},${categoryValue}\n`;
                 fs.appendFileSync(csvFilePath, csvRow);
             });
             console.log(`Apps in category ${categoryValue}:`, result);

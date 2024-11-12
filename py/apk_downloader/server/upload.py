@@ -4,9 +4,8 @@ import paramiko
 
 # Server details
 hostname = 'brooks.cs.ucf.edu'
-username = 'zh844971'  # Your username
-password = '!Qwert825215'  # Your password (if using password authentication)
-# Alternatively, use key_filename for SSH key authentication, e.g., key_filename='/path/to/your/private/key'
+username = 'zh844971'
+password = os.getenv('BROOK_PASSWORD')
 
 # File details
 # local_file_path = '/Users/yorca/projects/sdk_interaction/py/apk_downloader/apks/ac.voicenote.voicerecorder.audio---Voice Recorder_6.1_APKPure.xapk'  # The file on your local machine
