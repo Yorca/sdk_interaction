@@ -14,21 +14,25 @@ ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect(hostname=hostname, username=username, password=password)
 sftp = ssh.open_sftp()
-source_dir = "/Volumes/Yorca_T7/apks_new_2"
-remote_dir = "/home/zh844971/sdk_interaction/apks_macpro"
+source_dir = "/Volumes/T7 Shield/apps"
+remote_dir = "/home/zh844971/apks5000"
+exist_list = sftp.listdir(remote_dir)
 for filename in os.listdir(source_dir):
-    if not filename.lower().endswith("apk") and not filename.lower().endswith("xapk"):
+    if not filename.lower().endswith(".apk") and not filename.lower().endswith(".xapk"):
         continue
-    # if not filename == "ai.kanghealth---K Health | 24":
+    if filename in exist_list:
+        continue
+    # if not filename == "com.opera.mini.native.apk":
     #     continue
     print(filename)
     local_file_path = os.path.join(source_dir, filename)
     remote_file_path = os.path.join(remote_dir, filename)
+
     with open("uploaded_apks.txt", "a") as file:
         file.write(f"{filename.split('---')[0]}\n")
     try:
         sftp.put(local_file_path, remote_file_path)
-        os.remove(local_file_path)
+        # os.remove(local_file_path)
     except:
         with open("uploaded_failed.txt", "a") as file:
             file.write(f"{filename}\n")

@@ -1,0 +1,61 @@
+{
+    "title": "Passio GO!",
+    "description": "Transit tracking and feedback app allowing users to: \r\n   Track and view all routes at once\r\n   Select individual routes\r\n   Navigate to specific stops or follow an individual bus\r\n   See schedule information\r\n   See the next bus arriving and details about that stop location\r\n   Receive alerts and directly provide feedback",
+    "descriptionHTML": "Transit tracking and feedback app allowing users to: <br>   Track and view all routes at once<br>   Select individual routes<br>   Navigate to specific stops or follow an individual bus<br>   See schedule information<br>   See the next bus arriving and details about that stop location<br>   Receive alerts and directly provide feedback",
+    "summary": "A full featured, real-time transit locator system",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 184895,
+    "score": 3.63,
+    "ratings": 735,
+    "reviews": 404,
+    "histogram": [
+        176,
+        21,
+        51,
+        131,
+        352
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Passio Technologies Inc",
+    "developerId": "Passio+Technologies+Inc",
+    "developerEmail": "support@passiotech.com",
+    "developerWebsite": "http://www.passiotech.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://passio3.com/www/privacypolicy.htm",
+    "genre": "Auto & Vehicles",
+    "genreId": "AUTO_AND_VEHICLES",
+    "categories": [
+        {
+            "name": "Auto & Vehicles",
+            "id": "AUTO_AND_VEHICLES"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/qyOZ9gairgnllBe-5R6HQfDbmBTetUy5lw1BYdSry_3Qxy10oI6pA4jJ99dFORHGfxZc",
+    "headerImage": "https://play-lh.googleusercontent.com/mOls4qF_WlCV1b8W5KffOzRYfa1AVrqWhirBAU4V4nzyV5h5xsfOE0a1TkSrmKlwunw",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/Bb8SZXCJ72wt9zVecj0HIR4rZCHcUIDW-vCslr9xREp79QiF-B6Ng463ZnXGUoxpag",
+        "https://play-lh.googleusercontent.com/6TM5ZGGV2n3XrxOvPQAZ-P2FwJmV6C_PffdWPKSrN6IpRmFoLt3nxBshwh0Fun9dxR8"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Apr 21, 2017",
+    "lastUpdatedOn": "Oct 30, 2024",
+    "updated": 1730329863,
+    "version": "142",
+    "comments": [],
+    "appId": "com.passio3.go",
+    "url": "https://play.google.com/store/apps/details?id=com.passio3.go&hl=en&gl=us"
+}

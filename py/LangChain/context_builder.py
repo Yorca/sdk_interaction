@@ -1,10 +1,12 @@
 template = """
- You are a summarizer. You will be provided with a runtime trace log of an app, capturing method calls, UI displays, and view click events during the app's execution. Your task is to summarize each event's context and premise(if any).
-
+ You are a context/expectations summarizer. You will be provided with a runtime trace log of an app, which is a list of dictionaries capturing method calls, UI displays, and view click events during the app's execution. Your task is to process each event and produce a summary in JSON format.
  Instructions:
- 1. Iterate over the runtime trace, which is a list of dictionaries, and summarize every event. You should summarize the context and premise of each event/trace as detailed as possible.
+ 1. Iterate over the runtime trace, which is a list of dictionaries, and summarize every event.
  2. For events where `event_type` is **"method call"**:
-    - If `is_privacy` is `true`, it indicates a privacy API. Use the `method`, `arguments`, and `conditions` fields to summarize the context. For the premise, use the `effects` field.
+    - If `is_privacy` is `true`, it indicates a privacy API.
+    - First, briefly describe the method call, including the method name, class name, arguments, and return value.
+    - Based on the arguments field, match the arguments values (if any) with the parameter_configurations in the api_summary field, understand the conditions and effects of taking these parameters.
+    - Based on the matching result, summarize the corresponding conditions into the context, and the effects into expectations. You need to cover all information mentioned in "condition" or "effects" for the corresponding parameter setting.
     - Example:
       **Input:**
       {{
@@ -13,6 +15,7 @@ template = """
         "timestamp": 1730237721633,
         "arguments": "{{\"0\":true}}",
         "is_privacy": true,
+        "return": "undefined",
         "api_summary": {{
           "conditions": ["To help ensure compliance with COPPA you must indicate whether a user falls within an age-restricted category."],
           "effects": ["Indicates whether a user falls within an age-restricted category as per COPPA requirements.", "Specifies whether COPPA regulations apply for the current user."],
@@ -35,13 +38,14 @@ template = """
       **Output:**
       {{
         "timestamp": 1730237721633,
-        "context": "set Coppa to true. The user is under the age of 13.",
-        "premise": "The user is under the age of 13 and is subject to COPPA regulations. The SDK will treat the user as a child under COPPA regulations."
+        "is_privacy_api": true,
+        "description": "call 'setCoppa" of class 'io.bidmachine.BidMachine' with arguments 'false', return undefined",
+        "context": "The user is under the age of 13.",
+        "expectations": "The user is under the age of 13 and is subject to COPPA regulations. The SDK will treat the user as a child under COPPA regulations."
       }}
-
-    - If `is_privacy` is `false`, summarize only the context using the `method` and `arguments` fields. No premise is needed.
+      
  3. For events where `event_type` is **"UI display"**:
-    - Summarize the content of the display as the context.
+    - This is the text displayed on the screen, please describe what is displayed on the screen based on the content field.
     - Example:
       **Input:**
       {{
@@ -57,26 +61,27 @@ template = """
       }}
 
  4. For events where `event_type` is **"View Click"**:
-    - Summarize the clicked content and the context in which it occurred.
+    - Summarize the clicked content and the context in which it occurred, based on the clicked_text and page content fields.
     - Example:
       **Input:**
       {{
         "timestamp": 1730237797875,
         "clicked_text": "agree",
-        "page_content": "Tundra is asking for permission to personalize your advertising experience by collecting and processing personal data, such as device identifiers and location data, in order to show you relevant ads. This will provide you with an enhanced advertising experience. By agreeing, you confirm that you are over 16 years old and would like to personalize your ad experience. The purposes include information storage and access, personalization, and ad selection, delivery, and reporting. This is powered by Appodeal.",
+        "page content": "Tundra is asking for permission to personalize your advertising experience by collecting and processing personal data, such as device identifiers and location data, in order to show you relevant ads. This will provide you with an enhanced advertising experience. By agreeing, you confirm that you are over 16 years old and would like to personalize your ad experience. The purposes include information storage and access, personalization, and ad selection, delivery, and reporting. This is powered by Appodeal.",
         "event_type": "View Click"
       }}
 
       **Output:**
       {{
         "timestamp": 1730237797875,
-        "context": "The 'agree' button was clicked in a dialog asking for consent to personalize advertising by collecting and processing personal data. The user agreed to personal data collection."
+        "context": "clicked "agree" in a dialog/page asking for consent to personalize advertising by collecting and processing personal data. The user agreed to personal data collection."
       }}
-
+    
+    1. Please output the summaries in JSON format, as shown in the examples, which can be directly parsed.
+    2. You should process all the traces provided and convert them into the corresponding context.
+    
     Process the following traces:
     {traces}
-
-    Provide the output in JSON format as per the instructions, which can be directly parsed to JSON. Do not output extra string like "```json".
 
  """
 
@@ -99,20 +104,28 @@ def get_context(pkg, traces):
     context_list = []
     for i in range(len(traces)):
         trace = traces[i]
-        if(trace["event_type"] == "method call" and trace["is_privacy"]) or trace["event_type"] == "UI Display":
+        if (trace["event_type"] == "method call" and trace["is_privacy"]) or trace["event_type"] == "UI Display" or trace["event_type"] == "View Click":
             gpt_sum_list.append(trace)
 
         elif trace["event_type"] == "method call":
+            return_content = trace['return']
+            length_threshold = 50
+            if len(trace['return']) > length_threshold:
+                return_content = trace['return'][:length_threshold]
+            if len(trace['arguments']) > length_threshold:
+                return_content = trace['return'][:length_threshold]
+            action = ""
+            if "action" in trace.keys():
+                action = f" to {trace['action']}"
             context_list.append({
                 "timestamp": trace["timestamp"],
-                "context": f"Call method {trace['method']}; with parameters {trace['arguments']}; return {trace['return']}"
+                "context": f"Call method {trace['method']} of Class {trace['class_name']}{action}; with parameters {trace['arguments']}; return {return_content}"
             })
         elif trace["event_type"] == "View Click":
             context_list.append({
                 "timestamp": trace["timestamp"],
                 "context": trace["event"]
             })
-    print(f"gpt_sum_list: {gpt_sum_list}")
 
 
     propmt = PromptTemplate(input_variables=["traces"], template=template)

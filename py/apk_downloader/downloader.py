@@ -176,9 +176,9 @@ apk_list = list(set(apk_list))
 
 with ThreadPoolExecutor(max_workers=10000) as executor:
     futures = []
-    for apk in success_apks:
-        # if apk in success_apks:
-        #     continue
+    for apk in apk_list:
+        if not apk in success_apks:
+            continue
         if apk in execute_apk_list:
             print(f"has download: {apk}")
             continue

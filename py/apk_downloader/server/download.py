@@ -10,10 +10,11 @@ ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect(hostname=hostname, username=username, password=password)
 sftp = ssh.open_sftp()
-source_dir = "/Volumes/Yorca_T7/apps/xapks"
-remote_dir = "/home/xu111284/zhaojie/xapks"
+source_dir = "/Volumes/T7 Shield/success_apks"
+remote_dir = "/home/zh844971/apks5000"
+
 for filename in sftp.listdir(remote_dir):
-    if not filename.lower().endswith(".xapk"):
+    if not filename.lower().endswith(".xapk") and not filename.lower().endswith(".apk"):
         continue
     print(filename)
     local_file_path = os.path.join(source_dir, filename)

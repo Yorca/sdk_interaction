@@ -1,0 +1,63 @@
+{
+    "title": "Bella Pro",
+    "description": "Making friends on Bella pro is easier than it's ever been in real life. Are you hoping to resonate with someone who shares your unique interests? This is the best place for you to make friends.\r\nThe safest, fastest and easiest way to chat with your new friends is to send messages. You can send messages, voices, and photos to each other. Friendly warning: Be cautious when talking to strangers online~\r\n\r\nBella pro is a fun and safe community. We always maintain the highest security standards. If you find any behavior that endangers your safety, please inform us in time and we will deal with it seriously.",
+    "descriptionHTML": "Making friends on Bella pro is easier than it&#39;s ever been in real life. Are you hoping to resonate with someone who shares your unique interests? This is the best place for you to make friends.<br>The safest, fastest and easiest way to chat with your new friends is to send messages. You can send messages, voices, and photos to each other. Friendly warning: Be cautious when talking to strangers online~<br><br>Bella pro is a fun and safe community. We always maintain the highest security standards. If you find any behavior that endangers your safety, please inform us in time and we will deal with it seriously.",
+    "summary": "Make friends, share life, build friendships",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 4324772,
+    "score": 4.1485147,
+    "ratings": 6344,
+    "reviews": 24,
+    "histogram": [
+        797,
+        242,
+        346,
+        624,
+        4264
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$0.99 - $154.99 per item",
+    "developer": "morada",
+    "developerId": "6858581314457397873",
+    "developerEmail": "wongmorada79@gmail.com",
+    "developerWebsite": null,
+    "developerAddress": null,
+    "privacyPolicy": "https://sites.google.com/view/bellaproprivacypolicy",
+    "genre": "Travel & Local",
+    "genreId": "TRAVEL_AND_LOCAL",
+    "categories": [
+        {
+            "name": "Travel & Local",
+            "id": "TRAVEL_AND_LOCAL"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/K1iwBgNj5iwZJ_7kXi6CQv8COzvOjRqx9DUfm8hfDaUBuCDy0tm93PNNVIO0CJKdfPsp",
+    "headerImage": "https://play-lh.googleusercontent.com/L7xO-dO3kOfVjeR9KnRK1Twjh-vjQYykIUVTmsiuRAzpP6qUlhW0FuliTFl-oqP5fAmM",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/q5KJsr7v4As0SV7j9cJ1R7CPjCsvHugSx0awxg8q0OoCamrqTtDsAlc2Ty4CgT-SeCbA",
+        "https://play-lh.googleusercontent.com/d09zcPbjH3tRu5WaEVa3afYmgl0qH42pVZnMwKaDdX4mVRdh717y43aAKMqYkWQ-ww",
+        "https://play-lh.googleusercontent.com/PT2BJds7TTe_BAkfJ46l18cyHheHp6uL4E4PHjH2euaAU7NYbV6DGsMhRDiuKI14MA",
+        "https://play-lh.googleusercontent.com/Q8IdHuPLecX-nlRrSUpU43YQIJ3Y3F33J3lRhcQlTw9NWGNGDvrfeC1rWdpPoPUnjqvz"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Mature 17+",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Dec 12, 2023",
+    "lastUpdatedOn": "Apr 12, 2024",
+    "updated": 1712906892,
+    "version": "1.0.1",
+    "comments": [],
+    "appId": "com.nbelapro.pro",
+    "url": "https://play.google.com/store/apps/details?id=com.nbelapro.pro&hl=en&gl=us"
+}

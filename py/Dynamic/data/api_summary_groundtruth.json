@@ -545,9 +545,7 @@
                         "This tag is necessary when the app has users under the legal age of consent"
                     ],
                     "effects": [
-                        "Indicates whether a user is under the age of consent; consent is not requested from the user when set to true.",
-                        "Consent is not requested from the user if set to true",
-                        "prevents the user from being prompted for consent"
+                        "Indicates whether a user is under the age of consent"
                     ],
                     "parameter_configurations": [
                         {
@@ -559,10 +557,7 @@
                                 "For child users in mixed audience apps."
                             ],
                             "effects": [
-                                "ensures no consent request is made",
-                                "Consent is not requested from the user",
-                                "The SDK does not prompt for user consent.",
-                                "Prevents consent request for users under the age of consent"
+                                "prevents the transmission of the Android advertising identifier (AAID)"
                             ]
                         },
                         {
@@ -1243,6 +1238,33 @@
                 },
                 {
                     "API_name": "enableCoppaCompliance",
+                    "class_name": [
+                        "com.adjust.sdk.AdjustConfig"
+                    ],
+                    "conditions": [
+                        "Must be called before SDK initialization.",
+                        "Required if the app needs to comply with COPPA.",
+                        "Required for apps targeting users under 13 and install region isn't the USA."
+                    ],
+                    "effects": [
+                        "Disables third-party sharing.",
+                        "Prevents reading device and advertising IDs.",
+                        "Disables third-party sharing and prevents the SDK from reading device and advertising IDs."
+                    ],
+                    "parameter_configurations": [
+                        {
+                            "parameter_values": [
+                                true
+                            ],
+                            "conditions": [],
+                            "effects": [
+                                "Enables COPPA compliance."
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "API_name": "setCoppaCompliantEnabled",
                     "class_name": [
                         "com.adjust.sdk.AdjustConfig"
                     ],
@@ -5101,6 +5123,40 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "API_name": "setMixedAudience",
+                    "class_name": "AdSettings",
+                    "conditions": [
+                        "Compliance with the Children's Online Privacy Protection Act (COPPA) is required."
+                    ],
+                    "effects": [
+                        "Indicates whether the app's audience includes both children under 13 and users aged 13 and above."
+                    ],
+                    "parameter_configurations": [
+                        {
+                            "parameter_values": [
+                                true
+                            ],
+                            "conditions": [
+                                "The app is directed to a mixed audience, including children under 13."
+                            ],
+                            "effects": [
+                                "Meta Audience Network limits data collection and ad targeting to comply with COPPA regulations."
+                            ]
+                        },
+                        {
+                            "parameter_values": [
+                                false
+                            ],
+                            "conditions": [
+                                "The app is not directed to children under 13."
+                            ],
+                            "effects": [
+                                "Standard data collection and ad targeting practices are applied."
+                            ]
+                        }
+                    ]
                 }
             ],
             "classes": [
@@ -5811,6 +5867,7 @@
                 },
                 {
                     "API_name": "setMetaData",
+                    "privacy_params": ["do_not_sell", "is_child_directed", "gdpr.consent", "privacy.consent", "is_deviceid_optout", "Google_Family_Self_Certified_SDKS"],
                     "class_name": [
                         "com.ironsource.mediationsdk.IronSource"
                     ],
@@ -9495,6 +9552,108 @@
             "privacy_APIs": [
                 {
                     "API_name": "SetMetaData",
+                    "privacy_params": ["user.nonbehavioral", "pipl.consent", "gdpr.consent", "privacy.consent"],
+                    "class_name": [
+                        "com.unity3d.ads.metadata.MetaData"
+                    ],
+                    "conditions": [
+                        "The user must express consent for targeted advertising."
+                    ],
+                    "effects": [
+                        "Allows the developer to set user-specific metadata related to privacy preferences such as consent for targeted advertising.",
+                        "Allows the passing of consent flags for data privacy laws compliance."
+                    ],
+                    "parameter_configurations": [
+                        {
+                            "parameter_values": [
+                                "user.nonbehavioral",
+                                "true"
+                            ],
+                            "conditions": [
+                                "If the user opts out of personalized ads."
+                            ],
+                            "effects": [
+                                "User will not receive personalized ads."
+                            ]
+                        },
+                        {
+                            "parameter_values": [
+                                "user.nonbehavioral",
+                                "false"
+                            ],
+                            "conditions": [
+                                "If the user opts in to personalized ads."
+                            ],
+                            "effects": [
+                                "User will receive personalized ads."
+                            ]
+                        },
+                        {
+                            "parameter_values": [
+                                "pipl.consent",
+                                "true"
+                            ],
+                            "conditions": [
+                                "User opts in to sending their personal identifiable information outside of China."
+                            ],
+                            "effects": [
+                                "Allows sending user's personal identifiable information as per PIPL compliance.",
+                                "User consent is recorded for sending personal data."
+                            ]
+                        },
+                        {
+                            "parameter_values": [
+                                "gdpr.consent",
+                                "true"
+                            ],
+                            "conditions": [
+                                "User opts in to targeted advertising under GDPR compliance."
+                            ],
+                            "effects": [
+                                "User consents to receiving targeted advertisements."
+                            ]
+                        },
+                        {
+                            "parameter_values": [
+                                "privacy.consent",
+                                "true"
+                            ],
+                            "conditions": [
+                                "User opts in to targeted advertising under various consumer privacy acts."
+                            ],
+                            "effects": [
+                                "User agrees to receive personalized ads under specified consumer privacy acts."
+                            ]
+                        },
+                        {
+                            "parameter_values": [
+                                "gdpr.consent",
+                                "false"
+                            ],
+                            "conditions": [
+                                "User opts out of targeted advertising under GDPR."
+                            ],
+                            "effects": [
+                                "User consent is recorded against targeted advertising."
+                            ]
+                        },
+                        {
+                            "parameter_values": [
+                                "pipl.consent",
+                                "false"
+                            ],
+                            "conditions": [
+                                "User opts out of sending their personal identifiable information outside of China."
+                            ],
+                            "effects": [
+                                "User consent is recorded against sending personal data."
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "API_name": "Set",
+                    "privacy_params": ["user.nonbehavioral", "pipl.consent", "gdpr.consent", "privacy.consent"],
                     "class_name": [
                         "com.unity3d.ads.metadata.MetaData"
                     ],

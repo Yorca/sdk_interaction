@@ -1,0 +1,63 @@
+{
+    "title": "Peerspace - Rent Unique Venues",
+    "description": "Peerspace opens doors to rentable spaces in cities around the world, from photo studios and meeting rooms, to backyards and bars. \r\n\r\nDiscover and book unique spaces for meetings, events, and productions. Our network of spaces allows guests to hold personal and professional events in unique locations, while hosts earn additional income simply by opening their doors.\r\n\r\nWelcome to where extraordinary begins.\r\n\r\nHow it works:\r\n\u2022 Browse unique homes, studios, lofts, galleries, and more\r\n\u2022 Connect with local hosts\r\n\u2022 Book by the hour on the app\r\n\r\nEarn income as a Peerspace host:\r\n\u2022 Join thousands of hosts renting their space for meetings, events, and film and photo shoots on Peerspace; listing your space is free and easy\r\n\u2022 Choose how you share your space \u2013 from your hourly price, to which activities you welcome in your space\r\n\u2022 Get paid directly to your bank account\r\n\r\nTake Peerspace on the go:\r\n\u2022 Send messages and manage bookings right from your phone \r\n\u2022 Get automatically notified of new messages and requests",
+    "descriptionHTML": "Peerspace opens doors to rentable spaces in cities around the world, from photo studios and meeting rooms, to backyards and bars. <br><br>Discover and book unique spaces for meetings, events, and productions. Our network of spaces allows guests to hold personal and professional events in unique locations, while hosts earn additional income simply by opening their doors.<br><br>Welcome to where extraordinary begins.<br><br>How it works:<br>\u2022 Browse unique homes, studios, lofts, galleries, and more<br>\u2022 Connect with local hosts<br>\u2022 Book by the hour on the app<br><br>Earn income as a Peerspace host:<br>\u2022 Join thousands of hosts renting their space for meetings, events, and film and photo shoots on Peerspace; listing your space is free and easy<br>\u2022 Choose how you share your space \u2013 from your hourly price, to which activities you welcome in your space<br>\u2022 Get paid directly to your bank account<br><br>Take Peerspace on the go:<br>\u2022 Send messages and manage bookings right from your phone <br>\u2022 Get automatically notified of new messages and requests",
+    "summary": "Events, Meetings, Photo Shoots",
+    "installs": "50,000+",
+    "minInstalls": 50000,
+    "realInstalls": 53038,
+    "score": 4.8039217,
+    "ratings": 449,
+    "reviews": 64,
+    "histogram": [
+        4,
+        8,
+        0,
+        43,
+        391
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "Peerspace",
+    "developerId": "Peerspace",
+    "developerEmail": "support@peerspace.com",
+    "developerWebsite": "https://peerspace.com",
+    "developerAddress": null,
+    "privacyPolicy": "https://www.peerspace.com/legal/privacy",
+    "genre": "Events",
+    "genreId": "EVENTS",
+    "categories": [
+        {
+            "name": "Events",
+            "id": "EVENTS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/3k1cE6L-DnJJ5GxaATeAzICPUUW8ku__30vh-ANUQQgJw-N6X9PcO2JkfCX6vvi-tnw",
+    "headerImage": "https://play-lh.googleusercontent.com/BZ8JLaFJTAbqLCGX6S8IRwVP5W0i5cxQG9_VICu4GdVKcn1xU0kkANXuJuaivD93W2c",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/i4bz3E2uYmRqAk1lwGPDX215Zms1sk72qv_UQiI-gVGViiR3rM4g0byM0nu0iLQiOHI",
+        "https://play-lh.googleusercontent.com/DGQNWhi252Z-JGzmnywuU8A9gdP1VL6I6wR2mS_uXpE9RqZipFXlkQP3ImAE5jz4XFg",
+        "https://play-lh.googleusercontent.com/o20GLfJnlVz5Ojen_c1FoSOOyU1aohqt_1crxngXoNYBpaI_MIhcYMNfCkEKAyHu2KM",
+        "https://play-lh.googleusercontent.com/Ogv6FQl0ewwckJU7liWBSZTzDNP0PlH0-L92nBTcSBoukTveQ7jeyXsd6NY6yvWDXn0"
+    ],
+    "video": "https://www.youtube.com/embed/SJxWD5gR8So?ps=play&vq=large&rel=0&autohide=1&showinfo=0",
+    "videoImage": "https://play-lh.googleusercontent.com/BZ8JLaFJTAbqLCGX6S8IRwVP5W0i5cxQG9_VICu4GdVKcn1xU0kkANXuJuaivD93W2c",
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": false,
+    "containsAds": false,
+    "released": "Aug 29, 2022",
+    "lastUpdatedOn": "Nov 12, 2024",
+    "updated": 1731452746,
+    "version": "3.7.2",
+    "comments": [],
+    "appId": "com.peerspace.app",
+    "url": "https://play.google.com/store/apps/details?id=com.peerspace.app&hl=en&gl=us"
+}

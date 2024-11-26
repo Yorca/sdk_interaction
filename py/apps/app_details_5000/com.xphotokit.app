@@ -1,0 +1,63 @@
+{
+    "title": "X PhotoKit",
+    "description": "\ud83c\udf1f X PhotoKit: A versatile photo editor featuring AI face swapping, photo editing, collage creation, templates, and more. Effortlessly unleash your creativity, enhance the beauty of your photos, and create unique visual pieces with a personal touch\u2014anytime, anywhere.\r\n\ud83d\udd8c\ufe0f Comprehensive Photo Editing:\r\nOffers various filters, effects, and adjustment tools to help you quickly beautify your photos and elevate their visual impact.\r\n\u2728 Intelligent AI Face Swap:\r\nSimply upload a selfie to seamlessly replace your face in the selected image. The intelligent algorithm ensures a natural and realistic effect, bringing you a fresh creative experience.\r\n\ud83c\udf08 Photo Templates:\r\nBuilt-in templates for various occasions, allowing you to effortlessly create professional-quality posters, covers, and more.\r\n\ud83d\udcf8 Photo Collage:\r\nChoose from multiple layouts and templates to combine photos easily, creating a unique visual impact.\r\n\ud83d\udccf Image Stitching:\r\nCombine multiple photos to create wide or tall images, perfect for displaying panoramic scenes and capturing more details.\r\n\ud83d\udc4d Easy to Use:\r\nDesigned for everyone, X PhotoKit is simple to use and powerful, meeting all your photo editing needs.\r\nUsage Scenarios\r\n- Social Sharing: Use the AI face swap feature to create fun face-swapped photos, adding excitement and conversation to your social media.\r\n- Travel Memories: Stitch multiple travel photos together to create a panoramic story that captures every amazing moment.\r\n- Holiday Greetings: Use the templates to create beautiful holiday cards or posters that add warmth and festive cheer.\r\n- Personal Portraits: Enhance your photos with filters and editing tools to create an artful collection just for you.\r\n- Commercial Design: Without needing professional skills, use rich templates and customizable editing options to create high-quality promotional images for e-commerce or personal branding.\r\nTry X PhotoKit now and start your creative journey!",
+    "descriptionHTML": "\ud83c\udf1f X PhotoKit: A versatile photo editor featuring AI face swapping, photo editing, collage creation, templates, and more. Effortlessly unleash your creativity, enhance the beauty of your photos, and create unique visual pieces with a personal touch\u2014anytime, anywhere.<br>\ud83d\udd8c\ufe0f Comprehensive Photo Editing:<br>Offers various filters, effects, and adjustment tools to help you quickly beautify your photos and elevate their visual impact.<br>\u2728 Intelligent AI Face Swap:<br>Simply upload a selfie to seamlessly replace your face in the selected image. The intelligent algorithm ensures a natural and realistic effect, bringing you a fresh creative experience.<br>\ud83c\udf08 Photo Templates:<br>Built-in templates for various occasions, allowing you to effortlessly create professional-quality posters, covers, and more.<br>\ud83d\udcf8 Photo Collage:<br>Choose from multiple layouts and templates to combine photos easily, creating a unique visual impact.<br>\ud83d\udccf Image Stitching:<br>Combine multiple photos to create wide or tall images, perfect for displaying panoramic scenes and capturing more details.<br>\ud83d\udc4d Easy to Use:<br>Designed for everyone, X PhotoKit is simple to use and powerful, meeting all your photo editing needs.<br>Usage Scenarios<br>- Social Sharing: Use the AI face swap feature to create fun face-swapped photos, adding excitement and conversation to your social media.<br>- Travel Memories: Stitch multiple travel photos together to create a panoramic story that captures every amazing moment.<br>- Holiday Greetings: Use the templates to create beautiful holiday cards or posters that add warmth and festive cheer.<br>- Personal Portraits: Enhance your photos with filters and editing tools to create an artful collection just for you.<br>- Commercial Design: Without needing professional skills, use rich templates and customizable editing options to create high-quality promotional images for e-commerce or personal branding.<br>Try X PhotoKit now and start your creative journey!",
+    "summary": "X PhotoKit: Photo editing, AI face swap, and collages\u2014all in one!",
+    "installs": "10,000,000+",
+    "minInstalls": 10000000,
+    "realInstalls": 29171411,
+    "score": 4.4007783,
+    "ratings": 43245,
+    "reviews": 696,
+    "histogram": [
+        3865,
+        670,
+        1340,
+        5704,
+        31630
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$7.99 - $15.99 per item",
+    "developer": "X PhotoKit",
+    "developerId": "5339581751559250424",
+    "developerEmail": "team@xphotokit.com",
+    "developerWebsite": "https://xphotokit.com/",
+    "developerAddress": null,
+    "privacyPolicy": "https://sites.google.com/view/x-photokit/privacy",
+    "genre": "Photography",
+    "genreId": "PHOTOGRAPHY",
+    "categories": [
+        {
+            "name": "Photography",
+            "id": "PHOTOGRAPHY"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/J8k8c_Ehi-LjqnWhHhIR8FaDiZT4v1i9fmh9nvOYrjia9tqpkp0RqVnOjNn6r0gKQ75X",
+    "headerImage": "https://play-lh.googleusercontent.com/kNPknZqw-mpRM33ZxpGGIpxFtFYbPSVe4FSOXx8G5CpIGKvBnnNy5yQvRVjb4vTWg7U",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/tOkUs0G-ToEvphjAr54rSh3fC7cHppq60WRuHR7dVT5RwTAifJUDcs7u-8C_1rp-0Q",
+        "https://play-lh.googleusercontent.com/nnDy9hU_V-MBUDCs4IANLjzEWRegeYAmarlMHyZjBkQj8qBdd7gH1pw5cOaFQ4c_h0cc",
+        "https://play-lh.googleusercontent.com/Z9rePBbax5HYi0e213M-ZpjXB0vuPl5ZN2DafJZtYUt2FtRnr92uLOrrZNYg_TJu7IbG",
+        "https://play-lh.googleusercontent.com/2_-QcHdPzjJlYj_h0fyQnQnfwRTIYBJBvMAl4AD2F4nDGI0rQKgYtWk44Qnm073seiM"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Aug 24, 2021",
+    "lastUpdatedOn": "Nov 19, 2024",
+    "updated": 1732026624,
+    "version": "4.1.3",
+    "comments": [],
+    "appId": "com.xphotokit.app",
+    "url": "https://play.google.com/store/apps/details?id=com.xphotokit.app&hl=en&gl=us"
+}

@@ -1,0 +1,63 @@
+{
+    "title": "Bitcoin mining - Crypto Miner",
+    "description": "Bitcoin Mining APP is not using phone device as a miner, Apps mine for cryptocurrencies the processing is performed off device(cloud-based mining)\r\n\r\nSet sail! From the smallest Satoshi to the full Bitcoin - no technical expertise required - join us on a transformative journey through the blockchain.\r\n\r\nWhy invest in expensive hardware or dwell on technical jargon? Start your Bitcoin mining journey the smart way.\r\n\r\nYou don't need expensive hardware. Simply choose your desired bitcoin mining arithmetic and start receiving BTC directly into your cryptocurrency wallet. Test the waters with our free bitcoin mining contract and prove how easy it is to generate passive income with our app.\r\n\r\nExperience the digital gold rush with Crypto Cloud Mining, the ultimate way to seamlessly accumulate cryptocurrency. Starting with our cloud miners, they are a direct way to make money while we manage complexities such as proof-of-work algorithms, arithmetic, blockchain, bitcoin halving, mining pools and ASICs.\r\n\r\nRemote Mining A great way to get into BTC mining. With easily accessible cloud ASICs and cloud GPUs, monitoring is a breeze. Simply watch your cryptocurrency portfolio expand. Indeed, cryptocurrency mining is a great example of passive income.\r\n\r\nYour integrated Bitcoin wallet securely stores your income until you are ready to transfer it. Whether it's to your personal address, a cryptocurrency exchange, or any Bitcoin-compatible destination, the process is simple.\r\n\r\nThe technicalities of the blockchain, such as its public ledger and Proof of Work (PoW), can be daunting, and calculating your mining ROI may seem challenging, but that's what makes our remote miner stand out. Our unified cryptocurrency wallet view tracks your earnings, giving you a comprehensive overview of your assets.\r\n\r\nFor peace of mind, we keep your bitcoin rewards in cold storage to ensure your earnings are protected. Take your experience to the next level with our referral program. When your friends join the mining journey, you both benefit.\r\n\r\nCustomize your mining operations with over 20 cloud mining options, from free contracts to recurring subscriptions. Our virtual mining setup, utilizing GPUs and ASICs, is constantly evolving to meet the needs of our growing user base.\r\n\r\nKey Features:\r\n\r\nON-DEMAND BITCOIN CLOUD MINING: Simply choose the mining arithmetic you want. Our cloud GPUs and ASICs are then up and running, allowing you to witness a steady increase in your bitcoin balance. We constantly update our mining contracts to take into account the current bitcoin price, network power, and hardware availability to provide an unrivaled cloud mining experience.\r\n\r\nCloud-Based Bitcoin Mining Farm: Easily dive into the world of cryptocurrency! Build and personalize your own fleet of cloud miners in a few simple clicks. Watch profits grow in real-time and track growing balances right on your bitcoin wallet page. Easily enter the digital age and grow your crypto wealth.\r\n\r\nNo need to worry about high electricity bills or complicated knowledge. Explore the world of bitcoin mining in more depth and watch your digital assets grow with our powerful virtual miners.\r\n\r\nUSER-FRIENDLY INTERFACE: Ease your way into the world of Bitcoin mining with an easy-to-use app for beginners and experienced miners alike.\r\n\r\nEfficient and powerful: Our cutting-edge cloud infrastructure is designed to maximize mining results by taking into account the latest innovations in the crypto space.\r\n\r\nSecure and Reliable: We prioritize your security. Our servers are equipped with advanced encryption technology to protect your data and transactions.\r\n\r\nNo hidden fees: Our transparent pricing model ensures that you know exactly what you're getting, with no unpleasant surprises.\r\n\r\n\r\nprivacy policy\uff1ahttps://sites.google.com/view/bitcoinminingprivacy-policy/%E9%A6%96%E9%A1%B5",
+    "descriptionHTML": "Bitcoin Mining APP is not using phone device as a miner, Apps mine for cryptocurrencies the processing is performed off device(cloud-based mining)<br><br>Set sail! From the smallest Satoshi to the full Bitcoin - no technical expertise required - join us on a transformative journey through the blockchain.<br><br>Why invest in expensive hardware or dwell on technical jargon? Start your Bitcoin mining journey the smart way.<br><br>You don&#39;t need expensive hardware. Simply choose your desired bitcoin mining arithmetic and start receiving BTC directly into your cryptocurrency wallet. Test the waters with our free bitcoin mining contract and prove how easy it is to generate passive income with our app.<br><br>Experience the digital gold rush with Crypto Cloud Mining, the ultimate way to seamlessly accumulate cryptocurrency. Starting with our cloud miners, they are a direct way to make money while we manage complexities such as proof-of-work algorithms, arithmetic, blockchain, bitcoin halving, mining pools and ASICs.<br><br>Remote Mining A great way to get into BTC mining. With easily accessible cloud ASICs and cloud GPUs, monitoring is a breeze. Simply watch your cryptocurrency portfolio expand. Indeed, cryptocurrency mining is a great example of passive income.<br><br>Your integrated Bitcoin wallet securely stores your income until you are ready to transfer it. Whether it&#39;s to your personal address, a cryptocurrency exchange, or any Bitcoin-compatible destination, the process is simple.<br><br>The technicalities of the blockchain, such as its public ledger and Proof of Work (PoW), can be daunting, and calculating your mining ROI may seem challenging, but that&#39;s what makes our remote miner stand out. Our unified cryptocurrency wallet view tracks your earnings, giving you a comprehensive overview of your assets.<br><br>For peace of mind, we keep your bitcoin rewards in cold storage to ensure your earnings are protected. Take your experience to the next level with our referral program. When your friends join the mining journey, you both benefit.<br><br>Customize your mining operations with over 20 cloud mining options, from free contracts to recurring subscriptions. Our virtual mining setup, utilizing GPUs and ASICs, is constantly evolving to meet the needs of our growing user base.<br><br>Key Features:<br><br>ON-DEMAND BITCOIN CLOUD MINING: Simply choose the mining arithmetic you want. Our cloud GPUs and ASICs are then up and running, allowing you to witness a steady increase in your bitcoin balance. We constantly update our mining contracts to take into account the current bitcoin price, network power, and hardware availability to provide an unrivaled cloud mining experience.<br><br>Cloud-Based Bitcoin Mining Farm: Easily dive into the world of cryptocurrency! Build and personalize your own fleet of cloud miners in a few simple clicks. Watch profits grow in real-time and track growing balances right on your bitcoin wallet page. Easily enter the digital age and grow your crypto wealth.<br><br>No need to worry about high electricity bills or complicated knowledge. Explore the world of bitcoin mining in more depth and watch your digital assets grow with our powerful virtual miners.<br><br>USER-FRIENDLY INTERFACE: Ease your way into the world of Bitcoin mining with an easy-to-use app for beginners and experienced miners alike.<br><br>Efficient and powerful: Our cutting-edge cloud infrastructure is designed to maximize mining results by taking into account the latest innovations in the crypto space.<br><br>Secure and Reliable: We prioritize your security. Our servers are equipped with advanced encryption technology to protect your data and transactions.<br><br>No hidden fees: Our transparent pricing model ensures that you know exactly what you&#39;re getting, with no unpleasant surprises.<br><br><br>privacy policy\uff1ahttps://sites.google.com/view/bitcoinminingprivacy-policy/%E9%A6%96%E9%A1%B5",
+    "summary": "Bitcoin mining,mining BTC on cloud mining,miner Btc on blockchain,Bitcoin Miner",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 209402,
+    "score": 4.5156536,
+    "ratings": 12388,
+    "reviews": 779,
+    "histogram": [
+        478,
+        340,
+        773,
+        1505,
+        9285
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": true,
+    "inAppProductPrice": "$0.99 - $799.99 per item",
+    "developer": "Bitcoin Mining , Ltd",
+    "developerId": "Bitcoin+Mining+,+Ltd",
+    "developerEmail": "neolhr91@gmail.com",
+    "developerWebsite": null,
+    "developerAddress": null,
+    "privacyPolicy": "https://bitcoinlucky.xyz/#/pages/privacy/index",
+    "genre": "Finance",
+    "genreId": "FINANCE",
+    "categories": [
+        {
+            "name": "Finance",
+            "id": "FINANCE"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/jgoOUOFt1N9ahKGlQNuXidA1-cHIHc0sdGEy7ncRzGLJbRs9ZyfbQ4fh-9x9rx11oKI",
+    "headerImage": "https://play-lh.googleusercontent.com/RZmrKhhtRtBnG4kWJsfrGiGi6X5AvB-6XwNBHpJcZQSS89VmtQ_6w1cXm5GyRnsvFH0",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/Ybx-COkOz1_TKTzlxilSQi96vuBErdQM1gVeNd6ldbxpK6vsfn7phNI3hhvf2yQCDUg",
+        "https://play-lh.googleusercontent.com/7eM-J5mE5XAiNyDgX7GwAqAni67ow5VqlbiR8h-n-eKxFn8OL68fUzGzhKa0UeHOGmE",
+        "https://play-lh.googleusercontent.com/od8WMcLu7_7_JAH6qTtUUBvFF7y5FFyhzBLCcfcRWrMsuB_sKj3LyoVAR9Tp6U4uvLc",
+        "https://play-lh.googleusercontent.com/M8zF0yONQuErYXNDgbXXjWf7ksuGTJChv6e2TDEJNCGfWB48xzSACOcT15WaELN2lH4"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Aug 27, 2024",
+    "lastUpdatedOn": "Nov 12, 2024",
+    "updated": 1731410397,
+    "version": "3.0.4",
+    "comments": [],
+    "appId": "bitcoin.minning.com",
+    "url": "https://play.google.com/store/apps/details?id=bitcoin.minning.com&hl=en&gl=us"
+}

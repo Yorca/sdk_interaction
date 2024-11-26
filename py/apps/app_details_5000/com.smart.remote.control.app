@@ -1,0 +1,63 @@
+{
+    "title": "Smart Remote Control For TV",
+    "description": "Transform your phone or tablet into a powerful universal remote with Smart Remote Control. Offering seamless compatibility with a wide range of TV brands and other infrared-enabled devices, this app makes managing your home appliances easier than ever.\r\n\r\nKey Features:\r\n- Universal Compatibility: Works with popular TV brands and more.\r\n- Simple Setup: Easy to configure for a wide range of devices.\r\n- Effortless Control: Navigate channels, adjust settings.\r\n\r\nDitch the clutter of multiple remotes\u2014control all your devices from one app with Smart Remote Control!",
+    "descriptionHTML": "Transform your phone or tablet into a powerful universal remote with Smart Remote Control. Offering seamless compatibility with a wide range of TV brands and other infrared-enabled devices, this app makes managing your home appliances easier than ever.<br><br>Key Features:<br>- Universal Compatibility: Works with popular TV brands and more.<br>- Simple Setup: Easy to configure for a wide range of devices.<br>- Effortless Control: Navigate channels, adjust settings.<br><br>Ditch the clutter of multiple remotes\u2014control all your devices from one app with Smart Remote Control!",
+    "summary": "Transform your phone into a powerful universal remote with Smart Remote Control.",
+    "installs": "100,000+",
+    "minInstalls": 100000,
+    "realInstalls": 332450,
+    "score": 4.345794,
+    "ratings": 691,
+    "reviews": 185,
+    "histogram": [
+        89,
+        0,
+        5,
+        77,
+        516
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "BoomX Studio",
+    "developerId": "BoomX+Studio",
+    "developerEmail": "chenqiuyin789@gmail.com",
+    "developerWebsite": "https://boomxstudio.xyz/smartremote",
+    "developerAddress": null,
+    "privacyPolicy": "https://sites.google.com/view/remote-control-for-tv-ac",
+    "genre": "Tools",
+    "genreId": "TOOLS",
+    "categories": [
+        {
+            "name": "Tools",
+            "id": "TOOLS"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/zQyaZKb_tBNT_Iw3-SDRsqN3XZbz6zz60KYKKkXfhdGiQvmS1U-CGwzs6J4Eq2--ZA",
+    "headerImage": "https://play-lh.googleusercontent.com/rOBoCkmyOjAQPCh6CATa_k998fPhEV4mGHztZ12vTN-QWeBPVZvc8M49IoHeSusZZYI",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/KNMhx2b8nUS-xGbBl08W-pvJGxJKgUepaC12GM9qdZfIrTQv5IIJhywbJ-fXUMc1tjLx",
+        "https://play-lh.googleusercontent.com/PZWzns07_krFNPSoAk2htxBhoptGbpIO0bCM0KnNQbWpzas61zdkbE06d935Kb-3spxc",
+        "https://play-lh.googleusercontent.com/dgE8usXFsgJ5NnH360IgptAp0xWcV5fBUptJwTepcoUJEGIsfbMzoSZ0Wn2VaH7IAfk",
+        "https://play-lh.googleusercontent.com/ETIkWguxW4wNtrNbr83c2TZ1e6JA1yCf9Ocey5Ew6gIohOvWESyUoZFIkEbM_hUClgk"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Sep 10, 2024",
+    "lastUpdatedOn": "Nov 18, 2024",
+    "updated": 1731938678,
+    "version": "1.1.2",
+    "comments": [],
+    "appId": "com.smart.remote.control.app",
+    "url": "https://play.google.com/store/apps/details?id=com.smart.remote.control.app&hl=en&gl=us"
+}

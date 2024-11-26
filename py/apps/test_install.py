@@ -41,7 +41,7 @@ def push_obb(obb_files, package_name):
 def installApk(path, pkg_name, file_path):
     try:
         if file_path.endswith('.apk'):
-            res = subprocess.run(["adb", "install", path])
+            res = subprocess.run(["adb", "install", file_path])
             return res.returncode == 0
         else:
             xapk_path = os.path.join(f"{path}/apk_extract", pkg_name)
@@ -66,10 +66,23 @@ def installApk(path, pkg_name, file_path):
 source = "/Volumes/T7 Shield/apps"
 success_count = 0
 failed_count = 0
+with open("install/success2.txt", "r") as file:
+    success_apks = [apk.replace("\n", "") for apk in file.readlines()]
+with open("install/failed2.txt", "r") as file:
+    failed_apks = [apk.replace("\n", "") for apk in file.readlines()]
+
+
 for filename in os.listdir(source):
+    # if filename in success_apks or filename in failed_apks:
+    #     print(filename)
+    #     continue
+    print(filename)
+    if filename.endswith('XAPK') or filename.endswith('APK'):
+        print(filename)
     path = os.path.join(source, filename)
     pkg_name = filename.removesuffix(".xapk").removesuffix('.apk')
     print(pkg_name)
+
     if installApk(source, pkg_name, path):
         print(f"{filename} succeeded")
         success_count += 1

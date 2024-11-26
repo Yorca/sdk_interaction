@@ -1,13 +1,12 @@
 import os
 import subprocess
 import time
-
+import concurrent.futures
 import frida
 import json
 from datetime import datetime
 import zipfile
 import re
-
 
 def sensitive_api_class():
     return ["android.location.LocationManager", #location
@@ -23,8 +22,7 @@ def sensitive_api_class():
             ]
 def get_sensitive_apis():
     with open("data/sensitive_apis.json", "r") as file:
-        apis = json.loads(file)
-
+        apis = json.load(file)
     return apis
 
 def extract_xapk(xapk_file, output_dir):
@@ -73,10 +71,7 @@ def hook_classes(class_list, package_name, source):
                             console.log("methods = " + methods)
                             for (var i = 0; i < methods.length; i++) {{
                                 var methodName = methods[i].getName();
-                                if (methodName === "$new") {{
-                                    methodName = "$init";
-                                }}
-                                else if (methodName.startsWith("$")) {{
+                                if (methodName.startsWith("$")) {{
                                     continue;
                                 }}
                                 hookMethod("{cls}", methodName, "{package_name}", "{source}");
@@ -97,58 +92,79 @@ def hook_classes(class_list, package_name, source):
 
 
 def get_script_code(package_name, filename):
+    if not get_classes(filename):
+        print("no class")
+        return None
     overload = f"""
-    Java.perform(function () {{
-        Java.deoptimizeEverything()
-        function hookMethod(cls_name, methodName, pkg, source) {{
-            try {{
-                var clazz = Java.use(cls_name);
-                if (!clazz) {{
-                    return;
-                }}
-                var overloadCount = clazz[methodName]?.overloads?.length;
-                if (!overloadCount || overloadCount <= 0) {{
-                    return;
-                }}
-                for (var i = 0; i < overloadCount; i++) {{
-                    (function () {{
-                        var originalMethod = clazz[methodName].overloads[i];
-                        originalMethod.implementation = function () {{
-                            var argsArray = [];
-                            for (var j = 0; j < arguments.length; j++) {{
-                                argsArray.push(arguments[j] + "");
-                            }}
-                            var result = originalMethod.apply(this, arguments);
-                            send({{
-                                type: 'log',
-                                source: source,
-                                method: methodName,
-                                package_name: pkg,
-                                class_name: cls_name,
-                                timestamp: new Date().getTime(),
-                                ref: this + '',
-                                return: result + "",
-                                arguments: argsArray,
-                                stack_trace: Java.use('android.util.Log').getStackTraceString(Java.use('java.lang.Exception').$new())
-                            }});
-                            var result = originalMethod.apply(this, arguments);
-                            return result;
-                        }};
-                    }})();
-                }}
-            }} catch (e) {{
-                send({{
-                    type: 'error',
-                    source: source,
-                    method: methodName,
-                    package_name: pkg,
-                    class_name: cls_name,
-                    timestamp: new Date().getTime(),
-                    error: "" + e              
-                }});
-            }}
-        }}
-    """
+       Java.perform(function () {{
+           Java.deoptimizeEverything()
+           function hookMethod(cls_name, methodName, pkg, source) {{
+               try {{
+                   var clazz = null;
+                   try{{
+                       clazz = Java.use(cls_name);
+                   }} catch (e) {{
+                       return
+                   }}
+                   if (!clazz) {{
+                       return;
+                   }}
+                   var overloadCount = clazz[methodName]?.overloads?.length;
+                   if (!overloadCount || overloadCount <= 0) {{
+                       return;
+                   }}
+                   for (var i = 0; i < overloadCount; i++) {{
+                       (function () {{
+                           var originalMethod = clazz[methodName].overloads[i];
+                           originalMethod.implementation = function () {{
+                               var temp = null;
+                               if (methodName == "$init") {{
+                                   temp = this.$init.apply(this, arguments);
+                               }} else {{
+                                   temp = this[methodName].apply(this, arguments);
+                                   }}
+                               try {{
+                               var argsArray = [];
+                               for (var j = 0; j < arguments.length; j++) {{
+                                   argsArray.push(arguments[j] + "");
+                               }}
+
+
+                               send({{
+                                   type: 'log',
+                                   source: source,
+                                   method: methodName,
+                                   package_name: pkg,
+                                   class_name: cls_name,
+                                   timestamp: new Date().getTime(),
+                                   return: temp + "",
+                                   arguments: argsArray,
+                                   stack_trace: Java.use('android.util.Log').getStackTraceString(Java.use('java.lang.Exception').$new())
+                               }});
+
+
+                               }} catch (e) {{
+                                   console.log("hook error" + e)
+                               }}
+
+                               return temp;
+
+                           }};
+                       }})();
+                   }}
+               }} catch (e) {{
+                   send({{
+                       type: 'error',
+                       source: source,
+                       method: methodName,
+                       package_name: pkg,
+                       class_name: cls_name,
+                       timestamp: new Date().getTime(),
+                       error: "" + e              
+                   }});
+               }}
+           }}
+       """
 
     for hook_method in get_sensitive_apis():
         cls_name = hook_method["class"].strip()
@@ -176,44 +192,48 @@ def run_fastboot(package_name):
         "com.android.commands.monkey.Monkey",
         "-p", package_name,
         "--agent", "reuseq",
-        "--running-minutes", "1",
+        "--running-minutes", "2",
         "--throttle", "500",
         "-v", "-v",
-        "--output-directory", "/sdcard/fastbot_log"
+        "--output-directory", f"/sdcard/fastbot_log/{package_name}"
     ]
     with open(f"res/UI trace/{package_name}.log", "w") as file:
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        process = subprocess.Popen(command, stdout=file, stderr=file)
+        process.communicate()
 
-        for line in process.stdout:
-            file.write(line)
-        for line in process.stderr:
-            file.write(line)
-        process.wait()
 
 def start_app(package_name, filename):
     try:
+        script_text = get_script_code(package_name, filename)
+        print(script_text)
+        if not script_text:
+            return False
         print(f'start {package_name}')
         device = frida.get_usb_device()
         pid = device.spawn([package_name])
         session = device.attach(pid)
-        script = session.create_script(get_script_code(package_name, filename))
+        script = session.create_script(script_text)
         script.on('message', on_message)
         script.load()
         device.resume(pid)
         print("start fastbot")
-        run_fastboot(package_name)
-        # time.sleep(60)
-        print("end fastbot")
+        try:
+            run_fastboot(package_name)
+        except:
+            print("time out")
         session.detach()
+        return True
     except Exception as e:
         print(f"error: {e}")
         log_error("Running Error", f"pkg:{package_name}, {str(e)}")
+        return False
 
 def isPricacyAPI(cls, mtd):
     apis = loadAllMethods()
     for api in apis:
         if api["Class"] == cls and api["API"] == mtd:
-            return True
+            if "privacy_params" not in api.keys():
+                return True
     return False
 
 
@@ -236,7 +256,7 @@ def on_message(message, data):
 
 
 def loadAllMethods():
-    with open("data/apis.json", "r") as file:
+    with open("data/apis_v2.json", "r") as file:
         data = json.loads(file.read())
     return data
 
@@ -247,9 +267,20 @@ def loadAllClasses():
     return data
 
 def get_classes(filename):
-    with open("data/classes_in_packages.json", "r") as file:
+    with open("data/classes_in_packages_5000.json", "r") as file:
         data = json.loads(file.read())
     classes = data[f"{filename}.packages"]
+    print(classes)
+    if not classes or classes == "not found" or classes == "empty content":
+        return None
+    return classes.split(';')
+
+def get_classes_with_pkg(pkg):
+    with open("data/classes_in_packages_new.json", "r") as file:
+        data = json.loads(file.read())
+    if pkg not in data.keys():
+        return None
+    classes = data[pkg]
     print(classes)
     if not classes or classes == "not found" or classes == "empty content":
         return None
@@ -292,40 +323,36 @@ def installApk(device_file_path, path, pkg_name, file_path):
             if result.returncode == 0:
                 if obb_files:
                     push_obb(obb_files, pkg_name)
+                return True
             return False
     except Exception as e:
         log_error("Install Error", f"pck:{pkg_name}  error:{str(e)}")
         return False
 
 device_path = "/data/local/tmp/"
-path_list = ["/Volumes/Yorca_T7/apps/8773apps"]  # ["/Volumes/Yorca_T7/apks_new"]  ["/Volumes/YorcaDisk/class_apks"]   ["/Users/yorca/projects/sdk_interaction/testing_app/APKs"]
+path_list = ["/Volumes/T7 Shield/apps", "/Volumes/T7 Shield/success_apks"]  # ["/Volumes/Yorca_T7/apks_new"]  ["/Volumes/YorcaDisk/class_apks"]   ["/Users/yorca/projects/sdk_interaction/testing_app/APKs"]
 with open("log/executed_apks.log", "a") as file:
     file.write(f"")
-
-with open("../apps/install/success.txt", "r") as file:
-    success_apks = file.readlines()
-
-success_apks = [apk.replace("\n", "").replace(" ", "") for apk in success_apks]
-
 for path in path_list:
-
     for filename in os.listdir(path):
-        if filename not in success_apks:
-            continue
         try:
-            print(filename)
+            print(f"start {filename}")
             if not filename.lower().endswith(".xapk") and not filename.lower().endswith(".apk"):
                 continue
             file_path = os.path.join(path, filename)
             with open("log/executed_apks.log", "r") as file:
                 lines = file.read().split("\n")
             if file_path in lines:
+                print(f"executede : {file_path}")
                 continue
             with open("log/executed_apks.log", "a") as file:
                 file.write(f"{file_path}\n")
             pkg_name = filename.removesuffix('.apk').removesuffix('.xapk')
             print("pkg:" + pkg_name)
             if not pkg_name:
+                continue
+            if not get_classes(filename):
+                print("no classes:" + filename)
                 continue
             subprocess.run(['adb', 'push', file_path, device_path])
 
@@ -335,16 +362,20 @@ for path in path_list:
 
             success = installApk(device_file_path,path,pkg_name, file_path)
             if not success:
+                print("install failed")
                 continue
-
             push_valid_string(file_path)
-            start_app(pkg_name, filename)
+            run_success = start_app(pkg_name, filename)
             subprocess.run(['adb', 'uninstall', pkg_name])
             subprocess.run(['adb', 'shell', 'rm', device_file_path])
-            os.makedirs(f"res/fastbot_log/{pkg_name}")
-            subprocess.run(['adb', 'pull', '/sdcard/fastbot_log', f"/Users/yorca/projects/sdk_interaction/py/Dynamic/res/fastbot_log/{pkg_name}"])
-            subprocess.run(['adb', 'shell', 'rm', '-rf', '/sdcard/fastbot_log'])
+            if not os.path.exists(f"res/fastbot_log/{pkg_name}"):
+                os.makedirs(f"res/fastbot_log/{pkg_name}")
+            subprocess.run(['adb', 'pull', f'/sdcard/fastbot_log/{pkg_name}', f"/Users/yorca/projects/sdk_interaction/py/Dynamic/res/fastbot_log/{pkg_name}"])
+            subprocess.run(['adb', 'shell', 'rm', '-rf', f'/sdcard/fastbot_log/{pkg_name}'])
             print(f'APK {filename} processed. Package name: {pkg_name}')
+            if run_success:
+                with open("res/success_apks.log", "a") as file:
+                    file.write(f"{pkg_name}\n")
 
         except Exception as e:
             print(f"error = {e}")

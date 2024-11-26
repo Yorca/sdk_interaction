@@ -1,0 +1,63 @@
+{
+    "title": "Music Echo-Offline Music",
+    "description": "Music Echo-Offline Music is a powerful music app designed for true music lovers. Import your favorite tracks and listen anytime, anywhere \u2013 all without needing an internet connection. Enjoy your music with no limits!\r\n\r\nMAJOR FEATURES- \r\n\u25cf Beautiful design \u2013 the easiest way to play offline music.\r\n\u25cf Play offline \u2013 no internet or WiFi needed.\r\n\u25cf Music management \u2013 Organize your music files into tracks, artists, and albums.\r\n\u25cf Intelligent Search \u2013 you can quickly find the local resources song you want to listen to\r\n\u25cf .Mp3, .Flac, .wav, .caf, .aac etc.\r\n\u25cf Background music playback.\r\n\u25cf Lockscreen control support.\r\n\r\n\u201cDownload it now\u201d",
+    "descriptionHTML": "Music Echo-Offline Music is a powerful music app designed for true music lovers. Import your favorite tracks and listen anytime, anywhere \u2013 all without needing an internet connection. Enjoy your music with no limits!<br><br>MAJOR FEATURES- <br>\u25cf Beautiful design \u2013 the easiest way to play offline music.<br>\u25cf Play offline \u2013 no internet or WiFi needed.<br>\u25cf Music management \u2013 Organize your music files into tracks, artists, and albums.<br>\u25cf Intelligent Search \u2013 you can quickly find the local resources song you want to listen to<br>\u25cf .Mp3, .Flac, .wav, .caf, .aac etc.<br>\u25cf Background music playback.<br>\u25cf Lockscreen control support.<br><br>\u201cDownload it now\u201d",
+    "summary": "Offline Music&Beautiful Player",
+    "installs": "1,000,000+",
+    "minInstalls": 1000000,
+    "realInstalls": 1055757,
+    "score": 4.1621623,
+    "ratings": 863,
+    "reviews": 31,
+    "histogram": [
+        93,
+        46,
+        58,
+        93,
+        571
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "BAOZI",
+    "developerId": "BAOZI",
+    "developerEmail": "musicecho@mail.com",
+    "developerWebsite": "https://newrm.calulatorsecret.com/",
+    "developerAddress": null,
+    "privacyPolicy": "https://newrm.calulatorsecret.com/privacy",
+    "genre": "Music & Audio",
+    "genreId": "MUSIC_AND_AUDIO",
+    "categories": [
+        {
+            "name": "Music & Audio",
+            "id": "MUSIC_AND_AUDIO"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/uVWDcXyHAo8NjowhBjbKOdBQ_YuveYF-UTbqIQ0_D8TuFiJhcy6ArKCqWTAt0kZI0Hdr",
+    "headerImage": "https://play-lh.googleusercontent.com/3BmChBdAY0Jden5td740y0xBPuzU9HRhRCWI4nen6nFCwUtr23p_tv5VrpslqTz87g",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/JvZ6KMs95FgFNM1NADJ8T7xwG7TaEF3fRogxa8-Jc7A0IzYdPV_4PCKc1AZWuNp9FHs",
+        "https://play-lh.googleusercontent.com/3UMacDynlztIO8XKPDwyY_dQONB6WEdf5Hav4zdfHXvi4LlXwarQTEs2OSETvbBJJnM",
+        "https://play-lh.googleusercontent.com/EG7fKklQuq78UCmXNDVU8acp_oExijVbEsM10qeSdUS9cXqCS4oSVXVRJHa95bJa5Vs",
+        "https://play-lh.googleusercontent.com/PF9Chnocwg2c5fIyYfgNXLZ4Zk7KkrSJomcVMlrhGCndPIYM3zWWa8EDZMGkCUXNyPrE"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "Aug 2, 2024",
+    "lastUpdatedOn": "Nov 14, 2024",
+    "updated": 1731586487,
+    "version": "1.1.1",
+    "comments": [],
+    "appId": "com.fcmusicplayer.app",
+    "url": "https://play.google.com/store/apps/details?id=com.fcmusicplayer.app&hl=en&gl=us"
+}

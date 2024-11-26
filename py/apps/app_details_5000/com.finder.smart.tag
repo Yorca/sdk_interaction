@@ -1,0 +1,62 @@
+{
+    "title": "Samsung Galaxy SmartTag",
+    "description": "Application smarttag2 Connect and find your Smart Tag devices through our app.\r\nour application is compatible with smarttag 2.\r\n\r\nSamsung SmartTag helps you find your lost items. This small device uses Bluetooth Low Energy (BLE) technology to help you locate it. \r\n \r\nThe SmartTag 2 is a useful smart tracker that helps you find your lost items quickly and accurately, but it only works with Samsung Galaxy smart tag .\r\n\r\n\r\n\r\n\r\nThe Galaxy SmartTag app gives you everything you need to know about the wonderful Samsung Galaxy SmartTag Tag.\r\n\r\nGalaxy SmartTag2 / SmartTag+ Setup\r\nGalaxy SmartTag2 / SmartTag + General Settings\r\nConfiguring smart tags\r\nGet SmartTag advice\r\nUse of smart beacon\r\nBefore using SmartTag 2\r\nGalaxy SmartTag 2/ SmartTag + battery replacement\r\nArrangement of Galaxy SmartTag 2/ SmartTag+ devices\r\nAbout Galaxy SmartTag2 / SmartTag2+\r\n  \r\n\r\nAfter downloading Galaxy SmartTag2 app, you will have full knowledge about everything about Galaxy SmartTag, you will go to Samsung Galaxy Get One Smarttag stores.\r\n\r\n\r\nGalaxy SmartTag 2 is not an official app. it's just an educational application which will help users to understand Galaxy SmartTag step by step procedure. and The information comes from various reliable sources.",
+    "descriptionHTML": "Application smarttag2 Connect and find your Smart Tag devices through our app.<br>our application is compatible with smarttag 2.<br><br>Samsung SmartTag helps you find your lost items. This small device uses Bluetooth Low Energy (BLE) technology to help you locate it. <br> <br>The SmartTag 2 is a useful smart tracker that helps you find your lost items quickly and accurately, but it only works with Samsung Galaxy smart tag .<br><br><br><br><br>The Galaxy SmartTag app gives you everything you need to know about the wonderful Samsung Galaxy SmartTag Tag.<br><br>Galaxy SmartTag2 / SmartTag+ Setup<br>Galaxy SmartTag2 / SmartTag + General Settings<br>Configuring smart tags<br>Get SmartTag advice<br>Use of smart beacon<br>Before using SmartTag 2<br>Galaxy SmartTag 2/ SmartTag + battery replacement<br>Arrangement of Galaxy SmartTag 2/ SmartTag+ devices<br>About Galaxy SmartTag2 / SmartTag2+<br>  <br><br>After downloading Galaxy SmartTag2 app, you will have full knowledge about everything about Galaxy SmartTag, you will go to Samsung Galaxy Get One Smarttag stores.<br><br><br>Galaxy SmartTag 2 is not an official app. it&#39;s just an educational application which will help users to understand Galaxy SmartTag step by step procedure. and The information comes from various reliable sources.",
+    "summary": "Connect and find your Smart Tag 2 devices through our app.",
+    "installs": "5,000+",
+    "minInstalls": 5000,
+    "realInstalls": 9632,
+    "score": 3.3333333,
+    "ratings": 73,
+    "reviews": 8,
+    "histogram": [
+        29,
+        0,
+        0,
+        4,
+        38
+    ],
+    "price": 0,
+    "free": true,
+    "currency": "USD",
+    "sale": false,
+    "saleTime": null,
+    "originalPrice": null,
+    "saleText": null,
+    "offersIAP": false,
+    "inAppProductPrice": null,
+    "developer": "DTFHM",
+    "developerId": "5296077488150845700",
+    "developerEmail": "slegraine1@gmail.com",
+    "developerWebsite": "https://dsfstudio.blogspot.com/",
+    "developerAddress": "Mobile App Development Company We are an accomplished  mobile application development company that approach various apps and climbable solutions for diverse industry verticals. If you need a local app or rood platform app, our mobile app development services promise cutting-edge, customized solutions that cater to the business requirement in the right way. As a mobile app development company, we trust in providing result-oriented app solutions.",
+    "privacyPolicy": "https://dsfstudio.blogspot.com/2023/04/privacy-policy.html",
+    "genre": "Libraries & Demo",
+    "genreId": "LIBRARIES_AND_DEMO",
+    "categories": [
+        {
+            "name": "Libraries & Demo",
+            "id": "LIBRARIES_AND_DEMO"
+        }
+    ],
+    "icon": "https://play-lh.googleusercontent.com/7BqwoTDPNulOro3lazjfxemxvVfI-rAls5AmBfSpVJnfT7tZ-mu8WpvEpDOrMTblRLc",
+    "headerImage": "https://play-lh.googleusercontent.com/cY5Jed9DOjv1IZUD3GCL9ZWhuaGNSOWjLowQV9N70WIJ5Z4ZixXN2ReUvew3D-pnVF0",
+    "screenshots": [
+        "https://play-lh.googleusercontent.com/tBjp5Wsgz_qYcSyAGo8JPQEN2_tM4ptaGl51BMTRTzWV3tbSw4Bm6rphyXzq6zfcW7c",
+        "https://play-lh.googleusercontent.com/4sUTw6BP0oBTJMv8GzM3-mbRZKP1eZrhWRynhSuZtIntEAQVj1-Ig09gyYV_EEW2GLU",
+        "https://play-lh.googleusercontent.com/pElOARDS4YV739KFcAf74L3foVZ3BOkIu4Os3ipI903DEPCYpyPWzgI8y0WCQK2sNvE"
+    ],
+    "video": null,
+    "videoImage": null,
+    "contentRating": "Everyone",
+    "contentRatingDescription": null,
+    "adSupported": true,
+    "containsAds": true,
+    "released": "May 5, 2023",
+    "lastUpdatedOn": "Jul 30, 2024",
+    "updated": 1722363322,
+    "version": "8.0",
+    "comments": [],
+    "appId": "com.finder.smart.tag",
+    "url": "https://play.google.com/store/apps/details?id=com.finder.smart.tag&hl=en&gl=us"
+}
