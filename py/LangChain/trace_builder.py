@@ -14,6 +14,54 @@ import xml.etree.ElementTree as ET
 import json
 embedding_model = OpenAIEmbeddings()
 
+from collections import deque
+
+def is_directly_related(a, b):
+
+    set_a, set_b = set(a), set(b)
+    return set_a.issubset(set_b) or set_b.issubset(set_a)
+
+def build_graph(arr_of_lists):
+    n = len(arr_of_lists)
+    adj = [[] for _ in range(n)]
+    for i in range(n):
+        for j in range(i + 1, n):
+            if is_directly_related(arr_of_lists[i], arr_of_lists[j]):
+                adj[i].append(j)
+                adj[j].append(i)
+    return adj
+
+def find_index_of_p(arr_of_lists, p):
+    set_p = set(p)
+    for i, item in enumerate(arr_of_lists):
+        if set(item) == set_p and len(item) == len(p):
+            return i
+    return -1
+
+def bfs_connected_components(adj, start):
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+
+    while queue:
+        cur = queue.popleft()
+        for nxt in adj[cur]:
+            if nxt not in visited:
+                visited.add(nxt)
+                queue.append(nxt)
+    return visited
+
+def find_all_related(arr_of_lists, p):
+
+    start_idx = find_index_of_p(arr_of_lists, p)
+    if start_idx == -1:
+        return []
+    adj = build_graph(arr_of_lists)
+
+    related_indices = bfs_connected_components(adj, start_idx)
+
+    return [arr_of_lists[i] for i in related_indices]
+
 def is_test_method(mtd):
     words = ['debug', "Debug", "test", "Test", "getInstance"]
     for word in words:
@@ -21,26 +69,94 @@ def is_test_method(mtd):
             return True
     return False
 
+def add_prefix(trace):
+    if not trace:
+        return None
+    prefixes = []
+    with open("../Dynamic/data/apis_v2.json", "r") as file:
+        classes = json.loads(file.read())
+    class_prefixes = ['.'.join(cls["Class"].split('.')[:2]) for cls in classes]
+    class_prefixes = list(set(class_prefixes))
+    for api in trace:
+        stack_trace = api['stack_trace']
+        lines = []
+        for line in stack_trace.split('\n\tat'):
+            trimmed_line = line.strip()
+            if trimmed_line and any(trimmed_line.startswith(prefix) for prefix in class_prefixes):
+                splits = trimmed_line.split('.')
+                pre = splits[:min(2, len(splits))]
+                pre = '.'.join(pre)
+                if pre not in lines:
+                    lines.append(pre)
+        # prefix = list(set(lines))
+        # prefix = [pre for pre in prefix if not pre.startswith('java.') and not pre.startswith('com.android.') and not pre.startswith('android.')]
+        api['prefix'] = lines
+        if api["is_privacy"]:
+            prefixes.append(lines)
+    return prefixes
+
+def get_connected_prefix(prefixes, trace):
+    # print(f"prefixes = {prefixes}")
+    # print(f"trace = {trace}")
+    if not trace:
+        return None
+    effective_prefix = []
+    for api in trace:
+        if "is_privacy" in api.keys() and api['is_privacy']:
+            con_prefixes = find_all_related(prefixes, api['prefix'])
+            if not con_prefixes:
+                continue
+            print(f"con_prefixes = {con_prefixes}")
+            api['connected_prefix'] = con_prefixes
+            con_prefixes.append(api['prefix'])
+            for new_pre in con_prefixes:
+                if new_pre not in effective_prefix:
+                    effective_prefix.append(new_pre)
+            # effective_prefix += con_prefixes
+            # .append(api['prefix'])
+
+    return effective_prefix
+
+def is_effective_prefix(prefix, pri_prefixes):
+    for pri_pre in pri_prefixes:
+        pre_str = ';'.join(prefix)
+        pri_str = ';'.join(pri_pre)
+        if pre_str in pri_str or pri_str in pre_str:
+            return True
+        # if set(pri_pre).issubset(set(prefix)) or set(prefix).issubset(set(pri_pre)):
+        #     return True
+    return False
+            
+
+
 def get_api_trace(pkg_name):
     path = os.path.join(env.apk_log_folder, pkg_name + ".log")
     if not os.path.exists(path):
         return None, False, False
     with open(path) as file:
         data = "[" + file.read()[:-2] + "]"
+        if not '"is_privacy": true' in data:
+            return None, False, False
     data = json.loads(data)
-    fields_to_keep = {"method", "class_name", "timestamp", "arguments", "is_privacy", "return", "source"}
-
-    print("start filter")
+    fields_to_keep = {"method", "class_name", "timestamp", "arguments", "is_privacy", "return", "source", "stack_trace"}
     filtered_data = [{k: v for k, v in item.items() if k in fields_to_keep} for item in data]
-
+    all_prefix = add_prefix(filtered_data)
+    print(f"effective_prefix = {all_prefix}")
     has_privacy_api = False
     has_sensitive_api = False
     new_trace = []
-    print("start filter-2")
     meaningful_mtds = set()
     meaningless_mtds = set()
+    count = 0
+
     for trace in filtered_data:
-        if trace["is_privacy"]:
+        if not is_effective_prefix(trace['prefix'], all_prefix):
+            count += 1
+            with open(f"res/removed_trace/{pkg_name}.log", "a") as file:
+                file.write(json.dumps(f"{trace}", indent=4) + '\n\n')
+            continue
+
+        if tools.isPricacyAPI(trace['class_name'], trace['method']):
             has_privacy_api = True
             new_trace.append(trace)
         elif trace["source"] == "sensitive":
@@ -57,6 +173,9 @@ def get_api_trace(pkg_name):
             new_trace.append(trace)
         else:
             meaningless_mtds.add(trace["method"])
+    with open("stat.txt", "a") as file:
+        file.write(f"remove {count}/{len(filtered_data)}\n")
+    print(f"remove {count}/{len(filtered_data)}")
 
     return new_trace, has_privacy_api, has_sensitive_api
 
@@ -137,7 +256,6 @@ def summarize_click(trace):
 
     if not trace["click"] or trace["click"] == "null":
         return None
-    print(trace["click"])
     click = tools.xml_to_text(trace["click"])
     if not click:
         return None
@@ -147,7 +265,6 @@ def summarize_click(trace):
 
 def parse_xml_trace(trace):
     new_trace = []
-    print(trace)
     for item in trace:
         sum = summarize_click(item)
         print(sum)
@@ -167,13 +284,16 @@ def get_trace(pkg):
         return None
     load_summary(api_trace)
     add_event_type(api_trace, "method call")
-    ui_display_trace = get_ui_display_summary_with_xml(pkg)
-    add_event_type(ui_display_trace, "UI Display")
+    # ui_display_trace = get_ui_display_summary_with_xml(pkg)
+    # add_event_type(ui_display_trace, "UI Display")
     click_trace = parse_xml_trace(get_click_event_summary(pkg))
     add_event_type(click_trace, "View Click")
 
 
-    traces = sorted(api_trace + ui_display_trace + click_trace, key=lambda x: x['timestamp'])
+    # traces = sorted(api_trace + ui_display_trace + click_trace, key=lambda x: x['timestamp'])
+    traces = sorted(api_trace + click_trace, key=lambda x: x['timestamp'])
+    if pkg == 'com.cider':
+        print(f"traces = {traces}")
     data = json.dumps(traces, indent=4)
     with open(f"res/trace/{pkg}.json", "a") as file:
         file.write(data)

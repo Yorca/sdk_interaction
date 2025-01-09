@@ -187,22 +187,21 @@ def analyzeSDK(SDK, index):
     analyze(message, SDK, index)
 
 
+i = 9
+doc_source = f"../web_archive/privacy_doc_md_final/"
+summary_directory = f"summary/sum{i}"
 
-for i in range(2,6):
-    doc_source = f"../web_archive/privacy_doc_md_final/"
-    summary_directory = f"summary/sum{i}"
+with open(errorlog_name, 'a') as errorlog:
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    errorlog.write(f"{current_time} ----------------------------- index:{i}\n")
+for sdk in os.listdir(doc_source):
+    if f"{sdk}.json" in os.listdir(summary_directory):
+        print(f"has summary: {sdk}")
+        continue
+    print(f"start: {sdk}")
+    analyzeSDK(sdk, i)
+time.sleep(600)
 
-    with open(errorlog_name, 'a') as errorlog:
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        errorlog.write(f"{current_time} ----------------------------- index:{i}\n")
-    for sdk in os.listdir(doc_source):
-        if f"{sdk}.json" in os.listdir(summary_directory):
-            print(f"has summary: {sdk}")
-            continue
-        print(f"start: {sdk}")
-
-        analyzeSDK(sdk, i)
-    time.sleep(600)
 
 
 

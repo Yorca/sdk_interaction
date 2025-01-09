@@ -37,7 +37,7 @@ for sdk in sdks:
             cls_list.append(cls_name)
 
 apis_js = json.dumps(api_list, indent=4)
-with open("data/apis_v2.json", "w") as file:
+with open("data/apis_v3.json", "w") as file:
     file.write(apis_js)
 cls_list = list(set(cls_list))
 cls_js = json.dumps(cls_list, indent=4)

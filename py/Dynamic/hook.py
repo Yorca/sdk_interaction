@@ -5,6 +5,7 @@ import concurrent.futures
 import frida
 import json
 from datetime import datetime
+import shutil
 import zipfile
 import re
 
@@ -185,6 +186,9 @@ def get_script_code(package_name, filename):
 
 
 def run_fastboot(package_name):
+    fb_log_path = f'res/UI trace/{package_name}.log'
+    if os.path.exists(fb_log_path):
+        os.remove(fb_log_path)
     command = [
         "adb", "shell",
         "CLASSPATH=/sdcard/monkeyq.jar:/sdcard/framework.jar:/sdcard/fastbot-thirdpart.jar",
@@ -192,12 +196,12 @@ def run_fastboot(package_name):
         "com.android.commands.monkey.Monkey",
         "-p", package_name,
         "--agent", "reuseq",
-        "--running-minutes", "2",
+        "--running-minutes", "3",
         "--throttle", "500",
         "-v", "-v",
         "--output-directory", f"/sdcard/fastbot_log/{package_name}"
     ]
-    with open(f"res/UI trace/{package_name}.log", "w") as file:
+    with open(fb_log_path, "w") as file:
         process = subprocess.Popen(command, stdout=file, stderr=file)
         process.communicate()
 
@@ -343,7 +347,7 @@ for path in path_list:
             with open("log/executed_apks.log", "r") as file:
                 lines = file.read().split("\n")
             if file_path in lines:
-                print(f"executede : {file_path}")
+                print(f"executed : {file_path}")
                 continue
             with open("log/executed_apks.log", "a") as file:
                 file.write(f"{file_path}\n")
@@ -368,9 +372,12 @@ for path in path_list:
             run_success = start_app(pkg_name, filename)
             subprocess.run(['adb', 'uninstall', pkg_name])
             subprocess.run(['adb', 'shell', 'rm', device_file_path])
-            if not os.path.exists(f"res/fastbot_log/{pkg_name}"):
-                os.makedirs(f"res/fastbot_log/{pkg_name}")
-            subprocess.run(['adb', 'pull', f'/sdcard/fastbot_log/{pkg_name}', f"/Users/yorca/projects/sdk_interaction/py/Dynamic/res/fastbot_log/{pkg_name}"])
+            log_path = f"res/fastbot_log/{pkg_name}"
+            print('log_path ' + log_path)
+            if os.path.exists(log_path):
+                subprocess.run(["rm", "-r", log_path])
+            os.makedirs(log_path)
+            subprocess.run(['adb', 'pull', f'/sdcard/fastbot_log/{pkg_name}', f"/Volumes/T7 Shield/sdk_interaction/py/Dynamic/res/fastbot_log/{pkg_name}"])
             subprocess.run(['adb', 'shell', 'rm', '-rf', f'/sdcard/fastbot_log/{pkg_name}'])
             print(f'APK {filename} processed. Package name: {pkg_name}')
             if run_success:

@@ -44,6 +44,7 @@ def xml_to_text(xml_content):
 
 def xml_to_text(xml_content):
     # Parse XML
+    xml_content = re.sub(r"&#[0-9]+;", "", xml_content)
     root = ET.fromstring(xml_content)
 
     def extract_text(node, level=0):
@@ -119,3 +120,17 @@ def get_summary(class_name, mtd_name):
                     del api["class_name"]
                     return api
     return None
+
+
+def loadAllMethods():
+    with open("../Dynamic/data/apis_v2.json", "r") as file:
+        data = json.loads(file.read())
+    return data
+
+def isPricacyAPI(cls, mtd):
+    apis = loadAllMethods()
+    for api in apis:
+        if api["Class"] == cls and api["API"] == mtd:
+            if "privacy_params" not in api.keys():
+                return True
+    return False
